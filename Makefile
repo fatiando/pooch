@@ -3,7 +3,7 @@ PROJECT=garage
 TESTDIR=tmp-test-dir-with-unique-name
 PYTEST_ARGS=--cov-config=../.coveragerc --cov-report=term-missing --cov=$(PROJECT) --doctest-modules -v --pyargs
 CHECK_FILES=setup.py $(PROJECT)
-FORMAT_FILES=setup.py $(PROJECT) examples
+FORMAT_FILES=setup.py $(PROJECT)
 
 help:
 	@echo "Commands:"
