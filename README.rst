@@ -37,21 +37,33 @@ TL;DR
     # Get the version string from your project. You have one of these, right?
     from . import __version__
 
-    # Check if this is a valid version number (PEP 440). If not, then return the fallback.
-    # Needed to have versioned data and not mess things up when updating data on master.
-    version = garage.check_version(__version__, fallback="master")
-
     # Create a new garage to manage your sample data storage
-    STORAGE = garage.create(
+    GARAGE = garage.create(
         # Folder where the data will be stored. We'll join lists using os.path for you.
-        folder=[".myproject", "data", version],
-        # Base directory for the data folder. If None, will use the $HOME env variable.
-        base_dir=None,
-        # Name of an environment variable that overwrites the location of the data folder.
+        # If None, uses the default cache folder for your OS.
+        folder=["~", ".myproject", "data"],
+        # An environment variable that overwrites the location of the data folder.
         env_variable="MYPROJECT_DATA_DIR",
-        # Base URL of the remote data store. Only supports HTTP for now.
-        base_url="https://github.com/me/myproject/raw/{}/data/".format(version)
+        # Base URL of the remote data store. Will call .format to insert the version.
+        base_url="https://github.com/me/myproject/raw/{version}/data/",
+        # Garages are versioned so that you can use multiple versions of a package
+        # simultaneously. Use PEP440 compliant version number.
+        version=__version__,
+        # If a version as a "+XX.XXXXX" suffix, we'll assume that this is a dev version
+        # and replace the version with this string.
+        version_dev="master",
+        # The cache file registry. Each line contains a file name and it's sha256 hash
+        # separated by a space. Should be in the same directory as this module.
+        registry="cache-registry.txt"
     )
+
+
+    def fetch_all():
+        """
+        Download all data files in the registry.
+        """
+        fnames = GARAGE.fetch_all()
+        return fnames
 
 
     def fetch_some_data():
@@ -59,7 +71,7 @@ TL;DR
         Load some sample data to use in your docs.
         """
         # Get the path to a file in the garage. If it's not there, we'll download it.
-        fname = STORAGE.fetch("some-data.csv", sha256="0981jdkjo2h0d2hdljh982wd2dpoj0")
+        fname = GARAGE.fetch("some-data.csv")
         # Load it with numpy/pandas/etc
         data = ...
         return data
