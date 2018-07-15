@@ -20,6 +20,7 @@ Dependencies
 ------------
 
 * `requests <http://docs.python-requests.org/>`__
+* `packaging <https://github.com/pypa/packaging>`__
 
 
 Installing with conda
