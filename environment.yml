@@ -1,0 +1,19 @@
+name: garage
+channels:
+    - conda-forge
+    - defaults
+dependencies:
+    - python=3.6
+    - pip
+    - requests
+    - packaging
+    # Development requirements
+    - pytest
+    - pytest-cov
+    - coverage
+    - black
+    - pylint
+    - sphinx
+    - sphinx_rtd_theme
+    - numpydoc
+    - twine

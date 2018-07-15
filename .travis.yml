@@ -1,0 +1,134 @@
+# Configuration file for TravisCI
+
+# We use miniconda for Python so don't need any Python specific tools
+language: generic
+
+# Use the container builds so we don't need sudo priviledges
+sudo: false
+
+# Only build pushes to the master branch and tags. This avoids the double
+# builds than happen when working on a branch instead of a fork.
+branches:
+    only:
+        - master
+        # Regex to build tagged commits with version numbers
+        - /\d+\.\d+(\.\d+)?(\S*)?$/
+
+# Define environment variables common to all builds
+env:
+    global:
+        # Encrypted variables
+        # Github Token for pushing the built HTML (GH_TOKEN)
+        # PyPI password for deploying releases (TWINE_PASSWORD)
+        - TWINE_USERNAME=Leonardo.Uieda
+        # The file with the listed requirements to be installed by conda
+        - CONDA_REQUIREMENTS=requirements.txt
+        # These variables control which actions are performed in a build
+        - COVERAGE=false
+        - BUILD_DOCS=false
+        - CHECK_FORMAT=false
+        - LINKCHECK=false
+        - DEPLOY_DOCS=false
+        - DEPLOY_PYPI=false
+
+# Specify the build configurations. Be sure to only deploy from a single build.
+matrix:
+    include:
+        - os: linux
+          env:
+              - PYTHON=3.6
+              - CHECK_FORMAT=true
+              - COVERAGE=true
+              - BUILD_DOCS=true
+              - LINKCHECK=true
+              - DEPLOY_DOCS=true
+              - DEPLOY_PYPI=true
+        - os: linux
+          env:
+              - PYTHON=3.5
+              - BUILD_DOCS=true
+        - os: osx
+          env:
+              - PYTHON=3.6
+              - COVERAGE=true
+              - BUILD_DOCS=true
+        - os: osx
+          env:
+              - PYTHON=3.5
+              - BUILD_DOCS=true
+
+# Setup the build environment
+before_install:
+    # Copy sample data to the verde data dir to avoid downloading all the time
+    #- mkdir -p $HOME/.verde/data
+    #- cp data/* $HOME/.verde/data
+    # Get the Fatiando CI scripts
+    - git clone https://github.com/fatiando/continuous-integration.git
+    # Download and install miniconda and setup dependencies
+    # Need to source the script to set the PATH variable globaly
+    - source continuous-integration/travis/setup-miniconda.sh
+    # Show installed pkg information for postmortem diagnostic
+    - conda list
+
+# Install the package that we want to test
+install:
+    # Make a binary wheel for our package and install it
+    - python setup.py bdist_wheel
+    - pip install dist/*
+
+# Run the actual tests and checks
+script:
+    # Check code for style and quality
+    - if [ "$CHECK_FORMAT" == "true" ]; then
+          make check;
+      fi
+    # Run the test suite
+    - if [ "$COVERAGE" == "true" ]; then
+          pip install codecov;
+          make coverage;
+      else
+          make test;
+      fi
+    # Build the documentation
+    - if [ "$LINKCHECK" == "true" ]; then
+          make -C doc linkcheck;
+      fi
+    - if [ "$BUILD_DOCS" == "true" ]; then
+          make -C doc clean all;
+      fi
+
+# Things to do if the build is successful
+after_success:
+    # Upload coverage information
+    - if [ "$COVERAGE" == "true" ]; then
+        coverage xml;
+        echo "Uploading coverage to Codecov";
+        codecov -e PYTHON;
+      fi
+
+# Deploy
+deploy:
+    # Make a release on PyPI
+    - provider: script
+      script: continuous-integration/travis/deploy-pypi.sh
+      on:
+          tags: true
+          condition: '$DEPLOY_PYPI == "true"'
+    # Push the built HTML in doc/_build/html to the gh-pages branch
+    - provider: script
+      script: continuous-integration/travis/deploy-gh-pages.sh
+      skip_cleanup: true
+      on:
+          branch: master
+          condition: '$DEPLOY_DOCS == "true"'
+    # Push HTML when building tags as well
+    - provider: script
+      script: continuous-integration/travis/deploy-gh-pages.sh
+      skip_cleanup: true
+      on:
+          tags: true
+          condition: '$DEPLOY_DOCS == "true"'
+
+# Don't send out emails every time a build fails
+notifications:
+    email: false
