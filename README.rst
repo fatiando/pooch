@@ -1,10 +1,11 @@
 .. raw:: html
+
     <h1 align="center">
         <strong>Garage</strong>
     </h1>
 
     <h2 align="center">
-        <strong>Download and stash datasets in a user directory</strong>
+        <strong>A place to park your sample data files.</strong>
     </h2>
 
     <p align="center">
@@ -24,26 +25,64 @@
     Part of the <a href="https://www.fatiando.org">Fatiando a Terra</a> project
     </p>
 
-Disclaimer
-----------
 
-**This package in early stages of design and implementation.**
+TL;DR
+-----
 
-We welcome any feedback and ideas!
-Let us know by submitting
-`issues on Github <https://github.com/fatiando/garage/issues>`__
-or send us a message on our
-`Gitter chatroom <https://gitter.im/fatiando/fatiando>`__.
+
+```python
+"""
+Module mypackage/datasets.py
+"""
+import garage
+
+# Get the version string from your project. You have one of these, right?
+from . import __version__
+
+# Check if this is a valid version number (PEP 440). If not, then return the fallback.
+# Needed to have versioned data and not mess things up when updating data on master.
+version = garage.check_version(__version__, fallback="master")
+
+# Create a new garage to manage your sample data storage
+STORAGE = garage.create(
+    # Folder where the data will be stored. We'll join lists using os.path for you.
+    folder=[".myproject", "data", version],
+    # Base directory for the data folder. If None, will use the $HOME env variable.
+    base_dir=None,
+    # Name of an environment variable that overwrites the location of the data folder.
+    env_variable="MYPROJECT_DATA_DIR",
+    # Base URL of the remote data store. Only supports HTTP for now.
+    base_url="https://github.com/me/myproject/raw/{}/data/".format(version)
+)
+
+
+def fetch_some_data():
+    """
+    Load some sample data to use in your docs.
+    """
+    # Get the path to a file in the garage. If it's not there, we'll download it.
+    fname = STORAGE.fetch("some-data.csv", sha256="0981jdkjo2h0d2hdljh982wd2dpoj0")
+    # Load it with numpy/pandas/etc
+    data = ...
+    return data
+```
 
 
 About
 -----
 
+*Does your Python package include sample datasets? Are you shipping them with the code?
+Are they getting too big?*
 
+Garage will manage downloading files over HTTP from a server and storing them in a user
+directory:
 
+* Download a file only if it's not in the local garage.
+* Check the SHA256 hash to make sure the file is not corrupted or needs updating.
+* Update the hash in your code and Garage will download an updated version of the file.
+* If the hash still doesn't match, Garage will warn of possible data corruption.
+* If no hash is given, Garage won't perform these checks.
 
-Project goals
--------------
 
 
 
@@ -54,8 +93,8 @@ Contacting Us
   Feel free to `open an issue
   <https://github.com/fatiando/garage/issues/new>`__ or comment
   on any open issue or pull request.
-* We have `chat room on Gitter <https://gitter.im/fatiando/fatiando>`__
-  where you can ask questions and leave comments.
+* We have `chat room on Gitter <https://gitter.im/fatiando/fatiando>`__ where you can
+  ask questions and leave comments.
 
 
 Contributing
