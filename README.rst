@@ -13,8 +13,6 @@
     <a href="https://travis-ci.org/fatiando/garage"><img alt="TravisCI build status" src="http://img.shields.io/travis/fatiando/garage/master.svg?style=flat-square&label=Linux|Mac"></a>
     <a href="https://ci.appveyor.com/project/fatiando/garage"><img alt="AppVeyor build status" src="http://img.shields.io/appveyor/ci/fatiando/garage/master.svg?style=flat-square&label=Windows"></a>
     <a href="https://codecov.io/gh/fatiando/garage"><img alt="Test coverage status" src="https://img.shields.io/codecov/c/github/fatiando/garage/master.svg?style=flat-square"></a>
-    <a href="https://codeclimate.com/github/fatiando/garage"><img alt="Code quality status" src="https://img.shields.io/codeclimate/maintainability/fatiando/garage.svg?style=flat-square"></a>
-    <a href="https://www.codacy.com/app/leouieda/garage"><img alt="Code quality grade on codacy" src="https://img.shields.io/codacy/grade/6b698defc0df47288a634930d41a9d65.svg?style=flat-square&label=codacy"></a>
     <a href="https://pypi.python.org/pypi/garage"><img alt="Compatible Python versions." src="https://img.shields.io/pypi/pyversions/garage.svg?style=flat-square"></a>
     <a href="https://gitter.im/fatiando/fatiando"><img alt="Chat room on Gitter" src="https://img.shields.io/gitter/room/fatiando/fatiando.svg?style=flat-square"></a>
     </p>

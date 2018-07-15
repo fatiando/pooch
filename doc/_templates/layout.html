@@ -1,0 +1,38 @@
+{# Import the theme's layout. #}
+{% extends "!layout.html" %}
+
+{% block extrahead %}
+    {# Include require.js so that we can use WorldWind #}
+    <script src="{{ pathto('_static/require.js', 1) }}"></script>
+{% endblock %}
+
+
+{% block htmltitle %}
+    {% if title == '' or title == 'Home' %}
+        <title>{{ docstitle|e }}</title>
+    {% else %}
+        <title>{{ title|striptags|e }}{{ titlesuffix }}</title>
+    {% endif %}
+{% endblock %}
+
+
+{% block menu %}
+    {{ super() }}
+
+    {% if menu_links %}
+        <p class="caption">
+            <span class="caption-text">
+            {% if menu_links_name %}
+                {{ menu_links_name }}
+            {% else %}
+                External links
+            {% endif %}
+            </span>
+        </p>
+        <ul>
+            {% for text, link in menu_links %}
+                <li class="toctree-l1"><a href="{{ link }}">{{ text }}</a></li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+{% endblock %}

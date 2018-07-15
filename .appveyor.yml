@@ -1,0 +1,49 @@
+# Continuous integration for Windows using http://appveyor.com/
+
+# Not a .NET project, we build ci-helpers in the install step instead
+build: false
+
+# Only build pushes to the master branch. Will still build tags and pull requests.
+branches:
+    only:
+        - master
+
+environment:
+    matrix:
+        # Python 3.5 32bit
+        #- MINICONDA: C:\Miniconda35
+          #PYTHON: 3.5
+        # Python 3.5 64bit
+        - MINICONDA: C:\Miniconda35-x64
+          PYTHON: 3.5
+        # Python 3.6 32bit
+        #- MINICONDA: C:\Miniconda36
+          #PYTHON: 3.6
+        # Python 3.6 64bit
+        - MINICONDA: C:\Miniconda36-x64
+          PYTHON: 3.6
+
+init:
+    # Add miniconda to the PATH
+    - "set PATH=%MINICONDA%;%MINICONDA%\\Scripts;%MINICONDA%\\Library\\bin;%PATH%"
+    # The file with the listed requirements to be installed by setup-miniconda.bat
+    - set CONDA_REQUIREMENTS=requirements.txt
+
+install:
+    # Get the Fatiando CI scripts
+    - cmd: git clone https://github.com/fatiando/continuous-integration.git
+    # Setup miniconda and install the requirements into a new environment
+    - cmd: continuous-integration\appveyor\setup-miniconda.bat
+    # Activate the new environment
+    - cmd: activate testing
+    # Show installed pkg information for postmortem diagnostic
+    - cmd: conda list
+    # Make a source package for the project and install it
+    - cmd: python setup.py sdist --formats=zip
+    - ps: ls dist
+    - ps: pip install --no-deps (Get-ChildItem dist\*.zip)
+
+
+test_script:
+    # Run the tests inside a tmp folder to make sure we're testing the installed version
+    - ps: mkdir -p tmp; cd tmp; python -c "import garage; garage.test()"

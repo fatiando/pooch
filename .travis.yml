@@ -1,0 +1,136 @@
+# Configuration file for TravisCI
+
+# We use miniconda for Python so don't need any Python specific tools
+language: generic
+
+# Use the container builds so we don't need sudo priviledges
+sudo: false
+
+# Only build pushes to the master branch and tags. This avoids the double
+# builds than happen when working on a branch instead of a fork.
+branches:
+    only:
+        - master
+        # Regex to build tagged commits with version numbers
+        - /\d+\.\d+(\.\d+)?(\S*)?$/
+
+# Define environment variables common to all builds
+env:
+    global:
+        # Encrypted variables
+        # Github Token for pushing the built HTML (GH_TOKEN)
+        - secure: "uWYRnZV4KpElFZBsiw6MPbBERlvMyEdP0IUdp7ys8l5sJHTGppkZC6KOrxo5/xG1pqmu625FOM8+V5CDhqdzsVUedyDuLTD17ma8MkPAliAPKdBFwGkm1Y3nJZMEYVsvff7lM+bz8e4t8vrkLweaRSciJ65v4YRPjUnlDNVjXDLHOAmAB7VsU33ntxQZHByvjJX/3h6NWrbQmNifa7+BSlN2vSpQZFs/0shUJ3noJhessZLoxhylK2dDBt/ug8e8YN/5Hq9cDv6a+q9lac9E2n7dk8kV6xnzoBzddK09hk7PfDbheiHFwjwQGhzjgmth14FTii8U1MyLcZ+F+HGZHRHRMk/ARLfYK3HbioCTNR4fURiKJpoSEk/8mv/qKh6O1qnDWvs1cbEn37G600l8LK6ExEuP1dQlVYYvfhcwCqBVQXG5Z8pfql5p7T/BfLPCwsVAGKWN/g2PpHHHj23vkdEUdyenTGjOD8M+Zdm/Dxz+QnuZiCKVolgt1yx5aHfM1piw07fUq2CHPwLSOZdj4+sDHj8/zyCUUJSaU/I9xzc4BFB2oAxSTVm2kNSj2aqssxbgDu/bgwtaIP5oqCLrCDKNyEjqtXDsYyI+T0YJ67wFdpB1/K1pukYkU9/LCGrDWoUfxejm14MJFYmivpQDAa2heeHFiuVVBEaHzOBgWoE="
+        # PyPI password for deploying releases (TWINE_PASSWORD)
+        - secure: "drOQIoP0IbVf+NbjbyH2nGEixtt4R/1tBQYr7EBjo2IDXI8/b5io7voL2jsaAhhCGZpzaLJvvv1gVUj9FxJFfhiQKwyU2F4n0E1TLJFFVfxXWMUFh6rrCAAbfuBhhzRDsbVNtH29FYPhNJKj8D2YsLkAydoRfMDMli0DJrn0qPO+/My0Dk7ikaPLo1/UDRLSUBae95yGbex3B/ksTZdELIVAZiSb7SWkL//cQpl+UcP/tvAWxsz+XIWH2TJ8d8anOSnZv7ccCkVx1P8DDp1LxhvY3vSiSV9KE3WDTWJzgmuvC34e5sPqxPoQjDklHjCQHtV4p2hi7tNAFX9yESUjSpFS8LDGMgQRrt6s5y3+KmQ4Qg/lJTNnRVIu/L6cxH9NPFd8bmJevQO532Qu8d5aiNmgAQb1/m8ZuEZCebXxXSMTD1Pl+b3xS/folhqyKhh31pLb7JPwhjSTdim08ZjISdRIqNVes2dNYgfqaF7RNrho4ha0Cj7NpRW1YEYw+n0kVjFmZuIoWyNXClfAfn03r69XgXLAh51HmW1OeXrdRr6Ji7sbVLyu5AMkGEt92G9dJARqb+E+hHk4p+5Htp/U7rRzcUsXhMYKaMY4d9D8uCRNNbAFnKqOlOUXq3FaVG/qAi4Y4YskYtHs3veKjnP/TRdIEugFuEZjeaADFLR6YWA="
+        - TWINE_USERNAME=Leonardo.Uieda
+        # The file with the listed requirements to be installed by conda
+        - CONDA_REQUIREMENTS=requirements.txt
+        # These variables control which actions are performed in a build
+        - COVERAGE=false
+        - BUILD_DOCS=false
+        - CHECK_FORMAT=false
+        - LINKCHECK=false
+        - DEPLOY_DOCS=false
+        - DEPLOY_PYPI=false
+
+# Specify the build configurations. Be sure to only deploy from a single build.
+matrix:
+    include:
+        - os: linux
+          env:
+              - PYTHON=3.6
+              - CHECK_FORMAT=true
+              - COVERAGE=true
+              - BUILD_DOCS=true
+              - LINKCHECK=true
+              - DEPLOY_DOCS=true
+              - DEPLOY_PYPI=true
+        - os: linux
+          env:
+              - PYTHON=3.5
+              - BUILD_DOCS=true
+        - os: osx
+          env:
+              - PYTHON=3.6
+              - COVERAGE=true
+              - BUILD_DOCS=true
+        - os: osx
+          env:
+              - PYTHON=3.5
+              - BUILD_DOCS=true
+
+# Setup the build environment
+before_install:
+    # Copy sample data to the verde data dir to avoid downloading all the time
+    #- mkdir -p $HOME/.verde/data
+    #- cp data/* $HOME/.verde/data
+    # Get the Fatiando CI scripts
+    - git clone https://github.com/fatiando/continuous-integration.git
+    # Download and install miniconda and setup dependencies
+    # Need to source the script to set the PATH variable globaly
+    - source continuous-integration/travis/setup-miniconda.sh
+    # Show installed pkg information for postmortem diagnostic
+    - conda list
+
+# Install the package that we want to test
+install:
+    # Make a binary wheel for our package and install it
+    - python setup.py bdist_wheel
+    - pip install dist/*
+
+# Run the actual tests and checks
+script:
+    # Check code for style and quality
+    - if [ "$CHECK_FORMAT" == "true" ]; then
+          make check;
+      fi
+    # Run the test suite
+    - if [ "$COVERAGE" == "true" ]; then
+          pip install codecov;
+          make coverage;
+      else
+          make test;
+      fi
+    # Build the documentation
+    - if [ "$LINKCHECK" == "true" ]; then
+          make -C doc linkcheck;
+      fi
+    - if [ "$BUILD_DOCS" == "true" ]; then
+          make -C doc clean all;
+      fi
+
+# Things to do if the build is successful
+after_success:
+    # Upload coverage information
+    - if [ "$COVERAGE" == "true" ]; then
+        coverage xml;
+        echo "Uploading coverage to Codecov";
+        codecov -e PYTHON;
+      fi
+
+# Deploy
+deploy:
+    # Make a release on PyPI
+    - provider: script
+      script: continuous-integration/travis/deploy-pypi.sh
+      on:
+          tags: true
+          condition: '$DEPLOY_PYPI == "true"'
+    # Push the built HTML in doc/_build/html to the gh-pages branch
+    - provider: script
+      script: continuous-integration/travis/deploy-gh-pages.sh
+      skip_cleanup: true
+      on:
+          branch: master
+          condition: '$DEPLOY_DOCS == "true"'
+    # Push HTML when building tags as well
+    - provider: script
+      script: continuous-integration/travis/deploy-gh-pages.sh
+      skip_cleanup: true
+      on:
+          tags: true
+          condition: '$DEPLOY_DOCS == "true"'
+
+# Don't send out emails every time a build fails
+notifications:
+    email: false

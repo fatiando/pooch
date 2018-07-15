@@ -1,0 +1,12 @@
+requests
+packaging
+# Development requirements
+pytest
+pytest-cov
+coverage
+black
+pylint
+sphinx
+sphinx_rtd_theme
+numpydoc
+twine
