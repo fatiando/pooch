@@ -1,0 +1,16 @@
+*.pyc
+*~
+*.so
+*.pyd
+.pytest_cache/
+build/
+dist/
+.*.swp
+.coverage
+.cache
+doc/_build
+doc/api/generated
+.ipynb_checkpoints
+*.egg-info
+MANIFEST
+.coverage.*
