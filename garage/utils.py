@@ -36,7 +36,7 @@ def file_hash(fname):
     # Calculate the hash in chunks to avoid overloading the memory
     chunksize = 65536
     hasher = hashlib.sha256()
-    with open(fname, 'rb') as fin:
+    with open(fname, "rb") as fin:
         buff = fin.read(chunksize)
         while len(buff) > 0:
             hasher.update(buff)
