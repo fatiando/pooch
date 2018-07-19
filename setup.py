@@ -26,7 +26,7 @@ CMDCLASS = versioneer.get_cmdclass()
 
 PACKAGES = find_packages(exclude=["doc"])
 SCRIPTS = []
-PACKAGE_DATA = {}
+PACKAGE_DATA = {"garage.tests": ["data/*"]}
 
 CLASSIFIERS = [
     "Development Status :: 3 - Alpha",
