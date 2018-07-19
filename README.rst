@@ -37,45 +37,47 @@ TL;DR
     # Get the version string from your project. You have one of these, right?
     from . import __version__
 
+
     # Create a new garage to manage your sample data storage
     GARAGE = garage.create(
-        # Folder where the data will be stored. We'll join lists using os.path for you.
-        # If None, uses the default cache folder for your OS.
-        folder=["~", ".myproject", "data"],
-        # An environment variable that overwrites the location of the data folder.
-        env_variable="MYPROJECT_DATA_DIR",
-        # Base URL of the remote data store. Will call .format to insert the version.
-        base_url="https://github.com/me/myproject/raw/{version}/data/",
+        # Folder where the data will be stored. We'll join lists and expand users HOME
+        # directories (~) for you. If None, uses the default cache folder for your OS.
+        path=["~", ".mypackage", "data"],
+        # An environment variable that overwrites path of the garage.
+        env_variable="MYPACKAGE_DATA_DIR",
+        # Base URL of the remote data store. Will call .format on this string to insert
+        # the version (see below).
+        base_url="https://github.com/myproject/mypackage/raw/{version}/data/",
         # Garages are versioned so that you can use multiple versions of a package
-        # simultaneously. Use PEP440 compliant version number.
+        # simultaneously. Use PEP440 compliant version number. The version will be
+        # appended to the path of your garage.
         version=__version__,
         # If a version as a "+XX.XXXXX" suffix, we'll assume that this is a dev version
         # and replace the version with this string.
         version_dev="master",
-        # The cache file registry. Each line contains a file name and it's sha256 hash
-        # separated by a space. Should be in the same directory as this module.
-        registry="cache-registry.txt"
+        # The cache file registry. A dictionary with all files in this garage. Keys are
+        # the file names (relative to *base_url*) and values are their respective SHA256
+        # hashes. Files will be downloaded automatically when needed (see
+        # fetch_gravity_data).
+        registry={"gravity-data.csv": "89y10phsdwhs09whljwc09whcowsdhcwodcy0dcuhw"}
     )
+    # You can also load the registry from a file. Each line contains a file name and
+    # it's sha256 hash separated by a space. This makes it easier to manage large
+    # numbers of data files. The registry file should be in the same directory as this
+    # module.
+    GARAGE.load_registry("garage-registry.txt")
 
 
-    def fetch_all():
+    # Define functions that your users can call to get back some sample data in memory
+    def fetch_gravity_data():
         """
-        Download all data files in the registry.
-        """
-        fnames = GARAGE.fetch_all()
-        return fnames
-
-
-    def fetch_some_data():
-        """
-        Load some sample data to use in your docs.
+        Load some sample gravity data to use in your docs.
         """
         # Get the path to a file in the garage. If it's not there, we'll download it.
-        fname = GARAGE.fetch("some-data.csv")
+        fname = GARAGE.fetch("gravity-data.csv")
         # Load it with numpy/pandas/etc
         data = ...
         return data
-
 
 
 About
@@ -89,9 +91,10 @@ storing them in a local directory:
 
 * Download a file only if it's not in the local garage.
 * Check the SHA256 hash to make sure the file is not corrupted or needs updating.
-* If the hash is different Garage will download a new version of the file.
-* If the hash still doesn't match, Garage will warn of possible data corruption.
-* If no hash is given, Garage won't perform any checks.
+* If the hash is different from the registry, Garage will download a new version of the
+  file.
+* If the hash still doesn't match, Garage will raise an exception warning of possible
+  data corruption.
 
 
 Contacting Us
