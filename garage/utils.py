@@ -1,9 +1,54 @@
 """
 Misc utilities
 """
+from pathlib import Path
+import sys
 import hashlib
 
 from packaging.version import Version
+
+
+def os_cache(project, platform=None):
+    r"""
+    Default cache location based on the operating system.
+
+    Will insert the project name in the proper location of the path.
+
+    Parameters
+    ----------
+    project : str
+        The project name.
+    platform : str or None
+        The name of operating system as returned by ``sys.platform`` (``'darwin'`` for
+        Mac, ``'win32'`` for Windows, and anything else will be treated as generic
+        Linux/Unix. If None, will use the value of ``sys.platform``.
+
+    Returns
+    -------
+    cache_path : :class:`pathlib.Path`
+        The default location for the data cache. User directories (``'~'``) are not
+        expanded.
+
+    Examples
+    --------
+
+    >>> for os in ['darwin', 'win32', 'anything else']:
+    ...     path = os_cache("myproject", platform=os)
+    ...     print(path.parts)
+    ('~', 'Library', 'Caches', 'myproject')
+    ('~', 'AppData', 'Local', 'myproject', 'cache')
+    ('~', '.cache', 'myproject')
+
+    """
+    if platform is None:
+        platform = sys.platform
+    if platform == "darwin":
+        cache_path = Path("~", "Library", "Caches", project)
+    elif platform == "win32":
+        cache_path = Path("~", "AppData", "Local", project, "cache")
+    else:  # *NIX
+        cache_path = Path("~", ".cache", project)
+    return cache_path
 
 
 def file_hash(fname):

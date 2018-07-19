@@ -40,11 +40,9 @@ TL;DR
 
     # Create a new garage to manage your sample data storage
     GARAGE = garage.create(
-        # Folder where the data will be stored. We'll join lists and expand users HOME
-        # directories (~) for you. If None, uses the default cache folder for your OS.
-        path=["~", ".mypackage", "data"],
-        # An environment variable that overwrites path of the garage.
-        env_variable="MYPACKAGE_DATA_DIR",
+        # Folder where the data will be stored. For a sensible default, use the default
+        # cache folder for your OS.
+        path=garage.os_cache("mypackage"),
         # Base URL of the remote data store. Will call .format on this string to insert
         # the version (see below).
         base_url="https://github.com/myproject/mypackage/raw/{version}/data/",
@@ -55,6 +53,8 @@ TL;DR
         # If a version as a "+XX.XXXXX" suffix, we'll assume that this is a dev version
         # and replace the version with this string.
         version_dev="master",
+        # An environment variable that overwrites path of the garage.
+        env_variable="MYPACKAGE_DATA_DIR",
         # The cache file registry. A dictionary with all files in this garage. Keys are
         # the file names (relative to *base_url*) and values are their respective SHA256
         # hashes. Files will be downloaded automatically when needed (see
