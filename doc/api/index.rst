@@ -8,5 +8,7 @@ API Reference
 .. autosummary::
    :toctree: generated/
 
-    check_version
+    Garage
+    Garage.fetch
+    Garage.load_registry
     test

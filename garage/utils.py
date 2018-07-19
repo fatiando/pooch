@@ -1,7 +1,48 @@
 """
 Misc utilities
 """
+import hashlib
+
 from packaging.version import Version
+
+
+def file_hash(fname):
+    """
+    Calculate the SHA256 hash of a given file.
+
+    Useful for checking if a file has changed or been corrupted.
+
+    Parameters
+    ----------
+    fname : str
+        The name of the file.
+
+    Returns
+    -------
+    hash : str
+        The hash of the file.
+
+    Examples
+    --------
+
+    >>> fname = "test-file-for-hash.txt"
+    >>> with open(fname, "w") as f:
+    ...     __ = f.write("content of the file")
+    >>> print(file_hash(fname))
+    0fc74468e6a9a829f103d069aeb2bb4f8646bad58bf146bb0e3379b759ec4a00
+    >>> import os
+    >>> os.remove(fname)
+
+    """
+    # Calculate the hash in chunks to avoid overloading the memory
+    chunksize = 65536
+    hasher = hashlib.sha256()
+    with open(fname, "rb") as fin:
+        buff = fin.read(chunksize)
+        while buff:
+            hasher.update(buff)
+            buff = fin.read(chunksize)
+    return hasher.hexdigest()
 
 
 def check_version(version, fallback="master"):
