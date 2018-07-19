@@ -1,8 +1,9 @@
 """
 Misc utilities
 """
-from packaging.version import Version
 import hashlib
+
+from packaging.version import Version
 
 
 def file_hash(fname):
@@ -38,11 +39,10 @@ def file_hash(fname):
     hasher = hashlib.sha256()
     with open(fname, "rb") as fin:
         buff = fin.read(chunksize)
-        while len(buff) > 0:
+        while buff:
             hasher.update(buff)
             buff = fin.read(chunksize)
-    file_hash = hasher.hexdigest()
-    return file_hash
+    return hasher.hexdigest()
 
 
 def check_version(version, fallback="master"):
