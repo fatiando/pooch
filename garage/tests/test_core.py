@@ -8,20 +8,17 @@ import warnings
 import pytest
 
 from .. import Garage
-from ..utils import file_hash, check_version
-from .. import __version__
+from ..utils import file_hash
+from .utils import garage_test_url, garage_test_registry
+
 
 DATA_DIR = os.path.join(os.path.abspath(os.path.dirname(__file__)), "data")
-REGISTRY = {
-    "tiny-data.txt": "baee0894dba14b12085eacb204284b97e362f4f3e5a5807693cc90ef415c1b2d"
-}
+REGISTRY = garage_test_registry()
+BASEURL = garage_test_url()
 REGISTRY_CORRUPTED = {
     # The same data file but I changed the hash manually to a wrong one
     "tiny-data.txt": "098h0894dba14b12085eacb204284b97e362f4f3e5a5807693cc90ef415c1b2d"
 }
-BASEURL = "https://github.com/fatiando/garage/raw/{version}/garage/tests/data/".format(
-    version=check_version(__version__)
-)
 
 
 def test_garage_local():

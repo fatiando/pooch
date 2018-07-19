@@ -27,12 +27,46 @@ class Garage:
         and the values should be their SHA256 hashes. Only files in the registry can be
         fetched from the garage.
 
+    Examples
+    --------
+
+    >>> import warnings
+    >>> warnings.simplefilter("ignore")  # disable warnings to stop printing status
+    >>> import os
+    >>> from tempfile import TemporaryDirectory
+    >>> from garage.tests.utils import garage_test_url, garage_test_registry
+    >>> # Setup a garage in a temporary directory for this example
+    >>> store = TemporaryDirectory()
+    >>> os.listdir(store.name)
+    []
+    >>> # Use our test base url and registry
+    >>> garage = Garage(path=store.name, base_url=garage_test_url(),
+    ...                 registry=garage_test_registry())
+    >>> # Fetch a data file from the garage. Since it's not in our local storage, it
+    >>> # will be downloaded
+    >>> fname = garage.fetch('tiny-data.txt')
+    >>> os.listdir(store.name)
+    ['tiny-data.txt']
+    >>> with open(fname) as f:
+    ...     print(f.read().strip())
+    # A tiny data file for test purposes only
+    1  2  3  4  5  6
+    >>> # If the data file is corrupted or outdated, Garage will download a new version
+    >>> with open(fname, "w") as f:
+    ...     __ = f.write("This is no longer the same file content.")
+    >>> fname = garage.fetch('tiny-data.txt')
+    >>> with open(fname) as f:
+    ...     print(f.read().strip())
+    # A tiny data file for test purposes only
+    1  2  3  4  5  6
+    >>> store.cleanup()
+
     """
 
     def __init__(self, path, base_url, registry):
         self._path = path
         self.base_url = base_url
-        self.registry = registry
+        self.registry = dict(registry)
 
     @property
     def path(self):
@@ -41,7 +75,7 @@ class Garage:
 
     def fetch(self, fname):
         """
-        Get the full path to a file in the garage.
+        Get the absolute path to a file in the garage.
 
         If it's not in the local storage, it will be downloaded. If the hash of file in
         local storage doesn't match the one in the registry, will download a new copy of
@@ -58,7 +92,7 @@ class Garage:
         Returns
         -------
         full_path : str
-            The full path (including the file name) of the file in the local storage.
+            The absolute path (including the file name) of the file in the local garage.
 
         """
         if fname not in self.registry:
@@ -102,6 +136,8 @@ class Garage:
         )
         response = requests.get(source, stream=True)
         response.raise_for_status()
+        # Stream the file to a temporary so that we can safely check its hash before
+        # overwriting the original
         with NamedTemporaryFile(delete=False) as fout:
             for chunk in response.iter_content(chunk_size=1024):
                 if chunk:

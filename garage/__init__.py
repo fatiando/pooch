@@ -4,7 +4,6 @@ The Verde public API.
 from ._version import get_versions as _get_versions
 
 # Import functions/classes to make the API
-from .utils import check_version
 from .core import Garage
 
 
