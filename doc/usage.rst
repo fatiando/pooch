@@ -44,8 +44,8 @@ Let's say that this is the layout of your repository on Github:
 
 The sample data are stored in the ``data`` folder of your repository.
 
-Setting up a Pooch
-------------------
+Setup
+-----
 
 Pooch can download and cache your data files to the users computer automatically.
 This is what the ``plumbus/datasets.py`` file would look like:
