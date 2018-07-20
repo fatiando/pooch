@@ -5,7 +5,7 @@ from ._version import get_versions as _get_versions
 
 # Import functions/classes to make the API
 from .core import Garage, create
-from .utils import os_cache
+from .utils import os_cache, file_hash
 
 
 # Get the version number through versioneer

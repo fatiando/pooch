@@ -58,6 +58,10 @@ h1 {
     max-width: 1000px;
 }
 
+.wy-nav-top {
+    background-color: #555555;
+}
+
 .wy-side-nav-search {
     background-color: #555555;
 }
