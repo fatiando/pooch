@@ -9,7 +9,7 @@ import pytest
 
 from .. import Garage
 from ..utils import file_hash
-from .utils import garage_test_url, garage_test_registry
+from .utils import garage_test_url, garage_test_registry, check_tiny_data
 
 
 DATA_DIR = os.path.join(os.path.abspath(os.path.dirname(__file__)), "data")
@@ -27,13 +27,7 @@ def test_garage_local():
     true = os.path.join(DATA_DIR, "tiny-data.txt")
     fname = garage.fetch("tiny-data.txt")
     assert true == fname
-    assert os.path.exists(fname)
-    with open(fname) as tinydata:
-        content = tinydata.read()
-    true_content = "\n".join(
-        ["# A tiny data file for test purposes only", "1  2  3  4  5  6"]
-    )
-    assert content.strip() == true_content
+    check_tiny_data(fname)
 
 
 def test_garage_update():
@@ -55,13 +49,7 @@ def test_garage_update():
             assert str(warn[-1].message).split()[-1] == "'{}'.".format(local_store)
         # Check that the updated file has the right content
         assert true_path == fname
-        assert os.path.exists(fname)
-        with open(fname) as tinydata:
-            content = tinydata.read()
-        true_content = "\n".join(
-            ["# A tiny data file for test purposes only", "1  2  3  4  5  6"]
-        )
-        assert content.strip() == true_content
+        check_tiny_data(fname)
         assert file_hash(fname) == REGISTRY["tiny-data.txt"]
 
 

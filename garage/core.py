@@ -38,7 +38,8 @@ def create(path, base_url, version, version_dev, env=None, registry=None):
     base_url : str
         Base URL for the remote data source. All requests will be made relative to this
         URL. The string should have a ``{version}`` formatting mark in it. We will call
-        ``.format(version=version)`` on this string.
+        ``.format(version=version)`` on this string. If the URL is a directory path, it
+        must end in a ``'/'`` because we will not include it.
     version : str
         The version string for your project. Should be PEP440 compatible.
     version_dev : str
@@ -65,7 +66,7 @@ def create(path, base_url, version, version_dev, env=None, registry=None):
     Create a :class:`~garage.Garage` for a release (v0.1):
 
     >>> garage = create(path="mygarage",
-    ...                 base_url="http://some.link.com/{version}",
+    ...                 base_url="http://some.link.com/{version}/",
     ...                 version="v0.1",
     ...                 version_dev="master",
     ...                 registry={"data.txt": "9081wo2eb2gc0u..."})
@@ -75,14 +76,14 @@ def create(path, base_url, version, version_dev, env=None, registry=None):
     >>> garage.path.exists()
     True
     >>> print(garage.base_url)
-    http://some.link.com/v0.1
+    http://some.link.com/v0.1/
     >>> print(garage.registry)
     {'data.txt': '9081wo2eb2gc0u...'}
 
     If this is a development version (12 commits ahead of v0.1):
 
     >>> garage = create(path="mygarage",
-    ...                 base_url="http://some.link.com/{version}",
+    ...                 base_url="http://some.link.com/{version}/",
     ...                 version="v0.1+12.do9iwd",
     ...                 version_dev="master")
     >>> print(garage.path.parts)
@@ -90,13 +91,13 @@ def create(path, base_url, version, version_dev, env=None, registry=None):
     >>> garage.path.exists()
     True
     >>> print(garage.base_url)
-    http://some.link.com/master
+    http://some.link.com/master/
 
     To place the Garage at a subdirectory, pass in a list and we'll join the path for
     you using the appropriate separator for your operating system:
 
     >>> garage = create(path=["mygarage", "cache", "data"],
-    ...                 base_url="http://some.link.com/{version}",
+    ...                 base_url="http://some.link.com/{version}/",
     ...                 version="v0.1",
     ...                 version_dev="master")
     >>> print(garage.path.parts)
@@ -108,7 +109,7 @@ def create(path, base_url, version, version_dev, env=None, registry=None):
 
     >>> # The variable is not set so we'll use *path*
     >>> garage = create(path=["mygarage", "not_from_env"],
-    ...                 base_url="http://some.link.com/{version}",
+    ...                 base_url="http://some.link.com/{version}/",
     ...                 version="v0.1",
     ...                 version_dev="master",
     ...                 env="MYGARAGE_DATA_DIR")
@@ -118,7 +119,7 @@ def create(path, base_url, version, version_dev, env=None, registry=None):
     >>> import os
     >>> os.environ["MYGARAGE_DATA_DIR"] = os.path.join("mygarage", "from_env")
     >>> garage = create(path=["mygarage", "not_from_env"],
-    ...                 base_url="http://some.link.com/{version}",
+    ...                 base_url="http://some.link.com/{version}/",
     ...                 version="v0.1",
     ...                 version_dev="master",
     ...                 env="MYGARAGE_DATA_DIR")
@@ -136,7 +137,8 @@ def create(path, base_url, version, version_dev, env=None, registry=None):
     if env is not None and env in os.environ and os.environ[env]:
         path = Path(os.environ[env])
     versioned_path = Path(path, version)
-    versioned_path.mkdir(parents=True, exist_ok=True)
+    # Create the directory if it doesn't already exist
+    os.makedirs(versioned_path.expanduser().resolve(), exist_ok=True)
     if registry is None:
         registry = dict()
     garage = Garage(
@@ -208,7 +210,7 @@ class Garage:
     @property
     def abspath(self):
         "Absolute path to the local garage"
-        return os.path.abspath(os.path.expanduser(self.path))
+        return Path(self.path).expanduser().resolve()
 
     def fetch(self, fname):
         """
