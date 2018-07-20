@@ -1,8 +1,23 @@
 """
 Utilities for testing code.
 """
+import os
+
 from .. import __version__
 from ..utils import check_version
+
+
+def check_tiny_data(fname):
+    """
+    Load the tiny-data.txt file and check that the contents are correct.
+    """
+    assert os.path.exists(fname)
+    with open(fname) as tinydata:
+        content = tinydata.read()
+    true_content = "\n".join(
+        ["# A tiny data file for test purposes only", "1  2  3  4  5  6"]
+    )
+    assert content.strip() == true_content
 
 
 def garage_test_url():
