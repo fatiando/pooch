@@ -20,34 +20,34 @@ def check_tiny_data(fname):
     assert content.strip() == true_content
 
 
-def garage_test_url():
+def pooch_test_url():
     """
-    Get the base URL for the test data used in garage itself.
+    Get the base URL for the test data used in Pooch itself.
 
-    The URL is a github raw link to the ``garage/tests/data`` directory from the
-    `Github repository <https://github.com/fatiando/garage>`__. It matches the garage
-    version specified in ``garage.__version__``.
+    The URL is a github raw link to the ``pooch/tests/data`` directory from the
+    `Github repository <https://github.com/fatiando/pooch>`__. It matches the pooch
+    version specified in ``pooch.__version__``.
 
     Returns
     -------
     url
-        The versioned URL for garage's test data.
+        The versioned URL for pooch's test data.
 
     """
-    url = "https://github.com/fatiando/garage/raw/{version}/garage/tests/data/".format(
+    url = "https://github.com/fatiando/pooch/raw/{version}/pooch/tests/data/".format(
         version=check_version(__version__)
     )
     return url
 
 
-def garage_test_registry():
+def pooch_test_registry():
     """
-    Get a registry for the test data used in garage itself.
+    Get a registry for the test data used in Pooch itself.
 
     Returns
     -------
     registry
-        Dictionary with garage's test data files and their hashes.
+        Dictionary with pooch's test data files and their hashes.
 
     """
     sha256 = "baee0894dba14b12085eacb204284b97e362f4f3e5a5807693cc90ef415c1b2d"

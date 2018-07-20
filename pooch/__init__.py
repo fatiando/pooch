@@ -1,10 +1,10 @@
 """
-The Verde public API.
+The public API.
 """
 from ._version import get_versions as _get_versions
 
 # Import functions/classes to make the API
-from .core import Garage, create
+from .core import Pooch, create
 from .utils import os_cache, file_hash
 
 

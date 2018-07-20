@@ -3,7 +3,7 @@
 API Reference
 =============
 
-.. currentmodule:: garage
+.. currentmodule:: pooch
 
 .. autosummary::
    :toctree: generated/
@@ -11,7 +11,7 @@ API Reference
     create
     os_cache
     file_hash
-    Garage
-    Garage.fetch
-    Garage.load_registry
+    Pooch
+    Pooch.fetch
+    Pooch.load_registry
     test

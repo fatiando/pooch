@@ -26,10 +26,10 @@ Dependencies
 Installing with conda
 ---------------------
 
-You can install garage using the `conda package manager <https://conda.io/>`__ that
+You can install pooch using the `conda package manager <https://conda.io/>`__ that
 comes with the Anaconda distribution::
 
-    conda install garage --channel conda-forge
+    conda install pooch --channel conda-forge
 
 
 Installing with pip
@@ -38,7 +38,7 @@ Installing with pip
 Alternatively, you can also use the `pip package manager
 <https://pypi.org/project/pip/>`__::
 
-    pip install garage
+    pip install pooch
 
 
 Installing the latest development version
@@ -46,12 +46,12 @@ Installing the latest development version
 
 You can use ``pip`` to install the latest source from Github::
 
-    pip install https://github.com/fatiando/garage/archive/master.zip
+    pip install https://github.com/fatiando/pooch/archive/master.zip
 
 Alternatively, you can clone the git repository locally and install from there::
 
-    git clone https://github.com/fatiando/garage.git
-    cd garage
+    git clone https://github.com/fatiando/pooch.git
+    cd pooch
     pip install .
 
 
@@ -66,5 +66,5 @@ To run the tests, you'll need to install some extra dependencies first:
 After that, you can test your installation by running the following inside a Python
 interpreter::
 
-    import garage
-    garage.test()
+    import pooch
+    pooch.test()

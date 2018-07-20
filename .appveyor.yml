@@ -46,4 +46,4 @@ install:
 
 test_script:
     # Run the tests inside a tmp folder to make sure we're testing the installed version
-    - ps: mkdir -p tmp; cd tmp; python -c "import garage; garage.test()"
+    - ps: mkdir -p tmp; cd tmp; python -c "import pooch; pooch.test()"

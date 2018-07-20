@@ -1,4 +1,4 @@
-name: garage
+name: pooch
 channels:
     - conda-forge
     - defaults

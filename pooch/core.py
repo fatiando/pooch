@@ -14,27 +14,27 @@ from .utils import file_hash, check_version
 
 def create(path, base_url, version, version_dev, env=None, registry=None):
     """
-    Create a new (versioned) Garage with sensible defaults.
+    Create a new :class:`~pooch.Pooch` with sensible defaults to fetch data files.
 
-    The Garage will be versioned, meaning that the local storage folder and the base URL
+    The Pooch will be versioned, meaning that the local storage folder and the base URL
     depend on the projection version. This is necessary if your users have multiple
     versions of your library installed (using virtual environments) and you updated the
-    data files between versions. If the Garage was not versioned, every time a user
-    switches environments would trigger a re-download of the data.
+    data files between versions. Otherwise, every time a user switches environments
+    would trigger a re-download of the data.
 
     The version string will be appended to the local storage path (for example,
-    ``~/.mygarage/cache/v0.1``) and inserted into the base URL (for example,
-    ``https://github.com/fatiando/garage/raw/v0.1/data``). If the version string
+    ``~/.mypooch/cache/v0.1``) and inserted into the base URL (for example,
+    ``https://github.com/fatiando/pooch/raw/v0.1/data``). If the version string
     contains ``+XX.XXXXX``, it will be interpreted as a development version.
 
-    If the Garage path doesn't exit, it will be created.
+    If the local storage path doesn't exit, it will be created.
 
     Parameters
     ----------
     path : str, PathLike, list or tuple
         The path to the local data storage folder. If this is a list or tuple, we'll
         call :func:`os.path.join` on it. The *version* will be appended to the end of
-        this path. Use :func:`garage.os_cache` for a sensible default.
+        this path. Use :func:`pooch.os_cache` for a sensible default.
     base_url : str
         Base URL for the remote data source. All requests will be made relative to this
         URL. The string should have a ``{version}`` formatting mark in it. We will call
@@ -51,84 +51,84 @@ def create(path, base_url, version, version_dev, env=None, registry=None):
         to control where they want the data to be stored. We'll append *version* to the
         end of this value as well.
     registry : dict
-        A record of the files that exist in this garage. Keys should be the file names
-        and the values should be their SHA256 hashes. Only files in the registry can be
-        fetched from the garage.
+        A record of the files that are managed by this Pooch. Keys should be the file
+        names and the values should be their SHA256 hashes. Only files in the registry
+        can be fetched from the local storage.
 
     Returns
     -------
-    garage : :class:`~garage.Garage`
-        The Garage initialized with the given arguments.
+    pooch : :class:`~pooch.Pooch`
+        The :class:`~pooch.Pooch` initialized with the given arguments.
 
     Examples
     --------
 
-    Create a :class:`~garage.Garage` for a release (v0.1):
+    Create a :class:`~pooch.Pooch` for a release (v0.1):
 
-    >>> garage = create(path="mygarage",
-    ...                 base_url="http://some.link.com/{version}/",
-    ...                 version="v0.1",
-    ...                 version_dev="master",
-    ...                 registry={"data.txt": "9081wo2eb2gc0u..."})
-    >>> print(garage.path.parts)  # The path is a pathlib.Path
-    ('mygarage', 'v0.1')
+    >>> pup = create(path="myproject",
+    ...              base_url="http://some.link.com/{version}/",
+    ...              version="v0.1",
+    ...              version_dev="master",
+    ...              registry={"data.txt": "9081wo2eb2gc0u..."})
+    >>> print(pup.path.parts)  # The path is a pathlib.Path
+    ('myproject', 'v0.1')
     >>> # We'll create the directory if it doesn't exist yet.
-    >>> garage.path.exists()
+    >>> pup.path.exists()
     True
-    >>> print(garage.base_url)
+    >>> print(pup.base_url)
     http://some.link.com/v0.1/
-    >>> print(garage.registry)
+    >>> print(pup.registry)
     {'data.txt': '9081wo2eb2gc0u...'}
 
     If this is a development version (12 commits ahead of v0.1):
 
-    >>> garage = create(path="mygarage",
-    ...                 base_url="http://some.link.com/{version}/",
-    ...                 version="v0.1+12.do9iwd",
-    ...                 version_dev="master")
-    >>> print(garage.path.parts)
-    ('mygarage', 'master')
-    >>> garage.path.exists()
+    >>> pup = create(path="myproject",
+    ...              base_url="http://some.link.com/{version}/",
+    ...              version="v0.1+12.do9iwd",
+    ...              version_dev="master")
+    >>> print(pup.path.parts)
+    ('myproject', 'master')
+    >>> pup.path.exists()
     True
-    >>> print(garage.base_url)
+    >>> print(pup.base_url)
     http://some.link.com/master/
 
-    To place the Garage at a subdirectory, pass in a list and we'll join the path for
-    you using the appropriate separator for your operating system:
+    To place the storage folder at a subdirectory, pass in a list and we'll join the
+    path for you using the appropriate separator for your operating system:
 
-    >>> garage = create(path=["mygarage", "cache", "data"],
-    ...                 base_url="http://some.link.com/{version}/",
-    ...                 version="v0.1",
-    ...                 version_dev="master")
-    >>> print(garage.path.parts)
-    ('mygarage', 'cache', 'data', 'v0.1')
-    >>> garage.path.exists()
+    >>> pup = create(path=["myproject", "cache", "data"],
+    ...              base_url="http://some.link.com/{version}/",
+    ...              version="v0.1",
+    ...              version_dev="master")
+    >>> print(pup.path.parts)
+    ('myproject', 'cache', 'data', 'v0.1')
+    >>> pup.path.exists()
     True
 
-    The user can overwrite the garage path by setting an environment variable:
+    The user can overwrite the storage path by setting an environment variable:
 
     >>> # The variable is not set so we'll use *path*
-    >>> garage = create(path=["mygarage", "not_from_env"],
-    ...                 base_url="http://some.link.com/{version}/",
-    ...                 version="v0.1",
-    ...                 version_dev="master",
-    ...                 env="MYGARAGE_DATA_DIR")
-    >>> print(garage.path.parts)
-    ('mygarage', 'not_from_env', 'v0.1')
+    >>> pup = create(path=["myproject", "not_from_env"],
+    ...              base_url="http://some.link.com/{version}/",
+    ...              version="v0.1",
+    ...              version_dev="master",
+    ...              env="MYPROJECT_DATA_DIR")
+    >>> print(pup.path.parts)
+    ('myproject', 'not_from_env', 'v0.1')
     >>> # Set the environment variable and try again
     >>> import os
-    >>> os.environ["MYGARAGE_DATA_DIR"] = os.path.join("mygarage", "from_env")
-    >>> garage = create(path=["mygarage", "not_from_env"],
-    ...                 base_url="http://some.link.com/{version}/",
-    ...                 version="v0.1",
-    ...                 version_dev="master",
-    ...                 env="MYGARAGE_DATA_DIR")
-    >>> print(garage.path.parts)
-    ('mygarage', 'from_env', 'v0.1')
+    >>> os.environ["MYPROJECT_DATA_DIR"] = os.path.join("myproject", "from_env")
+    >>> pup = create(path=["myproject", "not_from_env"],
+    ...              base_url="http://some.link.com/{version}/",
+    ...              version="v0.1",
+    ...              version_dev="master",
+    ...              env="MYPROJECT_DATA_DIR")
+    >>> print(pup.path.parts)
+    ('myproject', 'from_env', 'v0.1')
 
     Clean up the files we created:
 
-    >>> import shutil; shutil.rmtree("mygarage")
+    >>> import shutil; shutil.rmtree("myproject")
 
     """
     version = check_version(version, fallback=version_dev)
@@ -141,15 +141,15 @@ def create(path, base_url, version, version_dev, env=None, registry=None):
     os.makedirs(versioned_path.expanduser().resolve(), exist_ok=True)
     if registry is None:
         registry = dict()
-    garage = Garage(
+    pup = Pooch(
         path=versioned_path,
         base_url=base_url.format(version=version),
         registry=registry,
     )
-    return garage
+    return pup
 
 
-class Garage:
+class Pooch:
     """
     Manager for a local data storage that can fetch from a remote source.
 
@@ -162,9 +162,9 @@ class Garage:
         Base URL for the remote data source. All requests will be made relative to this
         URL.
     registry : dict
-        A record of the files that exist in this garage. Keys should be the file names
-        and the values should be their SHA256 hashes. Only files in the registry can be
-        fetched from the garage.
+        A record of the files that are managed by this good boy. Keys should be the file
+        names and the values should be their SHA256 hashes. Only files in the registry
+        can be fetched from the local storage.
 
     Examples
     --------
@@ -173,27 +173,26 @@ class Garage:
     >>> warnings.simplefilter("ignore")  # disable warnings to stop printing status
     >>> import os
     >>> from tempfile import TemporaryDirectory
-    >>> from garage.tests.utils import garage_test_url, garage_test_registry
-    >>> # Setup a garage in a temporary directory for this example
+    >>> from pooch.tests.utils import pooch_test_url, pooch_test_registry
+    >>> # Setup a pooch in a temporary directory for this example
     >>> store = TemporaryDirectory()
     >>> os.listdir(store.name)
     []
     >>> # Use our test base url and registry
-    >>> garage = Garage(path=store.name, base_url=garage_test_url(),
-    ...                 registry=garage_test_registry())
-    >>> # Fetch a data file from the garage. Since it's not in our local storage, it
-    >>> # will be downloaded
-    >>> fname = garage.fetch('tiny-data.txt')
+    >>> pup = Pooch(path=store.name, base_url=pooch_test_url(),
+    ...             registry=pooch_test_registry())
+    >>> # Fetch a data file. Since it's not in our local storage, it will be downloaded
+    >>> fname = pup.fetch('tiny-data.txt')
     >>> os.listdir(store.name)
     ['tiny-data.txt']
     >>> with open(fname) as f:
     ...     print(f.read().strip())
     # A tiny data file for test purposes only
     1  2  3  4  5  6
-    >>> # If the data file is corrupted or outdated, Garage will download a new version
+    >>> # If the data file is corrupted or outdated, Pooch will download a new version
     >>> with open(fname, "w") as f:
     ...     __ = f.write("This is no longer the same file content.")
-    >>> fname = garage.fetch('tiny-data.txt')
+    >>> fname = pup.fetch('tiny-data.txt')
     >>> with open(fname) as f:
     ...     print(f.read().strip())
     # A tiny data file for test purposes only
@@ -209,12 +208,12 @@ class Garage:
 
     @property
     def abspath(self):
-        "Absolute path to the local garage"
+        "Absolute path to the local storage"
         return Path(os.path.abspath(os.path.expanduser(self.path)))
 
     def fetch(self, fname):
         """
-        Get the absolute path to a file in the garage.
+        Get the absolute path to a file in the local storage.
 
         If it's not in the local storage, it will be downloaded. If the hash of file in
         local storage doesn't match the one in the registry, will download a new copy of
@@ -226,35 +225,36 @@ class Garage:
         ----------
         fname : str
             The file name (relative to the *base_url* of the remote data storage) to
-            fetch from the garage.
+            fetch from the local storage.
 
         Returns
         -------
         full_path : str
-            The absolute path (including the file name) of the file in the local garage.
+            The absolute path (including the file name) of the file in the local
+            storage.
 
         """
         if fname not in self.registry:
             raise ValueError("File '{}' is not in the registry.".format(fname))
         full_path = os.path.join(self.abspath, fname)
-        in_garage = os.path.exists(full_path)
-        update = in_garage and file_hash(full_path) != self.registry[fname]
-        download = not in_garage
+        in_storage = os.path.exists(full_path)
+        update = in_storage and file_hash(full_path) != self.registry[fname]
+        download = not in_storage
         if update or download:
             self._download_file(fname, update)
         return full_path
 
     def _download_file(self, fname, update):
         """
-        Download a file from the remote data storage to the local garage.
+        Download a file from the remote data storage to the local storage.
 
         Parameters
         ----------
         fname : str
             The file name (relative to the *base_url* of the remote data storage) to
-            fetch from the garage.
+            fetch from the local storage.
         update : bool
-            True if the file already exists in the garage but needs an update.
+            True if the file already exists in the storage but needs an update.
 
         Raises
         ------
@@ -295,7 +295,7 @@ class Garage:
         """
         Load entries form a file and add them to the registry.
 
-        Use this if you are managing a garage with many files.
+        Use this if you are managing many files.
 
         Each line of the file should have file name and its SHA256 hash separate by a
         space. Only one file per line is allowed.

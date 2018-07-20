@@ -8,14 +8,14 @@ from setuptools import setup, find_packages
 import versioneer
 
 
-NAME = "garage"
-FULLNAME = "Garage"
+NAME = "pooch"
+FULLNAME = "Pooch"
 AUTHOR = "Leonardo Uieda"
 AUTHOR_EMAIL = "leouieda@gmail.com"
 MAINTAINER = AUTHOR
 MAINTAINER_EMAIL = AUTHOR_EMAIL
 LICENSE = "BSD License"
-URL = "https://github.com/fatiando/garage"
+URL = "https://github.com/fatiando/pooch"
 DESCRIPTION = "Download and stash datasets in a user directory"
 KEYWORDS = ""
 with open("README.rst") as f:
@@ -26,7 +26,7 @@ CMDCLASS = versioneer.get_cmdclass()
 
 PACKAGES = find_packages(exclude=["doc"])
 SCRIPTS = []
-PACKAGE_DATA = {"garage.tests": ["data/*"]}
+PACKAGE_DATA = {"pooch.tests": ["data/*"]}
 
 CLASSIFIERS = [
     "Development Status :: 3 - Alpha",

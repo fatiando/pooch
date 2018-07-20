@@ -8,7 +8,7 @@ import sphinx_rtd_theme
 # version number
 sys.path.append(os.path.pardir)
 
-from garage import __version__, __commit__
+from pooch import __version__, __commit__
 
 extensions = [
     'sphinx.ext.autodoc',
@@ -46,7 +46,7 @@ master_doc = 'index'
 
 # General information about the project
 year = datetime.date.today().year
-project = 'Garage'
+project = 'Pooch'
 copyright = '2018-{}, Leonardo Uieda'.format(year)
 if len(__version__.split('+')) > 1 or __version__ == 'unknown':
     version = 'dev'
@@ -59,8 +59,8 @@ rst_epilog = """
 """.format(year=year)
 
 html_last_updated_fmt = '%b %d, %Y'
-html_title = 'Garage'
-html_short_title = 'Garage'
+html_title = project
+html_short_title = project
 html_logo = ''
 html_favicon = '_static/favicon.png'
 html_static_path = ['_static']
@@ -81,17 +81,17 @@ html_context = {
     'menu_links_name': 'Getting help and contributing',
     'menu_links': [
         ('<i class="fa fa-external-link-square fa-fw"></i> Fatiando a Terra', 'https://www.fatiando.org'),
-        ('<i class="fa fa-users fa-fw"></i> Contributing', 'https://github.com/fatiando/garage/blob/master/CONTRIBUTING.md'),
-        ('<i class="fa fa-gavel fa-fw"></i> Code of Conduct', 'https://github.com/fatiando/garage/blob/master/CODE_OF_CONDUCT.md'),
+        ('<i class="fa fa-users fa-fw"></i> Contributing', 'https://github.com/fatiando/pooch/blob/master/CONTRIBUTING.md'),
+        ('<i class="fa fa-gavel fa-fw"></i> Code of Conduct', 'https://github.com/fatiando/pooch/blob/master/CODE_OF_CONDUCT.md'),
         ('<i class="fa fa-comment fa-fw"></i> Contact', 'https://gitter.im/fatiando/fatiando'),
-        ('<i class="fa fa-github fa-fw"></i> Source Code', 'https://github.com/fatiando/garage'),
+        ('<i class="fa fa-github fa-fw"></i> Source Code', 'https://github.com/fatiando/pooch'),
     ],
     # Custom variables to enable "Improve this page"" and "Download notebook"
     # links
     'doc_path': 'doc',
     'galleries': "",
     'gallery_dir': "",
-    'github_repo': 'fatiando/garage',
+    'github_repo': 'fatiando/pooch',
     'github_version': 'master',
 }
 

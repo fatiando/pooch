@@ -1,24 +1,24 @@
 .. raw:: html
 
     <h1 align="center">
-        <strong>Garage</strong>
+        <strong>Pooch</strong>
     </h1>
 
     <h3 align="center">
-        <strong>A place to park your sample data files.</strong>
+        <strong>A friend to fetch your sample data files.</strong>
     </h3>
 
     <p align="center">
-    <a href="https://pypi.python.org/pypi/garage"><img alt="Latest version on PyPI" src="http://img.shields.io/pypi/v/garage.svg?style=flat-square"></a>
-    <a href="https://travis-ci.org/fatiando/garage"><img alt="TravisCI build status" src="http://img.shields.io/travis/fatiando/garage/master.svg?style=flat-square&label=Linux|Mac"></a>
-    <a href="https://ci.appveyor.com/project/fatiando/garage"><img alt="AppVeyor build status" src="http://img.shields.io/appveyor/ci/fatiando/garage/master.svg?style=flat-square&label=Windows"></a>
-    <a href="https://codecov.io/gh/fatiando/garage"><img alt="Test coverage status" src="https://img.shields.io/codecov/c/github/fatiando/garage/master.svg?style=flat-square"></a>
-    <a href="https://pypi.python.org/pypi/garage"><img alt="Compatible Python versions." src="https://img.shields.io/pypi/pyversions/garage.svg?style=flat-square"></a>
+    <a href="https://pypi.python.org/pypi/pooch"><img alt="Latest version on PyPI" src="http://img.shields.io/pypi/v/pooch.svg?style=flat-square"></a>
+    <a href="https://travis-ci.org/fatiando/pooch"><img alt="TravisCI build status" src="http://img.shields.io/travis/fatiando/pooch/master.svg?style=flat-square&label=Linux|Mac"></a>
+    <a href="https://ci.appveyor.com/project/fatiando/pooch"><img alt="AppVeyor build status" src="http://img.shields.io/appveyor/ci/fatiando/pooch/master.svg?style=flat-square&label=Windows"></a>
+    <a href="https://codecov.io/gh/fatiando/pooch"><img alt="Test coverage status" src="https://img.shields.io/codecov/c/github/fatiando/pooch/master.svg?style=flat-square"></a>
+    <a href="https://pypi.python.org/pypi/pooch"><img alt="Compatible Python versions." src="https://img.shields.io/pypi/pyversions/pooch.svg?style=flat-square"></a>
     <a href="https://gitter.im/fatiando/fatiando"><img alt="Chat room on Gitter" src="https://img.shields.io/gitter/room/fatiando/fatiando.svg?style=flat-square"></a>
     </p>
 
     <p align="center">
-    <a href="http://www.fatiando.org/garage">Documentation</a> |
+    <a href="http://www.fatiando.org/pooch">Documentation</a> |
     <a href="https://gitter.im/fatiando/fatiando">Contact</a> |
     Part of the <a href="https://www.fatiando.org">Fatiando a Terra</a> project
     </p>
@@ -32,40 +32,40 @@ TL;DR
     """
     Module mypackage/datasets.py
     """
-    import garage
+    import pooch
 
     # Get the version string from your project. You have one of these, right?
     from . import __version__
 
 
-    # Create a new garage to manage your sample data storage
-    GARAGE = garage.create(
+    # Create a new friend to manage your sample data storage
+    GOODBOY = pooch.create(
         # Folder where the data will be stored. For a sensible default, use the default
         # cache folder for your OS.
-        path=garage.os_cache("mypackage"),
+        path=pooch.os_cache("mypackage"),
         # Base URL of the remote data store. Will call .format on this string to insert
         # the version (see below).
         base_url="https://github.com/myproject/mypackage/raw/{version}/data/",
-        # Garages are versioned so that you can use multiple versions of a package
+        # Pooches are versioned so that you can use multiple versions of a package
         # simultaneously. Use PEP440 compliant version number. The version will be
-        # appended to the path of your garage.
+        # appended to the path.
         version=__version__,
         # If a version as a "+XX.XXXXX" suffix, we'll assume that this is a dev version
         # and replace the version with this string.
         version_dev="master",
-        # An environment variable that overwrites path of the garage.
+        # An environment variable that overwrites the path.
         env="MYPACKAGE_DATA_DIR",
-        # The cache file registry. A dictionary with all files in this garage. Keys are
-        # the file names (relative to *base_url*) and values are their respective SHA256
-        # hashes. Files will be downloaded automatically when needed (see
-        # fetch_gravity_data).
+        # The cache file registry. A dictionary with all files managed by this pooch.
+        # Keys are the file names (relative to *base_url*) and values are their
+        # respective SHA256 hashes. Files will be downloaded automatically when needed
+        # (see fetch_gravity_data).
         registry={"gravity-data.csv": "89y10phsdwhs09whljwc09whcowsdhcwodcy0dcuhw"}
     )
     # You can also load the registry from a file. Each line contains a file name and
     # it's sha256 hash separated by a space. This makes it easier to manage large
     # numbers of data files. The registry file should be in the same directory as this
     # module.
-    GARAGE.load_registry("garage-registry.txt")
+    GOODBOY.load_registry("registry.txt")
 
 
     # Define functions that your users can call to get back some sample data in memory
@@ -73,8 +73,9 @@ TL;DR
         """
         Load some sample gravity data to use in your docs.
         """
-        # Get the path to a file in the garage. If it's not there, we'll download it.
-        fname = GARAGE.fetch("gravity-data.csv")
+        # Fetch the path to a file in the local storae. If it's not there, we'll
+        # download it.
+        fname = GOODBOY.fetch("gravity-data.csv")
         # Load it with numpy/pandas/etc
         data = ...
         return data
@@ -86,23 +87,23 @@ About
 *Does your Python package include sample datasets? Are you shipping them with the code?
 Are they getting too big?*
 
-Garage will manage downloading your sample data files over HTTP from a server and
-storing them in a local directory:
+Pooch will manage downloading your sample data files over HTTP from a server and storing
+them in a local directory:
 
-* Download a file only if it's not in the local garage.
+* Download a file only if it's not in the local storage.
 * Check the SHA256 hash to make sure the file is not corrupted or needs updating.
-* If the hash is different from the registry, Garage will download a new version of the
+* If the hash is different from the registry, Pooch will download a new version of the
   file.
-* If the hash still doesn't match, Garage will raise an exception warning of possible
+* If the hash still doesn't match, Pooch will raise an exception warning of possible
   data corruption.
 
 
 Contacting Us
 -------------
 
-* Most discussion happens `on Github <https://github.com/fatiando/garage>`__.
+* Most discussion happens `on Github <https://github.com/fatiando/pooch>`__.
   Feel free to `open an issue
-  <https://github.com/fatiando/garage/issues/new>`__ or comment
+  <https://github.com/fatiando/pooch/issues/new>`__ or comment
   on any open issue or pull request.
 * We have `chat room on Gitter <https://gitter.im/fatiando/fatiando>`__ where you can
   ask questions and leave comments.
@@ -115,14 +116,14 @@ Code of conduct
 +++++++++++++++
 
 Please note that this project is released with a
-`Contributor Code of Conduct <https://github.com/fatiando/garage/blob/master/CODE_OF_CONDUCT.md>`__.
+`Contributor Code of Conduct <https://github.com/fatiando/pooch/blob/master/CODE_OF_CONDUCT.md>`__.
 By participating in this project you agree to abide by its terms.
 
 Contributing Guidelines
 +++++++++++++++++++++++
 
 Please read our
-`Contributing Guide <https://github.com/fatiando/garage/blob/master/CONTRIBUTING.md>`__
+`Contributing Guide <https://github.com/fatiando/pooch/blob/master/CONTRIBUTING.md>`__
 to see how you can help and give feedback.
 
 Imposter syndrome disclaimer
@@ -158,5 +159,5 @@ License
 
 This is free software: you can redistribute it and/or modify it under the terms
 of the **BSD 3-clause License**. A copy of this license is provided in
-`LICENSE.txt <https://github.com/fatiando/garage/blob/master/LICENSE.txt>`__.
+`LICENSE.txt <https://github.com/fatiando/pooch/blob/master/LICENSE.txt>`__.
 
