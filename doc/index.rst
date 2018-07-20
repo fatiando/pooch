@@ -9,4 +9,5 @@
     :caption: Documentation
 
     install.rst
+    usage.rst
     api/index.rst

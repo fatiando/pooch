@@ -10,6 +10,7 @@ API Reference
 
     create
     os_cache
+    file_hash
     Garage
     Garage.fetch
     Garage.load_registry
