@@ -210,7 +210,7 @@ class Garage:
     @property
     def abspath(self):
         "Absolute path to the local garage"
-        return Path(self.path).expanduser().resolve()
+        return Path(os.path.abspath(os.path.expanduser(self.path)))
 
     def fetch(self, fname):
         """
