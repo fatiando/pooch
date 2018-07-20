@@ -33,20 +33,21 @@ def test_garage_local():
 def test_garage_update():
     "Setup a garage that already has the local data but the file is outdated"
     with TemporaryDirectory() as local_store:
+        path = os.path.abspath(os.path.expanduser(local_store))
         # Create a dummy version of tiny-data.txt that is different from the one in the
         # remote storage
-        true_path = os.path.join(local_store, "tiny-data.txt")
+        true_path = os.path.join(path, "tiny-data.txt")
         with open(true_path, "w") as fin:
             fin.write("different data")
         # Setup a garage in a temp dir
-        garage = Garage(path=local_store, base_url=BASEURL, registry=REGISTRY)
+        garage = Garage(path=path, base_url=BASEURL, registry=REGISTRY)
         # Check that the warning says that the file is being updated
         with warnings.catch_warnings(record=True) as warn:
             fname = garage.fetch("tiny-data.txt")
             assert len(warn) == 1
             assert issubclass(warn[-1].category, UserWarning)
             assert str(warn[-1].message).split()[0] == "Updating"
-            assert str(warn[-1].message).split()[-1] == "'{}'.".format(local_store)
+            assert str(warn[-1].message).split()[-1] == "'{}'.".format(path)
         # Check that the updated file has the right content
         assert true_path == fname
         check_tiny_data(fname)
@@ -57,14 +58,15 @@ def test_garage_corrupted():
     "Raise an exception if the hash of downloaded file doesn't match the registry"
     # Test the case where the file wasn't in the directory
     with TemporaryDirectory() as local_store:
-        garage = Garage(path=local_store, base_url=BASEURL, registry=REGISTRY_CORRUPTED)
+        path = os.path.abspath(os.path.expanduser(local_store))
+        garage = Garage(path=path, base_url=BASEURL, registry=REGISTRY_CORRUPTED)
         with warnings.catch_warnings(record=True) as warn:
             with pytest.raises(ValueError):
                 garage.fetch("tiny-data.txt")
             assert len(warn) == 1
             assert issubclass(warn[-1].category, UserWarning)
             assert str(warn[-1].message).split()[0] == "Downloading"
-            assert str(warn[-1].message).split()[-1] == "'{}'.".format(local_store)
+            assert str(warn[-1].message).split()[-1] == "'{}'.".format(path)
     # and the case where the file exists but hash doesn't match
     garage = Garage(path=DATA_DIR, base_url=BASEURL, registry=REGISTRY_CORRUPTED)
     with warnings.catch_warnings(record=True) as warn:
