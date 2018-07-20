@@ -9,10 +9,10 @@ from warnings import warn
 
 import requests
 
-from .utils import file_hash
+from .utils import file_hash, check_version
 
 
-def create(path, base_url, version, version_dev, env_variable=None, registry=None):
+def create(path, base_url, version, version_dev, env=None, registry=None):
     """
     Create a new (versioned) Garage with sensible defaults.
 
@@ -27,9 +27,11 @@ def create(path, base_url, version, version_dev, env_variable=None, registry=Non
     ``https://github.com/fatiando/garage/raw/v0.1/data``). If the version string
     contains ``+XX.XXXXX``, it will be interpreted as a development version.
 
+    If the Garage path doesn't exit, it will be created.
+
     Parameters
     ----------
-    path : str or PathLike
+    path : str, PathLike, list or tuple
         The path to the local data storage folder. If this is a list or tuple, we'll
         call :func:`os.path.join` on it. The *version* will be appended to the end of
         this path. Use :func:`garage.os_cache` for a sensible default.
@@ -43,7 +45,7 @@ def create(path, base_url, version, version_dev, env_variable=None, registry=Non
         The name used for the development version of a project. If your data is hosted
         on Github (and *base_url* is a Github raw link), then ``"master"`` is a good
         choice.
-    env_variable : str
+    env : str
         An environment variable that can be used to overwrite *path*. This allows users
         to control where they want the data to be stored. We'll append *version* to the
         end of this value as well.
@@ -60,28 +62,88 @@ def create(path, base_url, version, version_dev, env_variable=None, registry=Non
     Examples
     --------
 
-    >>> garage = create(path="mygarage", base_url="http://some.link.com/{version}",
-    ...                 version="v0.1", version_dev="master")
-    >>> print(garage.path.parts)
+    Create a :class:`~garage.Garage` for a release (v0.1):
+
+    >>> garage = create(path="mygarage",
+    ...                 base_url="http://some.link.com/{version}",
+    ...                 version="v0.1",
+    ...                 version_dev="master",
+    ...                 registry={"data.txt": "9081wo2eb2gc0u..."})
+    >>> print(garage.path.parts)  # The path is a pathlib.Path
     ('mygarage', 'v0.1')
+    >>> # We'll create the directory if it doesn't exist yet.
+    >>> garage.path.exists()
+    True
     >>> print(garage.base_url)
     http://some.link.com/v0.1
     >>> print(garage.registry)
-    {}
-    >>> garage = create(path="mygarage", base_url="http://some.link.com/{version}",
-    ...                 version="v0.1+12.do9iwd", version_dev="master")
+    {'data.txt': '9081wo2eb2gc0u...'}
+
+    If this is a development version (12 commits ahead of v0.1):
+
+    >>> garage = create(path="mygarage",
+    ...                 base_url="http://some.link.com/{version}",
+    ...                 version="v0.1+12.do9iwd",
+    ...                 version_dev="master")
     >>> print(garage.path.parts)
     ('mygarage', 'master')
+    >>> garage.path.exists()
+    True
     >>> print(garage.base_url)
     http://some.link.com/master
 
+    To place the Garage at a subdirectory, pass in a list and we'll join the path for
+    you using the appropriate separator for your operating system:
+
+    >>> garage = create(path=["mygarage", "cache", "data"],
+    ...                 base_url="http://some.link.com/{version}",
+    ...                 version="v0.1",
+    ...                 version_dev="master")
+    >>> print(garage.path.parts)
+    ('mygarage', 'cache', 'data', 'v0.1')
+    >>> garage.path.exists()
+    True
+
+    The user can overwrite the garage path by setting an environment variable:
+
+    >>> # The variable is not set so we'll use *path*
+    >>> garage = create(path=["mygarage", "not_from_env"],
+    ...                 base_url="http://some.link.com/{version}",
+    ...                 version="v0.1",
+    ...                 version_dev="master",
+    ...                 env="MYGARAGE_DATA_DIR")
+    >>> print(garage.path.parts)
+    ('mygarage', 'not_from_env', 'v0.1')
+    >>> # Set the environment variable and try again
+    >>> import os
+    >>> os.environ["MYGARAGE_DATA_DIR"] = os.path.join("mygarage", "from_env")
+    >>> garage = create(path=["mygarage", "not_from_env"],
+    ...                 base_url="http://some.link.com/{version}",
+    ...                 version="v0.1",
+    ...                 version_dev="master",
+    ...                 env="MYGARAGE_DATA_DIR")
+    >>> print(garage.path.parts)
+    ('mygarage', 'from_env', 'v0.1')
+
+    Clean up the files we created:
+
+    >>> import shutil; shutil.rmtree("mygarage")
+
     """
-    path = Path(path)
+    version = check_version(version, fallback=version_dev)
+    if isinstance(path, (list, tuple)):
+        path = Path(*path)
+    if env is not None and env in os.environ and os.environ[env]:
+        path = Path(os.environ[env])
+    versioned_path = Path(path, version)
+    versioned_path.mkdir(parents=True, exist_ok=True)
     if registry is None:
         registry = dict()
-    garage = Garage(path=Path(path, version),
-                    base_url=base_url.format(version=version),
-                    registry=registry)
+    garage = Garage(
+        path=versioned_path,
+        base_url=base_url.format(version=version),
+        registry=registry,
+    )
     return garage
 
 
@@ -92,7 +154,8 @@ class Garage:
     Parameters
     ----------
     path : str
-        The path to the local data storage folder.
+        The path to the local data storage folder. The path must exist in the file
+        system.
     base_url : str
         Base URL for the remote data source. All requests will be made relative to this
         URL.

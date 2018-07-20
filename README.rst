@@ -54,7 +54,7 @@ TL;DR
         # and replace the version with this string.
         version_dev="master",
         # An environment variable that overwrites path of the garage.
-        env_variable="MYPACKAGE_DATA_DIR",
+        env="MYPACKAGE_DATA_DIR",
         # The cache file registry. A dictionary with all files in this garage. Keys are
         # the file names (relative to *base_url*) and values are their respective SHA256
         # hashes. Files will be downloaded automatically when needed (see
