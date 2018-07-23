@@ -1,5 +1,5 @@
-*Please provide a detailed description of changes proposed and why they are
-required/desireable. If fixing an issue, enter the issue number below. You can
-delete this.*
+*Detailed description of changes proposed and why you made them.
+If unsure, open an issue first so we can discuss it.
+If fixing an issue, put the issue number after the # below (no spaces).*
 
 Fixes #

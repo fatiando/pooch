@@ -1,4 +1,15 @@
-*Please fill out the fields below to report an error.*
+**-- TEMPLATE FOR FEATURE REQUESTS AND FEEDBACK --**
+
+## Feedback or description of feature requested
+
+*Your text goes here. Please be as specific and detailed as possible.*
+
+
+**Are you willing to help implement and maintain this feature?** Yes/No
+
+
+
+**-- TEMPLATE FOR BUG REPORTS --** If you're not filing a bug, please delete this part.
 
 ## Full code that generated the error
 
@@ -16,16 +27,10 @@ PASTE ERROR MESSAGE HERE
 
 * Operating system:
 * Python installation (Anaconda, system, ETS):
-* Version installed:
+* Version of Python:
+* Version of this package:
 * If using conda, paste the output of `conda list` below:
 
 ```
-Output of conda list
+# Output of conda list
 ```
-
-*If this is a **question or feature request**, delete the above lines and instead:*
-
-* Describe the feature you desire in as much detail as possible:
-
-* Are you willing to try to implement and maintain this feature?
-  We'll help you through the process.
