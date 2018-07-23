@@ -1,6 +1,7 @@
 """
 Misc utilities
 """
+import os
 from pathlib import Path
 import sys
 import hashlib
@@ -9,7 +10,7 @@ from packaging.version import Version
 
 
 def os_cache(project, platform=None):
-    r"""
+    """
     Default cache location based on the operating system.
 
     Will insert the project name in the proper location of the path.
@@ -138,3 +139,35 @@ def check_version(version, fallback="master"):
     if parse.local is not None:
         return fallback
     return version
+
+
+def make_file_registry(directory, output, recursive=True):
+    """
+    Make a registry of files and hashes for the given directory.
+
+    This is helpful if you have many files in your test dataset as it keeps you
+    from needing to manually update the registry.
+
+    Parameters
+    ----------
+    directory : str
+        Directory of the test data to put in the registry.
+    output : str
+        File to write for the registry of files.
+    recursive : bool
+        If we should recursively follow subdirectories of directory.
+
+    """
+    if recursive:
+        files = [os.path.join(dp, f) for dp, dn, fn in os.walk(os.path.expanduser(directory)) for f in fn]
+    else:
+        files = [f for f in os.listdir(directory) if os.path.isfile(os.path.join(directory, f))]
+
+    # Get the hash of each of the files
+    hashes = [file_hash(f) for f in files]
+
+    # Write out the files and hashes to the desired file
+    outfile = open(output, 'w')
+    for f, h in zip(files, hashes):
+        outfile.write('{} {}\n'.format(f, h))
+    outfile.close()
