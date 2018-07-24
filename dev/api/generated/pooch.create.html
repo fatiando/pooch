@@ -224,8 +224,8 @@ contains <code class="docutils literal notranslate"><span class="pre">+XX.XXXXX<
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first docutils">
 <dt><strong>path</strong> <span class="classifier-delimiter">:</span> <span class="classifier">str, PathLike, list or tuple</span></dt>
 <dd><p class="first last">The path to the local data storage folder. If this is a list or tuple, we’ll
-call <a class="reference external" href="https://docs.python.org/3/library/os.path.html#os.path.join" title="(in Python v3.7)"><code class="xref py py-func docutils literal notranslate"><span class="pre">os.path.join</span></code></a> on it. The <em>version</em> will be appended to the end of
-this path. Use <a class="reference internal" href="pooch.os_cache.html#pooch.os_cache" title="pooch.os_cache"><code class="xref py py-func docutils literal notranslate"><span class="pre">pooch.os_cache</span></code></a> for a sensible default.</p>
+join the parts with the appropriate separator. The <em>version</em> will be appended to
+the end of this path. Use <a class="reference internal" href="pooch.os_cache.html#pooch.os_cache" title="pooch.os_cache"><code class="xref py py-func docutils literal notranslate"><span class="pre">pooch.os_cache</span></code></a> for a sensible default.</p>
 </dd>
 <dt><strong>base_url</strong> <span class="classifier-delimiter">:</span> <span class="classifier">str</span></dt>
 <dd><p class="first last">Base URL for the remote data source. All requests will be made relative to this
@@ -356,7 +356,7 @@ path for you using the appropriate separator for your operating system:</p>
   <div role="contentinfo">
     <p>
         &copy; Copyright 2018-2018, Leonardo Uieda.
-      Last updated on Jul 20, 2018.
+      Last updated on Jul 24, 2018.
 
     </p>
   </div>
