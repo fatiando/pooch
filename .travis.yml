@@ -24,7 +24,7 @@ env:
         - secure: "drOQIoP0IbVf+NbjbyH2nGEixtt4R/1tBQYr7EBjo2IDXI8/b5io7voL2jsaAhhCGZpzaLJvvv1gVUj9FxJFfhiQKwyU2F4n0E1TLJFFVfxXWMUFh6rrCAAbfuBhhzRDsbVNtH29FYPhNJKj8D2YsLkAydoRfMDMli0DJrn0qPO+/My0Dk7ikaPLo1/UDRLSUBae95yGbex3B/ksTZdELIVAZiSb7SWkL//cQpl+UcP/tvAWxsz+XIWH2TJ8d8anOSnZv7ccCkVx1P8DDp1LxhvY3vSiSV9KE3WDTWJzgmuvC34e5sPqxPoQjDklHjCQHtV4p2hi7tNAFX9yESUjSpFS8LDGMgQRrt6s5y3+KmQ4Qg/lJTNnRVIu/L6cxH9NPFd8bmJevQO532Qu8d5aiNmgAQb1/m8ZuEZCebXxXSMTD1Pl+b3xS/folhqyKhh31pLb7JPwhjSTdim08ZjISdRIqNVes2dNYgfqaF7RNrho4ha0Cj7NpRW1YEYw+n0kVjFmZuIoWyNXClfAfn03r69XgXLAh51HmW1OeXrdRr6Ji7sbVLyu5AMkGEt92G9dJARqb+E+hHk4p+5Htp/U7rRzcUsXhMYKaMY4d9D8uCRNNbAFnKqOlOUXq3FaVG/qAi4Y4YskYtHs3veKjnP/TRdIEugFuEZjeaADFLR6YWA="
         - TWINE_USERNAME=Leonardo.Uieda
         # The file with the listed requirements to be installed by conda
-        - REQUIREMENTS=requirements.txt
+        - CONDA_REQUIREMENTS=requirements.txt
         # These variables control which actions are performed in a build
         - COVERAGE=false
         - BUILD_DOCS=false
