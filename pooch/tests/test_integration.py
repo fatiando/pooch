@@ -23,16 +23,17 @@ def pup():
         version_dev="master",
         env="POOCH_DATA_DIR",
     )
-    gar.load_registry(Path(os.path.dirname(__file__), "data", "registry.txt"))
+    # The str conversion is needed in Python 3.5
+    gar.load_registry(str(Path(os.path.dirname(__file__), "data", "registry.txt")))
     yield gar
-    shutil.rmtree(gar.abspath)
+    shutil.rmtree(str(gar.abspath))
 
 
 def test_fetch(pup):
     "Fetch a data file from the local storage"
     # Make sure the storage exists and is empty to begin
     assert pup.abspath.exists()
-    assert not os.listdir(pup.abspath)
+    assert not list(pup.abspath.iterdir())
     with warnings.catch_warnings(record=True) as warn:
         fname = pup.fetch("tiny-data.txt")
         assert len(warn) == 1
