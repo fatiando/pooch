@@ -1,27 +1,32 @@
-.. raw:: html
+Pooch
+=====
 
-    <h1 align="center">
-        <strong>Pooch</strong>
-    </h1>
+    A friend to fetch your sample data files.
 
-    <h3 align="center">
-        <strong>A friend to fetch your sample data files.</strong>
-    </h3>
+`Documentation <http://www.fatiando.org/pooch>`__ |
+`Contact <https://gitter.im/fatiando/fatiando>`__ |
+Part of the `Fatiando a Terra <https://www.fatiando.org>`__ project
 
-    <p align="center">
-    <a href="https://pypi.python.org/pypi/pooch"><img alt="Latest version on PyPI" src="http://img.shields.io/pypi/v/pooch.svg?style=flat-square"></a>
-    <a href="https://travis-ci.org/fatiando/pooch"><img alt="TravisCI build status" src="http://img.shields.io/travis/fatiando/pooch/master.svg?style=flat-square&label=Linux|Mac"></a>
-    <a href="https://ci.appveyor.com/project/fatiando/pooch"><img alt="AppVeyor build status" src="http://img.shields.io/appveyor/ci/fatiando/pooch/master.svg?style=flat-square&label=Windows"></a>
-    <a href="https://codecov.io/gh/fatiando/pooch"><img alt="Test coverage status" src="https://img.shields.io/codecov/c/github/fatiando/pooch/master.svg?style=flat-square"></a>
-    <a href="https://pypi.python.org/pypi/pooch"><img alt="Compatible Python versions." src="https://img.shields.io/pypi/pyversions/pooch.svg?style=flat-square"></a>
-    <a href="https://gitter.im/fatiando/fatiando"><img alt="Chat room on Gitter" src="https://img.shields.io/gitter/room/fatiando/fatiando.svg?style=flat-square"></a>
-    </p>
 
-    <p align="center">
-    <a href="http://www.fatiando.org/pooch">Documentation</a> |
-    <a href="https://gitter.im/fatiando/fatiando">Contact</a> |
-    Part of the <a href="https://www.fatiando.org">Fatiando a Terra</a> project
-    </p>
+.. image:: http://img.shields.io/pypi/v/pooch.svg?style=flat-square
+    :alt: Latest version on PyPI
+    :target: https://pypi.python.org/pypi/pooch
+.. image:: http://img.shields.io/travis/fatiando/pooch/master.svg?style=flat-square&label=Linux|Mac
+    :alt: TravisCI build status
+    :target: https://travis-ci.org/fatiando/pooch
+.. image:: http://img.shields.io/appveyor/ci/fatiando/pooch/master.svg?style=flat-square&label=Windows
+    :alt: AppVeyor build status
+    :target: https://ci.appveyor.com/project/fatiando/pooch
+.. image:: https://img.shields.io/codecov/c/github/fatiando/pooch/master.svg?style=flat-square
+    :alt: Test coverage status
+    :target: https://codecov.io/gh/fatiando/pooch
+.. image:: https://img.shields.io/pypi/pyversions/pooch.svg?style=flat-square
+    :alt: Compatible Python versions.
+    :target: https://pypi.python.org/pypi/pooch
+.. image:: https://img.shields.io/gitter/room/fatiando/fatiando.svg?style=flat-square
+    :alt: Chat room on Gitter
+    :target: https://gitter.im/fatiando/fatiando
+
 
 
 TL;DR

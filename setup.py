@@ -16,7 +16,11 @@ MAINTAINER = AUTHOR
 MAINTAINER_EMAIL = AUTHOR_EMAIL
 LICENSE = "BSD License"
 URL = "https://github.com/fatiando/pooch"
-DESCRIPTION = "Download and stash datasets in a user directory"
+DESCRIPTION = (
+    "Pooch manages your Python library's sample data files: "
+    "it automatically downloads and stores them in a local directory, "
+    "with support for versioning and corruption checks."
+)
 KEYWORDS = ""
 with open("README.rst") as f:
     LONG_DESCRIPTION = "".join(f.readlines())
