@@ -2,6 +2,7 @@
 Test the core class and factory function.
 """
 import os
+from pathlib import Path
 from tempfile import TemporaryDirectory
 import warnings
 
@@ -12,7 +13,7 @@ from ..utils import file_hash
 from .utils import pooch_test_url, pooch_test_registry, check_tiny_data
 
 
-DATA_DIR = os.path.join(os.path.abspath(os.path.dirname(__file__)), "data")
+DATA_DIR = str(Path(os.path.dirname(__file__), "data").expanduser().resolve())
 REGISTRY = pooch_test_registry()
 BASEURL = pooch_test_url()
 REGISTRY_CORRUPTED = {
@@ -33,10 +34,10 @@ def test_pooch_local():
 def test_pooch_update():
     "Setup a pooch that already has the local data but the file is outdated"
     with TemporaryDirectory() as local_store:
-        path = os.path.abspath(os.path.expanduser(local_store))
+        path = Path(local_store).expanduser().resolve()
         # Create a dummy version of tiny-data.txt that is different from the one in the
         # remote storage
-        true_path = os.path.join(path, "tiny-data.txt")
+        true_path = str(path / "tiny-data.txt")
         with open(true_path, "w") as fin:
             fin.write("different data")
         # Setup a pooch in a temp dir
