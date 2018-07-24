@@ -270,7 +270,7 @@ class Pooch:
             action = "Downloading"
         warn(
             "{} data file '{}' from remote data store '{}' to '{}'.".format(
-                action, fname, self.base_url, str(self.abspath)
+                action, fname, self.base_url, str(self.path)
             )
         )
         response = requests.get(source, stream=True)
