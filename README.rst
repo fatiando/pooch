@@ -7,7 +7,6 @@ Pooch
 `Contact <https://gitter.im/fatiando/fatiando>`__ |
 Part of the `Fatiando a Terra <https://www.fatiando.org>`__ project
 
-----
 
 .. image:: http://img.shields.io/pypi/v/pooch.svg?style=flat-square
     :alt: Latest version on PyPI
