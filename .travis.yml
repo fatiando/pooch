@@ -82,6 +82,8 @@ install:
 script:
     # Check code for style and quality
     - if [ "$CHECK_FORMAT" == "true" ]; then
+          # Black is Python 3.6 only so it can't be in the requirements file.
+          conda install --yes --channel conda-forge black python=$PYTHON
           make check;
       fi
     # Run the test suite
