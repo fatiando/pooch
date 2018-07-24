@@ -3,6 +3,12 @@ Pooch
 
     A friend to fetch your sample data files.
 
+`Documentation <http://www.fatiando.org/pooch>`__ |
+`Contact <https://gitter.im/fatiando/fatiando>`__ |
+Part of the `Fatiando a Terra <https://www.fatiando.org>`__ project
+
+----
+
 .. image:: http://img.shields.io/pypi/v/pooch.svg?style=flat-square
     :alt: Latest version on PyPI
     :target: https://pypi.python.org/pypi/pooch
@@ -22,10 +28,6 @@ Pooch
     :alt: Chat room on Gitter
     :target: https://gitter.im/fatiando/fatiando
 
-
-`Documentation <http://www.fatiando.org/pooch>`__ |
-`Contact <https://gitter.im/fatiando/fatiando>`__ |
-Part of the `Fatiando a Terra <https://www.fatiando.org>`__ project
 
 
 TL;DR
