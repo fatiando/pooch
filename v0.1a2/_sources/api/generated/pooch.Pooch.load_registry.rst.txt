@@ -1,0 +1,10 @@
+pooch.Pooch.load\_registry
+==========================
+
+.. currentmodule:: pooch
+
+.. automethod:: Pooch.load_registry
+
+.. raw:: html
+
+      <div style='clear:both'></div>
