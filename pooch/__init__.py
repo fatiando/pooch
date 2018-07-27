@@ -1,16 +1,8 @@
-"""
-The public API.
-"""
-from ._version import get_versions as _get_versions
-
+# pylint: disable=missing-docstring
 # Import functions/classes to make the API
+from . import version
 from .core import Pooch, create
 from .utils import os_cache, file_hash
-
-
-# Get the version number through versioneer
-__version__ = _get_versions()["version"]
-__commit__ = _get_versions()["full-revisionid"]
 
 
 def test(doctest=True, verbose=True, coverage=False):

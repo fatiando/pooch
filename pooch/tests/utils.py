@@ -3,7 +3,7 @@ Utilities for testing code.
 """
 import os
 
-from .. import __version__
+from ..version import full_version
 from ..utils import check_version
 
 
@@ -26,7 +26,7 @@ def pooch_test_url():
 
     The URL is a github raw link to the ``pooch/tests/data`` directory from the
     `Github repository <https://github.com/fatiando/pooch>`__. It matches the pooch
-    version specified in ``pooch.__version__``.
+    version specified in ``pooch.version.full_version``.
 
     Returns
     -------
@@ -35,7 +35,7 @@ def pooch_test_url():
 
     """
     url = "https://github.com/fatiando/pooch/raw/{version}/pooch/tests/data/".format(
-        version=check_version(__version__)
+        version=check_version(full_version)
     )
     return url
 

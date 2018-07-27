@@ -9,7 +9,8 @@ import warnings
 
 import pytest
 
-from .. import create, os_cache, __version__
+from .. import create, os_cache
+from ..version import full_version
 from .utils import check_tiny_data
 
 
@@ -19,7 +20,7 @@ def pup():
     gar = create(
         path=os_cache("pooch"),
         base_url="https://github.com/fatiando/pooch/raw/{version}/data/",
-        version=__version__,
+        version=full_version,
         version_dev="master",
         env="POOCH_DATA_DIR",
     )
