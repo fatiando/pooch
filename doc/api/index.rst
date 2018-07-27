@@ -3,6 +3,8 @@
 API Reference
 =============
 
+.. automodule:: pooch
+
 .. currentmodule:: pooch
 
 .. autosummary::
