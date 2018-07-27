@@ -40,7 +40,7 @@ TL;DR
     import pooch
 
     # Get the version string from your project. You have one of these, right?
-    from . import __version__
+    from . import version
 
 
     # Create a new friend to manage your sample data storage
@@ -54,7 +54,7 @@ TL;DR
         # Pooches are versioned so that you can use multiple versions of a package
         # simultaneously. Use PEP440 compliant version number. The version will be
         # appended to the path.
-        version=__version__,
+        version=version,
         # If a version as a "+XX.XXXXX" suffix, we'll assume that this is a dev version
         # and replace the version with this string.
         version_dev="master",
@@ -165,4 +165,3 @@ License
 This is free software: you can redistribute it and/or modify it under the terms
 of the **BSD 3-clause License**. A copy of this license is provided in
 `LICENSE.txt <https://github.com/fatiando/pooch/blob/master/LICENSE.txt>`__.
-
