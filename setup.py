@@ -27,11 +27,6 @@ with open("README.rst") as f:
 
 VERSION = versioneer.get_version()
 CMDCLASS = versioneer.get_cmdclass()
-
-PACKAGES = find_packages(exclude=["doc"])
-SCRIPTS = []
-PACKAGE_DATA = {"pooch.tests": ["data/*"]}
-
 CLASSIFIERS = [
     "Development Status :: 3 - Alpha",
     "Intended Audience :: Science/Research",
@@ -44,7 +39,11 @@ CLASSIFIERS = [
     "License :: OSI Approved :: {}".format(LICENSE),
 ]
 PLATFORMS = "Any"
+PACKAGES = find_packages(exclude=["doc"])
+SCRIPTS = []
+PACKAGE_DATA = {"pooch.tests": ["data/*"]}
 INSTALL_REQUIRES = ["requests", "packaging"]
+PYTHON_REQUIRES = ">=3.5"
 
 if __name__ == "__main__":
     setup(
@@ -66,5 +65,6 @@ if __name__ == "__main__":
         classifiers=CLASSIFIERS,
         keywords=KEYWORDS,
         install_requires=INSTALL_REQUIRES,
+        python_requires=PYTHON_REQUIRES,
         cmdclass=CMDCLASS,
     )
