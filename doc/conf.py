@@ -8,7 +8,7 @@ import sphinx_rtd_theme
 # version number
 sys.path.append(os.path.pardir)
 
-from pooch import __version__, __commit__
+from pooch.version import full_version
 
 extensions = [
     'sphinx.ext.autodoc',
@@ -48,10 +48,10 @@ master_doc = 'index'
 year = datetime.date.today().year
 project = 'Pooch'
 copyright = '2018-{}, Leonardo Uieda'.format(year)
-if len(__version__.split('+')) > 1 or __version__ == 'unknown':
+if len(full_version.split('+')) > 1 or full_version == 'unknown':
     version = 'dev'
 else:
-    version = __version__
+    version = full_version
 
 # These enable substitutions using |variable| in the rst files
 rst_epilog = """

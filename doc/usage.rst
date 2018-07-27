@@ -58,7 +58,7 @@ This is what the ``plumbus/datasets.py`` file would look like:
     import pandas
     import pooch
 
-    from . import __version__  # The version string of your project
+    from . import version  # The version string of your project
 
 
     GOODBOY = pooch.create(
@@ -66,7 +66,7 @@ This is what the ``plumbus/datasets.py`` file would look like:
         path=pooch.os_cache("plumbus"),
         # The remote data is on Github
         base_url="https://github.com/rick/plumbus/raw/{version}/data/",
-        version=__version__,
+        version=version,
         # If this is a development version, get the data from the master branch
         version_dev="master",
         # The registry specifies the files that can be fetched from the local storage
@@ -160,7 +160,7 @@ variable:
        # This is still the default in case the environment variable isn't defined
        path=pooch.os_cache("plumbus"),
        base_url="https://github.com/rick/plumbus/raw/{version}/data/",
-       version=__version__,
+       version=version,
        version_dev="master",
        registry={
            "c137.csv": "19uheidhlkjdwhoiwuhc0uhcwljchw9ochwochw89dcgw9dcgwc",
@@ -191,7 +191,7 @@ use :meth:`pooch.Pooch.load_registry` to read them:
         path=pooch.os_cache("plumbus"),
         # The remote data is on Github
         base_url="https://github.com/rick/plumbus/raw/{version}/data/",
-        version=__version__,
+        version=version,
         # If this is a development version, get the data from the master branch
         version_dev="master",
         # We'll load it from a file later
