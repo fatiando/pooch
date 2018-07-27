@@ -184,19 +184,11 @@
            <div itemprop="articleBody">
             
   <h1>Source code for pooch</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">The public API.</span>
-<span class="sd">&quot;&quot;&quot;</span>
-<span class="kn">from</span> <span class="nn">._version</span> <span class="k">import</span> <span class="n">get_versions</span> <span class="k">as</span> <span class="n">_get_versions</span>
-
+<span></span><span class="c1"># pylint: disable=missing-docstring</span>
 <span class="c1"># Import functions/classes to make the API</span>
+<span class="kn">from</span> <span class="nn">.</span> <span class="k">import</span> <span class="n">version</span>
 <span class="kn">from</span> <span class="nn">.core</span> <span class="k">import</span> <span class="n">Pooch</span><span class="p">,</span> <span class="n">create</span>
 <span class="kn">from</span> <span class="nn">.utils</span> <span class="k">import</span> <span class="n">os_cache</span><span class="p">,</span> <span class="n">file_hash</span>
-
-
-<span class="c1"># Get the version number through versioneer</span>
-<span class="n">__version__</span> <span class="o">=</span> <span class="n">_get_versions</span><span class="p">()[</span><span class="s2">&quot;version&quot;</span><span class="p">]</span>
-<span class="n">__commit__</span> <span class="o">=</span> <span class="n">_get_versions</span><span class="p">()[</span><span class="s2">&quot;full-revisionid&quot;</span><span class="p">]</span>
 
 
 <div class="viewcode-block" id="test"><a class="viewcode-back" href="../api/generated/pooch.test.html#pooch.test">[docs]</a><span class="k">def</span> <span class="nf">test</span><span class="p">(</span><span class="n">doctest</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">coverage</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
@@ -253,7 +245,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2018-2018, Leonardo Uieda.
-      Last updated on Jul 24, 2018.
+      Last updated on Jul 27, 2018.
 
     </p>
   </div>

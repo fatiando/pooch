@@ -245,7 +245,7 @@ This is what the <code class="docutils literal notranslate"><span class="pre">pl
 <span class="kn">import</span> <span class="nn">pandas</span>
 <span class="kn">import</span> <span class="nn">pooch</span>
 
-<span class="kn">from</span> <span class="nn">.</span> <span class="k">import</span> <span class="n">__version__</span>  <span class="c1"># The version string of your project</span>
+<span class="kn">from</span> <span class="nn">.</span> <span class="k">import</span> <span class="n">version</span>  <span class="c1"># The version string of your project</span>
 
 
 <span class="n">GOODBOY</span> <span class="o">=</span> <span class="n">pooch</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
@@ -253,7 +253,7 @@ This is what the <code class="docutils literal notranslate"><span class="pre">pl
     <span class="n">path</span><span class="o">=</span><span class="n">pooch</span><span class="o">.</span><span class="n">os_cache</span><span class="p">(</span><span class="s2">&quot;plumbus&quot;</span><span class="p">),</span>
     <span class="c1"># The remote data is on Github</span>
     <span class="n">base_url</span><span class="o">=</span><span class="s2">&quot;https://github.com/rick/plumbus/raw/</span><span class="si">{version}</span><span class="s2">/data/&quot;</span><span class="p">,</span>
-    <span class="n">version</span><span class="o">=</span><span class="n">__version__</span><span class="p">,</span>
+    <span class="n">version</span><span class="o">=</span><span class="n">version</span><span class="p">,</span>
     <span class="c1"># If this is a development version, get the data from the master branch</span>
     <span class="n">version_dev</span><span class="o">=</span><span class="s2">&quot;master&quot;</span><span class="p">,</span>
     <span class="c1"># The registry specifies the files that can be fetched from the local storage</span>
@@ -334,7 +334,7 @@ variable:</p>
     <span class="c1"># This is still the default in case the environment variable isn&#39;t defined</span>
     <span class="n">path</span><span class="o">=</span><span class="n">pooch</span><span class="o">.</span><span class="n">os_cache</span><span class="p">(</span><span class="s2">&quot;plumbus&quot;</span><span class="p">),</span>
     <span class="n">base_url</span><span class="o">=</span><span class="s2">&quot;https://github.com/rick/plumbus/raw/</span><span class="si">{version}</span><span class="s2">/data/&quot;</span><span class="p">,</span>
-    <span class="n">version</span><span class="o">=</span><span class="n">__version__</span><span class="p">,</span>
+    <span class="n">version</span><span class="o">=</span><span class="n">version</span><span class="p">,</span>
     <span class="n">version_dev</span><span class="o">=</span><span class="s2">&quot;master&quot;</span><span class="p">,</span>
     <span class="n">registry</span><span class="o">=</span><span class="p">{</span>
         <span class="s2">&quot;c137.csv&quot;</span><span class="p">:</span> <span class="s2">&quot;19uheidhlkjdwhoiwuhc0uhcwljchw9ochwochw89dcgw9dcgwc&quot;</span><span class="p">,</span>
@@ -361,7 +361,7 @@ use <a class="reference internal" href="api/generated/pooch.Pooch.load_registry.
     <span class="n">path</span><span class="o">=</span><span class="n">pooch</span><span class="o">.</span><span class="n">os_cache</span><span class="p">(</span><span class="s2">&quot;plumbus&quot;</span><span class="p">),</span>
     <span class="c1"># The remote data is on Github</span>
     <span class="n">base_url</span><span class="o">=</span><span class="s2">&quot;https://github.com/rick/plumbus/raw/</span><span class="si">{version}</span><span class="s2">/data/&quot;</span><span class="p">,</span>
-    <span class="n">version</span><span class="o">=</span><span class="n">__version__</span><span class="p">,</span>
+    <span class="n">version</span><span class="o">=</span><span class="n">version</span><span class="p">,</span>
     <span class="c1"># If this is a development version, get the data from the master branch</span>
     <span class="n">version_dev</span><span class="o">=</span><span class="s2">&quot;master&quot;</span><span class="p">,</span>
     <span class="c1"># We&#39;ll load it from a file later</span>
@@ -413,7 +413,7 @@ your <code class="docutils literal notranslate"><span class="pre">MANIFEST.in</s
   <div role="contentinfo">
     <p>
         &copy; Copyright 2018-2018, Leonardo Uieda.
-      Last updated on Jul 24, 2018.
+      Last updated on Jul 27, 2018.
 
     </p>
   </div>
