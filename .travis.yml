@@ -61,9 +61,6 @@ matrix:
 
 # Setup the build environment
 before_install:
-    # Copy sample data to the verde data dir to avoid downloading all the time
-    #- mkdir -p $HOME/.verde/data
-    #- cp data/* $HOME/.verde/data
     # Get the Fatiando CI scripts
     - git clone https://github.com/fatiando/continuous-integration.git
     # Download and install miniconda and setup dependencies
@@ -81,7 +78,9 @@ install:
 # Run the actual tests and checks
 script:
     # Check code for style and quality
+    # Black is Python 3.6 only so it can't be in the requirements file.
     - if [ "$CHECK_FORMAT" == "true" ]; then
+          conda install --yes --channel conda-forge black python=$PYTHON;
           make check;
       fi
     # Run the test suite

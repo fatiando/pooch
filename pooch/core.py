@@ -33,8 +33,8 @@ def create(path, base_url, version, version_dev, env=None, registry=None):
     ----------
     path : str, PathLike, list or tuple
         The path to the local data storage folder. If this is a list or tuple, we'll
-        call :func:`os.path.join` on it. The *version* will be appended to the end of
-        this path. Use :func:`pooch.os_cache` for a sensible default.
+        join the parts with the appropriate separator. The *version* will be appended to
+        the end of this path. Use :func:`pooch.os_cache` for a sensible default.
     base_url : str
         Base URL for the remote data source. All requests will be made relative to this
         URL. The string should have a ``{version}`` formatting mark in it. We will call
@@ -138,7 +138,7 @@ def create(path, base_url, version, version_dev, env=None, registry=None):
         path = Path(os.environ[env])
     versioned_path = Path(path, version)
     # Create the directory if it doesn't already exist
-    os.makedirs(versioned_path.expanduser().resolve(), exist_ok=True)
+    versioned_path.expanduser().mkdir(parents=True, exist_ok=True)
     if registry is None:
         registry = dict()
     pup = Pooch(
@@ -209,7 +209,7 @@ class Pooch:
     @property
     def abspath(self):
         "Absolute path to the local storage"
-        return Path(os.path.abspath(os.path.expanduser(self.path)))
+        return Path(self.path).expanduser().resolve()
 
     def fetch(self, fname):
         """
@@ -236,13 +236,13 @@ class Pooch:
         """
         if fname not in self.registry:
             raise ValueError("File '{}' is not in the registry.".format(fname))
-        full_path = os.path.join(self.abspath, fname)
-        in_storage = os.path.exists(full_path)
-        update = in_storage and file_hash(full_path) != self.registry[fname]
+        full_path = self.abspath / fname
+        in_storage = full_path.exists()
+        update = in_storage and file_hash(str(full_path)) != self.registry[fname]
         download = not in_storage
         if update or download:
             self._download_file(fname, update)
-        return full_path
+        return str(full_path)
 
     def _download_file(self, fname, update):
         """
@@ -262,7 +262,7 @@ class Pooch:
             If the hash of the downloaded file doesn't match the hash in the registry.
 
         """
-        destination = os.path.join(self.abspath, fname)
+        destination = self.abspath / fname
         source = "".join([self.base_url, fname])
         if update:
             action = "Updating"
@@ -270,7 +270,7 @@ class Pooch:
             action = "Downloading"
         warn(
             "{} data file '{}' from remote data store '{}' to '{}'.".format(
-                action, fname, self.base_url, self.abspath
+                action, fname, self.base_url, str(self.path)
             )
         )
         response = requests.get(source, stream=True)
@@ -289,7 +289,7 @@ class Pooch:
                     fout.name, self.registry[fname], tmphash
                 )
             )
-        shutil.move(fout.name, destination)
+        shutil.move(fout.name, str(destination))
 
     def load_registry(self, fname):
         """

@@ -16,18 +16,17 @@ MAINTAINER = AUTHOR
 MAINTAINER_EMAIL = AUTHOR_EMAIL
 LICENSE = "BSD License"
 URL = "https://github.com/fatiando/pooch"
-DESCRIPTION = "Download and stash datasets in a user directory"
+DESCRIPTION = (
+    "Pooch manages your Python library's sample data files: "
+    "it automatically downloads and stores them in a local directory, "
+    "with support for versioning and corruption checks."
+)
 KEYWORDS = ""
 with open("README.rst") as f:
     LONG_DESCRIPTION = "".join(f.readlines())
 
 VERSION = versioneer.get_version()
 CMDCLASS = versioneer.get_cmdclass()
-
-PACKAGES = find_packages(exclude=["doc"])
-SCRIPTS = []
-PACKAGE_DATA = {"pooch.tests": ["data/*"]}
-
 CLASSIFIERS = [
     "Development Status :: 3 - Alpha",
     "Intended Audience :: Science/Research",
@@ -40,7 +39,11 @@ CLASSIFIERS = [
     "License :: OSI Approved :: {}".format(LICENSE),
 ]
 PLATFORMS = "Any"
+PACKAGES = find_packages(exclude=["doc"])
+SCRIPTS = []
+PACKAGE_DATA = {"pooch.tests": ["data/*"]}
 INSTALL_REQUIRES = ["requests", "packaging"]
+PYTHON_REQUIRES = ">=3.5"
 
 if __name__ == "__main__":
     setup(
@@ -62,5 +65,6 @@ if __name__ == "__main__":
         classifiers=CLASSIFIERS,
         keywords=KEYWORDS,
         install_requires=INSTALL_REQUIRES,
+        python_requires=PYTHON_REQUIRES,
         cmdclass=CMDCLASS,
     )
