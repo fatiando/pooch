@@ -4,7 +4,7 @@ Build and install the project.
 Uses versioneer to manage version numbers using git tags.
 """
 import os
-import glob
+from glob import glob
 from setuptools import setup, find_packages
 
 import versioneer
@@ -45,8 +45,8 @@ PACKAGES = find_packages(exclude=["doc"])
 SCRIPTS = []
 PACKAGE_DATA = {
     "pooch.tests": [
-        fname
-        for fname in glob.glob(os.path.join("data", "**"), recursive=True)
+        os.path.relpath(fname, os.path.join("pooch", "tests"))
+        for fname in glob(os.path.join("pooch", "tests", "data", "**"), recursive=True)
         if not os.path.isdir(fname)
     ]
 }
