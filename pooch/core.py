@@ -53,7 +53,8 @@ def create(path, base_url, version, version_dev, env=None, registry=None):
     registry : dict
         A record of the files that are managed by this Pooch. Keys should be the file
         names and the values should be their SHA256 hashes. Only files in the registry
-        can be fetched from the local storage.
+        can be fetched from the local storage. Files in subdirectories of *path* **must
+        use Unix-style separators** (``'/'``) even on Windows.
 
     Returns
     -------
@@ -164,7 +165,8 @@ class Pooch:
     registry : dict
         A record of the files that are managed by this good boy. Keys should be the file
         names and the values should be their SHA256 hashes. Only files in the registry
-        can be fetched from the local storage.
+        can be fetched from the local storage. Files in subdirectories of *path* **must
+        use Unix-style separators** (``'/'``) even on Windows.
 
     Examples
     --------
@@ -289,6 +291,9 @@ class Pooch:
                     fout.name, self.registry[fname], tmphash
                 )
             )
+        # Make sure the parent directory exists in case the file is in a subdirectory.
+        # Otherwise, move will cause an error.
+        destination.parent.mkdir(parents=True, exist_ok=True)
         shutil.move(fout.name, str(destination))
 
     def load_registry(self, fname):

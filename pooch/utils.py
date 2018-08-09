@@ -1,6 +1,8 @@
 """
 Misc utilities
 """
+import os
+import glob
 from pathlib import Path
 import sys
 import hashlib
@@ -9,7 +11,7 @@ from packaging.version import Version
 
 
 def os_cache(project, platform=None):
-    r"""
+    """
     Default cache location based on the operating system.
 
     Will insert the project name in the proper location of the path.
@@ -138,3 +140,38 @@ def check_version(version, fallback="master"):
     if parse.local is not None:
         return fallback
     return version
+
+
+def make_registry(directory, output, recursive=True):
+    """
+    Make a registry of files and hashes for the given directory.
+
+    This is helpful if you have many files in your test dataset as it keeps you
+    from needing to manually update the registry.
+
+    Parameters
+    ----------
+    directory : str
+        Directory of the test data to put in the registry. All file names in the
+        registry will be relative to this directory.
+    output : str
+        Name of the output registry file.
+    recursive : bool
+        If True, will recursively look for files in subdirectories of *directory*.
+
+    """
+    files = sorted(
+        [
+            os.path.relpath(fname, directory)
+            for fname in glob.glob(os.path.join(directory, "**"), recursive=recursive)
+            if os.path.isfile(fname)
+        ]
+    )
+
+    hashes = [file_hash(os.path.join(directory, fname)) for fname in files]
+
+    with open(output, "w") as outfile:
+        for fname, fhash in zip(files, hashes):
+            # Only use Unix separators for the registry so that we don't go insane
+            # dealing with file paths.
+            outfile.write("{} {}\n".format(fname.replace("\\", "/"), fhash))

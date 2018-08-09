@@ -175,6 +175,15 @@ use its value instead of ``path``. Pooch will still append the value of ``versio
 the path, so the value of ``PLUMBUS_DATA_DIR`` should not include a version number.
 
 
+Subdirectories
+--------------
+
+You can have data files in subdirectories of the remote data store. These files will be
+saved to the same subdirectories in the local storage folder. Note, however, that the
+names of these files in the registry **must use Unix-style separators** (``'/'``) even
+on Windows. We will handle the appropriate conversions.
+
+
 So you have 1000 data files
 ---------------------------
 
@@ -223,3 +232,16 @@ And the following entry in the ``setup`` function of your ``setup.py``:
         package_data={"plumbus": ["registry.txt"]},
         ...
     )
+
+
+Creating a registry file
+------------------------
+
+If you have many data files, creating the registry and keeping it updated can be a
+challenge. Function :func:`pooch.make_registry` will create a registry file with all
+contents of a directory. For example, we can generate the registry file for our
+fictitious project from the command-line:
+
+.. code:: bash
+
+   $ python -c "import pooch; pooch.make_registry('data', 'plumbus/registry.txt')"

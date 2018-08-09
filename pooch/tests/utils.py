@@ -50,6 +50,8 @@ def pooch_test_registry():
         Dictionary with pooch's test data files and their hashes.
 
     """
-    sha256 = "baee0894dba14b12085eacb204284b97e362f4f3e5a5807693cc90ef415c1b2d"
-    registry = {"tiny-data.txt": sha256}
+    registry = {
+        "tiny-data.txt": "baee0894dba14b12085eacb204284b97e362f4f3e5a5807693cc90ef415c1b2d",
+        "subdir/tiny-data.txt": "baee0894dba14b12085eacb204284b97e362f4f3e5a5807693cc90ef415c1b2d",
+    }
     return registry
