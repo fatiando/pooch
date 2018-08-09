@@ -1,0 +1,572 @@
+
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+    
+        <title>pooch.core &mdash; Pooch</title>
+    
+
+
+  
+  
+    <link rel="shortcut icon" href="../../_static/favicon.png"/>
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/style.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    
+    <script src="../../_static/require.js"></script>
+
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> Pooch
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                v0.1a4
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+    
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../install.html">Installing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../usage.html">Training your Pooch</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/index.html">API Reference</a></li>
+</ul>
+
+            
+          
+
+    
+        <p class="caption">
+            <span class="caption-text">
+            
+                Getting help and contributing
+            
+            </span>
+        </p>
+        <ul>
+            
+                <li class="toctree-l1"><a href="https://www.fatiando.org"><i class="fa fa-external-link-square fa-fw"></i> Fatiando a Terra</a></li>
+            
+                <li class="toctree-l1"><a href="https://github.com/fatiando/pooch/blob/master/CONTRIBUTING.md"><i class="fa fa-users fa-fw"></i> Contributing</a></li>
+            
+                <li class="toctree-l1"><a href="https://github.com/fatiando/pooch/blob/master/CODE_OF_CONDUCT.md"><i class="fa fa-gavel fa-fw"></i> Code of Conduct</a></li>
+            
+                <li class="toctree-l1"><a href="https://gitter.im/fatiando/fatiando"><i class="fa fa-comment fa-fw"></i> Contact</a></li>
+            
+                <li class="toctree-l1"><a href="https://github.com/fatiando/pooch"><i class="fa fa-github fa-fw"></i> Source Code</a></li>
+            
+        </ul>
+    
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Pooch</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+          <li><a href="../pooch.html">pooch</a> &raquo;</li>
+        
+      <li>pooch.core</li>
+    
+    
+    <li class="source-link">
+        
+        
+    </li>
+
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for pooch.core</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Functions to download, verify, and update a sample dataset.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="k">import</span> <span class="n">Path</span>
+<span class="kn">import</span> <span class="nn">shutil</span>
+<span class="kn">from</span> <span class="nn">tempfile</span> <span class="k">import</span> <span class="n">NamedTemporaryFile</span>
+<span class="kn">from</span> <span class="nn">warnings</span> <span class="k">import</span> <span class="n">warn</span>
+
+<span class="kn">import</span> <span class="nn">requests</span>
+
+<span class="kn">from</span> <span class="nn">.utils</span> <span class="k">import</span> <span class="n">file_hash</span><span class="p">,</span> <span class="n">check_version</span>
+
+
+<div class="viewcode-block" id="create"><a class="viewcode-back" href="../../api/generated/pooch.create.html#pooch.create">[docs]</a><span class="k">def</span> <span class="nf">create</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">base_url</span><span class="p">,</span> <span class="n">version</span><span class="p">,</span> <span class="n">version_dev</span><span class="p">,</span> <span class="n">env</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">registry</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Create a new :class:`~pooch.Pooch` with sensible defaults to fetch data files.</span>
+
+<span class="sd">    The Pooch will be versioned, meaning that the local storage folder and the base URL</span>
+<span class="sd">    depend on the projection version. This is necessary if your users have multiple</span>
+<span class="sd">    versions of your library installed (using virtual environments) and you updated the</span>
+<span class="sd">    data files between versions. Otherwise, every time a user switches environments</span>
+<span class="sd">    would trigger a re-download of the data.</span>
+
+<span class="sd">    The version string will be appended to the local storage path (for example,</span>
+<span class="sd">    ``~/.mypooch/cache/v0.1``) and inserted into the base URL (for example,</span>
+<span class="sd">    ``https://github.com/fatiando/pooch/raw/v0.1/data``). If the version string</span>
+<span class="sd">    contains ``+XX.XXXXX``, it will be interpreted as a development version.</span>
+
+<span class="sd">    If the local storage path doesn&#39;t exit, it will be created.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    path : str, PathLike, list or tuple</span>
+<span class="sd">        The path to the local data storage folder. If this is a list or tuple, we&#39;ll</span>
+<span class="sd">        join the parts with the appropriate separator. The *version* will be appended to</span>
+<span class="sd">        the end of this path. Use :func:`pooch.os_cache` for a sensible default.</span>
+<span class="sd">    base_url : str</span>
+<span class="sd">        Base URL for the remote data source. All requests will be made relative to this</span>
+<span class="sd">        URL. The string should have a ``{version}`` formatting mark in it. We will call</span>
+<span class="sd">        ``.format(version=version)`` on this string. If the URL is a directory path, it</span>
+<span class="sd">        must end in a ``&#39;/&#39;`` because we will not include it.</span>
+<span class="sd">    version : str</span>
+<span class="sd">        The version string for your project. Should be PEP440 compatible.</span>
+<span class="sd">    version_dev : str</span>
+<span class="sd">        The name used for the development version of a project. If your data is hosted</span>
+<span class="sd">        on Github (and *base_url* is a Github raw link), then ``&quot;master&quot;`` is a good</span>
+<span class="sd">        choice.</span>
+<span class="sd">    env : str</span>
+<span class="sd">        An environment variable that can be used to overwrite *path*. This allows users</span>
+<span class="sd">        to control where they want the data to be stored. We&#39;ll append *version* to the</span>
+<span class="sd">        end of this value as well.</span>
+<span class="sd">    registry : dict</span>
+<span class="sd">        A record of the files that are managed by this Pooch. Keys should be the file</span>
+<span class="sd">        names and the values should be their SHA256 hashes. Only files in the registry</span>
+<span class="sd">        can be fetched from the local storage. Files in subdirectories of *path* **must</span>
+<span class="sd">        use Unix-style separators** (``&#39;/&#39;``) even on Windows.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    pooch : :class:`~pooch.Pooch`</span>
+<span class="sd">        The :class:`~pooch.Pooch` initialized with the given arguments.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+
+<span class="sd">    Create a :class:`~pooch.Pooch` for a release (v0.1):</span>
+
+<span class="sd">    &gt;&gt;&gt; pup = create(path=&quot;myproject&quot;,</span>
+<span class="sd">    ...              base_url=&quot;http://some.link.com/{version}/&quot;,</span>
+<span class="sd">    ...              version=&quot;v0.1&quot;,</span>
+<span class="sd">    ...              version_dev=&quot;master&quot;,</span>
+<span class="sd">    ...              registry={&quot;data.txt&quot;: &quot;9081wo2eb2gc0u...&quot;})</span>
+<span class="sd">    &gt;&gt;&gt; print(pup.path.parts)  # The path is a pathlib.Path</span>
+<span class="sd">    (&#39;myproject&#39;, &#39;v0.1&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; # We&#39;ll create the directory if it doesn&#39;t exist yet.</span>
+<span class="sd">    &gt;&gt;&gt; pup.path.exists()</span>
+<span class="sd">    True</span>
+<span class="sd">    &gt;&gt;&gt; print(pup.base_url)</span>
+<span class="sd">    http://some.link.com/v0.1/</span>
+<span class="sd">    &gt;&gt;&gt; print(pup.registry)</span>
+<span class="sd">    {&#39;data.txt&#39;: &#39;9081wo2eb2gc0u...&#39;}</span>
+
+<span class="sd">    If this is a development version (12 commits ahead of v0.1):</span>
+
+<span class="sd">    &gt;&gt;&gt; pup = create(path=&quot;myproject&quot;,</span>
+<span class="sd">    ...              base_url=&quot;http://some.link.com/{version}/&quot;,</span>
+<span class="sd">    ...              version=&quot;v0.1+12.do9iwd&quot;,</span>
+<span class="sd">    ...              version_dev=&quot;master&quot;)</span>
+<span class="sd">    &gt;&gt;&gt; print(pup.path.parts)</span>
+<span class="sd">    (&#39;myproject&#39;, &#39;master&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; pup.path.exists()</span>
+<span class="sd">    True</span>
+<span class="sd">    &gt;&gt;&gt; print(pup.base_url)</span>
+<span class="sd">    http://some.link.com/master/</span>
+
+<span class="sd">    To place the storage folder at a subdirectory, pass in a list and we&#39;ll join the</span>
+<span class="sd">    path for you using the appropriate separator for your operating system:</span>
+
+<span class="sd">    &gt;&gt;&gt; pup = create(path=[&quot;myproject&quot;, &quot;cache&quot;, &quot;data&quot;],</span>
+<span class="sd">    ...              base_url=&quot;http://some.link.com/{version}/&quot;,</span>
+<span class="sd">    ...              version=&quot;v0.1&quot;,</span>
+<span class="sd">    ...              version_dev=&quot;master&quot;)</span>
+<span class="sd">    &gt;&gt;&gt; print(pup.path.parts)</span>
+<span class="sd">    (&#39;myproject&#39;, &#39;cache&#39;, &#39;data&#39;, &#39;v0.1&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; pup.path.exists()</span>
+<span class="sd">    True</span>
+
+<span class="sd">    The user can overwrite the storage path by setting an environment variable:</span>
+
+<span class="sd">    &gt;&gt;&gt; # The variable is not set so we&#39;ll use *path*</span>
+<span class="sd">    &gt;&gt;&gt; pup = create(path=[&quot;myproject&quot;, &quot;not_from_env&quot;],</span>
+<span class="sd">    ...              base_url=&quot;http://some.link.com/{version}/&quot;,</span>
+<span class="sd">    ...              version=&quot;v0.1&quot;,</span>
+<span class="sd">    ...              version_dev=&quot;master&quot;,</span>
+<span class="sd">    ...              env=&quot;MYPROJECT_DATA_DIR&quot;)</span>
+<span class="sd">    &gt;&gt;&gt; print(pup.path.parts)</span>
+<span class="sd">    (&#39;myproject&#39;, &#39;not_from_env&#39;, &#39;v0.1&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; # Set the environment variable and try again</span>
+<span class="sd">    &gt;&gt;&gt; import os</span>
+<span class="sd">    &gt;&gt;&gt; os.environ[&quot;MYPROJECT_DATA_DIR&quot;] = os.path.join(&quot;myproject&quot;, &quot;from_env&quot;)</span>
+<span class="sd">    &gt;&gt;&gt; pup = create(path=[&quot;myproject&quot;, &quot;not_from_env&quot;],</span>
+<span class="sd">    ...              base_url=&quot;http://some.link.com/{version}/&quot;,</span>
+<span class="sd">    ...              version=&quot;v0.1&quot;,</span>
+<span class="sd">    ...              version_dev=&quot;master&quot;,</span>
+<span class="sd">    ...              env=&quot;MYPROJECT_DATA_DIR&quot;)</span>
+<span class="sd">    &gt;&gt;&gt; print(pup.path.parts)</span>
+<span class="sd">    (&#39;myproject&#39;, &#39;from_env&#39;, &#39;v0.1&#39;)</span>
+
+<span class="sd">    Clean up the files we created:</span>
+
+<span class="sd">    &gt;&gt;&gt; import shutil; shutil.rmtree(&quot;myproject&quot;)</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">version</span> <span class="o">=</span> <span class="n">check_version</span><span class="p">(</span><span class="n">version</span><span class="p">,</span> <span class="n">fallback</span><span class="o">=</span><span class="n">version_dev</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)):</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="o">*</span><span class="n">path</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">env</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">env</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span> <span class="ow">and</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="n">env</span><span class="p">]:</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="n">env</span><span class="p">])</span>
+    <span class="n">versioned_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">version</span><span class="p">)</span>
+    <span class="c1"># Create the directory if it doesn&#39;t already exist</span>
+    <span class="n">versioned_path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">()</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">registry</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">registry</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+    <span class="n">pup</span> <span class="o">=</span> <span class="n">Pooch</span><span class="p">(</span>
+        <span class="n">path</span><span class="o">=</span><span class="n">versioned_path</span><span class="p">,</span>
+        <span class="n">base_url</span><span class="o">=</span><span class="n">base_url</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">version</span><span class="o">=</span><span class="n">version</span><span class="p">),</span>
+        <span class="n">registry</span><span class="o">=</span><span class="n">registry</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">pup</span></div>
+
+
+<div class="viewcode-block" id="Pooch"><a class="viewcode-back" href="../../api/generated/pooch.Pooch.html#pooch.Pooch">[docs]</a><span class="k">class</span> <span class="nc">Pooch</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Manager for a local data storage that can fetch from a remote source.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    path : str</span>
+<span class="sd">        The path to the local data storage folder. The path must exist in the file</span>
+<span class="sd">        system.</span>
+<span class="sd">    base_url : str</span>
+<span class="sd">        Base URL for the remote data source. All requests will be made relative to this</span>
+<span class="sd">        URL.</span>
+<span class="sd">    registry : dict</span>
+<span class="sd">        A record of the files that are managed by this good boy. Keys should be the file</span>
+<span class="sd">        names and the values should be their SHA256 hashes. Only files in the registry</span>
+<span class="sd">        can be fetched from the local storage. Files in subdirectories of *path* **must</span>
+<span class="sd">        use Unix-style separators** (``&#39;/&#39;``) even on Windows.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+
+<span class="sd">    &gt;&gt;&gt; import warnings</span>
+<span class="sd">    &gt;&gt;&gt; warnings.simplefilter(&quot;ignore&quot;)  # disable warnings to stop printing status</span>
+<span class="sd">    &gt;&gt;&gt; import os</span>
+<span class="sd">    &gt;&gt;&gt; from tempfile import TemporaryDirectory</span>
+<span class="sd">    &gt;&gt;&gt; from pooch.tests.utils import pooch_test_url, pooch_test_registry</span>
+<span class="sd">    &gt;&gt;&gt; # Setup a pooch in a temporary directory for this example</span>
+<span class="sd">    &gt;&gt;&gt; store = TemporaryDirectory()</span>
+<span class="sd">    &gt;&gt;&gt; os.listdir(store.name)</span>
+<span class="sd">    []</span>
+<span class="sd">    &gt;&gt;&gt; # Use our test base url and registry</span>
+<span class="sd">    &gt;&gt;&gt; pup = Pooch(path=store.name, base_url=pooch_test_url(),</span>
+<span class="sd">    ...             registry=pooch_test_registry())</span>
+<span class="sd">    &gt;&gt;&gt; # Fetch a data file. Since it&#39;s not in our local storage, it will be downloaded</span>
+<span class="sd">    &gt;&gt;&gt; fname = pup.fetch(&#39;tiny-data.txt&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; os.listdir(store.name)</span>
+<span class="sd">    [&#39;tiny-data.txt&#39;]</span>
+<span class="sd">    &gt;&gt;&gt; with open(fname) as f:</span>
+<span class="sd">    ...     print(f.read().strip())</span>
+<span class="sd">    # A tiny data file for test purposes only</span>
+<span class="sd">    1  2  3  4  5  6</span>
+<span class="sd">    &gt;&gt;&gt; # If the data file is corrupted or outdated, Pooch will download a new version</span>
+<span class="sd">    &gt;&gt;&gt; with open(fname, &quot;w&quot;) as f:</span>
+<span class="sd">    ...     __ = f.write(&quot;This is no longer the same file content.&quot;)</span>
+<span class="sd">    &gt;&gt;&gt; fname = pup.fetch(&#39;tiny-data.txt&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; with open(fname) as f:</span>
+<span class="sd">    ...     print(f.read().strip())</span>
+<span class="sd">    # A tiny data file for test purposes only</span>
+<span class="sd">    1  2  3  4  5  6</span>
+<span class="sd">    &gt;&gt;&gt; store.cleanup()</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">base_url</span><span class="p">,</span> <span class="n">registry</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="n">path</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">base_url</span> <span class="o">=</span> <span class="n">base_url</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">registry</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">registry</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">abspath</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="s2">&quot;Absolute path to the local storage&quot;</span>
+        <span class="k">return</span> <span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="p">)</span><span class="o">.</span><span class="n">expanduser</span><span class="p">()</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span>
+
+<div class="viewcode-block" id="Pooch.fetch"><a class="viewcode-back" href="../../api/generated/pooch.Pooch.fetch.html#pooch.Pooch.fetch">[docs]</a>    <span class="k">def</span> <span class="nf">fetch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fname</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the absolute path to a file in the local storage.</span>
+
+<span class="sd">        If it&#39;s not in the local storage, it will be downloaded. If the hash of file in</span>
+<span class="sd">        local storage doesn&#39;t match the one in the registry, will download a new copy of</span>
+<span class="sd">        the file. This is considered a sign that the file was updated in the remote</span>
+<span class="sd">        storage. If the hash of the downloaded file doesn&#39;t match the one in the</span>
+<span class="sd">        registry, will raise an exception to warn of possible file corruption.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        fname : str</span>
+<span class="sd">            The file name (relative to the *base_url* of the remote data storage) to</span>
+<span class="sd">            fetch from the local storage.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        full_path : str</span>
+<span class="sd">            The absolute path (including the file name) of the file in the local</span>
+<span class="sd">            storage.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">fname</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">registry</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;File &#39;</span><span class="si">{}</span><span class="s2">&#39; is not in the registry.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">fname</span><span class="p">))</span>
+        <span class="n">full_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">abspath</span> <span class="o">/</span> <span class="n">fname</span>
+        <span class="n">in_storage</span> <span class="o">=</span> <span class="n">full_path</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span>
+        <span class="n">update</span> <span class="o">=</span> <span class="n">in_storage</span> <span class="ow">and</span> <span class="n">file_hash</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">full_path</span><span class="p">))</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">registry</span><span class="p">[</span><span class="n">fname</span><span class="p">]</span>
+        <span class="n">download</span> <span class="o">=</span> <span class="ow">not</span> <span class="n">in_storage</span>
+        <span class="k">if</span> <span class="n">update</span> <span class="ow">or</span> <span class="n">download</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_download_file</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">update</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">full_path</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">_download_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fname</span><span class="p">,</span> <span class="n">update</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Download a file from the remote data storage to the local storage.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        fname : str</span>
+<span class="sd">            The file name (relative to the *base_url* of the remote data storage) to</span>
+<span class="sd">            fetch from the local storage.</span>
+<span class="sd">        update : bool</span>
+<span class="sd">            True if the file already exists in the storage but needs an update.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            If the hash of the downloaded file doesn&#39;t match the hash in the registry.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">destination</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">abspath</span> <span class="o">/</span> <span class="n">fname</span>
+        <span class="n">source</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">base_url</span><span class="p">,</span> <span class="n">fname</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">update</span><span class="p">:</span>
+            <span class="n">action</span> <span class="o">=</span> <span class="s2">&quot;Updating&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">action</span> <span class="o">=</span> <span class="s2">&quot;Downloading&quot;</span>
+        <span class="n">warn</span><span class="p">(</span>
+            <span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> data file &#39;</span><span class="si">{}</span><span class="s2">&#39; from remote data store &#39;</span><span class="si">{}</span><span class="s2">&#39; to &#39;</span><span class="si">{}</span><span class="s2">&#39;.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="n">action</span><span class="p">,</span> <span class="n">fname</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">base_url</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="p">)</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">stream</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">response</span><span class="o">.</span><span class="n">raise_for_status</span><span class="p">()</span>
+        <span class="c1"># Stream the file to a temporary so that we can safely check its hash before</span>
+        <span class="c1"># overwriting the original</span>
+        <span class="k">with</span> <span class="n">NamedTemporaryFile</span><span class="p">(</span><span class="n">delete</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="k">as</span> <span class="n">fout</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">chunk</span> <span class="ow">in</span> <span class="n">response</span><span class="o">.</span><span class="n">iter_content</span><span class="p">(</span><span class="n">chunk_size</span><span class="o">=</span><span class="mi">1024</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">chunk</span><span class="p">:</span>
+                    <span class="n">fout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">chunk</span><span class="p">)</span>
+        <span class="n">tmphash</span> <span class="o">=</span> <span class="n">file_hash</span><span class="p">(</span><span class="n">fout</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">tmphash</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">registry</span><span class="p">[</span><span class="n">fname</span><span class="p">]:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;Hash of downloaded file &#39;</span><span class="si">{}</span><span class="s2">&#39; doesn&#39;t match the entry in the registry:&quot;</span>
+                <span class="s2">&quot; Expected &#39;</span><span class="si">{}</span><span class="s2">&#39; and got &#39;</span><span class="si">{}</span><span class="s2">&#39;.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                    <span class="n">fout</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">registry</span><span class="p">[</span><span class="n">fname</span><span class="p">],</span> <span class="n">tmphash</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+        <span class="c1"># Make sure the parent directory exists in case the file is in a subdirectory.</span>
+        <span class="c1"># Otherwise, move will cause an error.</span>
+        <span class="n">destination</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">shutil</span><span class="o">.</span><span class="n">move</span><span class="p">(</span><span class="n">fout</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">destination</span><span class="p">))</span>
+
+<div class="viewcode-block" id="Pooch.load_registry"><a class="viewcode-back" href="../../api/generated/pooch.Pooch.load_registry.html#pooch.Pooch.load_registry">[docs]</a>    <span class="k">def</span> <span class="nf">load_registry</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fname</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Load entries form a file and add them to the registry.</span>
+
+<span class="sd">        Use this if you are managing many files.</span>
+
+<span class="sd">        Each line of the file should have file name and its SHA256 hash separate by a</span>
+<span class="sd">        space. Only one file per line is allowed.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        fname : str</span>
+<span class="sd">            File name and path to the registry file.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span> <span class="k">as</span> <span class="n">fin</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">linenum</span><span class="p">,</span> <span class="n">line</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">fin</span><span class="p">):</span>
+                <span class="n">elements</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">elements</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                        <span class="s2">&quot;Expected 2 elements in line </span><span class="si">{}</span><span class="s2"> but got </span><span class="si">{}</span><span class="s2">.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                            <span class="n">linenum</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">elements</span><span class="p">)</span>
+                        <span class="p">)</span>
+                    <span class="p">)</span>
+                <span class="n">file_name</span><span class="p">,</span> <span class="n">file_sha256</span> <span class="o">=</span> <span class="n">elements</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">registry</span><span class="p">[</span><span class="n">file_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">file_sha256</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018-2018, Leonardo Uieda.
+      Last updated on Aug 09, 2018.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
