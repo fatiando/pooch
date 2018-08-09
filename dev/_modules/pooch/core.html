@@ -241,7 +241,8 @@
 <span class="sd">    registry : dict</span>
 <span class="sd">        A record of the files that are managed by this Pooch. Keys should be the file</span>
 <span class="sd">        names and the values should be their SHA256 hashes. Only files in the registry</span>
-<span class="sd">        can be fetched from the local storage.</span>
+<span class="sd">        can be fetched from the local storage. Files in subdirectories of *path* **must</span>
+<span class="sd">        use Unix-style separators** (``&#39;/&#39;``) even on Windows.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -352,7 +353,8 @@
 <span class="sd">    registry : dict</span>
 <span class="sd">        A record of the files that are managed by this good boy. Keys should be the file</span>
 <span class="sd">        names and the values should be their SHA256 hashes. Only files in the registry</span>
-<span class="sd">        can be fetched from the local storage.</span>
+<span class="sd">        can be fetched from the local storage. Files in subdirectories of *path* **must</span>
+<span class="sd">        use Unix-style separators** (``&#39;/&#39;``) even on Windows.</span>
 
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
@@ -477,6 +479,9 @@
                     <span class="n">fout</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">registry</span><span class="p">[</span><span class="n">fname</span><span class="p">],</span> <span class="n">tmphash</span>
                 <span class="p">)</span>
             <span class="p">)</span>
+        <span class="c1"># Make sure the parent directory exists in case the file is in a subdirectory.</span>
+        <span class="c1"># Otherwise, move will cause an error.</span>
+        <span class="n">destination</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
         <span class="n">shutil</span><span class="o">.</span><span class="n">move</span><span class="p">(</span><span class="n">fout</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">destination</span><span class="p">))</span>
 
 <div class="viewcode-block" id="Pooch.load_registry"><a class="viewcode-back" href="../../api/generated/pooch.Pooch.load_registry.html#pooch.Pooch.load_registry">[docs]</a>    <span class="k">def</span> <span class="nf">load_registry</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fname</span><span class="p">):</span>
@@ -518,7 +523,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2018-2018, Leonardo Uieda.
-      Last updated on Jul 27, 2018.
+      Last updated on Aug 09, 2018.
 
     </p>
   </div>

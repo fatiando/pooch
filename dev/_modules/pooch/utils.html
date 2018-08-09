@@ -189,6 +189,8 @@
 <span></span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">Misc utilities</span>
 <span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">glob</span>
 <span class="kn">from</span> <span class="nn">pathlib</span> <span class="k">import</span> <span class="n">Path</span>
 <span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">hashlib</span>
@@ -197,7 +199,7 @@
 
 
 <div class="viewcode-block" id="os_cache"><a class="viewcode-back" href="../../api/generated/pooch.os_cache.html#pooch.os_cache">[docs]</a><span class="k">def</span> <span class="nf">os_cache</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="n">platform</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Default cache location based on the operating system.</span>
 
 <span class="sd">    Will insert the project name in the proper location of the path.</span>
@@ -326,6 +328,41 @@
     <span class="k">if</span> <span class="n">parse</span><span class="o">.</span><span class="n">local</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">fallback</span>
     <span class="k">return</span> <span class="n">version</span>
+
+
+<div class="viewcode-block" id="make_registry"><a class="viewcode-back" href="../../api/generated/pooch.make_registry.html#pooch.make_registry">[docs]</a><span class="k">def</span> <span class="nf">make_registry</span><span class="p">(</span><span class="n">directory</span><span class="p">,</span> <span class="n">output</span><span class="p">,</span> <span class="n">recursive</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Make a registry of files and hashes for the given directory.</span>
+
+<span class="sd">    This is helpful if you have many files in your test dataset as it keeps you</span>
+<span class="sd">    from needing to manually update the registry.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    directory : str</span>
+<span class="sd">        Directory of the test data to put in the registry. All file names in the</span>
+<span class="sd">        registry will be relative to this directory.</span>
+<span class="sd">    output : str</span>
+<span class="sd">        Name of the output registry file.</span>
+<span class="sd">    recursive : bool</span>
+<span class="sd">        If True, will recursively look for files in subdirectories of *directory*.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">files</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span>
+        <span class="p">[</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">relpath</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">directory</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">fname</span> <span class="ow">in</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">directory</span><span class="p">,</span> <span class="s2">&quot;**&quot;</span><span class="p">),</span> <span class="n">recursive</span><span class="o">=</span><span class="n">recursive</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
+        <span class="p">]</span>
+    <span class="p">)</span>
+
+    <span class="n">hashes</span> <span class="o">=</span> <span class="p">[</span><span class="n">file_hash</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">directory</span><span class="p">,</span> <span class="n">fname</span><span class="p">))</span> <span class="k">for</span> <span class="n">fname</span> <span class="ow">in</span> <span class="n">files</span><span class="p">]</span>
+
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">output</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">outfile</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">fname</span><span class="p">,</span> <span class="n">fhash</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">files</span><span class="p">,</span> <span class="n">hashes</span><span class="p">):</span>
+            <span class="c1"># Only use Unix separators for the registry so that we don&#39;t go insane</span>
+            <span class="c1"># dealing with file paths.</span>
+            <span class="n">outfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> </span><span class="si">{}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">fname</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;/&quot;</span><span class="p">),</span> <span class="n">fhash</span><span class="p">))</span></div>
 </pre></div>
 
            </div>
@@ -339,7 +376,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2018-2018, Leonardo Uieda.
-      Last updated on Jul 27, 2018.
+      Last updated on Aug 09, 2018.
 
     </p>
   </div>

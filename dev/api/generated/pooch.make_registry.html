@@ -10,7 +10,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
     
-        <title>pooch.test &mdash; Pooch</title>
+        <title>pooch.make_registry &mdash; Pooch</title>
     
 
 
@@ -34,7 +34,8 @@
   <link rel="stylesheet" href="../../_static/style.css" type="text/css" />
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="prev" title="pooch.Pooch.load_registry" href="pooch.Pooch.load_registry.html" />
+    <link rel="next" title="pooch.Pooch" href="pooch.Pooch.html" />
+    <link rel="prev" title="pooch.file_hash" href="pooch.file_hash.html" />
     
     <script src="../../_static/require.js"></script>
 
@@ -99,11 +100,11 @@
 <li class="toctree-l2"><a class="reference internal" href="pooch.create.html">pooch.create</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pooch.os_cache.html">pooch.os_cache</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pooch.file_hash.html">pooch.file_hash</a></li>
-<li class="toctree-l2"><a class="reference internal" href="pooch.make_registry.html">pooch.make_registry</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">pooch.make_registry</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pooch.Pooch.html">pooch.Pooch</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pooch.Pooch.fetch.html">pooch.Pooch.fetch</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pooch.Pooch.load_registry.html">pooch.Pooch.load_registry</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">pooch.test</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pooch.test.html">pooch.test</a></li>
 </ul>
 </li>
 </ul>
@@ -178,7 +179,7 @@
         
           <li><a href="../index.html">API Reference</a> &raquo;</li>
         
-      <li>pooch.test</li>
+      <li>pooch.make_registry</li>
     
     
     <li class="source-link">
@@ -186,7 +187,7 @@
             
                 
                 
-                <a href="https://github.com/fatiando/pooch/issues/new?title=Suggested%20improvement%20for%20api/generated/pooch.test&body=Please%20describe%20what%20could%20be%20improved%20about%20this%20page%20or%20the%20typo/mistake%20that%20you%20found%3A"
+                <a href="https://github.com/fatiando/pooch/issues/new?title=Suggested%20improvement%20for%20api/generated/pooch.make_registry&body=Please%20describe%20what%20could%20be%20improved%20about%20this%20page%20or%20the%20typo/mistake%20that%20you%20found%3A"
                    class="fa fa-github"> Improve this page</a>
             
         
@@ -201,36 +202,28 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="pooch-test">
-<h1>pooch.test<a class="headerlink" href="#pooch-test" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="pooch-make-registry">
+<h1>pooch.make_registry<a class="headerlink" href="#pooch-make-registry" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
-<dt id="pooch.test">
-<code class="descclassname">pooch.</code><code class="descname">test</code><span class="sig-paren">(</span><em>doctest=True</em>, <em>verbose=True</em>, <em>coverage=False</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pooch.html#test"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pooch.test" title="Permalink to this definition">¶</a></dt>
-<dd><p>Run the test suite.</p>
-<p>Uses <a class="reference external" href="http://pytest.org/">py.test</a> to discover and run the tests.</p>
+<dt id="pooch.make_registry">
+<code class="descclassname">pooch.</code><code class="descname">make_registry</code><span class="sig-paren">(</span><em>directory</em>, <em>output</em>, <em>recursive=True</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pooch/utils.html#make_registry"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pooch.make_registry" title="Permalink to this definition">¶</a></dt>
+<dd><p>Make a registry of files and hashes for the given directory.</p>
+<p>This is helpful if you have many files in your test dataset as it keeps you
+from needing to manually update the registry.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first docutils">
-<dt><strong>doctest</strong> <span class="classifier-delimiter">:</span> <span class="classifier">bool</span></dt>
-<dd><p class="first last">If <code class="docutils literal notranslate"><span class="pre">True</span></code>, will run the doctests as well (code examples that start
-with a <code class="docutils literal notranslate"><span class="pre">&gt;&gt;&gt;</span></code> in the docs).</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>directory</strong> <span class="classifier-delimiter">:</span> <span class="classifier">str</span></dt>
+<dd><p class="first last">Directory of the test data to put in the registry. All file names in the
+registry will be relative to this directory.</p>
 </dd>
-<dt><strong>verbose</strong> <span class="classifier-delimiter">:</span> <span class="classifier">bool</span></dt>
-<dd><p class="first last">If <code class="docutils literal notranslate"><span class="pre">True</span></code>, will print extra information during the test run.</p>
+<dt><strong>output</strong> <span class="classifier-delimiter">:</span> <span class="classifier">str</span></dt>
+<dd><p class="first last">Name of the output registry file.</p>
 </dd>
-<dt><strong>coverage</strong> <span class="classifier-delimiter">:</span> <span class="classifier">bool</span></dt>
-<dd><p class="first last">If <code class="docutils literal notranslate"><span class="pre">True</span></code>, will run test coverage analysis on the code as well.
-Requires <code class="docutils literal notranslate"><span class="pre">pytest-cov</span></code>.</p>
-</dd>
-</dl>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><dl class="first last docutils">
-<dt><strong>AssertionError</strong></dt>
-<dd><p class="first last">If pytest returns a non-zero error code indicating that some tests have
-failed.</p>
+<dt><strong>recursive</strong> <span class="classifier-delimiter">:</span> <span class="classifier">bool</span></dt>
+<dd><p class="first last">If True, will recursively look for files in subdirectories of <em>directory</em>.</p>
 </dd>
 </dl>
 </td>
@@ -249,8 +242,10 @@ failed.</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
+        <a href="pooch.Pooch.html" class="btn btn-neutral float-right" title="pooch.Pooch" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
-        <a href="pooch.Pooch.load_registry.html" class="btn btn-neutral" title="pooch.Pooch.load_registry" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+        <a href="pooch.file_hash.html" class="btn btn-neutral" title="pooch.file_hash" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
