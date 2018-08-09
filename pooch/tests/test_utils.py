@@ -5,7 +5,9 @@ import os
 from pathlib import Path
 from tempfile import NamedTemporaryFile
 
+from ..core import Pooch
 from ..utils import make_registry
+from .utils import check_tiny_data
 
 DATA_DIR = str(Path(os.path.dirname(__file__), "data", "store").expanduser().resolve())
 REGISTRY = (
@@ -27,6 +29,13 @@ def test_registry_builder():
         with open(outfile.name) as fout:
             registry = fout.read()
         assert registry == REGISTRY
+        # Check that the registry can be used.
+        pup = Pooch(path=DATA_DIR, base_url="some bogus URL", registry={})
+        pup.load_registry(outfile.name)
+        true = os.path.join(DATA_DIR, "tiny-data.txt")
+        fname = pup.fetch("tiny-data.txt")
+        assert true == fname
+        check_tiny_data(fname)
     finally:
         os.remove(outfile.name)
 
@@ -41,5 +50,13 @@ def test_registry_builder_recursive():
         with open(outfile.name) as fout:
             registry = fout.read()
         assert registry == REGISTRY_RECURSIVE
+        # Check that the registry can be used.
+        pup = Pooch(path=DATA_DIR, base_url="some bogus URL", registry={})
+        pup.load_registry(outfile.name)
+        assert os.path.join(DATA_DIR, "tiny-data.txt") == pup.fetch("tiny-data.txt")
+        check_tiny_data(pup.fetch("tiny-data.txt"))
+        true = os.path.join(DATA_DIR, "subdir", "tiny-data.txt")
+        assert true == pup.fetch("subdir/tiny-data.txt")
+        check_tiny_data(pup.fetch("subdir/tiny-data.txt"))
     finally:
         os.remove(outfile.name)
