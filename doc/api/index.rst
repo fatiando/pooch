@@ -13,7 +13,7 @@ API Reference
     create
     os_cache
     file_hash
-    make_file_registry
+    make_registry
     Pooch
     Pooch.fetch
     Pooch.load_registry

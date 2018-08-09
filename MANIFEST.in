@@ -4,4 +4,4 @@ include CODE_OF_CONDUCT.md
 include CONTRIBUTING.md
 include AUTHORS.md
 include versioneer.py
-recursive-include pooch/tests/data *
+recursive-include pooch/tests/data **

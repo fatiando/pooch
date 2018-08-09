@@ -2,6 +2,7 @@
 Misc utilities
 """
 import os
+import glob
 from pathlib import Path
 import sys
 import hashlib
@@ -141,7 +142,7 @@ def check_version(version, fallback="master"):
     return version
 
 
-def make_file_registry(directory, output, recursive=True):
+def make_registry(directory, output, recursive=True):
     """
     Make a registry of files and hashes for the given directory.
 
@@ -151,23 +152,26 @@ def make_file_registry(directory, output, recursive=True):
     Parameters
     ----------
     directory : str
-        Directory of the test data to put in the registry.
+        Directory of the test data to put in the registry. All file names in the
+        registry will be relative to this directory.
     output : str
-        File to write for the registry of files.
+        Name of the output registry file.
     recursive : bool
-        If we should recursively follow subdirectories of directory.
+        If True, will recursively look for files in subdirectories of *directory*.
 
     """
-    if recursive:
-        files = [os.path.join(dp, f) for dp, dn, fn in os.walk(os.path.expanduser(directory)) for f in fn]
-    else:
-        files = [f for f in os.listdir(directory) if os.path.isfile(os.path.join(directory, f))]
+    files = sorted(
+        [
+            os.path.relpath(fname, directory)
+            for fname in glob.glob(os.path.join(directory, "**"), recursive=recursive)
+            if os.path.isfile(fname)
+        ]
+    )
 
-    # Get the hash of each of the files
-    hashes = [file_hash(f) for f in files]
+    hashes = [file_hash(os.path.join(directory, fname)) for fname in files]
 
-    # Write out the files and hashes to the desired file
-    outfile = open(output, 'w')
-    for f, h in zip(files, hashes):
-        outfile.write('{} {}\n'.format(f, h))
-    outfile.close()
+    with open(output, "w") as outfile:
+        for fname, fhash in zip(files, hashes):
+            # Only use Unix separators for the registry so that we don't go insane
+            # dealing with file paths.
+            outfile.write("{} {}\n".format(fname.replace("\\", "/"), fhash))

@@ -3,6 +3,8 @@ Build and install the project.
 
 Uses versioneer to manage version numbers using git tags.
 """
+import os
+import glob
 from setuptools import setup, find_packages
 
 import versioneer
@@ -41,7 +43,13 @@ CLASSIFIERS = [
 PLATFORMS = "Any"
 PACKAGES = find_packages(exclude=["doc"])
 SCRIPTS = []
-PACKAGE_DATA = {"pooch.tests": ["data/*"]}
+PACKAGE_DATA = {
+    "pooch.tests": [
+        fname
+        for fname in glob.glob(os.path.join("data", "**"), recursive=True)
+        if not os.path.isdir(fname)
+    ]
+}
 INSTALL_REQUIRES = ["requests", "packaging"]
 PYTHON_REQUIRES = ">=3.5"
 

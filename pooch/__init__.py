@@ -2,7 +2,7 @@
 # Import functions/classes to make the API
 from . import version
 from .core import Pooch, create
-from .utils import os_cache, file_hash, make_file_registry
+from .utils import os_cache, file_hash, make_registry
 
 
 def test(doctest=True, verbose=True, coverage=False):
