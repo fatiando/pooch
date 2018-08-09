@@ -14,10 +14,10 @@ from ..version import full_version
 from .utils import check_tiny_data
 
 
-@pytest.fixture(scope="module")
+@pytest.fixture
 def pup():
     "Create a pooch the way most projects would."
-    gar = create(
+    doggo = create(
         path=os_cache("pooch"),
         base_url="https://github.com/fatiando/pooch/raw/{version}/data/",
         version=full_version,
@@ -25,9 +25,9 @@ def pup():
         env="POOCH_DATA_DIR",
     )
     # The str conversion is needed in Python 3.5
-    gar.load_registry(str(Path(os.path.dirname(__file__), "data", "registry.txt")))
-    yield gar
-    shutil.rmtree(str(gar.abspath))
+    doggo.load_registry(str(Path(os.path.dirname(__file__), "data", "registry.txt")))
+    yield doggo
+    shutil.rmtree(str(doggo.abspath))
 
 
 def test_fetch(pup):
@@ -35,18 +35,19 @@ def test_fetch(pup):
     # Make sure the storage exists and is empty to begin
     assert pup.abspath.exists()
     assert not list(pup.abspath.iterdir())
-    with warnings.catch_warnings(record=True) as warn:
-        fname = pup.fetch("tiny-data.txt")
-        assert len(warn) == 1
-        assert issubclass(warn[-1].category, UserWarning)
-        assert str(warn[-1].message).split()[0] == "Downloading"
-    check_tiny_data(fname)
-    # Now modify the file to trigger an update on the next fetch
-    with open(fname, "w") as fin:
-        fin.write("The data is now different")
-    with warnings.catch_warnings(record=True) as warn:
-        fname = pup.fetch("tiny-data.txt")
-        assert len(warn) == 1
-        assert issubclass(warn[-1].category, UserWarning)
-        assert str(warn[-1].message).split()[0] == "Updating"
-    check_tiny_data(fname)
+    for target in ["tiny-data.txt", "subdir/tiny-data.txt"]:
+        with warnings.catch_warnings(record=True) as warn:
+            fname = pup.fetch(target)
+            assert len(warn) == 1
+            assert issubclass(warn[-1].category, UserWarning)
+            assert str(warn[-1].message).split()[0] == "Downloading"
+        check_tiny_data(fname)
+        # Now modify the file to trigger an update on the next fetch
+        with open(fname, "w") as fin:
+            fin.write("The data is now different")
+        with warnings.catch_warnings(record=True) as warn:
+            fname = pup.fetch(target)
+            assert len(warn) == 1
+            assert issubclass(warn[-1].category, UserWarning)
+            assert str(warn[-1].message).split()[0] == "Updating"
+        check_tiny_data(fname)
