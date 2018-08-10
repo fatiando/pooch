@@ -3,7 +3,7 @@ Build and install the project.
 
 Uses versioneer to manage version numbers using git tags.
 """
-from pathlib import Path
+import os
 from setuptools import setup, find_packages
 
 import versioneer
@@ -45,9 +45,9 @@ PACKAGES = find_packages(exclude=["doc"])
 SCRIPTS = []
 PACKAGE_DATA = {
     "pooch.tests": [
-        str(path.relative_to(Path("pooch", "tests")))
-        for path in Path("pooch", "tests", "data").glob("**/*")
-        if path.is_file()
+        os.path.join("data", "*"),
+        os.path.join("data", "store", "*"),
+        os.path.join("data", "store", "subdir", "*"),
     ]
 }
 INSTALL_REQUIRES = [
