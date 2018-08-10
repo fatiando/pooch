@@ -4,7 +4,7 @@ Build and install the project.
 Uses versioneer to manage version numbers using git tags.
 """
 import os
-from glob import glob
+from pathlib import Path
 from setuptools import setup, find_packages
 
 import versioneer
@@ -45,13 +45,14 @@ PACKAGES = find_packages(exclude=["doc"])
 SCRIPTS = []
 PACKAGE_DATA = {
     "pooch.tests": [
-        os.path.relpath(fname, os.path.join("pooch", "tests"))
-        for fname in glob(os.path.join("pooch", "tests", "data", "**"), recursive=True)
-        if not os.path.isdir(fname)
+        str(path.relative_to(Path("pooch", "tests")))
+        for path in Path("pooch", "tests", "data").glob("**/*")
+        if path.is_file()
     ]
 }
-INSTALL_REQUIRES = ["requests", "packaging"]
-PYTHON_REQUIRES = ">=3.5"
+INSTALL_REQUIRES = ["requests", "packaging", "pathlib;python_version<'3.5'",
+                    "backports.tempfile;python_version<'3.5'"]
+PYTHON_REQUIRES = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
 
 if __name__ == "__main__":
     setup(

@@ -3,7 +3,10 @@ Test the core class and factory function.
 """
 import os
 from pathlib import Path
-from tempfile import TemporaryDirectory
+try:
+    from tempfile import TemporaryDirectory
+except ImportError:
+    from backports.tempfile import TemporaryDirectory
 import warnings
 
 import pytest

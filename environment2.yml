@@ -1,0 +1,15 @@
+name: pooch2
+channels:
+    - conda-forge
+    - defaults
+dependencies:
+    - python=2.7
+    - pip
+    - requests
+    - packaging
+    - pathlib
+    # Development requirements
+    - pytest
+    - pytest-cov
+    - coverage
+    - pylint
