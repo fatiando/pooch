@@ -1,0 +1,481 @@
+
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+    
+        <title>Training your Pooch &mdash; Pooch</title>
+    
+
+
+  
+  
+    <link rel="shortcut icon" href="_static/favicon.png"/>
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/style.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="API Reference" href="api/index.html" />
+    <link rel="prev" title="Installing" href="install.html" />
+    
+    <script src="_static/require.js"></script>
+
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> Pooch
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                v0.1a5
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+    
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Documentation</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installing</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Training your Pooch</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#the-problem">The problem</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#assumptions">Assumptions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#setup">Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#hashes">Hashes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#versioning">Versioning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#user-defined-paths">User-defined paths</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#subdirectories">Subdirectories</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#so-you-have-1000-data-files">So you have 1000 data files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#creating-a-registry-file">Creating a registry file</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api/index.html">API Reference</a></li>
+</ul>
+
+            
+          
+
+    
+        <p class="caption">
+            <span class="caption-text">
+            
+                Getting help and contributing
+            
+            </span>
+        </p>
+        <ul>
+            
+                <li class="toctree-l1"><a href="https://www.fatiando.org"><i class="fa fa-external-link-square fa-fw"></i> Fatiando a Terra</a></li>
+            
+                <li class="toctree-l1"><a href="https://github.com/fatiando/pooch/blob/master/CONTRIBUTING.md"><i class="fa fa-users fa-fw"></i> Contributing</a></li>
+            
+                <li class="toctree-l1"><a href="https://github.com/fatiando/pooch/blob/master/CODE_OF_CONDUCT.md"><i class="fa fa-gavel fa-fw"></i> Code of Conduct</a></li>
+            
+                <li class="toctree-l1"><a href="https://gitter.im/fatiando/fatiando"><i class="fa fa-comment fa-fw"></i> Contact</a></li>
+            
+                <li class="toctree-l1"><a href="https://github.com/fatiando/pooch"><i class="fa fa-github fa-fw"></i> Source Code</a></li>
+            
+        </ul>
+    
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Pooch</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Training your Pooch</li>
+    
+    
+    <li class="source-link">
+        
+            
+                <a href="https://github.com/fatiando/pooch/edit/master/doc/usage.rst"
+                   class="fa fa-github"> Improve this page</a>
+            
+        
+        
+    </li>
+
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="training-your-pooch">
+<span id="usage"></span><h1>Training your Pooch<a class="headerlink" href="#training-your-pooch" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="the-problem">
+<h2>The problem<a class="headerlink" href="#the-problem" title="Permalink to this headline">¶</a></h2>
+<p>You develop a Python library called <code class="docutils literal notranslate"><span class="pre">plumbus</span></code> for analysing data emitted by
+interdimensional portals. You want to distribute sample data so that your users can
+easily try out the library by copying and pasting from the docs. You want to have a
+<code class="docutils literal notranslate"><span class="pre">plumbus.datasets</span></code> module that defines functions like <code class="docutils literal notranslate"><span class="pre">fetch_c137()</span></code> that will
+return the data loaded as a <a class="reference external" href="http://pandas.pydata.org/pandas-docs/stable/generated/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v0.23.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">pandas.DataFrame</span></code></a> for convenient access.</p>
+</div>
+<div class="section" id="assumptions">
+<h2>Assumptions<a class="headerlink" href="#assumptions" title="Permalink to this headline">¶</a></h2>
+<p>We’ll setup a <a class="reference internal" href="api/generated/pooch.Pooch.html#pooch.Pooch" title="pooch.Pooch"><code class="xref py py-class docutils literal notranslate"><span class="pre">Pooch</span></code></a> to solve your data distribution needs.
+In this example, we’ll work with the follow assumptions:</p>
+<ol class="arabic simple">
+<li>Your sample data are in a folder of your Github repository.</li>
+<li>You use git tags to mark releases of your project in the history.</li>
+<li>Your project has a variable that defines the version string.</li>
+<li>The version string contains an indicator that the current commit is not a release
+(like <code class="docutils literal notranslate"><span class="pre">'v1.2.3+12.d908jdl'</span></code> or <code class="docutils literal notranslate"><span class="pre">'v0.1+dev'</span></code>).</li>
+</ol>
+<p>Let’s say that this is the layout of your repository on Github:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>doc/
+    ...
+data/
+    README.md
+    c137.csv
+    cronen.csv
+plumbus/
+    __init__.py
+    ...
+    datasets.py
+setup.py
+...
+</pre></div>
+</div>
+<p>The sample data are stored in the <code class="docutils literal notranslate"><span class="pre">data</span></code> folder of your repository.</p>
+</div>
+<div class="section" id="setup">
+<h2>Setup<a class="headerlink" href="#setup" title="Permalink to this headline">¶</a></h2>
+<p>Pooch can download and cache your data files to the users computer automatically.
+This is what the <code class="docutils literal notranslate"><span class="pre">plumbus/datasets.py</span></code> file would look like:</p>
+<div class="code python highlight-default notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Load sample data.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">pandas</span>
+<span class="kn">import</span> <span class="nn">pooch</span>
+
+<span class="kn">from</span> <span class="nn">.</span> <span class="k">import</span> <span class="n">version</span>  <span class="c1"># The version string of your project</span>
+
+
+<span class="n">GOODBOY</span> <span class="o">=</span> <span class="n">pooch</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+    <span class="c1"># Use the default cache folder for the OS</span>
+    <span class="n">path</span><span class="o">=</span><span class="n">pooch</span><span class="o">.</span><span class="n">os_cache</span><span class="p">(</span><span class="s2">&quot;plumbus&quot;</span><span class="p">),</span>
+    <span class="c1"># The remote data is on Github</span>
+    <span class="n">base_url</span><span class="o">=</span><span class="s2">&quot;https://github.com/rick/plumbus/raw/</span><span class="si">{version}</span><span class="s2">/data/&quot;</span><span class="p">,</span>
+    <span class="n">version</span><span class="o">=</span><span class="n">version</span><span class="p">,</span>
+    <span class="c1"># If this is a development version, get the data from the master branch</span>
+    <span class="n">version_dev</span><span class="o">=</span><span class="s2">&quot;master&quot;</span><span class="p">,</span>
+    <span class="c1"># The registry specifies the files that can be fetched from the local storage</span>
+    <span class="n">registry</span><span class="o">=</span><span class="p">{</span>
+        <span class="s2">&quot;c137.csv&quot;</span><span class="p">:</span> <span class="s2">&quot;19uheidhlkjdwhoiwuhc0uhcwljchw9ochwochw89dcgw9dcgwc&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;cronen.csv&quot;</span><span class="p">:</span> <span class="s2">&quot;1upodh2ioduhw9celdjhlfvhksgdwikdgcowjhcwoduchowjg8w&quot;</span><span class="p">,</span>
+    <span class="p">},</span>
+<span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">fetch_c137</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Load the C-137 sample data as a pandas.DataFrame.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># The file will be downloaded automatically the first time this is run.</span>
+    <span class="n">fname</span> <span class="o">=</span> <span class="n">GOODBOY</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="s2">&quot;c137.csv&quot;</span><span class="p">)</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">pandas</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">data</span>
+
+
+<span class="k">def</span> <span class="nf">fetch_cronen</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Load the Cronenberg sample data as a pandas.DataFrame.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">fname</span> <span class="o">=</span> <span class="n">GOODBOY</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="s2">&quot;cronen.csv&quot;</span><span class="p">)</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">pandas</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">data</span>
+</pre></div>
+</div>
+<p>When the user calls <code class="docutils literal notranslate"><span class="pre">plumbus.datasets.fetch_c137()</span></code> for the first time, the data file
+will be downloaded and stored in the local storage. In this case, we’re using
+<a class="reference internal" href="api/generated/pooch.os_cache.html#pooch.os_cache" title="pooch.os_cache"><code class="xref py py-func docutils literal notranslate"><span class="pre">pooch.os_cache</span></code></a> to set the local folder to the default cache location for your
+OS. You could also provide any other path if you prefer. See the documentation for
+<a class="reference internal" href="api/generated/pooch.create.html#pooch.create" title="pooch.create"><code class="xref py py-func docutils literal notranslate"><span class="pre">pooch.create</span></code></a> for more options.</p>
+</div>
+<div class="section" id="hashes">
+<h2>Hashes<a class="headerlink" href="#hashes" title="Permalink to this headline">¶</a></h2>
+<p>Pooch uses <a class="reference external" href="https://en.wikipedia.org/wiki/SHA-2">SHA256</a> hashes to check if files
+are up-to-date or possibly corrupted:</p>
+<ul class="simple">
+<li>If a file exists in the local folder, Pooch will check that its hash matches the one
+in the registry. If it doesn’t, we’ll assume that it needs to be updated.</li>
+<li>If a file needs to be updated or doesn’t exist, Pooch will download it from the
+remote source and check the hash. If the hash doesn’t match, an exception is raised to
+warn of possible file corruption.</li>
+</ul>
+<p>You can generate hashes for your data files using the terminal:</p>
+<div class="code bash highlight-default notranslate"><div class="highlight"><pre><span></span>$ openssl sha256 data/c137.csv
+SHA256(data/c137.csv)= baee0894dba14b12085eacb204284b97e362f4f3e5a5807693cc90ef415c1b2d
+</pre></div>
+</div>
+<p>Or using the <a class="reference internal" href="api/generated/pooch.file_hash.html#pooch.file_hash" title="pooch.file_hash"><code class="xref py py-func docutils literal notranslate"><span class="pre">pooch.file_hash</span></code></a> function (which is a convenient way of calling
+Python’s <a class="reference external" href="https://docs.python.org/3/library/hashlib.html#module-hashlib" title="(in Python v3.7)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">hashlib</span></code></a>):</p>
+<div class="code python highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pooch</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">pooch</span><span class="o">.</span><span class="n">file_hash</span><span class="p">(</span><span class="s2">&quot;data/c137.csv&quot;</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="versioning">
+<h2>Versioning<a class="headerlink" href="#versioning" title="Permalink to this headline">¶</a></h2>
+<p>The files from different version of your project will be kept in separate folders to
+make sure they don’t conflict with each other. This way, you can safely update data
+files while maintaining backward compatibility.
+For example, if <code class="docutils literal notranslate"><span class="pre">path=&quot;.plumbus&quot;</span></code> and <code class="docutils literal notranslate"><span class="pre">version=&quot;v0.1&quot;</span></code>, the data folder will be
+<code class="docutils literal notranslate"><span class="pre">.plumbus/v0.1</span></code>.</p>
+<p>When your project updates, Pooch will automatically setup a separate folder for the new
+data files based on the given version string. The remote URL will also be updated.
+Notice that there is a format specifier <code class="docutils literal notranslate"><span class="pre">{version}</span></code> in the URL that Pooch substitutes
+for you.</p>
+</div>
+<div class="section" id="user-defined-paths">
+<h2>User-defined paths<a class="headerlink" href="#user-defined-paths" title="Permalink to this headline">¶</a></h2>
+<p>In the above example, the location of the local storage in the users computer is
+hard-coded. There is no way for them to change it to something else. To avoid being a
+tyrant, you can allow the user to define the <code class="docutils literal notranslate"><span class="pre">path</span></code> argument using an environment
+variable:</p>
+<div class="code python highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">GOODBOY</span> <span class="o">=</span> <span class="n">pooch</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+    <span class="c1"># This is still the default in case the environment variable isn&#39;t defined</span>
+    <span class="n">path</span><span class="o">=</span><span class="n">pooch</span><span class="o">.</span><span class="n">os_cache</span><span class="p">(</span><span class="s2">&quot;plumbus&quot;</span><span class="p">),</span>
+    <span class="n">base_url</span><span class="o">=</span><span class="s2">&quot;https://github.com/rick/plumbus/raw/</span><span class="si">{version}</span><span class="s2">/data/&quot;</span><span class="p">,</span>
+    <span class="n">version</span><span class="o">=</span><span class="n">version</span><span class="p">,</span>
+    <span class="n">version_dev</span><span class="o">=</span><span class="s2">&quot;master&quot;</span><span class="p">,</span>
+    <span class="n">registry</span><span class="o">=</span><span class="p">{</span>
+        <span class="s2">&quot;c137.csv&quot;</span><span class="p">:</span> <span class="s2">&quot;19uheidhlkjdwhoiwuhc0uhcwljchw9ochwochw89dcgw9dcgwc&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;cronen.csv&quot;</span><span class="p">:</span> <span class="s2">&quot;1upodh2ioduhw9celdjhlfvhksgdwikdgcowjhcwoduchowjg8w&quot;</span><span class="p">,</span>
+    <span class="p">},</span>
+    <span class="c1"># The name of the environment variable that can overwrite the path argument</span>
+    <span class="n">env</span><span class="o">=</span><span class="s2">&quot;PLUMBUS_DATA_DIR&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>In this case, if the user defines the <code class="docutils literal notranslate"><span class="pre">PLUMBUS_DATA_DIR</span></code> environment variable, we’ll
+use its value instead of <code class="docutils literal notranslate"><span class="pre">path</span></code>. Pooch will still append the value of <code class="docutils literal notranslate"><span class="pre">version</span></code> to
+the path, so the value of <code class="docutils literal notranslate"><span class="pre">PLUMBUS_DATA_DIR</span></code> should not include a version number.</p>
+</div>
+<div class="section" id="subdirectories">
+<h2>Subdirectories<a class="headerlink" href="#subdirectories" title="Permalink to this headline">¶</a></h2>
+<p>You can have data files in subdirectories of the remote data store. These files will be
+saved to the same subdirectories in the local storage folder. Note, however, that the
+names of these files in the registry <strong>must use Unix-style separators</strong> (<code class="docutils literal notranslate"><span class="pre">'/'</span></code>) even
+on Windows. We will handle the appropriate conversions.</p>
+</div>
+<div class="section" id="so-you-have-1000-data-files">
+<h2>So you have 1000 data files<a class="headerlink" href="#so-you-have-1000-data-files" title="Permalink to this headline">¶</a></h2>
+<p>If your project has a large number of data files, it can be tedious to list them in a
+dictionary. In these cases, it’s better to store the file names and hashes in a file and
+use <a class="reference internal" href="api/generated/pooch.Pooch.load_registry.html#pooch.Pooch.load_registry" title="pooch.Pooch.load_registry"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pooch.Pooch.load_registry</span></code></a> to read them:</p>
+<div class="code python highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+
+<span class="n">GOODBOY</span> <span class="o">=</span> <span class="n">pooch</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+    <span class="c1"># Use the default cache folder for the OS</span>
+    <span class="n">path</span><span class="o">=</span><span class="n">pooch</span><span class="o">.</span><span class="n">os_cache</span><span class="p">(</span><span class="s2">&quot;plumbus&quot;</span><span class="p">),</span>
+    <span class="c1"># The remote data is on Github</span>
+    <span class="n">base_url</span><span class="o">=</span><span class="s2">&quot;https://github.com/rick/plumbus/raw/</span><span class="si">{version}</span><span class="s2">/data/&quot;</span><span class="p">,</span>
+    <span class="n">version</span><span class="o">=</span><span class="n">version</span><span class="p">,</span>
+    <span class="c1"># If this is a development version, get the data from the master branch</span>
+    <span class="n">version_dev</span><span class="o">=</span><span class="s2">&quot;master&quot;</span><span class="p">,</span>
+    <span class="c1"># We&#39;ll load it from a file later</span>
+    <span class="n">registry</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">GOODBOY</span><span class="o">.</span><span class="n">load_registry</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="vm">__file__</span><span class="p">),</span> <span class="s2">&quot;registry.txt&quot;</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">registry.txt</span></code> file in this case is in the same directory as the <code class="docutils literal notranslate"><span class="pre">datasets.py</span></code>
+module and should be shipped with the package. It’s contents are:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>c137.csv 19uheidhlkjdwhoiwuhc0uhcwljchw9ochwochw89dcgw9dcgwc
+cronen.csv 1upodh2ioduhw9celdjhlfvhksgdwikdgcowjhcwoduchowjg8w
+</pre></div>
+</div>
+<p>To make sure the registry file is shipped with your package, include the following in
+your <code class="docutils literal notranslate"><span class="pre">MANIFEST.in</span></code> file:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>include plumbus/registry.txt
+</pre></div>
+</div>
+<p>And the following entry in the <code class="docutils literal notranslate"><span class="pre">setup</span></code> function of your <code class="docutils literal notranslate"><span class="pre">setup.py</span></code>:</p>
+<div class="code python highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">setup</span><span class="p">(</span>
+    <span class="o">...</span>
+    <span class="n">package_data</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;plumbus&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;registry.txt&quot;</span><span class="p">]},</span>
+    <span class="o">...</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="creating-a-registry-file">
+<h2>Creating a registry file<a class="headerlink" href="#creating-a-registry-file" title="Permalink to this headline">¶</a></h2>
+<p>If you have many data files, creating the registry and keeping it updated can be a
+challenge. Function <a class="reference internal" href="api/generated/pooch.make_registry.html#pooch.make_registry" title="pooch.make_registry"><code class="xref py py-func docutils literal notranslate"><span class="pre">pooch.make_registry</span></code></a> will create a registry file with all
+contents of a directory. For example, we can generate the registry file for our
+fictitious project from the command-line:</p>
+<div class="code bash highlight-default notranslate"><div class="highlight"><pre><span></span>$ python -c &quot;import pooch; pooch.make_registry(&#39;data&#39;, &#39;plumbus/registry.txt&#39;)&quot;
+</pre></div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="api/index.html" class="btn btn-neutral float-right" title="API Reference" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="install.html" class="btn btn-neutral" title="Installing" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018-2018, Leonardo Uieda.
+      Last updated on Aug 10, 2018.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  <script type="text/javascript" src="_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
