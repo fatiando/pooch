@@ -322,16 +322,17 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">version</span> <span class="o">=</span> <span class="n">check_version</span><span class="p">(</span><span class="n">version</span><span class="p">,</span> <span class="n">fallback</span><span class="o">=</span><span class="n">version_dev</span><span class="p">)</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)):</span>
-        <span class="n">path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="o">*</span><span class="n">path</span><span class="p">)</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="o">*</span><span class="n">path</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">env</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">env</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span> <span class="ow">and</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="n">env</span><span class="p">]:</span>
-        <span class="n">path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="n">env</span><span class="p">])</span>
-    <span class="n">versioned_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">version</span><span class="p">)</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="n">env</span><span class="p">]</span>
+    <span class="n">versioned_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">path</span><span class="p">)),</span> <span class="n">version</span><span class="p">)</span>
     <span class="c1"># Create the directory if it doesn&#39;t already exist</span>
-    <span class="n">versioned_path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">()</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">versioned_path</span><span class="p">):</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">versioned_path</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">registry</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">registry</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
     <span class="n">pup</span> <span class="o">=</span> <span class="n">Pooch</span><span class="p">(</span>
-        <span class="n">path</span><span class="o">=</span><span class="n">versioned_path</span><span class="p">,</span>
+        <span class="n">path</span><span class="o">=</span><span class="n">Path</span><span class="p">(</span><span class="n">versioned_path</span><span class="p">),</span>
         <span class="n">base_url</span><span class="o">=</span><span class="n">base_url</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">version</span><span class="o">=</span><span class="n">version</span><span class="p">),</span>
         <span class="n">registry</span><span class="o">=</span><span class="n">registry</span><span class="p">,</span>
     <span class="p">)</span>
@@ -356,39 +357,6 @@
 <span class="sd">        can be fetched from the local storage. Files in subdirectories of *path* **must</span>
 <span class="sd">        use Unix-style separators** (``&#39;/&#39;``) even on Windows.</span>
 
-<span class="sd">    Examples</span>
-<span class="sd">    --------</span>
-
-<span class="sd">    &gt;&gt;&gt; import warnings</span>
-<span class="sd">    &gt;&gt;&gt; warnings.simplefilter(&quot;ignore&quot;)  # disable warnings to stop printing status</span>
-<span class="sd">    &gt;&gt;&gt; import os</span>
-<span class="sd">    &gt;&gt;&gt; from tempfile import TemporaryDirectory</span>
-<span class="sd">    &gt;&gt;&gt; from pooch.tests.utils import pooch_test_url, pooch_test_registry</span>
-<span class="sd">    &gt;&gt;&gt; # Setup a pooch in a temporary directory for this example</span>
-<span class="sd">    &gt;&gt;&gt; store = TemporaryDirectory()</span>
-<span class="sd">    &gt;&gt;&gt; os.listdir(store.name)</span>
-<span class="sd">    []</span>
-<span class="sd">    &gt;&gt;&gt; # Use our test base url and registry</span>
-<span class="sd">    &gt;&gt;&gt; pup = Pooch(path=store.name, base_url=pooch_test_url(),</span>
-<span class="sd">    ...             registry=pooch_test_registry())</span>
-<span class="sd">    &gt;&gt;&gt; # Fetch a data file. Since it&#39;s not in our local storage, it will be downloaded</span>
-<span class="sd">    &gt;&gt;&gt; fname = pup.fetch(&#39;tiny-data.txt&#39;)</span>
-<span class="sd">    &gt;&gt;&gt; os.listdir(store.name)</span>
-<span class="sd">    [&#39;tiny-data.txt&#39;]</span>
-<span class="sd">    &gt;&gt;&gt; with open(fname) as f:</span>
-<span class="sd">    ...     print(f.read().strip())</span>
-<span class="sd">    # A tiny data file for test purposes only</span>
-<span class="sd">    1  2  3  4  5  6</span>
-<span class="sd">    &gt;&gt;&gt; # If the data file is corrupted or outdated, Pooch will download a new version</span>
-<span class="sd">    &gt;&gt;&gt; with open(fname, &quot;w&quot;) as f:</span>
-<span class="sd">    ...     __ = f.write(&quot;This is no longer the same file content.&quot;)</span>
-<span class="sd">    &gt;&gt;&gt; fname = pup.fetch(&#39;tiny-data.txt&#39;)</span>
-<span class="sd">    &gt;&gt;&gt; with open(fname) as f:</span>
-<span class="sd">    ...     print(f.read().strip())</span>
-<span class="sd">    # A tiny data file for test purposes only</span>
-<span class="sd">    1  2  3  4  5  6</span>
-<span class="sd">    &gt;&gt;&gt; store.cleanup()</span>
-
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">base_url</span><span class="p">,</span> <span class="n">registry</span><span class="p">):</span>
@@ -399,7 +367,7 @@
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">abspath</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="s2">&quot;Absolute path to the local storage&quot;</span>
-        <span class="k">return</span> <span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="p">)</span><span class="o">.</span><span class="n">expanduser</span><span class="p">()</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">Path</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="p">))))</span>
 
 <div class="viewcode-block" id="Pooch.fetch"><a class="viewcode-back" href="../../api/generated/pooch.Pooch.fetch.html#pooch.Pooch.fetch">[docs]</a>    <span class="k">def</span> <span class="nf">fetch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fname</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -452,7 +420,7 @@
 <span class="sd">            If the hash of the downloaded file doesn&#39;t match the hash in the registry.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">destination</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">abspath</span> <span class="o">/</span> <span class="n">fname</span>
+        <span class="n">destination</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">abspath</span><span class="p">,</span> <span class="n">fname</span><span class="p">)</span>
         <span class="n">source</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">base_url</span><span class="p">,</span> <span class="n">fname</span><span class="p">])</span>
         <span class="k">if</span> <span class="n">update</span><span class="p">:</span>
             <span class="n">action</span> <span class="o">=</span> <span class="s2">&quot;Updating&quot;</span>
@@ -481,7 +449,8 @@
             <span class="p">)</span>
         <span class="c1"># Make sure the parent directory exists in case the file is in a subdirectory.</span>
         <span class="c1"># Otherwise, move will cause an error.</span>
-        <span class="n">destination</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">destination</span><span class="o">.</span><span class="n">parent</span><span class="p">)):</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">destination</span><span class="o">.</span><span class="n">parent</span><span class="p">))</span>
         <span class="n">shutil</span><span class="o">.</span><span class="n">move</span><span class="p">(</span><span class="n">fout</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">destination</span><span class="p">))</span>
 
 <div class="viewcode-block" id="Pooch.load_registry"><a class="viewcode-back" href="../../api/generated/pooch.Pooch.load_registry.html#pooch.Pooch.load_registry">[docs]</a>    <span class="k">def</span> <span class="nf">load_registry</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fname</span><span class="p">):</span>
@@ -523,7 +492,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2018-2018, Leonardo Uieda.
-      Last updated on Aug 09, 2018.
+      Last updated on Aug 10, 2018.
 
     </p>
   </div>

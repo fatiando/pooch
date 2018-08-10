@@ -200,7 +200,7 @@
 <span id="install"></span><h1>Installing<a class="headerlink" href="#installing" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="which-python">
 <h2>Which Python?<a class="headerlink" href="#which-python" title="Permalink to this headline">¶</a></h2>
-<p>You’ll need <strong>Python 3.5 or greater</strong>.</p>
+<p>You’ll need Python 2.7 or <strong>Python &gt;=3.5 (recommended)</strong>.</p>
 <p>We recommend using the
 <a class="reference external" href="https://www.anaconda.com/download">Anaconda Python distribution</a>
 to ensure you have all dependencies installed and the <code class="docutils literal notranslate"><span class="pre">conda</span></code> package manager
@@ -213,6 +213,11 @@ doesn’t interfere with any other Python installations in your system.</p>
 <ul class="simple">
 <li><a class="reference external" href="http://docs.python-requests.org/">requests</a></li>
 <li><a class="reference external" href="https://github.com/pypa/packaging">packaging</a></li>
+</ul>
+<p>The following are only required for Python 2.7:</p>
+<ul class="simple">
+<li><a class="reference external" href="https://pypi.org/project/pathlib/">pathlib</a></li>
+<li><a class="reference external" href="https://pypi.org/project/backports.tempfile/">backports.tempfile</a></li>
 </ul>
 </div>
 <div class="section" id="installing-with-conda">
@@ -280,7 +285,7 @@ interpreter:</p>
   <div role="contentinfo">
     <p>
         &copy; Copyright 2018-2018, Leonardo Uieda.
-      Last updated on Aug 09, 2018.
+      Last updated on Aug 10, 2018.
 
     </p>
   </div>
