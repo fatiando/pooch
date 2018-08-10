@@ -3,7 +3,11 @@ Test the core class and factory function.
 """
 import os
 from pathlib import Path
-from tempfile import TemporaryDirectory
+
+try:
+    from tempfile import TemporaryDirectory
+except ImportError:
+    from backports.tempfile import TemporaryDirectory
 import warnings
 
 import pytest
@@ -13,7 +17,7 @@ from ..utils import file_hash
 from .utils import pooch_test_url, pooch_test_registry, check_tiny_data
 
 
-DATA_DIR = str(Path(os.path.dirname(__file__), "data").expanduser().resolve())
+DATA_DIR = str(Path(__file__).parent / "data")
 REGISTRY = pooch_test_registry()
 BASEURL = pooch_test_url()
 REGISTRY_CORRUPTED = {
@@ -34,7 +38,7 @@ def test_pooch_local():
 def test_pooch_update():
     "Setup a pooch that already has the local data but the file is outdated"
     with TemporaryDirectory() as local_store:
-        path = Path(local_store).expanduser().resolve()
+        path = Path(local_store)
         # Create a dummy version of tiny-data.txt that is different from the one in the
         # remote storage
         true_path = str(path / "tiny-data.txt")
@@ -59,7 +63,7 @@ def test_pooch_corrupted():
     "Raise an exception if the hash of downloaded file doesn't match the registry"
     # Test the case where the file wasn't in the directory
     with TemporaryDirectory() as local_store:
-        path = os.path.abspath(os.path.expanduser(local_store))
+        path = os.path.abspath(local_store)
         pup = Pooch(path=path, base_url=BASEURL, registry=REGISTRY_CORRUPTED)
         with warnings.catch_warnings(record=True) as warn:
             with pytest.raises(ValueError):

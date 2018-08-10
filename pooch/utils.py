@@ -1,8 +1,6 @@
 """
 Misc utilities
 """
-import os
-import glob
 from pathlib import Path
 import sys
 import hashlib
@@ -130,10 +128,6 @@ def check_version(version, fallback="master"):
     'master'
     >>> check_version("0.1+111.9hdg36", fallback="dev")
     'dev'
-    >>> check_version("not compliant")
-    Traceback (most recent call last):
-        ...
-    packaging.version.InvalidVersion: Invalid version: 'not compliant'
 
     """
     parse = Version(version)
@@ -160,15 +154,21 @@ def make_registry(directory, output, recursive=True):
         If True, will recursively look for files in subdirectories of *directory*.
 
     """
+    directory = Path(directory)
+    if recursive:
+        pattern = "**/*"
+    else:
+        pattern = "*"
+
     files = sorted(
         [
-            os.path.relpath(fname, directory)
-            for fname in glob.glob(os.path.join(directory, "**"), recursive=recursive)
-            if os.path.isfile(fname)
+            str(path.relative_to(directory))
+            for path in directory.glob(pattern)
+            if path.is_file()
         ]
     )
 
-    hashes = [file_hash(os.path.join(directory, fname)) for fname in files]
+    hashes = [file_hash(str(directory / fname)) for fname in files]
 
     with open(output, "w") as outfile:
         for fname, fhash in zip(files, hashes):

@@ -1,0 +1,8 @@
+requests
+packaging
+backports.tempfile
+pathlib
+# Development requirements
+pytest
+pytest-cov
+coverage
