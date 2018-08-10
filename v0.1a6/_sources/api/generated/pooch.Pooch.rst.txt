@@ -1,0 +1,10 @@
+pooch.Pooch
+===========
+
+.. currentmodule:: pooch
+
+.. autoclass:: Pooch
+
+.. raw:: html
+
+     <div style='clear:both'></div>
