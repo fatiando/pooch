@@ -49,6 +49,11 @@ matrix:
           env:
               - PYTHON=3.5
               - BUILD_DOCS=true
+        - os: linux
+          env:
+              - PYTHON=2.7
+              - COVERAGE=true
+              - CONDA_REQUIREMENTS=requirements27.txt
         - os: osx
           env:
               - PYTHON=3.6

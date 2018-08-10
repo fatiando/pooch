@@ -1,7 +1,6 @@
 """
 Misc utilities
 """
-import os
 from pathlib import Path
 import sys
 import hashlib
@@ -129,10 +128,6 @@ def check_version(version, fallback="master"):
     'master'
     >>> check_version("0.1+111.9hdg36", fallback="dev")
     'dev'
-    >>> check_version("not compliant")
-    Traceback (most recent call last):
-        ...
-    packaging.version.InvalidVersion: Invalid version: 'not compliant'
 
     """
     parse = Version(version)

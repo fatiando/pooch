@@ -3,7 +3,6 @@ Build and install the project.
 
 Uses versioneer to manage version numbers using git tags.
 """
-import os
 from pathlib import Path
 from setuptools import setup, find_packages
 
@@ -36,6 +35,7 @@ CLASSIFIERS = [
     "Intended Audience :: Education",
     "Topic :: Scientific/Engineering",
     "Topic :: Software Development :: Libraries",
+    "Programming Language :: Python :: 2.7",
     "Programming Language :: Python :: 3.5",
     "Programming Language :: Python :: 3.6",
     "License :: OSI Approved :: {}".format(LICENSE),
@@ -50,8 +50,12 @@ PACKAGE_DATA = {
         if path.is_file()
     ]
 }
-INSTALL_REQUIRES = ["requests", "packaging", "pathlib;python_version<'3.5'",
-                    "backports.tempfile;python_version<'3.5'"]
+INSTALL_REQUIRES = [
+    "requests",
+    "packaging",
+    "pathlib;python_version<'3.5'",
+    "backports.tempfile;python_version<'3.5'",
+]
 PYTHON_REQUIRES = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
 
 if __name__ == "__main__":

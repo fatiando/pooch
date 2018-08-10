@@ -6,7 +6,7 @@ Installing
 Which Python?
 -------------
 
-You'll need **Python 3.5 or greater**.
+You'll need Python 2.7 or **Python >=3.5 (recommended)**.
 
 We recommend using the
 `Anaconda Python distribution <https://www.anaconda.com/download>`__
@@ -21,6 +21,11 @@ Dependencies
 
 * `requests <http://docs.python-requests.org/>`__
 * `packaging <https://github.com/pypa/packaging>`__
+
+The following are only required for Python 2.7:
+
+* `pathlib <https://pypi.org/project/pathlib/>`__
+* `backports.tempfile <https://pypi.org/project/backports.tempfile/>`__
 
 
 Installing with conda

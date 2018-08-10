@@ -9,7 +9,7 @@ from ..core import Pooch
 from ..utils import make_registry
 from .utils import check_tiny_data
 
-DATA_DIR = str(Path(os.path.dirname(__file__), "data", "store").expanduser().resolve())
+DATA_DIR = str(Path(__file__).parent / "data" / "store")
 REGISTRY = (
     "tiny-data.txt baee0894dba14b12085eacb204284b97e362f4f3e5a5807693cc90ef415c1b2d\n"
 )

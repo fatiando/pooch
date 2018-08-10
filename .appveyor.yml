@@ -10,24 +10,19 @@ branches:
 
 environment:
     matrix:
-        # Python 3.5 32bit
-        #- MINICONDA: C:\Miniconda35
-          #PYTHON: 3.5
-        # Python 3.5 64bit
+        - MINICONDA: C:\Miniconda-x64
+          PYTHON: 2.7
+          CONDA_REQUIREMENTS: requirements27.txt
         - MINICONDA: C:\Miniconda35-x64
           PYTHON: 3.5
-        # Python 3.6 32bit
-        #- MINICONDA: C:\Miniconda36
-          #PYTHON: 3.6
-        # Python 3.6 64bit
+          CONDA_REQUIREMENTS: requirements.txt
         - MINICONDA: C:\Miniconda36-x64
           PYTHON: 3.6
+          CONDA_REQUIREMENTS: requirements.txt
 
 init:
     # Add miniconda to the PATH
     - "set PATH=%MINICONDA%;%MINICONDA%\\Scripts;%MINICONDA%\\Library\\bin;%PATH%"
-    # The file with the listed requirements to be installed by setup-miniconda.bat
-    - set CONDA_REQUIREMENTS=requirements.txt
 
 install:
     # Get the Fatiando CI scripts

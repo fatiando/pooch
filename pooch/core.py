@@ -134,16 +134,17 @@ def create(path, base_url, version, version_dev, env=None, registry=None):
     """
     version = check_version(version, fallback=version_dev)
     if isinstance(path, (list, tuple)):
-        path = Path(*path)
+        path = os.path.join(*path)
     if env is not None and env in os.environ and os.environ[env]:
-        path = Path(os.environ[env])
-    versioned_path = Path(path, version)
+        path = os.environ[env]
+    versioned_path = os.path.join(os.path.expanduser(str(path)), version)
     # Create the directory if it doesn't already exist
-    versioned_path.expanduser().mkdir(parents=True, exist_ok=True)
+    if not os.path.exists(versioned_path):
+        os.makedirs(versioned_path)
     if registry is None:
         registry = dict()
     pup = Pooch(
-        path=versioned_path,
+        path=Path(versioned_path),
         base_url=base_url.format(version=version),
         registry=registry,
     )
@@ -168,39 +169,6 @@ class Pooch:
         can be fetched from the local storage. Files in subdirectories of *path* **must
         use Unix-style separators** (``'/'``) even on Windows.
 
-    Examples
-    --------
-
-    >>> import warnings
-    >>> warnings.simplefilter("ignore")  # disable warnings to stop printing status
-    >>> import os
-    >>> from tempfile import TemporaryDirectory
-    >>> from pooch.tests.utils import pooch_test_url, pooch_test_registry
-    >>> # Setup a pooch in a temporary directory for this example
-    >>> store = TemporaryDirectory()
-    >>> os.listdir(store.name)
-    []
-    >>> # Use our test base url and registry
-    >>> pup = Pooch(path=store.name, base_url=pooch_test_url(),
-    ...             registry=pooch_test_registry())
-    >>> # Fetch a data file. Since it's not in our local storage, it will be downloaded
-    >>> fname = pup.fetch('tiny-data.txt')
-    >>> os.listdir(store.name)
-    ['tiny-data.txt']
-    >>> with open(fname) as f:
-    ...     print(f.read().strip())
-    # A tiny data file for test purposes only
-    1  2  3  4  5  6
-    >>> # If the data file is corrupted or outdated, Pooch will download a new version
-    >>> with open(fname, "w") as f:
-    ...     __ = f.write("This is no longer the same file content.")
-    >>> fname = pup.fetch('tiny-data.txt')
-    >>> with open(fname) as f:
-    ...     print(f.read().strip())
-    # A tiny data file for test purposes only
-    1  2  3  4  5  6
-    >>> store.cleanup()
-
     """
 
     def __init__(self, path, base_url, registry):
@@ -211,7 +179,7 @@ class Pooch:
     @property
     def abspath(self):
         "Absolute path to the local storage"
-        return Path(self.path).expanduser().resolve()
+        return Path(os.path.abspath(os.path.expanduser(str(self.path))))
 
     def fetch(self, fname):
         """
@@ -264,7 +232,7 @@ class Pooch:
             If the hash of the downloaded file doesn't match the hash in the registry.
 
         """
-        destination = self.abspath / fname
+        destination = Path(self.abspath, fname)
         source = "".join([self.base_url, fname])
         if update:
             action = "Updating"
@@ -293,7 +261,8 @@ class Pooch:
             )
         # Make sure the parent directory exists in case the file is in a subdirectory.
         # Otherwise, move will cause an error.
-        destination.parent.mkdir(parents=True, exist_ok=True)
+        if not os.path.exists(str(destination.parent)):
+            os.makedirs(str(destination.parent))
         shutil.move(fout.name, str(destination))
 
     def load_registry(self, fname):
