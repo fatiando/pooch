@@ -3,5 +3,6 @@ include LICENSE.txt
 include CODE_OF_CONDUCT.md
 include CONTRIBUTING.md
 include AUTHORS.md
+include MAINTENANCE.md
 include versioneer.py
 recursive-include pooch/tests/data **

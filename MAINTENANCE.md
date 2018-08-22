@@ -3,14 +3,39 @@
 This page contains instructions for project maintainers about how our setup works,
 making releases, creating packages, etc.
 
-If you want to make a contribution to the project, see the [Contributing
-Guide](CONTRIBUTING.md) instead.
+If you want to make a contribution to the project, see the
+[Contributing Guide](CONTRIBUTING.md) instead.
 
 
 ## Branches
 
-* *master*:
-* *gh-pages*:
+* *master*: Always tested and ready to become a new version. Don't push directly to this
+  branch. Make a new branch and submit a pull request instead.
+* *gh-pages*: Holds the HTML documentation and is served by Github. Pages for the master
+  branch are in the `dev` folder. Pages for each release are in their own folders.
+  **Automatically updated by TravisCI** so you shouldn't have to make commits here.
+
+
+## Reviewing and merging pull requests
+
+A few guidelines for reviewing:
+
+* Always **be polite** and give constructive feedback.
+* Welcome new users and thank them for their time, even if we don't plan on merging the
+  PR.
+* Don't be harsh with code style or performance. If the code is bad, either (1) merge
+  the pull request and open a new one fixing the code and pinging the original submitter
+  (2) comment on the PR detailing how the code could be improved. Both ways are focused
+  on showing the contributor **how to write good code**, not shaming them.
+
+Pull requests should be **squash merged**.
+This means that all commits will be collapsed into one.
+The main advantages of this are:
+
+* Eliminates experimental commits or commits to undo previous changes.
+* Makes sure every commit on master passes the tests and has a defined purpose.
+* The maintainer writes the final commit message, so we can make sure it's good and
+  descriptive.
 
 
 ## Continuous Integration
@@ -39,6 +64,55 @@ submit pull requests to that repository.
 
 ## Making a Release
 
-Tagging.
-Updating the conda package.
-Post on social media.
+We try to automate the release process as much as possible.
+Travis handles publishing new releases to PyPI and updating the documentation.
+The version number is set automatically using versioneer based information it gets from
+git.
+There are a few steps that still must be done manually, though.
+
+### Updating the changelog
+
+1. Generate a list of commits between the last release tag and now:
+
+    ```bash
+    git log HEAD...v0.1.2 > changes.txt
+    ```
+
+2. Edit the changes list to remove any trivial changes (updates to the README, typo
+   fixes, CI configuration, etc).
+3. Replace the PR number in the commit titles with a link to the Github PR page.
+4. Copy the remaining changes to `doc/changelog.rst` under a new section for the
+   intended release.
+5. Open a new PR with the updated changelog.
+
+### Pushing to PyPI and updating the documentation
+
+After the changelog is updated, making a release should be as simple as creating a new
+git tag and pushing it to Github:
+
+```bash
+git tag v0.2.0
+git push --tags
+```
+
+The tag should be version number (following [Semantic Versioning](https://semver.org/))
+with a leading `v`.
+This should trigger Travis to do all the work for us.
+A new source distribution will be uploaded to PyPI, a new folder with the documentation
+HTML will be pushed to *gh-pages*, and the `latest` link will be updated to point to
+this new folder.
+
+### Updating the conda package
+
+After Travis is done building the tag and all builds pass, we need to update the conda
+package.
+Unfortunately, this needs to be done manually for now.
+
+1. Fork the feedstock repository (https://github.com/conda-forge/pooch-feedstock) if you
+   haven't already. If you have a fork, update it.
+2. Update the version number and sha256 hash on `recipe/meta.yaml`. You can get the hash
+   from the PyPI "Download files" section.
+3. Add or remove any new dependencies (most are probably only `run` dependencies).
+4. Make a new branch, commit, and push your changes **to your fork**.
+5. Create a PR against the original feedstock master.
+6. Once the CIs are passing, merge or as a maintainer to do so.
