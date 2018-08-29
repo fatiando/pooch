@@ -2,7 +2,9 @@
 Test the core class and factory function.
 """
 import os
+import sys
 from pathlib import Path
+import tempfile
 
 try:
     from tempfile import TemporaryDirectory
@@ -12,9 +14,14 @@ import warnings
 
 import pytest
 
-from .. import Pooch
+from .. import Pooch, create
 from ..utils import file_hash
 from .utils import pooch_test_url, pooch_test_registry, check_tiny_data
+
+
+# PermissionError was introduced in Python 3.3. This can be deleted when dropping 2.7
+if sys.version_info[0] < 3:
+    PermissionError = OSError  # pylint: disable=redefined-builtin,invalid-name
 
 
 DATA_DIR = str(Path(__file__).parent / "data")
@@ -104,3 +111,66 @@ def test_pooch_load_registry_invalid_line():
     pup = Pooch(path="", base_url="", registry={})
     with pytest.raises(ValueError):
         pup.load_registry(os.path.join(DATA_DIR, "registry-invalid.txt"))
+
+
+def test_create_makedirs_permissionerror(monkeypatch):
+    "Should warn the user when can't create the local data dir"
+
+    def mockmakedirs(path):  # pylint: disable=unused-argument
+        "Raise an exception to mimic permission issues"
+        raise PermissionError("Fake error")
+
+    data_cache = os.path.join(os.curdir, "test_permission")
+    assert not os.path.exists(data_cache)
+
+    monkeypatch.setattr(os, "makedirs", mockmakedirs)
+
+    with warnings.catch_warnings(record=True) as warn:
+        pup = create(
+            path=data_cache,
+            base_url="",
+            version="1.0",
+            version_dev="master",
+            env="SOME_VARIABLE",
+            registry={"afile.txt": "ahash"},
+        )
+        assert len(warn) == 1
+        assert issubclass(warn[-1].category, UserWarning)
+        assert str(warn[-1].message).startswith("Cannot write to data cache")
+        assert "'SOME_VARIABLE'" in str(warn[-1].message)
+
+    with pytest.raises(PermissionError):
+        pup.fetch("afile.txt")
+
+
+def test_create_newfile_permissionerror(monkeypatch):
+    "Should warn the user when can't write to the local data dir"
+    # This is a separate function because there should be a warning if the data dir
+    # already exists but we can't write to it.
+
+    def mocktempfile(**kwargs):  # pylint: disable=unused-argument
+        "Raise an exception to mimic permission issues"
+        raise PermissionError("Fake error")
+
+    with TemporaryDirectory() as data_cache:
+        os.makedirs(os.path.join(data_cache, "1.0"))
+        assert os.path.exists(data_cache)
+
+        monkeypatch.setattr(tempfile, "NamedTemporaryFile", mocktempfile)
+
+        with warnings.catch_warnings(record=True) as warn:
+            pup = create(
+                path=data_cache,
+                base_url="",
+                version="1.0",
+                version_dev="master",
+                env="SOME_VARIABLE",
+                registry={"afile.txt": "ahash"},
+            )
+            assert len(warn) == 1
+            assert issubclass(warn[-1].category, UserWarning)
+            assert str(warn[-1].message).startswith("Cannot write to data cache")
+            assert "'SOME_VARIABLE'" in str(warn[-1].message)
+
+            with pytest.raises(PermissionError):
+                pup.fetch("afile.txt")

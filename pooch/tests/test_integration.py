@@ -26,15 +26,16 @@ def pup():
     )
     # The str conversion is needed in Python 3.5
     doggo.load_registry(str(Path(os.path.dirname(__file__), "data", "registry.txt")))
+    if os.path.exists(str(doggo.abspath)):
+        shutil.rmtree(str(doggo.abspath))
     yield doggo
     shutil.rmtree(str(doggo.abspath))
 
 
 def test_fetch(pup):
     "Fetch a data file from the local storage"
-    # Make sure the storage exists and is empty to begin
-    assert pup.abspath.exists()
-    assert not list(pup.abspath.iterdir())
+    # Make sure the storage has been cleaned up before running the tests
+    assert not pup.abspath.exists()
     for target in ["tiny-data.txt", "subdir/tiny-data.txt"]:
         with warnings.catch_warnings(record=True) as warn:
             fname = pup.fetch(target)
