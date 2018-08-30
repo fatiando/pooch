@@ -190,14 +190,20 @@
 <span class="sd">Functions to download, verify, and update a sample dataset.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">from</span> <span class="nn">pathlib</span> <span class="k">import</span> <span class="n">Path</span>
 <span class="kn">import</span> <span class="nn">shutil</span>
-<span class="kn">from</span> <span class="nn">tempfile</span> <span class="k">import</span> <span class="n">NamedTemporaryFile</span>
+<span class="kn">import</span> <span class="nn">tempfile</span>
 <span class="kn">from</span> <span class="nn">warnings</span> <span class="k">import</span> <span class="n">warn</span>
 
 <span class="kn">import</span> <span class="nn">requests</span>
 
 <span class="kn">from</span> <span class="nn">.utils</span> <span class="k">import</span> <span class="n">file_hash</span><span class="p">,</span> <span class="n">check_version</span>
+
+
+<span class="c1"># PermissionError was introduced in Python 3.3. This can be deleted when dropping 2.7</span>
+<span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">:</span>
+    <span class="ne">PermissionError</span> <span class="o">=</span> <span class="ne">OSError</span>  <span class="c1"># pylint: disable=redefined-builtin,invalid-name</span>
 
 
 <div class="viewcode-block" id="create"><a class="viewcode-back" href="../../api/generated/pooch.create.html#pooch.create">[docs]</a><span class="k">def</span> <span class="nf">create</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">base_url</span><span class="p">,</span> <span class="n">version</span><span class="p">,</span> <span class="n">version_dev</span><span class="p">,</span> <span class="n">env</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">registry</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
@@ -214,8 +220,6 @@
 <span class="sd">    ``~/.mypooch/cache/v0.1``) and inserted into the base URL (for example,</span>
 <span class="sd">    ``https://github.com/fatiando/pooch/raw/v0.1/data``). If the version string</span>
 <span class="sd">    contains ``+XX.XXXXX``, it will be interpreted as a development version.</span>
-
-<span class="sd">    If the local storage path doesn&#39;t exit, it will be created.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -261,9 +265,6 @@
 <span class="sd">    ...              registry={&quot;data.txt&quot;: &quot;9081wo2eb2gc0u...&quot;})</span>
 <span class="sd">    &gt;&gt;&gt; print(pup.path.parts)  # The path is a pathlib.Path</span>
 <span class="sd">    (&#39;myproject&#39;, &#39;v0.1&#39;)</span>
-<span class="sd">    &gt;&gt;&gt; # We&#39;ll create the directory if it doesn&#39;t exist yet.</span>
-<span class="sd">    &gt;&gt;&gt; pup.path.exists()</span>
-<span class="sd">    True</span>
 <span class="sd">    &gt;&gt;&gt; print(pup.base_url)</span>
 <span class="sd">    http://some.link.com/v0.1/</span>
 <span class="sd">    &gt;&gt;&gt; print(pup.registry)</span>
@@ -277,8 +278,6 @@
 <span class="sd">    ...              version_dev=&quot;master&quot;)</span>
 <span class="sd">    &gt;&gt;&gt; print(pup.path.parts)</span>
 <span class="sd">    (&#39;myproject&#39;, &#39;master&#39;)</span>
-<span class="sd">    &gt;&gt;&gt; pup.path.exists()</span>
-<span class="sd">    True</span>
 <span class="sd">    &gt;&gt;&gt; print(pup.base_url)</span>
 <span class="sd">    http://some.link.com/master/</span>
 
@@ -291,8 +290,6 @@
 <span class="sd">    ...              version_dev=&quot;master&quot;)</span>
 <span class="sd">    &gt;&gt;&gt; print(pup.path.parts)</span>
 <span class="sd">    (&#39;myproject&#39;, &#39;cache&#39;, &#39;data&#39;, &#39;v0.1&#39;)</span>
-<span class="sd">    &gt;&gt;&gt; pup.path.exists()</span>
-<span class="sd">    True</span>
 
 <span class="sd">    The user can overwrite the storage path by setting an environment variable:</span>
 
@@ -315,10 +312,6 @@
 <span class="sd">    &gt;&gt;&gt; print(pup.path.parts)</span>
 <span class="sd">    (&#39;myproject&#39;, &#39;from_env&#39;, &#39;v0.1&#39;)</span>
 
-<span class="sd">    Clean up the files we created:</span>
-
-<span class="sd">    &gt;&gt;&gt; import shutil; shutil.rmtree(&quot;myproject&quot;)</span>
-
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">version</span> <span class="o">=</span> <span class="n">check_version</span><span class="p">(</span><span class="n">version</span><span class="p">,</span> <span class="n">fallback</span><span class="o">=</span><span class="n">version_dev</span><span class="p">)</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)):</span>
@@ -326,9 +319,25 @@
     <span class="k">if</span> <span class="n">env</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">env</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span> <span class="ow">and</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="n">env</span><span class="p">]:</span>
         <span class="n">path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="n">env</span><span class="p">]</span>
     <span class="n">versioned_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">path</span><span class="p">)),</span> <span class="n">version</span><span class="p">)</span>
-    <span class="c1"># Create the directory if it doesn&#39;t already exist</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">versioned_path</span><span class="p">):</span>
-        <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">versioned_path</span><span class="p">)</span>
+    <span class="c1"># Check that the data directory is writable</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">versioned_path</span><span class="p">):</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">versioned_path</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">tempfile</span><span class="o">.</span><span class="n">NamedTemporaryFile</span><span class="p">(</span><span class="nb">dir</span><span class="o">=</span><span class="n">versioned_path</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">PermissionError</span><span class="p">:</span>
+        <span class="n">message</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Cannot write to data cache &#39;</span><span class="si">{}</span><span class="s2">&#39;. &quot;</span>
+            <span class="s2">&quot;Will not be able to download remote data files.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">versioned_path</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="n">env</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">message</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">message</span>
+                <span class="o">+</span> <span class="s2">&quot;Use environment variable &#39;</span><span class="si">{}</span><span class="s2">&#39; to specify another directory.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                    <span class="n">env</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+        <span class="n">warn</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">registry</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">registry</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
     <span class="n">pup</span> <span class="o">=</span> <span class="n">Pooch</span><span class="p">(</span>
@@ -373,10 +382,10 @@
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get the absolute path to a file in the local storage.</span>
 
-<span class="sd">        If it&#39;s not in the local storage, it will be downloaded. If the hash of file in</span>
-<span class="sd">        local storage doesn&#39;t match the one in the registry, will download a new copy of</span>
-<span class="sd">        the file. This is considered a sign that the file was updated in the remote</span>
-<span class="sd">        storage. If the hash of the downloaded file doesn&#39;t match the one in the</span>
+<span class="sd">        If it&#39;s not in the local storage, it will be downloaded. If the hash of the file</span>
+<span class="sd">        in local storage doesn&#39;t match the one in the registry, will download a new copy</span>
+<span class="sd">        of the file. This is considered a sign that the file was updated in the remote</span>
+<span class="sd">        storage. If the hash of the downloaded file still doesn&#39;t match the one in the</span>
 <span class="sd">        registry, will raise an exception to warn of possible file corruption.</span>
 
 <span class="sd">        Parameters</span>
@@ -394,15 +403,27 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">fname</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">registry</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;File &#39;</span><span class="si">{}</span><span class="s2">&#39; is not in the registry.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">fname</span><span class="p">))</span>
+        <span class="c1"># Create the local data directory if it doesn&#39;t already exist</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">abspath</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">abspath</span><span class="p">))</span>
         <span class="n">full_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">abspath</span> <span class="o">/</span> <span class="n">fname</span>
         <span class="n">in_storage</span> <span class="o">=</span> <span class="n">full_path</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span>
-        <span class="n">update</span> <span class="o">=</span> <span class="n">in_storage</span> <span class="ow">and</span> <span class="n">file_hash</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">full_path</span><span class="p">))</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">registry</span><span class="p">[</span><span class="n">fname</span><span class="p">]</span>
-        <span class="n">download</span> <span class="o">=</span> <span class="ow">not</span> <span class="n">in_storage</span>
-        <span class="k">if</span> <span class="n">update</span> <span class="ow">or</span> <span class="n">download</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_download_file</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">update</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">in_storage</span><span class="p">:</span>
+            <span class="n">action</span> <span class="o">=</span> <span class="s2">&quot;Downloading&quot;</span>
+        <span class="k">elif</span> <span class="n">in_storage</span> <span class="ow">and</span> <span class="n">file_hash</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">full_path</span><span class="p">))</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">registry</span><span class="p">[</span><span class="n">fname</span><span class="p">]:</span>
+            <span class="n">action</span> <span class="o">=</span> <span class="s2">&quot;Updating&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">action</span> <span class="o">=</span> <span class="s2">&quot;Nothing&quot;</span>
+        <span class="k">if</span> <span class="n">action</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;Updating&quot;</span><span class="p">,</span> <span class="s2">&quot;Downloading&quot;</span><span class="p">):</span>
+            <span class="n">warn</span><span class="p">(</span>
+                <span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> data file &#39;</span><span class="si">{}</span><span class="s2">&#39; from remote data store &#39;</span><span class="si">{}</span><span class="s2">&#39; to &#39;</span><span class="si">{}</span><span class="s2">&#39;.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                    <span class="n">action</span><span class="p">,</span> <span class="n">fname</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">base_url</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="p">)</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_download_file</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
         <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">full_path</span><span class="p">)</span></div>
 
-    <span class="k">def</span> <span class="nf">_download_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fname</span><span class="p">,</span> <span class="n">update</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_download_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fname</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Download a file from the remote data storage to the local storage.</span>
 
@@ -411,8 +432,6 @@
 <span class="sd">        fname : str</span>
 <span class="sd">            The file name (relative to the *base_url* of the remote data storage) to</span>
 <span class="sd">            fetch from the local storage.</span>
-<span class="sd">        update : bool</span>
-<span class="sd">            True if the file already exists in the storage but needs an update.</span>
 
 <span class="sd">        Raises</span>
 <span class="sd">        ------</span>
@@ -420,22 +439,13 @@
 <span class="sd">            If the hash of the downloaded file doesn&#39;t match the hash in the registry.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">destination</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">abspath</span><span class="p">,</span> <span class="n">fname</span><span class="p">)</span>
+        <span class="n">destination</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">abspath</span> <span class="o">/</span> <span class="n">fname</span>
         <span class="n">source</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">base_url</span><span class="p">,</span> <span class="n">fname</span><span class="p">])</span>
-        <span class="k">if</span> <span class="n">update</span><span class="p">:</span>
-            <span class="n">action</span> <span class="o">=</span> <span class="s2">&quot;Updating&quot;</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">action</span> <span class="o">=</span> <span class="s2">&quot;Downloading&quot;</span>
-        <span class="n">warn</span><span class="p">(</span>
-            <span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> data file &#39;</span><span class="si">{}</span><span class="s2">&#39; from remote data store &#39;</span><span class="si">{}</span><span class="s2">&#39; to &#39;</span><span class="si">{}</span><span class="s2">&#39;.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-                <span class="n">action</span><span class="p">,</span> <span class="n">fname</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">base_url</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="p">)</span>
-            <span class="p">)</span>
-        <span class="p">)</span>
-        <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">stream</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-        <span class="n">response</span><span class="o">.</span><span class="n">raise_for_status</span><span class="p">()</span>
         <span class="c1"># Stream the file to a temporary so that we can safely check its hash before</span>
         <span class="c1"># overwriting the original</span>
-        <span class="k">with</span> <span class="n">NamedTemporaryFile</span><span class="p">(</span><span class="n">delete</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="k">as</span> <span class="n">fout</span><span class="p">:</span>
+        <span class="k">with</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">NamedTemporaryFile</span><span class="p">(</span><span class="n">delete</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="k">as</span> <span class="n">fout</span><span class="p">:</span>
+            <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">stream</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">response</span><span class="o">.</span><span class="n">raise_for_status</span><span class="p">()</span>
             <span class="k">for</span> <span class="n">chunk</span> <span class="ow">in</span> <span class="n">response</span><span class="o">.</span><span class="n">iter_content</span><span class="p">(</span><span class="n">chunk_size</span><span class="o">=</span><span class="mi">1024</span><span class="p">):</span>
                 <span class="k">if</span> <span class="n">chunk</span><span class="p">:</span>
                     <span class="n">fout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">chunk</span><span class="p">)</span>
@@ -492,7 +502,7 @@
   <div role="contentinfo">
     <p>
         &copy; Copyright 2018-2018, Leonardo Uieda.
-      Last updated on Aug 10, 2018.
+      Last updated on Aug 30, 2018.
 
     </p>
   </div>

@@ -208,10 +208,10 @@
 <dt id="pooch.Pooch.fetch">
 <code class="descclassname">Pooch.</code><code class="descname">fetch</code><span class="sig-paren">(</span><em>fname</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pooch/core.html#Pooch.fetch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pooch.Pooch.fetch" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the absolute path to a file in the local storage.</p>
-<p>If it’s not in the local storage, it will be downloaded. If the hash of file in
-local storage doesn’t match the one in the registry, will download a new copy of
-the file. This is considered a sign that the file was updated in the remote
-storage. If the hash of the downloaded file doesn’t match the one in the
+<p>If it’s not in the local storage, it will be downloaded. If the hash of the file
+in local storage doesn’t match the one in the registry, will download a new copy
+of the file. This is considered a sign that the file was updated in the remote
+storage. If the hash of the downloaded file still doesn’t match the one in the
 registry, will raise an exception to warn of possible file corruption.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -260,7 +260,7 @@ storage.</p>
   <div role="contentinfo">
     <p>
         &copy; Copyright 2018-2018, Leonardo Uieda.
-      Last updated on Aug 10, 2018.
+      Last updated on Aug 30, 2018.
 
     </p>
   </div>
