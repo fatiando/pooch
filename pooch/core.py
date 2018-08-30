@@ -140,7 +140,7 @@ def create(path, base_url, version, version_dev, env=None, registry=None):
     except PermissionError:
         message = (
             "Cannot write to data cache '{}'. "
-            "Will not be able to download remote data files.".format(versioned_path)
+            "Will not be able to download remote data files. ".format(versioned_path)
         )
         if env is not None:
             message = (
