@@ -8,6 +8,12 @@ Which Python?
 
 You'll need Python 2.7 or **Python >=3.5 (recommended)**.
 
+.. warning::
+
+   🚨 **Python 2.7 will only be supported until the Fall of 2019.** 🚨
+
+   Relases made after this date will only be compatible with Python 3.
+
 We recommend using the
 `Anaconda Python distribution <https://www.anaconda.com/download>`__
 to ensure you have all dependencies installed and the ``conda`` package manager

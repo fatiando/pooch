@@ -81,8 +81,9 @@ There are a few steps that still must be done manually, though.
 2. Edit the changes list to remove any trivial changes (updates to the README, typo
    fixes, CI configuration, etc).
 3. Replace the PR number in the commit titles with a link to the Github PR page.
-4. Copy the remaining changes to `doc/changelog.rst` under a new section for the
+4. Copy the remaining changes to `doc/changes.rst` under a new section for the
    intended release.
+5. Add a link to the new release version documentation in `doc/index.rst`.
 5. Open a new PR with the updated changelog.
 
 ### Pushing to PyPI and updating the documentation

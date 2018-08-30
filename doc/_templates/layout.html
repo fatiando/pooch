@@ -9,9 +9,9 @@
 
 {% block htmltitle %}
     {% if title == '' or title == 'Home' %}
-        <title>{{ docstitle|e }}</title>
+        <title>{{ docstitle|e }} {{ version }}</title>
     {% else %}
-        <title>{{ title|striptags|e }}{{ titlesuffix }}</title>
+    <title>{{ title|striptags|e }}{{ titlesuffix }} {{ version }}</title>
     {% endif %}
 {% endblock %}
 

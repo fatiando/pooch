@@ -4,9 +4,11 @@ Pooch
     A friend to fetch your sample data files.
 
 `Documentation <http://www.fatiando.org/pooch>`__ |
+`Documentation (dev version) <http://www.fatiando.org/pooch/dev>`__ |
 `Contact <https://gitter.im/fatiando/fatiando>`__ |
 Part of the `Fatiando a Terra <https://www.fatiando.org>`__ project
 
+🚨 **Python 2.7 will only be supported until the Fall of 2019.** 🚨
 
 .. image:: http://img.shields.io/pypi/v/pooch.svg?style=flat-square
     :alt: Latest version on PyPI
@@ -101,6 +103,15 @@ them in a local directory:
   file.
 * If the hash still doesn't match, Pooch will raise an exception warning of possible
   data corruption.
+
+
+Projects using Pooch
+--------------------
+
+* `MetPy <https://github.com/Unidata/MetPy>`__
+* `Verde <https://github.com/fatiando/verde>`__
+
+*If you're using Pooch, send us a pull request adding your project to the list.*
 
 
 Contacting Us
