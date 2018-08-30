@@ -2,14 +2,20 @@
 Functions to download, verify, and update a sample dataset.
 """
 import os
+import sys
 from pathlib import Path
 import shutil
-from tempfile import NamedTemporaryFile
+import tempfile
 from warnings import warn
 
 import requests
 
 from .utils import file_hash, check_version
+
+
+# PermissionError was introduced in Python 3.3. This can be deleted when dropping 2.7
+if sys.version_info[0] < 3:
+    PermissionError = OSError  # pylint: disable=redefined-builtin,invalid-name
 
 
 def create(path, base_url, version, version_dev, env=None, registry=None):
@@ -26,8 +32,6 @@ def create(path, base_url, version, version_dev, env=None, registry=None):
     ``~/.mypooch/cache/v0.1``) and inserted into the base URL (for example,
     ``https://github.com/fatiando/pooch/raw/v0.1/data``). If the version string
     contains ``+XX.XXXXX``, it will be interpreted as a development version.
-
-    If the local storage path doesn't exit, it will be created.
 
     Parameters
     ----------
@@ -73,9 +77,6 @@ def create(path, base_url, version, version_dev, env=None, registry=None):
     ...              registry={"data.txt": "9081wo2eb2gc0u..."})
     >>> print(pup.path.parts)  # The path is a pathlib.Path
     ('myproject', 'v0.1')
-    >>> # We'll create the directory if it doesn't exist yet.
-    >>> pup.path.exists()
-    True
     >>> print(pup.base_url)
     http://some.link.com/v0.1/
     >>> print(pup.registry)
@@ -89,8 +90,6 @@ def create(path, base_url, version, version_dev, env=None, registry=None):
     ...              version_dev="master")
     >>> print(pup.path.parts)
     ('myproject', 'master')
-    >>> pup.path.exists()
-    True
     >>> print(pup.base_url)
     http://some.link.com/master/
 
@@ -103,8 +102,6 @@ def create(path, base_url, version, version_dev, env=None, registry=None):
     ...              version_dev="master")
     >>> print(pup.path.parts)
     ('myproject', 'cache', 'data', 'v0.1')
-    >>> pup.path.exists()
-    True
 
     The user can overwrite the storage path by setting an environment variable:
 
@@ -127,10 +124,6 @@ def create(path, base_url, version, version_dev, env=None, registry=None):
     >>> print(pup.path.parts)
     ('myproject', 'from_env', 'v0.1')
 
-    Clean up the files we created:
-
-    >>> import shutil; shutil.rmtree("myproject")
-
     """
     version = check_version(version, fallback=version_dev)
     if isinstance(path, (list, tuple)):
@@ -138,9 +131,25 @@ def create(path, base_url, version, version_dev, env=None, registry=None):
     if env is not None and env in os.environ and os.environ[env]:
         path = os.environ[env]
     versioned_path = os.path.join(os.path.expanduser(str(path)), version)
-    # Create the directory if it doesn't already exist
-    if not os.path.exists(versioned_path):
-        os.makedirs(versioned_path)
+    # Check that the data directory is writable
+    try:
+        if not os.path.exists(versioned_path):
+            os.makedirs(versioned_path)
+        else:
+            tempfile.NamedTemporaryFile(dir=versioned_path)
+    except PermissionError:
+        message = (
+            "Cannot write to data cache '{}'. "
+            "Will not be able to download remote data files.".format(versioned_path)
+        )
+        if env is not None:
+            message = (
+                message
+                + "Use environment variable '{}' to specify another directory.".format(
+                    env
+                )
+            )
+        warn(message)
     if registry is None:
         registry = dict()
     pup = Pooch(
@@ -185,10 +194,10 @@ class Pooch:
         """
         Get the absolute path to a file in the local storage.
 
-        If it's not in the local storage, it will be downloaded. If the hash of file in
-        local storage doesn't match the one in the registry, will download a new copy of
-        the file. This is considered a sign that the file was updated in the remote
-        storage. If the hash of the downloaded file doesn't match the one in the
+        If it's not in the local storage, it will be downloaded. If the hash of the file
+        in local storage doesn't match the one in the registry, will download a new copy
+        of the file. This is considered a sign that the file was updated in the remote
+        storage. If the hash of the downloaded file still doesn't match the one in the
         registry, will raise an exception to warn of possible file corruption.
 
         Parameters
@@ -206,15 +215,27 @@ class Pooch:
         """
         if fname not in self.registry:
             raise ValueError("File '{}' is not in the registry.".format(fname))
+        # Create the local data directory if it doesn't already exist
+        if not self.abspath.exists():
+            os.makedirs(str(self.abspath))
         full_path = self.abspath / fname
         in_storage = full_path.exists()
-        update = in_storage and file_hash(str(full_path)) != self.registry[fname]
-        download = not in_storage
-        if update or download:
-            self._download_file(fname, update)
+        if not in_storage:
+            action = "Downloading"
+        elif in_storage and file_hash(str(full_path)) != self.registry[fname]:
+            action = "Updating"
+        else:
+            action = "Nothing"
+        if action in ("Updating", "Downloading"):
+            warn(
+                "{} data file '{}' from remote data store '{}' to '{}'.".format(
+                    action, fname, self.base_url, str(self.path)
+                )
+            )
+            self._download_file(fname)
         return str(full_path)
 
-    def _download_file(self, fname, update):
+    def _download_file(self, fname):
         """
         Download a file from the remote data storage to the local storage.
 
@@ -223,8 +244,6 @@ class Pooch:
         fname : str
             The file name (relative to the *base_url* of the remote data storage) to
             fetch from the local storage.
-        update : bool
-            True if the file already exists in the storage but needs an update.
 
         Raises
         ------
@@ -232,22 +251,13 @@ class Pooch:
             If the hash of the downloaded file doesn't match the hash in the registry.
 
         """
-        destination = Path(self.abspath, fname)
+        destination = self.abspath / fname
         source = "".join([self.base_url, fname])
-        if update:
-            action = "Updating"
-        else:
-            action = "Downloading"
-        warn(
-            "{} data file '{}' from remote data store '{}' to '{}'.".format(
-                action, fname, self.base_url, str(self.path)
-            )
-        )
-        response = requests.get(source, stream=True)
-        response.raise_for_status()
         # Stream the file to a temporary so that we can safely check its hash before
         # overwriting the original
-        with NamedTemporaryFile(delete=False) as fout:
+        with tempfile.NamedTemporaryFile(delete=False) as fout:
+            response = requests.get(source, stream=True)
+            response.raise_for_status()
             for chunk in response.iter_content(chunk_size=1024):
                 if chunk:
                     fout.write(chunk)
