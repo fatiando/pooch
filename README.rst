@@ -176,3 +176,13 @@ License
 This is free software: you can redistribute it and/or modify it under the terms
 of the **BSD 3-clause License**. A copy of this license is provided in
 `LICENSE.txt <https://github.com/fatiando/pooch/blob/master/LICENSE.txt>`__.
+
+
+Documentation for other versions
+--------------------------------
+
+* `Development <http://www.fatiando.org/pooch/dev>`__ (reflects the *master* branch on
+  Github)
+* `Latest release <http://www.fatiando.org/pooch/latest>`__
+* `v0.1.1 <http://www.fatiando.org/pooch/v0.1.1>`__
+* `v0.1 <http://www.fatiando.org/pooch/v0.1>`__

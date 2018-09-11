@@ -1,8 +1,5 @@
+# Requirements for Python 2.7
 requests
 packaging
 backports.tempfile
 pathlib
-# Development requirements
-pytest
-pytest-cov
-coverage

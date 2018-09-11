@@ -1,13 +1,2 @@
 requests
 packaging
-# Development requirements
-pytest
-pytest-cov
-coverage
-pylint
-sphinx
-sphinx_rtd_theme
-numpydoc
-twine
-# Black is not included because it requires Python 3.6
-#black

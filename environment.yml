@@ -16,4 +16,3 @@ dependencies:
     - sphinx
     - sphinx_rtd_theme
     - numpydoc
-    - twine

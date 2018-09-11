@@ -1,0 +1,9 @@
+# Development requirements
+pytest
+pytest-cov
+coverage
+pylint
+sphinx
+sphinx_rtd_theme
+numpydoc
+twine
