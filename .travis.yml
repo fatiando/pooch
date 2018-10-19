@@ -25,6 +25,7 @@ env:
         - TWINE_USERNAME=Leonardo.Uieda
         # The file with the listed requirements to be installed by conda
         - CONDA_REQUIREMENTS=requirements.txt
+        - CONDA_REQUIREMENTS_DEV=requirements-dev.txt
         # These variables control which actions are performed in a build
         - COVERAGE=false
         - BUILD_DOCS=false
@@ -37,12 +38,18 @@ matrix:
     include:
         - os: linux
           env:
+              - PYTHON=3.7
+              - BUILD_DOCS=true
+        - os: linux
+          env:
               - PYTHON=3.6
               - CHECK_FORMAT=true
               - COVERAGE=true
               - BUILD_DOCS=true
               - DEPLOY_DOCS=true
               - DEPLOY_PYPI=true
+              # Black is Python 3.6 only so it can't be in the requirements file.
+              - CONDA_INSTALL_EXTRA="black"
         - os: linux
           env:
               - PYTHON=3.5
@@ -52,6 +59,10 @@ matrix:
               - PYTHON=2.7
               - COVERAGE=true
               - CONDA_REQUIREMENTS=requirements27.txt
+        - os: osx
+          env:
+              - PYTHON=3.7
+              - BUILD_DOCS=true
         - os: osx
           env:
               - PYTHON=3.6
@@ -81,9 +92,7 @@ install:
 # Run the actual tests and checks
 script:
     # Check code for style and quality
-    # Black is Python 3.6 only so it can't be in the requirements file.
     - if [ "$CHECK_FORMAT" == "true" ]; then
-          conda install --yes --channel conda-forge black python=$PYTHON;
           make check;
       fi
     # Run the test suite
