@@ -18,20 +18,19 @@ if sys.version_info[0] < 3:
     PermissionError = OSError  # pylint: disable=redefined-builtin,invalid-name
 
 
-def create(path, base_url, version, version_dev, env=None, registry=None):
+def create(path, base_url, version=None, version_dev="master", env=None, registry=None):
     """
     Create a new :class:`~pooch.Pooch` with sensible defaults to fetch data files.
 
-    The Pooch will be versioned, meaning that the local storage folder and the base URL
-    depend on the projection version. This is necessary if your users have multiple
-    versions of your library installed (using virtual environments) and you updated the
-    data files between versions. Otherwise, every time a user switches environments
-    would trigger a re-download of the data.
-
-    The version string will be appended to the local storage path (for example,
+    If a version string is given, the Pooch will be versioned, meaning that the local
+    storage folder and the base URL depend on the projection version. This is necessary
+    if your users have multiple versions of your library installed (using virtual
+    environments) and you updated the data files between versions. Otherwise, every time
+    a user switches environments would trigger a re-download of the data. The version
+    string will be appended to the local storage path (for example,
     ``~/.mypooch/cache/v0.1``) and inserted into the base URL (for example,
-    ``https://github.com/fatiando/pooch/raw/v0.1/data``). If the version string
-    contains ``+XX.XXXXX``, it will be interpreted as a development version.
+    ``https://github.com/fatiando/pooch/raw/v0.1/data``). If the version string contains
+    ``+XX.XXXXX``, it will be interpreted as a development version.
 
     Parameters
     ----------
@@ -44,13 +43,15 @@ def create(path, base_url, version, version_dev, env=None, registry=None):
         URL. The string should have a ``{version}`` formatting mark in it. We will call
         ``.format(version=version)`` on this string. If the URL is a directory path, it
         must end in a ``'/'`` because we will not include it.
-    version : str
-        The version string for your project. Should be PEP440 compatible.
+    version : str or None
+        The version string for your project. Should be PEP440 compatible. If None is
+        given, will not attempt to format *base_url* and no subfolder will be appended
+        to *path*.
     version_dev : str
         The name used for the development version of a project. If your data is hosted
         on Github (and *base_url* is a Github raw link), then ``"master"`` is a good
-        choice.
-    env : str
+        choice (default). Ignored if *version* is None.
+    env : str or None
         An environment variable that can be used to overwrite *path*. This allows users
         to control where they want the data to be stored. We'll append *version* to the
         end of this value as well.
@@ -59,6 +60,7 @@ def create(path, base_url, version, version_dev, env=None, registry=None):
         names and the values should be their SHA256 hashes. Only files in the registry
         can be fetched from the local storage. Files in subdirectories of *path* **must
         use Unix-style separators** (``'/'``) even on Windows.
+
 
     Returns
     -------
@@ -73,7 +75,6 @@ def create(path, base_url, version, version_dev, env=None, registry=None):
     >>> pup = create(path="myproject",
     ...              base_url="http://some.link.com/{version}/",
     ...              version="v0.1",
-    ...              version_dev="master",
     ...              registry={"data.txt": "9081wo2eb2gc0u..."})
     >>> print(pup.path.parts)  # The path is a pathlib.Path
     ('myproject', 'v0.1')
@@ -82,24 +83,33 @@ def create(path, base_url, version, version_dev, env=None, registry=None):
     >>> print(pup.registry)
     {'data.txt': '9081wo2eb2gc0u...'}
 
-    If this is a development version (12 commits ahead of v0.1):
+    If this is a development version (12 commits ahead of v0.1), then the
+    ``version_dev`` will be used (defaults to ``"master"``):
 
     >>> pup = create(path="myproject",
     ...              base_url="http://some.link.com/{version}/",
-    ...              version="v0.1+12.do9iwd",
-    ...              version_dev="master")
+    ...              version="v0.1+12.do9iwd")
     >>> print(pup.path.parts)
     ('myproject', 'master')
     >>> print(pup.base_url)
     http://some.link.com/master/
+
+    Versioning is optional (but highly encouraged):
+
+    >>> pup = create(path="myproject",
+    ...              base_url="http://some.link.com/",
+    ...              registry={"data.txt": "9081wo2eb2gc0u..."})
+    >>> print(pup.path.parts)  # The path is a pathlib.Path
+    ('myproject',)
+    >>> print(pup.base_url)
+    http://some.link.com/
 
     To place the storage folder at a subdirectory, pass in a list and we'll join the
     path for you using the appropriate separator for your operating system:
 
     >>> pup = create(path=["myproject", "cache", "data"],
     ...              base_url="http://some.link.com/{version}/",
-    ...              version="v0.1",
-    ...              version_dev="master")
+    ...              version="v0.1")
     >>> print(pup.path.parts)
     ('myproject', 'cache', 'data', 'v0.1')
 
@@ -109,7 +119,6 @@ def create(path, base_url, version, version_dev, env=None, registry=None):
     >>> pup = create(path=["myproject", "not_from_env"],
     ...              base_url="http://some.link.com/{version}/",
     ...              version="v0.1",
-    ...              version_dev="master",
     ...              env="MYPROJECT_DATA_DIR")
     >>> print(pup.path.parts)
     ('myproject', 'not_from_env', 'v0.1')
@@ -119,28 +128,29 @@ def create(path, base_url, version, version_dev, env=None, registry=None):
     >>> pup = create(path=["myproject", "not_from_env"],
     ...              base_url="http://some.link.com/{version}/",
     ...              version="v0.1",
-    ...              version_dev="master",
     ...              env="MYPROJECT_DATA_DIR")
     >>> print(pup.path.parts)
     ('myproject', 'from_env', 'v0.1')
 
     """
-    version = check_version(version, fallback=version_dev)
     if isinstance(path, (list, tuple)):
         path = os.path.join(*path)
     if env is not None and env in os.environ and os.environ[env]:
         path = os.environ[env]
-    versioned_path = os.path.join(os.path.expanduser(str(path)), version)
+    if version is not None:
+        version = check_version(version, fallback=version_dev)
+        path = os.path.join(os.path.expanduser(str(path)), version)
+        base_url = base_url.format(version=version)
     # Check that the data directory is writable
     try:
-        if not os.path.exists(versioned_path):
-            os.makedirs(versioned_path)
+        if not os.path.exists(path):
+            os.makedirs(path)
         else:
-            tempfile.NamedTemporaryFile(dir=versioned_path)
+            tempfile.NamedTemporaryFile(dir=path)
     except PermissionError:
         message = (
             "Cannot write to data cache '{}'. "
-            "Will not be able to download remote data files. ".format(versioned_path)
+            "Will not be able to download remote data files. ".format(path)
         )
         if env is not None:
             message = (
@@ -152,11 +162,7 @@ def create(path, base_url, version, version_dev, env=None, registry=None):
         warn(message)
     if registry is None:
         registry = dict()
-    pup = Pooch(
-        path=Path(versioned_path),
-        base_url=base_url.format(version=version),
-        registry=registry,
-    )
+    pup = Pooch(path=Path(path), base_url=base_url, registry=registry)
     return pup
 
 
