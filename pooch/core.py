@@ -18,7 +18,15 @@ if sys.version_info[0] < 3:
     PermissionError = OSError  # pylint: disable=redefined-builtin,invalid-name
 
 
-def create(path, base_url, version=None, version_dev="master", env=None, registry=None):
+def create(
+    path,
+    base_url,
+    version=None,
+    version_dev="master",
+    env=None,
+    registry=None,
+    urls=None,
+):
     """
     Create a new :class:`~pooch.Pooch` with sensible defaults to fetch data files.
 
@@ -55,11 +63,16 @@ def create(path, base_url, version=None, version_dev="master", env=None, registr
         An environment variable that can be used to overwrite *path*. This allows users
         to control where they want the data to be stored. We'll append *version* to the
         end of this value as well.
-    registry : dict
+    registry : dict or None
         A record of the files that are managed by this Pooch. Keys should be the file
         names and the values should be their SHA256 hashes. Only files in the registry
         can be fetched from the local storage. Files in subdirectories of *path* **must
         use Unix-style separators** (``'/'``) even on Windows.
+    urls : dict or None
+        Custom URLs for downloading individual files in the registry. A dictionary with
+        the file names as keys and the custom URLs as values. Not all files in
+        *registry* need an entry in *urls*. If a file has an entry in *urls*, the
+        *base_url* will be ignored when downloading it in favor of ``urls[fname]``.
 
 
     Returns
@@ -160,9 +173,7 @@ def create(path, base_url, version=None, version_dev="master", env=None, registr
                 )
             )
         warn(message)
-    if registry is None:
-        registry = dict()
-    pup = Pooch(path=Path(path), base_url=base_url, registry=registry)
+    pup = Pooch(path=Path(path), base_url=base_url, registry=registry, urls=urls)
     return pup
 
 
@@ -178,18 +189,28 @@ class Pooch:
     base_url : str
         Base URL for the remote data source. All requests will be made relative to this
         URL.
-    registry : dict
+    registry : dict or None
         A record of the files that are managed by this good boy. Keys should be the file
         names and the values should be their SHA256 hashes. Only files in the registry
         can be fetched from the local storage. Files in subdirectories of *path* **must
         use Unix-style separators** (``'/'``) even on Windows.
+    urls : dict or None
+        Custom URLs for downloading individual files in the registry. A dictionary with
+        the file names as keys and the custom URLs as values. Not all files in
+        *registry* need an entry in *urls*. If a file has an entry in *urls*, the
+        *base_url* will be ignored when downloading it in favor of ``urls[fname]``.
 
     """
 
-    def __init__(self, path, base_url, registry):
+    def __init__(self, path, base_url, registry=None, urls=None):
         self.path = path
         self.base_url = base_url
+        if registry is None:
+            registry = dict()
         self.registry = dict(registry)
+        if urls is None:
+            urls = dict()
+        self.urls = dict(urls)
 
     @property
     def abspath(self):
@@ -245,6 +266,8 @@ class Pooch:
         """
         Download a file from the remote data storage to the local storage.
 
+        Used by :meth:`~pooch.Pooch.fetch` to do the actual downloading.
+
         Parameters
         ----------
         fname : str
@@ -258,7 +281,7 @@ class Pooch:
 
         """
         destination = self.abspath / fname
-        source = "".join([self.base_url, fname])
+        source = self.urls.get(fname, "".join([self.base_url, fname]))
         # Stream the file to a temporary so that we can safely check its hash before
         # overwriting the original
         with tempfile.NamedTemporaryFile(delete=False) as fout:
@@ -288,7 +311,8 @@ class Pooch:
         Use this if you are managing many files.
 
         Each line of the file should have file name and its SHA256 hash separate by a
-        space. Only one file per line is allowed.
+        space. Only one file per line is allowed. Custom download URLs for individual
+        files can be specified as a third element on the line.
 
         Parameters
         ----------
@@ -299,11 +323,15 @@ class Pooch:
         with open(fname) as fin:
             for linenum, line in enumerate(fin):
                 elements = line.strip().split()
-                if len(elements) != 2:
-                    raise ValueError(
-                        "Expected 2 elements in line {} but got {}.".format(
+                if len(elements) > 3 or len(elements) < 2:
+                    raise IOError(
+                        "Expected 2 or 3 elements in line {} but got {}.".format(
                             linenum, len(elements)
                         )
                     )
-                file_name, file_sha256 = elements
+                file_name = elements[0]
+                file_sha256 = elements[1]
+                if len(elements) == 3:
+                    file_url = elements[2]
+                    self.urls[file_name] = file_url
                 self.registry[file_name] = file_sha256

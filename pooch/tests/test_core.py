@@ -42,6 +42,23 @@ def test_pooch_local():
     check_tiny_data(fname)
 
 
+def test_pooch_custom_url():
+    "Have pooch download the file from URL that is not base_url"
+    with TemporaryDirectory() as local_store:
+        path = Path(local_store)
+        urls = {"tiny-data.txt": BASEURL + "tiny-data.txt"}
+        # Setup a pooch in a temp dir
+        pup = Pooch(path=path, base_url="", registry=REGISTRY, urls=urls)
+        # Check that the warning says that the file is being updated
+        with warnings.catch_warnings(record=True) as warn:
+            fname = pup.fetch("tiny-data.txt")
+            assert len(warn) == 1
+            assert issubclass(warn[-1].category, UserWarning)
+            assert str(warn[-1].message).split()[0] == "Downloading"
+            assert str(warn[-1].message).split()[-1] == "'{}'.".format(path)
+        check_tiny_data(fname)
+
+
 def test_pooch_update():
     "Setup a pooch that already has the local data but the file is outdated"
     with TemporaryDirectory() as local_store:
@@ -101,15 +118,23 @@ def test_pooch_file_not_in_registry():
 
 def test_pooch_load_registry():
     "Loading the registry from a file should work"
-    pup = Pooch(path="", base_url="", registry={})
+    pup = Pooch(path="", base_url="")
     pup.load_registry(os.path.join(DATA_DIR, "registry.txt"))
     assert pup.registry == REGISTRY
+
+
+def test_pooch_load_registry_custom_url():
+    "Load the registry from a file with a custom URL inserted"
+    pup = Pooch(path="", base_url="")
+    pup.load_registry(os.path.join(DATA_DIR, "registry-custom-url.txt"))
+    assert pup.registry == REGISTRY
+    assert pup.urls == {"tiny-data.txt": "https://some-site/tiny-data.txt"}
 
 
 def test_pooch_load_registry_invalid_line():
     "Should raise an exception when a line doesn't have two elements"
     pup = Pooch(path="", base_url="", registry={})
-    with pytest.raises(ValueError):
+    with pytest.raises(IOError):
         pup.load_registry(os.path.join(DATA_DIR, "registry-invalid.txt"))
 
 
