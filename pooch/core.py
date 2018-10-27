@@ -284,25 +284,30 @@ class Pooch:
         source = self.urls.get(fname, "".join([self.base_url, fname]))
         # Stream the file to a temporary so that we can safely check its hash before
         # overwriting the original
-        with tempfile.NamedTemporaryFile(delete=False) as fout:
-            response = requests.get(source, stream=True)
-            response.raise_for_status()
-            for chunk in response.iter_content(chunk_size=1024):
-                if chunk:
-                    fout.write(chunk)
-        tmphash = file_hash(fout.name)
-        if tmphash != self.registry[fname]:
-            raise ValueError(
-                "Hash of downloaded file '{}' doesn't match the entry in the registry:"
-                " Expected '{}' and got '{}'.".format(
-                    fout.name, self.registry[fname], tmphash
+        fout = tempfile.NamedTemporaryFile(delete=False)
+        try:
+            with fout:
+                response = requests.get(source, stream=True)
+                response.raise_for_status()
+                for chunk in response.iter_content(chunk_size=1024):
+                    if chunk:
+                        fout.write(chunk)
+            tmphash = file_hash(fout.name)
+            if tmphash != self.registry[fname]:
+                raise ValueError(
+                    "Hash of downloaded file '{}' doesn't match the entry in the registry:"
+                    " Expected '{}' and got '{}'.".format(
+                        fout.name, self.registry[fname], tmphash
+                    )
                 )
-            )
-        # Make sure the parent directory exists in case the file is in a subdirectory.
-        # Otherwise, move will cause an error.
-        if not os.path.exists(str(destination.parent)):
-            os.makedirs(str(destination.parent))
-        shutil.move(fout.name, str(destination))
+            # Make sure the parent directory exists in case the file is in a subdirectory.
+            # Otherwise, move will cause an error.
+            if not os.path.exists(str(destination.parent)):
+                os.makedirs(str(destination.parent))
+            shutil.move(fout.name, str(destination))
+        except:
+            os.remove(fout.name)
+            raise
 
     def load_registry(self, fname):
         """
