@@ -262,6 +262,21 @@ class Pooch:
             self._download_file(fname)
         return str(full_path)
 
+    def _get_url(self, fname):
+        """
+        Compute the full URL to a file.
+
+        Provided for easy override in subclasses.
+
+        Parameters
+        ----------
+        fname : str
+            The file name (relative to the *base_url* of the remote data storage) to
+            fetch from the local storage.
+
+        """
+        return self.urls.get(fname, "".join([self.base_url, fname]))
+
     def _download_file(self, fname):
         """
         Download a file from the remote data storage to the local storage.
@@ -281,7 +296,7 @@ class Pooch:
 
         """
         destination = self.abspath / fname
-        source = self.urls.get(fname, "".join([self.base_url, fname]))
+        source = self._get_url(fname)
         # Stream the file to a temporary so that we can safely check its hash before
         # overwriting the original
         with tempfile.NamedTemporaryFile(delete=False) as fout:
