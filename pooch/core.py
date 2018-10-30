@@ -299,7 +299,7 @@ class Pooch:
         source = self._get_url(fname)
         # Stream the file to a temporary so that we can safely check its hash before
         # overwriting the original
-        fout = tempfile.NamedTemporaryFile(delete=False)
+        fout = tempfile.NamedTemporaryFile(delete=False, dir=str(self.abspath))
         try:
             with fout:
                 response = requests.get(source, stream=True)
