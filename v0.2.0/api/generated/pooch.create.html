@@ -1,0 +1,403 @@
+
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+    
+    <title>pooch.create &mdash; Pooch v0.2.0</title>
+    
+
+
+  
+  
+    <link rel="shortcut icon" href="../../_static/favicon.png"/>
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/style.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="pooch.os_cache" href="pooch.os_cache.html" />
+    <link rel="prev" title="API Reference" href="../index.html" />
+    
+    <script src="../../_static/require.js"></script>
+
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> Pooch
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                v0.2.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+    
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Documentation</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../install.html">Installing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../usage.html">Training your Pooch</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">API Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">pooch.create</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pooch.os_cache.html">pooch.os_cache</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pooch.file_hash.html">pooch.file_hash</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pooch.make_registry.html">pooch.make_registry</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pooch.Pooch.html">pooch.Pooch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pooch.Pooch.fetch.html">pooch.Pooch.fetch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pooch.Pooch.load_registry.html">pooch.Pooch.load_registry</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pooch.test.html">pooch.test</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../changes.html">Changelog</a></li>
+</ul>
+
+            
+          
+
+    
+        <p class="caption">
+            <span class="caption-text">
+            
+                Getting help and contributing
+            
+            </span>
+        </p>
+        <ul>
+            
+                <li class="toctree-l1"><a href="https://www.fatiando.org"><i class="fa fa-external-link-square fa-fw"></i> Fatiando a Terra</a></li>
+            
+                <li class="toctree-l1"><a href="https://github.com/fatiando/pooch/blob/master/CONTRIBUTING.md"><i class="fa fa-users fa-fw"></i> Contributing</a></li>
+            
+                <li class="toctree-l1"><a href="https://github.com/fatiando/pooch/blob/master/CODE_OF_CONDUCT.md"><i class="fa fa-gavel fa-fw"></i> Code of Conduct</a></li>
+            
+                <li class="toctree-l1"><a href="https://gitter.im/fatiando/fatiando"><i class="fa fa-comment fa-fw"></i> Contact</a></li>
+            
+                <li class="toctree-l1"><a href="https://github.com/fatiando/pooch"><i class="fa fa-github fa-fw"></i> Source Code</a></li>
+            
+        </ul>
+    
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Pooch</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">API Reference</a> &raquo;</li>
+        
+      <li>pooch.create</li>
+    
+    
+    <li class="source-link">
+        
+            
+                
+                
+                <a href="https://github.com/fatiando/pooch/issues/new?title=Suggested%20improvement%20for%20api/generated/pooch.create&body=Please%20describe%20what%20could%20be%20improved%20about%20this%20page%20or%20the%20typo/mistake%20that%20you%20found%3A"
+                   class="fa fa-github"> Improve this page</a>
+            
+        
+        
+    </li>
+
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="pooch-create">
+<h1>pooch.create<a class="headerlink" href="#pooch-create" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="pooch.create">
+<code class="descclassname">pooch.</code><code class="descname">create</code><span class="sig-paren">(</span><em>path</em>, <em>base_url</em>, <em>version=None</em>, <em>version_dev='master'</em>, <em>env=None</em>, <em>registry=None</em>, <em>urls=None</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pooch/core.html#create"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pooch.create" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a new <a class="reference internal" href="pooch.Pooch.html#pooch.Pooch" title="pooch.Pooch"><code class="xref py py-class docutils literal notranslate"><span class="pre">Pooch</span></code></a> with sensible defaults to fetch data files.</p>
+<p>If a version string is given, the Pooch will be versioned, meaning that the local
+storage folder and the base URL depend on the projection version. This is necessary
+if your users have multiple versions of your library installed (using virtual
+environments) and you updated the data files between versions. Otherwise, every time
+a user switches environments would trigger a re-download of the data. The version
+string will be appended to the local storage path (for example,
+<code class="docutils literal notranslate"><span class="pre">~/.mypooch/cache/v0.1</span></code>) and inserted into the base URL (for example,
+<code class="docutils literal notranslate"><span class="pre">https://github.com/fatiando/pooch/raw/v0.1/data</span></code>). If the version string contains
+<code class="docutils literal notranslate"><span class="pre">+XX.XXXXX</span></code>, it will be interpreted as a development version.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first docutils">
+<dt><strong>path</strong> <span class="classifier-delimiter">:</span> <span class="classifier">str, PathLike, list or tuple</span></dt>
+<dd><p class="first last">The path to the local data storage folder. If this is a list or tuple, we’ll
+join the parts with the appropriate separator. The <em>version</em> will be appended to
+the end of this path. Use <a class="reference internal" href="pooch.os_cache.html#pooch.os_cache" title="pooch.os_cache"><code class="xref py py-func docutils literal notranslate"><span class="pre">pooch.os_cache</span></code></a> for a sensible default.</p>
+</dd>
+<dt><strong>base_url</strong> <span class="classifier-delimiter">:</span> <span class="classifier">str</span></dt>
+<dd><p class="first last">Base URL for the remote data source. All requests will be made relative to this
+URL. The string should have a <code class="docutils literal notranslate"><span class="pre">{version}</span></code> formatting mark in it. We will call
+<code class="docutils literal notranslate"><span class="pre">.format(version=version)</span></code> on this string. If the URL is a directory path, it
+must end in a <code class="docutils literal notranslate"><span class="pre">'/'</span></code> because we will not include it.</p>
+</dd>
+<dt><strong>version</strong> <span class="classifier-delimiter">:</span> <span class="classifier">str or None</span></dt>
+<dd><p class="first last">The version string for your project. Should be PEP440 compatible. If None is
+given, will not attempt to format <em>base_url</em> and no subfolder will be appended
+to <em>path</em>.</p>
+</dd>
+<dt><strong>version_dev</strong> <span class="classifier-delimiter">:</span> <span class="classifier">str</span></dt>
+<dd><p class="first last">The name used for the development version of a project. If your data is hosted
+on Github (and <em>base_url</em> is a Github raw link), then <code class="docutils literal notranslate"><span class="pre">&quot;master&quot;</span></code> is a good
+choice (default). Ignored if <em>version</em> is None.</p>
+</dd>
+<dt><strong>env</strong> <span class="classifier-delimiter">:</span> <span class="classifier">str or None</span></dt>
+<dd><p class="first last">An environment variable that can be used to overwrite <em>path</em>. This allows users
+to control where they want the data to be stored. We’ll append <em>version</em> to the
+end of this value as well.</p>
+</dd>
+<dt><strong>registry</strong> <span class="classifier-delimiter">:</span> <span class="classifier">dict or None</span></dt>
+<dd><p class="first last">A record of the files that are managed by this Pooch. Keys should be the file
+names and the values should be their SHA256 hashes. Only files in the registry
+can be fetched from the local storage. Files in subdirectories of <em>path</em> <strong>must
+use Unix-style separators</strong> (<code class="docutils literal notranslate"><span class="pre">'/'</span></code>) even on Windows.</p>
+</dd>
+<dt><strong>urls</strong> <span class="classifier-delimiter">:</span> <span class="classifier">dict or None</span></dt>
+<dd><p class="first last">Custom URLs for downloading individual files in the registry. A dictionary with
+the file names as keys and the custom URLs as values. Not all files in
+<em>registry</em> need an entry in <em>urls</em>. If a file has an entry in <em>urls</em>, the
+<em>base_url</em> will be ignored when downloading it in favor of <code class="docutils literal notranslate"><span class="pre">urls[fname]</span></code>.</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>pooch</strong> <span class="classifier-delimiter">:</span> <span class="classifier"><a class="reference internal" href="pooch.Pooch.html#pooch.Pooch" title="pooch.Pooch"><code class="xref py py-class docutils literal notranslate"><span class="pre">Pooch</span></code></a></span></dt>
+<dd><p class="first last">The <a class="reference internal" href="pooch.Pooch.html#pooch.Pooch" title="pooch.Pooch"><code class="xref py py-class docutils literal notranslate"><span class="pre">Pooch</span></code></a> initialized with the given arguments.</p>
+</dd>
+</dl>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<p>Create a <a class="reference internal" href="pooch.Pooch.html#pooch.Pooch" title="pooch.Pooch"><code class="xref py py-class docutils literal notranslate"><span class="pre">Pooch</span></code></a> for a release (v0.1):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">pup</span> <span class="o">=</span> <span class="n">create</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s2">&quot;myproject&quot;</span><span class="p">,</span>
+<span class="gp">... </span>             <span class="n">base_url</span><span class="o">=</span><span class="s2">&quot;http://some.link.com/</span><span class="si">{version}</span><span class="s2">/&quot;</span><span class="p">,</span>
+<span class="gp">... </span>             <span class="n">version</span><span class="o">=</span><span class="s2">&quot;v0.1&quot;</span><span class="p">,</span>
+<span class="gp">... </span>             <span class="n">registry</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;data.txt&quot;</span><span class="p">:</span> <span class="s2">&quot;9081wo2eb2gc0u...&quot;</span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">pup</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">parts</span><span class="p">)</span>  <span class="c1"># The path is a pathlib.Path</span>
+<span class="go">(&#39;myproject&#39;, &#39;v0.1&#39;)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">pup</span><span class="o">.</span><span class="n">base_url</span><span class="p">)</span>
+<span class="go">http://some.link.com/v0.1/</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">pup</span><span class="o">.</span><span class="n">registry</span><span class="p">)</span>
+<span class="go">{&#39;data.txt&#39;: &#39;9081wo2eb2gc0u...&#39;}</span>
+</pre></div>
+</div>
+<p>If this is a development version (12 commits ahead of v0.1), then the
+<code class="docutils literal notranslate"><span class="pre">version_dev</span></code> will be used (defaults to <code class="docutils literal notranslate"><span class="pre">&quot;master&quot;</span></code>):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">pup</span> <span class="o">=</span> <span class="n">create</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s2">&quot;myproject&quot;</span><span class="p">,</span>
+<span class="gp">... </span>             <span class="n">base_url</span><span class="o">=</span><span class="s2">&quot;http://some.link.com/</span><span class="si">{version}</span><span class="s2">/&quot;</span><span class="p">,</span>
+<span class="gp">... </span>             <span class="n">version</span><span class="o">=</span><span class="s2">&quot;v0.1+12.do9iwd&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">pup</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">parts</span><span class="p">)</span>
+<span class="go">(&#39;myproject&#39;, &#39;master&#39;)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">pup</span><span class="o">.</span><span class="n">base_url</span><span class="p">)</span>
+<span class="go">http://some.link.com/master/</span>
+</pre></div>
+</div>
+<p>Versioning is optional (but highly encouraged):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">pup</span> <span class="o">=</span> <span class="n">create</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s2">&quot;myproject&quot;</span><span class="p">,</span>
+<span class="gp">... </span>             <span class="n">base_url</span><span class="o">=</span><span class="s2">&quot;http://some.link.com/&quot;</span><span class="p">,</span>
+<span class="gp">... </span>             <span class="n">registry</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;data.txt&quot;</span><span class="p">:</span> <span class="s2">&quot;9081wo2eb2gc0u...&quot;</span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">pup</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">parts</span><span class="p">)</span>  <span class="c1"># The path is a pathlib.Path</span>
+<span class="go">(&#39;myproject&#39;,)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">pup</span><span class="o">.</span><span class="n">base_url</span><span class="p">)</span>
+<span class="go">http://some.link.com/</span>
+</pre></div>
+</div>
+<p>To place the storage folder at a subdirectory, pass in a list and we’ll join the
+path for you using the appropriate separator for your operating system:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">pup</span> <span class="o">=</span> <span class="n">create</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;myproject&quot;</span><span class="p">,</span> <span class="s2">&quot;cache&quot;</span><span class="p">,</span> <span class="s2">&quot;data&quot;</span><span class="p">],</span>
+<span class="gp">... </span>             <span class="n">base_url</span><span class="o">=</span><span class="s2">&quot;http://some.link.com/</span><span class="si">{version}</span><span class="s2">/&quot;</span><span class="p">,</span>
+<span class="gp">... </span>             <span class="n">version</span><span class="o">=</span><span class="s2">&quot;v0.1&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">pup</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">parts</span><span class="p">)</span>
+<span class="go">(&#39;myproject&#39;, &#39;cache&#39;, &#39;data&#39;, &#39;v0.1&#39;)</span>
+</pre></div>
+</div>
+<p>The user can overwrite the storage path by setting an environment variable:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># The variable is not set so we&#39;ll use *path*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pup</span> <span class="o">=</span> <span class="n">create</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;myproject&quot;</span><span class="p">,</span> <span class="s2">&quot;not_from_env&quot;</span><span class="p">],</span>
+<span class="gp">... </span>             <span class="n">base_url</span><span class="o">=</span><span class="s2">&quot;http://some.link.com/</span><span class="si">{version}</span><span class="s2">/&quot;</span><span class="p">,</span>
+<span class="gp">... </span>             <span class="n">version</span><span class="o">=</span><span class="s2">&quot;v0.1&quot;</span><span class="p">,</span>
+<span class="gp">... </span>             <span class="n">env</span><span class="o">=</span><span class="s2">&quot;MYPROJECT_DATA_DIR&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">pup</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">parts</span><span class="p">)</span>
+<span class="go">(&#39;myproject&#39;, &#39;not_from_env&#39;, &#39;v0.1&#39;)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Set the environment variable and try again</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">os</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;MYPROJECT_DATA_DIR&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;myproject&quot;</span><span class="p">,</span> <span class="s2">&quot;from_env&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pup</span> <span class="o">=</span> <span class="n">create</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;myproject&quot;</span><span class="p">,</span> <span class="s2">&quot;not_from_env&quot;</span><span class="p">],</span>
+<span class="gp">... </span>             <span class="n">base_url</span><span class="o">=</span><span class="s2">&quot;http://some.link.com/</span><span class="si">{version}</span><span class="s2">/&quot;</span><span class="p">,</span>
+<span class="gp">... </span>             <span class="n">version</span><span class="o">=</span><span class="s2">&quot;v0.1&quot;</span><span class="p">,</span>
+<span class="gp">... </span>             <span class="n">env</span><span class="o">=</span><span class="s2">&quot;MYPROJECT_DATA_DIR&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">pup</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">parts</span><span class="p">)</span>
+<span class="go">(&#39;myproject&#39;, &#39;from_env&#39;, &#39;v0.1&#39;)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<div style='clear:both'></div></div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="pooch.os_cache.html" class="btn btn-neutral float-right" title="pooch.os_cache" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="../index.html" class="btn btn-neutral" title="API Reference" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018-2018, The Pooch Developers
+      Last updated on Nov 01, 2018.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+
+  
+
+  <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
