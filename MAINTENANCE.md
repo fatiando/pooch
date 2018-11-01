@@ -80,11 +80,29 @@ There are a few steps that still must be done manually, though.
 
 2. Edit the changes list to remove any trivial changes (updates to the README, typo
    fixes, CI configuration, etc).
-3. Replace the PR number in the commit titles with a link to the Github PR page.
+3. Replace the PR number in the commit titles with a link to the Github PR page. In Vim,
+   use `` %s$#\([0-9]\+\)$`#\1 <https://github.com/fatiando/PROJECT/pull/\1>`__$g ``
+   to make the change automatically.
 4. Copy the remaining changes to `doc/changes.rst` under a new section for the
    intended release.
+5. Reserve a DOI in [Zenodo](https://zenodo.org/) and pre-fill the fields for archiving
+   the new release. Include as authors anyone who made contributions between now and the
+   last release.
+6. Include the DOI badge in the changelog.
 5. Add a link to the new release version documentation in `README.rst`.
 5. Open a new PR with the updated changelog.
+
+### Check the README syntax
+
+Github is a bit forgiving when it comes to the RST syntax in the README but PyPI is not.
+So slightly broken RST can cause the PyPI page to not render the correct content. Check
+using the `rst2html.py` script that comes with docutils:
+
+```
+python setup.py --long-description | rst2html.py --no-raw > index.html
+```
+
+Open `index.html` and check for any flaws or error messages.
 
 ### Pushing to PyPI and updating the documentation
 
@@ -103,14 +121,19 @@ A new source distribution will be uploaded to PyPI, a new folder with the docume
 HTML will be pushed to *gh-pages*, and the `latest` link will be updated to point to
 this new folder.
 
+### Archiving on Zenodo
+
+Grab a zip file from the Github release and upload to Zenodo using the previously
+reserved DOI.
+
 ### Updating the conda package
 
 After Travis is done building the tag and all builds pass, we need to update the conda
 package.
 Unfortunately, this needs to be done manually for now.
 
-1. Fork the feedstock repository (https://github.com/conda-forge/pooch-feedstock) if you
-   haven't already. If you have a fork, update it.
+1. Fork the feedstock repository (https://github.com/conda-forge/PROJECT-feedstock) if
+   you haven't already. If you have a fork, update it.
 2. Update the version number and sha256 hash on `recipe/meta.yaml`. You can get the hash
    from the PyPI "Download files" section.
 3. Add or remove any new dependencies (most are probably only `run` dependencies).
