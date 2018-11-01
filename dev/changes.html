@@ -10,7 +10,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
     
-    <title>Python Module Index &mdash; Pooch dev</title>
+    <title>Changelog &mdash; Pooch dev</title>
     
 
 
@@ -34,15 +34,9 @@
   <link rel="stylesheet" href="_static/style.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-
+    <link rel="prev" title="pooch.test" href="api/generated/pooch.test.html" />
     
     <script src="_static/require.js"></script>
-
-
-    <script type="text/javascript">
-      DOCUMENTATION_OPTIONS.COLLAPSE_INDEX = true;
-    </script>
-
 
 
   
@@ -98,11 +92,16 @@
             
             
               <p class="caption"><span class="caption-text">Documentation</span></p>
-<ul>
+<ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="install.html">Installing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="usage.html">Training your Pooch</a></li>
 <li class="toctree-l1"><a class="reference internal" href="api/index.html">API Reference</a></li>
-<li class="toctree-l1"><a class="reference internal" href="changes.html">Changelog</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Changelog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#version-0-2-0">Version 0.2.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#version-0-1-1">Version 0.1.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#version-0-1">Version 0.1</a></li>
+</ul>
+</li>
 </ul>
 
             
@@ -173,10 +172,15 @@
     
       <li><a href="index.html">Docs</a> &raquo;</li>
         
-      <li>Python Module Index</li>
+      <li>Changelog</li>
     
     
     <li class="source-link">
+        
+            
+                <a href="https://github.com/fatiando/pooch/edit/master/doc/changes.rst"
+                   class="fa fa-github"> Improve this page</a>
+            
         
         
     </li>
@@ -189,29 +193,66 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-
-   <h1>Python Module Index</h1>
-
-   <div class="modindex-jumpbox">
-   <a href="#cap-p"><strong>p</strong></a>
-   </div>
-
-   <table class="indextable modindextable">
-     <tr class="pcap"><td></td><td>&#160;</td><td></td></tr>
-     <tr class="cap" id="cap-p"><td></td><td>
-       <strong>p</strong></td><td></td></tr>
-     <tr>
-       <td></td>
-       <td>
-       <a href="api/index.html#module-pooch"><code class="xref">pooch</code></a></td><td>
-       <em></em></td></tr>
-   </table>
+  <div class="section" id="changelog">
+<span id="changes"></span><h1>Changelog<a class="headerlink" href="#changelog" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="version-0-2-0">
+<h2>Version 0.2.0<a class="headerlink" href="#version-0-2-0" title="Permalink to this headline">¶</a></h2>
+<p><em>Released on: 2018/10/31</em></p>
+<p>Bug fixes:</p>
+<ul class="simple">
+<li>Avoid copying of files across the file system (<a class="reference external" href="https://github.com/fatiando/pooch/pull/33">#33</a>)</li>
+<li>Correctly delete temporary downloads on error (<a class="reference external" href="https://github.com/fatiando/pooch/pull/32">#32</a>)</li>
+</ul>
+<p>New features:</p>
+<ul class="simple">
+<li>Allow custom download URLs for individual files (<a class="reference external" href="https://github.com/fatiando/pooch/pull/30">#30</a>)</li>
+<li>Allow dataset versioning to be optional (<a class="reference external" href="https://github.com/fatiando/pooch/pull/29">#29</a>)</li>
+</ul>
+<p>Maintenance:</p>
+<ul class="simple">
+<li>Move URLs building to a dedicated method for easy subclassing (<a class="reference external" href="https://github.com/fatiando/pooch/pull/31">#31</a>)</li>
+<li>Add testing and support for Python 3.7 (<a class="reference external" href="https://github.com/fatiando/pooch/pull/25">#25</a>)</li>
+</ul>
+</div>
+<div class="section" id="version-0-1-1">
+<h2>Version 0.1.1<a class="headerlink" href="#version-0-1-1" title="Permalink to this headline">¶</a></h2>
+<p><em>Released on: 2018/08/30</em></p>
+<p>Bug fixes:</p>
+<ul class="simple">
+<li>Check if the local data folder is writable and warn the user instead of crashing
+(<a class="reference external" href="https://github.com/fatiando/pooch/pull/23">#23</a>)</li>
+</ul>
+</div>
+<div class="section" id="version-0-1">
+<h2>Version 0.1<a class="headerlink" href="#version-0-1" title="Permalink to this headline">¶</a></h2>
+<p><em>Released on: 2018/08/20</em></p>
+<ul class="simple">
+<li>Fist release of Pooch. Manages downloading sample data files over HTTP from a server
+and storing them in a local directory. Main features:<ul>
+<li>Download a file only if it’s not in the local storage.</li>
+<li>Check the SHA256 hash to make sure the file is not corrupted or needs updating.</li>
+<li>If the hash is different from the registry, Pooch will download a new version of
+the file.</li>
+<li>If the hash still doesn’t match, Pooch will raise an exception warning of possible
+data corruption.</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
 
 
            </div>
            
           </div>
           <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="api/generated/pooch.test.html" class="btn btn-neutral" title="pooch.test" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
   
 
   <hr/>

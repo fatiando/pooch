@@ -2,7 +2,6 @@
 
 .. include:: ../README.rst
 
-
 .. toctree::
     :maxdepth: 2
     :hidden:
@@ -11,3 +10,5 @@
     install.rst
     usage.rst
     api/index.rst
+    changes.rst
+

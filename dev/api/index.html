@@ -10,7 +10,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
     
-        <title>API Reference &mdash; Pooch</title>
+    <title>API Reference &mdash; Pooch dev</title>
     
 
 
@@ -107,6 +107,7 @@
 <li class="toctree-l2"><a class="reference internal" href="generated/pooch.test.html">pooch.test</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="../changes.html">Changelog</a></li>
 </ul>
 
             
@@ -206,7 +207,7 @@
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="generated/pooch.create.html#pooch.create" title="pooch.create"><code class="xref py py-obj docutils literal notranslate"><span class="pre">create</span></code></a>(path,&nbsp;base_url,&nbsp;version,&nbsp;version_dev)</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pooch.create.html#pooch.create" title="pooch.create"><code class="xref py py-obj docutils literal notranslate"><span class="pre">create</span></code></a>(path,&nbsp;base_url[,&nbsp;version,&nbsp;…])</td>
 <td>Create a new <a class="reference internal" href="generated/pooch.Pooch.html#pooch.Pooch" title="pooch.Pooch"><code class="xref py py-class docutils literal notranslate"><span class="pre">Pooch</span></code></a> with sensible defaults to fetch data files.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/pooch.os_cache.html#pooch.os_cache" title="pooch.os_cache"><code class="xref py py-obj docutils literal notranslate"><span class="pre">os_cache</span></code></a>(project[,&nbsp;platform])</td>
@@ -218,7 +219,7 @@
 <tr class="row-even"><td><a class="reference internal" href="generated/pooch.make_registry.html#pooch.make_registry" title="pooch.make_registry"><code class="xref py py-obj docutils literal notranslate"><span class="pre">make_registry</span></code></a>(directory,&nbsp;output[,&nbsp;recursive])</td>
 <td>Make a registry of files and hashes for the given directory.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pooch.Pooch.html#pooch.Pooch" title="pooch.Pooch"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Pooch</span></code></a>(path,&nbsp;base_url,&nbsp;registry)</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pooch.Pooch.html#pooch.Pooch" title="pooch.Pooch"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Pooch</span></code></a>(path,&nbsp;base_url[,&nbsp;registry,&nbsp;urls])</td>
 <td>Manager for a local data storage that can fetch from a remote source.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/pooch.Pooch.fetch.html#pooch.Pooch.fetch" title="pooch.Pooch.fetch"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Pooch.fetch</span></code></a>(fname)</td>
@@ -254,8 +255,8 @@
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2018-2018, Leonardo Uieda.
-      Last updated on Aug 30, 2018.
+        &copy; Copyright 2018-2018, The Pooch Developers
+      Last updated on Nov 01, 2018.
 
     </p>
   </div>
@@ -274,21 +275,14 @@
 
   
 
-    <script type="text/javascript">
-        var DOCUMENTATION_OPTIONS = {
-            URL_ROOT:'../',
-            VERSION:'',
-            LANGUAGE:'None',
-            COLLAPSE_INDEX:false,
-            FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true,
-            SOURCELINK_SUFFIX: '.txt'
-        };
-    </script>
-      <script type="text/javascript" src="../_static/jquery.js"></script>
-      <script type="text/javascript" src="../_static/underscore.js"></script>
-      <script type="text/javascript" src="../_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
 
   
 

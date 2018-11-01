@@ -145,6 +145,9 @@ data files based on the given version string. The remote URL will also be update
 Notice that there is a format specifier ``{version}`` in the URL that Pooch substitutes
 for you.
 
+Versioning is optional and can be ignored by omitting the ``version`` and
+``version_dev`` arguments or setting them to ``None``.
+
 
 User-defined paths
 -------------------
@@ -245,3 +248,66 @@ fictitious project from the command-line:
 .. code:: bash
 
    $ python -c "import pooch; pooch.make_registry('data', 'plumbus/registry.txt')"
+
+
+Multiple URLs
+-------------
+
+You can set a custom download URL for individual files with the ``urls`` argument of
+:func:`pooch.create` or :class:`pooch.Pooch`. It should be a dictionary with the file
+names as keys and the URLs for downloading the files as values. For example, say we have
+a ``citadel.csv`` file that we want to download from
+``https://www.some-data-hosting-site.com`` instead:
+
+.. code:: python
+
+    # The basic setup is the same and we must include citadel.csv in the registry.
+    GOODBOY = pooch.create(
+        path=pooch.os_cache("plumbus"),
+        base_url="https://github.com/rick/plumbus/raw/{version}/data/",
+        version=version,
+        version_dev="master",
+        registry={
+            "c137.csv": "19uheidhlkjdwhoiwuhc0uhcwljchw9ochwochw89dcgw9dcgwc",
+            "cronen.csv": "1upodh2ioduhw9celdjhlfvhksgdwikdgcowjhcwoduchowjg8w",
+            "citadel.csv": "893yprofwjndcwhx9c0ehp3ue9gcwoscjwdfgh923e0hwhcwiyc",
+        },
+        # Now specify custom URLs for some of the files in the registry.
+        urls={
+            "citadel.csv": "https://www.some-data-hosting-site.com/files/citadel.csv",
+        },
+    )
+
+Notice that versioning of custom URLs is not supported (since they are assumed to be
+data files independent of your project) and the file name will not be appended
+automatically to the URL (in case you want to change the file name in local storage).
+
+Custom URLs can be used along side ``base_url`` or you can omit ``base_url`` entirely by
+setting it to an empty string (``base_url=""``). However, doing so requires setting a
+custom URL for every file in the registry.
+
+You can also include custom URLs in a registry file by adding the URL for a file to end
+of the line (separated by a space):
+
+.. code-block:: none
+
+    c137.csv 19uheidhlkjdwhoiwuhc0uhcwljchw9ochwochw89dcgw9dcgwc
+    cronen.csv 1upodh2ioduhw9celdjhlfvhksgdwikdgcowjhcwoduchowjg8w
+    citadel.csv 893yprofwjndcwhx9c0ehp3ue9gcwoscjwdfgh923e0hwhcwiyc https://www.some-data-hosting-site.com/files/citadel.csv
+
+:meth:`pooch.Pooch.load_registry` will automatically populate the ``urls`` attribute.
+This way, custom URLs don't need to be set in the code. In fact, the module code doesn't
+change at all:
+
+.. code:: python
+
+    # Define the Pooch exactly the same (urls is None by default)
+    GOODBOY = pooch.create(
+        path=pooch.os_cache("plumbus"),
+        base_url="https://github.com/rick/plumbus/raw/{version}/data/",
+        version=version,
+        version_dev="master",
+        registry=None,
+    )
+    # If custom URLs are present in the registry file, they will be set automatically
+    GOODBOY.load_registry(os.path.join(os.path.dirname(__file__), "registry.txt"))

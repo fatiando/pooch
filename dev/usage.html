@@ -10,7 +10,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
     
-        <title>Training your Pooch &mdash; Pooch</title>
+    <title>Training your Pooch &mdash; Pooch dev</title>
     
 
 
@@ -105,9 +105,11 @@
 <li class="toctree-l2"><a class="reference internal" href="#subdirectories">Subdirectories</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#so-you-have-1000-data-files">So you have 1000 data files</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#creating-a-registry-file">Creating a registry file</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#multiple-urls">Multiple URLs</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="api/index.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changes.html">Changelog</a></li>
 </ul>
 
             
@@ -325,6 +327,8 @@ For example, if <code class="docutils literal notranslate"><span class="pre">pat
 data files based on the given version string. The remote URL will also be updated.
 Notice that there is a format specifier <code class="docutils literal notranslate"><span class="pre">{version}</span></code> in the URL that Pooch substitutes
 for you.</p>
+<p>Versioning is optional and can be ignored by omitting the <code class="docutils literal notranslate"><span class="pre">version</span></code> and
+<code class="docutils literal notranslate"><span class="pre">version_dev</span></code> arguments or setting them to <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p>
 </div>
 <div class="section" id="user-defined-paths">
 <h2>User-defined paths<a class="headerlink" href="#user-defined-paths" title="Permalink to this headline">¶</a></h2>
@@ -409,6 +413,60 @@ fictitious project from the command-line:</p>
 </pre></div>
 </div>
 </div>
+<div class="section" id="multiple-urls">
+<h2>Multiple URLs<a class="headerlink" href="#multiple-urls" title="Permalink to this headline">¶</a></h2>
+<p>You can set a custom download URL for individual files with the <code class="docutils literal notranslate"><span class="pre">urls</span></code> argument of
+<a class="reference internal" href="api/generated/pooch.create.html#pooch.create" title="pooch.create"><code class="xref py py-func docutils literal notranslate"><span class="pre">pooch.create</span></code></a> or <a class="reference internal" href="api/generated/pooch.Pooch.html#pooch.Pooch" title="pooch.Pooch"><code class="xref py py-class docutils literal notranslate"><span class="pre">pooch.Pooch</span></code></a>. It should be a dictionary with the file
+names as keys and the URLs for downloading the files as values. For example, say we have
+a <code class="docutils literal notranslate"><span class="pre">citadel.csv</span></code> file that we want to download from
+<code class="docutils literal notranslate"><span class="pre">https://www.some-data-hosting-site.com</span></code> instead:</p>
+<div class="code python highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># The basic setup is the same and we must include citadel.csv in the registry.</span>
+<span class="n">GOODBOY</span> <span class="o">=</span> <span class="n">pooch</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+    <span class="n">path</span><span class="o">=</span><span class="n">pooch</span><span class="o">.</span><span class="n">os_cache</span><span class="p">(</span><span class="s2">&quot;plumbus&quot;</span><span class="p">),</span>
+    <span class="n">base_url</span><span class="o">=</span><span class="s2">&quot;https://github.com/rick/plumbus/raw/</span><span class="si">{version}</span><span class="s2">/data/&quot;</span><span class="p">,</span>
+    <span class="n">version</span><span class="o">=</span><span class="n">version</span><span class="p">,</span>
+    <span class="n">version_dev</span><span class="o">=</span><span class="s2">&quot;master&quot;</span><span class="p">,</span>
+    <span class="n">registry</span><span class="o">=</span><span class="p">{</span>
+        <span class="s2">&quot;c137.csv&quot;</span><span class="p">:</span> <span class="s2">&quot;19uheidhlkjdwhoiwuhc0uhcwljchw9ochwochw89dcgw9dcgwc&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;cronen.csv&quot;</span><span class="p">:</span> <span class="s2">&quot;1upodh2ioduhw9celdjhlfvhksgdwikdgcowjhcwoduchowjg8w&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;citadel.csv&quot;</span><span class="p">:</span> <span class="s2">&quot;893yprofwjndcwhx9c0ehp3ue9gcwoscjwdfgh923e0hwhcwiyc&quot;</span><span class="p">,</span>
+    <span class="p">},</span>
+    <span class="c1"># Now specify custom URLs for some of the files in the registry.</span>
+    <span class="n">urls</span><span class="o">=</span><span class="p">{</span>
+        <span class="s2">&quot;citadel.csv&quot;</span><span class="p">:</span> <span class="s2">&quot;https://www.some-data-hosting-site.com/files/citadel.csv&quot;</span><span class="p">,</span>
+    <span class="p">},</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>Notice that versioning of custom URLs is not supported (since they are assumed to be
+data files independent of your project) and the file name will not be appended
+automatically to the URL (in case you want to change the file name in local storage).</p>
+<p>Custom URLs can be used along side <code class="docutils literal notranslate"><span class="pre">base_url</span></code> or you can omit <code class="docutils literal notranslate"><span class="pre">base_url</span></code> entirely by
+setting it to an empty string (<code class="docutils literal notranslate"><span class="pre">base_url=&quot;&quot;</span></code>). However, doing so requires setting a
+custom URL for every file in the registry.</p>
+<p>You can also include custom URLs in a registry file by adding the URL for a file to end
+of the line (separated by a space):</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>c137.csv 19uheidhlkjdwhoiwuhc0uhcwljchw9ochwochw89dcgw9dcgwc
+cronen.csv 1upodh2ioduhw9celdjhlfvhksgdwikdgcowjhcwoduchowjg8w
+citadel.csv 893yprofwjndcwhx9c0ehp3ue9gcwoscjwdfgh923e0hwhcwiyc https://www.some-data-hosting-site.com/files/citadel.csv
+</pre></div>
+</div>
+<p><a class="reference internal" href="api/generated/pooch.Pooch.load_registry.html#pooch.Pooch.load_registry" title="pooch.Pooch.load_registry"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pooch.Pooch.load_registry</span></code></a> will automatically populate the <code class="docutils literal notranslate"><span class="pre">urls</span></code> attribute.
+This way, custom URLs don’t need to be set in the code. In fact, the module code doesn’t
+change at all:</p>
+<div class="code python highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define the Pooch exactly the same (urls is None by default)</span>
+<span class="n">GOODBOY</span> <span class="o">=</span> <span class="n">pooch</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+    <span class="n">path</span><span class="o">=</span><span class="n">pooch</span><span class="o">.</span><span class="n">os_cache</span><span class="p">(</span><span class="s2">&quot;plumbus&quot;</span><span class="p">),</span>
+    <span class="n">base_url</span><span class="o">=</span><span class="s2">&quot;https://github.com/rick/plumbus/raw/</span><span class="si">{version}</span><span class="s2">/data/&quot;</span><span class="p">,</span>
+    <span class="n">version</span><span class="o">=</span><span class="n">version</span><span class="p">,</span>
+    <span class="n">version_dev</span><span class="o">=</span><span class="s2">&quot;master&quot;</span><span class="p">,</span>
+    <span class="n">registry</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="c1"># If custom URLs are present in the registry file, they will be set automatically</span>
+<span class="n">GOODBOY</span><span class="o">.</span><span class="n">load_registry</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="vm">__file__</span><span class="p">),</span> <span class="s2">&quot;registry.txt&quot;</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
 </div>
 
 
@@ -431,8 +489,8 @@ fictitious project from the command-line:</p>
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2018-2018, Leonardo Uieda.
-      Last updated on Aug 30, 2018.
+        &copy; Copyright 2018-2018, The Pooch Developers
+      Last updated on Nov 01, 2018.
 
     </p>
   </div>
@@ -451,21 +509,14 @@ fictitious project from the command-line:</p>
 
   
 
-    <script type="text/javascript">
-        var DOCUMENTATION_OPTIONS = {
-            URL_ROOT:'./',
-            VERSION:'',
-            LANGUAGE:'None',
-            COLLAPSE_INDEX:false,
-            FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true,
-            SOURCELINK_SUFFIX: '.txt'
-        };
-    </script>
-      <script type="text/javascript" src="_static/jquery.js"></script>
-      <script type="text/javascript" src="_static/underscore.js"></script>
-      <script type="text/javascript" src="_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
 
   
 
