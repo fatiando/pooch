@@ -152,7 +152,7 @@ def create(
         path = os.environ[env]
     if version is not None:
         version = check_version(version, fallback=version_dev)
-        path = os.path.join(path, version)
+        path = os.path.join(str(path), version)
         base_url = base_url.format(version=version)
     path = os.path.expanduser(str(path))
     # Check that the data directory is writable
