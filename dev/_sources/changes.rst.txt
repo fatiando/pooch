@@ -3,6 +3,18 @@
 Changelog
 =========
 
+
+Version 0.2.1
+-------------
+
+*Released on: 2018/11/15*
+
+Bug fixes:
+
+* Fix unwanted ``~`` directory creation when not using a ``version`` in ``pooch.create``
+  (`#37 <https://github.com/fatiando/pooch/pull/37>`__)
+
+
 Version 0.2.0
 -------------
 
