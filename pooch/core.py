@@ -327,7 +327,7 @@ class Pooch:
 
     def load_registry(self, fname):
         """
-        Load entries form a file and add them to the registry.
+        Load entries from a file and add them to the registry.
 
         Use this if you are managing many files.
 
