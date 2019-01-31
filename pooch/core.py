@@ -95,6 +95,8 @@ def create(
     http://some.link.com/v0.1/
     >>> print(pup.registry)
     {'data.txt': '9081wo2eb2gc0u...'}
+    >>> print(pup.registry_files)
+    ['data.txt']
 
     If this is a development version (12 commits ahead of v0.1), then the
     ``version_dev`` will be used (defaults to ``"master"``):
@@ -217,6 +219,11 @@ class Pooch:
     def abspath(self):
         "Absolute path to the local storage"
         return Path(os.path.abspath(os.path.expanduser(str(self.path))))
+
+    @property
+    def registry_files(self):
+        "List of file names on the registry"
+        return list(self.registry)
 
     def fetch(self, fname):
         """

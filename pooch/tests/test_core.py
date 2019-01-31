@@ -121,6 +121,7 @@ def test_pooch_load_registry():
     pup = Pooch(path="", base_url="")
     pup.load_registry(os.path.join(DATA_DIR, "registry.txt"))
     assert pup.registry == REGISTRY
+    assert pup.registry_files.sort() == list(REGISTRY).sort()
 
 
 def test_pooch_load_registry_custom_url():
