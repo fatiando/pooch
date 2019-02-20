@@ -1,6 +1,7 @@
 """
 Misc utilities
 """
+import appdirs
 from pathlib import Path
 import sys
 import hashlib
@@ -40,15 +41,7 @@ def os_cache(project, platform=None):
     ('~', '.cache', 'myproject')
 
     """
-    if platform is None:
-        platform = sys.platform
-    if platform == "darwin":
-        cache_path = Path("~", "Library", "Caches", project)
-    elif platform == "win32":
-        cache_path = Path("~", "AppData", "Local", project, "cache")
-    else:  # *NIX
-        cache_path = Path("~", ".cache", project)
-    return cache_path
+    return appdirs.user_cache_dir(project)
 
 
 def file_hash(fname):
