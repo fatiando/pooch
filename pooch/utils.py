@@ -1,6 +1,7 @@
 """
 Misc utilities
 """
+import os
 from pathlib import Path
 import sys
 import hashlib
@@ -46,7 +47,9 @@ def os_cache(project, platform=None):
         cache_path = Path("~", "Library", "Caches", project)
     elif platform == "win32":
         cache_path = Path("~", "AppData", "Local", project, "cache")
-    else:  # *NIX
+    elif 'XDG_CACHE_HOME' in os.environ:
+        cache_path = Path(os.environ['XDG_CACHE_HOME'], project)
+    else:
         cache_path = Path("~", ".cache", project)
     return cache_path
 
