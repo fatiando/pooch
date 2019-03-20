@@ -19,9 +19,11 @@ environment:
         - MINICONDA: C:\Miniconda35-x64
           PYTHON: 3.5
           CONDA_REQUIREMENTS: requirements.txt
+        # Downgrade pip on 2.7 to avoid failures from a deprecation warning
         - MINICONDA: C:\Miniconda-x64
           PYTHON: 2.7
           CONDA_REQUIREMENTS: requirements27.txt
+          CONDA_INSTALL_EXTRA: pip=18.1
 
 init:
     # Add miniconda to the PATH
@@ -30,7 +32,7 @@ init:
 
 install:
     # Get the Fatiando CI scripts
-    - cmd: git clone https://github.com/fatiando/continuous-integration.git
+    - cmd: git clone --branch=1.0.0 --depth=1 https://github.com/fatiando/continuous-integration.git
     # Setup miniconda and install the requirements into a new environment
     - cmd: continuous-integration\appveyor\setup-miniconda.bat
     # Activate the new environment
