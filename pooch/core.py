@@ -9,6 +9,7 @@ import tempfile
 from warnings import warn
 
 import requests
+import urllib
 
 from .utils import file_hash, check_version
 
@@ -363,3 +364,33 @@ class Pooch:
                     file_url = elements[2]
                     self.urls[file_name] = file_url
                 self.registry[file_name] = file_sha256
+
+    def check_availability(self, fname):
+        """
+        Check availability of remote file without downloading it
+
+        Use this method when working with big files and want to check if they are
+        available for download.
+
+        Parameters
+        ----------
+        fname : str
+            File name and path to the registry file.
+
+        Returns
+        -------
+        status : bool
+            Availability status of the registry file.
+        """
+        if fname not in self.registry:
+            raise ValueError("File '{}' is not in the registry.".format(fname))
+        source = self._get_url(fname)
+        try:
+            response = urllib.request.urlopen(source)
+        except:
+            return False
+        else:
+            if response.code == 200:
+                return True
+            else:
+                return False
