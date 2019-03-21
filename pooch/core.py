@@ -248,8 +248,7 @@ class Pooch:
             storage.
 
         """
-        if fname not in self.registry:
-            raise ValueError("File '{}' is not in the registry.".format(fname))
+        self._is_file_in_registry(fname)
         # Create the local data directory if it doesn't already exist
         if not self.abspath.exists():
             os.makedirs(str(self.abspath))
@@ -269,6 +268,10 @@ class Pooch:
             )
             self._download_file(fname)
         return str(full_path)
+
+    def _is_file_in_registry(self, fname):
+        if fname not in self.registry:
+            raise ValueError("File '{}' is not in the registry.".format(fname))
 
     def _get_url(self, fname):
         """
