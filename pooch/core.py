@@ -9,7 +9,6 @@ import tempfile
 from warnings import warn
 
 import requests
-import urllib
 
 from .utils import file_hash, check_version
 
@@ -385,12 +384,5 @@ class Pooch:
         if fname not in self.registry:
             raise ValueError("File '{}' is not in the registry.".format(fname))
         source = self._get_url(fname)
-        try:
-            response = urllib.request.urlopen(source)
-        except:
-            return False
-        else:
-            if response.code == 200:
-                return True
-            else:
-                return False
+        response = requests.head(source, allow_redirects=True)
+        return bool(response.status_code == 200)

@@ -12,8 +12,6 @@ except ImportError:
     from backports.tempfile import TemporaryDirectory
 import warnings
 
-from urllib.error import HTTPError
-
 import pytest
 
 from .. import Pooch, create
@@ -211,7 +209,4 @@ def test_check_availability():
     assert pup.check_availability("tiny-data.txt") is True
     # Check non available remote file
     pup = Pooch(path=DATA_DIR, base_url=BASEURL + "wrong-url/", registry=REGISTRY)
-    assert pup.check_availability("tiny-data.txt") is False
-    # Check nonexisting url
-    pup = Pooch(path=DATA_DIR, base_url="this-ulr-does-not-exist", registry=REGISTRY)
     assert pup.check_availability("tiny-data.txt") is False
