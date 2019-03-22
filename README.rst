@@ -19,7 +19,7 @@ Part of the `Fatiando a Terra <https://www.fatiando.org>`__ project
 .. image:: http://img.shields.io/appveyor/ci/fatiando/pooch/master.svg?style=flat-square&label=AppVeyor
     :alt: AppVeyor build status
     :target: https://ci.appveyor.com/project/fatiando/pooch
-.. image:: https://img.shields.io/azure-devops/build/fatiando/468a030e-9766-495e-b0d6-b94ff15ff50b/5/master.svg?label=Azure&style=flat-square
+.. image:: https://img.shields.io/azure-devops/build/fatiando/cb775164-4881-4854-81fd-7eaa170192e0/6/master.svg?label=Azure&style=flat-square
     :alt: Azure Pipelines build status
     :target: https://dev.azure.com/fatiando/pooch/_build
 .. image:: https://img.shields.io/codecov/c/github/fatiando/pooch/master.svg?style=flat-square
