@@ -33,7 +33,7 @@ jobs:
   - bash: echo "##vso[task.prependpath]/usr/share/miniconda/bin"
     displayName: Add conda to PATH
 
-  # Get the Fatiando CI scripts (replace "master" with the version you want to use)
+  # Get the Fatiando CI scripts
   - bash: git clone --branch=1.1.0 --depth=1 https://github.com/fatiando/continuous-integration.git
     displayName: Fetch the Fatiando CI scripts
 
@@ -99,8 +99,8 @@ jobs:
   - bash: echo "##vso[task.prependpath]$CONDA/bin"
     displayName: Add conda to PATH
 
-  # Get the Fatiando CI scripts (replace "master" with the version you want to use)
-  - bash: git clone --branch=master --depth=1 https://github.com/fatiando/continuous-integration.git
+  # Get the Fatiando CI scripts
+  - bash: git clone --branch=1.1.0 --depth=1 https://github.com/fatiando/continuous-integration.git
     displayName: Fetch the Fatiando CI scripts
 
   # Setup dependencies and build a conda environment
@@ -185,8 +185,8 @@ jobs:
   - powershell: Write-Host "##vso[task.prependpath]$env:CONDA\Scripts"
     displayName: Add conda to PATH
 
-  # Get the Fatiando CI scripts (replace "master" with the version you want to use)
-  - script: git clone --branch=master --depth=1 https://github.com/fatiando/continuous-integration.git
+  # Get the Fatiando CI scripts
+  - script: git clone --branch=1.1.0 --depth=1 https://github.com/fatiando/continuous-integration.git
     displayName: Fetch the Fatiando CI scripts
 
   # Setup dependencies and build a conda environment
