@@ -269,7 +269,10 @@ class Pooch:
             self._download_file(fname)
         return str(full_path)
 
-    def _is_file_in_registry(self, fname):
+    def _assert_file_in_registry(self, fname):
+        """
+        Check if a file is in the registry and raise :class:`ValueError` if it's not.
+        """
         if fname not in self.registry:
             raise ValueError("File '{}' is not in the registry.".format(fname))
 
