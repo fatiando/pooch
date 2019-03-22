@@ -248,7 +248,7 @@ class Pooch:
             storage.
 
         """
-        self._is_file_in_registry(fname)
+        self._assert_file_in_registry(fname)
         # Create the local data directory if it doesn't already exist
         if not self.abspath.exists():
             os.makedirs(str(self.abspath))
