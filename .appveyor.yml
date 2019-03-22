@@ -10,7 +10,7 @@ branches:
 
 environment:
     matrix:
-        - MINICONDA: C:\Miniconda36-x64
+        - MINICONDA: C:\Miniconda37-x64
           PYTHON: 3.7
           CONDA_REQUIREMENTS: requirements.txt
         - MINICONDA: C:\Miniconda36-x64
@@ -32,7 +32,7 @@ init:
 
 install:
     # Get the Fatiando CI scripts
-    - cmd: git clone --branch=1.0.0 --depth=1 https://github.com/fatiando/continuous-integration.git
+    - cmd: git clone --branch=1.1.0 --depth=1 https://github.com/fatiando/continuous-integration.git
     # Setup miniconda and install the requirements into a new environment
     - cmd: continuous-integration\appveyor\setup-miniconda.bat
     # Activate the new environment
