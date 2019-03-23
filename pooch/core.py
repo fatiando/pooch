@@ -248,8 +248,7 @@ class Pooch:
             storage.
 
         """
-        if fname not in self.registry:
-            raise ValueError("File '{}' is not in the registry.".format(fname))
+        self._assert_file_in_registry(fname)
         # Create the local data directory if it doesn't already exist
         if not self.abspath.exists():
             os.makedirs(str(self.abspath))
@@ -269,6 +268,13 @@ class Pooch:
             )
             self._download_file(fname)
         return str(full_path)
+
+    def _assert_file_in_registry(self, fname):
+        """
+        Check if a file is in the registry and raise :class:`ValueError` if it's not.
+        """
+        if fname not in self.registry:
+            raise ValueError("File '{}' is not in the registry.".format(fname))
 
     def _get_url(self, fname):
         """
@@ -328,7 +334,7 @@ class Pooch:
             if not os.path.exists(str(destination.parent)):
                 os.makedirs(str(destination.parent))
             shutil.move(fout.name, str(destination))
-        except:
+        except Exception:
             os.remove(fout.name)
             raise
 
