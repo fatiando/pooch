@@ -328,7 +328,7 @@ class Pooch:
             if not os.path.exists(str(destination.parent)):
                 os.makedirs(str(destination.parent))
             shutil.move(fout.name, str(destination))
-        except:
+        except Exception:
             os.remove(fout.name)
             raise
 
