@@ -86,9 +86,6 @@ jobs:
       Python36:
         python.version: '3.6'
         PYTHON: '3.6'
-      Python35:
-        python.version: '3.5'
-        PYTHON: '3.5'
       Python27:
         python.version: '2.7'
         PYTHON: '2.7'
@@ -170,9 +167,6 @@ jobs:
       Python36:
         python.version: '3.6'
         PYTHON: '3.6'
-      Python35:
-        python.version: '3.5'
-        PYTHON: '3.5'
       Python27:
         python.version: '2.7'
         PYTHON: '2.7'

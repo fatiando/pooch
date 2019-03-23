@@ -6,7 +6,7 @@ Installing
 Which Python?
 -------------
 
-You'll need Python 2.7 or **Python >=3.5 (recommended)**.
+You'll need Python 2.7 or **Python >=3.6 (recommended)**.
 
 .. warning::
 

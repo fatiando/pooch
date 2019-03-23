@@ -16,9 +16,6 @@ environment:
         - MINICONDA: C:\Miniconda36-x64
           PYTHON: 3.6
           CONDA_REQUIREMENTS: requirements.txt
-        - MINICONDA: C:\Miniconda35-x64
-          PYTHON: 3.5
-          CONDA_REQUIREMENTS: requirements.txt
         # Downgrade pip on 2.7 to avoid failures from a deprecation warning
         - MINICONDA: C:\Miniconda-x64
           PYTHON: 2.7
