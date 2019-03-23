@@ -1,28 +1,30 @@
 """
 Misc utilities
 """
-import appdirs
 from pathlib import Path
-import sys
 import hashlib
 
+import appdirs
 from packaging.version import Version
 
 
-def os_cache(project, platform=None):
-    """
+def os_cache(project):
+    r"""
     Default cache location based on the operating system.
 
-    Will insert the project name in the proper location of the path.
+    The folder locations are defined by the ``appdirs``  package.
+    Usually, the locations will be following (see the
+    `appdirs documentation <https://github.com/ActiveState/appdirs>`__):
+
+    * Mac: ``~/Library/Application Support/<project>``
+    * Unix: ``~/.local/share/<project>`` or the value of the ``XDG_DATA_HOME``
+      environment variable, if defined.
+    * Windows: ``C:\Users\<user>\AppData\Roaming\<project>\<project>``
 
     Parameters
     ----------
     project : str
         The project name.
-    platform : str or None
-        The name of operating system as returned by ``sys.platform`` (``'darwin'`` for
-        Mac, ``'win32'`` for Windows, and anything else will be treated as generic
-        Linux/Unix. If None, will use the value of ``sys.platform``.
 
     Returns
     -------
@@ -30,18 +32,8 @@ def os_cache(project, platform=None):
         The default location for the data cache. User directories (``'~'``) are not
         expanded.
 
-    Examples
-    --------
-
-    >>> for os in ['darwin', 'win32', 'anything else']:
-    ...     path = os_cache("myproject", platform=os)
-    ...     print(path.parts)
-    ('~', 'Library', 'Caches', 'myproject')
-    ('~', 'AppData', 'Local', 'myproject', 'cache')
-    ('~', '.cache', 'myproject')
-
     """
-    return appdirs.user_cache_dir(project)
+    return Path(appdirs.user_cache_dir(project))
 
 
 def file_hash(fname):
