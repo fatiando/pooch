@@ -27,6 +27,8 @@ test:
 	cp $(TESTDIR)/.coverage* .
 	rm -r $(TESTDIR)
 
+format:
+	black $(BLACK_FILES)
 
 check:
 	black --check $(BLACK_FILES)
