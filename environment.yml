@@ -7,6 +7,7 @@ dependencies:
     - pip
     - requests
     - packaging
+    - appdirs
     # Development requirements
     - pytest
     - pytest-cov
