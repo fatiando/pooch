@@ -2,42 +2,38 @@
 PROJECT=pooch
 TESTDIR=tmp-test-dir-with-unique-name
 PYTEST_ARGS=--cov-config=../.coveragerc --cov-report=term-missing --cov=$(PROJECT) --doctest-modules -v --pyargs
-CHECK_FILES=setup.py $(PROJECT)
-FORMAT_FILES=setup.py $(PROJECT)
+LINT_FILES=setup.py $(PROJECT)
+BLACK_FILES=setup.py $(PROJECT)
+FLAKE8_FILES=setup.py $(PROJECT)
 
 help:
 	@echo "Commands:"
 	@echo ""
-	@echo "    develop       install in editable mode"
-	@echo "    test          run the test suite (including doctests)"
-	@echo "    check         run code quality checks (black and pylint)"
-	@echo "    format        run black to automatically format the code"
-	@echo "    coverage      calculate test coverage"
-	@echo "    clean         clean up build and generated files"
+	@echo "  install   install in editable mode"
+	@echo "  test      run the test suite (including doctests) and report coverage"
+	@echo "  format    run black to automatically format the code"
+	@echo "  check     run code style and quality checks (black and flake8)"
+	@echo "  lint      run pylint for a deeper (and slower) quality check"
+	@echo "  clean     clean up build and generated files"
 	@echo ""
 
-develop:
+install:
 	pip install --no-deps -e .
 
 test:
-	# Run a tmp folder to make sure the tests are run on the installed version
-	mkdir -p $(TESTDIR)
-	cd $(TESTDIR); python -c "import $(PROJECT); $(PROJECT).test()"
-	rm -r $(TESTDIR)
-
-coverage:
 	# Run a tmp folder to make sure the tests are run on the installed version
 	mkdir -p $(TESTDIR)
 	cd $(TESTDIR); pytest $(PYTEST_ARGS) $(PROJECT)
 	cp $(TESTDIR)/.coverage* .
 	rm -r $(TESTDIR)
 
-format:
-	black $(FORMAT_FILES)
 
 check:
-	black --check $(FORMAT_FILES)
-	pylint $(CHECK_FILES)
+	black --check $(BLACK_FILES)
+	flake8 $(FLAKE8_FILES)
+
+lint:
+	pylint --jobs=0 $(LINT_FILES)
 
 clean:
 	find . -name "*.pyc" -exec rm -v {} \;
