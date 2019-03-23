@@ -26,57 +26,38 @@ env:
         # The file with the listed requirements to be installed by conda
         - CONDA_REQUIREMENTS=requirements.txt
         - CONDA_REQUIREMENTS_DEV=requirements-dev.txt
+        - CONDA_INSTALL_EXTRA="codecov"
         # These variables control which actions are performed in a build
-        - COVERAGE=false
-        - BUILD_DOCS=false
-        - CHECK_FORMAT=false
         - DEPLOY_DOCS=false
         - DEPLOY_PYPI=false
 
 # Specify the build configurations. Be sure to only deploy from a single build.
 matrix:
     include:
-        - os: linux
+        - name: "Linux - Python 3.7"
+          os: linux
           env:
               - PYTHON=3.7
-              - BUILD_DOCS=true
-        - os: linux
+        - name: "Linux - Python 3.6"
+          os: linux
           env:
               - PYTHON=3.6
-              - CHECK_FORMAT=true
-              - COVERAGE=true
-              - BUILD_DOCS=true
               - DEPLOY_DOCS=true
               - DEPLOY_PYPI=true
-              # Black is Python 3.6 only so it can't be in the requirements file.
-              - CONDA_INSTALL_EXTRA="black"
-        - os: linux
+        - name: "Linux - Python 3.5"
+          os: linux
           env:
               - PYTHON=3.5
-              - BUILD_DOCS=true
-        - os: linux
+        - name: "Linux - Python 2.7"
+          os: linux
           env:
               - PYTHON=2.7
-              - COVERAGE=true
               - CONDA_REQUIREMENTS=requirements27.txt
-        - os: osx
-          env:
-              - PYTHON=3.7
-              - BUILD_DOCS=true
-        - os: osx
-          env:
-              - PYTHON=3.6
-              - COVERAGE=true
-              - BUILD_DOCS=true
-        - os: osx
-          env:
-              - PYTHON=3.5
-              - BUILD_DOCS=true
 
 # Setup the build environment
 before_install:
     # Get the Fatiando CI scripts
-    - git clone --branch=1.0.0 --depth=1 https://github.com/fatiando/continuous-integration.git
+    - git clone --branch=1.1.1 --depth=1 https://github.com/fatiando/continuous-integration.git
     # Download and install miniconda and setup dependencies
     # Need to source the script to set the PATH variable globaly
     - source continuous-integration/travis/setup-miniconda.sh
@@ -91,30 +72,18 @@ install:
 
 # Run the actual tests and checks
 script:
-    # Check code for style and quality
-    - if [ "$CHECK_FORMAT" == "true" ]; then
-          make check;
-      fi
     # Run the test suite
-    - if [ "$COVERAGE" == "true" ]; then
-          pip install codecov;
-          make coverage;
-      else
-          make test;
-      fi
+    - make test
     # Build the documentation
-    - if [ "$BUILD_DOCS" == "true" ]; then
-          make -C doc clean all;
-      fi
+    - make -C doc clean all
 
 # Things to do if the build is successful
 after_success:
     # Upload coverage information
-    - if [ "$COVERAGE" == "true" ]; then
-        coverage xml;
-        echo "Uploading coverage to Codecov";
-        codecov -e PYTHON;
-      fi
+    # Upload coverage information
+    - coverage xml
+    - echo "Uploading coverage to Codecov"
+    - codecov -e PYTHON
 
 # Deploy
 deploy:

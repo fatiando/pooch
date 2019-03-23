@@ -13,12 +13,15 @@ Part of the `Fatiando a Terra <https://www.fatiando.org>`__ project
 .. image:: http://img.shields.io/pypi/v/pooch.svg?style=flat-square
     :alt: Latest version on PyPI
     :target: https://pypi.python.org/pypi/pooch
-.. image:: http://img.shields.io/travis/fatiando/pooch/master.svg?style=flat-square&label=Linux|Mac
+.. image:: http://img.shields.io/travis/fatiando/pooch/master.svg?style=flat-square&label=TravisCI
     :alt: TravisCI build status
     :target: https://travis-ci.org/fatiando/pooch
-.. image:: http://img.shields.io/appveyor/ci/fatiando/pooch/master.svg?style=flat-square&label=Windows
+.. image:: http://img.shields.io/appveyor/ci/fatiando/pooch/master.svg?style=flat-square&label=AppVeyor
     :alt: AppVeyor build status
     :target: https://ci.appveyor.com/project/fatiando/pooch
+.. image:: https://img.shields.io/azure-devops/build/fatiando/cb775164-4881-4854-81fd-7eaa170192e0/6/master.svg?label=Azure&style=flat-square
+    :alt: Azure Pipelines build status
+    :target: https://dev.azure.com/fatiando/pooch/_build
 .. image:: https://img.shields.io/codecov/c/github/fatiando/pooch/master.svg?style=flat-square
     :alt: Test coverage status
     :target: https://codecov.io/gh/fatiando/pooch

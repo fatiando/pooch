@@ -1,0 +1,5 @@
+# Set the default behavior, in case people don't have core.autocrlf set.
+* text=auto
+
+# Declare test data files that will always have LF line endings on checkout (even on Windows).
+pooch/tests/data/** text eol=lf
