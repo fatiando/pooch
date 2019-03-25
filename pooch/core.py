@@ -380,7 +380,8 @@ class Pooch:
         Parameters
         ----------
         fname : str
-            File name and path to the registry file.
+            The file name (relative to the *base_url* of the remote data storage) to
+            fetch from the local storage.
 
         Returns
         -------
