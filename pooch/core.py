@@ -388,7 +388,7 @@ class Pooch:
         status : bool
             True if the file is available for download. False otherwise.
         """
-        if fname not in self.registry:
+        self._assert_file_in_registry(fname)
         source = self._get_url(fname)
         response = requests.head(source, allow_redirects=True)
         return bool(response.status_code == 200)
