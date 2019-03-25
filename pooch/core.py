@@ -385,7 +385,7 @@ class Pooch:
         Returns
         -------
         status : bool
-            Availability status of the registry file.
+            True if the file is available for download. False otherwise.
         """
         if fname not in self.registry:
             raise ValueError("File '{}' is not in the registry.".format(fname))
