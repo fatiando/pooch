@@ -374,7 +374,7 @@ class Pooch:
         """
         Check availability of a remote file without downloading it.
 
-        Use this method when working with big files and want to check if they are
+        Use this method when working with large files and to check if they are
         available for download.
 
         Parameters
