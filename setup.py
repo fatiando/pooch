@@ -54,6 +54,7 @@ PACKAGE_DATA = {
 INSTALL_REQUIRES = [
     "requests",
     "packaging",
+    "appdirs",
     "pathlib;python_version<'3.5'",
     "backports.tempfile;python_version<'3.5'",
 ]
