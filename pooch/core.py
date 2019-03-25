@@ -370,7 +370,7 @@ class Pooch:
                     self.urls[file_name] = file_url
                 self.registry[file_name] = file_sha256
 
-    def check_availability(self, fname):
+    def is_available(self, fname):
         """
         Check availability of a remote file without downloading it.
 
