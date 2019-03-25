@@ -206,7 +206,7 @@ def test_check_availability():
     "Should correctly check availability of existing and non existing files"
     # Check available remote file
     pup = Pooch(path=DATA_DIR, base_url=BASEURL, registry=REGISTRY)
-    assert pup.check_availability("tiny-data.txt") is True
+    assert pup.is_available("tiny-data.txt")
     # Check non available remote file
     pup = Pooch(path=DATA_DIR, base_url=BASEURL + "wrong-url/", registry=REGISTRY)
     assert pup.check_availability("tiny-data.txt") is False
