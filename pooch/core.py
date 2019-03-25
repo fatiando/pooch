@@ -389,7 +389,6 @@ class Pooch:
             True if the file is available for download. False otherwise.
         """
         if fname not in self.registry:
-            raise ValueError("File '{}' is not in the registry.".format(fname))
         source = self._get_url(fname)
         response = requests.head(source, allow_redirects=True)
         return bool(response.status_code == 200)
