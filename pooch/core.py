@@ -372,7 +372,7 @@ class Pooch:
 
     def check_availability(self, fname):
         """
-        Check availability of remote file without downloading it
+        Check availability of a remote file without downloading it.
 
         Use this method when working with big files and want to check if they are
         available for download.
