@@ -374,8 +374,8 @@ class Pooch:
         """
         Check availability of a remote file without downloading it.
 
-        Use this method when working with large files and to check if they are
-        available for download.
+        Use this method when working with large files to check if they are available for
+        download.
 
         Parameters
         ----------
@@ -387,6 +387,7 @@ class Pooch:
         -------
         status : bool
             True if the file is available for download. False otherwise.
+
         """
         self._assert_file_in_registry(fname)
         source = self._get_url(fname)
