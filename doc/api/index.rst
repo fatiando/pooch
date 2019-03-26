@@ -16,5 +16,6 @@ API Reference
     make_registry
     Pooch
     Pooch.fetch
+    Pooch.is_available
     Pooch.load_registry
     test
