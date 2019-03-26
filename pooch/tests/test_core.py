@@ -211,5 +211,7 @@ def test_check_availability():
     pup = Pooch(path=DATA_DIR, base_url=BASEURL + "wrong-url/", registry=REGISTRY)
     assert not pup.is_available("tiny-data.txt")
     # Wrong file name
-    pup = Pooch(path=DATA_DIR, base_url=BASEURL, registry=REGISTRY)
+    registry = {"not-a-real-data-file.txt": "notarealhash"}
+    registry.update(REGISTRY)
+    pup = Pooch(path=DATA_DIR, base_url=BASEURL, registry=registry)
     assert not pup.is_available("not-a-real-data-file.txt")
