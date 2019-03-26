@@ -369,3 +369,27 @@ class Pooch:
                     file_url = elements[2]
                     self.urls[file_name] = file_url
                 self.registry[file_name] = file_sha256
+
+    def is_available(self, fname):
+        """
+        Check availability of a remote file without downloading it.
+
+        Use this method when working with large files to check if they are available for
+        download.
+
+        Parameters
+        ----------
+        fname : str
+            The file name (relative to the *base_url* of the remote data storage) to
+            fetch from the local storage.
+
+        Returns
+        -------
+        status : bool
+            True if the file is available for download. False otherwise.
+
+        """
+        self._assert_file_in_registry(fname)
+        source = self._get_url(fname)
+        response = requests.head(source, allow_redirects=True)
+        return bool(response.status_code == 200)

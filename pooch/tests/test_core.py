@@ -200,3 +200,18 @@ def test_create_newfile_permissionerror(monkeypatch):
 
             with pytest.raises(PermissionError):
                 pup.fetch("afile.txt")
+
+
+def test_check_availability():
+    "Should correctly check availability of existing and non existing files"
+    # Check available remote file
+    pup = Pooch(path=DATA_DIR, base_url=BASEURL, registry=REGISTRY)
+    assert pup.is_available("tiny-data.txt")
+    # Check non available remote file
+    pup = Pooch(path=DATA_DIR, base_url=BASEURL + "wrong-url/", registry=REGISTRY)
+    assert not pup.is_available("tiny-data.txt")
+    # Wrong file name
+    registry = {"not-a-real-data-file.txt": "notarealhash"}
+    registry.update(REGISTRY)
+    pup = Pooch(path=DATA_DIR, base_url=BASEURL, registry=registry)
+    assert not pup.is_available("not-a-real-data-file.txt")
