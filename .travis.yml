@@ -44,10 +44,6 @@ matrix:
               - PYTHON=3.6
               - DEPLOY_DOCS=true
               - DEPLOY_PYPI=true
-        - name: "Linux - Python 3.5"
-          os: linux
-          env:
-              - PYTHON=3.5
         - name: "Linux - Python 2.7"
           os: linux
           env:
