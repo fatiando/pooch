@@ -3,20 +3,20 @@ Pooch
 
     A friend to fetch your sample data files.
 
-`Documentation <http://www.fatiando.org/pooch>`__ |
-`Documentation (dev version) <http://www.fatiando.org/pooch/dev>`__ |
+`Documentation <https://www.fatiando.org/pooch>`__ |
+`Documentation (dev version) <https://www.fatiando.org/pooch/dev>`__ |
 `Contact <https://gitter.im/fatiando/fatiando>`__ |
 Part of the `Fatiando a Terra <https://www.fatiando.org>`__ project
 
 🚨 **Python 2.7 will only be supported until the Fall of 2019.** 🚨
 
-.. image:: http://img.shields.io/pypi/v/pooch.svg?style=flat-square
+.. image:: https://img.shields.io/pypi/v/pooch.svg?style=flat-square
     :alt: Latest version on PyPI
     :target: https://pypi.python.org/pypi/pooch
-.. image:: http://img.shields.io/travis/fatiando/pooch/master.svg?style=flat-square&label=TravisCI
+.. image:: https://img.shields.io/travis/fatiando/pooch/master.svg?style=flat-square&label=TravisCI
     :alt: TravisCI build status
     :target: https://travis-ci.org/fatiando/pooch
-.. image:: http://img.shields.io/appveyor/ci/fatiando/pooch/master.svg?style=flat-square&label=AppVeyor
+.. image:: https://img.shields.io/appveyor/ci/fatiando/pooch/master.svg?style=flat-square&label=AppVeyor
     :alt: AppVeyor build status
     :target: https://ci.appveyor.com/project/fatiando/pooch
 .. image:: https://img.shields.io/azure-devops/build/fatiando/cb775164-4881-4854-81fd-7eaa170192e0/6/master.svg?label=Azure&style=flat-square
@@ -186,11 +186,11 @@ of the **BSD 3-clause License**. A copy of this license is provided in
 Documentation for other versions
 --------------------------------
 
-* `Development <http://www.fatiando.org/pooch/dev>`__ (reflects the *master* branch on
+* `Development <https://www.fatiando.org/pooch/dev>`__ (reflects the *master* branch on
   Github)
-* `Latest release <http://www.fatiando.org/pooch/latest>`__
-* `v0.3.0 <http://www.fatiando.org/pooch/v0.3.0>`__
-* `v0.2.1 <http://www.fatiando.org/pooch/v0.2.1>`__
-* `v0.2.0 <http://www.fatiando.org/pooch/v0.2.0>`__
-* `v0.1.1 <http://www.fatiando.org/pooch/v0.1.1>`__
-* `v0.1 <http://www.fatiando.org/pooch/v0.1>`__
+* `Latest release <https://www.fatiando.org/pooch/latest>`__
+* `v0.3.0 <https://www.fatiando.org/pooch/v0.3.0>`__
+* `v0.2.1 <https://www.fatiando.org/pooch/v0.2.1>`__
+* `v0.2.0 <https://www.fatiando.org/pooch/v0.2.0>`__
+* `v0.1.1 <https://www.fatiando.org/pooch/v0.1.1>`__
+* `v0.1   <https://www.fatiando.org/pooch/v0.1>`__
