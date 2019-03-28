@@ -17,5 +17,6 @@ API Reference
     Pooch
     Pooch.fetch
     Pooch.is_available
+    Pooch.get_url
     Pooch.load_registry
     test

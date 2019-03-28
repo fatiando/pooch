@@ -263,7 +263,7 @@ class Pooch:
         if action in ("Updating", "Downloading"):
             warn(
                 "{} data file '{}' from remote data store '{}' to '{}'.".format(
-                    action, fname, self.base_url, str(self.path)
+                    action, fname, self.get_url(fname), str(self.path)
                 )
             )
             self._download_file(fname)
@@ -276,11 +276,9 @@ class Pooch:
         if fname not in self.registry:
             raise ValueError("File '{}' is not in the registry.".format(fname))
 
-    def _get_url(self, fname):
+    def get_url(self, fname):
         """
-        Compute the full URL to a file.
-
-        Provided for easy override in subclasses.
+        Get the full URL to download a file in the registry.
 
         Parameters
         ----------
@@ -289,6 +287,7 @@ class Pooch:
             fetch from the local storage.
 
         """
+        self._assert_file_in_registry(fname)
         return self.urls.get(fname, "".join([self.base_url, fname]))
 
     def _download_file(self, fname):
@@ -310,7 +309,7 @@ class Pooch:
 
         """
         destination = self.abspath / fname
-        source = self._get_url(fname)
+        source = self.get_url(fname)
         # Stream the file to a temporary so that we can safely check its hash before
         # overwriting the original
         fout = tempfile.NamedTemporaryFile(delete=False, dir=str(self.abspath))
@@ -390,6 +389,6 @@ class Pooch:
 
         """
         self._assert_file_in_registry(fname)
-        source = self._get_url(fname)
+        source = self.get_url(fname)
         response = requests.head(source, allow_redirects=True)
         return bool(response.status_code == 200)
