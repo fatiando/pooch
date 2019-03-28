@@ -3,6 +3,36 @@
 Changelog
 =========
 
+Version 0.3.0
+-------------
+
+*Released on: 2019/03/27*
+
+New features:
+
+* Use the ``appdirs`` library to get the cache directory. **Could change the default
+  data location on all platforms**. Locations are compatible with the
+  `XDG Base Directory Specification <https://specifications.freedesktop.org/basedir-spec/basedir-spec-latest.html>`__
+  (`#45 <https://github.com/fatiando/pooch/pull/45>`__)
+* Add method ``Pooch.is_available`` to check remote file availability
+  (`#50 <https://github.com/fatiando/pooch/pull/50>`__)
+* Add ``Pooch.registry_files`` property to get a name of all files in the registry
+  (`#42 <https://github.com/fatiando/pooch/pull/42>`__)
+* Make ``Pooch.get_url`` a public method to get the download URL for a given file
+  (`#55 <https://github.com/fatiando/pooch/pull/55>`__)
+
+Maintenance:
+
+* **Drop support for Python 3.5**. Pooch now requires Python >= 3.6.
+  (`#52 <https://github.com/fatiando/pooch/pull/52>`__)
+* Add a private method to check if a file is in the registry (`#49 <https://github.com/fatiando/pooch/pull/49>`__)
+* Fix typo in the ``Pooch.load_registry`` docstring (`#41 <https://github.com/fatiando/pooch/pull/41>`__)
+
+This release contains contributions from:
+
+* Santiago Soler
+* Rémi Rampin
+* Leonardo Uieda
 
 Version 0.2.1
 -------------
