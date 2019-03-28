@@ -10,7 +10,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
     
-    <title>pooch.create &mdash; Pooch v0.2.1</title>
+    <title>pooch.create &mdash; Pooch dev</title>
     
 
 
@@ -22,13 +22,20 @@
   
 
   
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
 
-  
-  
     
 
   
-
   <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
   <link rel="stylesheet" href="../../_static/style.css" type="text/css" />
@@ -39,21 +46,16 @@
     
     <script src="../../_static/require.js"></script>
 
-
-  
-  <script src="../../_static/js/modernizr.min.js"></script>
-
 </head>
 
 <body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
-
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
+        <div class="wy-side-nav-search" >
           
 
           
@@ -67,7 +69,7 @@
             
             
               <div class="version">
-                v0.2.1
+                dev
               </div>
             
           
@@ -103,6 +105,8 @@
 <li class="toctree-l2"><a class="reference internal" href="pooch.make_registry.html">pooch.make_registry</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pooch.Pooch.html">pooch.Pooch</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pooch.Pooch.fetch.html">pooch.Pooch.fetch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pooch.Pooch.is_available.html">pooch.Pooch.is_available</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pooch.Pooch.get_url.html">pooch.Pooch.get_url</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pooch.Pooch.load_registry.html">pooch.Pooch.load_registry</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pooch.test.html">pooch.test</a></li>
 </ul>
@@ -285,6 +289,8 @@ the file names as keys and the custom URLs as values. Not all files in
 <span class="go">http://some.link.com/v0.1/</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">pup</span><span class="o">.</span><span class="n">registry</span><span class="p">)</span>
 <span class="go">{&#39;data.txt&#39;: &#39;9081wo2eb2gc0u...&#39;}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">pup</span><span class="o">.</span><span class="n">registry_files</span><span class="p">)</span>
+<span class="go">[&#39;data.txt&#39;]</span>
 </pre></div>
 </div>
 <p>If this is a development version (12 commits ahead of v0.1), then the
@@ -351,7 +357,7 @@ path for you using the appropriate separator for your operating system:</p>
         <a href="pooch.os_cache.html" class="btn btn-neutral float-right" title="pooch.os_cache" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="../index.html" class="btn btn-neutral" title="API Reference" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="../index.html" class="btn btn-neutral float-left" title="API Reference" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -360,8 +366,10 @@ path for you using the appropriate separator for your operating system:</p>
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2018-2018, The Pooch Developers
-      Last updated on Nov 15, 2018.
+        &copy; Copyright 2018-2019, The Pooch Developers
+      <span class="lastupdated">
+        Last updated on Mar 28, 2019.
+      </span>
 
     </p>
   </div>
@@ -378,25 +386,16 @@ path for you using the appropriate separator for your operating system:</p>
   
 
 
-  
-
-    
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
-        <script type="text/javascript" src="../../_static/jquery.js"></script>
-        <script type="text/javascript" src="../../_static/underscore.js"></script>
-        <script type="text/javascript" src="../../_static/doctools.js"></script>
-    
-
-  
-
-  <script type="text/javascript" src="../../_static/js/theme.js"></script>
-
   <script type="text/javascript">
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script> 
+  </script>
+
+  
+  
+    
+   
 
 </body>
 </html>

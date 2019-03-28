@@ -10,7 +10,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
     
-    <title>pooch.Pooch.fetch &mdash; Pooch dev</title>
+    <title>pooch.Pooch.is_available &mdash; Pooch dev</title>
     
 
 
@@ -41,8 +41,8 @@
   <link rel="stylesheet" href="../../_static/style.css" type="text/css" />
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="pooch.Pooch.is_available" href="pooch.Pooch.is_available.html" />
-    <link rel="prev" title="pooch.Pooch" href="pooch.Pooch.html" />
+    <link rel="next" title="pooch.Pooch.get_url" href="pooch.Pooch.get_url.html" />
+    <link rel="prev" title="pooch.Pooch.fetch" href="pooch.Pooch.fetch.html" />
     
     <script src="../../_static/require.js"></script>
 
@@ -104,8 +104,8 @@
 <li class="toctree-l2"><a class="reference internal" href="pooch.file_hash.html">pooch.file_hash</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pooch.make_registry.html">pooch.make_registry</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pooch.Pooch.html">pooch.Pooch</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">pooch.Pooch.fetch</a></li>
-<li class="toctree-l2"><a class="reference internal" href="pooch.Pooch.is_available.html">pooch.Pooch.is_available</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pooch.Pooch.fetch.html">pooch.Pooch.fetch</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">pooch.Pooch.is_available</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pooch.Pooch.get_url.html">pooch.Pooch.get_url</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pooch.Pooch.load_registry.html">pooch.Pooch.load_registry</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pooch.test.html">pooch.test</a></li>
@@ -184,7 +184,7 @@
         
           <li><a href="../index.html">API Reference</a> &raquo;</li>
         
-      <li>pooch.Pooch.fetch</li>
+      <li>pooch.Pooch.is_available</li>
     
     
     <li class="source-link">
@@ -192,7 +192,7 @@
             
                 
                 
-                <a href="https://github.com/fatiando/pooch/issues/new?title=Suggested%20improvement%20for%20api/generated/pooch.Pooch.fetch&body=Please%20describe%20what%20could%20be%20improved%20about%20this%20page%20or%20the%20typo/mistake%20that%20you%20found%3A"
+                <a href="https://github.com/fatiando/pooch/issues/new?title=Suggested%20improvement%20for%20api/generated/pooch.Pooch.is_available&body=Please%20describe%20what%20could%20be%20improved%20about%20this%20page%20or%20the%20typo/mistake%20that%20you%20found%3A"
                    class="fa fa-github"> Improve this page</a>
             
         
@@ -207,17 +207,14 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="pooch-pooch-fetch">
-<h1>pooch.Pooch.fetch<a class="headerlink" href="#pooch-pooch-fetch" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="pooch-pooch-is-available">
+<h1>pooch.Pooch.is_available<a class="headerlink" href="#pooch-pooch-is-available" title="Permalink to this headline">¶</a></h1>
 <dl class="method">
-<dt id="pooch.Pooch.fetch">
-<code class="descclassname">Pooch.</code><code class="descname">fetch</code><span class="sig-paren">(</span><em>fname</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pooch/core.html#Pooch.fetch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pooch.Pooch.fetch" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the absolute path to a file in the local storage.</p>
-<p>If it’s not in the local storage, it will be downloaded. If the hash of the file
-in local storage doesn’t match the one in the registry, will download a new copy
-of the file. This is considered a sign that the file was updated in the remote
-storage. If the hash of the downloaded file still doesn’t match the one in the
-registry, will raise an exception to warn of possible file corruption.</p>
+<dt id="pooch.Pooch.is_available">
+<code class="descclassname">Pooch.</code><code class="descname">is_available</code><span class="sig-paren">(</span><em>fname</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pooch/core.html#Pooch.is_available"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pooch.Pooch.is_available" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check availability of a remote file without downloading it.</p>
+<p>Use this method when working with large files to check if they are available for
+download.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -231,9 +228,8 @@ fetch from the local storage.</p>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
-<dt><strong>full_path</strong> <span class="classifier-delimiter">:</span> <span class="classifier">str</span></dt>
-<dd><p class="first last">The absolute path (including the file name) of the file in the local
-storage.</p>
+<dt><strong>status</strong> <span class="classifier-delimiter">:</span> <span class="classifier">bool</span></dt>
+<dd><p class="first last">True if the file is available for download. False otherwise.</p>
 </dd>
 </dl>
 </td>
@@ -252,10 +248,10 @@ storage.</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="pooch.Pooch.is_available.html" class="btn btn-neutral float-right" title="pooch.Pooch.is_available" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="pooch.Pooch.get_url.html" class="btn btn-neutral float-right" title="pooch.Pooch.get_url" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="pooch.Pooch.html" class="btn btn-neutral float-left" title="pooch.Pooch" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="pooch.Pooch.fetch.html" class="btn btn-neutral float-left" title="pooch.Pooch.fetch" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

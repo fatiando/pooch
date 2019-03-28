@@ -10,7 +10,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
     
-    <title>Changelog &mdash; Pooch v0.2.1</title>
+    <title>Changelog &mdash; Pooch dev</title>
     
 
 
@@ -22,13 +22,20 @@
   
 
   
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
 
-  
-  
     
 
   
-
   <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
   <link rel="stylesheet" href="_static/style.css" type="text/css" />
@@ -38,21 +45,16 @@
     
     <script src="_static/require.js"></script>
 
-
-  
-  <script src="_static/js/modernizr.min.js"></script>
-
 </head>
 
 <body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
-
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
+        <div class="wy-side-nav-search" >
           
 
           
@@ -66,7 +68,7 @@
             
             
               <div class="version">
-                v0.2.1
+                dev
               </div>
             
           
@@ -97,6 +99,7 @@
 <li class="toctree-l1"><a class="reference internal" href="usage.html">Training your Pooch</a></li>
 <li class="toctree-l1"><a class="reference internal" href="api/index.html">API Reference</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Changelog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#version-0-3-0">Version 0.3.0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#version-0-2-1">Version 0.2.1</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#version-0-2-0">Version 0.2.0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#version-0-1-1">Version 0.1.1</a></li>
@@ -196,6 +199,36 @@
             
   <div class="section" id="changelog">
 <span id="changes"></span><h1>Changelog<a class="headerlink" href="#changelog" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="version-0-3-0">
+<h2>Version 0.3.0<a class="headerlink" href="#version-0-3-0" title="Permalink to this headline">¶</a></h2>
+<p><em>Released on: 2019/03/27</em></p>
+<p>New features:</p>
+<ul class="simple">
+<li>Use the <code class="docutils literal notranslate"><span class="pre">appdirs</span></code> library to get the cache directory. <strong>Could change the default
+data location on all platforms</strong>. Locations are compatible with the
+<a class="reference external" href="https://specifications.freedesktop.org/basedir-spec/basedir-spec-latest.html">XDG Base Directory Specification</a>
+(<a class="reference external" href="https://github.com/fatiando/pooch/pull/45">#45</a>)</li>
+<li>Add method <code class="docutils literal notranslate"><span class="pre">Pooch.is_available</span></code> to check remote file availability
+(<a class="reference external" href="https://github.com/fatiando/pooch/pull/50">#50</a>)</li>
+<li>Add <code class="docutils literal notranslate"><span class="pre">Pooch.registry_files</span></code> property to get a name of all files in the registry
+(<a class="reference external" href="https://github.com/fatiando/pooch/pull/42">#42</a>)</li>
+<li>Make <code class="docutils literal notranslate"><span class="pre">Pooch.get_url</span></code> a public method to get the download URL for a given file
+(<a class="reference external" href="https://github.com/fatiando/pooch/pull/55">#55</a>)</li>
+</ul>
+<p>Maintenance:</p>
+<ul class="simple">
+<li><strong>Drop support for Python 3.5</strong>. Pooch now requires Python &gt;= 3.6.
+(<a class="reference external" href="https://github.com/fatiando/pooch/pull/52">#52</a>)</li>
+<li>Add a private method to check if a file is in the registry (<a class="reference external" href="https://github.com/fatiando/pooch/pull/49">#49</a>)</li>
+<li>Fix typo in the <code class="docutils literal notranslate"><span class="pre">Pooch.load_registry</span></code> docstring (<a class="reference external" href="https://github.com/fatiando/pooch/pull/41">#41</a>)</li>
+</ul>
+<p>This release contains contributions from:</p>
+<ul class="simple">
+<li>Santiago Soler</li>
+<li>Rémi Rampin</li>
+<li>Leonardo Uieda</li>
+</ul>
+</div>
 <div class="section" id="version-0-2-1">
 <h2>Version 0.2.1<a class="headerlink" href="#version-0-2-1" title="Permalink to this headline">¶</a></h2>
 <p><em>Released on: 2018/11/15</em></p>
@@ -260,7 +293,7 @@ data corruption.</li>
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
       
-        <a href="api/generated/pooch.test.html" class="btn btn-neutral" title="pooch.test" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="api/generated/pooch.test.html" class="btn btn-neutral float-left" title="pooch.test" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -269,8 +302,10 @@ data corruption.</li>
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2018-2018, The Pooch Developers
-      Last updated on Nov 15, 2018.
+        &copy; Copyright 2018-2019, The Pooch Developers
+      <span class="lastupdated">
+        Last updated on Mar 28, 2019.
+      </span>
 
     </p>
   </div>
@@ -287,25 +322,16 @@ data corruption.</li>
   
 
 
-  
-
-    
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-        <script type="text/javascript" src="_static/jquery.js"></script>
-        <script type="text/javascript" src="_static/underscore.js"></script>
-        <script type="text/javascript" src="_static/doctools.js"></script>
-    
-
-  
-
-  <script type="text/javascript" src="_static/js/theme.js"></script>
-
   <script type="text/javascript">
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script> 
+  </script>
+
+  
+  
+    
+   
 
 </body>
 </html>

@@ -10,7 +10,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
     
-    <title>pooch.Pooch.load_registry &mdash; Pooch v0.2.1</title>
+    <title>pooch.Pooch.load_registry &mdash; Pooch dev</title>
     
 
 
@@ -22,26 +22,29 @@
   
 
   
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
 
-  
-  
     
 
   
-
   <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
   <link rel="stylesheet" href="../../_static/style.css" type="text/css" />
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="pooch.test" href="pooch.test.html" />
-    <link rel="prev" title="pooch.Pooch.fetch" href="pooch.Pooch.fetch.html" />
+    <link rel="prev" title="pooch.Pooch.get_url" href="pooch.Pooch.get_url.html" />
     
     <script src="../../_static/require.js"></script>
-
-
-  
-  <script src="../../_static/js/modernizr.min.js"></script>
 
 </head>
 
@@ -49,11 +52,10 @@
 
    
   <div class="wy-grid-for-nav">
-
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
+        <div class="wy-side-nav-search" >
           
 
           
@@ -67,7 +69,7 @@
             
             
               <div class="version">
-                v0.2.1
+                dev
               </div>
             
           
@@ -103,6 +105,8 @@
 <li class="toctree-l2"><a class="reference internal" href="pooch.make_registry.html">pooch.make_registry</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pooch.Pooch.html">pooch.Pooch</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pooch.Pooch.fetch.html">pooch.Pooch.fetch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pooch.Pooch.is_available.html">pooch.Pooch.is_available</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pooch.Pooch.get_url.html">pooch.Pooch.get_url</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">pooch.Pooch.load_registry</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pooch.test.html">pooch.test</a></li>
 </ul>
@@ -208,7 +212,7 @@
 <dl class="method">
 <dt id="pooch.Pooch.load_registry">
 <code class="descclassname">Pooch.</code><code class="descname">load_registry</code><span class="sig-paren">(</span><em>fname</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pooch/core.html#Pooch.load_registry"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pooch.Pooch.load_registry" title="Permalink to this definition">¶</a></dt>
-<dd><p>Load entries form a file and add them to the registry.</p>
+<dd><p>Load entries from a file and add them to the registry.</p>
 <p>Use this if you are managing many files.</p>
 <p>Each line of the file should have file name and its SHA256 hash separate by a
 space. Only one file per line is allowed. Custom download URLs for individual
@@ -241,7 +245,7 @@ files can be specified as a third element on the line.</p>
         <a href="pooch.test.html" class="btn btn-neutral float-right" title="pooch.test" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="pooch.Pooch.fetch.html" class="btn btn-neutral" title="pooch.Pooch.fetch" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="pooch.Pooch.get_url.html" class="btn btn-neutral float-left" title="pooch.Pooch.get_url" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -250,8 +254,10 @@ files can be specified as a third element on the line.</p>
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2018-2018, The Pooch Developers
-      Last updated on Nov 15, 2018.
+        &copy; Copyright 2018-2019, The Pooch Developers
+      <span class="lastupdated">
+        Last updated on Mar 28, 2019.
+      </span>
 
     </p>
   </div>
@@ -268,25 +274,16 @@ files can be specified as a third element on the line.</p>
   
 
 
-  
-
-    
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
-        <script type="text/javascript" src="../../_static/jquery.js"></script>
-        <script type="text/javascript" src="../../_static/underscore.js"></script>
-        <script type="text/javascript" src="../../_static/doctools.js"></script>
-    
-
-  
-
-  <script type="text/javascript" src="../../_static/js/theme.js"></script>
-
   <script type="text/javascript">
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script> 
+  </script>
+
+  
+  
+    
+   
 
 </body>
 </html>

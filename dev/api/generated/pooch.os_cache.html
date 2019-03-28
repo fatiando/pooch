@@ -10,7 +10,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
     
-    <title>pooch.os_cache &mdash; Pooch v0.2.1</title>
+    <title>pooch.os_cache &mdash; Pooch dev</title>
     
 
 
@@ -22,13 +22,20 @@
   
 
   
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
 
-  
-  
     
 
   
-
   <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
   <link rel="stylesheet" href="../../_static/style.css" type="text/css" />
@@ -39,21 +46,16 @@
     
     <script src="../../_static/require.js"></script>
 
-
-  
-  <script src="../../_static/js/modernizr.min.js"></script>
-
 </head>
 
 <body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
-
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
+        <div class="wy-side-nav-search" >
           
 
           
@@ -67,7 +69,7 @@
             
             
               <div class="version">
-                v0.2.1
+                dev
               </div>
             
           
@@ -103,6 +105,8 @@
 <li class="toctree-l2"><a class="reference internal" href="pooch.make_registry.html">pooch.make_registry</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pooch.Pooch.html">pooch.Pooch</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pooch.Pooch.fetch.html">pooch.Pooch.fetch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pooch.Pooch.is_available.html">pooch.Pooch.is_available</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pooch.Pooch.get_url.html">pooch.Pooch.get_url</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pooch.Pooch.load_registry.html">pooch.Pooch.load_registry</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pooch.test.html">pooch.test</a></li>
 </ul>
@@ -207,9 +211,17 @@
 <h1>pooch.os_cache<a class="headerlink" href="#pooch-os-cache" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="pooch.os_cache">
-<code class="descclassname">pooch.</code><code class="descname">os_cache</code><span class="sig-paren">(</span><em>project</em>, <em>platform=None</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pooch/utils.html#os_cache"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pooch.os_cache" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">pooch.</code><code class="descname">os_cache</code><span class="sig-paren">(</span><em>project</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pooch/utils.html#os_cache"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pooch.os_cache" title="Permalink to this definition">¶</a></dt>
 <dd><p>Default cache location based on the operating system.</p>
-<p>Will insert the project name in the proper location of the path.</p>
+<p>The folder locations are defined by the <code class="docutils literal notranslate"><span class="pre">appdirs</span></code>  package.
+Usually, the locations will be following (see the
+<a class="reference external" href="https://github.com/ActiveState/appdirs">appdirs documentation</a>):</p>
+<ul class="simple">
+<li>Mac: <code class="docutils literal notranslate"><span class="pre">~/Library/Application</span> <span class="pre">Support/&lt;project&gt;</span></code></li>
+<li>Unix: <code class="docutils literal notranslate"><span class="pre">~/.local/share/&lt;project&gt;</span></code> or the value of the <code class="docutils literal notranslate"><span class="pre">XDG_DATA_HOME</span></code>
+environment variable, if defined.</li>
+<li>Windows: <code class="docutils literal notranslate"><span class="pre">C:\Users\&lt;user&gt;\AppData\Roaming\&lt;project&gt;\&lt;project&gt;</span></code></li>
+</ul>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -217,11 +229,6 @@
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first docutils">
 <dt><strong>project</strong> <span class="classifier-delimiter">:</span> <span class="classifier">str</span></dt>
 <dd><p class="first last">The project name.</p>
-</dd>
-<dt><strong>platform</strong> <span class="classifier-delimiter">:</span> <span class="classifier">str or None</span></dt>
-<dd><p class="first last">The name of operating system as returned by <code class="docutils literal notranslate"><span class="pre">sys.platform</span></code> (<code class="docutils literal notranslate"><span class="pre">'darwin'</span></code> for
-Mac, <code class="docutils literal notranslate"><span class="pre">'win32'</span></code> for Windows, and anything else will be treated as generic
-Linux/Unix. If None, will use the value of <code class="docutils literal notranslate"><span class="pre">sys.platform</span></code>.</p>
 </dd>
 </dl>
 </td>
@@ -236,15 +243,6 @@ expanded.</p>
 </tr>
 </tbody>
 </table>
-<p class="rubric">Examples</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">os</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;darwin&#39;</span><span class="p">,</span> <span class="s1">&#39;win32&#39;</span><span class="p">,</span> <span class="s1">&#39;anything else&#39;</span><span class="p">]:</span>
-<span class="gp">... </span>    <span class="n">path</span> <span class="o">=</span> <span class="n">os_cache</span><span class="p">(</span><span class="s2">&quot;myproject&quot;</span><span class="p">,</span> <span class="n">platform</span><span class="o">=</span><span class="n">os</span><span class="p">)</span>
-<span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="n">path</span><span class="o">.</span><span class="n">parts</span><span class="p">)</span>
-<span class="go">(&#39;~&#39;, &#39;Library&#39;, &#39;Caches&#39;, &#39;myproject&#39;)</span>
-<span class="go">(&#39;~&#39;, &#39;AppData&#39;, &#39;Local&#39;, &#39;myproject&#39;, &#39;cache&#39;)</span>
-<span class="go">(&#39;~&#39;, &#39;.cache&#39;, &#39;myproject&#39;)</span>
-</pre></div>
-</div>
 </dd></dl>
 
 <div style='clear:both'></div></div>
@@ -260,7 +258,7 @@ expanded.</p>
         <a href="pooch.file_hash.html" class="btn btn-neutral float-right" title="pooch.file_hash" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="pooch.create.html" class="btn btn-neutral" title="pooch.create" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="pooch.create.html" class="btn btn-neutral float-left" title="pooch.create" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -269,8 +267,10 @@ expanded.</p>
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2018-2018, The Pooch Developers
-      Last updated on Nov 15, 2018.
+        &copy; Copyright 2018-2019, The Pooch Developers
+      <span class="lastupdated">
+        Last updated on Mar 28, 2019.
+      </span>
 
     </p>
   </div>
@@ -287,25 +287,16 @@ expanded.</p>
   
 
 
-  
-
-    
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
-        <script type="text/javascript" src="../../_static/jquery.js"></script>
-        <script type="text/javascript" src="../../_static/underscore.js"></script>
-        <script type="text/javascript" src="../../_static/doctools.js"></script>
-    
-
-  
-
-  <script type="text/javascript" src="../../_static/js/theme.js"></script>
-
   <script type="text/javascript">
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script> 
+  </script>
+
+  
+  
+    
+   
 
 </body>
 </html>

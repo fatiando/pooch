@@ -10,7 +10,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
     
-    <title>pooch.core &mdash; Pooch v0.2.1</title>
+    <title>pooch.core &mdash; Pooch dev</title>
     
 
 
@@ -22,13 +22,20 @@
   
 
   
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
 
-  
-  
     
 
   
-
   <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
   <link rel="stylesheet" href="../../_static/style.css" type="text/css" />
@@ -37,21 +44,16 @@
     
     <script src="../../_static/require.js"></script>
 
-
-  
-  <script src="../../_static/js/modernizr.min.js"></script>
-
 </head>
 
 <body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
-
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
+        <div class="wy-side-nav-search" >
           
 
           
@@ -65,7 +67,7 @@
             
             
               <div class="version">
-                v0.2.1
+                dev
               </div>
             
           
@@ -284,6 +286,8 @@
 <span class="sd">    http://some.link.com/v0.1/</span>
 <span class="sd">    &gt;&gt;&gt; print(pup.registry)</span>
 <span class="sd">    {&#39;data.txt&#39;: &#39;9081wo2eb2gc0u...&#39;}</span>
+<span class="sd">    &gt;&gt;&gt; print(pup.registry_files)</span>
+<span class="sd">    [&#39;data.txt&#39;]</span>
 
 <span class="sd">    If this is a development version (12 commits ahead of v0.1), then the</span>
 <span class="sd">    ``version_dev`` will be used (defaults to ``&quot;master&quot;``):</span>
@@ -407,6 +411,11 @@
         <span class="s2">&quot;Absolute path to the local storage&quot;</span>
         <span class="k">return</span> <span class="n">Path</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="p">))))</span>
 
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">registry_files</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="s2">&quot;List of file names on the registry&quot;</span>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">registry</span><span class="p">)</span>
+
 <div class="viewcode-block" id="Pooch.fetch"><a class="viewcode-back" href="../../api/generated/pooch.Pooch.fetch.html#pooch.Pooch.fetch">[docs]</a>    <span class="k">def</span> <span class="nf">fetch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fname</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get the absolute path to a file in the local storage.</span>
@@ -430,8 +439,7 @@
 <span class="sd">            storage.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="n">fname</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">registry</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;File &#39;</span><span class="si">{}</span><span class="s2">&#39; is not in the registry.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">fname</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_assert_file_in_registry</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
         <span class="c1"># Create the local data directory if it doesn&#39;t already exist</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">abspath</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
             <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">abspath</span><span class="p">))</span>
@@ -446,17 +454,22 @@
         <span class="k">if</span> <span class="n">action</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;Updating&quot;</span><span class="p">,</span> <span class="s2">&quot;Downloading&quot;</span><span class="p">):</span>
             <span class="n">warn</span><span class="p">(</span>
                 <span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> data file &#39;</span><span class="si">{}</span><span class="s2">&#39; from remote data store &#39;</span><span class="si">{}</span><span class="s2">&#39; to &#39;</span><span class="si">{}</span><span class="s2">&#39;.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-                    <span class="n">action</span><span class="p">,</span> <span class="n">fname</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">base_url</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="p">)</span>
+                    <span class="n">action</span><span class="p">,</span> <span class="n">fname</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_url</span><span class="p">(</span><span class="n">fname</span><span class="p">),</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="p">)</span>
                 <span class="p">)</span>
             <span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_download_file</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
         <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">full_path</span><span class="p">)</span></div>
 
-    <span class="k">def</span> <span class="nf">_get_url</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fname</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_assert_file_in_registry</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fname</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Compute the full URL to a file.</span>
+<span class="sd">        Check if a file is in the registry and raise :class:`ValueError` if it&#39;s not.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">fname</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">registry</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;File &#39;</span><span class="si">{}</span><span class="s2">&#39; is not in the registry.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">fname</span><span class="p">))</span>
 
-<span class="sd">        Provided for easy override in subclasses.</span>
+<div class="viewcode-block" id="Pooch.get_url"><a class="viewcode-back" href="../../api/generated/pooch.Pooch.get_url.html#pooch.Pooch.get_url">[docs]</a>    <span class="k">def</span> <span class="nf">get_url</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fname</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the full URL to download a file in the registry.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -465,7 +478,8 @@
 <span class="sd">            fetch from the local storage.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">urls</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">base_url</span><span class="p">,</span> <span class="n">fname</span><span class="p">]))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_assert_file_in_registry</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">urls</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">base_url</span><span class="p">,</span> <span class="n">fname</span><span class="p">]))</span></div>
 
     <span class="k">def</span> <span class="nf">_download_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fname</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -486,7 +500,7 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">destination</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">abspath</span> <span class="o">/</span> <span class="n">fname</span>
-        <span class="n">source</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_url</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
+        <span class="n">source</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_url</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
         <span class="c1"># Stream the file to a temporary so that we can safely check its hash before</span>
         <span class="c1"># overwriting the original</span>
         <span class="n">fout</span> <span class="o">=</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">NamedTemporaryFile</span><span class="p">(</span><span class="n">delete</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="nb">dir</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">abspath</span><span class="p">))</span>
@@ -510,13 +524,13 @@
             <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">destination</span><span class="o">.</span><span class="n">parent</span><span class="p">)):</span>
                 <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">destination</span><span class="o">.</span><span class="n">parent</span><span class="p">))</span>
             <span class="n">shutil</span><span class="o">.</span><span class="n">move</span><span class="p">(</span><span class="n">fout</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">destination</span><span class="p">))</span>
-        <span class="k">except</span><span class="p">:</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
             <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">fout</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
             <span class="k">raise</span>
 
 <div class="viewcode-block" id="Pooch.load_registry"><a class="viewcode-back" href="../../api/generated/pooch.Pooch.load_registry.html#pooch.Pooch.load_registry">[docs]</a>    <span class="k">def</span> <span class="nf">load_registry</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fname</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Load entries form a file and add them to the registry.</span>
+<span class="sd">        Load entries from a file and add them to the registry.</span>
 
 <span class="sd">        Use this if you are managing many files.</span>
 
@@ -544,7 +558,31 @@
                 <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">elements</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
                     <span class="n">file_url</span> <span class="o">=</span> <span class="n">elements</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">urls</span><span class="p">[</span><span class="n">file_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">file_url</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">registry</span><span class="p">[</span><span class="n">file_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">file_sha256</span></div></div>
+                <span class="bp">self</span><span class="o">.</span><span class="n">registry</span><span class="p">[</span><span class="n">file_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">file_sha256</span></div>
+
+<div class="viewcode-block" id="Pooch.is_available"><a class="viewcode-back" href="../../api/generated/pooch.Pooch.is_available.html#pooch.Pooch.is_available">[docs]</a>    <span class="k">def</span> <span class="nf">is_available</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fname</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Check availability of a remote file without downloading it.</span>
+
+<span class="sd">        Use this method when working with large files to check if they are available for</span>
+<span class="sd">        download.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        fname : str</span>
+<span class="sd">            The file name (relative to the *base_url* of the remote data storage) to</span>
+<span class="sd">            fetch from the local storage.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        status : bool</span>
+<span class="sd">            True if the file is available for download. False otherwise.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_assert_file_in_registry</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
+        <span class="n">source</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_url</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">allow_redirects</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">bool</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">200</span><span class="p">)</span></div></div>
 </pre></div>
 
            </div>
@@ -557,8 +595,10 @@
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2018-2018, The Pooch Developers
-      Last updated on Nov 15, 2018.
+        &copy; Copyright 2018-2019, The Pooch Developers
+      <span class="lastupdated">
+        Last updated on Mar 28, 2019.
+      </span>
 
     </p>
   </div>
@@ -575,25 +615,16 @@
   
 
 
-  
-
-    
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
-        <script type="text/javascript" src="../../_static/jquery.js"></script>
-        <script type="text/javascript" src="../../_static/underscore.js"></script>
-        <script type="text/javascript" src="../../_static/doctools.js"></script>
-    
-
-  
-
-  <script type="text/javascript" src="../../_static/js/theme.js"></script>
-
   <script type="text/javascript">
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script> 
+  </script>
+
+  
+  
+    
+   
 
 </body>
 </html>
