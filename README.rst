@@ -1,14 +1,10 @@
-Pooch
-=====
-
-    A friend to fetch your sample data files.
+.. image:: https://github.com/fatiando/pooch/raw/master/doc/_static/readme-banner.png
+    :alt: Pooch
 
 `Documentation <https://www.fatiando.org/pooch>`__ |
 `Documentation (dev version) <https://www.fatiando.org/pooch/dev>`__ |
 `Contact <https://gitter.im/fatiando/fatiando>`__ |
 Part of the `Fatiando a Terra <https://www.fatiando.org>`__ project
-
-🚨 **Python 2.7 will only be supported until the Fall of 2019.** 🚨
 
 .. image:: https://img.shields.io/pypi/v/pooch.svg?style=flat-square
     :alt: Latest version on PyPI
@@ -32,6 +28,11 @@ Part of the `Fatiando a Terra <https://www.fatiando.org>`__ project
     :alt: Chat room on Gitter
     :target: https://gitter.im/fatiando/fatiando
 
+
+.. placeholder-for-doc-index
+
+
+🚨🚨 **Python 2.7 will only be supported until the Fall of 2019.** 🚨🚨
 
 
 TL;DR
