@@ -3,6 +3,17 @@
 Changelog
 =========
 
+Version 0.3.1
+-------------
+
+*Released on: 2019/03/28*
+
+Minor patches:
+
+* Add a project logo (`#57 <https://github.com/fatiando/pooch/pull/57>`__)
+* Replace ``http`` with ``https`` in the ``README.rst`` to avoid mixed content warnings
+  in some browsers (`#56 <https://github.com/fatiando/pooch/pull/56>`__)
+
 Version 0.3.0
 -------------
 
