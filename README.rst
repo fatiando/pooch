@@ -1,4 +1,4 @@
-.. image:: doc/_static/readme-banner.png
+.. image:: https://github.com/fatiando/pooch/raw/master/doc/_static/readme-banner.png
     :alt: Pooch
 
 `Documentation <https://www.fatiando.org/pooch>`__ |
