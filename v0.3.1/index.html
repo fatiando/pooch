@@ -1,0 +1,401 @@
+
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+    
+        <title>Pooch v0.3.1</title>
+    
+
+
+  
+  
+    <link rel="shortcut icon" href="_static/favicon.png"/>
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/style.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Installing" href="install.html" />
+    
+    <script src="_static/require.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="#">
+          
+
+          
+            
+            <img src="_static/pooch-logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                v0.3.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+    
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usage.html">Training your Pooch</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/index.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changes.html">Changelog</a></li>
+</ul>
+
+            
+          
+
+    
+        <p class="caption">
+            <span class="caption-text">
+            
+                Getting help and contributing
+            
+            </span>
+        </p>
+        <ul>
+            
+                <li class="toctree-l1"><a href="https://www.fatiando.org"><i class="fa fa-external-link-square fa-fw"></i> Fatiando a Terra</a></li>
+            
+                <li class="toctree-l1"><a href="https://github.com/fatiando/pooch/blob/master/CONTRIBUTING.md"><i class="fa fa-users fa-fw"></i> Contributing</a></li>
+            
+                <li class="toctree-l1"><a href="https://github.com/fatiando/pooch/blob/master/CODE_OF_CONDUCT.md"><i class="fa fa-gavel fa-fw"></i> Code of Conduct</a></li>
+            
+                <li class="toctree-l1"><a href="https://gitter.im/fatiando/fatiando"><i class="fa fa-comment fa-fw"></i> Contact</a></li>
+            
+                <li class="toctree-l1"><a href="https://github.com/fatiando/pooch"><i class="fa fa-github fa-fw"></i> Source Code</a></li>
+            
+        </ul>
+    
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="#">Pooch</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="#">Docs</a> &raquo;</li>
+        
+      <li>Home</li>
+    
+    
+    <li class="source-link">
+        
+            
+                <a href="https://github.com/fatiando/pooch/edit/master/doc/index.rst"
+                   class="fa fa-github"> Improve this page</a>
+            
+        
+        
+    </li>
+
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="banner">
+    <img src="_static/banner.svg" alt="Pooch">
+    <h2>A friend to fetch you sample data files</h2>
+    <p>A part of the <a href="https://www.fatiando.org/">Fatiando a Terra</a> project.</p>
+</div><p>🚨🚨 <strong>Python 2.7 will only be supported until the Fall of 2019.</strong> 🚨🚨</p>
+<div class="section" id="tl-dr">
+<h1>TL;DR<a class="headerlink" href="#tl-dr" title="Permalink to this headline">¶</a></h1>
+<div class="code python highlight-default notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Module mypackage/datasets.py</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">pooch</span>
+
+<span class="c1"># Get the version string from your project. You have one of these, right?</span>
+<span class="kn">from</span> <span class="nn">.</span> <span class="k">import</span> <span class="n">version</span>
+
+
+<span class="c1"># Create a new friend to manage your sample data storage</span>
+<span class="n">GOODBOY</span> <span class="o">=</span> <span class="n">pooch</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+    <span class="c1"># Folder where the data will be stored. For a sensible default, use the default</span>
+    <span class="c1"># cache folder for your OS.</span>
+    <span class="n">path</span><span class="o">=</span><span class="n">pooch</span><span class="o">.</span><span class="n">os_cache</span><span class="p">(</span><span class="s2">&quot;mypackage&quot;</span><span class="p">),</span>
+    <span class="c1"># Base URL of the remote data store. Will call .format on this string to insert</span>
+    <span class="c1"># the version (see below).</span>
+    <span class="n">base_url</span><span class="o">=</span><span class="s2">&quot;https://github.com/myproject/mypackage/raw/</span><span class="si">{version}</span><span class="s2">/data/&quot;</span><span class="p">,</span>
+    <span class="c1"># Pooches are versioned so that you can use multiple versions of a package</span>
+    <span class="c1"># simultaneously. Use PEP440 compliant version number. The version will be</span>
+    <span class="c1"># appended to the path.</span>
+    <span class="n">version</span><span class="o">=</span><span class="n">version</span><span class="p">,</span>
+    <span class="c1"># If a version as a &quot;+XX.XXXXX&quot; suffix, we&#39;ll assume that this is a dev version</span>
+    <span class="c1"># and replace the version with this string.</span>
+    <span class="n">version_dev</span><span class="o">=</span><span class="s2">&quot;master&quot;</span><span class="p">,</span>
+    <span class="c1"># An environment variable that overwrites the path.</span>
+    <span class="n">env</span><span class="o">=</span><span class="s2">&quot;MYPACKAGE_DATA_DIR&quot;</span><span class="p">,</span>
+    <span class="c1"># The cache file registry. A dictionary with all files managed by this pooch.</span>
+    <span class="c1"># Keys are the file names (relative to *base_url*) and values are their</span>
+    <span class="c1"># respective SHA256 hashes. Files will be downloaded automatically when needed</span>
+    <span class="c1"># (see fetch_gravity_data).</span>
+    <span class="n">registry</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;gravity-data.csv&quot;</span><span class="p">:</span> <span class="s2">&quot;89y10phsdwhs09whljwc09whcowsdhcwodcy0dcuhw&quot;</span><span class="p">}</span>
+<span class="p">)</span>
+<span class="c1"># You can also load the registry from a file. Each line contains a file name and</span>
+<span class="c1"># it&#39;s sha256 hash separated by a space. This makes it easier to manage large</span>
+<span class="c1"># numbers of data files. The registry file should be in the same directory as this</span>
+<span class="c1"># module.</span>
+<span class="n">GOODBOY</span><span class="o">.</span><span class="n">load_registry</span><span class="p">(</span><span class="s2">&quot;registry.txt&quot;</span><span class="p">)</span>
+
+
+<span class="c1"># Define functions that your users can call to get back some sample data in memory</span>
+<span class="k">def</span> <span class="nf">fetch_gravity_data</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Load some sample gravity data to use in your docs.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Fetch the path to a file in the local storae. If it&#39;s not there, we&#39;ll</span>
+    <span class="c1"># download it.</span>
+    <span class="n">fname</span> <span class="o">=</span> <span class="n">GOODBOY</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="s2">&quot;gravity-data.csv&quot;</span><span class="p">)</span>
+    <span class="c1"># Load it with numpy/pandas/etc</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="o">...</span>
+    <span class="k">return</span> <span class="n">data</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="about">
+<h1>About<a class="headerlink" href="#about" title="Permalink to this headline">¶</a></h1>
+<p><em>Does your Python package include sample datasets? Are you shipping them with the code?
+Are they getting too big?</em></p>
+<p>Pooch will manage downloading your sample data files over HTTP from a server and storing
+them in a local directory:</p>
+<ul class="simple">
+<li>Download a file only if it’s not in the local storage.</li>
+<li>Check the SHA256 hash to make sure the file is not corrupted or needs updating.</li>
+<li>If the hash is different from the registry, Pooch will download a new version of the
+file.</li>
+<li>If the hash still doesn’t match, Pooch will raise an exception warning of possible
+data corruption.</li>
+</ul>
+</div>
+<div class="section" id="projects-using-pooch">
+<h1>Projects using Pooch<a class="headerlink" href="#projects-using-pooch" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><a class="reference external" href="https://github.com/Unidata/MetPy">MetPy</a></li>
+<li><a class="reference external" href="https://github.com/fatiando/verde">Verde</a></li>
+<li><a class="reference external" href="https://github.com/fatiando/harmonica">Harmonica</a></li>
+<li><a class="reference external" href="https://github.com/fatiando/rockhound">RockHound</a></li>
+</ul>
+<p><em>If you’re using Pooch, send us a pull request adding your project to the list.</em></p>
+</div>
+<div class="section" id="contacting-us">
+<h1>Contacting Us<a class="headerlink" href="#contacting-us" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li>Most discussion happens <a class="reference external" href="https://github.com/fatiando/pooch">on Github</a>.
+Feel free to <a class="reference external" href="https://github.com/fatiando/pooch/issues/new">open an issue</a> or comment
+on any open issue or pull request.</li>
+<li>We have <a class="reference external" href="https://gitter.im/fatiando/fatiando">chat room on Gitter</a> where you can
+ask questions and leave comments.</li>
+</ul>
+</div>
+<div class="section" id="contributing">
+<h1>Contributing<a class="headerlink" href="#contributing" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="code-of-conduct">
+<h2>Code of conduct<a class="headerlink" href="#code-of-conduct" title="Permalink to this headline">¶</a></h2>
+<p>Please note that this project is released with a
+<a class="reference external" href="https://github.com/fatiando/pooch/blob/master/CODE_OF_CONDUCT.md">Contributor Code of Conduct</a>.
+By participating in this project you agree to abide by its terms.</p>
+</div>
+<div class="section" id="contributing-guidelines">
+<h2>Contributing Guidelines<a class="headerlink" href="#contributing-guidelines" title="Permalink to this headline">¶</a></h2>
+<p>Please read our
+<a class="reference external" href="https://github.com/fatiando/pooch/blob/master/CONTRIBUTING.md">Contributing Guide</a>
+to see how you can help and give feedback.</p>
+</div>
+<div class="section" id="imposter-syndrome-disclaimer">
+<h2>Imposter syndrome disclaimer<a class="headerlink" href="#imposter-syndrome-disclaimer" title="Permalink to this headline">¶</a></h2>
+<p><strong>We want your help.</strong> No, really.</p>
+<p>There may be a little voice inside your head that is telling you that you’re
+not ready to be an open source contributor; that your skills aren’t nearly good
+enough to contribute.
+What could you possibly offer?</p>
+<p>We assure you that the little voice in your head is wrong.</p>
+<p><strong>Being a contributor doesn’t just mean writing code</strong>.
+Equality important contributions include:
+writing or proof-reading documentation, suggesting or implementing tests, or
+even giving feedback about the project (including giving feedback about the
+contribution process).
+If you’re coming to the project with fresh eyes, you might see the errors and
+assumptions that seasoned contributors have glossed over.
+If you can write any code at all, you can contribute code to open source.
+We are constantly trying out new skills, making mistakes, and learning from
+those mistakes.
+That’s how we all improve and we are happy to help others learn.</p>
+<p><em>This disclaimer was adapted from the</em>
+<a class="reference external" href="https://github.com/Unidata/MetPy">MetPy project</a>.</p>
+</div>
+</div>
+<div class="section" id="license">
+<h1>License<a class="headerlink" href="#license" title="Permalink to this headline">¶</a></h1>
+<p>This is free software: you can redistribute it and/or modify it under the terms
+of the <strong>BSD 3-clause License</strong>. A copy of this license is provided in
+<a class="reference external" href="https://github.com/fatiando/pooch/blob/master/LICENSE.txt">LICENSE.txt</a>.</p>
+</div>
+<div class="section" id="documentation-for-other-versions">
+<h1>Documentation for other versions<a class="headerlink" href="#documentation-for-other-versions" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><a class="reference external" href="https://www.fatiando.org/pooch/dev">Development</a> (reflects the <em>master</em> branch on
+Github)</li>
+<li><a class="reference external" href="https://www.fatiando.org/pooch/latest">Latest release</a></li>
+<li><a class="reference external" href="https://www.fatiando.org/pooch/v0.3.1">v0.3.1</a></li>
+<li><a class="reference external" href="https://www.fatiando.org/pooch/v0.3.0">v0.3.0</a></li>
+<li><a class="reference external" href="https://www.fatiando.org/pooch/v0.2.1">v0.2.1</a></li>
+<li><a class="reference external" href="https://www.fatiando.org/pooch/v0.2.0">v0.2.0</a></li>
+<li><a class="reference external" href="https://www.fatiando.org/pooch/v0.1.1">v0.1.1</a></li>
+<li><a class="reference external" href="https://www.fatiando.org/pooch/v0.1">v0.1</a></li>
+</ul>
+<div class="toctree-wrapper compound">
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="install.html" class="btn btn-neutral float-right" title="Installing" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018-2019, The Pooch Developers
+      <span class="lastupdated">
+        Last updated on Mar 29, 2019.
+      </span>
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

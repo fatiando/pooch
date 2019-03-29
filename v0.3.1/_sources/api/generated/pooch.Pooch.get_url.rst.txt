@@ -1,0 +1,10 @@
+pooch.Pooch.get\_url
+====================
+
+.. currentmodule:: pooch
+
+.. automethod:: Pooch.get_url
+
+.. raw:: html
+
+      <div style='clear:both'></div>

@@ -1,0 +1,10 @@
+pooch.Pooch.is\_available
+=========================
+
+.. currentmodule:: pooch
+
+.. automethod:: Pooch.is_available
+
+.. raw:: html
+
+      <div style='clear:both'></div>
