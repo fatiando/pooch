@@ -1,7 +1,5 @@
-Pooch
-=====
-
-    A friend to fetch your sample data files.
+.. image:: doc/_static/readme-banner.png
+    :alt: Pooch
 
 `Documentation <https://www.fatiando.org/pooch>`__ |
 `Documentation (dev version) <https://www.fatiando.org/pooch/dev>`__ |
