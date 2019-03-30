@@ -159,19 +159,19 @@ variable:
 
 .. code:: python
 
-   GOODBOY = pooch.create(
-       # This is still the default in case the environment variable isn't defined
-       path=pooch.os_cache("plumbus"),
-       base_url="https://github.com/rick/plumbus/raw/{version}/data/",
-       version=version,
-       version_dev="master",
-       registry={
-           "c137.csv": "19uheidhlkjdwhoiwuhc0uhcwljchw9ochwochw89dcgw9dcgwc",
-           "cronen.csv": "1upodh2ioduhw9celdjhlfvhksgdwikdgcowjhcwoduchowjg8w",
-       },
-       # The name of the environment variable that can overwrite the path argument
-       env="PLUMBUS_DATA_DIR",
-   )
+    GOODBOY = pooch.create(
+        # This is still the default in case the environment variable isn't defined
+        path=pooch.os_cache("plumbus"),
+        base_url="https://github.com/rick/plumbus/raw/{version}/data/",
+        version=version,
+        version_dev="master",
+        registry={
+            "c137.csv": "19uheidhlkjdwhoiwuhc0uhcwljchw9ochwochw89dcgw9dcgwc",
+            "cronen.csv": "1upodh2ioduhw9celdjhlfvhksgdwikdgcowjhcwoduchowjg8w",
+        },
+        # The name of the environment variable that can overwrite the path argument
+        env="PLUMBUS_DATA_DIR",
+    )
 
 In this case, if the user defines the ``PLUMBUS_DATA_DIR`` environment variable, we'll
 use its value instead of ``path``. Pooch will still append the value of ``version`` to
@@ -185,6 +185,75 @@ You can have data files in subdirectories of the remote data store. These files 
 saved to the same subdirectories in the local storage folder. Note, however, that the
 names of these files in the registry **must use Unix-style separators** (``'/'``) even
 on Windows. We will handle the appropriate conversions.
+
+
+Post-processing hooks
+---------------------
+
+Sometimes further post-processing actions need to be taken on downloaded files
+(unzipping, conversion to a more efficient format, etc). If these actions are
+time or memory consuming, it would be best to this only once when the file is
+actually downloaded and not every time :meth:`pooch.Pooch.fetch` is called.
+
+One way to do this is using *post-processing hooks*. Method :meth:`pooch.Pooch.fetch`
+takes a ``hook`` argument that allows us to specify a function that is executed
+post-download and before returning the local file path. The hook actually lets us
+overwrite the file name returned by :meth:`pooch.Pooch.fetch`.
+
+For example, let's say our data file is zipped and we want to store an unzipped copy of
+it in and read that instead. We can do this with a post-processing hook that unzips the
+file and returns the path to the unzipped file instead:
+
+.. code:: python
+
+    import os
+    from zipfile import ZipFile
+
+    def unpack_hook(fname, action, pup):
+        """
+        Post-processing hook to unzip a file and return the unzipped file name.
+
+        Parameters
+        ----------
+        fname : str
+           Full path of the zipped file in local storage
+        action : str
+           One of "download" (file doesn't exist and will download),
+           "update" (file is outdated and will download), and
+           "fetch" (file exists and is updated so no download).
+        pup : Pooch
+           The instance of Pooch that called the hook function.
+
+        Returns
+        -------
+        fname : str
+           The full path to the unzipped file.
+           (Return the same fname is your hook doesn't modify the file).
+
+        """
+        # Create a new name for the unzipped file
+        unzipped = fname + ".unzipped"
+        # Don't unzip if file already exists and is not being downloaded
+        if action in ("update", "download") or not os.path.exists(unzipped):
+            with ZipFile(fname, "r") as zip_file:
+                # Extract the data file from within the archive
+                with zip_file.open("actual-data-file.txt") as data_file:
+                    # Save it to our desired file name
+                    with open(unzipped, "wb") as output:
+                        output.write(data_file.read())
+        # Return the path of the unzipped file
+        return unzipped
+
+
+    def fetch_zipped_file():
+        """
+        Load a large zipped sample data as a pandas.DataFrame.
+        """
+        # Pass in the hook to unzip the data file
+        fname = GOODBOY.fetch("zipped-data-file.zip", hook=unpack_hook)
+        # fname is now the path of the unzipped file which can be loaded by pandas
+        data = pandas.read_csv(fname)
+        return data
 
 
 So you have 1000 data files

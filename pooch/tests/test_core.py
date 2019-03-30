@@ -4,6 +4,7 @@ Test the core class and factory function.
 import os
 import sys
 from pathlib import Path
+from zipfile import ZipFile
 import tempfile
 
 try:
@@ -57,6 +58,34 @@ def test_pooch_custom_url():
             assert str(warn[-1].message).split()[0] == "Downloading"
             assert str(warn[-1].message).split()[-1] == "'{}'.".format(path)
         check_tiny_data(fname)
+        # Check that no warnings happen when not downloading
+        with warnings.catch_warnings(record=True) as warn:
+            fname = pup.fetch("tiny-data.txt")
+            assert not warn
+
+
+def test_pooch_download():
+    "Setup a pooch that has no local data and needs to download"
+    with TemporaryDirectory() as local_store:
+        path = Path(local_store)
+        true_path = str(path / "tiny-data.txt")
+        # Setup a pooch in a temp dir
+        pup = Pooch(path=path, base_url=BASEURL, registry=REGISTRY)
+        # Check that the warning says that the file is being downloaded
+        with warnings.catch_warnings(record=True) as warn:
+            fname = pup.fetch("tiny-data.txt")
+            assert len(warn) == 1
+            assert issubclass(warn[-1].category, UserWarning)
+            assert str(warn[-1].message).split()[0] == "Downloading"
+            assert str(warn[-1].message).split()[-1] == "'{}'.".format(path)
+        # Check that the downloaded file has the right content
+        assert true_path == fname
+        check_tiny_data(fname)
+        assert file_hash(fname) == REGISTRY["tiny-data.txt"]
+        # Check that no warnings happen when not downloading
+        with warnings.catch_warnings(record=True) as warn:
+            fname = pup.fetch("tiny-data.txt")
+            assert not warn
 
 
 def test_pooch_update():
@@ -81,6 +110,10 @@ def test_pooch_update():
         assert true_path == fname
         check_tiny_data(fname)
         assert file_hash(fname) == REGISTRY["tiny-data.txt"]
+        # Check that no warnings happen when not downloading
+        with warnings.catch_warnings(record=True) as warn:
+            fname = pup.fetch("tiny-data.txt")
+            assert not warn
 
 
 def test_pooch_corrupted():
@@ -215,3 +248,39 @@ def test_check_availability():
     registry.update(REGISTRY)
     pup = Pooch(path=DATA_DIR, base_url=BASEURL, registry=registry)
     assert not pup.is_available("not-a-real-data-file.txt")
+
+
+def test_postdownload_hooks():
+    "Setup a post-download hook and make sure it's only executed when downloading"
+
+    def unzip_hook(fname, action, pup):  # pylint: disable=unused-argument
+        "unzip the data file and warn when doing so"
+        unzipped = fname + ".unzipped"
+        if action in ("update", "download") or not os.path.exists(unzipped):
+            with ZipFile(fname, "r") as zip_file:
+                with zip_file.open("tiny-data.txt") as data_file:
+                    with open(unzipped, "wb") as output:
+                        output.write(data_file.read())
+                warnings.warn("hook executed")
+        return unzipped
+
+    with TemporaryDirectory() as local_store:
+        path = Path(local_store)
+        true_path = str(path / "tiny-data.zip.unzipped")
+        # Setup a pooch in a temp dir
+        pup = Pooch(path=path, base_url=BASEURL, registry=REGISTRY)
+        # Check the warnings when downloading and from the hook
+        with warnings.catch_warnings(record=True) as warn:
+            fname = pup.fetch("tiny-data.zip", hook=unzip_hook)
+            assert len(warn) == 2
+            assert all(issubclass(w.category, UserWarning) for w in warn)
+            assert str(warn[-2].message).split()[0] == "Downloading"
+            assert str(warn[-1].message) == "hook executed"
+        assert fname == true_path
+        check_tiny_data(fname)
+        # Check that hook doesn't execute when not downloading
+        with warnings.catch_warnings(record=True) as warn:
+            fname = pup.fetch("tiny-data.zip", hook=unzip_hook)
+            assert not warn
+        assert fname == true_path
+        check_tiny_data(fname)
