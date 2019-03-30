@@ -237,7 +237,7 @@ class Pooch:
 
         Sometimes further post-processing actions need to be taken on downloaded files
         (unzipping, conversion to a more efficient format, etc). If these actions are
-        time or memory consuming, it would be best to this only once when the file is
+        time or memory consuming, it would be best to do this only once when the file is
         actually downloaded. Use the *hook* argument to specify a function that is
         executed after a file is downloaded to perform these actions.
 

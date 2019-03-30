@@ -191,18 +191,18 @@ Post-processing hooks
 ---------------------
 
 Sometimes further post-processing actions need to be taken on downloaded files
-(unzipping, conversion to a more efficient format, etc). If these actions are
-time or memory consuming, it would be best to this only once when the file is
-actually downloaded and not every time :meth:`pooch.Pooch.fetch` is called.
+(unzipping, conversion to a more efficient format, etc). If these actions are time or
+memory consuming, it would be best to do this only once when the file is actually
+downloaded and not every time :meth:`pooch.Pooch.fetch` is called.
 
 One way to do this is using *post-processing hooks*. Method :meth:`pooch.Pooch.fetch`
 takes a ``hook`` argument that allows us to specify a function that is executed
-post-download and before returning the local file path. The hook actually lets us
-overwrite the file name returned by :meth:`pooch.Pooch.fetch`.
+post-download and before returning the local file path. The hook also lets us overwrite
+the file name returned by :meth:`pooch.Pooch.fetch`.
 
 For example, let's say our data file is zipped and we want to store an unzipped copy of
-it in and read that instead. We can do this with a post-processing hook that unzips the
-file and returns the path to the unzipped file instead:
+it and read that instead. We can do this with a post-processing hook that unzips the
+file and returns the path to the unzipped file instead of the original zip archive:
 
 .. code:: python
 
@@ -252,6 +252,7 @@ file and returns the path to the unzipped file instead:
         # Pass in the hook to unzip the data file
         fname = GOODBOY.fetch("zipped-data-file.zip", hook=unpack_hook)
         # fname is now the path of the unzipped file which can be loaded by pandas
+        # directly
         data = pandas.read_csv(fname)
         return data
 
