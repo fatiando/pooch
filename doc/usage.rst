@@ -231,7 +231,9 @@ file and returns the path to the unzipped file instead of the original zip archi
            (Return the same fname is your hook doesn't modify the file).
 
         """
-        # Create a new name for the unzipped file
+        # Create a new name for the unzipped file. Appending something to the name is a
+        # relatively safe way of making sure there are no clashes with other files in
+        # the registry.
         unzipped = fname + ".unzipped"
         # Don't unzip if file already exists and is not being downloaded
         if action in ("update", "download") or not os.path.exists(unzipped):
@@ -254,6 +256,61 @@ file and returns the path to the unzipped file instead of the original zip archi
         # fname is now the path of the unzipped file which can be loaded by pandas
         # directly
         data = pandas.read_csv(fname)
+        return data
+
+
+Alternatively, your zip archive could contain multiple files that you want to unpack. In
+this case, the hook can extract all files into a directory and return a list of file
+paths instead of a single one:
+
+.. code:: python
+
+    def unpack_multiple_hook(fname, action, pup):
+        """
+        Post-processing hook to unpack a zip archive and return a list of all files.
+
+        Parameters
+        ----------
+        fname : str
+           Full path of the zipped file in local storage
+        action : str
+           One of "download" (file doesn't exist and will download),
+           "update" (file is outdated and will download), and
+           "fetch" (file exists and is updated so no download).
+        pup : Pooch
+           The instance of Pooch that called the hook function.
+
+        Returns
+        -------
+        fnames : list of str
+           A list of the full path to all files in the unzipped archive.
+
+        """
+        unzipped = fname + ".unzipped"
+        if action in ("update", "download") or not os.path.exists(unzipped):
+            # Make sure that the folder with the unzipped files exists
+            if not os.path.exists(unzipped):
+                os.makedirs(unzipped)
+            with ZipFile(fname, "r") as zip_file:
+                # Unpack all files from the archive into our new folder
+                zip_file.extractall(path=unzipped)
+        # Get a list of all file names (including subdirectories) in our folder of
+        # unzipped files.
+        fnames = [
+            os.path.join(path, fname)
+            for path, _, files in os.walk(unzipped)
+            for fname in files
+        ]
+        return fnames
+
+
+    def fetch_zipped_archive():
+        """
+        Load all files from a zipped archive.
+        """
+        # Pass in the hook to unzip the data file
+        fnames = GOODBOY.fetch("zipped-archive.zip", hook=unpack_multiple_hook)
+        data = [pandas.read_csv(fname) for fname in fnames]
         return data
 
 
