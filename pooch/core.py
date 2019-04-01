@@ -31,7 +31,7 @@ def create(
     Create a new :class:`~pooch.Pooch` with sensible defaults to fetch data files.
 
     If a version string is given, the Pooch will be versioned, meaning that the local
-    storage folder and the base URL depend on the projection version. This is necessary
+    storage folder and the base URL depend on the project version. This is necessary
     if your users have multiple versions of your library installed (using virtual
     environments) and you updated the data files between versions. Otherwise, every time
     a user switches environments would trigger a re-download of the data. The version
