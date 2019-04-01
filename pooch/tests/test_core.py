@@ -250,7 +250,7 @@ def test_check_availability():
     assert not pup.is_available("not-a-real-data-file.txt")
 
 
-def test_postdownload_hooks():
+def test_hooks():
     "Setup a post-download hook and make sure it's only executed when downloading"
 
     def unzip_hook(fname, action, pup):  # pylint: disable=unused-argument
@@ -284,3 +284,51 @@ def test_postdownload_hooks():
             assert not warn
         assert fname == true_path
         check_tiny_data(fname)
+
+
+def test_hooks_multiplefiles():
+    "Setup a hook to unzip a file and return multiple fnames"
+
+    def unzip_hook(fname, action, pup):  # pylint: disable=unused-argument
+        "unzip the data file and warn when doing so"
+        unzipped = fname + ".unzipped"
+        if action in ("update", "download") or not os.path.exists(unzipped):
+            if not os.path.exists(unzipped):
+                os.makedirs(unzipped)
+            with ZipFile(fname, "r") as zip_file:
+                zip_file.extractall(path=unzipped)
+                warnings.warn("hook executed")
+        fnames = [
+            os.path.join(path, fname)
+            for path, _, files in os.walk(unzipped)
+            for fname in files
+        ]
+        return fnames
+
+    with TemporaryDirectory() as local_store:
+        path = Path(local_store)
+        true_paths = {
+            str(path / "store.zip.unzipped" / "store" / "tiny-data.txt"),
+            str(path / "store.zip.unzipped" / "store" / "subdir" / "tiny-data.txt"),
+        }
+        # Setup a pooch in a temp dir
+        pup = Pooch(path=path, base_url=BASEURL, registry=REGISTRY)
+        # Check the warnings when downloading and from the hook
+        with warnings.catch_warnings(record=True) as warn:
+            fnames = pup.fetch("store.zip", hook=unzip_hook)
+            assert len(warn) == 2
+            assert all(issubclass(w.category, UserWarning) for w in warn)
+            assert str(warn[-2].message).split()[0] == "Downloading"
+            assert str(warn[-1].message) == "hook executed"
+            assert len(fnames) == 2
+            assert true_paths == set(fnames)
+            for fname in fnames:
+                check_tiny_data(fname)
+        # Check that hook doesn't execute when not downloading
+        with warnings.catch_warnings(record=True) as warn:
+            fnames = pup.fetch("store.zip", hook=unzip_hook)
+            assert not warn
+            assert len(fnames) == 2
+            assert true_paths == set(fnames)
+            for fname in fnames:
+                check_tiny_data(fname)
