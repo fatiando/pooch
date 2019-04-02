@@ -225,7 +225,7 @@ class Pooch:
         "List of file names on the registry"
         return list(self.registry)
 
-    def fetch(self, fname):
+    def fetch(self, fname, hook=None):
         """
         Get the absolute path to a file in the local storage.
 
@@ -235,11 +235,30 @@ class Pooch:
         storage. If the hash of the downloaded file still doesn't match the one in the
         registry, will raise an exception to warn of possible file corruption.
 
+        Sometimes further post-processing actions need to be taken on downloaded files
+        (unzipping, conversion to a more efficient format, etc). If these actions are
+        time or memory consuming, it would be best to do this only once when the file is
+        actually downloaded. Use the *hook* argument to specify a function that is
+        executed after a file is downloaded to perform these actions.
+
         Parameters
         ----------
         fname : str
             The file name (relative to the *base_url* of the remote data storage) to
             fetch from the local storage.
+        hook : None or callable
+            If not None, then a function (or callable object) that will be called before
+            returning the full path and after the file has been downloaded.
+            The functions **must** take as arguments (in order):
+
+            * ``fname``: the full path of the file in the local data storage
+            * ``action``: either "download" (file doesn't exist and will be downloaded),
+              "update" (file is outdated and will be downloaded), or "fetch" (file
+              exists and is updated so no download is necessary).
+            * ``pooch``: this instance of the :class:`pooch.Pooch` class.
+
+            The return value should be a full path to a file. This is what will be
+            returned by *fetch* in place of the original file path.
 
         Returns
         -------
@@ -255,18 +274,21 @@ class Pooch:
         full_path = self.abspath / fname
         in_storage = full_path.exists()
         if not in_storage:
-            action = "Downloading"
+            action = "download"
         elif in_storage and file_hash(str(full_path)) != self.registry[fname]:
-            action = "Updating"
+            action = "update"
         else:
-            action = "Nothing"
-        if action in ("Updating", "Downloading"):
+            action = "fetch"
+        if action in ("download", "update"):
+            action_word = dict(download="Downloading", update="Updating")
             warn(
                 "{} data file '{}' from remote data store '{}' to '{}'.".format(
-                    action, fname, self.get_url(fname), str(self.path)
+                    action_word[action], fname, self.get_url(fname), str(self.path)
                 )
             )
             self._download_file(fname)
+        if hook is not None:
+            return hook(str(full_path), action, self)
         return str(full_path)
 
     def _assert_file_in_registry(self, fname):
