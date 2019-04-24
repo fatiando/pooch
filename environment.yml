@@ -15,6 +15,6 @@ dependencies:
     - black
     - flake8
     - pylint
-    - sphinx
+    - sphinx=1.8.5
     - sphinx_rtd_theme
     - numpydoc
