@@ -1,5 +1,5 @@
 """
-Functions to download, verify, and update a sample dataset.
+The main Pooch class and a factory function for it.
 """
 import os
 import sys
@@ -334,23 +334,16 @@ class Pooch:
         source = self.get_url(fname)
         # Stream the file to a temporary so that we can safely check its hash before
         # overwriting the original
-        fout = tempfile.NamedTemporaryFile(delete=False, dir=str(self.abspath))
+        tmp_download = tempfile.NamedTemporaryFile(delete=False, dir=str(self.abspath))
         try:
-            with fout:
+            with open(tmp_download.name, "wb") as fout:
                 response = requests.get(source, stream=True)
                 response.raise_for_status()
                 for chunk in response.iter_content(chunk_size=1024):
                     if chunk:
                         fout.write(chunk)
-            tmphash = file_hash(fout.name)
-            if tmphash != self.registry[fname]:
-                raise ValueError(
-                    "Hash of downloaded file '{}' doesn't match the entry in the registry:"
-                    " Expected '{}' and got '{}'.".format(
-                        fout.name, self.registry[fname], tmphash
-                    )
-                )
-            # Make sure the parent directory exists in case the file is in a subdirectory.
+            self._check_download_hash(fname, tmp_download.name)
+            # Ensure the parent directory exists in case the file is in a subdirectory.
             # Otherwise, move will cause an error.
             if not os.path.exists(str(destination.parent)):
                 os.makedirs(str(destination.parent))
@@ -358,6 +351,32 @@ class Pooch:
         except Exception:
             os.remove(fout.name)
             raise
+
+    def _check_download_hash(self, fname, downloaded):
+        """
+        Check the hash of the downloaded file against the one in the registry.
+
+        Parameters
+        ----------
+        fname : str
+            The file name in the registry.
+        downloaded : str
+            The pull path to the downloaded file.
+
+        Raises
+        ------
+        :class:`ValueError`
+            If the hashes don't match.
+
+        """
+        tmphash = file_hash(downloaded)
+        if tmphash != self.registry[fname]:
+            raise ValueError(
+                "Hash of downloaded file '{}' doesn't match the entry in the registry:"
+                " Expected '{}' and got '{}'.".format(
+                    downloaded, self.registry[fname], tmphash
+                )
+            )
 
     def load_registry(self, fname):
         """
