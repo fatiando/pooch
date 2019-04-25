@@ -11,6 +11,7 @@ from warnings import warn
 import requests
 
 from .utils import file_hash, check_version
+from .hooks import HTTPDownloader
 
 
 # PermissionError was introduced in Python 3.3. This can be deleted when dropping 2.7
@@ -184,6 +185,8 @@ class Pooch:
     """
     Manager for a local data storage that can fetch from a remote source.
 
+    Avoid creating ``Pooch`` instances directly. Use :func:`pooch.create` instead.
+
     Parameters
     ----------
     path : str
@@ -331,26 +334,21 @@ class Pooch:
 
         """
         destination = self.abspath / fname
-        source = self.get_url(fname)
         # Stream the file to a temporary so that we can safely check its hash before
         # overwriting the original
         tmp_download = tempfile.NamedTemporaryFile(delete=False, dir=str(self.abspath))
+        # Close the temp file so that the downloader can decide how it's to be opened
         tmp_download.close()
         try:
-            with open(tmp_download.name, "wb") as fout:
-                response = requests.get(source, stream=True)
-                response.raise_for_status()
-                for chunk in response.iter_content(chunk_size=1024):
-                    if chunk:
-                        fout.write(chunk)
+            HTTPDownloader()(self.get_url(fname), tmp_download.name, self)
             self._check_download_hash(fname, tmp_download.name)
             # Ensure the parent directory exists in case the file is in a subdirectory.
             # Otherwise, move will cause an error.
             if not os.path.exists(str(destination.parent)):
                 os.makedirs(str(destination.parent))
-            shutil.move(fout.name, str(destination))
+            shutil.move(tmp_download.name, str(destination))
         except Exception:
-            os.remove(fout.name)
+            os.remove(tmp_download.name)
             raise
 
     def _check_download_hash(self, fname, downloaded):
