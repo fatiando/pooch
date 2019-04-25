@@ -335,6 +335,7 @@ class Pooch:
         # Stream the file to a temporary so that we can safely check its hash before
         # overwriting the original
         tmp_download = tempfile.NamedTemporaryFile(delete=False, dir=str(self.abspath))
+        tmp_download.close()
         try:
             with open(tmp_download.name, "wb") as fout:
                 response = requests.get(source, stream=True)
