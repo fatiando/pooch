@@ -347,9 +347,9 @@ class Pooch:
             if not os.path.exists(str(destination.parent)):
                 os.makedirs(str(destination.parent))
             shutil.move(tmp_download.name, str(destination))
-        except Exception:
-            os.remove(tmp_download.name)
-            raise
+        finally:
+            if os.path.exists(tmp_download.name):
+                os.remove(tmp_download.name)
 
     def _check_download_hash(self, fname, downloaded):
         """
