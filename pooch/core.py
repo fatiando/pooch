@@ -289,7 +289,8 @@ class Pooch:
                     action_word[action], fname, self.get_url(fname), str(self.path)
                 )
             )
-            self._download_file(fname)
+            downloader = HTTPDownloader()
+            self._download_file(fname, full_path, downloader)
         if hook is not None:
             return hook(str(full_path), action, self)
         return str(full_path)
@@ -315,7 +316,7 @@ class Pooch:
         self._assert_file_in_registry(fname)
         return self.urls.get(fname, "".join([self.base_url, fname]))
 
-    def _download_file(self, fname):
+    def _download_file(self, fname, destination, downloader):
         """
         Download a file from the remote data storage to the local storage.
 
@@ -333,14 +334,13 @@ class Pooch:
             If the hash of the downloaded file doesn't match the hash in the registry.
 
         """
-        destination = self.abspath / fname
         # Stream the file to a temporary so that we can safely check its hash before
         # overwriting the original
         tmp_download = tempfile.NamedTemporaryFile(delete=False, dir=str(self.abspath))
         # Close the temp file so that the downloader can decide how it's to be opened
         tmp_download.close()
         try:
-            HTTPDownloader()(self.get_url(fname), tmp_download.name, self)
+            downloader(self.get_url(fname), tmp_download.name, self)
             self._check_download_hash(fname, tmp_download.name)
             # Ensure the parent directory exists in case the file is in a subdirectory.
             # Otherwise, move will cause an error.
