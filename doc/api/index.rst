@@ -23,6 +23,7 @@ Utilities:
     os_cache
     make_registry
     file_hash
+    check_version
 
 Downloaders:
 
