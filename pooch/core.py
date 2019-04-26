@@ -252,7 +252,7 @@ class Pooch:
         hook : None or callable
             If not None, then a function (or callable object) that will be called before
             returning the full path and after the file has been downloaded.
-            The functions **must** take as arguments (in order):
+            The function **must** take as arguments (in order):
 
             * ``fname``: the full path of the file in the local data storage
             * ``action``: either "download" (file doesn't exist and will be downloaded),
@@ -271,10 +271,13 @@ class Pooch:
 
         """
         self._assert_file_in_registry(fname)
+
         # Create the local data directory if it doesn't already exist
         if not self.abspath.exists():
             os.makedirs(str(self.abspath))
+
         full_path = self.abspath / fname
+
         in_storage = full_path.exists()
         if not in_storage:
             action = "download"
@@ -282,6 +285,7 @@ class Pooch:
             action = "update"
         else:
             action = "fetch"
+
         if action in ("download", "update"):
             action_word = dict(download="Downloading", update="Updating")
             warn(
@@ -290,9 +294,26 @@ class Pooch:
                 )
             )
             downloader = HTTPDownloader()
-            self._download_file(fname, full_path, downloader)
+            # Stream the file to a temporary so that we can safely check its hash before
+            # overwriting the original
+            tmp = tempfile.NamedTemporaryFile(delete=False, dir=str(self.abspath))
+            # Close the temp file so that the downloader can decide how to opened it
+            tmp.close()
+            try:
+                downloader(self.get_url(fname), tmp.name, self)
+                self._check_download_hash(fname, tmp.name)
+                # Ensure the parent directory exists in case the file is in a
+                # subdirectory. Otherwise, move will cause an error.
+                if not os.path.exists(str(full_path.parent)):
+                    os.makedirs(str(full_path.parent))
+                shutil.move(tmp.name, str(full_path))
+            finally:
+                if os.path.exists(tmp.name):
+                    os.remove(tmp.name)
+
         if hook is not None:
             return hook(str(full_path), action, self)
+
         return str(full_path)
 
     def _assert_file_in_registry(self, fname):
@@ -315,41 +336,6 @@ class Pooch:
         """
         self._assert_file_in_registry(fname)
         return self.urls.get(fname, "".join([self.base_url, fname]))
-
-    def _download_file(self, fname, destination, downloader):
-        """
-        Download a file from the remote data storage to the local storage.
-
-        Used by :meth:`~pooch.Pooch.fetch` to do the actual downloading.
-
-        Parameters
-        ----------
-        fname : str
-            The file name (relative to the *base_url* of the remote data storage) to
-            fetch from the local storage.
-
-        Raises
-        ------
-        ValueError
-            If the hash of the downloaded file doesn't match the hash in the registry.
-
-        """
-        # Stream the file to a temporary so that we can safely check its hash before
-        # overwriting the original
-        tmp_download = tempfile.NamedTemporaryFile(delete=False, dir=str(self.abspath))
-        # Close the temp file so that the downloader can decide how it's to be opened
-        tmp_download.close()
-        try:
-            downloader(self.get_url(fname), tmp_download.name, self)
-            self._check_download_hash(fname, tmp_download.name)
-            # Ensure the parent directory exists in case the file is in a subdirectory.
-            # Otherwise, move will cause an error.
-            if not os.path.exists(str(destination.parent)):
-                os.makedirs(str(destination.parent))
-            shutil.move(tmp_download.name, str(destination))
-        finally:
-            if os.path.exists(tmp_download.name):
-                os.remove(tmp_download.name)
 
     def _check_download_hash(self, fname, downloaded):
         """
