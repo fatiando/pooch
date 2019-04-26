@@ -58,10 +58,11 @@ class HTTPDownloader:  # pylint: disable=too-few-public-methods
     >>> url = "https://httpbin.org/basic-auth/{}/{}".format(user, password)
     >>> # Trying without the login credentials causes an error
     >>> downloader = HTTPDownloader()
-    >>> downloader(url=url, output_file="tiny-data.txt", pooch=None)
-    Traceback (most recent call last):
-        ...
-    requests.exceptions.HTTPError: 401 Client Error: UNAUTHORIZED for url: https://httpbin.org/basic-auth/doggo/goodboy
+    >>> try:
+    ...     downloader(url=url, output_file="tiny-data.txt", pooch=None)
+    ... except Exception:
+    ...     print("There was an error!")
+    There was an error!
     >>> # Pass in the credentials to HTTPDownloader and it will forward to requests.get
     >>> downloader = HTTPDownloader(auth=(user, password))
     >>> downloader(url=url, output_file="tiny-data.txt", pooch=None)
