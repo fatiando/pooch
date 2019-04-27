@@ -14,6 +14,7 @@ API Reference
     os_cache
     file_hash
     make_registry
+    check_version
     Pooch
     Pooch.fetch
     Pooch.is_available
