@@ -196,9 +196,9 @@ memory consuming, it would be best to do this only once when the file is actuall
 downloaded and not every time :meth:`pooch.Pooch.fetch` is called.
 
 One way to do this is using *post-processing hooks*. Method :meth:`pooch.Pooch.fetch`
-takes a ``hook`` argument that allows us to specify a function that is executed
-post-download and before returning the local file path. The hook also lets us overwrite
-the file name returned by :meth:`pooch.Pooch.fetch`.
+takes a ``processor`` argument that allows us to specify a function that is executed
+post-download and before returning the local file path. The processor also lets us
+overwrite the file name returned by :meth:`pooch.Pooch.fetch`.
 
 For example, let's say our data file is zipped and we want to store an unzipped copy of
 it and read that instead. We can do this with a post-processing hook that unzips the
@@ -209,7 +209,7 @@ file and returns the path to the unzipped file instead of the original zip archi
     import os
     from zipfile import ZipFile
 
-    def unpack_hook(fname, action, pup):
+    def unpack(fname, action, pup):
         """
         Post-processing hook to unzip a file and return the unzipped file name.
 
@@ -222,13 +222,13 @@ file and returns the path to the unzipped file instead of the original zip archi
            "update" (file is outdated and will download), and
            "fetch" (file exists and is updated so no download).
         pup : Pooch
-           The instance of Pooch that called the hook function.
+           The instance of Pooch that called the processor function.
 
         Returns
         -------
         fname : str
            The full path to the unzipped file.
-           (Return the same fname is your hook doesn't modify the file).
+           (Return the same fname is your processor doesn't modify the file).
 
         """
         # Create a new name for the unzipped file. Appending something to the name is a
@@ -251,8 +251,8 @@ file and returns the path to the unzipped file instead of the original zip archi
         """
         Load a large zipped sample data as a pandas.DataFrame.
         """
-        # Pass in the hook to unzip the data file
-        fname = GOODBOY.fetch("zipped-data-file.zip", hook=unpack_hook)
+        # Pass in the processor to unzip the data file
+        fname = GOODBOY.fetch("zipped-data-file.zip", processor=unpack)
         # fname is now the path of the unzipped file which can be loaded by pandas
         # directly
         data = pandas.read_csv(fname)
@@ -260,12 +260,12 @@ file and returns the path to the unzipped file instead of the original zip archi
 
 
 Alternatively, your zip archive could contain multiple files that you want to unpack. In
-this case, the hook can extract all files into a directory and return a list of file
-paths instead of a single one:
+this case, the processor can extract all files into a directory and return a list of
+file paths instead of a single one:
 
 .. code:: python
 
-    def unpack_multiple_hook(fname, action, pup):
+    def unpack_multiple(fname, action, pup):
         """
         Post-processing hook to unpack a zip archive and return a list of all files.
 
@@ -278,7 +278,7 @@ paths instead of a single one:
            "update" (file is outdated and will download), and
            "fetch" (file exists and is updated so no download).
         pup : Pooch
-           The instance of Pooch that called the hook function.
+           The instance of Pooch that called the processor function.
 
         Returns
         -------
@@ -308,8 +308,8 @@ paths instead of a single one:
         """
         Load all files from a zipped archive.
         """
-        # Pass in the hook to unzip the data file
-        fnames = GOODBOY.fetch("zipped-archive.zip", hook=unpack_multiple_hook)
+        # Pass in the processor to unzip the data file
+        fnames = GOODBOY.fetch("zipped-archive.zip", processor=unpack_multiple)
         data = [pandas.read_csv(fname) for fname in fnames]
         return data
 

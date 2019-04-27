@@ -250,10 +250,10 @@ def test_check_availability():
     assert not pup.is_available("not-a-real-data-file.txt")
 
 
-def test_hooks():
+def test_processors():
     "Setup a post-download hook and make sure it's only executed when downloading"
 
-    def unzip_hook(fname, action, pup):  # pylint: disable=unused-argument
+    def unzip(fname, action, pup):  # pylint: disable=unused-argument
         "unzip the data file and warn when doing so"
         unzipped = fname + ".unzipped"
         if action in ("update", "download") or not os.path.exists(unzipped):
@@ -269,27 +269,27 @@ def test_hooks():
         true_path = str(path / "tiny-data.zip.unzipped")
         # Setup a pooch in a temp dir
         pup = Pooch(path=path, base_url=BASEURL, registry=REGISTRY)
-        # Check the warnings when downloading and from the hook
+        # Check the warnings when downloading and from the processor
         with warnings.catch_warnings(record=True) as warn:
-            fname = pup.fetch("tiny-data.zip", hook=unzip_hook)
+            fname = pup.fetch("tiny-data.zip", processor=unzip)
             assert len(warn) == 2
             assert all(issubclass(w.category, UserWarning) for w in warn)
             assert str(warn[-2].message).split()[0] == "Downloading"
             assert str(warn[-1].message) == "hook executed"
         assert fname == true_path
         check_tiny_data(fname)
-        # Check that hook doesn't execute when not downloading
+        # Check that processor doesn't execute when not downloading
         with warnings.catch_warnings(record=True) as warn:
-            fname = pup.fetch("tiny-data.zip", hook=unzip_hook)
+            fname = pup.fetch("tiny-data.zip", processor=unzip)
             assert not warn
         assert fname == true_path
         check_tiny_data(fname)
 
 
-def test_hooks_multiplefiles():
-    "Setup a hook to unzip a file and return multiple fnames"
+def test_processor_multiplefiles():
+    "Setup a processor to unzip a file and return multiple fnames"
 
-    def unzip_hook(fname, action, pup):  # pylint: disable=unused-argument
+    def unzip(fname, action, pup):  # pylint: disable=unused-argument
         "unzip the data file and warn when doing so"
         unzipped = fname + ".unzipped"
         if action in ("update", "download") or not os.path.exists(unzipped):
@@ -313,9 +313,9 @@ def test_hooks_multiplefiles():
         }
         # Setup a pooch in a temp dir
         pup = Pooch(path=path, base_url=BASEURL, registry=REGISTRY)
-        # Check the warnings when downloading and from the hook
+        # Check the warnings when downloading and from the processor
         with warnings.catch_warnings(record=True) as warn:
-            fnames = pup.fetch("store.zip", hook=unzip_hook)
+            fnames = pup.fetch("store.zip", processor=unzip)
             assert len(warn) == 2
             assert all(issubclass(w.category, UserWarning) for w in warn)
             assert str(warn[-2].message).split()[0] == "Downloading"
@@ -324,9 +324,9 @@ def test_hooks_multiplefiles():
             assert true_paths == set(fnames)
             for fname in fnames:
                 check_tiny_data(fname)
-        # Check that hook doesn't execute when not downloading
+        # Check that processor doesn't execute when not downloading
         with warnings.catch_warnings(record=True) as warn:
-            fnames = pup.fetch("store.zip", hook=unzip_hook)
+            fnames = pup.fetch("store.zip", processor=unzip)
             assert not warn
             assert len(fnames) == 2
             assert true_paths == set(fnames)
