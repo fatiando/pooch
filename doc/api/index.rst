@@ -7,17 +7,27 @@ API Reference
 
 .. currentmodule:: pooch
 
+Core:
+
 .. autosummary::
    :toctree: generated/
 
     create
-    os_cache
-    file_hash
-    make_registry
-    check_version
     Pooch
-    Pooch.fetch
-    Pooch.is_available
-    Pooch.get_url
-    Pooch.load_registry
+
+Utilities:
+
+.. autosummary::
+   :toctree: generated/
+
+    os_cache
+    make_registry
+    file_hash
+    check_version
+
+Misc:
+
+.. autosummary::
+   :toctree: generated/
+
     test
