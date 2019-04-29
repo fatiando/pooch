@@ -228,7 +228,7 @@ class Pooch:
         "List of file names on the registry"
         return list(self.registry)
 
-    def fetch(self, fname, hook=None):
+    def fetch(self, fname, processor=None):
         """
         Get the absolute path to a file in the local storage.
 
@@ -238,36 +238,57 @@ class Pooch:
         storage. If the hash of the downloaded file still doesn't match the one in the
         registry, will raise an exception to warn of possible file corruption.
 
-        Sometimes further post-processing actions need to be taken on downloaded files
+        Post-processing actions sometimes need to be taken on downloaded files
         (unzipping, conversion to a more efficient format, etc). If these actions are
         time or memory consuming, it would be best to do this only once when the file is
-        actually downloaded. Use the *hook* argument to specify a function that is
-        executed after a file is downloaded to perform these actions.
+        actually downloaded. Use the *processor* argument to specify a function that is
+        executed after the downloaded (if required) to perform these actions. See below.
 
         Parameters
         ----------
         fname : str
             The file name (relative to the *base_url* of the remote data storage) to
             fetch from the local storage.
-        hook : None or callable
-            If not None, then a function (or callable object) that will be called before
-            returning the full path and after the file has been downloaded.
-            The function **must** take as arguments (in order):
-
-            * ``fname``: the full path of the file in the local data storage
-            * ``action``: either "download" (file doesn't exist and will be downloaded),
-              "update" (file is outdated and will be downloaded), or "fetch" (file
-              exists and is updated so no download is necessary).
-            * ``pooch``: this instance of the :class:`pooch.Pooch` class.
-
-            The return value should be a full path to a file. This is what will be
-            returned by *fetch* in place of the original file path.
+        processor : None or callable
+            If not None, then a function (or callable object) that will be called
+            before returning the full path and after the file has been downloaded (if
+            required). See below.
 
         Returns
         -------
         full_path : str
             The absolute path (including the file name) of the file in the local
             storage.
+
+        Notes
+        -----
+
+        Processor functions should have the following format:
+
+        .. code:: python
+
+            def myprocessor(fname, action, update):
+                '''
+                Processes the downloaded file and returns a new file name.
+
+                The function **must** take as arguments (in order):
+
+                fname : str
+                    The full path of the file in the local data storage
+                action : str
+                    Either:
+                    "download" (file doesn't exist and will be downloaded),
+                    "update" (file is outdated and will be downloaded), or
+                    "fetch" (file exists and is updated so no download is necessary).
+                pooch : pooch.Pooch
+                    The instance of the Pooch class that is calling this function.
+
+                The return value can be anything but is usually a full path to a file
+                (or list of files). This is what will be returned by *fetch* in place of
+                the original file path.
+                '''
+                ...
+                return full_path
 
         """
         self._assert_file_in_registry(fname)
@@ -311,8 +332,8 @@ class Pooch:
                 if os.path.exists(tmp.name):
                     os.remove(tmp.name)
 
-        if hook is not None:
-            return hook(str(full_path), action, self)
+        if processor is not None:
+            return processor(str(full_path), action, self)
 
         return str(full_path)
 
