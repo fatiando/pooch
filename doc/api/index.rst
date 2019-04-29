@@ -14,6 +14,10 @@ Core:
 
     create
     Pooch
+    Pooch.fetch
+    Pooch.load_registry
+    Pooch.get_url
+    Pooch.is_available
 
 Utilities:
 
