@@ -314,6 +314,89 @@ file paths instead of a single one:
         return data
 
 
+Custom downloaders and authentication
+-------------------------------------
+
+By default, :meth:`pooch.Pooch.fetch` will download files over HTTP without
+authentication. Sometimes this is not enough: some servers require logins, some are FTP
+instead of HTTP. To get around this, you can pass a ``downloader`` to
+:meth:`~pooch.Pooch.fetch`.
+
+Pooch provides :class:`~pooch.HTTPDownloader` class (which is used by default) that can
+be used to provide login credentials to HTTP servers that require authentication. For
+example:
+
+.. code:: python
+
+    from pooch import HTTPDownloader
+
+
+    def fetch_protected_data():
+        """
+        Fetch a file from a server that requires authentication
+        """
+        # Let the downloader know the login credentials
+        download_auth = HTTPDownloader(auth=("my_username", "my_password"))
+        fname = GOODBOY.fetch("some-data.csv", downloader=download_auth)
+        data = pandas.read_csv(fname)
+        return data
+
+It's probably not a good idea to hard-code credentials in your code. One way around this
+is to ask users to set their own credentials through environment variables. The download
+code could look something like this:
+
+
+.. code:: python
+
+    import os
+
+
+    def fetch_protected_data():
+        """
+        Fetch a file from a server that requires authentication
+        """
+        # Get the credentials from the user's environment
+        username = os.environ.get("SOMESITE_USERNAME")
+        password = os.environ.get("SOMESITE_PASSWORD")
+        # Let the downloader know the login credentials
+        download_auth = HTTPDownloader(auth=(username, password))
+        fname = GOODBOY.fetch("some-data.csv", downloader=download_auth)
+        data = pandas.read_csv(fname)
+        return data
+
+If your use case is not covered by our downloaders, you can implement your own. See
+:meth:`pooch.Pooch.fetch` for the required format of downloaders. As an example,
+consider the case in which the login credentials need to be provided to a site that is
+redirected from the original download URL in the :class:`~pooch.Pooch` registry:
+
+.. code:: python
+
+    import requests
+
+
+    def redirect_downloader(url, output_file, pooch):
+        """
+        Download after following a redirection.
+        """
+        # Get the credentials from the user's environment
+        username = os.environ.get("SOMESITE_USERNAME")
+        password = os.environ.get("SOMESITE_PASSWORD")
+        # Make a request that will redirect to the login page
+        login = requests.get(url)
+        # Provide the credentials and download from the new URL
+        download = HTTPDownloader(auth=(username, password))
+        download(login.url, output_file, mypooch)
+
+
+    def fetch_protected_data():
+        """
+        Fetch a file from a server that requires authentication
+        """
+        fname = GOODBOY.fetch("some-data.csv", downloader=redirect_downloader)
+        data = pandas.read_csv(fname)
+        return data
+
+
 So you have 1000 data files
 ---------------------------
 
