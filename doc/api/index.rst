@@ -7,7 +7,8 @@ API Reference
 
 .. currentmodule:: pooch
 
-Core:
+Core
+----
 
 .. autosummary::
    :toctree: generated/
@@ -19,7 +20,8 @@ Core:
     Pooch.get_url
     Pooch.is_available
 
-Utilities:
+Utilities
+---------
 
 .. autosummary::
    :toctree: generated/
@@ -29,7 +31,16 @@ Utilities:
     file_hash
     check_version
 
-Misc:
+Downloaders
+-----------
+
+.. autosummary::
+   :toctree: generated/
+
+   HTTPDownloader
+
+Miscellaneous
+-------------
 
 .. autosummary::
    :toctree: generated/

@@ -11,6 +11,7 @@ from warnings import warn
 import requests
 
 from .utils import file_hash, check_version
+from .hooks import HTTPDownloader
 
 
 # PermissionError was introduced in Python 3.3. This can be deleted when dropping 2.7
@@ -227,7 +228,7 @@ class Pooch:
         "List of file names on the registry"
         return list(self.registry)
 
-    def fetch(self, fname, processor=None):
+    def fetch(self, fname, processor=None, downloader=None):
         """
         Get the absolute path to a file in the local storage.
 
@@ -243,6 +244,11 @@ class Pooch:
         actually downloaded. Use the *processor* argument to specify a function that is
         executed after the downloaded (if required) to perform these actions. See below.
 
+        Custom file downloaders can be provided through the *downloader* argument. By
+        default, files are downloaded over HTTP. If the server for a given file requires
+        authentication (username and password) or if the file is served over FTP, use
+        custom downloaders that support these features. See below for details.
+
         Parameters
         ----------
         fname : str
@@ -251,7 +257,12 @@ class Pooch:
         processor : None or callable
             If not None, then a function (or callable object) that will be called
             before returning the full path and after the file has been downloaded (if
-            required). See below.
+            required). See below for details.
+        downloader : None or callable
+            If not None, then a function (or callable object) that will be called to
+            download a given URL to a provided local file name. By default, downloads
+            are done through HTTP without authentication using
+            :class:`pooch.HTTPDownloader`. See below for details.
 
         Returns
         -------
@@ -262,11 +273,11 @@ class Pooch:
         Notes
         -----
 
-        Processor functions should have the following format:
+        **Processor** functions should have the following format:
 
         .. code:: python
 
-            def myprocessor(fname, action, update):
+            def myprocessor(fname, action, pooch):
                 '''
                 Processes the downloaded file and returns a new file name.
 
@@ -287,6 +298,35 @@ class Pooch:
                 the original file path.
                 '''
                 ...
+                return full_path
+
+        **Downloader** functions should have the following format:
+
+        .. code:: python
+
+            def mydownloader(url, output_file, pooch):
+                '''
+                Download a file from the given URL to the given local file.
+
+                The function **must** take as arguments (in order):
+
+                url : str
+                    The URL to the file you want to download.
+                output_file : str or file-like object
+                    Path (and file name) to which the file will be downloaded.
+                pooch : pooch.Pooch
+                    The instance of the Pooch class that is calling this function.
+
+                No return value is required.
+                '''
+                ...
+
+        **Authentication** through HTTP can be handled by :class:`pooch.HTTPDownloader`:
+
+        .. code:: python
+
+            authdownload = HTTPDownloader(auth=(username, password))
+            mypooch.fetch("some-data-file.txt", downloader=authdownload)
 
         """
         self._assert_file_in_registry(fname)
@@ -312,7 +352,24 @@ class Pooch:
                     action_word[action], fname, self.get_url(fname), str(self.path)
                 )
             )
-            self._download_file(fname)
+            if downloader is None:
+                downloader = HTTPDownloader()
+            # Stream the file to a temporary so that we can safely check its hash before
+            # overwriting the original
+            tmp = tempfile.NamedTemporaryFile(delete=False, dir=str(self.abspath))
+            # Close the temp file so that the downloader can decide how to opened it
+            tmp.close()
+            try:
+                downloader(self.get_url(fname), tmp.name, self)
+                self._check_download_hash(fname, tmp.name)
+                # Ensure the parent directory exists in case the file is in a
+                # subdirectory. Otherwise, move will cause an error.
+                if not os.path.exists(str(full_path.parent)):
+                    os.makedirs(str(full_path.parent))
+                shutil.move(tmp.name, str(full_path))
+            finally:
+                if os.path.exists(tmp.name):
+                    os.remove(tmp.name)
 
         if processor is not None:
             return processor(str(full_path), action, self)
@@ -340,52 +397,31 @@ class Pooch:
         self._assert_file_in_registry(fname)
         return self.urls.get(fname, "".join([self.base_url, fname]))
 
-    def _download_file(self, fname):
+    def _check_download_hash(self, fname, downloaded):
         """
-        Download a file from the remote data storage to the local storage.
-
-        Used by :meth:`~pooch.Pooch.fetch` to do the actual downloading.
+        Check the hash of the downloaded file against the one in the registry.
 
         Parameters
         ----------
         fname : str
-            The file name (relative to the *base_url* of the remote data storage) to
-            fetch from the local storage.
+            The file name in the registry.
+        downloaded : str
+            The pull path to the downloaded file.
 
         Raises
         ------
-        ValueError
-            If the hash of the downloaded file doesn't match the hash in the registry.
+        :class:`ValueError`
+            If the hashes don't match.
 
         """
-        destination = self.abspath / fname
-        source = self.get_url(fname)
-        # Stream the file to a temporary so that we can safely check its hash before
-        # overwriting the original
-        fout = tempfile.NamedTemporaryFile(delete=False, dir=str(self.abspath))
-        try:
-            with fout:
-                response = requests.get(source, stream=True)
-                response.raise_for_status()
-                for chunk in response.iter_content(chunk_size=1024):
-                    if chunk:
-                        fout.write(chunk)
-            tmphash = file_hash(fout.name)
-            if tmphash != self.registry[fname]:
-                raise ValueError(
-                    "Hash of downloaded file '{}' doesn't match the entry in the registry:"
-                    " Expected '{}' and got '{}'.".format(
-                        fout.name, self.registry[fname], tmphash
-                    )
+        tmphash = file_hash(downloaded)
+        if tmphash != self.registry[fname]:
+            raise ValueError(
+                "Hash of downloaded file '{}' doesn't match the entry in the registry:"
+                " Expected '{}' and got '{}'.".format(
+                    downloaded, self.registry[fname], tmphash
                 )
-            # Make sure the parent directory exists in case the file is in a subdirectory.
-            # Otherwise, move will cause an error.
-            if not os.path.exists(str(destination.parent)):
-                os.makedirs(str(destination.parent))
-            shutil.move(fout.name, str(destination))
-        except Exception:
-            os.remove(fout.name)
-            raise
+            )
 
     def load_registry(self, fname):
         """
