@@ -17,6 +17,9 @@ class HTTPDownloader:  # pylint: disable=too-few-public-methods
     All keyword arguments given when creating an instance of this class will be passed
     to :func:`requests.get`.
 
+    Use with :meth:`pooch.Pooch.fetch` to customize the download of files (for example,
+    to use authentication).
+
     Parameters
     ----------
     url : str

@@ -228,7 +228,7 @@ class Pooch:
         "List of file names on the registry"
         return list(self.registry)
 
-    def fetch(self, fname, processor=None):
+    def fetch(self, fname, processor=None, downloader=None):
         """
         Get the absolute path to a file in the local storage.
 
@@ -244,6 +244,11 @@ class Pooch:
         actually downloaded. Use the *processor* argument to specify a function that is
         executed after the downloaded (if required) to perform these actions. See below.
 
+        Custom file downloaders can be provided through the *downloader* argument. By
+        default, files are downloaded over HTTP. If the server for a given file requires
+        authentication (username and password) or if the file is served over FTP, use
+        custom downloaders that support these features. See below for details.
+
         Parameters
         ----------
         fname : str
@@ -252,7 +257,12 @@ class Pooch:
         processor : None or callable
             If not None, then a function (or callable object) that will be called
             before returning the full path and after the file has been downloaded (if
-            required). See below.
+            required). See below for details.
+        downloader : None or callable
+            If not None, then a function (or callable object) that will be called to
+            download a given URL to a provided local file name. By default, downloads
+            are done through HTTP without authentication using
+            :class:`pooch.HTTPDownloader`. See below for details.
 
         Returns
         -------
@@ -263,11 +273,11 @@ class Pooch:
         Notes
         -----
 
-        Processor functions should have the following format:
+        **Processor** functions should have the following format:
 
         .. code:: python
 
-            def myprocessor(fname, action, update):
+            def myprocessor(fname, action, pooch):
                 '''
                 Processes the downloaded file and returns a new file name.
 
@@ -289,6 +299,34 @@ class Pooch:
                 '''
                 ...
                 return full_path
+
+        **Downloader** functions should have the following format:
+
+        .. code:: python
+
+            def mydownloader(url, output_file, pooch):
+                '''
+                Download a file from the given URL to the given local file.
+
+                The function **must** take as arguments (in order):
+
+                url : str
+                    The URL to the file you want to download.
+                output_file : str or file-like object
+                    Path (and file name) to which the file will be downloaded.
+                pooch : pooch.Pooch
+                    The instance of the Pooch class that is calling this function.
+
+                No return value is required.
+                '''
+                ...
+
+        **Authentication** through HTTP can be handled by :class:`pooch.HTTPDownloader`:
+
+        .. code:: python
+
+            authdownload = HTTPDownloader(auth=(username, password))
+            mypooch.fetch("some-data-file.txt", downloader=authdownload)
 
         """
         self._assert_file_in_registry(fname)
@@ -314,7 +352,8 @@ class Pooch:
                     action_word[action], fname, self.get_url(fname), str(self.path)
                 )
             )
-            downloader = HTTPDownloader()
+            if downloader is None:
+                downloader = HTTPDownloader()
             # Stream the file to a temporary so that we can safely check its hash before
             # overwriting the original
             tmp = tempfile.NamedTemporaryFile(delete=False, dir=str(self.abspath))

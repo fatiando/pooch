@@ -17,6 +17,8 @@ import pytest
 
 from .. import Pooch, create
 from ..utils import file_hash
+from ..hooks import HTTPDownloader
+
 from .utils import pooch_test_url, pooch_test_registry, check_tiny_data
 
 
@@ -332,3 +334,30 @@ def test_processor_multiplefiles():
             assert true_paths == set(fnames)
             for fname in fnames:
                 check_tiny_data(fname)
+
+
+def test_downloader():
+    "Setup a downloader function for fetch"
+
+    def download(url, output_file, pup):  # pylint: disable=unused-argument
+        "Download through HTTP and warn that we're doing it"
+        warnings.warn("downloader executed")
+        HTTPDownloader()(url, output_file, pup)
+
+    with TemporaryDirectory() as local_store:
+        path = Path(local_store)
+        # Setup a pooch in a temp dir
+        pup = Pooch(path=path, base_url=BASEURL, registry=REGISTRY)
+        # Check that the warning says that the file is being downloaded
+        with warnings.catch_warnings(record=True) as warn:
+            fname = pup.fetch("tiny-data.txt", downloader=download)
+            assert len(warn) == 2
+            assert all(issubclass(w.category, UserWarning) for w in warn)
+            assert str(warn[-2].message).split()[0] == "Downloading"
+            assert str(warn[-1].message) == "downloader executed"
+        # Check that the downloaded file has the right content
+        check_tiny_data(fname)
+        # Check that no warnings happen when not downloading
+        with warnings.catch_warnings(record=True) as warn:
+            fname = pup.fetch("tiny-data.txt")
+            assert not warn
