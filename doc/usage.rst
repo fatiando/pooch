@@ -260,8 +260,8 @@ file and returns the path to the unzipped file instead of the original zip archi
         return data
 
 Fortunately, you don't have to implement your own unzip processor. Pooch provides the
-:class:`pooch.Unzip` and :class:`pooch.UnzipSingle` processors for exactly this use
-case. The above example using the Pooch processor would look like:
+:class:`pooch.Unzip` processor for exactly this use case. The above example using the
+Pooch processor would look like:
 
 .. code:: python
 
@@ -273,17 +273,19 @@ case. The above example using the Pooch processor would look like:
         Load a large zipped sample data as a pandas.DataFrame.
         """
         # Extract the file "actual-data-file.txt" from the archive
-        unpack =  UnzipSingle(member="actual-data-file.txt")
+        unpack =  Unzip(members=["actual-data-file.txt"])
         # Pass in the processor to unzip the data file
-        fname = GOODBOY.fetch("zipped-data-file.zip", processor=unpack)
+        fnames = GOODBOY.fetch("zipped-data-file.zip", processor=unpack)
+        # Returns the paths of all extract members (in our case, only one)
+        fname = fnames[0]
         # fname is now the path of the unzipped file ("actual-data-file.txt") which can
         # be loaded by pandas directly
         data = pandas.read_csv(fname)
         return data
 
 Alternatively, your zip archive could contain multiple files that you want to unpack. In
-this case, the :class:`pooch.Unzip` processor can extract all files into a directory and
-return a list of file paths instead of a single one:
+this case, the default behavior of :class:`pooch.Unzip` is to extract all files into a
+directory and return a list of file paths instead of a single one:
 
 .. code:: python
 

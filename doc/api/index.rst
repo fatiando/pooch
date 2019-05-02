@@ -42,7 +42,6 @@ Processors
    :toctree: generated/
 
    Unzip
-   UnzipSingle
 
 Miscellaneous
 -------------
