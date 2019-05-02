@@ -16,7 +16,7 @@ import pytest
 
 from .. import Pooch, create
 from ..utils import file_hash
-from ..hooks import HTTPDownloader
+from ..downloaders import HTTPDownloader
 from ..processors import Unzip, UnzipSingle
 
 from .utils import pooch_test_url, pooch_test_registry, check_tiny_data
