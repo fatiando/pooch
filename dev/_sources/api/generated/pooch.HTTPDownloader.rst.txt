@@ -1,0 +1,76 @@
+pooch.HTTPDownloader
+====================
+
+.. currentmodule:: pooch
+
+.. autoclass:: HTTPDownloader
+
+.. raw:: html
+
+     <div style='clear:both'></div>
+
+
+
+.. automethod:: HTTPDownloader.__call__
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.. raw:: html
+
+     <div style='clear:both'></div>

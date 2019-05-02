@@ -10,7 +10,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
     
-    <title>pooch.core &mdash; Pooch v0.3.1</title>
+    <title>pooch.core &mdash; Pooch dev</title>
     
 
 
@@ -41,8 +41,18 @@
   <link rel="stylesheet" href="../../_static/style.css" type="text/css" />
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    
-    <script src="../../_static/require.js"></script>
+    <!-- Google Analytics tracking code -->
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new
+            Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+                })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-38125837-1', 'auto', {'storage': 'none'});
+      ga('set', 'anonymizeIp', true);
+      ga('send', 'pageview');
+    </script>
 
 </head>
 
@@ -70,7 +80,7 @@
             
             
               <div class="version">
-                v0.3.1
+                dev
               </div>
             
           
@@ -193,7 +203,7 @@
             
   <h1>Source code for pooch.core</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">Functions to download, verify, and update a sample dataset.</span>
+<span class="sd">The main Pooch class and a factory function for it.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">sys</span>
@@ -205,6 +215,7 @@
 <span class="kn">import</span> <span class="nn">requests</span>
 
 <span class="kn">from</span> <span class="nn">.utils</span> <span class="k">import</span> <span class="n">file_hash</span><span class="p">,</span> <span class="n">check_version</span>
+<span class="kn">from</span> <span class="nn">.downloaders</span> <span class="k">import</span> <span class="n">HTTPDownloader</span>
 
 
 <span class="c1"># PermissionError was introduced in Python 3.3. This can be deleted when dropping 2.7</span>
@@ -225,7 +236,7 @@
 <span class="sd">    Create a new :class:`~pooch.Pooch` with sensible defaults to fetch data files.</span>
 
 <span class="sd">    If a version string is given, the Pooch will be versioned, meaning that the local</span>
-<span class="sd">    storage folder and the base URL depend on the projection version. This is necessary</span>
+<span class="sd">    storage folder and the base URL depend on the project version. This is necessary</span>
 <span class="sd">    if your users have multiple versions of your library installed (using virtual</span>
 <span class="sd">    environments) and you updated the data files between versions. Otherwise, every time</span>
 <span class="sd">    a user switches environments would trigger a re-download of the data. The version</span>
@@ -378,6 +389,8 @@
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Manager for a local data storage that can fetch from a remote source.</span>
 
+<span class="sd">    Avoid creating ``Pooch`` instances directly. Use :func:`pooch.create` instead.</span>
+
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    path : str</span>
@@ -419,7 +432,7 @@
         <span class="s2">&quot;List of file names on the registry&quot;</span>
         <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">registry</span><span class="p">)</span>
 
-<div class="viewcode-block" id="Pooch.fetch"><a class="viewcode-back" href="../../api/generated/pooch.Pooch.fetch.html#pooch.Pooch.fetch">[docs]</a>    <span class="k">def</span> <span class="nf">fetch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fname</span><span class="p">):</span>
+<div class="viewcode-block" id="Pooch.fetch"><a class="viewcode-back" href="../../api/generated/pooch.Pooch.html#pooch.Pooch.fetch">[docs]</a>    <span class="k">def</span> <span class="nf">fetch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fname</span><span class="p">,</span> <span class="n">processor</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">downloader</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get the absolute path to a file in the local storage.</span>
 
@@ -429,11 +442,31 @@
 <span class="sd">        storage. If the hash of the downloaded file still doesn&#39;t match the one in the</span>
 <span class="sd">        registry, will raise an exception to warn of possible file corruption.</span>
 
+<span class="sd">        Post-processing actions sometimes need to be taken on downloaded files</span>
+<span class="sd">        (unzipping, conversion to a more efficient format, etc). If these actions are</span>
+<span class="sd">        time or memory consuming, it would be best to do this only once when the file is</span>
+<span class="sd">        actually downloaded. Use the *processor* argument to specify a function that is</span>
+<span class="sd">        executed after the downloaded (if required) to perform these actions. See below.</span>
+
+<span class="sd">        Custom file downloaders can be provided through the *downloader* argument. By</span>
+<span class="sd">        default, files are downloaded over HTTP. If the server for a given file requires</span>
+<span class="sd">        authentication (username and password) or if the file is served over FTP, use</span>
+<span class="sd">        custom downloaders that support these features. See below for details.</span>
+
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        fname : str</span>
 <span class="sd">            The file name (relative to the *base_url* of the remote data storage) to</span>
 <span class="sd">            fetch from the local storage.</span>
+<span class="sd">        processor : None or callable</span>
+<span class="sd">            If not None, then a function (or callable object) that will be called</span>
+<span class="sd">            before returning the full path and after the file has been downloaded (if</span>
+<span class="sd">            required). See below for details.</span>
+<span class="sd">        downloader : None or callable</span>
+<span class="sd">            If not None, then a function (or callable object) that will be called to</span>
+<span class="sd">            download a given URL to a provided local file name. By default, downloads</span>
+<span class="sd">            are done through HTTP without authentication using</span>
+<span class="sd">            :class:`pooch.HTTPDownloader`. See below for details.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -441,26 +474,110 @@
 <span class="sd">            The absolute path (including the file name) of the file in the local</span>
 <span class="sd">            storage.</span>
 
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+
+<span class="sd">        **Processor** functions should have the following format:</span>
+
+<span class="sd">        .. code:: python</span>
+
+<span class="sd">            def myprocessor(fname, action, pooch):</span>
+<span class="sd">                &#39;&#39;&#39;</span>
+<span class="sd">                Processes the downloaded file and returns a new file name.</span>
+
+<span class="sd">                The function **must** take as arguments (in order):</span>
+
+<span class="sd">                fname : str</span>
+<span class="sd">                    The full path of the file in the local data storage</span>
+<span class="sd">                action : str</span>
+<span class="sd">                    Either:</span>
+<span class="sd">                    &quot;download&quot; (file doesn&#39;t exist and will be downloaded),</span>
+<span class="sd">                    &quot;update&quot; (file is outdated and will be downloaded), or</span>
+<span class="sd">                    &quot;fetch&quot; (file exists and is updated so no download is necessary).</span>
+<span class="sd">                pooch : pooch.Pooch</span>
+<span class="sd">                    The instance of the Pooch class that is calling this function.</span>
+
+<span class="sd">                The return value can be anything but is usually a full path to a file</span>
+<span class="sd">                (or list of files). This is what will be returned by *fetch* in place of</span>
+<span class="sd">                the original file path.</span>
+<span class="sd">                &#39;&#39;&#39;</span>
+<span class="sd">                ...</span>
+<span class="sd">                return full_path</span>
+
+<span class="sd">        **Downloader** functions should have the following format:</span>
+
+<span class="sd">        .. code:: python</span>
+
+<span class="sd">            def mydownloader(url, output_file, pooch):</span>
+<span class="sd">                &#39;&#39;&#39;</span>
+<span class="sd">                Download a file from the given URL to the given local file.</span>
+
+<span class="sd">                The function **must** take as arguments (in order):</span>
+
+<span class="sd">                url : str</span>
+<span class="sd">                    The URL to the file you want to download.</span>
+<span class="sd">                output_file : str or file-like object</span>
+<span class="sd">                    Path (and file name) to which the file will be downloaded.</span>
+<span class="sd">                pooch : pooch.Pooch</span>
+<span class="sd">                    The instance of the Pooch class that is calling this function.</span>
+
+<span class="sd">                No return value is required.</span>
+<span class="sd">                &#39;&#39;&#39;</span>
+<span class="sd">                ...</span>
+
+<span class="sd">        **Authentication** through HTTP can be handled by :class:`pooch.HTTPDownloader`:</span>
+
+<span class="sd">        .. code:: python</span>
+
+<span class="sd">            authdownload = HTTPDownloader(auth=(username, password))</span>
+<span class="sd">            mypooch.fetch(&quot;some-data-file.txt&quot;, downloader=authdownload)</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_assert_file_in_registry</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
+
         <span class="c1"># Create the local data directory if it doesn&#39;t already exist</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">abspath</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
             <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">abspath</span><span class="p">))</span>
+
         <span class="n">full_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">abspath</span> <span class="o">/</span> <span class="n">fname</span>
+
         <span class="n">in_storage</span> <span class="o">=</span> <span class="n">full_path</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">in_storage</span><span class="p">:</span>
-            <span class="n">action</span> <span class="o">=</span> <span class="s2">&quot;Downloading&quot;</span>
+            <span class="n">action</span> <span class="o">=</span> <span class="s2">&quot;download&quot;</span>
         <span class="k">elif</span> <span class="n">in_storage</span> <span class="ow">and</span> <span class="n">file_hash</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">full_path</span><span class="p">))</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">registry</span><span class="p">[</span><span class="n">fname</span><span class="p">]:</span>
-            <span class="n">action</span> <span class="o">=</span> <span class="s2">&quot;Updating&quot;</span>
+            <span class="n">action</span> <span class="o">=</span> <span class="s2">&quot;update&quot;</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">action</span> <span class="o">=</span> <span class="s2">&quot;Nothing&quot;</span>
-        <span class="k">if</span> <span class="n">action</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;Updating&quot;</span><span class="p">,</span> <span class="s2">&quot;Downloading&quot;</span><span class="p">):</span>
+            <span class="n">action</span> <span class="o">=</span> <span class="s2">&quot;fetch&quot;</span>
+
+        <span class="k">if</span> <span class="n">action</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;download&quot;</span><span class="p">,</span> <span class="s2">&quot;update&quot;</span><span class="p">):</span>
+            <span class="n">action_word</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">download</span><span class="o">=</span><span class="s2">&quot;Downloading&quot;</span><span class="p">,</span> <span class="n">update</span><span class="o">=</span><span class="s2">&quot;Updating&quot;</span><span class="p">)</span>
             <span class="n">warn</span><span class="p">(</span>
                 <span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> data file &#39;</span><span class="si">{}</span><span class="s2">&#39; from remote data store &#39;</span><span class="si">{}</span><span class="s2">&#39; to &#39;</span><span class="si">{}</span><span class="s2">&#39;.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-                    <span class="n">action</span><span class="p">,</span> <span class="n">fname</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_url</span><span class="p">(</span><span class="n">fname</span><span class="p">),</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="p">)</span>
+                    <span class="n">action_word</span><span class="p">[</span><span class="n">action</span><span class="p">],</span> <span class="n">fname</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_url</span><span class="p">(</span><span class="n">fname</span><span class="p">),</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="p">)</span>
                 <span class="p">)</span>
             <span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_download_file</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">downloader</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">downloader</span> <span class="o">=</span> <span class="n">HTTPDownloader</span><span class="p">()</span>
+            <span class="c1"># Stream the file to a temporary so that we can safely check its hash before</span>
+            <span class="c1"># overwriting the original</span>
+            <span class="n">tmp</span> <span class="o">=</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">NamedTemporaryFile</span><span class="p">(</span><span class="n">delete</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="nb">dir</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">abspath</span><span class="p">))</span>
+            <span class="c1"># Close the temp file so that the downloader can decide how to opened it</span>
+            <span class="n">tmp</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">downloader</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_url</span><span class="p">(</span><span class="n">fname</span><span class="p">),</span> <span class="n">tmp</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_check_download_hash</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">tmp</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+                <span class="c1"># Ensure the parent directory exists in case the file is in a</span>
+                <span class="c1"># subdirectory. Otherwise, move will cause an error.</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">full_path</span><span class="o">.</span><span class="n">parent</span><span class="p">)):</span>
+                    <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">full_path</span><span class="o">.</span><span class="n">parent</span><span class="p">))</span>
+                <span class="n">shutil</span><span class="o">.</span><span class="n">move</span><span class="p">(</span><span class="n">tmp</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">full_path</span><span class="p">))</span>
+            <span class="k">finally</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">tmp</span><span class="o">.</span><span class="n">name</span><span class="p">):</span>
+                    <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">tmp</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">processor</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">processor</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">full_path</span><span class="p">),</span> <span class="n">action</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+
         <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">full_path</span><span class="p">)</span></div>
 
     <span class="k">def</span> <span class="nf">_assert_file_in_registry</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fname</span><span class="p">):</span>
@@ -470,7 +587,7 @@
         <span class="k">if</span> <span class="n">fname</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">registry</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;File &#39;</span><span class="si">{}</span><span class="s2">&#39; is not in the registry.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">fname</span><span class="p">))</span>
 
-<div class="viewcode-block" id="Pooch.get_url"><a class="viewcode-back" href="../../api/generated/pooch.Pooch.get_url.html#pooch.Pooch.get_url">[docs]</a>    <span class="k">def</span> <span class="nf">get_url</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fname</span><span class="p">):</span>
+<div class="viewcode-block" id="Pooch.get_url"><a class="viewcode-back" href="../../api/generated/pooch.Pooch.html#pooch.Pooch.get_url">[docs]</a>    <span class="k">def</span> <span class="nf">get_url</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fname</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get the full URL to download a file in the registry.</span>
 
@@ -484,54 +601,33 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_assert_file_in_registry</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">urls</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">base_url</span><span class="p">,</span> <span class="n">fname</span><span class="p">]))</span></div>
 
-    <span class="k">def</span> <span class="nf">_download_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fname</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_check_download_hash</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fname</span><span class="p">,</span> <span class="n">downloaded</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Download a file from the remote data storage to the local storage.</span>
-
-<span class="sd">        Used by :meth:`~pooch.Pooch.fetch` to do the actual downloading.</span>
+<span class="sd">        Check the hash of the downloaded file against the one in the registry.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        fname : str</span>
-<span class="sd">            The file name (relative to the *base_url* of the remote data storage) to</span>
-<span class="sd">            fetch from the local storage.</span>
+<span class="sd">            The file name in the registry.</span>
+<span class="sd">        downloaded : str</span>
+<span class="sd">            The pull path to the downloaded file.</span>
 
 <span class="sd">        Raises</span>
 <span class="sd">        ------</span>
-<span class="sd">        ValueError</span>
-<span class="sd">            If the hash of the downloaded file doesn&#39;t match the hash in the registry.</span>
+<span class="sd">        :class:`ValueError`</span>
+<span class="sd">            If the hashes don&#39;t match.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">destination</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">abspath</span> <span class="o">/</span> <span class="n">fname</span>
-        <span class="n">source</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_url</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
-        <span class="c1"># Stream the file to a temporary so that we can safely check its hash before</span>
-        <span class="c1"># overwriting the original</span>
-        <span class="n">fout</span> <span class="o">=</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">NamedTemporaryFile</span><span class="p">(</span><span class="n">delete</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="nb">dir</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">abspath</span><span class="p">))</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="k">with</span> <span class="n">fout</span><span class="p">:</span>
-                <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">stream</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-                <span class="n">response</span><span class="o">.</span><span class="n">raise_for_status</span><span class="p">()</span>
-                <span class="k">for</span> <span class="n">chunk</span> <span class="ow">in</span> <span class="n">response</span><span class="o">.</span><span class="n">iter_content</span><span class="p">(</span><span class="n">chunk_size</span><span class="o">=</span><span class="mi">1024</span><span class="p">):</span>
-                    <span class="k">if</span> <span class="n">chunk</span><span class="p">:</span>
-                        <span class="n">fout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">chunk</span><span class="p">)</span>
-            <span class="n">tmphash</span> <span class="o">=</span> <span class="n">file_hash</span><span class="p">(</span><span class="n">fout</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">tmphash</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">registry</span><span class="p">[</span><span class="n">fname</span><span class="p">]:</span>
-                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                    <span class="s2">&quot;Hash of downloaded file &#39;</span><span class="si">{}</span><span class="s2">&#39; doesn&#39;t match the entry in the registry:&quot;</span>
-                    <span class="s2">&quot; Expected &#39;</span><span class="si">{}</span><span class="s2">&#39; and got &#39;</span><span class="si">{}</span><span class="s2">&#39;.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-                        <span class="n">fout</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">registry</span><span class="p">[</span><span class="n">fname</span><span class="p">],</span> <span class="n">tmphash</span>
-                    <span class="p">)</span>
+        <span class="n">tmphash</span> <span class="o">=</span> <span class="n">file_hash</span><span class="p">(</span><span class="n">downloaded</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">tmphash</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">registry</span><span class="p">[</span><span class="n">fname</span><span class="p">]:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;Hash of downloaded file &#39;</span><span class="si">{}</span><span class="s2">&#39; doesn&#39;t match the entry in the registry:&quot;</span>
+                <span class="s2">&quot; Expected &#39;</span><span class="si">{}</span><span class="s2">&#39; and got &#39;</span><span class="si">{}</span><span class="s2">&#39;.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                    <span class="n">downloaded</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">registry</span><span class="p">[</span><span class="n">fname</span><span class="p">],</span> <span class="n">tmphash</span>
                 <span class="p">)</span>
-            <span class="c1"># Make sure the parent directory exists in case the file is in a subdirectory.</span>
-            <span class="c1"># Otherwise, move will cause an error.</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">destination</span><span class="o">.</span><span class="n">parent</span><span class="p">)):</span>
-                <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">destination</span><span class="o">.</span><span class="n">parent</span><span class="p">))</span>
-            <span class="n">shutil</span><span class="o">.</span><span class="n">move</span><span class="p">(</span><span class="n">fout</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">destination</span><span class="p">))</span>
-        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
-            <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">fout</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
-            <span class="k">raise</span>
+            <span class="p">)</span>
 
-<div class="viewcode-block" id="Pooch.load_registry"><a class="viewcode-back" href="../../api/generated/pooch.Pooch.load_registry.html#pooch.Pooch.load_registry">[docs]</a>    <span class="k">def</span> <span class="nf">load_registry</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fname</span><span class="p">):</span>
+<div class="viewcode-block" id="Pooch.load_registry"><a class="viewcode-back" href="../../api/generated/pooch.Pooch.html#pooch.Pooch.load_registry">[docs]</a>    <span class="k">def</span> <span class="nf">load_registry</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fname</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Load entries from a file and add them to the registry.</span>
 
@@ -563,7 +659,7 @@
                     <span class="bp">self</span><span class="o">.</span><span class="n">urls</span><span class="p">[</span><span class="n">file_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">file_url</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">registry</span><span class="p">[</span><span class="n">file_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">file_sha256</span></div>
 
-<div class="viewcode-block" id="Pooch.is_available"><a class="viewcode-back" href="../../api/generated/pooch.Pooch.is_available.html#pooch.Pooch.is_available">[docs]</a>    <span class="k">def</span> <span class="nf">is_available</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fname</span><span class="p">):</span>
+<div class="viewcode-block" id="Pooch.is_available"><a class="viewcode-back" href="../../api/generated/pooch.Pooch.html#pooch.Pooch.is_available">[docs]</a>    <span class="k">def</span> <span class="nf">is_available</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fname</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Check availability of a remote file without downloading it.</span>
 
@@ -600,7 +696,7 @@
     <p>
         &copy; Copyright 2018-2019, The Pooch Developers
       <span class="lastupdated">
-        Last updated on Mar 29, 2019.
+        Last updated on May 02, 2019.
       </span>
 
     </p>

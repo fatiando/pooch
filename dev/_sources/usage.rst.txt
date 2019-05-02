@@ -159,19 +159,19 @@ variable:
 
 .. code:: python
 
-   GOODBOY = pooch.create(
-       # This is still the default in case the environment variable isn't defined
-       path=pooch.os_cache("plumbus"),
-       base_url="https://github.com/rick/plumbus/raw/{version}/data/",
-       version=version,
-       version_dev="master",
-       registry={
-           "c137.csv": "19uheidhlkjdwhoiwuhc0uhcwljchw9ochwochw89dcgw9dcgwc",
-           "cronen.csv": "1upodh2ioduhw9celdjhlfvhksgdwikdgcowjhcwoduchowjg8w",
-       },
-       # The name of the environment variable that can overwrite the path argument
-       env="PLUMBUS_DATA_DIR",
-   )
+    GOODBOY = pooch.create(
+        # This is still the default in case the environment variable isn't defined
+        path=pooch.os_cache("plumbus"),
+        base_url="https://github.com/rick/plumbus/raw/{version}/data/",
+        version=version,
+        version_dev="master",
+        registry={
+            "c137.csv": "19uheidhlkjdwhoiwuhc0uhcwljchw9ochwochw89dcgw9dcgwc",
+            "cronen.csv": "1upodh2ioduhw9celdjhlfvhksgdwikdgcowjhcwoduchowjg8w",
+        },
+        # The name of the environment variable that can overwrite the path argument
+        env="PLUMBUS_DATA_DIR",
+    )
 
 In this case, if the user defines the ``PLUMBUS_DATA_DIR`` environment variable, we'll
 use its value instead of ``path``. Pooch will still append the value of ``version`` to
@@ -185,6 +185,203 @@ You can have data files in subdirectories of the remote data store. These files 
 saved to the same subdirectories in the local storage folder. Note, however, that the
 names of these files in the registry **must use Unix-style separators** (``'/'``) even
 on Windows. We will handle the appropriate conversions.
+
+
+Post-processing hooks
+---------------------
+
+Sometimes further post-processing actions need to be taken on downloaded files
+(unzipping, conversion to a more efficient format, etc). If these actions are time or
+memory consuming, it would be best to do this only once when the file is actually
+downloaded and not every time :meth:`pooch.Pooch.fetch` is called.
+
+One way to do this is using *post-processing hooks*. Method :meth:`pooch.Pooch.fetch`
+takes a ``processor`` argument that allows us to specify a function that is executed
+post-download and before returning the local file path. The processor also lets us
+overwrite the file name returned by :meth:`pooch.Pooch.fetch`.
+
+For example, let's say our data file is zipped and we want to store an unzipped copy of
+it and read that instead. We can do this with a post-processing hook that unzips the
+file and returns the path to the unzipped file instead of the original zip archive:
+
+.. code:: python
+
+    import os
+    from zipfile import ZipFile
+
+
+    def unpack(fname, action, pup):
+        """
+        Post-processing hook to unzip a file and return the unzipped file name.
+
+        Parameters
+        ----------
+        fname : str
+           Full path of the zipped file in local storage
+        action : str
+           One of "download" (file doesn't exist and will download),
+           "update" (file is outdated and will download), and
+           "fetch" (file exists and is updated so no download).
+        pup : Pooch
+           The instance of Pooch that called the processor function.
+
+        Returns
+        -------
+        fname : str
+           The full path to the unzipped file.
+           (Return the same fname is your processor doesn't modify the file).
+
+        """
+        # Create a new name for the unzipped file. Appending something to the name is a
+        # relatively safe way of making sure there are no clashes with other files in
+        # the registry.
+        unzipped = fname + ".unzipped"
+        # Don't unzip if file already exists and is not being downloaded
+        if action in ("update", "download") or not os.path.exists(unzipped):
+            with ZipFile(fname, "r") as zip_file:
+                # Extract the data file from within the archive
+                with zip_file.open("actual-data-file.txt") as data_file:
+                    # Save it to our desired file name
+                    with open(unzipped, "wb") as output:
+                        output.write(data_file.read())
+        # Return the path of the unzipped file
+        return unzipped
+
+
+    def fetch_zipped_file():
+        """
+        Load a large zipped sample data as a pandas.DataFrame.
+        """
+        # Pass in the processor to unzip the data file
+        fname = GOODBOY.fetch("zipped-data-file.zip", processor=unpack)
+        # fname is now the path of the unzipped file which can be loaded by pandas
+        # directly
+        data = pandas.read_csv(fname)
+        return data
+
+Fortunately, you don't have to implement your own unzip processor. Pooch provides the
+:class:`pooch.Unzip` processor for exactly this use case. The above example using the
+Pooch processor would look like:
+
+.. code:: python
+
+    from pooch import UnzipSingle
+
+
+    def fetch_zipped_file():
+        """
+        Load a large zipped sample data as a pandas.DataFrame.
+        """
+        # Extract the file "actual-data-file.txt" from the archive
+        unpack =  Unzip(members=["actual-data-file.txt"])
+        # Pass in the processor to unzip the data file
+        fnames = GOODBOY.fetch("zipped-data-file.zip", processor=unpack)
+        # Returns the paths of all extract members (in our case, only one)
+        fname = fnames[0]
+        # fname is now the path of the unzipped file ("actual-data-file.txt") which can
+        # be loaded by pandas directly
+        data = pandas.read_csv(fname)
+        return data
+
+Alternatively, your zip archive could contain multiple files that you want to unpack. In
+this case, the default behavior of :class:`pooch.Unzip` is to extract all files into a
+directory and return a list of file paths instead of a single one:
+
+.. code:: python
+
+    from pooch import Unzip
+
+    def fetch_zipped_archive():
+        """
+        Load all files from a zipped archive.
+        """
+        # Pass in the processor to unzip the data file
+        fnames = GOODBOY.fetch("zipped-archive.zip", processor=Unzip())
+        data = [pandas.read_csv(fname) for fname in fnames]
+        return data
+
+
+Custom downloaders and authentication
+-------------------------------------
+
+By default, :meth:`pooch.Pooch.fetch` will download files over HTTP without
+authentication. Sometimes this is not enough: some servers require logins, some are FTP
+instead of HTTP. To get around this, you can pass a ``downloader`` to
+:meth:`~pooch.Pooch.fetch`.
+
+Pooch provides :class:`~pooch.HTTPDownloader` class (which is used by default) that can
+be used to provide login credentials to HTTP servers that require authentication. For
+example:
+
+.. code:: python
+
+    from pooch import HTTPDownloader
+
+
+    def fetch_protected_data():
+        """
+        Fetch a file from a server that requires authentication
+        """
+        # Let the downloader know the login credentials
+        download_auth = HTTPDownloader(auth=("my_username", "my_password"))
+        fname = GOODBOY.fetch("some-data.csv", downloader=download_auth)
+        data = pandas.read_csv(fname)
+        return data
+
+It's probably not a good idea to hard-code credentials in your code. One way around this
+is to ask users to set their own credentials through environment variables. The download
+code could look something like this:
+
+
+.. code:: python
+
+    import os
+
+
+    def fetch_protected_data():
+        """
+        Fetch a file from a server that requires authentication
+        """
+        # Get the credentials from the user's environment
+        username = os.environ.get("SOMESITE_USERNAME")
+        password = os.environ.get("SOMESITE_PASSWORD")
+        # Let the downloader know the login credentials
+        download_auth = HTTPDownloader(auth=(username, password))
+        fname = GOODBOY.fetch("some-data.csv", downloader=download_auth)
+        data = pandas.read_csv(fname)
+        return data
+
+If your use case is not covered by our downloaders, you can implement your own. See
+:meth:`pooch.Pooch.fetch` for the required format of downloaders. As an example,
+consider the case in which the login credentials need to be provided to a site that is
+redirected from the original download URL in the :class:`~pooch.Pooch` registry:
+
+.. code:: python
+
+    import requests
+
+
+    def redirect_downloader(url, output_file, pooch):
+        """
+        Download after following a redirection.
+        """
+        # Get the credentials from the user's environment
+        username = os.environ.get("SOMESITE_USERNAME")
+        password = os.environ.get("SOMESITE_PASSWORD")
+        # Make a request that will redirect to the login page
+        login = requests.get(url)
+        # Provide the credentials and download from the new URL
+        download = HTTPDownloader(auth=(username, password))
+        download(login.url, output_file, mypooch)
+
+
+    def fetch_protected_data():
+        """
+        Fetch a file from a server that requires authentication
+        """
+        fname = GOODBOY.fetch("some-data.csv", downloader=redirect_downloader)
+        data = pandas.read_csv(fname)
+        return data
 
 
 So you have 1000 data files

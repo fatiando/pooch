@@ -10,7 +10,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
     
-    <title>pooch &mdash; Pooch v0.3.1</title>
+    <title>pooch &mdash; Pooch dev</title>
     
 
 
@@ -41,8 +41,18 @@
   <link rel="stylesheet" href="../_static/style.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    
-    <script src="../_static/require.js"></script>
+    <!-- Google Analytics tracking code -->
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new
+            Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+                })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-38125837-1', 'auto', {'storage': 'none'});
+      ga('set', 'anonymizeIp', true);
+      ga('send', 'pageview');
+    </script>
 
 </head>
 
@@ -70,7 +80,7 @@
             
             
               <div class="version">
-                v0.3.1
+                dev
               </div>
             
           
@@ -194,7 +204,9 @@
 <span class="c1"># Import functions/classes to make the API</span>
 <span class="kn">from</span> <span class="nn">.</span> <span class="k">import</span> <span class="n">version</span>
 <span class="kn">from</span> <span class="nn">.core</span> <span class="k">import</span> <span class="n">Pooch</span><span class="p">,</span> <span class="n">create</span>
-<span class="kn">from</span> <span class="nn">.utils</span> <span class="k">import</span> <span class="n">os_cache</span><span class="p">,</span> <span class="n">file_hash</span><span class="p">,</span> <span class="n">make_registry</span>
+<span class="kn">from</span> <span class="nn">.utils</span> <span class="k">import</span> <span class="n">os_cache</span><span class="p">,</span> <span class="n">file_hash</span><span class="p">,</span> <span class="n">make_registry</span><span class="p">,</span> <span class="n">check_version</span>
+<span class="kn">from</span> <span class="nn">.downloaders</span> <span class="k">import</span> <span class="n">HTTPDownloader</span>
+<span class="kn">from</span> <span class="nn">.processors</span> <span class="k">import</span> <span class="n">Unzip</span>
 
 
 <div class="viewcode-block" id="test"><a class="viewcode-back" href="../api/generated/pooch.test.html#pooch.test">[docs]</a><span class="k">def</span> <span class="nf">test</span><span class="p">(</span><span class="n">doctest</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">coverage</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
@@ -252,7 +264,7 @@
     <p>
         &copy; Copyright 2018-2019, The Pooch Developers
       <span class="lastupdated">
-        Last updated on Mar 29, 2019.
+        Last updated on May 02, 2019.
       </span>
 
     </p>

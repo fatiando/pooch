@@ -3,6 +3,40 @@
 Changelog
 =========
 
+Version 0.4.0
+-------------
+
+*Released on: 2019/05/01*
+
+New features:
+
+* Add customizable downloaders. Delegate file download into separate classes that can be
+  passed to ``Pooch.fetch``. Created the ``HTTPDownloader`` class (used by default)
+  which can also be used to download files that require authentication/login. (`#66
+  <https://github.com/fatiando/pooch/pull/66>`__)
+* Add post-download processor hooks to ``Pooch.fetch``. Allows users to pass in a
+  function that is executed right before returning and can overwrite the file path that
+  is returned by ``fetch``. Use this, for example, to perform unpacking/decompression
+  operations on larger files that can be time consuming and we only want to do once.
+  (`#59 <https://github.com/fatiando/pooch/pull/59>`__)
+* Add the ``Unzip`` post-download processor to extract files from a downloaded zip
+  archive. Unpacks files into a directory in the local store and returns a list of all
+  unzipped files. (`#72 <https://github.com/fatiando/pooch/pull/72>`__)
+* Make the ``check_version`` function public. It's used internally but will be useful in
+  examples that want to download things from the pooch repository. (`#69
+  <https://github.com/fatiando/pooch/pull/69>`__)
+
+Maintenance:
+
+* Pin sphinx to version 1.8.5. New versions of Sphinx (2.0.*) are messing up the
+  numpydoc style docstrings. (`#64 <https://github.com/fatiando/pooch/pull/64>`__)
+
+This release contains contributions from:
+
+* Santiago Soler
+* Leonardo Uieda
+
+
 Version 0.3.1
 -------------
 

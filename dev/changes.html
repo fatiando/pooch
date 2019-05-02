@@ -10,7 +10,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
     
-    <title>Changelog &mdash; Pooch v0.3.1</title>
+    <title>Changelog &mdash; Pooch dev</title>
     
 
 
@@ -42,8 +42,18 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="prev" title="pooch.test" href="api/generated/pooch.test.html" />
-    
-    <script src="_static/require.js"></script>
+    <!-- Google Analytics tracking code -->
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new
+            Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+                })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-38125837-1', 'auto', {'storage': 'none'});
+      ga('set', 'anonymizeIp', true);
+      ga('send', 'pageview');
+    </script>
 
 </head>
 
@@ -71,7 +81,7 @@
             
             
               <div class="version">
-                v0.3.1
+                dev
               </div>
             
           
@@ -102,6 +112,7 @@
 <li class="toctree-l1"><a class="reference internal" href="usage.html">Training your Pooch</a></li>
 <li class="toctree-l1"><a class="reference internal" href="api/index.html">API Reference</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Changelog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#version-0-4-0">Version 0.4.0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#version-0-3-1">Version 0.3.1</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#version-0-3-0">Version 0.3.0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#version-0-2-1">Version 0.2.1</a></li>
@@ -203,6 +214,36 @@
             
   <div class="section" id="changelog">
 <span id="changes"></span><h1>Changelog<a class="headerlink" href="#changelog" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="version-0-4-0">
+<h2>Version 0.4.0<a class="headerlink" href="#version-0-4-0" title="Permalink to this headline">¶</a></h2>
+<p><em>Released on: 2019/05/01</em></p>
+<p>New features:</p>
+<ul class="simple">
+<li>Add customizable downloaders. Delegate file download into separate classes that can be
+passed to <code class="docutils literal notranslate"><span class="pre">Pooch.fetch</span></code>. Created the <code class="docutils literal notranslate"><span class="pre">HTTPDownloader</span></code> class (used by default)
+which can also be used to download files that require authentication/login. (<a class="reference external" href="https://github.com/fatiando/pooch/pull/66">#66</a>)</li>
+<li>Add post-download processor hooks to <code class="docutils literal notranslate"><span class="pre">Pooch.fetch</span></code>. Allows users to pass in a
+function that is executed right before returning and can overwrite the file path that
+is returned by <code class="docutils literal notranslate"><span class="pre">fetch</span></code>. Use this, for example, to perform unpacking/decompression
+operations on larger files that can be time consuming and we only want to do once.
+(<a class="reference external" href="https://github.com/fatiando/pooch/pull/59">#59</a>)</li>
+<li>Add the <code class="docutils literal notranslate"><span class="pre">Unzip</span></code> post-download processor to extract files from a downloaded zip
+archive. Unpacks files into a directory in the local store and returns a list of all
+unzipped files. (<a class="reference external" href="https://github.com/fatiando/pooch/pull/72">#72</a>)</li>
+<li>Make the <code class="docutils literal notranslate"><span class="pre">check_version</span></code> function public. It’s used internally but will be useful in
+examples that want to download things from the pooch repository. (<a class="reference external" href="https://github.com/fatiando/pooch/pull/69">#69</a>)</li>
+</ul>
+<p>Maintenance:</p>
+<ul class="simple">
+<li>Pin sphinx to version 1.8.5. New versions of Sphinx (2.0.*) are messing up the
+numpydoc style docstrings. (<a class="reference external" href="https://github.com/fatiando/pooch/pull/64">#64</a>)</li>
+</ul>
+<p>This release contains contributions from:</p>
+<ul class="simple">
+<li>Santiago Soler</li>
+<li>Leonardo Uieda</li>
+</ul>
+</div>
 <div class="section" id="version-0-3-1">
 <h2>Version 0.3.1<a class="headerlink" href="#version-0-3-1" title="Permalink to this headline">¶</a></h2>
 <p><em>Released on: 2019/03/28</em></p>
@@ -318,7 +359,7 @@ data corruption.</li>
     <p>
         &copy; Copyright 2018-2019, The Pooch Developers
       <span class="lastupdated">
-        Last updated on Mar 29, 2019.
+        Last updated on May 02, 2019.
       </span>
 
     </p>

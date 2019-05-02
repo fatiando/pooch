@@ -1,9 +1,9 @@
-pooch.Pooch
+pooch.Unzip
 ===========
 
 .. currentmodule:: pooch
 
-.. autoclass:: Pooch
+.. autoclass:: Unzip
 
 .. raw:: html
 
@@ -11,6 +11,7 @@ pooch.Pooch
 
 
 
+.. automethod:: Unzip.__call__
 
 
 
@@ -67,35 +68,6 @@ pooch.Pooch
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-.. automethod:: Pooch.fetch
-
-
-
-.. automethod:: Pooch.get_url
-
-
-
-.. automethod:: Pooch.is_available
-
-
-
-.. automethod:: Pooch.load_registry
 
 
 
