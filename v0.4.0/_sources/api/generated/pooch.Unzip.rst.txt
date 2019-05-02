@@ -1,0 +1,76 @@
+pooch.Unzip
+===========
+
+.. currentmodule:: pooch
+
+.. autoclass:: Unzip
+
+.. raw:: html
+
+     <div style='clear:both'></div>
+
+
+
+.. automethod:: Unzip.__call__
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.. raw:: html
+
+     <div style='clear:both'></div>
