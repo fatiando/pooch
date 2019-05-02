@@ -1,6 +1,5 @@
-# pylint: disable=line-too-long
 """
-Download and post-processing hooks for Pooch.fetch
+Download hooks for Pooch.fetch
 """
 from __future__ import print_function
 
@@ -14,20 +13,14 @@ class HTTPDownloader:  # pylint: disable=too-few-public-methods
     When called, downloads the given file URL into the specified local file. Uses the
     :mod:`requests` library to manage downloads.
 
-    All keyword arguments given when creating an instance of this class will be passed
-    to :func:`requests.get`.
-
     Use with :meth:`pooch.Pooch.fetch` to customize the download of files (for example,
     to use authentication).
 
     Parameters
     ----------
-    url : str
-        The URL to the file you want to download.
-    output_file : str or file-like object
-        Path (and file name) to which the file will be downloaded.
-    pooch : :class:`~pooch.Pooch`
-        The instance of :class:`~pooch.Pooch` that is calling this method.
+    **kwargs
+        All keyword arguments given when creating an instance of this class will be
+        passed to :func:`requests.get`.
 
     Examples
     --------
@@ -85,7 +78,19 @@ class HTTPDownloader:  # pylint: disable=too-few-public-methods
 
     def __call__(self, url, output_file, pooch):
         """
-        Download the URL to the given output file.
+        Download the given URL over HTTP to the given output file.
+
+        Uses :func:`requests.get`.
+
+        Parameters
+        ----------
+        url : str
+            The URL to the file you want to download.
+        output_file : str or file-like object
+            Path (and file name) to which the file will be downloaded.
+        pooch : :class:`~pooch.Pooch`
+            The instance of :class:`~pooch.Pooch` that is calling this method.
+
         """
         kwargs = self.kwargs.copy()
         kwargs.setdefault("stream", True)

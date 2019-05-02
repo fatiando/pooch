@@ -15,10 +15,6 @@ Core
 
     create
     Pooch
-    Pooch.fetch
-    Pooch.load_registry
-    Pooch.get_url
-    Pooch.is_available
 
 Utilities
 ---------
@@ -38,6 +34,14 @@ Downloaders
    :toctree: generated/
 
    HTTPDownloader
+
+Processors
+----------
+
+.. autosummary::
+   :toctree: generated/
+
+   Unzip
 
 Miscellaneous
 -------------

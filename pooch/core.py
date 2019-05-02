@@ -11,7 +11,7 @@ from warnings import warn
 import requests
 
 from .utils import file_hash, check_version
-from .hooks import HTTPDownloader
+from .downloaders import HTTPDownloader
 
 
 # PermissionError was introduced in Python 3.3. This can be deleted when dropping 2.7
