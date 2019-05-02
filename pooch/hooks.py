@@ -1,11 +1,7 @@
-# pylint: disable=line-too-long
 """
-Download and post-processing hooks for Pooch.fetch
+Download hooks for Pooch.fetch
 """
 from __future__ import print_function
-
-import os
-from zipfile import ZipFile
 
 import requests
 
@@ -17,20 +13,14 @@ class HTTPDownloader:  # pylint: disable=too-few-public-methods
     When called, downloads the given file URL into the specified local file. Uses the
     :mod:`requests` library to manage downloads.
 
-    All keyword arguments given when creating an instance of this class will be passed
-    to :func:`requests.get`.
-
     Use with :meth:`pooch.Pooch.fetch` to customize the download of files (for example,
     to use authentication).
 
     Parameters
     ----------
-    url : str
-        The URL to the file you want to download.
-    output_file : str or file-like object
-        Path (and file name) to which the file will be downloaded.
-    pooch : :class:`~pooch.Pooch`
-        The instance of :class:`~pooch.Pooch` that is calling this method.
+    **kwargs
+        All keyword arguments given when creating an instance of this class will be
+        passed to :func:`requests.get`.
 
     Examples
     --------
@@ -88,7 +78,19 @@ class HTTPDownloader:  # pylint: disable=too-few-public-methods
 
     def __call__(self, url, output_file, pooch):
         """
-        Download the URL to the given output file.
+        Download the given URL over HTTP to the given output file.
+
+        Uses :func:`requests.get`.
+
+        Parameters
+        ----------
+        url : str
+            The URL to the file you want to download.
+        output_file : str or file-like object
+            Path (and file name) to which the file will be downloaded.
+        pooch : :class:`~pooch.Pooch`
+            The instance of :class:`~pooch.Pooch` that is calling this method.
+
         """
         kwargs = self.kwargs.copy()
         kwargs.setdefault("stream", True)
@@ -104,70 +106,3 @@ class HTTPDownloader:  # pylint: disable=too-few-public-methods
         finally:
             if ispath:
                 output_file.close()
-
-
-class UnzipProcessor:  # pylint: disable=too-few-public-methods
-    """
-    Processing hook to unpack a zip archive and return a list of all files.
-
-    Use with :meth:`pooch.Pooch.fetch` to unzip a downloaded data file and return the
-    names of the unzipped files instead of the zip archive.
-
-    Parameters
-    ----------
-    folder_name : str or None
-        Name (path) of the folder where the files will be unpacked. If None, will use
-        the original file name plus ``.unzipped``.
-
-    Examples
-    --------
-
-
-    """
-
-    def __init__(self, folder_name=None):
-        self.folder_name = folder_name
-
-    def __call__(self, fname, action, pooch):
-        """
-        Extract all files from the given zip archive.
-
-        The output folder is determined by the ``folder_name`` attribute (defaults to
-        ``fname + ".unzipped"``.
-
-        Parameters
-        ----------
-        fname : str
-           Full path of the zipped file in local storage.
-        action : str
-           One of "download" (file doesn't exist and will download),
-           "update" (file is outdated and will download), and
-           "fetch" (file exists and is updated so no download).
-       pooch : :class:`pooch.Pooch`
-           The instance of :class:`pooch.Pooch` that is calling this.
-
-        Returns
-        -------
-        fnames : list of str
-           A list of the full path to all files in the unzipped archive.
-
-        """
-        if self.folder_name is not None:
-            unzipped = self.folder_name
-        else:
-            unzipped = fname + ".unzipped"
-        if action in ("update", "download") or not os.path.exists(unzipped):
-            # Make sure that the folder with the unzipped files exists
-            if not os.path.exists(unzipped):
-                os.makedirs(unzipped)
-            with ZipFile(fname, "r") as zip_file:
-                # Unpack all files from the archive into our new folder
-                zip_file.extractall(path=unzipped)
-        # Get a list of all file names (including subdirectories) in our folder of
-        # unzipped files.
-        fnames = [
-            os.path.join(path, fname)
-            for path, _, files in os.walk(unzipped)
-            for fname in files
-        ]
-        return fnames

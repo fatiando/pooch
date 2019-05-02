@@ -209,6 +209,7 @@ file and returns the path to the unzipped file instead of the original zip archi
     import os
     from zipfile import ZipFile
 
+
     def unpack(fname, action, pup):
         """
         Post-processing hook to unzip a file and return the unzipped file name.
@@ -258,58 +259,42 @@ file and returns the path to the unzipped file instead of the original zip archi
         data = pandas.read_csv(fname)
         return data
 
-
-Alternatively, your zip archive could contain multiple files that you want to unpack. In
-this case, the processor can extract all files into a directory and return a list of
-file paths instead of a single one:
+Fortunately, you don't have to implement your own unzip processor. Pooch provides the
+:class:`pooch.Unzip` and :class:`pooch.UnzipSingle` processors for exactly this use
+case. The above example using the Pooch processor would look like:
 
 .. code:: python
 
-    def unpack_multiple(fname, action, pup):
+    from pooch import UnzipSingle
+
+
+    def fetch_zipped_file():
         """
-        Post-processing hook to unpack a zip archive and return a list of all files.
-
-        Parameters
-        ----------
-        fname : str
-           Full path of the zipped file in local storage
-        action : str
-           One of "download" (file doesn't exist and will download),
-           "update" (file is outdated and will download), and
-           "fetch" (file exists and is updated so no download).
-        pup : Pooch
-           The instance of Pooch that called the processor function.
-
-        Returns
-        -------
-        fnames : list of str
-           A list of the full path to all files in the unzipped archive.
-
+        Load a large zipped sample data as a pandas.DataFrame.
         """
-        unzipped = fname + ".unzipped"
-        if action in ("update", "download") or not os.path.exists(unzipped):
-            # Make sure that the folder with the unzipped files exists
-            if not os.path.exists(unzipped):
-                os.makedirs(unzipped)
-            with ZipFile(fname, "r") as zip_file:
-                # Unpack all files from the archive into our new folder
-                zip_file.extractall(path=unzipped)
-        # Get a list of all file names (including subdirectories) in our folder of
-        # unzipped files.
-        fnames = [
-            os.path.join(path, fname)
-            for path, _, files in os.walk(unzipped)
-            for fname in files
-        ]
-        return fnames
+        # Extract the file "actual-data-file.txt" from the archive
+        unpack =  UnzipSingle(member="actual-data-file.txt")
+        # Pass in the processor to unzip the data file
+        fname = GOODBOY.fetch("zipped-data-file.zip", processor=unpack)
+        # fname is now the path of the unzipped file ("actual-data-file.txt") which can
+        # be loaded by pandas directly
+        data = pandas.read_csv(fname)
+        return data
 
+Alternatively, your zip archive could contain multiple files that you want to unpack. In
+this case, the :class:`pooch.Unzip` processor can extract all files into a directory and
+return a list of file paths instead of a single one:
+
+.. code:: python
+
+    from pooch import Unzip
 
     def fetch_zipped_archive():
         """
         Load all files from a zipped archive.
         """
         # Pass in the processor to unzip the data file
-        fnames = GOODBOY.fetch("zipped-archive.zip", processor=unpack_multiple)
+        fnames = GOODBOY.fetch("zipped-archive.zip", processor=Unzip())
         data = [pandas.read_csv(fname) for fname in fnames]
         return data
 

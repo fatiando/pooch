@@ -4,7 +4,6 @@ Test the core class and factory function.
 import os
 import sys
 from pathlib import Path
-from zipfile import ZipFile
 import tempfile
 
 try:
@@ -18,6 +17,7 @@ import pytest
 from .. import Pooch, create
 from ..utils import file_hash
 from ..hooks import HTTPDownloader
+from ..processors import Unzip, UnzipSingle
 
 from .utils import pooch_test_url, pooch_test_registry, check_tiny_data
 
@@ -254,21 +254,10 @@ def test_check_availability():
 
 def test_processors():
     "Setup a post-download hook and make sure it's only executed when downloading"
-
-    def unzip(fname, action, pup):  # pylint: disable=unused-argument
-        "unzip the data file and warn when doing so"
-        unzipped = fname + ".unzipped"
-        if action in ("update", "download") or not os.path.exists(unzipped):
-            with ZipFile(fname, "r") as zip_file:
-                with zip_file.open("tiny-data.txt") as data_file:
-                    with open(unzipped, "wb") as output:
-                        output.write(data_file.read())
-                warnings.warn("hook executed")
-        return unzipped
-
+    unzip = UnzipSingle(member="tiny-data.txt")
     with TemporaryDirectory() as local_store:
         path = Path(local_store)
-        true_path = str(path / "tiny-data.zip.unzipped")
+        true_path = str(path / "tiny-data.zip-tiny-data.txt.unzip")
         # Setup a pooch in a temp dir
         pup = Pooch(path=path, base_url=BASEURL, registry=REGISTRY)
         # Check the warnings when downloading and from the processor
@@ -277,7 +266,7 @@ def test_processors():
             assert len(warn) == 2
             assert all(issubclass(w.category, UserWarning) for w in warn)
             assert str(warn[-2].message).split()[0] == "Downloading"
-            assert str(warn[-1].message) == "hook executed"
+            assert str(warn[-1].message).startswith("Unzipping 'tiny-data.txt'")
         assert fname == true_path
         check_tiny_data(fname)
         # Check that processor doesn't execute when not downloading
@@ -290,45 +279,28 @@ def test_processors():
 
 def test_processor_multiplefiles():
     "Setup a processor to unzip a file and return multiple fnames"
-
-    def unzip(fname, action, pup):  # pylint: disable=unused-argument
-        "unzip the data file and warn when doing so"
-        unzipped = fname + ".unzipped"
-        if action in ("update", "download") or not os.path.exists(unzipped):
-            if not os.path.exists(unzipped):
-                os.makedirs(unzipped)
-            with ZipFile(fname, "r") as zip_file:
-                zip_file.extractall(path=unzipped)
-                warnings.warn("hook executed")
-        fnames = [
-            os.path.join(path, fname)
-            for path, _, files in os.walk(unzipped)
-            for fname in files
-        ]
-        return fnames
-
     with TemporaryDirectory() as local_store:
         path = Path(local_store)
         true_paths = {
-            str(path / "store.zip.unzipped" / "store" / "tiny-data.txt"),
-            str(path / "store.zip.unzipped" / "store" / "subdir" / "tiny-data.txt"),
+            str(path / "store.zip.unzip" / "store" / "tiny-data.txt"),
+            str(path / "store.zip.unzip" / "store" / "subdir" / "tiny-data.txt"),
         }
         # Setup a pooch in a temp dir
         pup = Pooch(path=path, base_url=BASEURL, registry=REGISTRY)
         # Check the warnings when downloading and from the processor
         with warnings.catch_warnings(record=True) as warn:
-            fnames = pup.fetch("store.zip", processor=unzip)
+            fnames = pup.fetch("store.zip", processor=Unzip())
             assert len(warn) == 2
             assert all(issubclass(w.category, UserWarning) for w in warn)
             assert str(warn[-2].message).split()[0] == "Downloading"
-            assert str(warn[-1].message) == "hook executed"
+            assert str(warn[-1].message).startswith("Unzipping contents")
             assert len(fnames) == 2
             assert true_paths == set(fnames)
             for fname in fnames:
                 check_tiny_data(fname)
         # Check that processor doesn't execute when not downloading
         with warnings.catch_warnings(record=True) as warn:
-            fnames = pup.fetch("store.zip", processor=unzip)
+            fnames = pup.fetch("store.zip", processor=Unzip())
             assert not warn
             assert len(fnames) == 2
             assert true_paths == set(fnames)
