@@ -5,33 +5,35 @@ Post-processing hooks for Pooch.fetch
 import os
 
 from zipfile import ZipFile
+from tarfile import TarFile
 from warnings import warn
 
 
-class Unzip:  # pylint: disable=too-few-public-methods
+class ExtractorProcessor:  # pylint: disable=too-few-public-methods
     """
-    Processor that unpacks a zip archive and returns a list of all files.
+    Base class for extractions from compressed archives.
 
-    Use with :meth:`pooch.Pooch.fetch` to unzip a downloaded data file into a folder in
-    the local data store. :meth:`~pooch.Pooch.fetch` will return a list with the names
-    of the unzipped files instead of the zip archive.
+    Subclasses can be used with :meth:`pooch.Pooch.fetch` to unzip a downloaded
+    data file into a folder in the local data store. :meth:`~pooch.Pooch.fetch`
+    will return a list with the names of the extracted files instead of the
+    archive.
 
     Parameters
     ----------
     members : list or None
-        If None, will unpack all files in the zip archive. Otherwise, *members* must be
-        a list of file names to unpack from the archive. Only these files will be
-        unpacked.
+        If None, will unpack all files in the archive. Otherwise, *members*
+        must be a list of file names to unpack from the archive. Only these
+        files will be unpacked.
     """
+
+    suffix = None  # to be implemented in subclass
 
     def __init__(self, members=None):
         self.members = members
 
     def __call__(self, fname, action, pooch):
         """
-        Extract all files from the given zip archive.
-
-        The output folder is ``{fname}.unzip``.
+        Extract all files from the given archive.
 
         Parameters
         ----------
@@ -50,36 +52,113 @@ class Unzip:  # pylint: disable=too-few-public-methods
         Returns
         -------
         fnames : list of str
-            A list of the full path to all files in the unzipped archive.
+            A list of the full path to all files in the extracted archive.
 
         """
-        unzipped = fname + ".unzip"
-        if action in ("update", "download") or not os.path.exists(unzipped):
-            # Make sure that the folder with the unzipped files exists
-            if not os.path.exists(unzipped):
-                os.makedirs(unzipped)
-            with ZipFile(fname, "r") as zip_file:
-                if self.members is None:
-                    warn("Unzipping contents of '{}' to '{}'".format(fname, unzipped))
-                    # Unpack all files from the archive into our new folder
-                    zip_file.extractall(path=unzipped)
-                else:
-                    for member in self.members:
-                        warn(
-                            "Unzipping '{}' from '{}' to '{}'".format(
-                                member, fname, unzipped
-                            )
-                        )
-                        # Extract the data file from within the archive
-                        with zip_file.open(member) as data_file:
-                            # Save it to our desired file name
-                            with open(os.path.join(unzipped, member), "wb") as output:
-                                output.write(data_file.read())
+        extract_dir = fname + self.suffix
+        if action in ("update", "download") or not os.path.exists(extract_dir):
+            # Make sure that the folder with the extracted files exists
+            if not os.path.exists(extract_dir):
+                os.makedirs(extract_dir)
+            self._extract_file(fname, extract_dir)
         # Get a list of all file names (including subdirectories) in our folder of
         # unzipped files.
         fnames = [
             os.path.join(path, fname)
-            for path, _, files in os.walk(unzipped)
+            for path, _, files in os.walk(extract_dir)
             for fname in files
         ]
         return fnames
+
+    def _extract_file(self, fname, extract_dir):
+        raise NotImplementedError
+
+
+class Unzip(ExtractorProcessor):  # pylint: disable=too-few-public-methods
+    """
+    Processor that unpacks a zip archive and returns a list of all files.
+
+    Use with :meth:`pooch.Pooch.fetch` to unzip a downloaded data file into a folder in
+    the local data store. :meth:`~pooch.Pooch.fetch` will return a list with the names
+    of the unzipped files instead of the zip archive.
+
+    The output folder is ``{fname}.unzip``.
+
+
+    Parameters
+    ----------
+    members : list or None
+        If None, will unpack all files in the zip archive. Otherwise, *members* must be
+        a list of file names to unpack from the archive. Only these files will be
+        unpacked.
+    """
+
+    suffix = ".unzip"
+
+    def _extract_file(self, fname, extract_dir):
+        """
+        This method receives an argument for the archive to extract and the
+        destination path.
+        """
+        with ZipFile(fname, "r") as zip_file:
+            if self.members is None:
+                warn("Unzipping contents of '{}' to '{}'".format(fname, extract_dir))
+                # Unpack all files from the archive into our new folder
+                zip_file.extractall(path=extract_dir)
+            else:
+                for member in self.members:
+                    warn(
+                        "Extracting '{}' from '{}' to '{}'".format(
+                            member, fname, extract_dir
+                        )
+                    )
+                    # Extract the data file from within the archive
+                    with zip_file.open(member) as data_file:
+                        # Save it to our desired file name
+                        with open(os.path.join(extract_dir, member), "wb") as output:
+                            output.write(data_file.read())
+
+
+class Untar(ExtractorProcessor):  # pylint: disable=too-few-public-methods
+    """
+    Processor that unpacks a tar archive and returns a list of all files.
+
+    Use with :meth:`pooch.Pooch.fetch` to untar a downloaded data file into a folder in
+    the local data store. :meth:`~pooch.Pooch.fetch` will return a list with the names
+    of the extracted files instead of the archive.
+
+    The output folder is ``{fname}.untar``.
+
+
+    Parameters
+    ----------
+    members : list or None
+        If None, will unpack all files in the archive. Otherwise, *members* must be
+        a list of file names to unpack from the archive. Only these files will be
+        unpacked.
+    """
+
+    suffix = ".untar"
+
+    def _extract_file(self, fname, extract_dir):
+        """
+        This method receives an argument for the archive to extract and the
+        destination path.
+        """
+        with TarFile.open(fname, "r") as tar_file:
+            if self.members is None:
+                warn("Untarring contents of '{}' to '{}'".format(fname, extract_dir))
+                # Unpack all files from the archive into our new folder
+                tar_file.extractall(path=extract_dir)
+            else:
+                for member in self.members:
+                    warn(
+                        "Extracting '{}' from '{}' to '{}'".format(
+                            member, fname, extract_dir
+                        )
+                    )
+                    # Extract the data file from within the archive
+                    with tar_file.getmember(member) as data_file:
+                        # Save it to our desired file name
+                        with open(os.path.join(extract_dir, member), "wb") as output:
+                            output.write(data_file.tobuf())
