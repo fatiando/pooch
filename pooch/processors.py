@@ -71,6 +71,10 @@ class ExtractorProcessor:  # pylint: disable=too-few-public-methods
         return fnames
 
     def _extract_file(self, fname, extract_dir):
+        """
+        This method receives an argument for the archive to extract and the
+        destination path. MUST BE IMPLEMENTED BY CHILD CLASSES.
+        """
         raise NotImplementedError
 
 
@@ -158,7 +162,11 @@ class Untar(ExtractorProcessor):  # pylint: disable=too-few-public-methods
                         )
                     )
                     # Extract the data file from within the archive
-                    with tar_file.extractfile(member) as data_file:
+                    # Python 2.7: extractfile doesn't return a context manager
+                    data_file = tar_file.extractfile(member)
+                    try:
                         # Save it to our desired file name
                         with open(os.path.join(extract_dir, member), "wb") as output:
                             output.write(data_file.read())
+                    finally:
+                        data_file.close()
