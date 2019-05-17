@@ -42,6 +42,7 @@ Processors
    :toctree: generated/
 
    Unzip
+   Untar
 
 Miscellaneous
 -------------

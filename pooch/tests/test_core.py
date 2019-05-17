@@ -17,7 +17,6 @@ import pytest
 from .. import Pooch, create
 from ..utils import file_hash
 from ..downloaders import HTTPDownloader
-from ..processors import Unzip
 
 from .utils import pooch_test_url, pooch_test_registry, check_tiny_data
 
@@ -250,66 +249,6 @@ def test_check_availability():
     registry.update(REGISTRY)
     pup = Pooch(path=DATA_DIR, base_url=BASEURL, registry=registry)
     assert not pup.is_available("not-a-real-data-file.txt")
-
-
-def test_processors():
-    "Setup a post-download hook and make sure it's only executed when downloading"
-    unzip = Unzip(members=["tiny-data.txt"])
-    with TemporaryDirectory() as local_store:
-        path = Path(local_store)
-        true_path = str(path / "tiny-data.zip.unzip" / "tiny-data.txt")
-        # Setup a pooch in a temp dir
-        pup = Pooch(path=path, base_url=BASEURL, registry=REGISTRY)
-        # Check the warnings when downloading and from the processor
-        with warnings.catch_warnings(record=True) as warn:
-            fnames = pup.fetch("tiny-data.zip", processor=unzip)
-            fname = fnames[0]
-            assert len(fnames) == 1
-            assert len(warn) == 2
-            assert all(issubclass(w.category, UserWarning) for w in warn)
-            assert str(warn[-2].message).split()[0] == "Downloading"
-            assert str(warn[-1].message).startswith("Unzipping 'tiny-data.txt'")
-        assert fname == true_path
-        check_tiny_data(fname)
-        # Check that processor doesn't execute when not downloading
-        with warnings.catch_warnings(record=True) as warn:
-            fnames = pup.fetch("tiny-data.zip", processor=unzip)
-            fname = fnames[0]
-            assert len(fnames) == 1
-            assert not warn
-        assert fname == true_path
-        check_tiny_data(fname)
-
-
-def test_processor_multiplefiles():
-    "Setup a processor to unzip a file and return multiple fnames"
-    with TemporaryDirectory() as local_store:
-        path = Path(local_store)
-        true_paths = {
-            str(path / "store.zip.unzip" / "store" / "tiny-data.txt"),
-            str(path / "store.zip.unzip" / "store" / "subdir" / "tiny-data.txt"),
-        }
-        # Setup a pooch in a temp dir
-        pup = Pooch(path=path, base_url=BASEURL, registry=REGISTRY)
-        # Check the warnings when downloading and from the processor
-        with warnings.catch_warnings(record=True) as warn:
-            fnames = pup.fetch("store.zip", processor=Unzip())
-            assert len(warn) == 2
-            assert all(issubclass(w.category, UserWarning) for w in warn)
-            assert str(warn[-2].message).split()[0] == "Downloading"
-            assert str(warn[-1].message).startswith("Unzipping contents")
-            assert len(fnames) == 2
-            assert true_paths == set(fnames)
-            for fname in fnames:
-                check_tiny_data(fname)
-        # Check that processor doesn't execute when not downloading
-        with warnings.catch_warnings(record=True) as warn:
-            fnames = pup.fetch("store.zip", processor=Unzip())
-            assert not warn
-            assert len(fnames) == 2
-            assert true_paths == set(fnames)
-            for fname in fnames:
-                check_tiny_data(fname)
 
 
 def test_downloader():
