@@ -161,4 +161,4 @@ class Untar(ExtractorProcessor):  # pylint: disable=too-few-public-methods
                     with tar_file.getmember(member) as data_file:
                         # Save it to our desired file name
                         with open(os.path.join(extract_dir, member), "wb") as output:
-                            output.write(data_file.tobuf())
+                            output.write(data_file.read())
