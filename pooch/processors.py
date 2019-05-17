@@ -26,7 +26,7 @@ class ExtractorProcessor:  # pylint: disable=too-few-public-methods
         files will be unpacked.
     """
 
-    suffix = None  # to be implemented in subclass
+    suffix = None  # String appended to unpacked archive. To be implemented in subclass
 
     def __init__(self, members=None):
         self.members = members
@@ -55,6 +55,10 @@ class ExtractorProcessor:  # pylint: disable=too-few-public-methods
             A list of the full path to all files in the extracted archive.
 
         """
+        if self.suffix is None:
+            raise NotImplementedError(
+                "Derived classes must define the 'suffix' attribute."
+            )
         extract_dir = fname + self.suffix
         if action in ("update", "download") or not os.path.exists(extract_dir):
             # Make sure that the folder with the extracted files exists

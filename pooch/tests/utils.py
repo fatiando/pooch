@@ -56,5 +56,6 @@ def pooch_test_registry():
         "tiny-data.zip": "0d49e94f07bc1866ec57e7fd1b93a351fba36842ec9b13dd50bf94e8dfa35cbb",
         "store.zip": "0498d2a001e71051bbd2acd2346f38da7cbd345a633cb7bf0f8a20938714b51a",
         "tiny-data.tar.gz": "41503f083814f43a01a8e9a30c28d7a9fe96839a99727a7fdd0acf7cd5bab63b",
+        "store.tar.gz": "088c7f4e0f1859b1c769bb6065de24376f366374817ede8691a6ac2e49f29511",
     }
     return registry
