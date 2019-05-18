@@ -12,7 +12,7 @@ import warnings
 import pytest
 
 from .. import Pooch
-from ..processors import Unzip, Untar, ExtractorProcessor
+from ..processors import Unzip, Untar, ExtractorProcessor, Decompress
 
 from .utils import pooch_test_url, pooch_test_registry, check_tiny_data
 
@@ -20,6 +20,32 @@ from .utils import pooch_test_url, pooch_test_registry, check_tiny_data
 REGISTRY = pooch_test_registry()
 BASEURL = pooch_test_url()
 
+@pytest.mark.parametrize("method,ext", [("lzma", "xz"), ("xz", "xz"), ("bzip2", "bz2"),
+                                        ("gzip", "gz")], ids=["lzma", "xz", "bz2", "gz"])
+def test_decompress(method, ext):
+    "Check that decompression after download works for all formats"
+    processor = Decompress(method=method)
+    extracted = "tiny-data.txt"
+    with TemporaryDirectory() as local_store:
+        path = Path(local_store)
+        true_path = str(path / "tiny-data.txt")
+        # Setup a pooch in a temp dir
+        pup = Pooch(path=path, base_url=BASEURL, registry=REGISTRY)
+        # Check the warnings when downloading and from the processor
+        with warnings.catch_warnings(record=True) as warn:
+            fname = pup.fetch("tiny-data.txt." + ext, processor=processor)
+            assert len(warn) == 2
+            assert all(issubclass(w.category, UserWarning) for w in warn)
+            assert str(warn[-2].message).split()[0] == "Downloading"
+            assert str(warn[-1].message).startswith("Decompressing")
+        assert fname == true_path
+        check_tiny_data(fname)
+        # Check that processor doesn't execute when not downloading
+        with warnings.catch_warnings(record=True) as warn:
+            fname = pup.fetch("tiny-data.txt." + ext, processor=processor)
+            assert not warn
+        assert fname == true_path
+        check_tiny_data(fname)
 
 def test_extractprocessor_fails():
     "The base class should be used and should fail when passed to fecth"

@@ -3,7 +3,10 @@
 Post-processing hooks for Pooch.fetch
 """
 import os
-
+import bz2
+import gzip
+import lzma
+import shutil
 from zipfile import ZipFile
 from tarfile import TarFile
 from warnings import warn
@@ -24,6 +27,7 @@ class ExtractorProcessor:  # pylint: disable=too-few-public-methods
         If None, will unpack all files in the archive. Otherwise, *members*
         must be a list of file names to unpack from the archive. Only these
         files will be unpacked.
+
     """
 
     suffix = None  # String appended to unpacked archive. To be implemented in subclass
@@ -92,13 +96,13 @@ class Unzip(ExtractorProcessor):  # pylint: disable=too-few-public-methods
 
     The output folder is ``{fname}.unzip``.
 
-
     Parameters
     ----------
     members : list or None
         If None, will unpack all files in the zip archive. Otherwise, *members* must be
         a list of file names to unpack from the archive. Only these files will be
         unpacked.
+
     """
 
     suffix = ".unzip"
@@ -174,3 +178,41 @@ class Untar(ExtractorProcessor):  # pylint: disable=too-few-public-methods
                             output.write(data_file.read())
                     finally:
                         data_file.close()
+
+
+class Decompress():  # pylint: disable=too-few-public-methods
+    """
+    """
+
+    def __init__(self, method="auto"):
+        self.method = method
+
+    def __call__(self, fname, action, pooch):
+        """
+        Decompress the given file.
+        The output file will be ``fname`` without the ``.gz`` extension.
+
+        Parameters
+        ----------
+        fname : str
+            Full path of the compressed file in local storage.
+        action : str
+            Indicates what action was taken by :meth:`pooch.Pooch.fetch`. One of:
+            * ``"download"``: The file didn't exist locally and was downloaded
+            * ``"update"``: The local file was outdated and was re-download
+            * ``"fetch"``: The file exists and is updated so it wasn't downloaded
+        pooch : :class:`pooch.Pooch`
+            The instance of :class:`pooch.Pooch` that is calling this.
+
+        Returns
+        -------
+        fname : str
+            The full path to the decompressed file.
+        """
+        # Get rid of the .gz
+        decomp = os.path.splitext(fname)[0]
+        if action in ("update", "download") or not os.path.exists(decomp):
+            with open(decomp, "w+b") as output:
+                with gzip.open(fname) as compressed:
+                    shutil.copyfileobj(compressed, output)
+        return decomp
