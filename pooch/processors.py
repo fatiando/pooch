@@ -180,8 +180,9 @@ class Untar(ExtractorProcessor):  # pylint: disable=too-few-public-methods
                         data_file.close()
 
 
-class Decompress():  # pylint: disable=too-few-public-methods
+class Decompress:  # pylint: disable=too-few-public-methods
     """
+    Decompress a file.
     """
 
     def __init__(self, method="auto"):
@@ -209,10 +210,43 @@ class Decompress():  # pylint: disable=too-few-public-methods
         fname : str
             The full path to the decompressed file.
         """
-        # Get rid of the .gz
-        decomp = os.path.splitext(fname)[0]
-        if action in ("update", "download") or not os.path.exists(decomp):
-            with open(decomp, "w+b") as output:
-                with gzip.open(fname) as compressed:
+        decompressed = fname + ".decomp"
+        if action in ("update", "download") or not os.path.exists(decompressed):
+            warn(
+                "Decompressing '{}' to '{}' using method '{}'.".format(
+                    fname, decompressed, self.method
+                )
+            )
+            module = self._compression_module(fname)
+            with open(decompressed, "w+b") as output:
+                with module.open(fname) as compressed:
                     shutil.copyfileobj(compressed, output)
-        return decomp
+        return decompressed
+
+    def _compression_module(self, fname):
+        """
+        Get the Python compression module compatible with fname and the chosen method.
+
+        If the *method* attribute is "auto", will select a method based on the
+        extension. If no recognized extension is in the file name, will raise a
+        ValueError.
+        """
+        method = self.method
+        if method == "auto":
+            ext = os.path.splitext(fname)[-1]
+            valid_methods = {".xz": "lzma", ".gz": "gzip", ".bz2": "bzip2"}
+            if ext not in valid_methods:
+                raise ValueError(
+                    "Unrecognized extension '{}'. Must be one of '{}'.".format(
+                        ext, list(valid_methods.keys())
+                    )
+                )
+            method = valid_methods[ext]
+        modules = {"lzma": lzma, "xz": lzma, "gzip": gzip, "bzip2": bz2}
+        if method not in modules:
+            raise ValueError(
+                "Invalid compression method '{}'. Must be one of '{}'.".format(
+                    method, list(modules.keys())
+                )
+            )
+        return modules[method]

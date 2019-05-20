@@ -20,15 +20,18 @@ from .utils import pooch_test_url, pooch_test_registry, check_tiny_data
 REGISTRY = pooch_test_registry()
 BASEURL = pooch_test_url()
 
-@pytest.mark.parametrize("method,ext", [("lzma", "xz"), ("xz", "xz"), ("bzip2", "bz2"),
-                                        ("gzip", "gz")], ids=["lzma", "xz", "bz2", "gz"])
+
+@pytest.mark.parametrize(
+    "method,ext",
+    [("auto", "xz"), ("lzma", "xz"), ("xz", "xz"), ("bzip2", "bz2"), ("gzip", "gz")],
+    ids=["auto", "lzma", "xz", "bz2", "gz"],
+)
 def test_decompress(method, ext):
     "Check that decompression after download works for all formats"
     processor = Decompress(method=method)
-    extracted = "tiny-data.txt"
     with TemporaryDirectory() as local_store:
         path = Path(local_store)
-        true_path = str(path / "tiny-data.txt")
+        true_path = str(path / ".".join(["tiny-data.txt", ext, "decomp"]))
         # Setup a pooch in a temp dir
         pup = Pooch(path=path, base_url=BASEURL, registry=REGISTRY)
         # Check the warnings when downloading and from the processor
@@ -38,6 +41,7 @@ def test_decompress(method, ext):
             assert all(issubclass(w.category, UserWarning) for w in warn)
             assert str(warn[-2].message).split()[0] == "Downloading"
             assert str(warn[-1].message).startswith("Decompressing")
+            assert method in str(warn[-1].message)
         assert fname == true_path
         check_tiny_data(fname)
         # Check that processor doesn't execute when not downloading
@@ -46,6 +50,23 @@ def test_decompress(method, ext):
             assert not warn
         assert fname == true_path
         check_tiny_data(fname)
+
+
+def test_decompress_fails():
+    "Should fail if method='auto' and no extension is given in the file name"
+    with TemporaryDirectory() as local_store:
+        path = Path(local_store)
+        pup = Pooch(path=path, base_url=BASEURL, registry=REGISTRY)
+        with pytest.raises(ValueError) as exception:
+            with warnings.catch_warnings():
+                pup.fetch("tiny-data.txt", processor=Decompress(method="auto"))
+        assert exception.value.args[0].startswith("Unrecognized extension '.txt'")
+        # Should also fail for a bad method name
+        with pytest.raises(ValueError) as exception:
+            with warnings.catch_warnings():
+                pup.fetch("tiny-data.txt", processor=Decompress(method="bla"))
+        assert exception.value.args[0].startswith("Invalid compression method 'bla'")
+
 
 def test_extractprocessor_fails():
     "The base class should be used and should fail when passed to fecth"
