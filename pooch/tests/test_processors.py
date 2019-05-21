@@ -69,9 +69,7 @@ def test_decompress_fails():
 
 
 @pytest.mark.parametrize(
-    "method,ext",
-    [("lzma", "xz"), ("bzip2", "bz2")],
-    ids=["lzma", "bz2"],
+    "method,ext", [("lzma", "xz"), ("bzip2", "bz2")], ids=["lzma", "bz2"]
 )
 def test_decompress_27_missing_dependencies(method, ext):
     "Raises an exception when missing extra dependencies for 2.7"

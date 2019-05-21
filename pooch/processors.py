@@ -271,7 +271,7 @@ class Decompress:  # pylint: disable=too-few-public-methods
             raise ValueError(
                 "LZMA/xz support requires the 'backports.lzma' package in Python 2.7"
             )
-        elif method == "bzip2" and self.modules["bzip2"] is None:
+        if method == "bzip2" and self.modules["bzip2"] is None:
             raise ValueError(
                 "bzip2 support requires the 'bz2file' package in Python 2.7"
             )
