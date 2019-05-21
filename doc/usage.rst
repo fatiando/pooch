@@ -267,7 +267,7 @@ Pooch processor would look like:
 
 .. code:: python
 
-    from pooch import UnzipSingle
+    from pooch import Unzip
 
 
     def fetch_zipped_file():
@@ -290,8 +290,6 @@ this case, the default behavior of :class:`pooch.Unzip` is to extract all files 
 directory and return a list of file paths instead of a single one:
 
 .. code:: python
-
-    from pooch import Unzip
 
     def fetch_zipped_archive():
         """
