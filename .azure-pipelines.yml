@@ -90,6 +90,7 @@ jobs:
         python.version: '2.7'
         PYTHON: '2.7'
         CONDA_REQUIREMENTS: 'requirements27.txt'
+        CONDA_INSTALL_EXTRA: 'codecov backports.lzma bz2file'
 
   steps:
 
@@ -171,6 +172,7 @@ jobs:
         python.version: '2.7'
         PYTHON: '2.7'
         CONDA_REQUIREMENTS: 'requirements27.txt'
+        CONDA_INSTALL_EXTRA: 'codecov backports.lzma bz2file'
 
   steps:
 

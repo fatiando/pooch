@@ -57,5 +57,8 @@ def pooch_test_registry():
         "store.zip": "0498d2a001e71051bbd2acd2346f38da7cbd345a633cb7bf0f8a20938714b51a",
         "tiny-data.tar.gz": "41503f083814f43a01a8e9a30c28d7a9fe96839a99727a7fdd0acf7cd5bab63b",
         "store.tar.gz": "088c7f4e0f1859b1c769bb6065de24376f366374817ede8691a6ac2e49f29511",
+        "tiny-data.txt.bz2": "753663687a4040c90c8578061867d1df623e6aa8011c870a5dbd88ee3c82e306",
+        "tiny-data.txt.gz": "2e2da6161291657617c32192dba95635706af80c6e7335750812907b58fd4b52",
+        "tiny-data.txt.xz": "99dcb5c32a6e916344bacb4badcbc2f2b6ee196977d1d8187610c21e7e607765",
     }
     return registry

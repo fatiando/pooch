@@ -4,7 +4,7 @@ from . import version
 from .core import Pooch, create
 from .utils import os_cache, file_hash, make_registry, check_version
 from .downloaders import HTTPDownloader
-from .processors import Unzip, Untar
+from .processors import Unzip, Untar, Decompress
 
 
 def test(doctest=True, verbose=True, coverage=False):

@@ -43,6 +43,7 @@ Processors
 
    Unzip
    Untar
+   Decompress
 
 Miscellaneous
 -------------
