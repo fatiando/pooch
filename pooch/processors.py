@@ -242,9 +242,11 @@ class Decompress:  # pylint: disable=too-few-public-methods
             Full path of the compressed file in local storage.
         action : str
             Indicates what action was taken by :meth:`pooch.Pooch.fetch`. One of:
-            * ``"download"``: The file didn't exist locally and was downloaded
-            * ``"update"``: The local file was outdated and was re-download
-            * ``"fetch"``: The file exists and is updated so it wasn't downloaded
+
+            - ``"download"``: The file didn't exist locally and was downloaded
+            - ``"update"``: The local file was outdated and was re-download
+            - ``"fetch"``: The file exists and is updated so it wasn't downloaded
+
         pooch : :class:`pooch.Pooch`
             The instance of :class:`pooch.Pooch` that is calling this.
 
