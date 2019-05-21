@@ -198,7 +198,31 @@ class Untar(ExtractorProcessor):  # pylint: disable=too-few-public-methods
 
 class Decompress:  # pylint: disable=too-few-public-methods
     """
-    Decompress a file.
+    Processor that decompress a file and returns the decompressed version.
+
+    Use with :meth:`pooch.Pooch.fetch` to decompress a downloaded data file so that it
+    can be easily opened. Useful for data files that take a long time to decompress
+    (exchanging disk space for speed).
+
+    The output file is ``{fname}.decomp``.
+
+    Supported decompression methods are LZMA (``.xz``), bzip2 (``.bz2``), and gzip
+    (``.gz``).
+
+    File names with the standard extensions (see above) can use ``method="auto"`` to
+    automatically determine the compression method. This can be overwritten by setting
+    the *method* argument.
+
+    .. warning::
+
+        With **Python 2.7**, methods "lzma"/"xz" and "bzip2" require extra dependencies
+        to be installed: ``backports.lzma`` for "lzma" and ``bz2file`` for "bzip2".
+
+    Parameters
+    ----------
+    method : str
+        Name of the compression method. Can be "auto", "lzma", "xz", "bzip2", or "gzip".
+
     """
 
     modules = {"lzma": lzma, "xz": lzma, "gzip": gzip, "bzip2": bz2}
@@ -209,7 +233,8 @@ class Decompress:  # pylint: disable=too-few-public-methods
     def __call__(self, fname, action, pooch):
         """
         Decompress the given file.
-        The output file will be ``fname`` without the ``.gz`` extension.
+
+        The output file will be ``fname`` with ``.decomp`` appended to it.
 
         Parameters
         ----------
