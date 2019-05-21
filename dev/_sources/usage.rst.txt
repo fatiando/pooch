@@ -200,6 +200,8 @@ takes a ``processor`` argument that allows us to specify a function that is exec
 post-download and before returning the local file path. The processor also lets us
 overwrite the file name returned by :meth:`pooch.Pooch.fetch`.
 
+See the :ref:`api` for a list of all available post-processing hooks.
+
 For example, let's say our data file is zipped and we want to store an unzipped copy of
 it and read that instead. We can do this with a post-processing hook that unzips the
 file and returns the path to the unzipped file instead of the original zip archive:

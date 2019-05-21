@@ -225,7 +225,7 @@
 <em class="property">class </em><code class="descclassname">pooch.</code><code class="descname">HTTPDownloader</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pooch/downloaders.html#HTTPDownloader"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pooch.HTTPDownloader" title="Permalink to this definition">¶</a></dt>
 <dd><p>Download manager for fetching files over HTTP/HTTPS.</p>
 <p>When called, downloads the given file URL into the specified local file. Uses the
-<a class="reference external" href="https://2.python-requests.org/en/stable/api/#module-requests" title="(in Requests v2.20.1)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">requests</span></code></a> library to manage downloads.</p>
+<a class="reference external" href="https://2.python-requests.org/en/stable/api/#module-requests" title="(in Requests v2.22.0)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">requests</span></code></a> library to manage downloads.</p>
 <p>Use with <a class="reference internal" href="pooch.Pooch.html#pooch.Pooch.fetch" title="pooch.Pooch.fetch"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pooch.Pooch.fetch</span></code></a> to customize the download of files (for example,
 to use authentication).</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -235,7 +235,7 @@ to use authentication).</p>
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first last docutils">
 <dt><strong>**kwargs</strong></dt>
 <dd><p class="first last">All keyword arguments given when creating an instance of this class will be
-passed to <a class="reference external" href="https://2.python-requests.org/en/stable/api/#requests.get" title="(in Requests v2.20.1)"><code class="xref py py-func docutils literal notranslate"><span class="pre">requests.get</span></code></a>.</p>
+passed to <a class="reference external" href="https://2.python-requests.org/en/stable/api/#requests.get" title="(in Requests v2.22.0)"><code class="xref py py-func docutils literal notranslate"><span class="pre">requests.get</span></code></a>.</p>
 </dd>
 </dl>
 </td>
@@ -261,8 +261,8 @@ passed to <a class="reference external" href="https://2.python-requests.org/en/s
 </pre></div>
 </div>
 <p>Authentication can be handled by passing a user name and password to
-<a class="reference external" href="https://2.python-requests.org/en/stable/api/#requests.get" title="(in Requests v2.20.1)"><code class="xref py py-func docutils literal notranslate"><span class="pre">requests.get</span></code></a>. All arguments provided when creating an instance of the class
-are forwarded to <a class="reference external" href="https://2.python-requests.org/en/stable/api/#requests.get" title="(in Requests v2.20.1)"><code class="xref py py-func docutils literal notranslate"><span class="pre">requests.get</span></code></a>. We’ll use <code class="docutils literal notranslate"><span class="pre">auth=(username,</span> <span class="pre">password)</span></code> to
+<a class="reference external" href="https://2.python-requests.org/en/stable/api/#requests.get" title="(in Requests v2.22.0)"><code class="xref py py-func docutils literal notranslate"><span class="pre">requests.get</span></code></a>. All arguments provided when creating an instance of the class
+are forwarded to <a class="reference external" href="https://2.python-requests.org/en/stable/api/#requests.get" title="(in Requests v2.22.0)"><code class="xref py py-func docutils literal notranslate"><span class="pre">requests.get</span></code></a>. We’ll use <code class="docutils literal notranslate"><span class="pre">auth=(username,</span> <span class="pre">password)</span></code> to
 use basic HTTPS authentication. The <a class="reference external" href="https://httpbin.org">https://httpbin.org</a> website allows us to make a
 fake a login request using whatever username and password we provide to it:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">user</span> <span class="o">=</span> <span class="s2">&quot;doggo&quot;</span>
@@ -307,7 +307,7 @@ fake a login request using whatever username and password we provide to it:</p>
 <dt id="pooch.HTTPDownloader.__call__">
 <code class="descclassname">HTTPDownloader.</code><code class="descname">__call__</code><span class="sig-paren">(</span><em>self</em>, <em>url</em>, <em>output_file</em>, <em>pooch</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pooch/downloaders.html#HTTPDownloader.__call__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pooch.HTTPDownloader.__call__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Download the given URL over HTTP to the given output file.</p>
-<p>Uses <a class="reference external" href="https://2.python-requests.org/en/stable/api/#requests.get" title="(in Requests v2.20.1)"><code class="xref py py-func docutils literal notranslate"><span class="pre">requests.get</span></code></a>.</p>
+<p>Uses <a class="reference external" href="https://2.python-requests.org/en/stable/api/#requests.get" title="(in Requests v2.22.0)"><code class="xref py py-func docutils literal notranslate"><span class="pre">requests.get</span></code></a>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -353,7 +353,7 @@ fake a login request using whatever username and password we provide to it:</p>
     <p>
         &copy; Copyright 2018-2019, The Pooch Developers
       <span class="lastupdated">
-        Last updated on May 02, 2019.
+        Last updated on May 21, 2019.
       </span>
 
     </p>

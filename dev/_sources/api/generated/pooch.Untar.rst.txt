@@ -1,9 +1,9 @@
-pooch.Unzip
+pooch.Untar
 ===========
 
 .. currentmodule:: pooch
 
-.. autoclass:: Unzip
+.. autoclass:: Untar
 
 .. raw:: html
 
@@ -11,7 +11,7 @@ pooch.Unzip
 
 
 
-.. automethod:: Unzip.__call__
+.. automethod:: Untar.__call__
 
 
 

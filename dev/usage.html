@@ -389,6 +389,7 @@ downloaded and not every time <a class="reference internal" href="api/generated/
 takes a <code class="docutils literal notranslate"><span class="pre">processor</span></code> argument that allows us to specify a function that is executed
 post-download and before returning the local file path. The processor also lets us
 overwrite the file name returned by <a class="reference internal" href="api/generated/pooch.Pooch.html#pooch.Pooch.fetch" title="pooch.Pooch.fetch"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pooch.Pooch.fetch</span></code></a>.</p>
+<p>See the <a class="reference internal" href="api/index.html#api"><span class="std std-ref">API Reference</span></a> for a list of all available post-processing hooks.</p>
 <p>For example, let’s say our data file is zipped and we want to store an unzipped copy of
 it and read that instead. We can do this with a post-processing hook that unzips the
 file and returns the path to the unzipped file instead of the original zip archive:</p>
@@ -687,7 +688,7 @@ change at all:</p>
     <p>
         &copy; Copyright 2018-2019, The Pooch Developers
       <span class="lastupdated">
-        Last updated on May 02, 2019.
+        Last updated on May 21, 2019.
       </span>
 
     </p>

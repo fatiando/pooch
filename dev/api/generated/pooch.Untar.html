@@ -10,7 +10,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
     
-    <title>pooch.file_hash &mdash; Pooch dev</title>
+    <title>pooch.Untar &mdash; Pooch dev</title>
     
 
 
@@ -41,8 +41,8 @@
   <link rel="stylesheet" href="../../_static/style.css" type="text/css" />
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="pooch.check_version" href="pooch.check_version.html" />
-    <link rel="prev" title="pooch.make_registry" href="pooch.make_registry.html" />
+    <link rel="next" title="pooch.Decompress" href="pooch.Decompress.html" />
+    <link rel="prev" title="pooch.Unzip" href="pooch.Unzip.html" />
     <!-- Google Analytics tracking code -->
     <script>
       (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -113,15 +113,14 @@
 <li class="toctree-l1"><a class="reference internal" href="../../usage.html">Training your Pooch</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../index.html">API Reference</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../index.html#core">Core</a></li>
-<li class="toctree-l2 current"><a class="reference internal" href="../index.html#utilities">Utilities</a><ul class="current">
-<li class="toctree-l3"><a class="reference internal" href="pooch.os_cache.html">pooch.os_cache</a></li>
-<li class="toctree-l3"><a class="reference internal" href="pooch.make_registry.html">pooch.make_registry</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="#">pooch.file_hash</a></li>
-<li class="toctree-l3"><a class="reference internal" href="pooch.check_version.html">pooch.check_version</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#utilities">Utilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#downloaders">Downloaders</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html#processors">Processors</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="pooch.Unzip.html">pooch.Unzip</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">pooch.Untar</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pooch.Decompress.html">pooch.Decompress</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../index.html#downloaders">Downloaders</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../index.html#processors">Processors</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../index.html#miscellaneous">Miscellaneous</a></li>
 </ul>
 </li>
@@ -198,7 +197,7 @@
         
           <li><a href="../index.html">API Reference</a> &raquo;</li>
         
-      <li>pooch.file_hash</li>
+      <li>pooch.Untar</li>
     
     
     <li class="source-link">
@@ -206,7 +205,7 @@
             
                 
                 
-                <a href="https://github.com/fatiando/pooch/issues/new?title=Suggested%20improvement%20for%20api/generated/pooch.file_hash&body=Please%20describe%20what%20could%20be%20improved%20about%20this%20page%20or%20the%20typo/mistake%20that%20you%20found%3A"
+                <a href="https://github.com/fatiando/pooch/issues/new?title=Suggested%20improvement%20for%20api/generated/pooch.Untar&body=Please%20describe%20what%20could%20be%20improved%20about%20this%20page%20or%20the%20typo/mistake%20that%20you%20found%3A"
                    class="fa fa-github"> Improve this page</a>
             
         
@@ -221,43 +220,80 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="pooch-file-hash">
-<h1>pooch.file_hash<a class="headerlink" href="#pooch-file-hash" title="Permalink to this headline">¶</a></h1>
-<dl class="function">
-<dt id="pooch.file_hash">
-<code class="descclassname">pooch.</code><code class="descname">file_hash</code><span class="sig-paren">(</span><em>fname</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pooch/utils.html#file_hash"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pooch.file_hash" title="Permalink to this definition">¶</a></dt>
-<dd><p>Calculate the SHA256 hash of a given file.</p>
-<p>Useful for checking if a file has changed or been corrupted.</p>
+  <div class="section" id="pooch-untar">
+<h1>pooch.Untar<a class="headerlink" href="#pooch-untar" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="pooch.Untar">
+<em class="property">class </em><code class="descclassname">pooch.</code><code class="descname">Untar</code><span class="sig-paren">(</span><em>members=None</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pooch/processors.html#Untar"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pooch.Untar" title="Permalink to this definition">¶</a></dt>
+<dd><p>Processor that unpacks a tar archive and returns a list of all files.</p>
+<p>Use with <a class="reference internal" href="pooch.Pooch.html#pooch.Pooch.fetch" title="pooch.Pooch.fetch"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pooch.Pooch.fetch</span></code></a> to untar a downloaded data file into a folder in
+the local data store. <a class="reference internal" href="pooch.Pooch.html#pooch.Pooch.fetch" title="pooch.Pooch.fetch"><code class="xref py py-meth docutils literal notranslate"><span class="pre">fetch</span></code></a> will return a list with the names
+of the extracted files instead of the archive.</p>
+<p>The output folder is <code class="docutils literal notranslate"><span class="pre">{fname}.untar</span></code>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first docutils">
-<dt><strong>fname</strong> <span class="classifier-delimiter">:</span> <span class="classifier">str</span></dt>
-<dd><p class="first last">The name of the file.</p>
-</dd>
-</dl>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
-<dt><strong>hash</strong> <span class="classifier-delimiter">:</span> <span class="classifier">str</span></dt>
-<dd><p class="first last">The hash of the file.</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>members</strong> <span class="classifier-delimiter">:</span> <span class="classifier">list or None</span></dt>
+<dd><p class="first last">If None, will unpack all files in the archive. Otherwise, <em>members</em> must be
+a list of file names to unpack from the archive. Only these files will be
+unpacked.</p>
 </dd>
 </dl>
 </td>
 </tr>
 </tbody>
 </table>
-<p class="rubric">Examples</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">fname</span> <span class="o">=</span> <span class="s2">&quot;test-file-for-hash.txt&quot;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-<span class="gp">... </span>    <span class="n">__</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;content of the file&quot;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">file_hash</span><span class="p">(</span><span class="n">fname</span><span class="p">))</span>
-<span class="go">0fc74468e6a9a829f103d069aeb2bb4f8646bad58bf146bb0e3379b759ec4a00</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">os</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
-</pre></div>
-</div>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#pooch.Untar.__call__" title="pooch.Untar.__call__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__call__</span></code></a>(self,&nbsp;fname,&nbsp;action,&nbsp;pooch)</td>
+<td>Extract all files from the given archive.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<div style='clear:both'></div><dl class="method">
+<dt id="pooch.Untar.__call__">
+<code class="descclassname">Untar.</code><code class="descname">__call__</code><span class="sig-paren">(</span><em>self</em>, <em>fname</em>, <em>action</em>, <em>pooch</em><span class="sig-paren">)</span><a class="headerlink" href="#pooch.Untar.__call__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extract all files from the given archive.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first docutils">
+<dt><strong>fname</strong> <span class="classifier-delimiter">:</span> <span class="classifier">str</span></dt>
+<dd><p class="first last">Full path of the zipped file in local storage.</p>
+</dd>
+<dt><strong>action</strong> <span class="classifier-delimiter">:</span> <span class="classifier">str</span></dt>
+<dd><p class="first">Indicates what action was taken by <a class="reference internal" href="pooch.Pooch.html#pooch.Pooch.fetch" title="pooch.Pooch.fetch"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pooch.Pooch.fetch</span></code></a>. One of:</p>
+<ul class="last simple">
+<li><code class="docutils literal notranslate"><span class="pre">&quot;download&quot;</span></code>: The file didn’t exist locally and was downloaded</li>
+<li><code class="docutils literal notranslate"><span class="pre">&quot;update&quot;</span></code>: The local file was outdated and was re-download</li>
+<li><code class="docutils literal notranslate"><span class="pre">&quot;fetch&quot;</span></code>: The file exists and is updated so it wasn’t downloaded</li>
+</ul>
+</dd>
+<dt><strong>pooch</strong> <span class="classifier-delimiter">:</span> <span class="classifier"><a class="reference internal" href="pooch.Pooch.html#pooch.Pooch" title="pooch.Pooch"><code class="xref py py-class docutils literal notranslate"><span class="pre">pooch.Pooch</span></code></a></span></dt>
+<dd><p class="first last">The instance of <a class="reference internal" href="pooch.Pooch.html#pooch.Pooch" title="pooch.Pooch"><code class="xref py py-class docutils literal notranslate"><span class="pre">pooch.Pooch</span></code></a> that is calling this.</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>fnames</strong> <span class="classifier-delimiter">:</span> <span class="classifier">list of str</span></dt>
+<dd><p class="first last">A list of the full path to all files in the extracted archive.</p>
+</dd>
+</dl>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <div style='clear:both'></div></div>
@@ -270,10 +306,10 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="pooch.check_version.html" class="btn btn-neutral float-right" title="pooch.check_version" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="pooch.Decompress.html" class="btn btn-neutral float-right" title="pooch.Decompress" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="pooch.make_registry.html" class="btn btn-neutral float-left" title="pooch.make_registry" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="pooch.Unzip.html" class="btn btn-neutral float-left" title="pooch.Unzip" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

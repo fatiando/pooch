@@ -112,6 +112,7 @@
 <li class="toctree-l1"><a class="reference internal" href="usage.html">Training your Pooch</a></li>
 <li class="toctree-l1"><a class="reference internal" href="api/index.html">API Reference</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Changelog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#version-0-5-0">Version 0.5.0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#version-0-4-0">Version 0.4.0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#version-0-3-1">Version 0.3.1</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#version-0-3-0">Version 0.3.0</a></li>
@@ -214,6 +215,24 @@
             
   <div class="section" id="changelog">
 <span id="changes"></span><h1>Changelog<a class="headerlink" href="#changelog" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="version-0-5-0">
+<h2>Version 0.5.0<a class="headerlink" href="#version-0-5-0" title="Permalink to this headline">¶</a></h2>
+<p><em>Released on: 2019/05/20</em></p>
+<p>New features:</p>
+<ul class="simple">
+<li>New processor <code class="docutils literal notranslate"><span class="pre">pooch.Decompress</span></code> saves a decompressed version of the downloaded
+file. Supports gzip, lzma/xz, and bzip2 compression. <strong>Note</strong>: Under Python 2.7, lzma
+and bzip2 require the <code class="docutils literal notranslate"><span class="pre">backports.lzma</span></code> and <code class="docutils literal notranslate"><span class="pre">bz2file</span></code> packages as well. These are
+soft dependencies and not required to use Pooch. See <a class="reference internal" href="install.html#install"><span class="std std-ref">Installing</span></a>. (<a class="reference external" href="https://github.com/fatiando/pooch/pull/78">#78</a>)</li>
+<li>New processor <code class="docutils literal notranslate"><span class="pre">pooch.Untar</span></code> unpacks files contained in a downloaded tar archive
+(with or without compression). (<a class="reference external" href="https://github.com/fatiando/pooch/pull/77">#77</a>)</li>
+</ul>
+<p>This release contains contributions from:</p>
+<ul class="simple">
+<li>Matthew Turk</li>
+<li>Leonardo Uieda</li>
+</ul>
+</div>
 <div class="section" id="version-0-4-0">
 <h2>Version 0.4.0<a class="headerlink" href="#version-0-4-0" title="Permalink to this headline">¶</a></h2>
 <p><em>Released on: 2019/05/01</em></p>
@@ -359,7 +378,7 @@ data corruption.</li>
     <p>
         &copy; Copyright 2018-2019, The Pooch Developers
       <span class="lastupdated">
-        Last updated on May 02, 2019.
+        Last updated on May 21, 2019.
       </span>
 
     </p>

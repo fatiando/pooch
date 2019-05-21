@@ -41,7 +41,7 @@
   <link rel="stylesheet" href="../../_static/style.css" type="text/css" />
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="pooch.test" href="pooch.test.html" />
+    <link rel="next" title="pooch.Untar" href="pooch.Untar.html" />
     <link rel="prev" title="pooch.HTTPDownloader" href="pooch.HTTPDownloader.html" />
     <!-- Google Analytics tracking code -->
     <script>
@@ -117,6 +117,8 @@
 <li class="toctree-l2"><a class="reference internal" href="../index.html#downloaders">Downloaders</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="../index.html#processors">Processors</a><ul class="current">
 <li class="toctree-l3 current"><a class="current reference internal" href="#">pooch.Unzip</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pooch.Untar.html">pooch.Untar</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pooch.Decompress.html">pooch.Decompress</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../index.html#miscellaneous">Miscellaneous</a></li>
@@ -227,6 +229,7 @@
 <p>Use with <a class="reference internal" href="pooch.Pooch.html#pooch.Pooch.fetch" title="pooch.Pooch.fetch"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pooch.Pooch.fetch</span></code></a> to unzip a downloaded data file into a folder in
 the local data store. <a class="reference internal" href="pooch.Pooch.html#pooch.Pooch.fetch" title="pooch.Pooch.fetch"><code class="xref py py-meth docutils literal notranslate"><span class="pre">fetch</span></code></a> will return a list with the names
 of the unzipped files instead of the zip archive.</p>
+<p>The output folder is <code class="docutils literal notranslate"><span class="pre">{fname}.unzip</span></code>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -250,7 +253,7 @@ unpacked.</p>
 </colgroup>
 <tbody valign="top">
 <tr class="row-odd"><td><a class="reference internal" href="#pooch.Unzip.__call__" title="pooch.Unzip.__call__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__call__</span></code></a>(self,&nbsp;fname,&nbsp;action,&nbsp;pooch)</td>
-<td>Extract all files from the given zip archive.</td>
+<td>Extract all files from the given archive.</td>
 </tr>
 </tbody>
 </table>
@@ -258,9 +261,8 @@ unpacked.</p>
 
 <div style='clear:both'></div><dl class="method">
 <dt id="pooch.Unzip.__call__">
-<code class="descclassname">Unzip.</code><code class="descname">__call__</code><span class="sig-paren">(</span><em>self</em>, <em>fname</em>, <em>action</em>, <em>pooch</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pooch/processors.html#Unzip.__call__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pooch.Unzip.__call__" title="Permalink to this definition">¶</a></dt>
-<dd><p>Extract all files from the given zip archive.</p>
-<p>The output folder is <code class="docutils literal notranslate"><span class="pre">{fname}.unzip</span></code>.</p>
+<code class="descclassname">Unzip.</code><code class="descname">__call__</code><span class="sig-paren">(</span><em>self</em>, <em>fname</em>, <em>action</em>, <em>pooch</em><span class="sig-paren">)</span><a class="headerlink" href="#pooch.Unzip.__call__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extract all files from the given archive.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -285,7 +287,7 @@ unpacked.</p>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
 <dt><strong>fnames</strong> <span class="classifier-delimiter">:</span> <span class="classifier">list of str</span></dt>
-<dd><p class="first last">A list of the full path to all files in the unzipped archive.</p>
+<dd><p class="first last">A list of the full path to all files in the extracted archive.</p>
 </dd>
 </dl>
 </td>
@@ -304,7 +306,7 @@ unpacked.</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="pooch.test.html" class="btn btn-neutral float-right" title="pooch.test" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="pooch.Untar.html" class="btn btn-neutral float-right" title="pooch.Untar" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="pooch.HTTPDownloader.html" class="btn btn-neutral float-left" title="pooch.HTTPDownloader" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
@@ -318,7 +320,7 @@ unpacked.</p>
     <p>
         &copy; Copyright 2018-2019, The Pooch Developers
       <span class="lastupdated">
-        Last updated on May 02, 2019.
+        Last updated on May 21, 2019.
       </span>
 
     </p>
