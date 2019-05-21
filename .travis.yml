@@ -49,6 +49,7 @@ matrix:
           env:
               - PYTHON=2.7
               - CONDA_REQUIREMENTS=requirements27.txt
+              - CONDA_INSTALL_EXTRA="codecov backports.lzma bz2file"
 
 # Setup the build environment
 before_install:

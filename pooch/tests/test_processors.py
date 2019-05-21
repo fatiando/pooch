@@ -68,6 +68,21 @@ def test_decompress_fails():
         assert exception.value.args[0].startswith("Invalid compression method 'bla'")
 
 
+@pytest.mark.parametrize(
+    "method,ext",
+    [("lzma", "xz"), ("bzip2", "bz2")],
+    ids=["lzma", "bz2"],
+)
+def test_decompress_27_missing_dependencies(method, ext):
+    "Raises an exception when missing extra dependencies for 2.7"
+    decompress = Decompress(method=method)
+    decompress.modules[method] = None
+    with pytest.raises(ValueError) as exception:
+        with warnings.catch_warnings():
+            decompress(fname="meh.txt." + ext, action="download", pooch=None)
+    assert method in exception.value.args[0]
+
+
 def test_extractprocessor_fails():
     "The base class should be used and should fail when passed to fecth"
     with TemporaryDirectory() as local_store:
