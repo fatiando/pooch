@@ -3,6 +3,26 @@
 Changelog
 =========
 
+Version 0.5.0
+-------------
+
+*Released on: 2019/05/20*
+
+New features:
+
+* New processor ``pooch.Decompress`` saves a decompressed version of the downloaded
+  file. Supports gzip, lzma/xz, and bzip2 compression. **Note**: Under Python 2.7, lzma
+  and bzip2 require the ``backports.lzma`` and ``bz2file`` packages as well. These are
+  soft dependencies and not required to use Pooch. See :ref:`install`. (`#78
+  <https://github.com/fatiando/pooch/pull/78>`__)
+* New processor ``pooch.Untar`` unpacks files contained in a downloaded tar archive
+  (with or without compression). (`#77 <https://github.com/fatiando/pooch/pull/77>`__)
+
+This release contains contributions from:
+
+* Matthew Turk
+* Leonardo Uieda
+
 Version 0.4.0
 -------------
 
@@ -35,7 +55,6 @@ This release contains contributions from:
 
 * Santiago Soler
 * Leonardo Uieda
-
 
 Version 0.3.1
 -------------
