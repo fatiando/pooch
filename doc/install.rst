@@ -34,6 +34,12 @@ The following are only required for Python 2.7:
 * `pathlib <https://pypi.org/project/pathlib/>`__
 * `backports.tempfile <https://pypi.org/project/backports.tempfile/>`__
 
+If using :class:`pooch.Decompress` in Python 2.7, the following extra packages might
+need to be installed (they will not be automatically installed when installing Pooch):
+
+* `backports.lzma <https://pypi.org/project/backports.lzma/>`__
+* `bz2file <https://pypi.org/project/bz2file/>`__
+
 
 Installing with conda
 ---------------------
