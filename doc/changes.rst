@@ -3,6 +3,25 @@
 Changelog
 =========
 
+Version 0.5.1
+-------------
+
+*Released on: 2019/05/21*
+
+Documentation fixes:
+
+* Fix formatting error in ``pooch.Decompress`` docstring.
+  (`#81 <https://github.com/fatiando/pooch/pull/81>`__)
+* Fix wrong imports in the usage guide for post-processing hooks.
+  (`#84 <https://github.com/fatiando/pooch/pull/84>`__)
+* Add section to the usage guide explaining when to use ``pooch.Decompress``.
+  (`#85 <https://github.com/fatiando/pooch/pull/85>`__)
+
+This release contains contributions from:
+
+* Santiago Soler
+* Leonardo Uieda
+
 Version 0.5.0
 -------------
 
