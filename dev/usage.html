@@ -10,7 +10,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
     
-    <title>Training your Pooch &mdash; Pooch dev</title>
+    <title>Training your Pooch &mdash; Pooch v0.5.1</title>
     
 
 
@@ -82,7 +82,7 @@
             
             
               <div class="version">
-                dev
+                v0.5.1
               </div>
             
           
@@ -450,7 +450,7 @@ file and returns the path to the unzipped file instead of the original zip archi
 <p>Fortunately, you don’t have to implement your own unzip processor. Pooch provides the
 <a class="reference internal" href="api/generated/pooch.Unzip.html#pooch.Unzip" title="pooch.Unzip"><code class="xref py py-class docutils literal notranslate"><span class="pre">pooch.Unzip</span></code></a> processor for exactly this use case. The above example using the
 Pooch processor would look like:</p>
-<div class="code python highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pooch</span> <span class="k">import</span> <span class="n">UnzipSingle</span>
+<div class="code python highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pooch</span> <span class="k">import</span> <span class="n">Unzip</span>
 
 
 <span class="k">def</span> <span class="nf">fetch_zipped_file</span><span class="p">():</span>
@@ -472,15 +472,31 @@ Pooch processor would look like:</p>
 <p>Alternatively, your zip archive could contain multiple files that you want to unpack. In
 this case, the default behavior of <a class="reference internal" href="api/generated/pooch.Unzip.html#pooch.Unzip" title="pooch.Unzip"><code class="xref py py-class docutils literal notranslate"><span class="pre">pooch.Unzip</span></code></a> is to extract all files into a
 directory and return a list of file paths instead of a single one:</p>
-<div class="code python highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pooch</span> <span class="k">import</span> <span class="n">Unzip</span>
-
-<span class="k">def</span> <span class="nf">fetch_zipped_archive</span><span class="p">():</span>
+<div class="code python highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">fetch_zipped_archive</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Load all files from a zipped archive.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Pass in the processor to unzip the data file</span>
     <span class="n">fnames</span> <span class="o">=</span> <span class="n">GOODBOY</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="s2">&quot;zipped-archive.zip&quot;</span><span class="p">,</span> <span class="n">processor</span><span class="o">=</span><span class="n">Unzip</span><span class="p">())</span>
     <span class="n">data</span> <span class="o">=</span> <span class="p">[</span><span class="n">pandas</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span> <span class="k">for</span> <span class="n">fname</span> <span class="ow">in</span> <span class="n">fnames</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">data</span>
+</pre></div>
+</div>
+<p>If you have a compressed file that is not an archive (zip or tar), you can use
+<a class="reference internal" href="api/generated/pooch.Decompress.html#pooch.Decompress" title="pooch.Decompress"><code class="xref py py-class docutils literal notranslate"><span class="pre">pooch.Decompress</span></code></a> to decompress it after download. For example, large binary
+files can be compressed with <code class="docutils literal notranslate"><span class="pre">gzip</span></code> to reduce download times but will need to be
+decompressed before loading, which can be slow. You can trade storage space for speed by
+keeping a decompressed copy of the file:</p>
+<div class="code python highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pooch</span> <span class="k">import</span> <span class="n">Decompress</span>
+
+<span class="k">def</span> <span class="nf">fetch_compressed_file</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Load a large binary file that has been gzip compressed.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Pass in the processor to decompress the file on download</span>
+    <span class="n">fname</span> <span class="o">=</span> <span class="n">GOODBOY</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="s2">&quot;large-binary-file.npy.gz&quot;</span><span class="p">,</span> <span class="n">processor</span><span class="o">=</span><span class="n">Decompress</span><span class="p">())</span>
+    <span class="c1"># The file returned is the decompressed version which can be loaded by numpy</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">data</span>
 </pre></div>
 </div>
@@ -688,7 +704,7 @@ change at all:</p>
     <p>
         &copy; Copyright 2018-2019, The Pooch Developers
       <span class="lastupdated">
-        Last updated on May 21, 2019.
+        Last updated on May 22, 2019.
       </span>
 
     </p>
