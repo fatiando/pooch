@@ -164,7 +164,7 @@ conda env create
 Before building and testing the project, you have to activate the environment:
 
 ```bash
-source activate ENVIRONMENT_NAME
+conda activate ENVIRONMENT_NAME
 ```
 
 You'll need to do this every time you start a new terminal.

@@ -70,6 +70,24 @@ The version number is set automatically using versioneer based information it ge
 git.
 There are a few steps that still must be done manually, though.
 
+### Drafting a new Zenodo release
+
+If the project already has releases on [Zenodo](https://zenodo.org/), you need to create
+a **New version** of it. Find the link to the latest Zenodo release on the `README.md`
+file of your project. Then:
+
+1. Delete all existing files (they will be replaced with the new version).
+2. Reserve a DOI and save the release draft.
+3. Include as authors anyone who made contributions between now and the last release.
+
+On the other hand, if you're making the first release of the project, you need to create
+a **New upload** for it inside the
+[Fatiando a Terra community at Zenodo](https://zenodo.org/communities/fatiando/).
+
+1. Make sure the Fatiando a Terra community is chosen when filling the release draft.
+2. Reserve a DOI and save the release draft.
+3. Include as authors anyone who made contributions between now and the last release.
+
 ### Updating the changelog
 
 1. Generate a list of commits between the last release tag and now:
@@ -85,12 +103,17 @@ There are a few steps that still must be done manually, though.
    to make the change automatically.
 4. Copy the remaining changes to `doc/changes.rst` under a new section for the
    intended release.
-5. Reserve a DOI in [Zenodo](https://zenodo.org/) and pre-fill the fields for archiving
-   the new release. Include as authors anyone who made contributions between now and the
-   last release.
-6. Include the DOI badge in the changelog.
-5. Add a link to the new release version documentation in `README.rst`.
-5. Open a new PR with the updated changelog.
+5. Include the DOI badge in the changelog. Remember to replace your DOI inside the badge
+   url.
+
+    ```
+    .. image:: https://img.shields.io/badge/doi-<DOI-FIRST-PART>%2F<DOI-SECOND-PART>-blue.svg?style=flat-square
+        :alt: Digital Object Identifier for the Zenodo archive
+        :target: https://doi.org/<INSERT-YOUR-DOI>
+    ```
+
+6. Add a link to the new release version documentation in `README.rst`.
+7. Open a new PR with the updated changelog.
 
 ### Check the README syntax
 
