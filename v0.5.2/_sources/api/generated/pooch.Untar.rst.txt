@@ -1,0 +1,80 @@
+pooch.Untar
+===========
+
+.. currentmodule:: pooch
+
+.. autoclass:: Untar
+
+.. raw:: html
+
+     <div style='clear:both'></div>
+
+
+
+.. automethod:: Untar.__call__
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.. raw:: html
+
+     <div style='clear:both'></div>

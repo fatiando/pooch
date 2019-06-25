@@ -1,0 +1,80 @@
+pooch.Decompress
+================
+
+.. currentmodule:: pooch
+
+.. autoclass:: Decompress
+
+.. raw:: html
+
+     <div style='clear:both'></div>
+
+
+
+.. automethod:: Decompress.__call__
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.. raw:: html
+
+     <div style='clear:both'></div>
