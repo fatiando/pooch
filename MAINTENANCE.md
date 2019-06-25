@@ -40,9 +40,9 @@ The main advantages of this are:
 
 ## Continuous Integration
 
-We use TravisCI and AppVeyor continuous integration (CI) services to build and test the
-project on Windows, Linux, and Mac.
-The configuration files for these services are `.travis.yml` and `.appveyor.yml`.
+We use TravisCI and Azure Pipelines continuous integration (CI) services to build and 
+test the project on Windows, Linux, and Mac.
+The configuration files for these services are `.travis.yml` and `.azure-pipelines.yml`.
 Both rely on the `requirements.txt` file to install the required dependencies using
 conda and the `Makefile` to run the tests and checks.
 
