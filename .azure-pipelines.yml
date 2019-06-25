@@ -89,6 +89,7 @@ jobs:
       Python35:
         python.version: '3.5'
         PYTHON: '3.5'
+        CONDA_INSTALL_EXTRA: "codecov pip"
       Python27:
         python.version: '2.7'
         PYTHON: '2.7'
@@ -174,6 +175,7 @@ jobs:
       Python35:
         python.version: '3.5'
         PYTHON: '3.5'
+        CONDA_INSTALL_EXTRA: "codecov pip"
       Python27:
         python.version: '2.7'
         PYTHON: '2.7'
