@@ -36,6 +36,7 @@ CLASSIFIERS = [
     "Topic :: Scientific/Engineering",
     "Topic :: Software Development :: Libraries",
     "Programming Language :: Python :: 2.7",
+    "Programming Language :: Python :: 3.5",
     "Programming Language :: Python :: 3.6",
     "Programming Language :: Python :: 3.7",
     "License :: OSI Approved :: {}".format(LICENSE),
