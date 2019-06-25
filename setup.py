@@ -57,7 +57,7 @@ INSTALL_REQUIRES = [
     "pathlib;python_version<'3.5'",
     "backports.tempfile;python_version<'3.5'",
 ]
-PYTHON_REQUIRES = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*, !=3.5.*"
+PYTHON_REQUIRES = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
 
 if __name__ == "__main__":
     setup(
