@@ -3,6 +3,21 @@
 Changelog
 =========
 
+Version 0.5.2
+-------------
+
+*Released on: 2019/06/24*
+
+Maintenance:
+
+* Add back support for Python 3.5 with continuous integration tests. No code changes
+  were needed, only removing the restriction from ``setup.py``.
+  (`#93 <https://github.com/fatiando/pooch/pull/93>`__)
+
+This release contains contributions from:
+
+* Leonardo Uieda
+
 Version 0.5.1
 -------------
 
