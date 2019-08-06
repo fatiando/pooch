@@ -116,6 +116,7 @@ Projects using Pooch
 * `Verde <https://github.com/fatiando/verde>`__
 * `Harmonica <https://github.com/fatiando/harmonica>`__
 * `RockHound <https://github.com/fatiando/rockhound>`__
+* `icepack <https://github.com/icepack/icepack>`__
 
 *If you're using Pooch, send us a pull request adding your project to the list.*
 
