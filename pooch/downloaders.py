@@ -5,6 +5,12 @@ from __future__ import print_function
 
 import requests
 
+try:
+    import tqdm
+    has_tqdm = True
+except ImportError:
+    has_tqdm = False
+
 
 class HTTPDownloader:  # pylint: disable=too-few-public-methods
     """
@@ -75,6 +81,7 @@ class HTTPDownloader:  # pylint: disable=too-few-public-methods
 
     def __init__(self, **kwargs):
         self.kwargs = kwargs
+        self.progressbar = self.kwargs.pop("progressbar", False) and has_tqdm
 
     def __call__(self, url, output_file, pooch):
         """
@@ -100,9 +107,22 @@ class HTTPDownloader:  # pylint: disable=too-few-public-methods
         try:
             response = requests.get(url, **kwargs)
             response.raise_for_status()
-            for chunk in response.iter_content(chunk_size=1024):
-                if chunk:
-                    output_file.write(chunk)
+            if self.progressbar:
+                total_size = int(response.headers.get("content-length", 0))
+                with tqdm.tqdm(
+                    response.iter_content(1024),
+                    total=total_size,
+                    unit="B",
+                    unit_scale=True,
+                ) as bar:
+                    for chunk in response.iter_content(chunk_size=1024):
+                        if chunk:
+                            bar.update(len(chunk))
+                            output_file.write(chunk)
+            else:
+                for chunk in response.iter_content(chunk_size=1024):
+                    if chunk:
+                        output_file.write(chunk)
         finally:
             if ispath:
                 output_file.close()
