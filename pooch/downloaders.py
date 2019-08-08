@@ -3,13 +3,13 @@ Download hooks for Pooch.fetch
 """
 from __future__ import print_function
 
-import requests
 from warnings import warn
+import requests
 try:
     from tqdm import tqdm
-    has_tqdm = True
+    _has_tqdm = True
 except ImportError:
-    has_tqdm = False
+    _has_tqdm = False
 
 
 class HTTPDownloader:  # pylint: disable=too-few-public-methods
@@ -82,7 +82,7 @@ class HTTPDownloader:  # pylint: disable=too-few-public-methods
     def __init__(self, progressbar=False, **kwargs):
         self.kwargs = kwargs
         self.progressbar = progressbar
-        if self.progressbar and not has_tqdm:
+        if self.progressbar and not _has_tqdm:
             warn("Progress bar specified but tqdm not found! "
                  "Disabling progress bar.")
             self.progressbar = False
@@ -119,7 +119,7 @@ class HTTPDownloader:  # pylint: disable=too-few-public-methods
             for chunk in content:
                 if chunk:
                     output_file.write(chunk)
-                    if self.progressbar and has_tqdm:
+                    if self.progressbar:
                         pbar.update(len(chunk))
         finally:
             if ispath:
