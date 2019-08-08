@@ -4,9 +4,9 @@ Download hooks for Pooch.fetch
 from __future__ import print_function
 
 import requests
-
+from warnings import warn
 try:
-    import tqdm
+    from tqdm import tqdm
     has_tqdm = True
 except ImportError:
     has_tqdm = False
@@ -79,9 +79,13 @@ class HTTPDownloader:  # pylint: disable=too-few-public-methods
 
     """
 
-    def __init__(self, **kwargs):
+    def __init__(self, progressbar=False, **kwargs):
         self.kwargs = kwargs
-        self.progressbar = self.kwargs.pop("progressbar", False) and has_tqdm
+        self.progressbar = progressbar
+        if self.progressbar and not has_tqdm:
+            warn("Progress bar specified but tqdm not found! "
+                 "Disabling progress bar.")
+            self.progressbar = False
 
     def __call__(self, url, output_file, pooch):
         """
@@ -102,27 +106,21 @@ class HTTPDownloader:  # pylint: disable=too-few-public-methods
         kwargs = self.kwargs.copy()
         kwargs.setdefault("stream", True)
         ispath = not hasattr(output_file, "write")
+        chunk_size = 1024
         if ispath:
             output_file = open(output_file, "w+b")
         try:
             response = requests.get(url, **kwargs)
             response.raise_for_status()
+            content = response.iter_content(chunk_size=chunk_size)
             if self.progressbar:
-                total_size = int(response.headers.get("content-length", 0))
-                with tqdm.tqdm(
-                    response.iter_content(1024),
-                    total=total_size,
-                    unit="B",
-                    unit_scale=True,
-                ) as bar:
-                    for chunk in response.iter_content(chunk_size=1024):
-                        if chunk:
-                            bar.update(len(chunk))
-                            output_file.write(chunk)
-            else:
-                for chunk in response.iter_content(chunk_size=1024):
-                    if chunk:
-                        output_file.write(chunk)
+                total = int(response.headers.get("content-length", 0))
+                pbar = tqdm(content, total=total, unit="B", unit_scale=True)
+            for chunk in content:
+                if chunk:
+                    output_file.write(chunk)
+                    if self.progressbar and has_tqdm:
+                        pbar.update(len(chunk))
         finally:
             if ispath:
                 output_file.close()
