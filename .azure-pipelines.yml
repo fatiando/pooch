@@ -91,11 +91,6 @@ jobs:
         PYTHON: '3.5'
         CONDA_INSTALL_EXTRA: "codecov pip pytest pytest-cov coverage sphinx sphinx_rtd_theme numpydoc"
         CONDA_REQUIREMENTS_DEV: ""
-      Python27:
-        python.version: '2.7'
-        PYTHON: '2.7'
-        CONDA_REQUIREMENTS: 'requirements27.txt'
-        CONDA_INSTALL_EXTRA: 'codecov backports.lzma bz2file'
 
   steps:
 
@@ -178,11 +173,6 @@ jobs:
         PYTHON: '3.5'
         CONDA_INSTALL_EXTRA: "codecov pip pytest pytest-cov coverage sphinx sphinx_rtd_theme numpydoc"
         CONDA_REQUIREMENTS_DEV: ""
-      Python27:
-        python.version: '2.7'
-        PYTHON: '2.7'
-        CONDA_REQUIREMENTS: 'requirements27.txt'
-        CONDA_INSTALL_EXTRA: 'codecov backports.lzma bz2file'
 
   steps:
 

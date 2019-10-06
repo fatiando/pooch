@@ -51,12 +51,6 @@ matrix:
               - PYTHON=3.5
               - CONDA_INSTALL_EXTRA="codecov pip pytest pytest-cov coverage sphinx sphinx_rtd_theme numpydoc"
               - CONDA_REQUIREMENTS_DEV=""
-        - name: "Linux - Python 2.7"
-          os: linux
-          env:
-              - PYTHON=2.7
-              - CONDA_REQUIREMENTS=requirements27.txt
-              - CONDA_INSTALL_EXTRA="codecov backports.lzma bz2file"
 
 # Setup the build environment
 before_install:

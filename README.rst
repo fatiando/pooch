@@ -32,7 +32,7 @@ Part of the `Fatiando a Terra <https://www.fatiando.org>`__ project
 .. placeholder-for-doc-index
 
 
-🚨🚨 **Python 2.7 will only be supported until the Fall of 2019.** 🚨🚨
+🚨🚨 **Python 2.7 is no longer supported.** 🚨🚨
 
 
 TL;DR

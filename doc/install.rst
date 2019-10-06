@@ -6,13 +6,11 @@ Installing
 Which Python?
 -------------
 
-You'll need Python 2.7 or **Python >=3.6 (recommended)**.
+You'll need **Python >=3.6**.
 
 .. warning::
 
-   🚨 **Python 2.7 will only be supported until the Fall of 2019.** 🚨
-
-   Relases made after this date will only be compatible with Python 3.
+   🚨 **Python 2.7 is no longer supported.** 🚨
 
 We recommend using the
 `Anaconda Python distribution <https://www.anaconda.com/download>`__
@@ -28,17 +26,6 @@ Dependencies
 * `requests <http://docs.python-requests.org/>`__
 * `packaging <https://github.com/pypa/packaging>`__
 * `appdirs <https://github.com/ActiveState/appdirs>`__
-
-The following are only required for Python 2.7:
-
-* `pathlib <https://pypi.org/project/pathlib/>`__
-* `backports.tempfile <https://pypi.org/project/backports.tempfile/>`__
-
-If using :class:`pooch.Decompress` in Python 2.7, the following extra packages might
-need to be installed (they will not be automatically installed when installing Pooch):
-
-* `backports.lzma <https://pypi.org/project/backports.lzma/>`__
-* `bz2file <https://pypi.org/project/bz2file/>`__
 
 
 Installing with conda
