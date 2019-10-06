@@ -443,7 +443,7 @@ class Pooch:
             for linenum, line in enumerate(fin):
                 elements = line.strip().split()
                 if len(elements) > 3 or len(elements) < 2:
-                    raise IOError(
+                    raise OSError(
                         "Expected 2 or 3 elements in line {} but got {}.".format(
                             linenum, len(elements)
                         )
