@@ -2,7 +2,6 @@
 The main Pooch class and a factory function for it.
 """
 import os
-import sys
 from pathlib import Path
 import shutil
 import tempfile
@@ -12,11 +11,6 @@ import requests
 
 from .utils import file_hash, check_version
 from .downloaders import HTTPDownloader
-
-
-# PermissionError was introduced in Python 3.3. This can be deleted when dropping 2.7
-if sys.version_info[0] < 3:
-    PermissionError = OSError  # pylint: disable=redefined-builtin,invalid-name
 
 
 def create(

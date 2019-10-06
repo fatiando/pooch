@@ -2,14 +2,9 @@
 Test the core class and factory function.
 """
 import os
-import sys
 from pathlib import Path
 import tempfile
-
-try:
-    from tempfile import TemporaryDirectory
-except ImportError:
-    from backports.tempfile import TemporaryDirectory
+from tempfile import TemporaryDirectory
 import warnings
 
 import pytest
@@ -19,11 +14,6 @@ from ..utils import file_hash
 from ..downloaders import HTTPDownloader
 
 from .utils import pooch_test_url, pooch_test_registry, check_tiny_data
-
-
-# PermissionError was introduced in Python 3.3. This can be deleted when dropping 2.7
-if sys.version_info[0] < 3:
-    PermissionError = OSError  # pylint: disable=redefined-builtin,invalid-name
 
 
 DATA_DIR = str(Path(__file__).parent / "data")
