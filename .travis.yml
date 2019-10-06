@@ -3,9 +3,6 @@
 # We use miniconda for Python so don't need any Python specific tools
 language: generic
 
-# Use the container builds so we don't need sudo priviledges
-sudo: false
-
 # Only build pushes to the master branch and tags. This avoids the double
 # builds than happen when working on a branch instead of a fork.
 branches:
