@@ -52,11 +52,7 @@ PACKAGE_DATA = {
         os.path.join("data", "store", "subdir", "*"),
     ]
 }
-INSTALL_REQUIRES = [
-    "requests",
-    "packaging",
-    "appdirs",
-]
+INSTALL_REQUIRES = ["requests", "packaging", "appdirs"]
 PYTHON_REQUIRES = ">=3.5"
 
 if __name__ == "__main__":
