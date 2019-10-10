@@ -89,7 +89,7 @@ jobs:
       Python35:
         python.version: '3.5'
         PYTHON: '3.5'
-        CONDA_INSTALL_EXTRA: "codecov pip pytest pytest-cov coverage sphinx=1.8.5 sphinx_rtd_theme numpydoc"
+        CONDA_INSTALL_EXTRA: "codecov pip pytest pytest-cov coverage sphinx=2.0.0 sphinx_rtd_theme numpydoc"
         CONDA_REQUIREMENTS_DEV: ""
       Python27:
         python.version: '2.7'
