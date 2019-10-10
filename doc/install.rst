@@ -10,7 +10,7 @@ You'll need **Python >=3.6**.
 
 .. warning::
 
-   🚨 **Python 2.7 is no longer supported.** 🚨
+   🚨 **Python 2.7 is no longer supported. Use Pooch <= 0.5.2 if you need 2.7 support.** 🚨
 
 We recommend using the
 `Anaconda Python distribution <https://www.anaconda.com/download>`__

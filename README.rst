@@ -32,7 +32,7 @@ Part of the `Fatiando a Terra <https://www.fatiando.org>`__ project
 .. placeholder-for-doc-index
 
 
-🚨🚨 **Python 2.7 is no longer supported.** 🚨🚨
+🚨🚨 **Python 2.7 is no longer supported. Use Pooch <= 0.5.2 if you need 2.7 support.** 🚨🚨
 
 
 TL;DR
