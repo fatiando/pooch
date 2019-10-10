@@ -89,13 +89,20 @@ jobs:
       Python35:
         python.version: '3.5'
         PYTHON: '3.5'
-        CONDA_INSTALL_EXTRA: "codecov pip pytest pytest-cov coverage sphinx sphinx_rtd_theme numpydoc"
+        # Need to use sphinx=2.0.0 because 1.8.5 causes conflicts and 2.2.0 crashes
+        CONDA_INSTALL_EXTRA: "codecov pip pytest pytest-cov coverage sphinx=2.0.0 sphinx_rtd_theme numpydoc"
         CONDA_REQUIREMENTS_DEV: ""
 
   steps:
 
   - bash: echo "##vso[task.prependpath]$CONDA/bin"
     displayName: Add conda to PATH
+
+  # On Hosted macOS, the agent user doesn't have ownership of Miniconda's installation
+  # directory We need to take ownership if we want to update conda or install packages
+  # globally
+  - bash: sudo chown -R $USER $CONDA
+    displayName: Take ownership of conda installation
 
   # Get the Fatiando CI scripts
   - bash: git clone --branch=1.1.1 --depth=1 https://github.com/fatiando/continuous-integration.git
@@ -171,7 +178,8 @@ jobs:
       Python35:
         python.version: '3.5'
         PYTHON: '3.5'
-        CONDA_INSTALL_EXTRA: "codecov pip pytest pytest-cov coverage sphinx sphinx_rtd_theme numpydoc"
+        # Need to use sphinx=2.0.0 because 1.8.5 causes conflicts and 2.2.0 crashes
+        CONDA_INSTALL_EXTRA: "codecov pip pytest pytest-cov coverage sphinx=2.0.0 sphinx_rtd_theme numpydoc"
         CONDA_REQUIREMENTS_DEV: ""
 
   steps:
