@@ -7,6 +7,7 @@ from warnings import warn
 import requests
 from tqdm import tqdm
 
+
 class HTTPDownloader:  # pylint: disable=too-few-public-methods
     """
     Download manager for fetching files over HTTP/HTTPS.
