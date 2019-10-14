@@ -3,7 +3,6 @@ Download hooks for Pooch.fetch
 """
 from __future__ import print_function
 
-from warnings import warn
 import requests
 from tqdm import tqdm
 
