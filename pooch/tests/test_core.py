@@ -257,7 +257,7 @@ def test_downloader():
     def download(url, output_file, pup):  # pylint: disable=unused-argument
         "Download through HTTP and warn that we're doing it"
         warnings.warn("downloader executed")
-        HTTPDownloader()(url, output_file, pup)
+        HTTPDownloader(progressbar=True)(url, output_file, pup)
 
     with TemporaryDirectory() as local_store:
         path = Path(local_store)
