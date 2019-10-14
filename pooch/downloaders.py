@@ -5,12 +5,7 @@ from __future__ import print_function
 
 from warnings import warn
 import requests
-try:
-    from tqdm import tqdm
-    _has_tqdm = True
-except ImportError:
-    _has_tqdm = False
-
+from tqdm import tqdm
 
 class HTTPDownloader:  # pylint: disable=too-few-public-methods
     """
@@ -82,10 +77,6 @@ class HTTPDownloader:  # pylint: disable=too-few-public-methods
     def __init__(self, progressbar=False, **kwargs):
         self.kwargs = kwargs
         self.progressbar = progressbar
-        if self.progressbar and not _has_tqdm:
-            warn("Progress bar specified but tqdm not found! "
-                 "Disabling progress bar.")
-            self.progressbar = False
 
     def __call__(self, url, output_file, pooch):
         """

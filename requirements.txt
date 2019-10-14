@@ -1,3 +1,4 @@
 requests
 packaging
 appdirs
+tqdm
