@@ -2,6 +2,7 @@
 Download hooks for Pooch.fetch
 """
 from __future__ import print_function
+import sys
 
 import requests
 
@@ -118,8 +119,16 @@ class HTTPDownloader:  # pylint: disable=too-few-public-methods
             content = response.iter_content(chunk_size=self.chunk_size)
             if self.progressbar:
                 total = int(response.headers.get("content-length", 0))
+                # Need to use ascii characters on Windows because there isn't always
+                # full unicode support (see https://github.com/tqdm/tqdm/issues/454)
+                use_ascii = bool(sys.platform == "win32")
                 progress = tqdm(
-                    total=total, ncols=79, unit="B", unit_scale=True, leave=True
+                    total=total,
+                    ncols=79,
+                    ascii=use_ascii,
+                    unit="B",
+                    unit_scale=True,
+                    leave=True,
                 )
             for chunk in content:
                 if chunk:
