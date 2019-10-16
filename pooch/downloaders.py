@@ -4,7 +4,10 @@ Download hooks for Pooch.fetch
 from __future__ import print_function
 
 import requests
-from tqdm import tqdm
+try:
+    from tqdm import tqdm
+except ImportError:
+    tqdm = None
 
 
 class HTTPDownloader:  # pylint: disable=too-few-public-methods
@@ -15,10 +18,15 @@ class HTTPDownloader:  # pylint: disable=too-few-public-methods
     :mod:`requests` library to manage downloads.
 
     Use with :meth:`pooch.Pooch.fetch` to customize the download of files (for example,
-    to use authentication).
+    to use authentication or print a progress bar).
 
     Parameters
     ----------
+    progressbar : bool
+        If True, will print a progress bar of the download to STDERR.
+    chunk_size : int
+        Files are streamed *chunk_size* bytes at a time instead of loading everything
+        into memory at one. Usually doesn't need to be changed.
     **kwargs
         All keyword arguments given when creating an instance of this class will be
         passed to :func:`requests.get`.
@@ -74,9 +82,10 @@ class HTTPDownloader:  # pylint: disable=too-few-public-methods
 
     """
 
-    def __init__(self, progressbar=False, **kwargs):
+    def __init__(self, progressbar=False, chunk_size=1024, **kwargs):
         self.kwargs = kwargs
         self.progressbar = progressbar
+        self.chunk_size = chunk_size
 
     def __call__(self, url, output_file, pooch):
         """
@@ -97,21 +106,32 @@ class HTTPDownloader:  # pylint: disable=too-few-public-methods
         kwargs = self.kwargs.copy()
         kwargs.setdefault("stream", True)
         ispath = not hasattr(output_file, "write")
-        chunk_size = 1024
         if ispath:
             output_file = open(output_file, "w+b")
         try:
             response = requests.get(url, **kwargs)
             response.raise_for_status()
-            content = response.iter_content(chunk_size=chunk_size)
+            content = response.iter_content(chunk_size=self.chunk_size)
             if self.progressbar:
                 total = int(response.headers.get("content-length", 0))
-                pbar = tqdm(content, total=total, unit="B", unit_scale=True)
+                pbar = tqdm(total=total, ncols=79, unit="B", unit_scale=True, leave=True)
             for chunk in content:
                 if chunk:
                     output_file.write(chunk)
+                    output_file.flush()
                     if self.progressbar:
-                        pbar.update(len(chunk))
+                        # Use the chunk size here because chunk may be much larger if
+                        # the data are decompressed by requests after reading (happens
+                        # with text files).
+                        pbar.update(self.chunk_size)
+            # Make sure the progress bar gets filled even if the actual number is
+            # chunks is smaller than expected. This happens when streaming text files
+            # that are compressed by the server when sending (gzip). Binary files don't
+            # experience this.
+            if self.progressbar:
+                pbar.reset()
+                pbar.update(total)
+                pbar.close()
         finally:
             if ispath:
                 output_file.close()
