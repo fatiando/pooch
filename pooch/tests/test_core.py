@@ -308,12 +308,15 @@ def test_downloader_progressbar(capsys):
         fname = pup.fetch("large-data.txt", downloader=download)
         # Read stderr and make sure the progress bar is printed only when told to
         captured = capsys.readouterr()
-        if sys.platform == "win32":
-            progress = "100%|#########################################| 336/336"
-        else:
-            progress = "100%|█████████████████████████████████████████| 336/336"
         printed = captured.err.split("\r")[-1].strip()
         assert len(printed) == 79
-        assert printed[:55] == progress
+        if sys.platform == "win32":
+            # On Windows, the bar is sometimes larger than 55 character, though the
+            # total size is correct.
+            progress = "100%|#########################"
+            assert printed[:30] == progress
+        else:
+            progress = "100%|█████████████████████████████████████████| 336/336"
+            assert printed[:55] == progress
         # Check that the downloaded file has the right content
         check_large_data(fname)
