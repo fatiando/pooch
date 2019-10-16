@@ -28,6 +28,7 @@ Dependencies
 * `requests <http://docs.python-requests.org/>`__
 * `packaging <https://github.com/pypa/packaging>`__
 * `appdirs <https://github.com/ActiveState/appdirs>`__
+* `tqdm <https://github.com/tqdm/tqdm>`__
 
 The following are only required for Python 2.7:
 
