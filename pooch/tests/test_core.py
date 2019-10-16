@@ -18,7 +18,12 @@ from .. import Pooch, create
 from ..utils import file_hash
 from ..downloaders import HTTPDownloader
 
-from .utils import pooch_test_url, pooch_test_registry, check_tiny_data
+from .utils import (
+    pooch_test_url,
+    pooch_test_registry,
+    check_tiny_data,
+    check_large_data,
+)
 
 
 # PermissionError was introduced in Python 3.3. This can be deleted when dropping 2.7
@@ -265,14 +270,14 @@ def test_downloader():
         pup = Pooch(path=path, base_url=BASEURL, registry=REGISTRY)
         # Check that the warning says that the file is being downloaded
         with warnings.catch_warnings(record=True) as warn:
-            fname = pup.fetch("tiny-data.txt", downloader=download)
+            fname = pup.fetch("large-data.txt", downloader=download)
             assert len(warn) == 2
             assert all(issubclass(w.category, UserWarning) for w in warn)
             assert str(warn[-2].message).split()[0] == "Downloading"
             assert str(warn[-1].message) == "downloader executed"
         # Check that the downloaded file has the right content
-        check_tiny_data(fname)
+        check_large_data(fname)
         # Check that no warnings happen when not downloading
         with warnings.catch_warnings(record=True) as warn:
-            fname = pup.fetch("tiny-data.txt")
+            fname = pup.fetch("large-data.txt")
             assert not warn
