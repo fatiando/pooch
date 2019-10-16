@@ -8,7 +8,6 @@ dependencies:
     - requests
     - packaging
     - appdirs
-    - tqdm
     # Development requirements
     - pytest
     - pytest-cov

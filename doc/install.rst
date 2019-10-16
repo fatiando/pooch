@@ -25,10 +25,16 @@ doesn't interfere with any other Python installations in your system.
 Dependencies
 ------------
 
+Required:
+
 * `requests <http://docs.python-requests.org/>`__
 * `packaging <https://github.com/pypa/packaging>`__
 * `appdirs <https://github.com/ActiveState/appdirs>`__
-* `tqdm <https://github.com/tqdm/tqdm>`__
+
+Optional:
+
+* `tqdm <https://github.com/tqdm/tqdm>`__: Required to print a download progress bar
+  (see :class:`pooch.HTTPDownloader`).
 
 The following are only required for Python 2.7:
 

@@ -290,14 +290,17 @@ def test_downloader(capsys):
             assert not warn
 
 
+@pytest.mark.skipif(tqdm is not None, reason="tqdm must be missing")
+def test_downloader_progressbar_fails():
+    "Make sure an error is raised if trying to use progressbar without tqdm"
+    with pytest.raises(ValueError):
+        HTTPDownloader(progressbar=True)
+
+
 @pytest.mark.skipif(tqdm is None, reason="requires tqdm")
 def test_downloader_progressbar(capsys):
     "Setup a downloader function that prints a progress bar for fetch"
-
-    def download(url, output_file, pup):  # pylint: disable=unused-argument
-        "Download through HTTP and print a progress bar"
-        HTTPDownloader(progressbar=True)(url, output_file, pup)
-
+    download = HTTPDownloader(progressbar=True)
     with TemporaryDirectory() as local_store:
         path = Path(local_store)
         # Setup a pooch in a temp dir
@@ -305,7 +308,7 @@ def test_downloader_progressbar(capsys):
         fname = pup.fetch("large-data.txt", downloader=download)
         # Read stderr and make sure the progress bar is printed only when told to
         captured = capsys.readouterr()
-        bar = "100%|█████████████████████████████████████████| 336/336"
-        assert captured.err.split("\r")[-1][:55] == bar
+        progress = "100%|█████████████████████████████████████████| 336/336"
+        assert captured.err.split("\r")[-1][:55] == progress
         # Check that the downloaded file has the right content
         check_large_data(fname)

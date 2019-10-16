@@ -4,6 +4,7 @@ Download hooks for Pooch.fetch
 from __future__ import print_function
 
 import requests
+
 try:
     from tqdm import tqdm
 except ImportError:
@@ -23,7 +24,8 @@ class HTTPDownloader:  # pylint: disable=too-few-public-methods
     Parameters
     ----------
     progressbar : bool
-        If True, will print a progress bar of the download to STDERR.
+        If True, will print a progress bar of the download to standard error (stderr).
+        Requires `tqdm <https://github.com/tqdm/tqdm>`__ to be installed.
     chunk_size : int
         Files are streamed *chunk_size* bytes at a time instead of loading everything
         into memory at one. Usually doesn't need to be changed.
@@ -86,6 +88,8 @@ class HTTPDownloader:  # pylint: disable=too-few-public-methods
         self.kwargs = kwargs
         self.progressbar = progressbar
         self.chunk_size = chunk_size
+        if self.progressbar and tqdm is None:
+            raise ValueError("Missing package 'tqdm' required for progress bars.")
 
     def __call__(self, url, output_file, pooch):
         """
@@ -114,7 +118,9 @@ class HTTPDownloader:  # pylint: disable=too-few-public-methods
             content = response.iter_content(chunk_size=self.chunk_size)
             if self.progressbar:
                 total = int(response.headers.get("content-length", 0))
-                pbar = tqdm(total=total, ncols=79, unit="B", unit_scale=True, leave=True)
+                progress = tqdm(
+                    total=total, ncols=79, unit="B", unit_scale=True, leave=True
+                )
             for chunk in content:
                 if chunk:
                     output_file.write(chunk)
@@ -123,15 +129,15 @@ class HTTPDownloader:  # pylint: disable=too-few-public-methods
                         # Use the chunk size here because chunk may be much larger if
                         # the data are decompressed by requests after reading (happens
                         # with text files).
-                        pbar.update(self.chunk_size)
+                        progress.update(self.chunk_size)
             # Make sure the progress bar gets filled even if the actual number is
             # chunks is smaller than expected. This happens when streaming text files
             # that are compressed by the server when sending (gzip). Binary files don't
             # experience this.
             if self.progressbar:
-                pbar.reset()
-                pbar.update(total)
-                pbar.close()
+                progress.reset()
+                progress.update(total)
+                progress.close()
         finally:
             if ispath:
                 output_file.close()

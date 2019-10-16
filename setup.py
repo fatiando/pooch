@@ -55,7 +55,6 @@ INSTALL_REQUIRES = [
     "requests",
     "packaging",
     "appdirs",
-    "tqdm",
     "pathlib;python_version<'3.5'",
     "backports.tempfile;python_version<'3.5'",
 ]
