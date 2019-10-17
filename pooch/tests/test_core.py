@@ -311,12 +311,10 @@ def test_downloader_progressbar(capsys):
         printed = captured.err.split("\r")[-1].strip()
         assert len(printed) == 79
         if sys.platform == "win32":
-            # On Windows, the bar is sometimes larger than 55 character, though the
-            # total size is correct.
-            progress = "100%|#########################"
-            assert printed[:30] == progress
+            progress = "100%|####################"
         else:
-            progress = "100%|█████████████████████████████████████████| 336/336"
-            assert printed[:55] == progress
+            progress = "100%|████████████████████"
+        # The bar size is not always the same so we can't reliably test the whole bar.
+        assert printed[:25] == progress
         # Check that the downloaded file has the right content
         check_large_data(fname)
