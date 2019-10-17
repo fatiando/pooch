@@ -3,7 +3,7 @@
 
 `Documentation <https://www.fatiando.org/pooch>`__ |
 `Documentation (dev version) <https://www.fatiando.org/pooch/dev>`__ |
-`Contact <https://gitter.im/fatiando/fatiando>`__ |
+`Contact <http://contact.fatiando.org>`__ |
 Part of the `Fatiando a Terra <https://www.fatiando.org>`__ project
 
 .. image:: https://img.shields.io/pypi/v/pooch.svg?style=flat-square
@@ -24,9 +24,6 @@ Part of the `Fatiando a Terra <https://www.fatiando.org>`__ project
 .. image:: https://img.shields.io/pypi/pyversions/pooch.svg?style=flat-square
     :alt: Compatible Python versions.
     :target: https://pypi.python.org/pypi/pooch
-.. image:: https://img.shields.io/gitter/room/fatiando/fatiando.svg?style=flat-square
-    :alt: Chat room on Gitter
-    :target: https://gitter.im/fatiando/fatiando
 
 
 .. placeholder-for-doc-index
@@ -128,7 +125,7 @@ Contacting Us
   Feel free to `open an issue
   <https://github.com/fatiando/pooch/issues/new>`__ or comment
   on any open issue or pull request.
-* We have `chat room on Gitter <https://gitter.im/fatiando/fatiando>`__ where you can
+* We have `chat room on Slack <http://contact.fatiando.org>`__ where you can
   ask questions and leave comments.
 
 
