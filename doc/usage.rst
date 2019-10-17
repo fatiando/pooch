@@ -404,6 +404,38 @@ redirected from the original download URL in the :class:`~pooch.Pooch` registry:
         return data
 
 
+Printing a download progress bar
+--------------------------------
+
+The :class:`~pooch.HTTPDownloader` can use `tqdm <https://github.com/tqdm/tqdm>`__ to
+print a download progress bar. This is turned off by default but can be enabled using:
+
+.. code:: python
+
+    from pooch import HTTPDownloader
+
+
+    def fetch_large_data():
+        """
+        Fetch a large file from a server and print a progress bar.
+        """
+        download = HTTPDownloader(progressbar=True)
+        fname = GOODBOY.fetch("large-data-file.h5", downloader=download)
+        data = h5py.File(fname, "r")
+        return data
+
+The resulting progress bar will be printed to stderr and should look something like
+this:
+
+.. code::
+
+    100%|█████████████████████████████████████████| 336/336 [...]
+
+.. note::
+    
+    ``tqdm`` is not installed by default with Pooch. You will have to install it
+    separately in order to use this feature.
+
 So you have 1000 data files
 ---------------------------
 

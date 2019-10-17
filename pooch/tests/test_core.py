@@ -14,6 +14,11 @@ import warnings
 
 import pytest
 
+try:
+    import tqdm
+except ImportError:
+    tqdm = None
+
 from .. import Pooch, create
 from ..utils import file_hash
 from ..downloaders import HTTPDownloader
@@ -256,7 +261,7 @@ def test_check_availability():
     assert not pup.is_available("not-a-real-data-file.txt")
 
 
-def test_downloader():
+def test_downloader(capsys):
     "Setup a downloader function for fetch"
 
     def download(url, output_file, pup):  # pylint: disable=unused-argument
@@ -275,9 +280,41 @@ def test_downloader():
             assert all(issubclass(w.category, UserWarning) for w in warn)
             assert str(warn[-2].message).split()[0] == "Downloading"
             assert str(warn[-1].message) == "downloader executed"
+        # Read stderr and make sure no progress bar was printed by default
+        assert not capsys.readouterr().err
         # Check that the downloaded file has the right content
         check_large_data(fname)
         # Check that no warnings happen when not downloading
         with warnings.catch_warnings(record=True) as warn:
             fname = pup.fetch("large-data.txt")
             assert not warn
+
+
+@pytest.mark.skipif(tqdm is not None, reason="tqdm must be missing")
+def test_downloader_progressbar_fails():
+    "Make sure an error is raised if trying to use progressbar without tqdm"
+    with pytest.raises(ValueError):
+        HTTPDownloader(progressbar=True)
+
+
+@pytest.mark.skipif(tqdm is None, reason="requires tqdm")
+def test_downloader_progressbar(capsys):
+    "Setup a downloader function that prints a progress bar for fetch"
+    download = HTTPDownloader(progressbar=True)
+    with TemporaryDirectory() as local_store:
+        path = Path(local_store)
+        # Setup a pooch in a temp dir
+        pup = Pooch(path=path, base_url=BASEURL, registry=REGISTRY)
+        fname = pup.fetch("large-data.txt", downloader=download)
+        # Read stderr and make sure the progress bar is printed only when told to
+        captured = capsys.readouterr()
+        printed = captured.err.split("\r")[-1].strip()
+        assert len(printed) == 79
+        if sys.platform == "win32":
+            progress = "100%|####################"
+        else:
+            progress = "100%|████████████████████"
+        # The bar size is not always the same so we can't reliably test the whole bar.
+        assert printed[:25] == progress
+        # Check that the downloaded file has the right content
+        check_large_data(fname)
