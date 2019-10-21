@@ -6,13 +6,12 @@ Installing
 Which Python?
 -------------
 
-You'll need Python 2.7 or **Python >=3.6 (recommended)**.
+You'll need Python 2.7 or **Python >=3.5 (recommended)**.
 
 .. warning::
 
-   🚨 **Python 2.7 will only be supported until the Fall of 2019.** 🚨
-
-   Relases made after this date will only be compatible with Python 3.
+    🚨 **Pooch v0.6.0 is the last release to support Python 2.7. Please update to Python
+    3 or use Pooch <= 0.6.0.** 🚨
 
 We recommend using the
 `Anaconda Python distribution <https://www.anaconda.com/download>`__

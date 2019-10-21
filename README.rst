@@ -29,7 +29,8 @@ Part of the `Fatiando a Terra <https://www.fatiando.org>`__ project
 .. placeholder-for-doc-index
 
 
-🚨🚨 **Python 2.7 will only be supported until the Fall of 2019.** 🚨🚨
+🚨🚨 **Pooch v0.6.0 is the last release to support Python 2.7. Please update to Python 3
+or use Pooch <= 0.6.0.** 🚨🚨
 
 
 TL;DR
