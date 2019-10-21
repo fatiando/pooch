@@ -16,6 +16,7 @@
     :caption: Documentation
 
     install.rst
+    citing.rst
     usage.rst
     api/index.rst
     changes.rst

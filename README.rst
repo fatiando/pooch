@@ -130,6 +130,18 @@ Contacting Us
   ask questions and leave comments.
 
 
+Citing Pooch
+------------
+
+This is research software **made by scientists** (see
+`AUTHORS.md <https://github.com/fatiando/pooch/blob/master/AUTHORS.md>`__). Citations
+help us justify the effort that goes into building and maintaining this project. If you
+used Pooch for your research, please consider citing us.
+
+See our `CITATION.rst file <https://github.com/fatiando/pooch/blob/master/CITATION.rst>`__
+to find out more.
+
+
 Contributing
 ------------
 
@@ -189,6 +201,7 @@ Documentation for other versions
 * `Development <https://www.fatiando.org/pooch/dev>`__ (reflects the *master* branch on
   Github)
 * `Latest release <https://www.fatiando.org/pooch/latest>`__
+* `v0.6.0 <https://www.fatiando.org/pooch/v0.6.0>`__
 * `v0.5.2 <https://www.fatiando.org/pooch/v0.5.2>`__
 * `v0.5.1 <https://www.fatiando.org/pooch/v0.5.1>`__
 * `v0.5.0 <https://www.fatiando.org/pooch/v0.5.0>`__
