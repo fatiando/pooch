@@ -3,6 +3,37 @@
 Changelog
 =========
 
+Version 0.6.0
+-------------
+
+*Released on: 2019/10/21*
+
+.. image:: https://img.shields.io/badge/doi-10.5281%2Fzenodo.3515031-blue.svg?style=flat-square
+    :alt: Digital Object Identifier for the Zenodo archive
+    :target: https://doi.org/10.5281/zenodo.3515031
+
+New features:
+
+* Add optional download progress bar to ``pooch.HTTPDownloader``
+  (`#97 <https://github.com/fatiando/pooch/pull/97>`__)
+
+Maintenance:
+
+* Warn that 0.6.0 is the last version to support Python 2.7
+  (`#108 <https://github.com/fatiando/pooch/pull/108>`__)
+
+Documentation:
+
+* Update contact information to point to our Slack channel
+  (`#107 <https://github.com/fatiando/pooch/pull/107>`__)
+* Add icepack to list of projects using Pooch
+  (`#98 <https://github.com/fatiando/pooch/pull/98>`__)
+
+This release contains contributions from:
+
+* Daniel Shapero
+* Leonardo Uieda
+
 Version 0.5.2
 -------------
 
