@@ -1,7 +1,6 @@
 """
 Download hooks for Pooch.fetch
 """
-from __future__ import print_function
 import sys
 
 import requests

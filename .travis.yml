@@ -3,9 +3,6 @@
 # We use miniconda for Python so don't need any Python specific tools
 language: generic
 
-# Use the container builds so we don't need sudo priviledges
-sudo: false
-
 # Only build pushes to the master branch and tags. This avoids the double
 # builds than happen when working on a branch instead of a fork.
 branches:
@@ -57,12 +54,6 @@ matrix:
               # Need to use sphinx=2.0.0 because 1.8.5 causes conflicts and 2.2.0 crashes
               - CONDA_INSTALL_EXTRA="codecov pip pytest pytest-cov coverage sphinx=2.0.0 sphinx_rtd_theme numpydoc"
               - CONDA_REQUIREMENTS_DEV=""
-        - name: "Linux - Python 2.7"
-          os: linux
-          env:
-              - PYTHON=2.7
-              - CONDA_REQUIREMENTS=requirements27.txt
-              - CONDA_INSTALL_EXTRA="codecov backports.lzma bz2file"
 
 # Setup the build environment
 before_install:

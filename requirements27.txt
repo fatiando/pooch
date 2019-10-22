@@ -1,6 +1,0 @@
-# Requirements for Python 2.7
-requests
-packaging
-appdirs
-backports.tempfile
-pathlib

@@ -2,11 +2,7 @@
 Test the processor hooks
 """
 from pathlib import Path
-
-try:
-    from tempfile import TemporaryDirectory
-except ImportError:
-    from backports.tempfile import TemporaryDirectory
+from tempfile import TemporaryDirectory
 import warnings
 
 import pytest
@@ -66,19 +62,6 @@ def test_decompress_fails():
             with warnings.catch_warnings():
                 pup.fetch("tiny-data.txt", processor=Decompress(method="bla"))
         assert exception.value.args[0].startswith("Invalid compression method 'bla'")
-
-
-@pytest.mark.parametrize(
-    "method,ext", [("lzma", "xz"), ("bzip2", "bz2")], ids=["lzma", "bz2"]
-)
-def test_decompress_27_missing_dependencies(method, ext):
-    "Raises an exception when missing extra dependencies for 2.7"
-    decompress = Decompress(method=method)
-    decompress.modules[method] = None
-    with pytest.raises(ValueError) as exception:
-        with warnings.catch_warnings():
-            decompress(fname="meh.txt." + ext, action="download", pooch=None)
-    assert method in exception.value.args[0]
 
 
 def test_extractprocessor_fails():

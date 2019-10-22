@@ -3,29 +3,13 @@
 Post-processing hooks for Pooch.fetch
 """
 import os
-import sys
+import bz2
 import gzip
+import lzma
 import shutil
 from zipfile import ZipFile
 from tarfile import TarFile
 from warnings import warn
-
-# Try getting the 2.7 backports of lzma and bz2. Can be deleted when dropping 2.7
-if sys.version_info[0] < 3:
-    try:
-        import bz2file as bz2
-    except ImportError:
-        bz2 = None
-else:
-    import bz2
-try:
-    import lzma
-except ImportError:
-    try:
-        from backports import lzma
-    except ImportError:
-        # Make this an optional dependency
-        lzma = None
 
 
 class ExtractorProcessor:  # pylint: disable=too-few-public-methods
@@ -213,11 +197,6 @@ class Decompress:  # pylint: disable=too-few-public-methods
     automatically determine the compression method. This can be overwritten by setting
     the *method* argument.
 
-    .. warning::
-
-        With **Python 2.7**, methods "lzma"/"xz" and "bzip2" require extra dependencies
-        to be installed: ``backports.lzma`` for "lzma" and ``bz2file`` for "bzip2".
-
     Parameters
     ----------
     method : str
@@ -292,14 +271,5 @@ class Decompress:  # pylint: disable=too-few-public-methods
                 "Invalid compression method '{}'. Must be one of '{}'.".format(
                     method, list(self.modules.keys())
                 )
-            )
-        # Check for Python 2.7 extra dependencies
-        if method in ["lzma", "xz"] and self.modules["lzma"] is None:
-            raise ValueError(
-                "LZMA/xz support requires the 'backports.lzma' package in Python 2.7"
-            )
-        if method == "bzip2" and self.modules["bzip2"] is None:
-            raise ValueError(
-                "bzip2 support requires the 'bz2file' package in Python 2.7"
             )
         return self.modules[method]

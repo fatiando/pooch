@@ -96,11 +96,6 @@ jobs:
         # Need to use sphinx=2.0.0 because 1.8.5 causes conflicts and 2.2.0 crashes
         CONDA_INSTALL_EXTRA: "codecov pip pytest pytest-cov coverage sphinx=2.0.0 sphinx_rtd_theme numpydoc"
         CONDA_REQUIREMENTS_DEV: ""
-      Python27:
-        python.version: '2.7'
-        PYTHON: '2.7'
-        CONDA_REQUIREMENTS: 'requirements27.txt'
-        CONDA_INSTALL_EXTRA: 'codecov backports.lzma bz2file'
 
   steps:
 
@@ -194,11 +189,6 @@ jobs:
         # Need to use sphinx=2.0.0 because 1.8.5 causes conflicts and 2.2.0 crashes
         CONDA_INSTALL_EXTRA: "codecov pip pytest pytest-cov coverage sphinx=2.0.0 sphinx_rtd_theme numpydoc"
         CONDA_REQUIREMENTS_DEV: ""
-      Python27:
-        python.version: '2.7'
-        PYTHON: '2.7'
-        CONDA_REQUIREMENTS: 'requirements27.txt'
-        CONDA_INSTALL_EXTRA: 'codecov backports.lzma bz2file'
 
   steps:
 

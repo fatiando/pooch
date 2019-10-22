@@ -35,10 +35,11 @@ CLASSIFIERS = [
     "Intended Audience :: Education",
     "Topic :: Scientific/Engineering",
     "Topic :: Software Development :: Libraries",
-    "Programming Language :: Python :: 2.7",
+    "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.5",
     "Programming Language :: Python :: 3.6",
     "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3 :: Only",
     "License :: OSI Approved :: {}".format(LICENSE),
 ]
 PLATFORMS = "Any"
@@ -51,14 +52,8 @@ PACKAGE_DATA = {
         os.path.join("data", "store", "subdir", "*"),
     ]
 }
-INSTALL_REQUIRES = [
-    "requests",
-    "packaging",
-    "appdirs",
-    "pathlib;python_version<'3.5'",
-    "backports.tempfile;python_version<'3.5'",
-]
-PYTHON_REQUIRES = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
+INSTALL_REQUIRES = ["requests", "packaging", "appdirs"]
+PYTHON_REQUIRES = ">=3.5"
 
 if __name__ == "__main__":
     setup(
