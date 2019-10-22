@@ -61,7 +61,7 @@ read it carefully.
 ## How Can I Talk to You?
 
 Discussion often happens in the issues and pull requests.
-In addition, there is a [Gitter chat room](https://gitter.im/fatiando/fatiando) for the
+In addition, there is a [Slack chat room](http://contact.fatiando.org) for the
 Fatiando a Terra project where you can ask questions.
 
 

@@ -6,11 +6,11 @@ Installing
 Which Python?
 -------------
 
-You'll need **Python >=3.6**.
+You'll need **Python >= 3.5**.
 
 .. warning::
 
-   🚨 **Python 2.7 is no longer supported. Use Pooch <= 0.5.2 if you need 2.7 support.** 🚨
+   **Python 2.7 is no longer supported. Use Pooch <= 0.6.0 if you need 2.7 support.**
 
 We recommend using the
 `Anaconda Python distribution <https://www.anaconda.com/download>`__
@@ -23,9 +23,16 @@ doesn't interfere with any other Python installations in your system.
 Dependencies
 ------------
 
+Required:
+
 * `requests <http://docs.python-requests.org/>`__
 * `packaging <https://github.com/pypa/packaging>`__
 * `appdirs <https://github.com/ActiveState/appdirs>`__
+
+Optional:
+
+* `tqdm <https://github.com/tqdm/tqdm>`__: Required to print a download progress bar
+  (see :class:`pooch.HTTPDownloader`).
 
 
 Installing with conda

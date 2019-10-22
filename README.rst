@@ -3,7 +3,7 @@
 
 `Documentation <https://www.fatiando.org/pooch>`__ |
 `Documentation (dev version) <https://www.fatiando.org/pooch/dev>`__ |
-`Contact <https://gitter.im/fatiando/fatiando>`__ |
+`Contact <http://contact.fatiando.org>`__ |
 Part of the `Fatiando a Terra <https://www.fatiando.org>`__ project
 
 .. image:: https://img.shields.io/pypi/v/pooch.svg?style=flat-square
@@ -24,15 +24,11 @@ Part of the `Fatiando a Terra <https://www.fatiando.org>`__ project
 .. image:: https://img.shields.io/pypi/pyversions/pooch.svg?style=flat-square
     :alt: Compatible Python versions.
     :target: https://pypi.python.org/pypi/pooch
-.. image:: https://img.shields.io/gitter/room/fatiando/fatiando.svg?style=flat-square
-    :alt: Chat room on Gitter
-    :target: https://gitter.im/fatiando/fatiando
 
 
 .. placeholder-for-doc-index
 
-
-🚨🚨 **Python 2.7 is no longer supported. Use Pooch <= 0.5.2 if you need 2.7 support.** 🚨🚨
+🚨 **Python 2.7 is no longer supported. Use Pooch <= 0.6.0 if you need 2.7 support.** 🚨
 
 
 TL;DR
@@ -128,8 +124,20 @@ Contacting Us
   Feel free to `open an issue
   <https://github.com/fatiando/pooch/issues/new>`__ or comment
   on any open issue or pull request.
-* We have `chat room on Gitter <https://gitter.im/fatiando/fatiando>`__ where you can
+* We have `chat room on Slack <http://contact.fatiando.org>`__ where you can
   ask questions and leave comments.
+
+
+Citing Pooch
+------------
+
+This is research software **made by scientists** (see
+`AUTHORS.md <https://github.com/fatiando/pooch/blob/master/AUTHORS.md>`__). Citations
+help us justify the effort that goes into building and maintaining this project. If you
+used Pooch for your research, please consider citing us.
+
+See our `CITATION.rst file <https://github.com/fatiando/pooch/blob/master/CITATION.rst>`__
+to find out more.
 
 
 Contributing
@@ -191,6 +199,7 @@ Documentation for other versions
 * `Development <https://www.fatiando.org/pooch/dev>`__ (reflects the *master* branch on
   Github)
 * `Latest release <https://www.fatiando.org/pooch/latest>`__
+* `v0.6.0 <https://www.fatiando.org/pooch/v0.6.0>`__
 * `v0.5.2 <https://www.fatiando.org/pooch/v0.5.2>`__
 * `v0.5.1 <https://www.fatiando.org/pooch/v0.5.1>`__
 * `v0.5.0 <https://www.fatiando.org/pooch/v0.5.0>`__

@@ -35,6 +35,11 @@ matrix:
           os: linux
           env:
               - PYTHON=3.7
+        - name: "Linux - Python 3.7 [optional]"
+          os: linux
+          env:
+              - PYTHON=3.7
+              - CONDA_INSTALL_EXTRA="codecov tqdm"
         - name: "Linux - Python 3.6"
           os: linux
           env:
@@ -53,7 +58,7 @@ matrix:
 # Setup the build environment
 before_install:
     # Get the Fatiando CI scripts
-    - git clone --branch=1.1.1 --depth=1 https://github.com/fatiando/continuous-integration.git
+    - git clone --branch=1.2.0 --depth=1 https://github.com/fatiando/continuous-integration.git
     # Download and install miniconda and setup dependencies
     # Need to source the script to set the PATH variable globaly
     - source continuous-integration/travis/setup-miniconda.sh

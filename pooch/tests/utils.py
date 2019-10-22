@@ -20,6 +20,18 @@ def check_tiny_data(fname):
     assert content.strip() == true_content
 
 
+def check_large_data(fname):
+    """
+    Load the large-data.txt file and check that the contents are correct.
+    """
+    assert os.path.exists(fname)
+    with open(fname) as data:
+        content = data.read()
+    true_content = ["# A larer data file for test purposes only"]
+    true_content.extend(["1  2  3  4  5  6"] * 6002)
+    assert content.strip() == "\n".join(true_content)
+
+
 def pooch_test_url():
     """
     Get the base URL for the test data used in Pooch itself.
@@ -52,6 +64,7 @@ def pooch_test_registry():
     """
     registry = {
         "tiny-data.txt": "baee0894dba14b12085eacb204284b97e362f4f3e5a5807693cc90ef415c1b2d",
+        "large-data.txt": "98de171fb320da82982e6bf0f3994189fff4b42b23328769afce12bdd340444a",
         "subdir/tiny-data.txt": "baee0894dba14b12085eacb204284b97e362f4f3e5a5807693cc90ef415c1b2d",
         "tiny-data.zip": "0d49e94f07bc1866ec57e7fd1b93a351fba36842ec9b13dd50bf94e8dfa35cbb",
         "store.zip": "0498d2a001e71051bbd2acd2346f38da7cbd345a633cb7bf0f8a20938714b51a",

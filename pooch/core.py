@@ -241,7 +241,8 @@ class Pooch:
         Custom file downloaders can be provided through the *downloader* argument. By
         default, files are downloaded over HTTP. If the server for a given file requires
         authentication (username and password) or if the file is served over FTP, use
-        custom downloaders that support these features. See below for details.
+        custom downloaders that support these features. Downloaders can also be used to
+        print custom messages (like a progress bar), etc. See below for details.
 
         Parameters
         ----------
@@ -321,6 +322,16 @@ class Pooch:
 
             authdownload = HTTPDownloader(auth=(username, password))
             mypooch.fetch("some-data-file.txt", downloader=authdownload)
+
+        **Progress bar** for the download can be printed by :class:`pooch.HTTPDownloader`
+        by passing the argument ``progressbar=True``:
+
+        .. code:: python
+
+            progress_download = HTTPDownloader(progressbar=True)
+            mypooch.fetch("some-data-file.txt", downloader=progress_download)
+            # Will print a progress bar to standard error like:
+            # 100%|█████████████████████████████████████████| 336/336 [...]
 
         """
         self._assert_file_in_registry(fname)
