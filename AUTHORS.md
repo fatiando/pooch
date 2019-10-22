@@ -8,3 +8,4 @@ last name) and are considered "The Pooch Developers":
 * [John Leeman](https://github.com/jrleeman)
 * [Santiago R. Soler](https://github.com/santisoler)
 * [Leonardo Uieda](http://www.leouieda.com/)
+* [Hugo van Kemenade](https://github.com/hugovk)
