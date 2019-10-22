@@ -6,11 +6,13 @@ Changelog
 Version 0.6.0
 -------------
 
-*Released on: 2019/10/21*
+*Released on: 2019/10/22*
 
 .. image:: https://img.shields.io/badge/doi-10.5281%2Fzenodo.3515031-blue.svg?style=flat-square
     :alt: Digital Object Identifier for the Zenodo archive
     :target: https://doi.org/10.5281/zenodo.3515031
+
+🚨 **Pooch v0.6.0 is the last release to support Python 2.7** 🚨
 
 New features:
 
