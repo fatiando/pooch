@@ -41,7 +41,7 @@
   <link rel="stylesheet" href="_static/style.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Training your Pooch" href="usage.html" />
+    <link rel="next" title="Citing Pooch" href="citing.html" />
     <link rel="prev" title="TL;DR" href="index.html" />
     <!-- Google Analytics tracking code -->
     <script>
@@ -118,6 +118,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#testing-your-install">Testing your install</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="citing.html">Citing Pooch</a></li>
 <li class="toctree-l1"><a class="reference internal" href="usage.html">Training your Pooch</a></li>
 <li class="toctree-l1"><a class="reference internal" href="api/index.html">API Reference</a></li>
 <li class="toctree-l1"><a class="reference internal" href="changes.html">Changelog</a></li>
@@ -142,7 +143,7 @@
             
                 <li class="toctree-l1"><a href="https://github.com/fatiando/pooch/blob/master/CODE_OF_CONDUCT.md"><i class="fa fa-gavel fa-fw"></i> Code of Conduct</a></li>
             
-                <li class="toctree-l1"><a href="https://gitter.im/fatiando/fatiando"><i class="fa fa-comment fa-fw"></i> Contact</a></li>
+                <li class="toctree-l1"><a href="http://contact.fatiando.org"><i class="fa fa-comment fa-fw"></i> Contact</a></li>
             
                 <li class="toctree-l1"><a href="https://github.com/fatiando/pooch"><i class="fa fa-github fa-fw"></i> Source Code</a></li>
             
@@ -216,11 +217,11 @@
 <span id="install"></span><h1>Installing<a class="headerlink" href="#installing" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="which-python">
 <h2>Which Python?<a class="headerlink" href="#which-python" title="Permalink to this headline">¶</a></h2>
-<p>You’ll need Python 2.7 or <strong>Python &gt;=3.6 (recommended)</strong>.</p>
+<p>You’ll need Python 2.7 or <strong>Python &gt;=3.5 (recommended)</strong>.</p>
 <div class="admonition warning">
 <p class="first admonition-title">Warning</p>
-<p>🚨 <strong>Python 2.7 will only be supported until the Fall of 2019.</strong> 🚨</p>
-<p class="last">Relases made after this date will only be compatible with Python 3.</p>
+<p class="last">🚨 <strong>Pooch v0.6.0 is the last release to support Python 2.7. Please update to Python
+3 or use Pooch &lt;= 0.6.0.</strong> 🚨</p>
 </div>
 <p>We recommend using the
 <a class="reference external" href="https://www.anaconda.com/download">Anaconda Python distribution</a>
@@ -231,10 +232,16 @@ doesn’t interfere with any other Python installations in your system.</p>
 </div>
 <div class="section" id="dependencies">
 <h2>Dependencies<a class="headerlink" href="#dependencies" title="Permalink to this headline">¶</a></h2>
+<p>Required:</p>
 <ul class="simple">
 <li><a class="reference external" href="http://docs.python-requests.org/">requests</a></li>
 <li><a class="reference external" href="https://github.com/pypa/packaging">packaging</a></li>
 <li><a class="reference external" href="https://github.com/ActiveState/appdirs">appdirs</a></li>
+</ul>
+<p>Optional:</p>
+<ul class="simple">
+<li><a class="reference external" href="https://github.com/tqdm/tqdm">tqdm</a>: Required to print a download progress bar
+(see <a class="reference internal" href="api/generated/pooch.HTTPDownloader.html#pooch.HTTPDownloader" title="pooch.HTTPDownloader"><code class="xref py py-class docutils literal notranslate"><span class="pre">pooch.HTTPDownloader</span></code></a>).</li>
 </ul>
 <p>The following are only required for Python 2.7:</p>
 <ul class="simple">
@@ -300,7 +307,7 @@ interpreter:</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="usage.html" class="btn btn-neutral float-right" title="Training your Pooch" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="citing.html" class="btn btn-neutral float-right" title="Citing Pooch" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="index.html" class="btn btn-neutral float-left" title="TL;DR" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
@@ -314,7 +321,7 @@ interpreter:</p>
     <p>
         &copy; Copyright 2018-2019, The Pooch Developers
       <span class="lastupdated">
-        Last updated on Jun 25, 2019.
+        Last updated on Oct 22, 2019.
       </span>
 
     </p>

@@ -110,6 +110,7 @@
               <p class="caption"><span class="caption-text">Documentation</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../../install.html">Installing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../citing.html">Citing Pooch</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../usage.html">Training your Pooch</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../index.html">API Reference</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="../index.html#core">Core</a><ul class="current">
@@ -145,7 +146,7 @@
             
                 <li class="toctree-l1"><a href="https://github.com/fatiando/pooch/blob/master/CODE_OF_CONDUCT.md"><i class="fa fa-gavel fa-fw"></i> Code of Conduct</a></li>
             
-                <li class="toctree-l1"><a href="https://gitter.im/fatiando/fatiando"><i class="fa fa-comment fa-fw"></i> Contact</a></li>
+                <li class="toctree-l1"><a href="http://contact.fatiando.org"><i class="fa fa-comment fa-fw"></i> Contact</a></li>
             
                 <li class="toctree-l1"><a href="https://github.com/fatiando/pooch"><i class="fa fa-github fa-fw"></i> Source Code</a></li>
             
@@ -306,7 +307,8 @@ executed after the downloaded (if required) to perform these actions. See below.
 <p>Custom file downloaders can be provided through the <em>downloader</em> argument. By
 default, files are downloaded over HTTP. If the server for a given file requires
 authentication (username and password) or if the file is served over FTP, use
-custom downloaders that support these features. See below for details.</p>
+custom downloaders that support these features. Downloaders can also be used to
+print custom messages (like a progress bar), etc. See below for details.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -388,6 +390,14 @@ storage.</p>
 <p><strong>Authentication</strong> through HTTP can be handled by <a class="reference internal" href="pooch.HTTPDownloader.html#pooch.HTTPDownloader" title="pooch.HTTPDownloader"><code class="xref py py-class docutils literal notranslate"><span class="pre">pooch.HTTPDownloader</span></code></a>:</p>
 <div class="code python highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">authdownload</span> <span class="o">=</span> <span class="n">HTTPDownloader</span><span class="p">(</span><span class="n">auth</span><span class="o">=</span><span class="p">(</span><span class="n">username</span><span class="p">,</span> <span class="n">password</span><span class="p">))</span>
 <span class="n">mypooch</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="s2">&quot;some-data-file.txt&quot;</span><span class="p">,</span> <span class="n">downloader</span><span class="o">=</span><span class="n">authdownload</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Progress bar</strong> for the download can be printed by <a class="reference internal" href="pooch.HTTPDownloader.html#pooch.HTTPDownloader" title="pooch.HTTPDownloader"><code class="xref py py-class docutils literal notranslate"><span class="pre">pooch.HTTPDownloader</span></code></a>
+by passing the argument <code class="docutils literal notranslate"><span class="pre">progressbar=True</span></code>:</p>
+<div class="code python highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">progress_download</span> <span class="o">=</span> <span class="n">HTTPDownloader</span><span class="p">(</span><span class="n">progressbar</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">mypooch</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="s2">&quot;some-data-file.txt&quot;</span><span class="p">,</span> <span class="n">downloader</span><span class="o">=</span><span class="n">progress_download</span><span class="p">)</span>
+<span class="c1"># Will print a progress bar to standard error like:</span>
+<span class="c1"># 100%|█████████████████████████████████████████| 336/336 [...]</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -488,7 +498,7 @@ files can be specified as a third element on the line.</p>
     <p>
         &copy; Copyright 2018-2019, The Pooch Developers
       <span class="lastupdated">
-        Last updated on Jun 25, 2019.
+        Last updated on Oct 22, 2019.
       </span>
 
     </p>

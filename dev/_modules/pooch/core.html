@@ -108,6 +108,7 @@
               <p class="caption"><span class="caption-text">Documentation</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../install.html">Installing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../citing.html">Citing Pooch</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../usage.html">Training your Pooch</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../api/index.html">API Reference</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../changes.html">Changelog</a></li>
@@ -132,7 +133,7 @@
             
                 <li class="toctree-l1"><a href="https://github.com/fatiando/pooch/blob/master/CODE_OF_CONDUCT.md"><i class="fa fa-gavel fa-fw"></i> Code of Conduct</a></li>
             
-                <li class="toctree-l1"><a href="https://gitter.im/fatiando/fatiando"><i class="fa fa-comment fa-fw"></i> Contact</a></li>
+                <li class="toctree-l1"><a href="http://contact.fatiando.org"><i class="fa fa-comment fa-fw"></i> Contact</a></li>
             
                 <li class="toctree-l1"><a href="https://github.com/fatiando/pooch"><i class="fa fa-github fa-fw"></i> Source Code</a></li>
             
@@ -451,7 +452,8 @@
 <span class="sd">        Custom file downloaders can be provided through the *downloader* argument. By</span>
 <span class="sd">        default, files are downloaded over HTTP. If the server for a given file requires</span>
 <span class="sd">        authentication (username and password) or if the file is served over FTP, use</span>
-<span class="sd">        custom downloaders that support these features. See below for details.</span>
+<span class="sd">        custom downloaders that support these features. Downloaders can also be used to</span>
+<span class="sd">        print custom messages (like a progress bar), etc. See below for details.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -531,6 +533,16 @@
 
 <span class="sd">            authdownload = HTTPDownloader(auth=(username, password))</span>
 <span class="sd">            mypooch.fetch(&quot;some-data-file.txt&quot;, downloader=authdownload)</span>
+
+<span class="sd">        **Progress bar** for the download can be printed by :class:`pooch.HTTPDownloader`</span>
+<span class="sd">        by passing the argument ``progressbar=True``:</span>
+
+<span class="sd">        .. code:: python</span>
+
+<span class="sd">            progress_download = HTTPDownloader(progressbar=True)</span>
+<span class="sd">            mypooch.fetch(&quot;some-data-file.txt&quot;, downloader=progress_download)</span>
+<span class="sd">            # Will print a progress bar to standard error like:</span>
+<span class="sd">            # 100%|█████████████████████████████████████████| 336/336 [...]</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_assert_file_in_registry</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
@@ -696,7 +708,7 @@
     <p>
         &copy; Copyright 2018-2019, The Pooch Developers
       <span class="lastupdated">
-        Last updated on Jun 25, 2019.
+        Last updated on Oct 22, 2019.
       </span>
 
     </p>

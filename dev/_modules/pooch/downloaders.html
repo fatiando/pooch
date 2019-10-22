@@ -108,6 +108,7 @@
               <p class="caption"><span class="caption-text">Documentation</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../install.html">Installing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../citing.html">Citing Pooch</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../usage.html">Training your Pooch</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../api/index.html">API Reference</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../changes.html">Changelog</a></li>
@@ -132,7 +133,7 @@
             
                 <li class="toctree-l1"><a href="https://github.com/fatiando/pooch/blob/master/CODE_OF_CONDUCT.md"><i class="fa fa-gavel fa-fw"></i> Code of Conduct</a></li>
             
-                <li class="toctree-l1"><a href="https://gitter.im/fatiando/fatiando"><i class="fa fa-comment fa-fw"></i> Contact</a></li>
+                <li class="toctree-l1"><a href="http://contact.fatiando.org"><i class="fa fa-comment fa-fw"></i> Contact</a></li>
             
                 <li class="toctree-l1"><a href="https://github.com/fatiando/pooch"><i class="fa fa-github fa-fw"></i> Source Code</a></li>
             
@@ -206,8 +207,14 @@
 <span class="sd">Download hooks for Pooch.fetch</span>
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span>
+<span class="kn">import</span> <span class="nn">sys</span>
 
 <span class="kn">import</span> <span class="nn">requests</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">tqdm</span> <span class="k">import</span> <span class="n">tqdm</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="n">tqdm</span> <span class="o">=</span> <span class="kc">None</span>
 
 
 <div class="viewcode-block" id="HTTPDownloader"><a class="viewcode-back" href="../../api/generated/pooch.HTTPDownloader.html#pooch.HTTPDownloader">[docs]</a><span class="k">class</span> <span class="nc">HTTPDownloader</span><span class="p">:</span>  <span class="c1"># pylint: disable=too-few-public-methods</span>
@@ -218,10 +225,16 @@
 <span class="sd">    :mod:`requests` library to manage downloads.</span>
 
 <span class="sd">    Use with :meth:`pooch.Pooch.fetch` to customize the download of files (for example,</span>
-<span class="sd">    to use authentication).</span>
+<span class="sd">    to use authentication or print a progress bar).</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
+<span class="sd">    progressbar : bool</span>
+<span class="sd">        If True, will print a progress bar of the download to standard error (stderr).</span>
+<span class="sd">        Requires `tqdm &lt;https://github.com/tqdm/tqdm&gt;`__ to be installed.</span>
+<span class="sd">    chunk_size : int</span>
+<span class="sd">        Files are streamed *chunk_size* bytes at a time instead of loading everything</span>
+<span class="sd">        into memory at one. Usually doesn&#39;t need to be changed.</span>
 <span class="sd">    **kwargs</span>
 <span class="sd">        All keyword arguments given when creating an instance of this class will be</span>
 <span class="sd">        passed to :func:`requests.get`.</span>
@@ -277,8 +290,12 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">progressbar</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">chunk_size</span><span class="o">=</span><span class="mi">1024</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">kwargs</span> <span class="o">=</span> <span class="n">kwargs</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">progressbar</span> <span class="o">=</span> <span class="n">progressbar</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">chunk_size</span> <span class="o">=</span> <span class="n">chunk_size</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">progressbar</span> <span class="ow">and</span> <span class="n">tqdm</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Missing package &#39;tqdm&#39; required for progress bars.&quot;</span><span class="p">)</span>
 
 <div class="viewcode-block" id="HTTPDownloader.__call__"><a class="viewcode-back" href="../../api/generated/pooch.HTTPDownloader.html#pooch.HTTPDownloader.__call__">[docs]</a>    <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="n">output_file</span><span class="p">,</span> <span class="n">pooch</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -304,9 +321,37 @@
         <span class="k">try</span><span class="p">:</span>
             <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
             <span class="n">response</span><span class="o">.</span><span class="n">raise_for_status</span><span class="p">()</span>
-            <span class="k">for</span> <span class="n">chunk</span> <span class="ow">in</span> <span class="n">response</span><span class="o">.</span><span class="n">iter_content</span><span class="p">(</span><span class="n">chunk_size</span><span class="o">=</span><span class="mi">1024</span><span class="p">):</span>
+            <span class="n">content</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">iter_content</span><span class="p">(</span><span class="n">chunk_size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">chunk_size</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">progressbar</span><span class="p">:</span>
+                <span class="n">total</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">headers</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;content-length&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+                <span class="c1"># Need to use ascii characters on Windows because there isn&#39;t always</span>
+                <span class="c1"># full unicode support (see https://github.com/tqdm/tqdm/issues/454)</span>
+                <span class="n">use_ascii</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">platform</span> <span class="o">==</span> <span class="s2">&quot;win32&quot;</span><span class="p">)</span>
+                <span class="n">progress</span> <span class="o">=</span> <span class="n">tqdm</span><span class="p">(</span>
+                    <span class="n">total</span><span class="o">=</span><span class="n">total</span><span class="p">,</span>
+                    <span class="n">ncols</span><span class="o">=</span><span class="mi">79</span><span class="p">,</span>
+                    <span class="n">ascii</span><span class="o">=</span><span class="n">use_ascii</span><span class="p">,</span>
+                    <span class="n">unit</span><span class="o">=</span><span class="s2">&quot;B&quot;</span><span class="p">,</span>
+                    <span class="n">unit_scale</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                    <span class="n">leave</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="p">)</span>
+            <span class="k">for</span> <span class="n">chunk</span> <span class="ow">in</span> <span class="n">content</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">chunk</span><span class="p">:</span>
                     <span class="n">output_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">chunk</span><span class="p">)</span>
+                    <span class="n">output_file</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">progressbar</span><span class="p">:</span>
+                        <span class="c1"># Use the chunk size here because chunk may be much larger if</span>
+                        <span class="c1"># the data are decompressed by requests after reading (happens</span>
+                        <span class="c1"># with text files).</span>
+                        <span class="n">progress</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">chunk_size</span><span class="p">)</span>
+            <span class="c1"># Make sure the progress bar gets filled even if the actual number is</span>
+            <span class="c1"># chunks is smaller than expected. This happens when streaming text files</span>
+            <span class="c1"># that are compressed by the server when sending (gzip). Binary files don&#39;t</span>
+            <span class="c1"># experience this.</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">progressbar</span><span class="p">:</span>
+                <span class="n">progress</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+                <span class="n">progress</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">total</span><span class="p">)</span>
+                <span class="n">progress</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
         <span class="k">finally</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">ispath</span><span class="p">:</span>
                 <span class="n">output_file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div></div>
@@ -324,7 +369,7 @@
     <p>
         &copy; Copyright 2018-2019, The Pooch Developers
       <span class="lastupdated">
-        Last updated on Jun 25, 2019.
+        Last updated on Oct 22, 2019.
       </span>
 
     </p>
