@@ -8,7 +8,7 @@ authors:
     affiliation: 1
   - name: Santiago Rubén Soler
     orcid: 0000-0001-9202-5317
-    affiliation: 2,3
+    affiliation: "2,3"
   - name: Rémi Rampin
     orcid: 0000-0002-0524-2282
     affiliation: 4
