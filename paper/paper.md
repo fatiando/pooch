@@ -42,6 +42,13 @@ bibliography: paper.bib
 
 # Summary
 
+Scientific software are usually created to analyze, model, and/or visualize
+data.
+As such, many software libraries include sample datasets in their distributions
+for use in documentation and workshops.
+Prominent examples in Python include scikit-learn [@scikit-learn] and
+scikit-image [@scikit-image].
+
 Problem setup.
 Statement of need.
 
