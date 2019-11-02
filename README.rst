@@ -31,8 +31,39 @@ Part of the `Fatiando a Terra <https://www.fatiando.org>`__ project
 🚨 **Python 2.7 is no longer supported. Use Pooch <= 0.6.0 if you need 2.7 support.** 🚨
 
 
-TL;DR
+About
 -----
+
+*Does your Python package include sample datasets? Are you shipping them with the code?
+Are they getting too big?*
+
+Pooch is here to help! It will manage a data *registry* by downloading your data files
+from a server only when needed and storing them locally in a data *cache* (a folder on
+your computer).
+
+Here are Pooch's main features:
+
+* Pure Python and minimal dependencies.
+* Download a file only if necessary (it's not in the data cache or needs to be updated).
+* Verify download integrity through SHA256 hashes (also used to check if a file needs to
+  be updated).
+* Designed to be extended: plug-in custom download (FTP, scp, etc) and post-processing
+  (unzip, decompress, rename) functions.
+* Includes utilities to unzip/decompress the data upon download to save loading time.
+* Can handle basic HTTP authentication (for servers that require a log in) and printing
+  download progress bars.
+* Easily setup an environment variable to overwrite the data cache location.
+
+*Are you a scientist or researcher? Pooch can help you too!*
+
+* Automatically download your data files so you don't have to keep them in your GitHub
+  repository.
+* Make sure everyone running the code has the same version of the data files (enforced
+  through the SHA256 hashes).
+
+
+Example
+-------
 
 .. code:: python
 
@@ -80,29 +111,12 @@ TL;DR
         """
         Load some sample gravity data to use in your docs.
         """
-        # Fetch the path to a file in the local storae. If it's not there, we'll
+        # Fetch the path to a file in the local storage. If it's not there, we'll
         # download it.
         fname = GOODBOY.fetch("gravity-data.csv")
         # Load it with numpy/pandas/etc
         data = ...
         return data
-
-
-About
------
-
-*Does your Python package include sample datasets? Are you shipping them with the code?
-Are they getting too big?*
-
-Pooch will manage downloading your sample data files over HTTP from a server and storing
-them in a local directory:
-
-* Download a file only if it's not in the local storage.
-* Check the SHA256 hash to make sure the file is not corrupted or needs updating.
-* If the hash is different from the registry, Pooch will download a new version of the
-  file.
-* If the hash still doesn't match, Pooch will raise an exception warning of possible
-  data corruption.
 
 
 Projects using Pooch
