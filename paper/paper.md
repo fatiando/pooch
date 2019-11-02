@@ -62,5 +62,8 @@ What we can do and how we do it.
 
 I would like to thank all of the volunteers who have dedicated their time and
 energy to build the open-source ecosystem on which our work relies.
+The order of authors is based on number of commits to the GitHub repository.
+A full list of all contributors to the project can be found at
+https://github.com/fatiando/pooch/graphs/contributors
 
 # References
