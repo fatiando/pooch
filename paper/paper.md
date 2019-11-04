@@ -84,6 +84,53 @@ Setup is as easy as calling a single function (`pooch.create`), including settin
 environment variable for overwriting the data cache path and versioning the downloads so
 that multiple versions of the same package can coexist in the same machine.
 
+For example, this is the code required to setup a file `mypackage/datasets.py` that
+uses Pooch to manage the downloads:
+
+```python
+"""
+Module mypackage/datasets.py
+"""
+import pooch
+
+# Get the version string from the project
+from . import version
+
+# Create a new Pooch
+GOODBOY = pooch.create(
+    # Data cache path using the default cache folder for the operating system
+    path=pooch.os_cache("mypackage"),
+    # Base URL of the remote data server (for example, on GitHub)
+    base_url="https://github.com/myproject/mypackage/raw/{version}/data/",
+    # PEP440 compliant version number (added to path and base_url)
+    version=version,
+    # Replace the development version (e.g., 0.1+dev) with this
+    version_dev="master",
+    # An environment variable that overwrites the path
+    env="MYPACKAGE_DATA_DIR",
+    # A dictionary with all files managed by pooch (filename: SHA256 hash)
+    registry={
+        "some-data.csv": "89y10phsdwhs09whljwc09whcowsdhcwodcy0dcuhw",
+        "other-data.nc": "ljbndscih02pei2nliued921gl1oi017grfkh3bc12"
+    },
+    # Download some files from a different URL
+    urls={"other-data.nc": "https://other-location.com/other-data.nc"}
+)
+# Load the registry from a file with file names, hashs, and (optionally) urls
+GOODBOY.load_registry("registry.txt")
+
+def fetch_some_data():
+    """
+    Load some data to use in the project.
+    """
+    # Fetch the path to a file in the data cache.
+    # If it's not there, download it.
+    fname = GOODBOY.fetch("some-data.csv")
+    # Load it with numpy/pandas/etc
+    data = pandas.read_csv(fname)
+    return data
+```
+
 Comparison with alternatives like Intake (Pooch seems to be much simpler and with less
 jargon and setup + ideally users shouldn't have to know that Pooch is being used [drop
 in replacement for what projects are already doing]).
