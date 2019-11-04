@@ -48,44 +48,47 @@ As such, many software libraries include sample datasets in their distributions
 for use in documentation, tests, benchmarks, and workshops.
 Prominent examples in Python include scikit-learn [@scikit-learn] and
 scikit-image [@scikit-image].
-The usual approach is to include smaller datasets in the GitHub repository directly and
-package them with the source and binary distributions.
-Larger datasets require writing code to download the files from a remote server to the
-users computer.
-The same problem is faced by scientists using version control to manage their research
-projects.
+The usual approach is to include smaller datasets in the GitHub repository
+directly and package them with the source and binary distributions.
+Larger datasets require writing code to download the files from a remote server
+to the users computer.
+The same problem is faced by scientists using version control to manage their
+research projects.
 As data files increase in size, it becomes unfeasible to store them on GitHub
 repositories.
-While downloading a data file over HTTP can be done easily with modern Python libraries,
-it is not trivial to manage a set of files, keep them updated, and check for corruption.
-Instead of scientists and library authors recreating the same code, it would be best to
-have a minimalistic and easy to setup tool for fetching and maintaining data files.
+While downloading a data file over HTTP can be done easily with modern Python
+libraries, it is not trivial to manage a set of files, keep them updated, and
+check for corruption.
+Instead of scientists and library authors recreating the same code, it would be
+best to have a minimalistic and easy to setup tool for fetching and maintaining
+data files.
 
 Pooch is a Python library that fills this gap.
-It manages a data *registry* by downloading files from one or more remote servers only
-when needed and storing them in a local data cache.
+It manages a data *registry* by downloading files from one or more remote
+servers only when needed and storing them in a local data cache.
 Pooch is written in pure Python and has minimal dependencies.
-Downloads are verified by comparing the file's SHA256 hash with the one stored in the
-data registry.
-This is also the mechanism used to detect if a file needs to be re-downloaded due to an
-update in the registry.
-Pooch is designed to be extended:
-users can plug-in custom download functions and post-download processing functions.
-For example, a custom download function can fetch files over FTP instead of HTTP (the
-default) and processing function can decrypt a file using a user-defined password once
-the download is completed.
-We include ready-made processor functions for unpacking archives (zip or tar) and
-decompressing files (gzip, lzma, and bzip2).
-Pooch is meant to be a drop-in replacement for the custom download code that users have
-already written (or are planning to write).
-In the ideal scenario, the end user of a software should not need to know that Pooch is
-being used.
-Setup is as easy as calling a single function (`pooch.create`), including setting up an
-environment variable for overwriting the data cache path and versioning the downloads so
-that multiple versions of the same package can coexist in the same machine.
+Downloads are verified by comparing the file's SHA256 hash with the one stored
+in the data registry.
+This is also the mechanism used to detect if a file needs to be re-downloaded
+due to an update in the registry.
+Pooch is designed to be extended: users can plug-in custom download functions
+and post-download processing functions.
+For example, a custom download function can fetch files over FTP instead of
+HTTP (the default) and processing function can decrypt a file using a
+user-defined password once the download is completed.
+We include ready-made processor functions for unpacking archives (zip or tar)
+and decompressing files (gzip, lzma, and bzip2).
+Pooch is meant to be a drop-in replacement for the custom download code that
+users have already written (or are planning to write).
+In the ideal scenario, the end user of a software should not need to know that
+Pooch is being used.
+Setup is as easy as calling a single function (`pooch.create`), including
+setting up an environment variable for overwriting the data cache path and
+versioning the downloads so that multiple versions of the same package can
+coexist in the same machine.
 
-For example, this is the code required to setup a file `mypackage/datasets.py` that
-uses Pooch to manage the downloads:
+For example, this is the code required to setup a module
+`mypackage/datasets.py` that uses Pooch to manage data downloads:
 
 ```python
 """
@@ -98,25 +101,19 @@ from . import version
 
 # Create a new Pooch
 GOODBOY = pooch.create(
-    # Data cache path using the default cache folder for the operating system
+    # Cache path using the default for the operating system
     path=pooch.os_cache("mypackage"),
     # Base URL of the remote data server (for example, on GitHub)
-    base_url="https://github.com/myproject/mypackage/raw/{version}/data/",
+    base_url="https://github.com/me/mypackage/raw/{version}/data/",
     # PEP440 compliant version number (added to path and base_url)
     version=version,
     # Replace the development version (e.g., 0.1+dev) with this
     version_dev="master",
     # An environment variable that overwrites the path
     env="MYPACKAGE_DATA_DIR",
-    # A dictionary with all files managed by pooch (filename: SHA256 hash)
-    registry={
-        "some-data.csv": "89y10phsdwhs09whljwc09whcowsdhcwodcy0dcuhw",
-        "other-data.nc": "ljbndscih02pei2nliued921gl1oi017grfkh3bc12"
-    },
-    # Download some files from a different URL
-    urls={"other-data.nc": "https://other-location.com/other-data.nc"}
 )
-# Load the registry from a file with file names, hashs, and (optionally) urls
+# Load the registry from a simple text file.
+# Each line has: file_name sha256 [url]
 GOODBOY.load_registry("registry.txt")
 
 def fetch_some_data():
@@ -131,11 +128,12 @@ def fetch_some_data():
     return data
 ```
 
-Comparison with alternatives like Intake (Pooch seems to be much simpler and with less
-jargon and setup + ideally users shouldn't have to know that Pooch is being used [drop
-in replacement for what projects are already doing]).
+Comparison with alternatives like Intake (Pooch seems to be much simpler and
+with less jargon and setup + ideally users shouldn't have to know that Pooch is
+being used [drop in replacement for what projects are already doing]).
 
-How Pooch is already being used (cite relevant packages and mention scikit-image PR).
+How Pooch is already being used (cite relevant packages and mention
+scikit-image PR).
 
 
 # Acknowledgements
