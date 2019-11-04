@@ -45,17 +45,26 @@ bibliography: paper.bib
 Scientific software are usually created to analyze, model, and/or visualize
 data.
 As such, many software libraries include sample datasets in their distributions
-for use in documentation and workshops.
+for use in documentation, tests, benchmarks, and workshops.
 Prominent examples in Python include scikit-learn [@scikit-learn] and
 scikit-image [@scikit-image].
-
-Problem setup.
-Statement of need.
+The usual approach is to include smaller datasets in the GitHub repository directly and
+package them with the source and binary distributions.
+Larger datasets require writing code to download the files from a remote server to the
+users computer.
+The same problem is faced by scientists using version control to manage their research
+projects.
+As data files increase in size, it becomes unfeasible to store them on GitHub
+repositories.
+While downloading a data file over HTTP can be done easily with modern Python libraries,
+it is not trivial to manage a set of files, keep them updated, and check for corruption.
+Instead of scientists and library authors recreating the same code, it would be best to
+have a minimalistic and easy to setup tool for fetching and maintaining data files.
 
 Introduce Pooch as the solution.
 Main goals of the library.
 What we can do and how we do it.
-
+How Pooch is already being used (cite relevant packages and mention scikit-image PR).
 
 
 # Acknowledgements
