@@ -121,9 +121,14 @@ We include ready-made download functions for HTTP (including basic
 authentication) and processing functions for unpacking archives (zip or tar)
 and decompressing files (gzip, lzma, and bzip2).
 
-Comparison with alternatives like Intake (Pooch seems to be much simpler and
-with less jargon and setup + ideally users shouldn't have to know that Pooch is
-being used [drop in replacement for what projects are already doing]).
+To the best of the authors awareness, the only other Python software with some
+overlapping functionality is [Intake](https://github.com/intake/intake).
+While Intake is powerful and can be used to manage large data archives,
+we argue that Pooch is has a simpler setup and meets the
+specific needs of scientific software authors and individual scientists.
+For example, Pooch does not require users to change their data loading code to
+fit into its plug-in structure, instead only providing the file path for the
+user.
 
 How Pooch is already being used (cite relevant packages and mention
 scikit-image PR).
