@@ -61,9 +61,29 @@ it is not trivial to manage a set of files, keep them updated, and check for cor
 Instead of scientists and library authors recreating the same code, it would be best to
 have a minimalistic and easy to setup tool for fetching and maintaining data files.
 
-Introduce Pooch as the solution.
-Main goals of the library.
-What we can do and how we do it.
+Pooch is a Python library that fills this gap.
+It manages a data *registry* by downloading files from one or more remote servers only
+when needed and storing them in a local data cache.
+Pooch is written in pure Python and has minimal dependencies.
+Downloads are verified by comparing the file's SHA256 hash with the one stored in the
+data registry.
+This is also the mechanism used to detect if a file needs to be re-downloaded due to an
+update in the registry.
+Pooch is designed to be extended:
+users can plug-in custom download functions and post-download processing functions.
+For example, a custom download function can fetch files over FTP instead of HTTP (the
+default) and processing function can decrypt a file using a user-defined password once
+the download is completed.
+We include ready-made processor functions for unpacking archives (zip or tar) and
+decompressing files (gzip, lzma, and bzip2).
+Pooch is meant to be a drop-in replacement for the custom download code that users have
+already written (or are planning to write).
+In the ideal scenario, the end user of a software should not need to know that Pooch is
+being used.
+Setup is as easy as calling a single function (`pooch.create`), including setting up an
+environment variable for overwriting the data cache path and versioning the downloads so
+that multiple versions of the same package can coexist in the same machine.
+
 Comparison with alternatives like Intake (Pooch seems to be much simpler and with less
 jargon and setup + ideally users shouldn't have to know that Pooch is being used [drop
 in replacement for what projects are already doing]).
