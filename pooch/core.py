@@ -1,6 +1,7 @@
 """
 The main Pooch class and a factory function for it.
 """
+import contextlib
 import os
 from pathlib import Path
 import shutil
@@ -440,12 +441,22 @@ class Pooch:
 
         Parameters
         ----------
-        fname : str
-            File name and path to the registry file.
+        fname : str | fileobj
+            File path to the registry file, of file object.
 
         """
-        with open(fname) as fin:
+        with contextlib.ExitStack() as stack:
+            if hasattr(fname, "read"):
+                # It's a file object
+                fin = fname
+            else:
+                # It's a file path
+                fin = stack.enter_context(open(fname))
+
             for linenum, line in enumerate(fin):
+                if isinstance(line, bytes):
+                    line = line.decode("utf-8")
+
                 elements = line.strip().split()
                 if len(elements) > 3 or len(elements) < 2:
                     raise OSError(
