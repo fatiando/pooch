@@ -130,16 +130,19 @@ For example, Pooch does not require users to change their data loading code to
 fit into its plug-in structure, instead only providing the file path for the
 user.
 
-How Pooch is already being used (cite relevant packages and mention
-scikit-image PR).
+The Pooch API is stable and has been field tested by other projects:
+MetPy [@metpy], Verde [@verde], RockHound [@rockhound], and icepack [@icepack].
+Pooch is also being implemented as the download manager for scikit-image
+([GitHub pull request number 3945](https://github.com/scikit-image/scikit-image/pull/3945)).
 
 
 # Acknowledgements
 
-I would like to thank all of the volunteers who have dedicated their time and
+We would like to thank all of the volunteers who have dedicated their time and
 energy to build the open-source ecosystem on which our work relies.
 The order of authors is based on number of commits to the GitHub repository.
-A full list of all contributors to the project can be found at
-https://github.com/fatiando/pooch/graphs/contributors
+A full list of all contributors to the project can be found on the
+[GitHub repository](https://github.com/fatiando/pooch/graphs/contributors).
+
 
 # References
