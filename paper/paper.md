@@ -65,10 +65,10 @@ data files.
 
 Pooch is a Python library that fills this gap.
 It manages a data *registry* by downloading files from one or more remote
-servers only when needed and storing them in a local data cache.
+servers and storing them in a local data cache.
 Pooch is written in pure Python and has minimal dependencies.
-Downloads are verified by comparing the file's SHA256 hash with the one stored
-in the data registry.
+The integrity of downloads is verified by comparing the file's SHA256 hash with
+the one stored in the data registry.
 This is also the mechanism used to detect if a file needs to be re-downloaded
 due to an update in the registry.
 Pooch is meant to be a drop-in replacement for the custom download code that
@@ -80,7 +80,7 @@ setting up an environment variable for overwriting the data cache path and
 versioning the downloads so that multiple versions of the same package can
 coexist in the same machine.
 For example, this is the code required to setup a module
-`mypackage/datasets.py` that uses Pooch to manage data downloads:
+`datasets.py` that uses Pooch to manage data downloads:
 
 ```python
 import pooch
@@ -91,13 +91,13 @@ from . import version
 # Create a new instance of pooch.Pooch
 GOODBOY = pooch.create(
     # Cache path using the default for the operating system
-    path=pooch.os_cache("mypackage"),
+    path=pooch.os_cache("myproject"),
     # Base URL of the remote data server (for example, on GitHub)
-    base_url="https://github.com/me/mypackage/raw/{version}/data/",
+    base_url="https://github.com/me/myproject/raw/{version}/data/",
     # PEP440 compliant version number (added to path and base_url)
     version=version,
     # An environment variable that overwrites the path
-    env="MYPACKAGE_DATA_DIR",
+    env="MYPROJECT_DATA_DIR",
 )
 # Load the registry from a simple text file.
 # Each line has: file_name sha256 [url]
@@ -114,10 +114,11 @@ def fetch_some_data():
 
 Pooch is designed to be extended: users can plug-in custom download functions
 and post-download processing functions.
-For example, a custom download function can fetch files over FTP instead of
-HTTP (the default) and processing function can decrypt a file using a
+For example, a custom download function could fetch files over FTP instead of
+HTTP (the default) and a processing function could decrypt a file using a
 user-defined password once the download is completed.
-We include ready-made processor functions for unpacking archives (zip or tar)
+We include ready-made download functions for HTTP (including basic
+authentication) and processing functions for unpacking archives (zip or tar)
 and decompressing files (gzip, lzma, and bzip2).
 
 Comparison with alternatives like Intake (Pooch seems to be much simpler and
