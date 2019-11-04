@@ -42,7 +42,7 @@ bibliography: paper.bib
 
 # Summary
 
-Scientific software are usually created to analyze, model, and visualize data.
+Scientific software is usually created to analyze, model, and visualize data.
 As such, many software libraries include sample datasets in their distributions
 for use in documentation, tests, benchmarks, and workshops.
 Prominent examples in Python include scikit-learn [@scikit-learn] and
@@ -50,7 +50,7 @@ scikit-image [@scikit-image].
 The usual approach is to include smaller datasets in the GitHub repository
 directly and package them with the source and binary distributions.
 Larger datasets require writing code to download the files from a remote server
-to the users computer.
+to the user's computer.
 The same problem is faced by scientists using version control to manage their
 research projects.
 As data files increase in size, it becomes unfeasible to store them on GitHub
@@ -72,7 +72,7 @@ This is also the mechanism used to detect if a file needs to be re-downloaded
 due to an update in the registry.
 Pooch is meant to be a drop-in replacement for the custom download code that
 users have already written (or are planning to write).
-In the ideal scenario, the end user of a software should not need to know that
+In the ideal scenario, the end-user of a software package should not need to know that
 Pooch is being used.
 Setup is as easy as calling a single function (`pooch.create`), including
 setting up an environment variable for overwriting the data cache path and
@@ -120,7 +120,7 @@ We include ready-made download functions for HTTP (including basic
 authentication) and processing functions for unpacking archives (zip or tar)
 and decompressing files (gzip, lzma, and bzip2).
 
-To the best of the authors awareness, the only other Python software with some
+To the best of the authors' awareness, the only other Python software with some
 overlapping functionality is [Intake](https://github.com/intake/intake).
 While Intake is powerful and can be used to manage large data archives,
 we argue that Pooch is has a simpler setup and meets the
@@ -129,7 +129,7 @@ For example, Pooch does not require users to change their data loading code to
 fit into its plug-in structure, instead only providing the file path for the
 user.
 
-The Pooch API is stable and has been field tested by other projects:
+The Pooch API is stable and has been field-tested by other projects:
 MetPy [@metpy], Verde [@verde], RockHound [@rockhound], and icepack [@icepack].
 Pooch is also being implemented as the download manager for scikit-image
 ([GitHub pull request number 3945](https://github.com/scikit-image/scikit-image/pull/3945)).
