@@ -64,6 +64,10 @@ have a minimalistic and easy to setup tool for fetching and maintaining data fil
 Introduce Pooch as the solution.
 Main goals of the library.
 What we can do and how we do it.
+Comparison with alternatives like Intake (Pooch seems to be much simpler and with less
+jargon and setup + ideally users shouldn't have to know that Pooch is being used [drop
+in replacement for what projects are already doing]).
+
 How Pooch is already being used (cite relevant packages and mention scikit-image PR).
 
 
