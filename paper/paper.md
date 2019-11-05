@@ -106,7 +106,7 @@ def fetch_some_data():
     # Get the path to the data file in the local cache
     # If it's not there or needs updating, download it
     fname = GOODBOY.fetch("some-data.csv")
-    # Load it with numpy/pandas/xarray/etc
+    # Load it with NumPy/pandas/xarray/etc.
     data = pandas.read_csv(fname)
     return data
 ```
