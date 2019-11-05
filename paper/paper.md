@@ -45,10 +45,9 @@ bibliography: paper.bib
 Scientific software is usually created to analyze, model, and visualize data.
 As such, many software libraries include sample datasets in their distributions
 for use in documentation, tests, benchmarks, and workshops.
-Prominent examples in Python include scikit-learn [@scikit-learn] and
-scikit-image [@scikit-image].
 The usual approach is to include smaller datasets in the GitHub repository
-directly and package them with the source and binary distributions.
+directly and package them with the source and binary distributions
+(e.g., scikit-learn [@scikit-learn] and scikit-image [@scikit-image] do this).
 Larger datasets require writing code to download the files from a remote server
 to the user's computer.
 The same problem is faced by scientists using version control to manage their
@@ -130,7 +129,8 @@ fit into its plug-in structure, instead only providing the file path for the
 user.
 
 The Pooch API is stable and has been field-tested by other projects:
-MetPy [@metpy], Verde [@verde], RockHound [@rockhound], and icepack [@icepack].
+MetPy [@metpy], Verde [@verde], RockHound [@rockhound], predictatops
+[@predictatops], and icepack [@icepack].
 Pooch is also being implemented as the download manager for scikit-image
 ([GitHub pull request number 3945](https://github.com/scikit-image/scikit-image/pull/3945)).
 
