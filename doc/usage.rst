@@ -47,7 +47,7 @@ The sample data are stored in the ``data`` folder of your repository.
 Setup
 -----
 
-Pooch can download and cache your data files to the users computer automatically.
+Pooch can download and cache your data files to the users' computer automatically.
 This is what the ``plumbus/datasets.py`` file would look like:
 
 .. code:: python
@@ -152,7 +152,7 @@ Versioning is optional and can be ignored by omitting the ``version`` and
 User-defined paths
 -------------------
 
-In the above example, the location of the local storage in the users computer is
+In the above example, the location of the local storage in the users' computer is
 hard-coded. There is no way for them to change it to something else. To avoid being a
 tyrant, you can allow the user to define the ``path`` argument using an environment
 variable:
@@ -461,7 +461,7 @@ use :meth:`pooch.Pooch.load_registry` to read them:
     GOODBOY.load_registry(os.path.join(os.path.dirname(__file__), "registry.txt"))
 
 The ``registry.txt`` file in this case is in the same directory as the ``datasets.py``
-module and should be shipped with the package. It's contents are:
+module and should be shipped with the package. Its contents are:
 
 .. code-block:: none
 
