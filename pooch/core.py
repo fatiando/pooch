@@ -442,7 +442,7 @@ class Pooch:
         Parameters
         ----------
         fname : str | fileobj
-            File path to the registry file, of file object.
+            Path (or open file object) to the registry file.
 
         """
         with contextlib.ExitStack() as stack:
