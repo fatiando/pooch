@@ -170,7 +170,7 @@ def infer_protocol_options(urlpath):
     ----------
     urlpath : str or unicode
         URL (e.g.: http://127.0.0.1:8080/test.nc, ftp://127.0.0.1:8080/test.nc)
-    
+
     Returns
     -------
     Options dict
