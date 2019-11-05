@@ -12,6 +12,12 @@ from requests_ftp.ftp import FTPSession
 from .utils import file_hash, check_version, infer_protocol_options
 from .downloaders import HTTPDownloader, FTPDownloader
 
+KNOWN_DOWNLOADERS = {
+    "ftp": FTPDownloader,
+    "https": HTTPDownloader,
+    "http": HTTPDownloader,
+}
+
 
 def create(
     path,
@@ -358,12 +364,9 @@ class Pooch:
                 )
             )
 
-            if downloader is None:
-                options = infer_protocol_options(url)
-                if options["protocol"] == "ftp":
-                    downloader = FTPDownloader()
-                else:
-                    downloader = HTTPDownloader()
+            options = infer_protocol_options(url)
+            if downloader is None and options["protocol"] in KNOWN_DOWNLOADERS:
+                downloader = KNOWN_DOWNLOADERS[options["protocol"]]()
             # Stream the file to a temporary so that we can safely check its hash before
             # overwriting the original
             tmp = tempfile.NamedTemporaryFile(delete=False, dir=str(self.abspath))
@@ -490,6 +493,6 @@ class Pooch:
         if options["protocol"] == "ftp":
             session = FTPSession()
         else:
-            session = requests
+            session = requests.Session()
         response = session.head(source, allow_redirects=True)
         return bool(response.status_code == 200)

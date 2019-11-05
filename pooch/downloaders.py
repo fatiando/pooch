@@ -91,6 +91,7 @@ class HTTPDownloader:  # pylint: disable=too-few-public-methods
         self.chunk_size = chunk_size
         if self.progressbar and tqdm is None:
             raise ValueError("Missing package 'tqdm' required for progress bars.")
+        self.session = requests.Session()
 
     def __call__(self, url, output_file, pooch):
         """
@@ -114,7 +115,7 @@ class HTTPDownloader:  # pylint: disable=too-few-public-methods
         if ispath:
             output_file = open(output_file, "w+b")
         try:
-            response = requests.get(url, **kwargs)
+            response = self.session.get(url, **kwargs)
             response.raise_for_status()
             content = response.iter_content(chunk_size=self.chunk_size)
             if self.progressbar:
@@ -152,56 +153,11 @@ class HTTPDownloader:  # pylint: disable=too-few-public-methods
                 output_file.close()
 
 
-class FTPDownloader(HTTPDownloader):
-    def __call__(self, url, output_file, pooch):
-        """
-        Download the given URL over FTP to the given output file.
+class FTPDownloader(HTTPDownloader):  # pylint: disable=too-few-public-methods
+    """
+    Download manager for fetching files over FTP.
+    """
 
-        Uses :func:`requests_ftp.ftp.FTPSession().get`.
-
-        Parameters
-        ----------
-        url : str
-            The URL to the file you want to download.
-        output_file : str or file-like object
-            Path (and file name) to which the file will be downloaded.
-        pooch : :class:`~pooch.Pooch`
-            The instance of :class:`~pooch.Pooch` that is calling this method.
-        """
-
-        kwargs = self.kwargs.copy()
-        kwargs.setdefault("stream", True)
-        ispath = not hasattr(output_file, "write")
-        if ispath:
-            output_file = open(output_file, "w+b")
-        try:
-            session = FTPSession()
-            response = session.get(url, **kwargs)
-            response.raise_for_status()
-            content = response.iter_content(chunk_size=self.chunk_size)
-            if self.progressbar:
-                total = int(response.headers.get("content-length", 0))
-                use_ascii = bool(sys.platform == "win32")
-                progress = tqdm(
-                    total=total,
-                    ncols=79,
-                    ascii=use_ascii,
-                    unit="B",
-                    unit_scale=True,
-                    leave=True,
-                )
-            for chunk in content:
-                if chunk:
-                    output_file.write(chunk)
-                    output_file.flush()
-                    if self.progressbar:
-                        progress.update(self.chunk_size)
-
-            if self.progressbar:
-                progress.reset()
-                progress.update(total)
-                progress.close()
-
-        finally:
-            if ispath:
-                output_file.close()
+    def __init__(self, progressbar=False, chunk_size=1024, **kwargs):
+        super().__init__(progressbar=progressbar, chunk_size=chunk_size, **kwargs)
+        self.session = FTPSession()
