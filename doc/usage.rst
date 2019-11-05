@@ -446,6 +446,7 @@ use :meth:`pooch.Pooch.load_registry` to read them:
 .. code:: python
 
     import os
+    import pkg_resources
 
     GOODBOY = pooch.create(
         # Use the default cache folder for the OS
@@ -458,9 +459,12 @@ use :meth:`pooch.Pooch.load_registry` to read them:
         # We'll load it from a file later
         registry=None,
     )
-    GOODBOY.load_registry(os.path.join(os.path.dirname(__file__), "registry.txt"))
+    # Get registry file from package_data
+    registry_file = pkg_resources.resource_stream("plumbus", "registry.txt")
+    # Load this registry file
+    GOODBOY.load_registry(registry_file)
 
-The ``registry.txt`` file in this case is in the same directory as the ``datasets.py``
+The ``registry.txt`` file in this case is in the ``plumbus/`` directory
 module and should be shipped with the package. Its contents are:
 
 .. code-block:: none
