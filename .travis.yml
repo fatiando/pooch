@@ -31,16 +31,15 @@ env:
 # Specify the build configurations. Be sure to only deploy from a single build.
 matrix:
     include:
-        - name: "Linux - Python 3.8 [optional]"
+        - name: "Linux - Python 3.8"
           os: linux
           env:
-              - PYTHON=3.7
-              - CONDA_INSTALL_EXTRA="codecov tqdm"
+              - PYTHON=3.8
         - name: "Linux - Python 3.7"
           os: linux
           env:
               - PYTHON=3.7
-        - name: "Linux - Python 3.7 [optional]"
+        - name: "Linux - Python 3.7 [optional dependencies]"
           os: linux
           env:
               - PYTHON=3.7
