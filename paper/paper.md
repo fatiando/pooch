@@ -52,13 +52,13 @@ Larger datasets require writing code to download the files from a remote server
 to the user's computer.
 The same problem is faced by scientists using version control to manage their
 research projects.
-As data files increase in size, it becomes unfeasible to store them on GitHub
+As data files increase in size, it becomes unfeasible to store them in GitHub
 repositories.
 While downloading a data file over HTTP can be done easily with modern Python
 libraries, it is not trivial to manage a set of files, keep them updated, and
 check for corruption.
 Instead of scientists and library authors recreating the same code, it would be
-best to have a minimalistic and easy to setup tool for fetching and maintaining
+best to have a minimalistic and easy to set up tool for fetching and maintaining
 data files.
 
 Pooch is a Python library that fills this gap.
@@ -77,7 +77,7 @@ Setup is as easy as calling a single function (`pooch.create`), including
 setting up an environment variable for overwriting the data cache path and
 versioning the downloads so that multiple versions of the same package can
 coexist in the same machine.
-For example, this is the code required to setup a module
+For example, this is the code required to set up a module
 `datasets.py` that uses Pooch to manage data downloads:
 
 ```python
@@ -92,7 +92,7 @@ GOODBOY = pooch.create(
     path=pooch.os_cache("myproject"),
     # Base URL of the remote data server (for example, on GitHub)
     base_url="https://github.com/me/myproject/raw/{version}/data/",
-    # PEP440 compliant version number (added to path and base_url)
+    # PEP 440 compliant version number (added to path and base_url)
     version=version,
     # An environment variable that overwrites the path
     env="MYPROJECT_DATA_DIR",
@@ -105,12 +105,12 @@ def fetch_some_data():
     # Get the path to the data file in the local cache
     # If it's not there or needs updating, download it
     fname = GOODBOY.fetch("some-data.csv")
-    # Load it with numpy/pandas/xarray/etc
+    # Load it with NumPy/pandas/xarray/etc.
     data = pandas.read_csv(fname)
     return data
 ```
 
-Pooch is designed to be extended: users can plug-in custom download functions
+Pooch is designed to be extended: users can plug in custom download functions
 and post-download processing functions.
 For example, a custom download function could fetch files over FTP instead of
 HTTP (the default) and a processing function could decrypt a file using a
@@ -122,7 +122,7 @@ and decompressing files (gzip, lzma, and bzip2).
 To the best of the authors' awareness, the only other Python software with some
 overlapping functionality is [Intake](https://github.com/intake/intake).
 While Intake is powerful and can be used to manage large data archives,
-we argue that Pooch is has a simpler setup and meets the
+we argue that Pooch has a simpler setup and meets the
 specific needs of scientific software authors and individual scientists.
 For example, Pooch does not require users to change their data loading code to
 fit into its plug-in structure, instead only providing the file path for the

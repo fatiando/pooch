@@ -47,12 +47,12 @@ Here are Pooch's main features:
 * Download a file only if necessary (it's not in the data cache or needs to be updated).
 * Verify download integrity through SHA256 hashes (also used to check if a file needs to
   be updated).
-* Designed to be extended: plug-in custom download (FTP, scp, etc) and post-processing
+* Designed to be extended: plug in custom download (FTP, scp, etc) and post-processing
   (unzip, decompress, rename) functions.
 * Includes utilities to unzip/decompress the data upon download to save loading time.
-* Can handle basic HTTP authentication (for servers that require a log in) and printing
+* Can handle basic HTTP authentication (for servers that require a login) and printing
   download progress bars.
-* Easily setup an environment variable to overwrite the data cache location.
+* Easily set up an environment variable to overwrite the data cache location.
 
 *Are you a scientist or researcher? Pooch can help you too!*
 
