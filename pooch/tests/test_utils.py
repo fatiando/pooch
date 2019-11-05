@@ -63,8 +63,9 @@ def test_registry_builder_recursive():
 
 
 def test_infer_protocol_options():
-    u = "http://127.0.0.1:8080/test.nc"
-    assert infer_protocol_options(u) == {"protocol": "http", "path": u}
+    "Infer protocol options from URL"
+    url = "http://127.0.0.1:8080/test.nc"
+    assert infer_protocol_options(url) == {"protocol": "http", "path": url}
 
-    u = "ftp://127.0.0.1:8080/test.nc"
-    assert infer_protocol_options(u) == {"protocol": "ftp", "path": u}
+    url = "ftp://127.0.0.1:8080/test.nc"
+    assert infer_protocol_options(url) == {"protocol": "ftp", "path": url}

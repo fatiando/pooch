@@ -3,10 +3,9 @@ Misc utilities
 """
 from pathlib import Path
 import hashlib
-
+from urllib.parse import urlsplit
 import appdirs
 from packaging.version import Version
-from urllib.parse import urlsplit
 
 
 def os_cache(project):
@@ -164,6 +163,18 @@ def make_registry(directory, output, recursive=True):
 
 
 def infer_protocol_options(urlpath):
+    """
+    Infer protocol options from URL path.
+    
+    Parameters
+    ----------
+    urlpath : str or unicode
+        URL (e.g.: http://127.0.0.1:8080/test.nc, ftp://127.0.0.1:8080/test.nc)
+    
+    Returns
+    -------
+    Options dict
+    """
     parsed_path = urlsplit(urlpath)
     protocol = parsed_path.scheme or "file"
     return {"protocol": protocol, "path": urlpath}
