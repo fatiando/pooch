@@ -165,7 +165,7 @@ def make_registry(directory, output, recursive=True):
 def infer_protocol_options(urlpath):
     """
     Infer protocol options from URL path.
-    
+
     Parameters
     ----------
     urlpath : str or unicode
