@@ -6,7 +6,7 @@ from pathlib import Path
 from tempfile import NamedTemporaryFile
 
 from ..core import Pooch
-from ..utils import make_registry
+from ..utils import make_registry, infer_protocol_options
 from .utils import check_tiny_data
 
 DATA_DIR = str(Path(__file__).parent / "data" / "store")
@@ -60,3 +60,11 @@ def test_registry_builder_recursive():
         check_tiny_data(pup.fetch("subdir/tiny-data.txt"))
     finally:
         os.remove(outfile.name)
+
+
+def test_infer_protocol_options():
+    u = "http://127.0.0.1:8080/test.nc"
+    assert infer_protocol_options(u) == {"protocol": "http", "path": u}
+    
+    u = "ftp://127.0.0.1:8080/test.nc"
+    assert infer_protocol_options(u) == {"protocol": "ftp", "path": u}

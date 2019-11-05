@@ -6,6 +6,7 @@ import hashlib
 
 import appdirs
 from packaging.version import Version
+from urllib.parse import urlsplit
 
 
 def os_cache(project):
@@ -160,3 +161,9 @@ def make_registry(directory, output, recursive=True):
             # Only use Unix separators for the registry so that we don't go insane
             # dealing with file paths.
             outfile.write("{} {}\n".format(fname.replace("\\", "/"), fhash))
+
+
+def infer_protocol_options(urlpath):
+    parsed_path = urlsplit(urlpath)
+    protocol = parsed_path.scheme or 'file'
+    return {'protocol': protocol, 'path': urlpath}

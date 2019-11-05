@@ -8,9 +8,9 @@ import tempfile
 from warnings import warn
 
 import requests
-
-from .utils import file_hash, check_version
-from .downloaders import HTTPDownloader
+from requests_ftp.ftp import FTPSession
+from .utils import file_hash, check_version, infer_protocol_options
+from .downloaders import HTTPDownloader, FTPDownloader
 
 
 def create(
@@ -341,7 +341,7 @@ class Pooch:
             os.makedirs(str(self.abspath))
 
         full_path = self.abspath / fname
-
+        url = self.get_url(fname)
         in_storage = full_path.exists()
         if not in_storage:
             action = "download"
@@ -357,15 +357,20 @@ class Pooch:
                     action_word[action], fname, self.get_url(fname), str(self.path)
                 )
             )
+
             if downloader is None:
-                downloader = HTTPDownloader()
+                options = infer_protocol_options(url)
+                if options['protocol'] == 'ftp':
+                    downloader = FTPDownloader()
+                else:
+                    downloader = HTTPDownloader()
             # Stream the file to a temporary so that we can safely check its hash before
             # overwriting the original
             tmp = tempfile.NamedTemporaryFile(delete=False, dir=str(self.abspath))
             # Close the temp file so that the downloader can decide how to opened it
             tmp.close()
             try:
-                downloader(self.get_url(fname), tmp.name, self)
+                downloader(url, tmp.name, self)
                 self._check_download_hash(fname, tmp.name)
                 # Ensure the parent directory exists in case the file is in a
                 # subdirectory. Otherwise, move will cause an error.
@@ -481,5 +486,10 @@ class Pooch:
         """
         self._assert_file_in_registry(fname)
         source = self.get_url(fname)
-        response = requests.head(source, allow_redirects=True)
+        options = infer_protocol_options(source)
+        if options['protocol'] == 'ftp':
+            session = FTPSession()
+        else:
+            session = requests
+        response = session.head(source, allow_redirects=True)
         return bool(response.status_code == 200)
