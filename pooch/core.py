@@ -360,7 +360,7 @@ class Pooch:
 
             if downloader is None:
                 options = infer_protocol_options(url)
-                if options['protocol'] == 'ftp':
+                if options["protocol"] == "ftp":
                     downloader = FTPDownloader()
                 else:
                     downloader = HTTPDownloader()
@@ -487,7 +487,7 @@ class Pooch:
         self._assert_file_in_registry(fname)
         source = self.get_url(fname)
         options = infer_protocol_options(source)
-        if options['protocol'] == 'ftp':
+        if options["protocol"] == "ftp":
             session = FTPSession()
         else:
             session = requests

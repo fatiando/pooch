@@ -170,20 +170,25 @@ class FTPDownloader(HTTPDownloader):
         """
 
         kwargs = self.kwargs.copy()
-        kwargs.setdefault('stream', True)
-        ispath = not hasattr(output_file, 'write')
+        kwargs.setdefault("stream", True)
+        ispath = not hasattr(output_file, "write")
         if ispath:
-            output_file = open(output_file, 'w+b')
+            output_file = open(output_file, "w+b")
         try:
             session = FTPSession()
             response = session.get(url, **kwargs)
             response.raise_for_status()
             content = response.iter_content(chunk_size=self.chunk_size)
             if self.progressbar:
-                total = int(response.headers.get('content-length', 0))
-                use_ascii = bool(sys.platform == 'win32')
+                total = int(response.headers.get("content-length", 0))
+                use_ascii = bool(sys.platform == "win32")
                 progress = tqdm(
-                    total=total, ncols=79, ascii=use_ascii, unit='B', unit_scale=True, leave=True
+                    total=total,
+                    ncols=79,
+                    ascii=use_ascii,
+                    unit="B",
+                    unit_scale=True,
+                    leave=True,
                 )
             for chunk in content:
                 if chunk:
