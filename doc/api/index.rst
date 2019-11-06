@@ -34,6 +34,7 @@ Downloaders
    :toctree: generated/
 
    HTTPDownloader
+   FTPDownloader
 
 Processors
 ----------
