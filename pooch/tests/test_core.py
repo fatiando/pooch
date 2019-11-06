@@ -309,3 +309,19 @@ def test_downloader_progressbar(capsys):
         assert printed[:25] == progress
         # Check that the downloaded file has the right content
         check_large_data(fname)
+
+
+def test_ftp_downloader():
+    "Test pooch with ftp downloader"
+    with TemporaryDirectory() as local_store:
+        doggo = create(
+            path=local_store,
+            base_url="ftp://speedtest.tele2.net/",
+            version_dev="master",
+            registry={
+                "10MB.zip": "e5b844cc57f57094ea4585e235f36c78c1cd222262bb89d53c94dcb4d6b3e55d"
+            },
+        )
+        assert doggo.is_available("10MB.zip")
+        fname = doggo.fetch("10MB.zip")
+        assert Path(fname).exists()
