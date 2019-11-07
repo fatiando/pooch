@@ -17,7 +17,7 @@ except ImportError:
 
 from .. import Pooch, create
 from ..utils import file_hash
-from ..downloaders import HTTPDownloader
+from ..downloaders import HTTPDownloader, FTPDownloader
 
 from .utils import (
     pooch_test_url,
@@ -311,16 +311,12 @@ def test_downloader_progressbar(capsys):
         check_large_data(fname)
 
 
-def test_ftp_downloader():
-    "Test pooch with ftp downloader"
+@pytest.mark.parametrize("progressbar", [True, False])
+def test_ftp_downloader(progressbar):
+    "Test ftp downloader"
     with TemporaryDirectory() as local_store:
-        doggo = create(
-            path=local_store,
-            base_url="ftp://speedtest.tele2.net/",
-            version_dev="master",
-            registry={
-                "10MB.zip": "e5b844cc57f57094ea4585e235f36c78c1cd222262bb89d53c94dcb4d6b3e55d"
-            },
-        )
-        fname = doggo.fetch("10MB.zip")
-        assert Path(fname).exists()
+        downloader = FTPDownloader(progressbar=progressbar)
+        url = "ftp://speedtest.tele2.net/100KB.zip"
+        outfile = Path(local_store) / "downlaoded_100KB.zip"
+        downloader(url, outfile, None)
+        assert outfile.exists()
