@@ -322,6 +322,5 @@ def test_ftp_downloader():
                 "10MB.zip": "e5b844cc57f57094ea4585e235f36c78c1cd222262bb89d53c94dcb4d6b3e55d"
             },
         )
-        assert doggo.is_available("10MB.zip")
         fname = doggo.fetch("10MB.zip")
         assert Path(fname).exists()

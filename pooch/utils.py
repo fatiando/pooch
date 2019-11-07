@@ -162,7 +162,7 @@ def make_registry(directory, output, recursive=True):
             outfile.write("{} {}\n".format(fname.replace("\\", "/"), fhash))
 
 
-def infer_protocol_options(urlpath):
+def infer_protocol(urlpath):
     """
     Infer protocol options from URL path.
 
@@ -173,8 +173,8 @@ def infer_protocol_options(urlpath):
 
     Returns
     -------
-    Options dict
+    protocol name : str
     """
     parsed_path = urlsplit(urlpath)
     protocol = parsed_path.scheme or "file"
-    return {"protocol": protocol, "path": urlpath}
+    return protocol

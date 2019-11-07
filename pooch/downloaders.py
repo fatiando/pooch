@@ -2,9 +2,10 @@
 Download hooks for Pooch.fetch
 """
 import sys
-
+import ftplib
+from urllib.parse import urlsplit
 import requests
-from requests_ftp.ftp import FTPSession
+
 
 try:
     from tqdm import tqdm
@@ -91,7 +92,6 @@ class HTTPDownloader:  # pylint: disable=too-few-public-methods
         self.chunk_size = chunk_size
         if self.progressbar and tqdm is None:
             raise ValueError("Missing package 'tqdm' required for progress bars.")
-        self.session = requests.Session()
 
     def __call__(self, url, output_file, pooch):
         """
@@ -115,7 +115,7 @@ class HTTPDownloader:  # pylint: disable=too-few-public-methods
         if ispath:
             output_file = open(output_file, "w+b")
         try:
-            response = self.session.get(url, **kwargs)
+            response = requests.get(url, **kwargs)
             response.raise_for_status()
             content = response.iter_content(chunk_size=self.chunk_size)
             if self.progressbar:
@@ -153,11 +153,98 @@ class HTTPDownloader:  # pylint: disable=too-few-public-methods
                 output_file.close()
 
 
-class FTPDownloader(HTTPDownloader):  # pylint: disable=too-few-public-methods
+class FTPDownloader:  # pylint: disable=too-few-public-methods
     """
     Download manager for fetching files over FTP.
+    When called, downloads the given file URL into the specified local file. Uses the
+    :mod:`ftplib` library to manage downloads.
     """
 
-    def __init__(self, progressbar=False, chunk_size=1024, **kwargs):
-        super().__init__(progressbar=progressbar, chunk_size=chunk_size, **kwargs)
-        self.session = FTPSession()
+    def __init__(
+        self,
+        port=21,
+        username=None,
+        password=None,
+        acct=None,
+        timeout=None,
+        progressbar=False,
+        chunk_size=1024,
+    ):
+        """
+        Parameters
+        ----------
+        port : int, optional
+            Port to connect with, by default 21
+        username : str, optional
+            If authenticating, the user's identifier, by default None
+        password : str, optional
+           User's password on the server, if using authentication, by default None
+        acct : str, optional
+            Some servers also need an "account" string for auth, by default None
+        timeout : int, optional
+            default timeout for all ftp socket operations for this instance, by default None
+        progressbar : bool, optional
+            If True, will print a progress bar of the download to
+            standard error (stderr), by default True
+        chunk_size : int, optional
+            The maximum number of bytes to read from the
+            socket at one time, by default 1024
+        """
+
+        self.port = port
+        self.username = username
+        self.password = password
+        self.cred = username, password, acct
+        self.timeout = timeout
+        self.progressbar = progressbar
+        self.chunk_size = chunk_size
+        if self.progressbar and tqdm is None:
+            raise ValueError("Missing package 'tqdm' required for progress bars.")
+
+    def __call__(self, url, output_file, pooch):
+        """
+        Download the given URL over FTP to the given output file.
+
+        Parameters
+        ----------
+        url : str
+            The URL to the file you want to download.
+        output_file : str or file-like object
+            Path (and file name) to which the file will be downloaded.
+        pooch : :class:`~pooch.Pooch`
+            The instance of :class:`~pooch.Pooch` that is calling this method.
+        """
+
+        options = urlsplit(url)
+        if options.scheme != "ftp":
+            raise RuntimeError("Expected FTP")
+
+        host = options.netloc
+        path = options.path
+        ftp = ftplib.FTP(timeout=self.timeout)
+        ftp.connect(host=host, port=self.port)
+        ftp.login(*self.cred)
+
+        with open(output_file, "wb") as fout:
+            cmd = f"RETR {path}"
+            if self.progressbar:
+                size = int(ftp.size(path))
+                with tqdm(
+                    total=size,
+                    unit="B",
+                    unit_scale=True,
+                    unit_divisor=1024,
+                    ncols=79,
+                    leave=True,
+                    disable=not self.progressbar,
+                ) as pbar:
+
+                    def callback(data):
+                        pbar.update(len(data))
+                        fout.write(data)
+
+                    ftp.retrbinary(cmd, callback, blocksize=self.chunk_size)
+            else:
+                ftp.retrbinary(cmd, fout.write, blocksize=self.chunk_size)
+
+        ftp.close()

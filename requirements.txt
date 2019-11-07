@@ -1,4 +1,3 @@
 requests
 packaging
 appdirs
-requests-ftp

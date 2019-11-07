@@ -8,8 +8,7 @@ import tempfile
 from warnings import warn
 
 import requests
-from requests_ftp.ftp import FTPSession
-from .utils import file_hash, check_version, infer_protocol_options
+from .utils import file_hash, check_version, infer_protocol
 from .downloaders import HTTPDownloader, FTPDownloader
 
 KNOWN_DOWNLOADERS = {
@@ -364,9 +363,9 @@ class Pooch:
                 )
             )
 
-            options = infer_protocol_options(url)
-            if downloader is None and options["protocol"] in KNOWN_DOWNLOADERS:
-                downloader = KNOWN_DOWNLOADERS[options["protocol"]]()
+            protocol = infer_protocol(url)
+            if downloader is None and protocol in KNOWN_DOWNLOADERS:
+                downloader = KNOWN_DOWNLOADERS[protocol]()
             # Stream the file to a temporary so that we can safely check its hash before
             # overwriting the original
             tmp = tempfile.NamedTemporaryFile(delete=False, dir=str(self.abspath))
@@ -489,10 +488,5 @@ class Pooch:
         """
         self._assert_file_in_registry(fname)
         source = self.get_url(fname)
-        options = infer_protocol_options(source)
-        if options["protocol"] == "ftp":
-            session = FTPSession()
-        else:
-            session = requests.Session()
-        response = session.head(source, allow_redirects=True)
+        response = requests.head(source, allow_redirects=True)
         return bool(response.status_code == 200)
