@@ -364,7 +364,14 @@ class Pooch:
             )
 
             protocol = infer_protocol(url)
-            if downloader is None and protocol in KNOWN_DOWNLOADERS:
+            if protocol not in KNOWN_DOWNLOADERS:
+                raise ValueError(
+                    "Unrecognized URL protocol '{}' in '{}'. Must be one of {}.".format(
+                        protocol, url, KNOWN_DOWNLOADERS.keys()
+                    )
+                )
+
+            if downloader is None:
                 downloader = KNOWN_DOWNLOADERS[protocol]()
             # Stream the file to a temporary so that we can safely check its hash before
             # overwriting the original

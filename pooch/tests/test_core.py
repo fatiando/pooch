@@ -282,10 +282,11 @@ def test_downloader(capsys):
 
 
 @pytest.mark.skipif(tqdm is not None, reason="tqdm must be missing")
-def test_downloader_progressbar_fails():
+@pytest.mark.parametrize("downloader", [HTTPDownloader, FTPDownloader])
+def test_downloader_progressbar_fails(downloader):
     "Make sure an error is raised if trying to use progressbar without tqdm"
     with pytest.raises(ValueError):
-        HTTPDownloader(progressbar=True)
+        downloader(progressbar=True)
 
 
 @pytest.mark.skipif(tqdm is None, reason="requires tqdm")
@@ -311,11 +312,10 @@ def test_downloader_progressbar(capsys):
         check_large_data(fname)
 
 
-@pytest.mark.parametrize("progressbar", [True, False])
-def test_ftp_downloader(progressbar):
+def test_ftp_downloader():
     "Test ftp downloader"
     with TemporaryDirectory() as local_store:
-        downloader = FTPDownloader(progressbar=progressbar)
+        downloader = FTPDownloader()
         url = "ftp://speedtest.tele2.net/100KB.zip"
         outfile = Path(local_store) / "downlaoded_100KB.zip"
         downloader(url, outfile, None)

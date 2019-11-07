@@ -162,7 +162,7 @@ def make_registry(directory, output, recursive=True):
             outfile.write("{} {}\n".format(fname.replace("\\", "/"), fhash))
 
 
-def infer_protocol(urlpath):
+def infer_protocol(url):
     """
     Infer the protocol from a given URL.
 
@@ -174,6 +174,7 @@ def infer_protocol(urlpath):
     Returns
     -------
     protocol : str
+        The inferred protocol (e.g., http, ftp, https, file)
 
     Examples
     --------
@@ -186,6 +187,6 @@ def infer_protocol(urlpath):
     file
 
     """
-    parsed_path = urlsplit(urlpath)
+    parsed_path = urlsplit(url)
     protocol = parsed_path.scheme or "file"
     return protocol
