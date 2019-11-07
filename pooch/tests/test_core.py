@@ -159,6 +159,25 @@ def test_pooch_load_registry():
     assert pup.registry_files.sort() == list(REGISTRY).sort()
 
 
+def test_pooch_load_registry_fileobj():
+    "Loading the registry from a file object"
+    path = os.path.join(DATA_DIR, "registry.txt")
+
+    # Binary mode
+    pup = Pooch(path="", base_url="")
+    with open(path, "rb") as fin:
+        pup.load_registry(fin)
+    assert pup.registry == REGISTRY
+    assert pup.registry_files.sort() == list(REGISTRY).sort()
+
+    # Text mode
+    pup = Pooch(path="", base_url="")
+    with open(path, "r") as fin:
+        pup.load_registry(fin)
+    assert pup.registry == REGISTRY
+    assert pup.registry_files.sort() == list(REGISTRY).sort()
+
+
 def test_pooch_load_registry_custom_url():
     "Load the registry from a file with a custom URL inserted"
     pup = Pooch(path="", base_url="")
