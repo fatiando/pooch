@@ -157,7 +157,7 @@ class FTPDownloader:  # pylint: disable=too-few-public-methods
     """
     Download manager for fetching files over FTP.
     When called, downloads the given file URL into the specified local file. Uses the
-    :mod:`ftplib` library to manage downloads.
+    :mod:`ftplib` module to manage downloads.
     """
 
     def __init__(
@@ -226,7 +226,7 @@ class FTPDownloader:  # pylint: disable=too-few-public-methods
         ftp.login(*self.cred)
 
         with open(output_file, "wb") as fout:
-            cmd = f"RETR {path}"
+            cmd = "RETR {}".format(path)
             if self.progressbar:
                 size = int(ftp.size(path))
                 with tqdm(
