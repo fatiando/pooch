@@ -164,16 +164,27 @@ def make_registry(directory, output, recursive=True):
 
 def infer_protocol(urlpath):
     """
-    Infer protocol options from URL path.
+    Infer the protocol from a given URL.
 
     Parameters
     ----------
-    urlpath : str or unicode
+    url : str
         URL (e.g.: http://127.0.0.1:8080/test.nc, ftp://127.0.0.1:8080/test.nc)
 
     Returns
     -------
-    protocol name : str
+    protocol : str
+
+    Examples
+    --------
+
+    >>> print(infer_protocol("http://127.0.0.1:8080/test.nc"))
+    http
+    >>> print(infer_protocol("ftp://127.0.0.1:8080/test.nc"))
+    ftp
+    >>> print(infer_protocol("file:///home/username/data/test.nc"))
+    file
+
     """
     parsed_path = urlsplit(urlpath)
     protocol = parsed_path.scheme or "file"
