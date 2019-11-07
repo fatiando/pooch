@@ -464,8 +464,10 @@ use :meth:`pooch.Pooch.load_registry` to read them:
     # Load this registry file
     GOODBOY.load_registry(registry_file)
 
-The ``registry.txt`` file in this case is in the ``plumbus/`` directory
-module and should be shipped with the package. Its contents are:
+The ``registry.txt`` file in this case is in the ``plumbus/`` directory module and should be
+shipped with the package. We use `pkg_resources <https://setuptools.readthedocs.io/en/latest/pkg_resources.html#basic-resource-access)`__
+to access it, giving it the name of our Python package (the one we'll put in ``setup.py``).
+Its contents are:
 
 .. code-block:: none
 
