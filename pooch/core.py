@@ -7,9 +7,10 @@ from pathlib import Path
 import shutil
 import tempfile
 from warnings import warn
+import ftplib
 
 import requests
-from .utils import file_hash, check_version, infer_protocol
+from .utils import file_hash, check_version, parse_url
 from .downloaders import HTTPDownloader, FTPDownloader
 
 KNOWN_DOWNLOADERS = {
@@ -364,16 +365,16 @@ class Pooch:
                 )
             )
 
-            protocol = infer_protocol(url)
-            if protocol not in KNOWN_DOWNLOADERS:
+            parsed_url = parse_url(url)
+            if parsed_url["protocol"] not in KNOWN_DOWNLOADERS:
                 raise ValueError(
                     "Unrecognized URL protocol '{}' in '{}'. Must be one of {}.".format(
-                        protocol, url, KNOWN_DOWNLOADERS.keys()
+                        parsed_url["protocol"], url, KNOWN_DOWNLOADERS.keys()
                     )
                 )
 
             if downloader is None:
-                downloader = KNOWN_DOWNLOADERS[protocol]()
+                downloader = KNOWN_DOWNLOADERS[parsed_url["protocol"]]()
             # Stream the file to a temporary so that we can safely check its hash before
             # overwriting the original
             tmp = tempfile.NamedTemporaryFile(delete=False, dir=str(self.abspath))
@@ -506,5 +507,16 @@ class Pooch:
         """
         self._assert_file_in_registry(fname)
         source = self.get_url(fname)
+        parsed_url = parse_url(source)
+
+        if parsed_url["protocol"] == "ftp":
+            directory = os.path.dirname(parsed_url["path"])
+            ftp = ftplib.FTP()
+            ftp.connect(host=parsed_url["netloc"])
+            ftp.login()
+            response = parsed_url["path"] in ftp.nlst(directory)
+            ftp.close()
+            return response
+
         response = requests.head(source, allow_redirects=True)
         return bool(response.status_code == 200)

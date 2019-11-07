@@ -3,9 +3,8 @@ Download hooks for Pooch.fetch
 """
 import sys
 import ftplib
-from urllib.parse import urlsplit
 import requests
-
+from .utils import parse_url
 
 try:
     from tqdm import tqdm
@@ -215,15 +214,13 @@ class FTPDownloader:  # pylint: disable=too-few-public-methods
             The instance of :class:`~pooch.Pooch` that is calling this method.
         """
 
-        options = urlsplit(url)
-        if options.scheme != "ftp":
+        parsed_url = parse_url(url)
+        if parsed_url["protocol"] != "ftp":
             raise RuntimeError("Expected FTP")
-
-        host = options.netloc
-        path = options.path
         ftp = ftplib.FTP(timeout=self.timeout)
-        ftp.connect(host=host, port=self.port)
+        ftp.connect(host=parsed_url["netloc"], port=self.port)
         ftp.login(*self.cred)
+        path = parsed_url["path"]
 
         with open(output_file, "wb") as fout:
             cmd = "RETR {}".format(path)

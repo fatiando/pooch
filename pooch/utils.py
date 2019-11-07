@@ -162,9 +162,11 @@ def make_registry(directory, output, recursive=True):
             outfile.write("{} {}\n".format(fname.replace("\\", "/"), fhash))
 
 
-def infer_protocol(url):
+def parse_url(url):
     """
-    Infer the protocol from a given URL.
+    Parse a URL into 3 components:
+
+    <protocol>://<netloc>/<path>
 
     Parameters
     ----------
@@ -173,20 +175,22 @@ def infer_protocol(url):
 
     Returns
     -------
-    protocol : str
-        The inferred protocol (e.g., http, ftp, https, file)
+    parsed_url : dict
+        Three components of a URL
+        (e.g., {'protocol': 'http', 'netloc': '127.0.0.1:8080', 'path': '/test.nc'})
 
     Examples
     --------
 
-    >>> print(infer_protocol("http://127.0.0.1:8080/test.nc"))
-    http
-    >>> print(infer_protocol("ftp://127.0.0.1:8080/test.nc"))
-    ftp
-    >>> print(infer_protocol("file:///home/username/data/test.nc"))
-    file
+    >>> from pooch.utils import parse_url
+    >>> print(parse_url("http://127.0.0.1:8080/test.nc"))
+    {'protocol': 'http', 'netloc': '127.0.0.1:8080', 'path': '/test.nc'}
+    >>> print(parse_url("ftp://127.0.0.1:8080/test.nc"))
+    {'protocol': 'ftp', 'netloc': '127.0.0.1:8080', 'path': '/test.nc'}
+    >>> print(parse_url("file:///home/username/data/test.nc"))
+    {'protocol': 'file', 'netloc': '', 'path': '/home/username/data/test.nc'}
 
     """
-    parsed_path = urlsplit(url)
-    protocol = parsed_path.scheme or "file"
-    return protocol
+    parsed_url = urlsplit(url)
+    protocol = parsed_url.scheme or "file"
+    return {"protocol": protocol, "netloc": parsed_url.netloc, "path": parsed_url.path}

@@ -6,7 +6,7 @@ from pathlib import Path
 from tempfile import NamedTemporaryFile
 
 from ..core import Pooch
-from ..utils import make_registry, infer_protocol
+from ..utils import make_registry, parse_url
 from .utils import check_tiny_data
 
 DATA_DIR = str(Path(__file__).parent / "data" / "store")
@@ -62,10 +62,18 @@ def test_registry_builder_recursive():
         os.remove(outfile.name)
 
 
-def test_infer_protocol():
-    "Infer protocol options from URL"
+def test_parse_url():
+    "Parse URL into 3 components"
     url = "http://127.0.0.1:8080/test.nc"
-    assert infer_protocol(url) == "http"
+    assert parse_url(url) == {
+        "protocol": "http",
+        "netloc": "127.0.0.1:8080",
+        "path": "/test.nc",
+    }
 
     url = "ftp://127.0.0.1:8080/test.nc"
-    assert infer_protocol(url) == "ftp"
+    assert parse_url(url) == {
+        "protocol": "ftp",
+        "netloc": "127.0.0.1:8080",
+        "path": "/test.nc",
+    }
