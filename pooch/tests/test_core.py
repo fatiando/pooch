@@ -240,20 +240,16 @@ def test_create_newfile_permissionerror():
     "Should warn the user when can't write to the local data dir"
     # This is a separate function because there should be a warning if the data dir
     # already exists but we can't write to it.
-
-    registry = {
-        "100KB.zip": "f627ca4c2c322f15db26152df306bd4f983f0146409b81a4341b9b340c365a16"
-    }
     with TemporaryDirectory() as data_cache:
         with no_write_permissions(data_cache):
             with warnings.catch_warnings(record=True) as warn:
                 pup = create(
                     path=data_cache,
-                    base_url="ftp://speedtest.tele2.net/",
+                    base_url="ftp://random.ftp.com/",
                     version="1.0",
                     version_dev="master",
                     env="SOME_VARIABLE",
-                    registry=registry,
+                    registry={"afile.txt": "ahash"},
                 )
                 assert len(warn) == 1
                 assert issubclass(warn[-1].category, UserWarning)
@@ -261,7 +257,22 @@ def test_create_newfile_permissionerror():
                 assert "'SOME_VARIABLE'" in str(warn[-1].message)
 
                 with pytest.raises(PermissionError):
-                    pup.fetch("100KB.zip")
+                    pup.fetch("afile.txt")
+
+
+def test_unsupported_protocol():
+    """ Should raise ValueError when protocol not in {"https", "http", "ftp"}"""
+    with TemporaryDirectory() as data_cache:
+        pup = create(
+            path=data_cache,
+            base_url="/home/johndoe/",
+            version="1.0",
+            version_dev="master",
+            env="SOME_VARIABLE",
+            registry={"afile.txt": "ahash"},
+        )
+        with pytest.raises(ValueError):
+            pup.fetch("afile.txt")
 
 
 def test_check_availability():
@@ -354,6 +365,6 @@ def test_ftp_downloader():
     with TemporaryDirectory() as local_store:
         downloader = FTPDownloader()
         url = "ftp://speedtest.tele2.net/100KB.zip"
-        outfile = Path(local_store) / "downlaoded_100KB.zip"
+        outfile = Path(local_store) / "100KB.zip"
         downloader(url, outfile, None)
         assert outfile.exists()

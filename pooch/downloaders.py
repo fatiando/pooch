@@ -222,7 +222,7 @@ class FTPDownloader:  # pylint: disable=too-few-public-methods
         ftp.login(*self.cred)
         path = parsed_url["path"]
 
-        with open(output_file, "wb") as fout:
+        with open(output_file.as_posix(), "wb") as fout:
             cmd = "RETR {}".format(path)
             if self.progressbar:
                 size = int(ftp.size(path))
