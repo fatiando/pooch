@@ -182,7 +182,6 @@ def parse_url(url):
     Examples
     --------
 
-    >>> from pooch.utils import parse_url
     >>> print(parse_url("http://127.0.0.1:8080/test.nc"))
     {'protocol': 'http', 'netloc': '127.0.0.1:8080', 'path': '/test.nc'}
     >>> print(parse_url("ftp://127.0.0.1:8080/test.nc"))
