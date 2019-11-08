@@ -236,6 +236,10 @@ def no_write_permissions(path):
         os.chmod(path, perm_orig)
 
 
+@pytest.mark.skipif(
+    sys.platform == "win32",
+    reason="Unable to programmatically make readyonly path on windows",
+)
 def test_create_newfile_permissionerror():
     "Should warn the user when can't write to the local data dir"
     # This is a separate function because there should be a warning if the data dir
