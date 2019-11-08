@@ -179,16 +179,6 @@ def parse_url(url):
         Three components of a URL
         (e.g., {'protocol': 'http', 'netloc': '127.0.0.1:8080', 'path': '/test.nc'})
 
-    Examples
-    --------
-
-    >>> print(parse_url("http://127.0.0.1:8080/test.nc"))
-    {'protocol': 'http', 'netloc': '127.0.0.1:8080', 'path': '/test.nc'}
-    >>> print(parse_url("ftp://127.0.0.1:8080/test.nc"))
-    {'protocol': 'ftp', 'netloc': '127.0.0.1:8080', 'path': '/test.nc'}
-    >>> print(parse_url("file:///home/username/data/test.nc"))
-    {'protocol': 'file', 'netloc': '', 'path': '/home/username/data/test.nc'}
-
     """
     parsed_url = urlsplit(url)
     protocol = parsed_url.scheme or "file"
