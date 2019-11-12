@@ -3,8 +3,10 @@ Download hooks for Pooch.fetch
 """
 import sys
 import ftplib
+from pathlib import Path
 import requests
 from .utils import parse_url
+
 
 try:
     from tqdm import tqdm
@@ -221,6 +223,7 @@ class FTPDownloader:  # pylint: disable=too-few-public-methods
         ftp.connect(host=parsed_url["netloc"], port=self.port)
         ftp.login(*self.cred)
         path = parsed_url["path"]
+        output_file = Path(output_file)
 
         with open(output_file.as_posix(), "wb") as fout:
             cmd = "RETR {}".format(path)
