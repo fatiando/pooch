@@ -51,8 +51,8 @@ matrix:
           os: linux
           env:
               - PYTHON=3.5
-              # Need to use sphinx=2.0.0 because 1.8.5 causes conflicts and 2.2.0 crashes
-              - CONDA_INSTALL_EXTRA="codecov pip pytest pytest-cov coverage sphinx=2.0.0 sphinx_rtd_theme numpydoc"
+              # Need to use sphinx=2.0.0 because 2.2.0 crashes
+              - CONDA_INSTALL_EXTRA="codecov pip pytest pytest-cov coverage sphinx=2.0.0 sphinx_rtd_theme=0.4.3"
               - CONDA_REQUIREMENTS_DEV=""
 
 # Setup the build environment

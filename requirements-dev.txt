@@ -2,6 +2,5 @@
 pytest
 pytest-cov
 coverage
-sphinx=1.8.5
-sphinx_rtd_theme
-numpydoc
+sphinx=2.2.1
+sphinx_rtd_theme=0.4.3
