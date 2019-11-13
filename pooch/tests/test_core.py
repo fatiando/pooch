@@ -27,7 +27,7 @@ from .utils import (
     check_large_data,
 )
 
-
+ON_TRAVIS = os.environ.get("TRAVIS", False)
 DATA_DIR = str(Path(__file__).parent / "data")
 REGISTRY = pooch_test_registry()
 BASEURL = pooch_test_url()
@@ -284,16 +284,6 @@ def test_check_availability():
     # Check available remote file
     pup = Pooch(path=DATA_DIR, base_url=BASEURL, registry=REGISTRY)
     assert pup.is_available("tiny-data.txt")
-
-    # Check available remote file on FTP server
-    pup = Pooch(
-        path=DATA_DIR,
-        base_url="ftp://speedtest.tele2.net/",
-        registry={
-            "100KB.zip": "f627ca4c2c322f15db26152df306bd4f983f0146409b81a4341b9b340c365a16"
-        },
-    )
-    assert pup.is_available("100KB.zip")
     # Check non available remote file
     pup = Pooch(path=DATA_DIR, base_url=BASEURL + "wrong-url/", registry=REGISTRY)
     assert not pup.is_available("tiny-data.txt")
@@ -302,6 +292,27 @@ def test_check_availability():
     registry.update(REGISTRY)
     pup = Pooch(path=DATA_DIR, base_url=BASEURL, registry=registry)
     assert not pup.is_available("not-a-real-data-file.txt")
+
+
+# https://blog.travis-ci.com/2018-07-23-the-tale-of-ftp-at-travis-ci
+@pytest.mark.skipif(
+    ON_TRAVIS,
+    reason="The use of FTP on TRAVIS-CI sudo-enabled builds seem not to work properly",
+)
+def test_check_availability_on_ftp():
+    "Should correctly check availability of existing and non existing files"
+    # Check available remote file on FTP server
+    pup = Pooch(
+        path=DATA_DIR,
+        base_url="ftp://speedtest.tele2.net/",
+        registry={
+            "100KB.zip": "f627ca4c2c322f15db26152df306bd4f983f0146409b81a4341b9b340c365a16",
+            "doesnot_exist.zip": "jdjdjdjdflld",
+        },
+    )
+    assert pup.is_available("100KB.zip")
+    # Check non available remote file
+    assert not pup.is_available("doesnot_exist.zip")
 
 
 def test_downloader(capsys):
@@ -364,6 +375,11 @@ def test_downloader_progressbar(capsys):
         check_large_data(fname)
 
 
+# https://blog.travis-ci.com/2018-07-23-the-tale-of-ftp-at-travis-ci
+@pytest.mark.skipif(
+    ON_TRAVIS,
+    reason="The use of FTP on TRAVIS-CI sudo-enabled builds seem not to work properly",
+)
 def test_ftp_downloader():
     "Test ftp downloader"
     with TemporaryDirectory() as local_store:
