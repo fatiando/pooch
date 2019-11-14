@@ -372,6 +372,6 @@ def test_ftp_downloader():
     with TemporaryDirectory() as local_store:
         downloader = FTPDownloader()
         url = "ftp://speedtest.tele2.net/100KB.zip"
-        outfile = Path(local_store) / "100KB.zip"
+        outfile = os.path.join(local_store, "100KB.zip")
         downloader(url, outfile, None)
-        assert outfile.exists()
+        assert os.path.exists(outfile)

@@ -167,10 +167,11 @@ class FTPDownloader:  # pylint: disable=too-few-public-methods
         If authenticating, the user's identifier, by default None
     password : str
         User's password on the server, if using authentication, by default None
-    acct : str
+    account : str
         Some servers also need an "account" string for auth, by default None
     timeout : int
-        default timeout for all ftp socket operations for this instance, by default None
+        Timeout in seconds for all ftp socket operations for this instance, 
+        by default None (no timeout)
     progressbar : bool
         If True, will print a progress bar of the download to standard error (stderr).
         Requires `tqdm <https://github.com/tqdm/tqdm>`__ to be installed.
@@ -185,7 +186,7 @@ class FTPDownloader:  # pylint: disable=too-few-public-methods
         port=21,
         username=None,
         password=None,
-        acct=None,
+        account=None,
         timeout=None,
         progressbar=False,
         chunk_size=1024,
@@ -194,7 +195,7 @@ class FTPDownloader:  # pylint: disable=too-few-public-methods
         self.port = port
         self.username = username
         self.password = password
-        self.cred = username, password, acct
+        self.credentials = username, password, account
         self.timeout = timeout
         self.progressbar = progressbar
         self.chunk_size = chunk_size
@@ -220,7 +221,7 @@ class FTPDownloader:  # pylint: disable=too-few-public-methods
             raise RuntimeError("Expected FTP")
         ftp = ftplib.FTP(timeout=self.timeout)
         ftp.connect(host=parsed_url["netloc"], port=self.port)
-        ftp.login(*self.cred)
+        ftp.login(*self.credentials)
         path = parsed_url["path"]
         ispath = not hasattr(output_file, "write")
         if ispath:
