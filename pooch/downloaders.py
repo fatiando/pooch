@@ -161,15 +161,15 @@ class FTPDownloader:  # pylint: disable=too-few-public-methods
 
     Parameters
     ----------
-    port : int, optional
+    port : int
         Port to connect with, by default 21
-    username : str, optional
+    username : str
         If authenticating, the user's identifier, by default None
-    password : str, optional
+    password : str
         User's password on the server, if using authentication, by default None
-    acct : str, optional
+    acct : str
         Some servers also need an "account" string for auth, by default None
-    timeout : int, optional
+    timeout : int
         default timeout for all ftp socket operations for this instance, by default None
     progressbar : bool
         If True, will print a progress bar of the download to standard error (stderr).
