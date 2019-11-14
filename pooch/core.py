@@ -513,10 +513,14 @@ class Pooch:
             directory = os.path.dirname(parsed_url["path"])
             ftp = ftplib.FTP()
             ftp.connect(host=parsed_url["netloc"])
-            ftp.login()
-            response = parsed_url["path"] in ftp.nlst(directory)
-            ftp.close()
-            return response
+            try:
+                ftp.login()
+                response = parsed_url["path"] in ftp.nlst(directory)
+                return response
+            except Exception as e:
+                raise e
+            finally:
+                ftp.close()
 
         response = requests.head(source, allow_redirects=True)
         return bool(response.status_code == 200)
