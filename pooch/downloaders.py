@@ -240,6 +240,7 @@ class FTPDownloader:  # pylint: disable=too-few-public-methods
                 ) as pbar:
 
                     def callback(data):
+                        "Update the progress bar and write to output"
                         pbar.update(len(data))
                         fout.write(data)
 
