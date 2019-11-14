@@ -1,4 +1,4 @@
-# Configuration file for TravisCI
+# Configuration file for Travis CI
 
 # We use miniconda for Python so don't need any Python specific tools
 language: generic
@@ -31,11 +31,15 @@ env:
 # Specify the build configurations. Be sure to only deploy from a single build.
 matrix:
     include:
+        - name: "Linux - Python 3.8"
+          os: linux
+          env:
+              - PYTHON=3.8
         - name: "Linux - Python 3.7"
           os: linux
           env:
               - PYTHON=3.7
-        - name: "Linux - Python 3.7 [optional]"
+        - name: "Linux - Python 3.7 [optional dependencies]"
           os: linux
           env:
               - PYTHON=3.7
@@ -51,8 +55,8 @@ matrix:
           os: linux
           env:
               - PYTHON=3.5
-              # Need to use sphinx=2.0.0 because 1.8.5 causes conflicts and 2.2.0 crashes
-              - CONDA_INSTALL_EXTRA="codecov pip pytest pytest-cov coverage sphinx=2.0.0 sphinx_rtd_theme numpydoc"
+              # Need to use sphinx=2.0.0 because 2.2.0 crashes
+              - CONDA_INSTALL_EXTRA="codecov pip pytest pytest-cov coverage sphinx=2.0.0 sphinx_rtd_theme=0.4.3"
               - CONDA_REQUIREMENTS_DEV=""
 
 # Setup the build environment
