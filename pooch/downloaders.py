@@ -170,7 +170,7 @@ class FTPDownloader:  # pylint: disable=too-few-public-methods
     account : str
         Some servers also need an "account" string for auth, by default None
     timeout : int
-        Timeout in seconds for all ftp socket operations for this instance, 
+        Timeout in seconds for ftp socket operations,
         by default None (no timeout)
     progressbar : bool
         If True, will print a progress bar of the download to standard error (stderr).
