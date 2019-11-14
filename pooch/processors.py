@@ -30,7 +30,8 @@ class ExtractorProcessor:  # pylint: disable=too-few-public-methods
 
     """
 
-    suffix = None  # String appended to unpacked archive. To be implemented in subclass
+    # String appended to unpacked archive. To be implemented in subclass
+    suffix = None
 
     def __init__(self, members=None):
         self.members = members
@@ -44,11 +45,11 @@ class ExtractorProcessor:  # pylint: disable=too-few-public-methods
         fname : str
             Full path of the zipped file in local storage.
         action : str
-            Indicates what action was taken by :meth:`pooch.Pooch.fetch`. One of:
+            Indicates what action was taken by :meth:`pooch.Pooch.fetch`:
 
-            * ``"download"``: The file didn't exist locally and was downloaded
-            * ``"update"``: The local file was outdated and was re-download
-            * ``"fetch"``: The file exists and is updated so it wasn't downloaded
+            * ``"download"``: File didn't exist locally and was downloaded
+            * ``"update"``: Local file was outdated and was re-download
+            * ``"fetch"``: File exists and is updated so it wasn't downloaded
 
         pooch : :class:`pooch.Pooch`
             The instance of :class:`pooch.Pooch` that is calling this.
@@ -69,8 +70,8 @@ class ExtractorProcessor:  # pylint: disable=too-few-public-methods
             if not os.path.exists(extract_dir):
                 os.makedirs(extract_dir)
             self._extract_file(fname, extract_dir)
-        # Get a list of all file names (including subdirectories) in our folder of
-        # unzipped files.
+        # Get a list of all file names (including subdirectories) in our folder
+        # of unzipped files.
         fnames = [
             os.path.join(path, fname)
             for path, _, files in os.walk(extract_dir)
@@ -90,18 +91,18 @@ class Unzip(ExtractorProcessor):  # pylint: disable=too-few-public-methods
     """
     Processor that unpacks a zip archive and returns a list of all files.
 
-    Use with :meth:`pooch.Pooch.fetch` to unzip a downloaded data file into a folder in
-    the local data store. :meth:`~pooch.Pooch.fetch` will return a list with the names
-    of the unzipped files instead of the zip archive.
+    Use with :meth:`pooch.Pooch.fetch` to unzip a downloaded data file into a
+    folder in the local data store. :meth:`~pooch.Pooch.fetch` will return a
+    list with the names of the unzipped files instead of the zip archive.
 
     The output folder is ``{fname}.unzip``.
 
     Parameters
     ----------
     members : list or None
-        If None, will unpack all files in the zip archive. Otherwise, *members* must be
-        a list of file names to unpack from the archive. Only these files will be
-        unpacked.
+        If None, will unpack all files in the zip archive. Otherwise, *members*
+        must be a list of file names to unpack from the archive. Only these
+        files will be unpacked.
 
     """
 
@@ -135,9 +136,9 @@ class Untar(ExtractorProcessor):  # pylint: disable=too-few-public-methods
     """
     Processor that unpacks a tar archive and returns a list of all files.
 
-    Use with :meth:`pooch.Pooch.fetch` to untar a downloaded data file into a folder in
-    the local data store. :meth:`~pooch.Pooch.fetch` will return a list with the names
-    of the extracted files instead of the archive.
+    Use with :meth:`pooch.Pooch.fetch` to untar a downloaded data file into a
+    folder in the local data store. :meth:`~pooch.Pooch.fetch` will return a
+    list with the names of the extracted files instead of the archive.
 
     The output folder is ``{fname}.untar``.
 
@@ -145,9 +146,9 @@ class Untar(ExtractorProcessor):  # pylint: disable=too-few-public-methods
     Parameters
     ----------
     members : list or None
-        If None, will unpack all files in the archive. Otherwise, *members* must be
-        a list of file names to unpack from the archive. Only these files will be
-        unpacked.
+        If None, will unpack all files in the archive. Otherwise, *members*
+        must be a list of file names to unpack from the archive. Only these
+        files will be unpacked.
     """
 
     suffix = ".untar"
@@ -184,23 +185,24 @@ class Decompress:  # pylint: disable=too-few-public-methods
     """
     Processor that decompress a file and returns the decompressed version.
 
-    Use with :meth:`pooch.Pooch.fetch` to decompress a downloaded data file so that it
-    can be easily opened. Useful for data files that take a long time to decompress
-    (exchanging disk space for speed).
+    Use with :meth:`pooch.Pooch.fetch` to decompress a downloaded data file so
+    that it can be easily opened. Useful for data files that take a long time
+    to decompress (exchanging disk space for speed).
 
     The output file is ``{fname}.decomp``.
 
-    Supported decompression methods are LZMA (``.xz``), bzip2 (``.bz2``), and gzip
-    (``.gz``).
+    Supported decompression methods are LZMA (``.xz``), bzip2 (``.bz2``), and
+    gzip (``.gz``).
 
-    File names with the standard extensions (see above) can use ``method="auto"`` to
-    automatically determine the compression method. This can be overwritten by setting
-    the *method* argument.
+    File names with the standard extensions (see above) can use
+    ``method="auto"`` to automatically determine the compression method. This
+    can be overwritten by setting the *method* argument.
 
     Parameters
     ----------
     method : str
-        Name of the compression method. Can be "auto", "lzma", "xz", "bzip2", or "gzip".
+        Name of the compression method. Can be "auto", "lzma", "xz", "bzip2",
+        or "gzip".
 
     """
 
@@ -220,11 +222,11 @@ class Decompress:  # pylint: disable=too-few-public-methods
         fname : str
             Full path of the compressed file in local storage.
         action : str
-            Indicates what action was taken by :meth:`pooch.Pooch.fetch`. One of:
+            Indicates what action was taken by :meth:`pooch.Pooch.fetch`:
 
-            - ``"download"``: The file didn't exist locally and was downloaded
-            - ``"update"``: The local file was outdated and was re-download
-            - ``"fetch"``: The file exists and is updated so it wasn't downloaded
+            - ``"download"``: File didn't exist locally and was downloaded
+            - ``"update"``: Local file was outdated and was re-download
+            - ``"fetch"``: File exists and is updated so it wasn't downloaded
 
         pooch : :class:`pooch.Pooch`
             The instance of :class:`pooch.Pooch` that is calling this.
@@ -249,7 +251,7 @@ class Decompress:  # pylint: disable=too-few-public-methods
 
     def _compression_module(self, fname):
         """
-        Get the Python compression module compatible with fname and the chosen method.
+        Get the Python module compatible with fname and the chosen method.
 
         If the *method* attribute is "auto", will select a method based on the
         extension. If no recognized extension is in the file name, will raise a
