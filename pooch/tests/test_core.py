@@ -298,7 +298,7 @@ def test_check_availability():
 # https://blog.travis-ci.com/2018-07-23-the-tale-of-ftp-at-travis-ci
 @pytest.mark.skipif(
     ON_TRAVIS,
-    reason="The use of FTP on TRAVIS-CI sudo-enabled builds seem not to work properly",
+    reason="FTP is not allowed on Travis CI",
 )
 def test_check_availability_on_ftp():
     "Should correctly check availability of existing and non existing files"
