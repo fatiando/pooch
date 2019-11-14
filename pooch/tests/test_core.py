@@ -266,7 +266,7 @@ def test_create_newfile_permissionerror():
 
 
 def test_unsupported_protocol():
-    """ Should raise ValueError when protocol not in {"https", "http", "ftp"}"""
+    "Should raise ValueError when protocol not in {'https', 'http', 'ftp'}"
     with TemporaryDirectory() as data_cache:
         pup = create(
             path=data_cache,
