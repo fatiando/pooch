@@ -27,7 +27,10 @@ from .utils import (
     check_large_data,
 )
 
-ON_TRAVIS = os.environ.get("TRAVIS", False)
+if os.environ.get("TRAVIS", None):
+    ON_TRAVIS = True
+else:
+    ON_TRAVIS = False
 DATA_DIR = str(Path(__file__).parent / "data")
 REGISTRY = pooch_test_registry()
 BASEURL = pooch_test_url()
