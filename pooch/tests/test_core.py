@@ -296,10 +296,7 @@ def test_check_availability():
 
 
 # https://blog.travis-ci.com/2018-07-23-the-tale-of-ftp-at-travis-ci
-@pytest.mark.skipif(
-    ON_TRAVIS,
-    reason="FTP is not allowed on Travis CI",
-)
+@pytest.mark.skipif(ON_TRAVIS, reason="FTP is not allowed on Travis CI")
 def test_check_availability_on_ftp():
     "Should correctly check availability of existing and non existing files"
     # Check available remote file on FTP server
@@ -377,10 +374,7 @@ def test_downloader_progressbar(capsys):
 
 
 # https://blog.travis-ci.com/2018-07-23-the-tale-of-ftp-at-travis-ci
-@pytest.mark.skipif(
-    ON_TRAVIS,
-    reason="FTP is not allowed on Travis CI",
-)
+@pytest.mark.skipif(ON_TRAVIS, reason="FTP is not allowed on Travis CI")
 def test_ftp_downloader():
     "Test ftp downloader"
     with TemporaryDirectory() as local_store:
