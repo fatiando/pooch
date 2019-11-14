@@ -27,6 +27,7 @@ from .utils import (
     check_large_data,
 )
 
+# FTP doesn't work on Travis CI so need to be able to skip tests there
 ON_TRAVIS = bool(os.environ.get("TRAVIS", None))
 DATA_DIR = str(Path(__file__).parent / "data")
 REGISTRY = pooch_test_registry()
