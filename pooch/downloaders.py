@@ -3,7 +3,6 @@ Download hooks for Pooch.fetch
 """
 import sys
 import ftplib
-from pathlib import Path
 import requests
 from .utils import parse_url
 
@@ -159,6 +158,26 @@ class FTPDownloader:  # pylint: disable=too-few-public-methods
     Download manager for fetching files over FTP.
     When called, downloads the given file URL into the specified local file. Uses the
     :mod:`ftplib` module to manage downloads.
+
+    Parameters
+    ----------
+    port : int, optional
+        Port to connect with, by default 21
+    username : str, optional
+        If authenticating, the user's identifier, by default None
+    password : str, optional
+        User's password on the server, if using authentication, by default None
+    acct : str, optional
+        Some servers also need an "account" string for auth, by default None
+    timeout : int, optional
+        default timeout for all ftp socket operations for this instance, by default None
+    progressbar : bool
+        If True, will print a progress bar of the download to standard error (stderr).
+        Requires `tqdm <https://github.com/tqdm/tqdm>`__ to be installed.
+    chunk_size : int
+        Files are streamed *chunk_size* bytes at a time instead of loading everything
+        into memory at one. Usually doesn't need to be changed.
+
     """
 
     def __init__(
@@ -171,26 +190,6 @@ class FTPDownloader:  # pylint: disable=too-few-public-methods
         progressbar=False,
         chunk_size=1024,
     ):
-        """
-        Parameters
-        ----------
-        port : int, optional
-            Port to connect with, by default 21
-        username : str, optional
-            If authenticating, the user's identifier, by default None
-        password : str, optional
-           User's password on the server, if using authentication, by default None
-        acct : str, optional
-            Some servers also need an "account" string for auth, by default None
-        timeout : int, optional
-            default timeout for all ftp socket operations for this instance, by default None
-        progressbar : bool, optional
-            If True, will print a progress bar of the download to
-            standard error (stderr), by default True
-        chunk_size : int, optional
-            The maximum number of bytes to read from the
-            socket at one time, by default 1024
-        """
 
         self.port = port
         self.username = username
@@ -223,29 +222,31 @@ class FTPDownloader:  # pylint: disable=too-few-public-methods
         ftp.connect(host=parsed_url["netloc"], port=self.port)
         ftp.login(*self.cred)
         path = parsed_url["path"]
-        output_file = Path(output_file)
+        ispath = not hasattr(output_file, "write")
+        if ispath:
+            output_file = open(output_file, "w+b")
 
-        with open(output_file.as_posix(), "wb") as fout:
-            cmd = "RETR {}".format(path)
-            if self.progressbar:
-                size = int(ftp.size(path))
-                with tqdm(
-                    total=size,
-                    unit="B",
-                    unit_scale=True,
-                    unit_divisor=1024,
-                    ncols=79,
-                    leave=True,
-                    disable=not self.progressbar,
-                ) as pbar:
+        cmd = "RETR {}".format(path)
+        if self.progressbar:
+            size = int(ftp.size(path))
+            use_ascii = bool(sys.platform == "win32")
+            with tqdm(
+                total=size,
+                ncols=79,
+                ascii=use_ascii,
+                unit="B",
+                unit_scale=True,
+                leave=True,
+            ) as pbar:
 
-                    def callback(data):
-                        "Update the progress bar and write to output"
-                        pbar.update(len(data))
-                        fout.write(data)
+                def callback(data):
+                    "Update the progress bar and write to output"
+                    pbar.update(len(data))
+                    output_file.write(data)
 
-                    ftp.retrbinary(cmd, callback, blocksize=self.chunk_size)
-            else:
-                ftp.retrbinary(cmd, fout.write, blocksize=self.chunk_size)
+                ftp.retrbinary(cmd, callback, blocksize=self.chunk_size)
+
+        else:
+            ftp.retrbinary(cmd, output_file.write, blocksize=self.chunk_size)
 
         ftp.close()

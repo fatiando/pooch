@@ -5,9 +5,8 @@ import os
 import sys
 from pathlib import Path
 from tempfile import TemporaryDirectory
+import tempfile
 import warnings
-import stat
-from contextlib import contextmanager
 
 import pytest
 
@@ -225,44 +224,37 @@ def test_create_makedirs_permissionerror(monkeypatch):
         pup.fetch("afile.txt")
 
 
-@contextmanager
-def no_write_permissions(path):
-    """Change write permissions"""
-    perm_orig = stat.S_IMODE(os.stat(path).st_mode)
-    perm_new = perm_orig ^ stat.S_IWRITE
-    try:
-        os.chmod(path, perm_new)
-        yield
-    finally:
-        os.chmod(path, perm_orig)
-
-
-@pytest.mark.skipif(
-    sys.platform == "win32",
-    reason="Unable to programmatically make readyonly path on windows",
-)
-def test_create_newfile_permissionerror():
+def test_create_newfile_permissionerror(monkeypatch):
     "Should warn the user when can't write to the local data dir"
     # This is a separate function because there should be a warning if the data dir
     # already exists but we can't write to it.
-    with TemporaryDirectory() as data_cache:
-        with no_write_permissions(data_cache):
-            with warnings.catch_warnings(record=True) as warn:
-                pup = create(
-                    path=data_cache,
-                    base_url="ftp://random.ftp.com/",
-                    version="1.0",
-                    version_dev="master",
-                    env="SOME_VARIABLE",
-                    registry={"afile.txt": "ahash"},
-                )
-                assert len(warn) == 1
-                assert issubclass(warn[-1].category, UserWarning)
-                assert str(warn[-1].message).startswith("Cannot write to data cache")
-                assert "'SOME_VARIABLE'" in str(warn[-1].message)
 
-                with pytest.raises(PermissionError):
-                    pup.fetch("afile.txt")
+    def mocktempfile(**kwargs):  # pylint: disable=unused-argument
+        "Raise an exception to mimic permission issues"
+        raise PermissionError("Fake error")
+
+    with TemporaryDirectory() as data_cache:
+        os.makedirs(os.path.join(data_cache, "1.0"))
+        assert os.path.exists(data_cache)
+
+        monkeypatch.setattr(tempfile, "NamedTemporaryFile", mocktempfile)
+
+        with warnings.catch_warnings(record=True) as warn:
+            pup = create(
+                path=data_cache,
+                base_url="ftp://random.ftp.com/",
+                version="1.0",
+                version_dev="master",
+                env="SOME_VARIABLE",
+                registry={"afile.txt": "ahash"},
+            )
+            assert len(warn) == 1
+            assert issubclass(warn[-1].category, UserWarning)
+            assert str(warn[-1].message).startswith("Cannot write to data cache")
+            assert "'SOME_VARIABLE'" in str(warn[-1].message)
+
+            with pytest.raises(PermissionError):
+                pup.fetch("afile.txt")
 
 
 def test_unsupported_protocol():
