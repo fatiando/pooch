@@ -375,3 +375,26 @@ def test_ftp_downloader():
         outfile = os.path.join(local_store, "100KB.zip")
         downloader(url, outfile, None)
         assert os.path.exists(outfile)
+
+
+@pytest.mark.skipif(tqdm is None, reason="requires tqdm")
+@pytest.mark.skipif(ON_TRAVIS, reason="FTP is not allowed on Travis CI")
+def test_downloader_progressbar_ftp(capsys):
+    "Setup an FTP downloader function that prints a progress bar for fetch"
+    download = FTPDownloader(progressbar=True)
+    with TemporaryDirectory() as local_store:
+        url = "ftp://speedtest.tele2.net/100KB.zip"
+        outfile = os.path.join(local_store, "100KB.zip")
+        download(url, outfile, None)
+        # Read stderr and make sure the progress bar is printed only when told
+        captured = capsys.readouterr()
+        printed = captured.err.split("\r")[-1].strip()
+        assert len(printed) == 79
+        if sys.platform == "win32":
+            progress = "100%|####################"
+        else:
+            progress = "100%|████████████████████"
+        # Bar size is not always the same so can't reliably test the whole bar.
+        assert printed[:25] == progress
+        # Check that the file was actually downloaded
+        assert os.path.exists(outfile)
