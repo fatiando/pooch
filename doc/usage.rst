@@ -47,7 +47,7 @@ The sample data are stored in the ``data`` folder of your repository.
 Setup
 -----
 
-Pooch can download and cache your data files to the users computer automatically.
+Pooch can download and cache your data files to the users' computer automatically.
 This is what the ``plumbus/datasets.py`` file would look like:
 
 .. code:: python
@@ -152,7 +152,7 @@ Versioning is optional and can be ignored by omitting the ``version`` and
 User-defined paths
 -------------------
 
-In the above example, the location of the local storage in the users computer is
+In the above example, the location of the local storage in the users' computer is
 hard-coded. There is no way for them to change it to something else. To avoid being a
 tyrant, you can allow the user to define the ``path`` argument using an environment
 variable:
@@ -432,7 +432,7 @@ this:
     100%|█████████████████████████████████████████| 336/336 [...]
 
 .. note::
-    
+
     ``tqdm`` is not installed by default with Pooch. You will have to install it
     separately in order to use this feature.
 
@@ -446,6 +446,7 @@ use :meth:`pooch.Pooch.load_registry` to read them:
 .. code:: python
 
     import os
+    import pkg_resources
 
     GOODBOY = pooch.create(
         # Use the default cache folder for the OS
@@ -458,10 +459,17 @@ use :meth:`pooch.Pooch.load_registry` to read them:
         # We'll load it from a file later
         registry=None,
     )
-    GOODBOY.load_registry(os.path.join(os.path.dirname(__file__), "registry.txt"))
+    # Get registry file from package_data
+    registry_file = pkg_resources.resource_stream("plumbus", "registry.txt")
+    # Load this registry file
+    GOODBOY.load_registry(registry_file)
 
-The ``registry.txt`` file in this case is in the same directory as the ``datasets.py``
-module and should be shipped with the package. It's contents are:
+In this case, the ``registry.txt`` file is in the ``plumbus/`` package directory and should be
+shipped with the package (see below for instructions).
+We use `pkg_resources <https://setuptools.readthedocs.io/en/latest/pkg_resources.html#basic-resource-access>`__
+to access the ``registry.txt``, giving it the name of our Python package.
+
+The contents of ``registry.txt`` are:
 
 .. code-block:: none
 
