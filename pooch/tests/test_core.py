@@ -95,8 +95,8 @@ def test_pooch_update():
     "Setup a pooch that already has the local data but the file is outdated"
     with TemporaryDirectory() as local_store:
         path = Path(local_store)
-        # Create a dummy version of tiny-data.txt that is different from the one in the
-        # remote storage
+        # Create a dummy version of tiny-data.txt that is different from the
+        # one in the remote storage
         true_path = str(path / "tiny-data.txt")
         with open(true_path, "w") as fin:
             fin.write("different data")
@@ -120,7 +120,7 @@ def test_pooch_update():
 
 
 def test_pooch_corrupted():
-    "Raise an exception if the hash of downloaded file doesn't match the registry"
+    "Raise an exception if the file hash doesn't match the registry"
     # Test the case where the file wasn't in the directory
     with TemporaryDirectory() as local_store:
         path = os.path.abspath(local_store)
@@ -226,8 +226,8 @@ def test_create_makedirs_permissionerror(monkeypatch):
 
 def test_create_newfile_permissionerror(monkeypatch):
     "Should warn the user when can't write to the local data dir"
-    # This is a separate function because there should be a warning if the data dir
-    # already exists but we can't write to it.
+    # This is a separate function because there should be a warning if the data
+    # dir already exists but we can't write to it.
 
     def mocktempfile(**kwargs):  # pylint: disable=unused-argument
         "Raise an exception to mimic permission issues"
@@ -351,7 +351,7 @@ def test_downloader_progressbar(capsys):
         # Setup a pooch in a temp dir
         pup = Pooch(path=path, base_url=BASEURL, registry=REGISTRY)
         fname = pup.fetch("large-data.txt", downloader=download)
-        # Read stderr and make sure the progress bar is printed only when told to
+        # Read stderr and make sure the progress bar is printed only when told
         captured = capsys.readouterr()
         printed = captured.err.split("\r")[-1].strip()
         assert len(printed) == 79
@@ -359,7 +359,7 @@ def test_downloader_progressbar(capsys):
             progress = "100%|####################"
         else:
             progress = "100%|████████████████████"
-        # The bar size is not always the same so we can't reliably test the whole bar.
+        # Bar size is not always the same so can't reliably test the whole bar.
         assert printed[:25] == progress
         # Check that the downloaded file has the right content
         check_large_data(fname)

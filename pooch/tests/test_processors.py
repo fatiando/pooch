@@ -83,7 +83,7 @@ def test_extractprocessor_fails():
     "proc_cls,ext", [(Unzip, ".zip"), (Untar, ".tar.gz")], ids=["Unzip", "Untar"]
 )
 def test_processors(proc_cls, ext):
-    "Setup a post-download hook and make sure it's only executed when downloading"
+    "Setup a hook and make sure it's only executed when downloading"
     processor = proc_cls(members=["tiny-data.txt"])
     suffix = proc_cls.suffix
     extract_dir = "tiny-data" + ext + suffix
