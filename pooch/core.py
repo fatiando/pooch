@@ -526,19 +526,16 @@ class Pooch:
         self._assert_file_in_registry(fname)
         source = self.get_url(fname)
         parsed_url = parse_url(source)
-
         if parsed_url["protocol"] == "ftp":
             directory = os.path.dirname(parsed_url["path"])
             ftp = ftplib.FTP()
             ftp.connect(host=parsed_url["netloc"])
             try:
                 ftp.login()
-                response = parsed_url["path"] in ftp.nlst(directory)
-                return response
-            except Exception as e:
-                raise e
+                available = parsed_url["path"] in ftp.nlst(directory)
             finally:
                 ftp.close()
-
-        response = requests.head(source, allow_redirects=True)
-        return bool(response.status_code == 200)
+        else:
+            response = requests.head(source, allow_redirects=True)
+            available = bool(response.status_code == 200)
+        return available
