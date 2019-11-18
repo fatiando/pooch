@@ -4,9 +4,21 @@
 
 .. autoclass:: {{ objname }}
 
-.. raw:: html
+    .. rubric:: Methods Summary
 
-     <div style='clear:both'></div>
+    .. autosummary::
+    {% for item in members %}
+    {% if item in ['__call__'] %}
+        {{ objname }}.{{ item }}
+    {% endif %}
+    {% endfor %}
+    {% for item in methods %}
+    {% if item != '__init__' %}
+        {{ objname }}.{{ item }}
+    {% endif %}
+    {% endfor %}
+
+----
 
 {% for item in members %}
 {% if item in ['__call__'] %}
