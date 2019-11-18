@@ -29,8 +29,8 @@ def os_cache(project):
     Returns
     -------
     cache_path : :class:`pathlib.Path`
-        The default location for the data cache. User directories (``'~'``) are not
-        expanded.
+        The default location for the data cache. User directories (``'~'``) are
+        not expanded.
 
     """
     return Path(appdirs.user_cache_dir(project))
@@ -77,12 +77,12 @@ def file_hash(fname):
 
 def check_version(version, fallback="master"):
     """
-    Check that a version string is PEP440 compliant and there are no unreleased changes.
+    Check if a version is PEP440 compliant and there are no unreleased changes.
 
-    For example, ``version = "0.1"`` will be returned as is but
-    ``version = "0.1+10.8dl8dh9"`` will return the fallback. This is the convention used
-    by `versioneer <https://github.com/warner/python-versioneer>`__ to mark that this
-    version is 10 commits ahead of the last release.
+    For example, ``version = "0.1"`` will be returned as is but ``version =
+    "0.1+10.8dl8dh9"`` will return the fallback. This is the convention used by
+    `versioneer <https://github.com/warner/python-versioneer>`__ to mark that
+    this version is 10 commits ahead of the last release.
 
     Parameters
     ----------
@@ -94,8 +94,8 @@ def check_version(version, fallback="master"):
     Returns
     -------
     version : str
-        If *version* is PEP440 compliant and there are unreleased changes, then return
-        *version*. Otherwise, return *fallback*.
+        If *version* is PEP440 compliant and there are unreleased changes, then
+        return *version*. Otherwise, return *fallback*.
 
     Raises
     ------
@@ -131,12 +131,13 @@ def make_registry(directory, output, recursive=True):
     Parameters
     ----------
     directory : str
-        Directory of the test data to put in the registry. All file names in the
-        registry will be relative to this directory.
+        Directory of the test data to put in the registry. All file names in
+        the registry will be relative to this directory.
     output : str
         Name of the output registry file.
     recursive : bool
-        If True, will recursively look for files in subdirectories of *directory*.
+        If True, will recursively look for files in subdirectories of
+        *directory*.
 
     """
     directory = Path(directory)
@@ -157,6 +158,6 @@ def make_registry(directory, output, recursive=True):
 
     with open(output, "w") as outfile:
         for fname, fhash in zip(files, hashes):
-            # Only use Unix separators for the registry so that we don't go insane
-            # dealing with file paths.
+            # Only use Unix separators for the registry so that we don't go
+            # insane dealing with file paths.
             outfile.write("{} {}\n".format(fname.replace("\\", "/"), fhash))
