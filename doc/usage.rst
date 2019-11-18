@@ -432,7 +432,7 @@ this:
     100%|█████████████████████████████████████████| 336/336 [...]
 
 .. note::
-    
+
     ``tqdm`` is not installed by default with Pooch. You will have to install it
     separately in order to use this feature.
 
@@ -464,10 +464,12 @@ use :meth:`pooch.Pooch.load_registry` to read them:
     # Load this registry file
     GOODBOY.load_registry(registry_file)
 
-The ``registry.txt`` file in this case is in the ``plumbus/`` directory module and should be
-shipped with the package. We use `pkg_resources <https://setuptools.readthedocs.io/en/latest/pkg_resources.html#basic-resource-access)`__
-to access it, giving it the name of our Python package (the one we'll put in ``setup.py``).
-Its contents are:
+In this case, the ``registry.txt`` file is in the ``plumbus/`` package directory and should be
+shipped with the package (see below for instructions).
+We use `pkg_resources <https://setuptools.readthedocs.io/en/latest/pkg_resources.html#basic-resource-access>`__
+to access the ``registry.txt``, giving it the name of our Python package.
+
+The contents of ``registry.txt`` are:
 
 .. code-block:: none
 
