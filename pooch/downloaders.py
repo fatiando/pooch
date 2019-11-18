@@ -163,19 +163,25 @@ class FTPDownloader:  # pylint: disable=too-few-public-methods
     When called, downloads the given file URL into the specified local file.
     Uses the :mod:`ftplib` module to manage downloads.
 
+    Use with :meth:`pooch.Pooch.fetch` to customize the download of files (for
+    example, to use authentication or print a progress bar).
+
     Parameters
     ----------
     port : int
-        Port to connect with, by default 21
+        Port used for the FTP connection.
     username : str
-        If authenticating, the user's identifier, by default None
+        User name used to login to the server. Only needed if the server
+        requires authentication (i.e., no anonymous FTP).
     password : str
-        User's password on the server, if using authentication, by default None
+        Password used to login to the server. Only needed if the server
+        requires authentication (i.e., no anonymous FTP). Use the empty string
+        to indicate no password is required.
     account : str
-        Some servers also need an "account" string for auth, by default None
+        Some servers also require an "account" name for authentication.
     timeout : int
-        Timeout in seconds for ftp socket operations,
-        by default None (no timeout)
+        Timeout in seconds for ftp socket operations, use None to mean no
+        timeout.
     progressbar : bool
         If True, will print a progress bar of the download to standard error
         (stderr). Requires `tqdm <https://github.com/tqdm/tqdm>`__ to be
@@ -189,9 +195,9 @@ class FTPDownloader:  # pylint: disable=too-few-public-methods
     def __init__(
         self,
         port=21,
-        username=None,
-        password=None,
-        account=None,
+        username="anonymous",
+        password="",
+        account="",
         timeout=None,
         progressbar=False,
         chunk_size=1024,
@@ -200,7 +206,7 @@ class FTPDownloader:  # pylint: disable=too-few-public-methods
         self.port = port
         self.username = username
         self.password = password
-        self.credentials = username, password, account
+        self.account = account
         self.timeout = timeout
         self.progressbar = progressbar
         self.chunk_size = chunk_size
@@ -222,37 +228,36 @@ class FTPDownloader:  # pylint: disable=too-few-public-methods
         """
 
         parsed_url = parse_url(url)
-        if parsed_url["protocol"] != "ftp":
-            raise RuntimeError("Expected FTP")
         ftp = ftplib.FTP(timeout=self.timeout)
         ftp.connect(host=parsed_url["netloc"], port=self.port)
-        ftp.login(*self.credentials)
-        path = parsed_url["path"]
         ispath = not hasattr(output_file, "write")
         if ispath:
             output_file = open(output_file, "w+b")
+        try:
+            ftp.login(user=self.username, passwd=self.password, acct=self.account)
+            command = "RETR {}".format(parsed_url["path"])
+            if self.progressbar:
+                size = int(ftp.size(parsed_url["path"]))
+                use_ascii = bool(sys.platform == "win32")
+                progress = tqdm(
+                    total=size,
+                    ncols=79,
+                    ascii=use_ascii,
+                    unit="B",
+                    unit_scale=True,
+                    leave=True,
+                )
+                with progress:
 
-        cmd = "RETR {}".format(path)
-        if self.progressbar:
-            size = int(ftp.size(path))
-            use_ascii = bool(sys.platform == "win32")
-            with tqdm(
-                total=size,
-                ncols=79,
-                ascii=use_ascii,
-                unit="B",
-                unit_scale=True,
-                leave=True,
-            ) as pbar:
+                    def callback(data):
+                        "Update the progress bar and write to output"
+                        progress.update(len(data))
+                        output_file.write(data)
 
-                def callback(data):
-                    "Update the progress bar and write to output"
-                    pbar.update(len(data))
-                    output_file.write(data)
-
-                ftp.retrbinary(cmd, callback, blocksize=self.chunk_size)
-
-        else:
-            ftp.retrbinary(cmd, output_file.write, blocksize=self.chunk_size)
-
-        ftp.close()
+                    ftp.retrbinary(command, callback, blocksize=self.chunk_size)
+            else:
+                ftp.retrbinary(command, output_file.write, blocksize=self.chunk_size)
+        finally:
+            ftp.quit()
+            if ispath:
+                output_file.close()
