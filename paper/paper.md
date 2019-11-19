@@ -117,12 +117,13 @@ def fetch_some_data():
 
 Pooch is designed to be extended: users can plug in custom download functions
 and post-download processing functions.
-For example, a custom download function could fetch files over FTP instead of
-HTTP (the default) and a processing function could decrypt a file using a
-user-defined password once the download is completed.
-We include ready-made download functions for HTTP (including basic
-authentication) and processing functions for unpacking archives (zip or tar)
-and decompressing files (gzip, lzma, and bzip2).
+For example, a custom download function could fetch files from a
+password-protected FTP server (the default is HTTP/HTTPS or anonymous FTP) and
+a processing function could decrypt a file using a user-defined password once
+the download is completed.
+We include ready-made download functions for HTTP and FTP (including basic
+authentication) as well as processing functions for unpacking archives (zip or
+tar) and decompressing files (gzip, lzma, and bzip2).
 
 To the best of the authors' awareness, the only other Python software with some
 overlapping functionality is [Intake](https://github.com/intake/intake).
@@ -130,7 +131,7 @@ While Intake is powerful and can be used to manage large data archives,
 we argue that Pooch has a simpler setup and meets the
 specific needs of scientific software authors and individual scientists.
 For example, Pooch does not require users to change their data loading code to
-fit into its plug-in structure, instead only providing the file path for the
+fit into a plug-in structure, instead only providing the file path for the
 user.
 
 The Pooch API is stable and has been field-tested by other projects:
