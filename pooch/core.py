@@ -7,11 +7,17 @@ from pathlib import Path
 import shutil
 import tempfile
 from warnings import warn
+import ftplib
 
 import requests
+from .utils import file_hash, check_version, parse_url
+from .downloaders import HTTPDownloader, FTPDownloader
 
-from .utils import file_hash, check_version
-from .downloaders import HTTPDownloader
+KNOWN_DOWNLOADERS = {
+    "ftp": FTPDownloader,
+    "https": HTTPDownloader,
+    "http": HTTPDownloader,
+}
 
 
 def create(
@@ -357,7 +363,7 @@ class Pooch:
             os.makedirs(str(self.abspath))
 
         full_path = self.abspath / fname
-
+        url = self.get_url(fname)
         in_storage = full_path.exists()
         if not in_storage:
             action = "download"
@@ -373,8 +379,17 @@ class Pooch:
                     action_word[action], fname, self.get_url(fname), str(self.path)
                 )
             )
+
+            parsed_url = parse_url(url)
+            if parsed_url["protocol"] not in KNOWN_DOWNLOADERS:
+                raise ValueError(
+                    "Unrecognized URL protocol '{}' in '{}'. Must be one of {}.".format(
+                        parsed_url["protocol"], url, KNOWN_DOWNLOADERS.keys()
+                    )
+                )
+
             if downloader is None:
-                downloader = HTTPDownloader()
+                downloader = KNOWN_DOWNLOADERS[parsed_url["protocol"]]()
             # Stream the file to a temporary so that we can safely check its
             # hash before overwriting the original
             tmp = tempfile.NamedTemporaryFile(delete=False, dir=str(self.abspath))
@@ -382,7 +397,7 @@ class Pooch:
             # opened it
             tmp.close()
             try:
-                downloader(self.get_url(fname), tmp.name, self)
+                downloader(url, tmp.name, self)
                 self._check_download_hash(fname, tmp.name)
                 # Ensure the parent directory exists in case the file is in a
                 # subdirectory. Otherwise, move will cause an error.
@@ -510,5 +525,17 @@ class Pooch:
         """
         self._assert_file_in_registry(fname)
         source = self.get_url(fname)
-        response = requests.head(source, allow_redirects=True)
-        return bool(response.status_code == 200)
+        parsed_url = parse_url(source)
+        if parsed_url["protocol"] == "ftp":
+            directory = os.path.dirname(parsed_url["path"])
+            ftp = ftplib.FTP()
+            ftp.connect(host=parsed_url["netloc"])
+            try:
+                ftp.login()
+                available = parsed_url["path"] in ftp.nlst(directory)
+            finally:
+                ftp.close()
+        else:
+            response = requests.head(source, allow_redirects=True)
+            available = bool(response.status_code == 200)
+        return available

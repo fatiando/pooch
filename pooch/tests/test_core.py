@@ -4,8 +4,8 @@ Test the core class and factory function.
 import os
 import sys
 from pathlib import Path
-import tempfile
 from tempfile import TemporaryDirectory
+import tempfile
 import warnings
 
 import pytest
@@ -17,7 +17,7 @@ except ImportError:
 
 from .. import Pooch, create
 from ..utils import file_hash
-from ..downloaders import HTTPDownloader
+from ..downloaders import HTTPDownloader, FTPDownloader
 
 from .utils import (
     pooch_test_url,
@@ -26,7 +26,8 @@ from .utils import (
     check_large_data,
 )
 
-
+# FTP doesn't work on Travis CI so need to be able to skip tests there
+ON_TRAVIS = bool(os.environ.get("TRAVIS", None))
 DATA_DIR = str(Path(__file__).parent / "data")
 REGISTRY = pooch_test_registry()
 BASEURL = pooch_test_url()
@@ -241,7 +242,7 @@ def test_create_newfile_permissionerror(monkeypatch):
         with warnings.catch_warnings(record=True) as warn:
             pup = create(
                 path=data_cache,
-                base_url="",
+                base_url="ftp://random.ftp.com/",
                 version="1.0",
                 version_dev="master",
                 env="SOME_VARIABLE",
@@ -254,6 +255,21 @@ def test_create_newfile_permissionerror(monkeypatch):
 
             with pytest.raises(PermissionError):
                 pup.fetch("afile.txt")
+
+
+def test_unsupported_protocol():
+    "Should raise ValueError when protocol not in {'https', 'http', 'ftp'}"
+    with TemporaryDirectory() as data_cache:
+        pup = create(
+            path=data_cache,
+            base_url="/home/johndoe/",
+            version="1.0",
+            version_dev="master",
+            env="SOME_VARIABLE",
+            registry={"afile.txt": "ahash"},
+        )
+        with pytest.raises(ValueError):
+            pup.fetch("afile.txt")
 
 
 def test_check_availability():
@@ -269,6 +285,24 @@ def test_check_availability():
     registry.update(REGISTRY)
     pup = Pooch(path=DATA_DIR, base_url=BASEURL, registry=registry)
     assert not pup.is_available("not-a-real-data-file.txt")
+
+
+# https://blog.travis-ci.com/2018-07-23-the-tale-of-ftp-at-travis-ci
+@pytest.mark.skipif(ON_TRAVIS, reason="FTP is not allowed on Travis CI")
+def test_check_availability_on_ftp():
+    "Should correctly check availability of existing and non existing files"
+    # Check available remote file on FTP server
+    pup = Pooch(
+        path=DATA_DIR,
+        base_url="ftp://speedtest.tele2.net/",
+        registry={
+            "100KB.zip": "f627ca4c2c322f15db26152df306bd4f983f0146409b81a4341b9b340c365a16",
+            "doesnot_exist.zip": "jdjdjdjdflld",
+        },
+    )
+    assert pup.is_available("100KB.zip")
+    # Check non available remote file
+    assert not pup.is_available("doesnot_exist.zip")
 
 
 def test_downloader(capsys):
@@ -301,10 +335,11 @@ def test_downloader(capsys):
 
 
 @pytest.mark.skipif(tqdm is not None, reason="tqdm must be missing")
-def test_downloader_progressbar_fails():
+@pytest.mark.parametrize("downloader", [HTTPDownloader, FTPDownloader])
+def test_downloader_progressbar_fails(downloader):
     "Make sure an error is raised if trying to use progressbar without tqdm"
     with pytest.raises(ValueError):
-        HTTPDownloader(progressbar=True)
+        downloader(progressbar=True)
 
 
 @pytest.mark.skipif(tqdm is None, reason="requires tqdm")
@@ -328,3 +363,38 @@ def test_downloader_progressbar(capsys):
         assert printed[:25] == progress
         # Check that the downloaded file has the right content
         check_large_data(fname)
+
+
+# https://blog.travis-ci.com/2018-07-23-the-tale-of-ftp-at-travis-ci
+@pytest.mark.skipif(ON_TRAVIS, reason="FTP is not allowed on Travis CI")
+def test_ftp_downloader():
+    "Test ftp downloader"
+    with TemporaryDirectory() as local_store:
+        downloader = FTPDownloader()
+        url = "ftp://speedtest.tele2.net/100KB.zip"
+        outfile = os.path.join(local_store, "100KB.zip")
+        downloader(url, outfile, None)
+        assert os.path.exists(outfile)
+
+
+@pytest.mark.skipif(tqdm is None, reason="requires tqdm")
+@pytest.mark.skipif(ON_TRAVIS, reason="FTP is not allowed on Travis CI")
+def test_downloader_progressbar_ftp(capsys):
+    "Setup an FTP downloader function that prints a progress bar for fetch"
+    download = FTPDownloader(progressbar=True)
+    with TemporaryDirectory() as local_store:
+        url = "ftp://speedtest.tele2.net/100KB.zip"
+        outfile = os.path.join(local_store, "100KB.zip")
+        download(url, outfile, None)
+        # Read stderr and make sure the progress bar is printed only when told
+        captured = capsys.readouterr()
+        printed = captured.err.split("\r")[-1].strip()
+        assert len(printed) == 79
+        if sys.platform == "win32":
+            progress = "100%|####################"
+        else:
+            progress = "100%|████████████████████"
+        # Bar size is not always the same so can't reliably test the whole bar.
+        assert printed[:25] == progress
+        # Check that the file was actually downloaded
+        assert os.path.exists(outfile)

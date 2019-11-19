@@ -321,8 +321,8 @@ keeping a decompressed copy of the file:
         return data
 
 
-Custom downloaders and authentication
--------------------------------------
+Downloaders and authentication
+------------------------------
 
 By default, :meth:`pooch.Pooch.fetch` will download files over HTTP without
 authentication. Sometimes this is not enough: some servers require logins, some are FTP
@@ -370,6 +370,63 @@ code could look something like this:
         fname = GOODBOY.fetch("some-data.csv", downloader=download_auth)
         data = pandas.read_csv(fname)
         return data
+
+
+FTP with or without authentication
+----------------------------------
+
+Pooch also comes with the :class:`~pooch.FTPDownloader` class that can be used
+when files are distributed over FTP. By default, :meth:`pooch.Pooch.fetch` will
+automatically detect if the download URL is HTTP(S) or FTP and use the appropriate
+downloader:
+
+.. code:: python
+
+    GOODBOY = pooch.create(
+        path=pooch.os_cache("plumbus"),
+        # Use an FTP server instead of HTTP. The rest is all the same.
+        base_url="ftp://my-data-server.org/{version}/",
+        version=version,
+        version_dev="master",
+        registry={
+            "c137.csv": "19uheidhlkjdwhoiwuhc0uhcwljchw9ochwochw89dcgw9dcgwc",
+            "cronen.csv": "1upodh2ioduhw9celdjhlfvhksgdwikdgcowjhcwoduchowjg8w",
+        },
+    )
+
+
+    def fetch_c137():
+        """
+        Load the C-137 sample data as a pandas.DataFrame (over FTP this time).
+        """
+        fname = GOODBOY.fetch("c137.csv")
+        data = pandas.read_csv(fname)
+        return data
+
+
+However, sometimes the FTP server doesn't support anonymous FTP and needs
+authentication. In these cases, pass in an :class:`~pooch.FTPDownloader`
+explicitly to :meth:`pooch.Pooch.fetch`:
+
+.. code:: python
+
+    import os
+
+
+    def fetch_c137():
+        """
+        Load the C-137 sample data as a pandas.DataFrame (over FTP this time).
+        """
+        username = os.environ.get("MYDATASERVER_USERNAME")
+        password = os.environ.get("MYDATASERVER_PASSWORD")
+        download_ftp = pooch.FTPDownloader(username=username, password=password)
+        fname = GOODBOY.fetch("c137.csv", downloader=download_ftp)
+        data = pandas.read_csv(fname)
+        return data
+
+
+Custom downloaders
+------------------
 
 If your use case is not covered by our downloaders, you can implement your own. See
 :meth:`pooch.Pooch.fetch` for the required format of downloaders. As an example,

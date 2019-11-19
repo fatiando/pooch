@@ -3,7 +3,7 @@ Misc utilities
 """
 from pathlib import Path
 import hashlib
-
+from urllib.parse import urlsplit
 import appdirs
 from packaging.version import Version
 
@@ -161,3 +161,26 @@ def make_registry(directory, output, recursive=True):
             # Only use Unix separators for the registry so that we don't go
             # insane dealing with file paths.
             outfile.write("{} {}\n".format(fname.replace("\\", "/"), fhash))
+
+
+def parse_url(url):
+    """
+    Parse a URL into 3 components:
+
+    <protocol>://<netloc>/<path>
+
+    Parameters
+    ----------
+    url : str
+        URL (e.g.: http://127.0.0.1:8080/test.nc, ftp://127.0.0.1:8080/test.nc)
+
+    Returns
+    -------
+    parsed_url : dict
+        Three components of a URL (e.g., {'protocol': 'http', 'netloc':
+        '127.0.0.1:8080', 'path': '/test.nc'})
+
+    """
+    parsed_url = urlsplit(url)
+    protocol = parsed_url.scheme or "file"
+    return {"protocol": protocol, "netloc": parsed_url.netloc, "path": parsed_url.path}
