@@ -70,6 +70,8 @@ Example
     """
     Module mypackage/datasets.py
     """
+    import pkg_resources
+    import pandas
     import pooch
 
     # Get the version string from your project. You have one of these, right?
@@ -78,44 +80,46 @@ Example
 
     # Create a new friend to manage your sample data storage
     GOODBOY = pooch.create(
-        # Folder where the data will be stored. For a sensible default, use the default
-        # cache folder for your OS.
+        # Folder where the data will be stored. For a sensible default, use the
+        # default cache folder for your OS.
         path=pooch.os_cache("mypackage"),
-        # Base URL of the remote data store. Will call .format on this string to insert
-        # the version (see below).
+        # Base URL of the remote data store. Will call .format on this string
+        # to insert the version (see below).
         base_url="https://github.com/myproject/mypackage/raw/{version}/data/",
-        # Pooches are versioned so that you can use multiple versions of a package
-        # simultaneously. Use PEP440 compliant version number. The version will be
-        # appended to the path.
+        # Pooches are versioned so that you can use multiple versions of a
+        # package simultaneously. Use PEP440 compliant version number. The
+        # version will be appended to the path.
         version=version,
-        # If a version as a "+XX.XXXXX" suffix, we'll assume that this is a dev version
-        # and replace the version with this string.
+        # If a version as a "+XX.XXXXX" suffix, we'll assume that this is a dev
+        # version and replace the version with this string.
         version_dev="master",
         # An environment variable that overwrites the path.
         env="MYPACKAGE_DATA_DIR",
-        # The cache file registry. A dictionary with all files managed by this pooch.
-        # Keys are the file names (relative to *base_url*) and values are their
-        # respective SHA256 hashes. Files will be downloaded automatically when needed
-        # (see fetch_gravity_data).
-        registry={"gravity-data.csv": "89y10phsdwhs09whljwc09whcowsdhcwodcy0dcuhw"}
+        # The cache file registry. A dictionary with all files managed by this
+        # pooch. Keys are the file names (relative to *base_url*) and values
+        # are their respective SHA256 hashes. Files will be downloaded
+        # automatically when needed (see fetch_gravity_data).
+        registry={"gravity-data.csv": "89y10phsdwhs09whljwc09whcowsdhcwodcydw"}
     )
-    # You can also load the registry from a file. Each line contains a file name and
-    # it's sha256 hash separated by a space. This makes it easier to manage large
-    # numbers of data files. The registry file should be in the same directory as this
-    # module.
-    GOODBOY.load_registry("registry.txt")
+    # You can also load the registry from a file. Each line contains a file
+    # name and it's sha256 hash separated by a space. This makes it easier to
+    # manage large numbers of data files. The registry file should be packaged
+    # and distributed with your software.
+    GOODBOY.load_registry(
+        pkg_resources.resource_stream("mypackage", "registry.txt")
+    )
 
 
-    # Define functions that your users can call to get back some sample data in memory
+    # Define functions that your users can call to get back the data in memory
     def fetch_gravity_data():
         """
         Load some sample gravity data to use in your docs.
         """
-        # Fetch the path to a file in the local storage. If it's not there, we'll
-        # download it.
+        # Fetch the path to a file in the local storage. If it's not there,
+        # we'll download it.
         fname = GOODBOY.fetch("gravity-data.csv")
         # Load it with numpy/pandas/etc
-        data = ...
+        data = pandas.read_csv(fname)
         return data
 
 

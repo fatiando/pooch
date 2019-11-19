@@ -47,7 +47,7 @@ The sample data are stored in the ``data`` folder of your repository.
 Setup
 -----
 
-Pooch can download and cache your data files to the users computer automatically.
+Pooch can download and cache your data files to the users' computer automatically.
 This is what the ``plumbus/datasets.py`` file would look like:
 
 .. code:: python
@@ -152,7 +152,7 @@ Versioning is optional and can be ignored by omitting the ``version`` and
 User-defined paths
 -------------------
 
-In the above example, the location of the local storage in the users computer is
+In the above example, the location of the local storage in the users' computer is
 hard-coded. There is no way for them to change it to something else. To avoid being a
 tyrant, you can allow the user to define the ``path`` argument using an environment
 variable:
@@ -321,8 +321,8 @@ keeping a decompressed copy of the file:
         return data
 
 
-Custom downloaders and authentication
--------------------------------------
+Downloaders and authentication
+------------------------------
 
 By default, :meth:`pooch.Pooch.fetch` will download files over HTTP without
 authentication. Sometimes this is not enough: some servers require logins, some are FTP
@@ -370,6 +370,63 @@ code could look something like this:
         fname = GOODBOY.fetch("some-data.csv", downloader=download_auth)
         data = pandas.read_csv(fname)
         return data
+
+
+FTP with or without authentication
+----------------------------------
+
+Pooch also comes with the :class:`~pooch.FTPDownloader` class that can be used
+when files are distributed over FTP. By default, :meth:`pooch.Pooch.fetch` will
+automatically detect if the download URL is HTTP(S) or FTP and use the appropriate
+downloader:
+
+.. code:: python
+
+    GOODBOY = pooch.create(
+        path=pooch.os_cache("plumbus"),
+        # Use an FTP server instead of HTTP. The rest is all the same.
+        base_url="ftp://my-data-server.org/{version}/",
+        version=version,
+        version_dev="master",
+        registry={
+            "c137.csv": "19uheidhlkjdwhoiwuhc0uhcwljchw9ochwochw89dcgw9dcgwc",
+            "cronen.csv": "1upodh2ioduhw9celdjhlfvhksgdwikdgcowjhcwoduchowjg8w",
+        },
+    )
+
+
+    def fetch_c137():
+        """
+        Load the C-137 sample data as a pandas.DataFrame (over FTP this time).
+        """
+        fname = GOODBOY.fetch("c137.csv")
+        data = pandas.read_csv(fname)
+        return data
+
+
+However, sometimes the FTP server doesn't support anonymous FTP and needs
+authentication. In these cases, pass in an :class:`~pooch.FTPDownloader`
+explicitly to :meth:`pooch.Pooch.fetch`:
+
+.. code:: python
+
+    import os
+
+
+    def fetch_c137():
+        """
+        Load the C-137 sample data as a pandas.DataFrame (over FTP this time).
+        """
+        username = os.environ.get("MYDATASERVER_USERNAME")
+        password = os.environ.get("MYDATASERVER_PASSWORD")
+        download_ftp = pooch.FTPDownloader(username=username, password=password)
+        fname = GOODBOY.fetch("c137.csv", downloader=download_ftp)
+        data = pandas.read_csv(fname)
+        return data
+
+
+Custom downloaders
+------------------
 
 If your use case is not covered by our downloaders, you can implement your own. See
 :meth:`pooch.Pooch.fetch` for the required format of downloaders. As an example,
@@ -432,7 +489,7 @@ this:
     100%|█████████████████████████████████████████| 336/336 [...]
 
 .. note::
-    
+
     ``tqdm`` is not installed by default with Pooch. You will have to install it
     separately in order to use this feature.
 
@@ -446,6 +503,7 @@ use :meth:`pooch.Pooch.load_registry` to read them:
 .. code:: python
 
     import os
+    import pkg_resources
 
     GOODBOY = pooch.create(
         # Use the default cache folder for the OS
@@ -458,10 +516,17 @@ use :meth:`pooch.Pooch.load_registry` to read them:
         # We'll load it from a file later
         registry=None,
     )
-    GOODBOY.load_registry(os.path.join(os.path.dirname(__file__), "registry.txt"))
+    # Get registry file from package_data
+    registry_file = pkg_resources.resource_stream("plumbus", "registry.txt")
+    # Load this registry file
+    GOODBOY.load_registry(registry_file)
 
-The ``registry.txt`` file in this case is in the same directory as the ``datasets.py``
-module and should be shipped with the package. It's contents are:
+In this case, the ``registry.txt`` file is in the ``plumbus/`` package directory and should be
+shipped with the package (see below for instructions).
+We use `pkg_resources <https://setuptools.readthedocs.io/en/latest/pkg_resources.html#basic-resource-access>`__
+to access the ``registry.txt``, giving it the name of our Python package.
+
+The contents of ``registry.txt`` are:
 
 .. code-block:: none
 

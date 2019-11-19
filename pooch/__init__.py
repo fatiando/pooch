@@ -3,7 +3,7 @@
 from . import version
 from .core import Pooch, create
 from .utils import os_cache, file_hash, make_registry, check_version
-from .downloaders import HTTPDownloader
+from .downloaders import HTTPDownloader, FTPDownloader
 from .processors import Unzip, Untar, Decompress
 
 
