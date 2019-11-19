@@ -21,6 +21,9 @@ authors:
   - name: Daniel Shapero
     orcid: 0000-0002-3651-0649
     affiliation: 7
+  - name: Anderson Banihirwe
+    orcid: 0000-0001-6583-571X
+    affiliation: 8
 affiliations:
  - name: Department of Earth, Ocean and Ecological Sciences, School of Environmental Sciences, University of Liverpool, UK
    index: 1
@@ -36,6 +39,8 @@ affiliations:
    index: 6
  - name: Polar Science Center, University of Washington Applied Physics Lab, USA
    index: 7
+ - name: The US National Center for Atmospheric Research, USA
+   index: 8
 date: 23 October 2019
 bibliography: paper.bib
 ---
