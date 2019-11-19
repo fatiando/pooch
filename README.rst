@@ -31,14 +31,47 @@ Part of the `Fatiando a Terra <https://www.fatiando.org>`__ project
 🚨 **Python 2.7 is no longer supported. Use Pooch <= 0.6.0 if you need 2.7 support.** 🚨
 
 
-TL;DR
+About
 -----
+
+*Does your Python package include sample datasets? Are you shipping them with the code?
+Are they getting too big?*
+
+Pooch is here to help! It will manage a data *registry* by downloading your data files
+from a server only when needed and storing them locally in a data *cache* (a folder on
+your computer).
+
+Here are Pooch's main features:
+
+* Pure Python and minimal dependencies.
+* Download a file only if necessary (it's not in the data cache or needs to be updated).
+* Verify download integrity through SHA256 hashes (also used to check if a file needs to
+  be updated).
+* Designed to be extended: plug in custom download (FTP, scp, etc) and post-processing
+  (unzip, decompress, rename) functions.
+* Includes utilities to unzip/decompress the data upon download to save loading time.
+* Can handle basic HTTP authentication (for servers that require a login) and printing
+  download progress bars.
+* Easily set up an environment variable to overwrite the data cache location.
+
+*Are you a scientist or researcher? Pooch can help you too!*
+
+* Automatically download your data files so you don't have to keep them in your GitHub
+  repository.
+* Make sure everyone running the code has the same version of the data files (enforced
+  through the SHA256 hashes).
+
+
+Example
+-------
 
 .. code:: python
 
     """
     Module mypackage/datasets.py
     """
+    import pkg_resources
+    import pandas
     import pooch
 
     # Get the version string from your project. You have one of these, right?
@@ -47,62 +80,47 @@ TL;DR
 
     # Create a new friend to manage your sample data storage
     GOODBOY = pooch.create(
-        # Folder where the data will be stored. For a sensible default, use the default
-        # cache folder for your OS.
+        # Folder where the data will be stored. For a sensible default, use the
+        # default cache folder for your OS.
         path=pooch.os_cache("mypackage"),
-        # Base URL of the remote data store. Will call .format on this string to insert
-        # the version (see below).
+        # Base URL of the remote data store. Will call .format on this string
+        # to insert the version (see below).
         base_url="https://github.com/myproject/mypackage/raw/{version}/data/",
-        # Pooches are versioned so that you can use multiple versions of a package
-        # simultaneously. Use PEP440 compliant version number. The version will be
-        # appended to the path.
+        # Pooches are versioned so that you can use multiple versions of a
+        # package simultaneously. Use PEP440 compliant version number. The
+        # version will be appended to the path.
         version=version,
-        # If a version as a "+XX.XXXXX" suffix, we'll assume that this is a dev version
-        # and replace the version with this string.
+        # If a version as a "+XX.XXXXX" suffix, we'll assume that this is a dev
+        # version and replace the version with this string.
         version_dev="master",
         # An environment variable that overwrites the path.
         env="MYPACKAGE_DATA_DIR",
-        # The cache file registry. A dictionary with all files managed by this pooch.
-        # Keys are the file names (relative to *base_url*) and values are their
-        # respective SHA256 hashes. Files will be downloaded automatically when needed
-        # (see fetch_gravity_data).
-        registry={"gravity-data.csv": "89y10phsdwhs09whljwc09whcowsdhcwodcy0dcuhw"}
+        # The cache file registry. A dictionary with all files managed by this
+        # pooch. Keys are the file names (relative to *base_url*) and values
+        # are their respective SHA256 hashes. Files will be downloaded
+        # automatically when needed (see fetch_gravity_data).
+        registry={"gravity-data.csv": "89y10phsdwhs09whljwc09whcowsdhcwodcydw"}
     )
-    # You can also load the registry from a file. Each line contains a file name and
-    # it's sha256 hash separated by a space. This makes it easier to manage large
-    # numbers of data files. The registry file should be in the same directory as this
-    # module.
-    GOODBOY.load_registry("registry.txt")
+    # You can also load the registry from a file. Each line contains a file
+    # name and it's sha256 hash separated by a space. This makes it easier to
+    # manage large numbers of data files. The registry file should be packaged
+    # and distributed with your software.
+    GOODBOY.load_registry(
+        pkg_resources.resource_stream("mypackage", "registry.txt")
+    )
 
 
-    # Define functions that your users can call to get back some sample data in memory
+    # Define functions that your users can call to get back the data in memory
     def fetch_gravity_data():
         """
         Load some sample gravity data to use in your docs.
         """
-        # Fetch the path to a file in the local storae. If it's not there, we'll
-        # download it.
+        # Fetch the path to a file in the local storage. If it's not there,
+        # we'll download it.
         fname = GOODBOY.fetch("gravity-data.csv")
         # Load it with numpy/pandas/etc
-        data = ...
+        data = pandas.read_csv(fname)
         return data
-
-
-About
------
-
-*Does your Python package include sample datasets? Are you shipping them with the code?
-Are they getting too big?*
-
-Pooch will manage downloading your sample data files over HTTP from a server and storing
-them in a local directory:
-
-* Download a file only if it's not in the local storage.
-* Check the SHA256 hash to make sure the file is not corrupted or needs updating.
-* If the hash is different from the registry, Pooch will download a new version of the
-  file.
-* If the hash still doesn't match, Pooch will raise an exception warning of possible
-  data corruption.
 
 
 Projects using Pooch
