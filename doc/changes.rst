@@ -3,6 +3,55 @@
 Changelog
 =========
 
+Version 0.7.0
+-------------
+
+*Released on: 2019/11/19*
+
+.. image:: https://img.shields.io/badge/doi-10.5281%2fzenodo.3547640-blue.svg?style=flat-square
+    :alt: Digital Object Identifier for the Zenodo archive
+    :target: https://doi.org/10.5281/zenodo.3547640
+
+New features:
+
+* New ``pooch.FTPDownloader`` class for downloading files over FTP. Uses the
+  standard library ``ftplib``. The appropriate downloader is automatically
+  selected by ``pooch.Pooch.fetch`` based on the URL (for anonymous FTP only),
+  so no configuration is required.
+  If authentication is required, ``pooch.FTPDownloader`` provides the need
+  support. Ported from
+  `NCAR/aletheia-data <https://github.com/NCAR/aletheia-data>`__ by the author.
+  (`#118 <https://github.com/fatiando/pooch/pull/118>`__)
+* Support for file-like objects to ``Pooch.load_registry`` (opened either in
+  binary or text mode).
+  (`#117 <https://github.com/fatiando/pooch/pull/117>`__)
+
+Maintenance:
+
+* Testing and official support for Python 3.8.
+  (`#113 <https://github.com/fatiando/pooch/pull/113>`__)
+* 🚨 **Drop support for Python 2.7.** 🚨 Remove conditional dependencies and CI
+  jobs.
+  (`#100 <https://github.com/fatiando/pooch/pull/100>`__)
+
+Documentation:
+
+* In the tutorial, use ``pkg_resources.resource_stream()`` from setuptools to
+  load the ``registry.txt`` file. It's less error-prone than using ``os.path``
+  and ``__file__`` and allows the package to work from zip files.
+  (`#120 <https://github.com/fatiando/pooch/pull/120>`__)
+* Docstrings formatted to 79 characters (instead of 88) for better rendering in
+  Jupyter notebooks and IPython. These displays are limited to 80 chars so the
+  longer lines made the docstring unreadable.
+  (`#123 <https://github.com/fatiando/pooch/pull/123>`__)
+
+This release contains contributions from:
+
+* Anderson Banihirwe
+* Hugo van Kemenade
+* Remi Rampin
+* Leonardo Uieda
+
 Version 0.6.0
 -------------
 
