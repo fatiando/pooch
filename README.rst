@@ -217,6 +217,7 @@ Documentation for other versions
 * `Development <https://www.fatiando.org/pooch/dev>`__ (reflects the *master* branch on
   Github)
 * `Latest release <https://www.fatiando.org/pooch/latest>`__
+* `v0.7.0 <https://www.fatiando.org/pooch/v0.7.0>`__
 * `v0.6.0 <https://www.fatiando.org/pooch/v0.6.0>`__
 * `v0.5.2 <https://www.fatiando.org/pooch/v0.5.2>`__
 * `v0.5.1 <https://www.fatiando.org/pooch/v0.5.1>`__
