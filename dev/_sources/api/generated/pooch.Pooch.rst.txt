@@ -5,9 +5,99 @@ pooch.Pooch
 
 .. autoclass:: Pooch
 
-.. raw:: html
+    .. rubric:: Methods Summary
 
-     <div style='clear:both'></div>
+    .. autosummary::
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+        Pooch.fetch
+    
+    
+    
+        Pooch.get_url
+    
+    
+    
+        Pooch.is_available
+    
+    
+    
+        Pooch.load_registry
+    
+    
+
+----
 
 
 

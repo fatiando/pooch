@@ -206,10 +206,11 @@
 <span></span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">Download hooks for Pooch.fetch</span>
 <span class="sd">&quot;&quot;&quot;</span>
-<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span>
 <span class="kn">import</span> <span class="nn">sys</span>
-
+<span class="kn">import</span> <span class="nn">ftplib</span>
 <span class="kn">import</span> <span class="nn">requests</span>
+<span class="kn">from</span> <span class="nn">.utils</span> <span class="k">import</span> <span class="n">parse_url</span>
+
 
 <span class="k">try</span><span class="p">:</span>
     <span class="kn">from</span> <span class="nn">tqdm</span> <span class="k">import</span> <span class="n">tqdm</span>
@@ -221,23 +222,24 @@
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Download manager for fetching files over HTTP/HTTPS.</span>
 
-<span class="sd">    When called, downloads the given file URL into the specified local file. Uses the</span>
-<span class="sd">    :mod:`requests` library to manage downloads.</span>
+<span class="sd">    When called, downloads the given file URL into the specified local file.</span>
+<span class="sd">    Uses the :mod:`requests` library to manage downloads.</span>
 
-<span class="sd">    Use with :meth:`pooch.Pooch.fetch` to customize the download of files (for example,</span>
-<span class="sd">    to use authentication or print a progress bar).</span>
+<span class="sd">    Use with :meth:`pooch.Pooch.fetch` to customize the download of files (for</span>
+<span class="sd">    example, to use authentication or print a progress bar).</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    progressbar : bool</span>
-<span class="sd">        If True, will print a progress bar of the download to standard error (stderr).</span>
-<span class="sd">        Requires `tqdm &lt;https://github.com/tqdm/tqdm&gt;`__ to be installed.</span>
+<span class="sd">        If True, will print a progress bar of the download to standard error</span>
+<span class="sd">        (stderr). Requires `tqdm &lt;https://github.com/tqdm/tqdm&gt;`__ to be</span>
+<span class="sd">        installed.</span>
 <span class="sd">    chunk_size : int</span>
-<span class="sd">        Files are streamed *chunk_size* bytes at a time instead of loading everything</span>
-<span class="sd">        into memory at one. Usually doesn&#39;t need to be changed.</span>
+<span class="sd">        Files are streamed *chunk_size* bytes at a time instead of loading</span>
+<span class="sd">        everything into memory at one. Usually doesn&#39;t need to be changed.</span>
 <span class="sd">    **kwargs</span>
-<span class="sd">        All keyword arguments given when creating an instance of this class will be</span>
-<span class="sd">        passed to :func:`requests.get`.</span>
+<span class="sd">        All keyword arguments given when creating an instance of this class</span>
+<span class="sd">        will be passed to :func:`requests.get`.</span>
 
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
@@ -246,8 +248,8 @@
 
 <span class="sd">    &gt;&gt;&gt; import os</span>
 <span class="sd">    &gt;&gt;&gt; from pooch import version, check_version</span>
-<span class="sd">    &gt;&gt;&gt; url = &quot;https://github.com/fatiando/pooch/raw/{}/data/tiny-data.txt&quot;.format(</span>
-<span class="sd">    ...     check_version(version.full_version))</span>
+<span class="sd">    &gt;&gt;&gt; url = &quot;https://github.com/fatiando/pooch/raw/{}/data/tiny-data.txt&quot;</span>
+<span class="sd">    &gt;&gt;&gt; url = url.format(check_version(version.full_version))</span>
 <span class="sd">    &gt;&gt;&gt; downloader = HTTPDownloader()</span>
 <span class="sd">    &gt;&gt;&gt; # Not using with Pooch.fetch so no need to pass an instance of Pooch</span>
 <span class="sd">    &gt;&gt;&gt; downloader(url=url, output_file=&quot;tiny-data.txt&quot;, pooch=None)</span>
@@ -260,10 +262,11 @@
 <span class="sd">    &gt;&gt;&gt; os.remove(&quot;tiny-data.txt&quot;)</span>
 
 <span class="sd">    Authentication can be handled by passing a user name and password to</span>
-<span class="sd">    :func:`requests.get`. All arguments provided when creating an instance of the class</span>
-<span class="sd">    are forwarded to :func:`requests.get`. We&#39;ll use ``auth=(username, password)`` to</span>
-<span class="sd">    use basic HTTPS authentication. The https://httpbin.org website allows us to make a</span>
-<span class="sd">    fake a login request using whatever username and password we provide to it:</span>
+<span class="sd">    :func:`requests.get`. All arguments provided when creating an instance of</span>
+<span class="sd">    the class are forwarded to :func:`requests.get`. We&#39;ll use</span>
+<span class="sd">    ``auth=(username, password)`` to use basic HTTPS authentication. The</span>
+<span class="sd">    https://httpbin.org website allows us to make a fake a login request using</span>
+<span class="sd">    whatever username and password we provide to it:</span>
 
 <span class="sd">    &gt;&gt;&gt; user = &quot;doggo&quot;</span>
 <span class="sd">    &gt;&gt;&gt; password = &quot;goodboy&quot;</span>
@@ -276,7 +279,7 @@
 <span class="sd">    ... except Exception:</span>
 <span class="sd">    ...     print(&quot;There was an error!&quot;)</span>
 <span class="sd">    There was an error!</span>
-<span class="sd">    &gt;&gt;&gt; # Pass in the credentials to HTTPDownloader and it will forward to requests.get</span>
+<span class="sd">    &gt;&gt;&gt; # Pass in the credentials to HTTPDownloader</span>
 <span class="sd">    &gt;&gt;&gt; downloader = HTTPDownloader(auth=(user, password))</span>
 <span class="sd">    &gt;&gt;&gt; downloader(url=url, output_file=&quot;tiny-data.txt&quot;, pooch=None)</span>
 <span class="sd">    &gt;&gt;&gt; with open(&quot;tiny-data.txt&quot;) as f:</span>
@@ -324,8 +327,9 @@
             <span class="n">content</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">iter_content</span><span class="p">(</span><span class="n">chunk_size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">chunk_size</span><span class="p">)</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">progressbar</span><span class="p">:</span>
                 <span class="n">total</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">headers</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;content-length&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
-                <span class="c1"># Need to use ascii characters on Windows because there isn&#39;t always</span>
-                <span class="c1"># full unicode support (see https://github.com/tqdm/tqdm/issues/454)</span>
+                <span class="c1"># Need to use ascii characters on Windows because there isn&#39;t</span>
+                <span class="c1"># always full unicode support</span>
+                <span class="c1"># (see https://github.com/tqdm/tqdm/issues/454)</span>
                 <span class="n">use_ascii</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">platform</span> <span class="o">==</span> <span class="s2">&quot;win32&quot;</span><span class="p">)</span>
                 <span class="n">progress</span> <span class="o">=</span> <span class="n">tqdm</span><span class="p">(</span>
                     <span class="n">total</span><span class="o">=</span><span class="n">total</span><span class="p">,</span>
@@ -340,19 +344,126 @@
                     <span class="n">output_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">chunk</span><span class="p">)</span>
                     <span class="n">output_file</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
                     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">progressbar</span><span class="p">:</span>
-                        <span class="c1"># Use the chunk size here because chunk may be much larger if</span>
-                        <span class="c1"># the data are decompressed by requests after reading (happens</span>
-                        <span class="c1"># with text files).</span>
+                        <span class="c1"># Use the chunk size here because chunk may be much</span>
+                        <span class="c1"># larger if the data are decompressed by requests after</span>
+                        <span class="c1"># reading (happens with text files).</span>
                         <span class="n">progress</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">chunk_size</span><span class="p">)</span>
-            <span class="c1"># Make sure the progress bar gets filled even if the actual number is</span>
-            <span class="c1"># chunks is smaller than expected. This happens when streaming text files</span>
-            <span class="c1"># that are compressed by the server when sending (gzip). Binary files don&#39;t</span>
-            <span class="c1"># experience this.</span>
+            <span class="c1"># Make sure the progress bar gets filled even if the actual number</span>
+            <span class="c1"># is chunks is smaller than expected. This happens when streaming</span>
+            <span class="c1"># text files that are compressed by the server when sending (gzip).</span>
+            <span class="c1"># Binary files don&#39;t experience this.</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">progressbar</span><span class="p">:</span>
                 <span class="n">progress</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
                 <span class="n">progress</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">total</span><span class="p">)</span>
                 <span class="n">progress</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
         <span class="k">finally</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">ispath</span><span class="p">:</span>
+                <span class="n">output_file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div></div>
+
+
+<div class="viewcode-block" id="FTPDownloader"><a class="viewcode-back" href="../../api/generated/pooch.FTPDownloader.html#pooch.FTPDownloader">[docs]</a><span class="k">class</span> <span class="nc">FTPDownloader</span><span class="p">:</span>  <span class="c1"># pylint: disable=too-few-public-methods</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Download manager for fetching files over FTP.</span>
+
+<span class="sd">    When called, downloads the given file URL into the specified local file.</span>
+<span class="sd">    Uses the :mod:`ftplib` module to manage downloads.</span>
+
+<span class="sd">    Use with :meth:`pooch.Pooch.fetch` to customize the download of files (for</span>
+<span class="sd">    example, to use authentication or print a progress bar).</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    port : int</span>
+<span class="sd">        Port used for the FTP connection.</span>
+<span class="sd">    username : str</span>
+<span class="sd">        User name used to login to the server. Only needed if the server</span>
+<span class="sd">        requires authentication (i.e., no anonymous FTP).</span>
+<span class="sd">    password : str</span>
+<span class="sd">        Password used to login to the server. Only needed if the server</span>
+<span class="sd">        requires authentication (i.e., no anonymous FTP). Use the empty string</span>
+<span class="sd">        to indicate no password is required.</span>
+<span class="sd">    account : str</span>
+<span class="sd">        Some servers also require an &quot;account&quot; name for authentication.</span>
+<span class="sd">    timeout : int</span>
+<span class="sd">        Timeout in seconds for ftp socket operations, use None to mean no</span>
+<span class="sd">        timeout.</span>
+<span class="sd">    progressbar : bool</span>
+<span class="sd">        If True, will print a progress bar of the download to standard error</span>
+<span class="sd">        (stderr). Requires `tqdm &lt;https://github.com/tqdm/tqdm&gt;`__ to be</span>
+<span class="sd">        installed.</span>
+<span class="sd">    chunk_size : int</span>
+<span class="sd">        Files are streamed *chunk_size* bytes at a time instead of loading</span>
+<span class="sd">        everything into memory at one. Usually doesn&#39;t need to be changed.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">port</span><span class="o">=</span><span class="mi">21</span><span class="p">,</span>
+        <span class="n">username</span><span class="o">=</span><span class="s2">&quot;anonymous&quot;</span><span class="p">,</span>
+        <span class="n">password</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+        <span class="n">account</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+        <span class="n">timeout</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">progressbar</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">chunk_size</span><span class="o">=</span><span class="mi">1024</span><span class="p">,</span>
+    <span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">port</span> <span class="o">=</span> <span class="n">port</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">username</span> <span class="o">=</span> <span class="n">username</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">password</span> <span class="o">=</span> <span class="n">password</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">account</span> <span class="o">=</span> <span class="n">account</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">timeout</span> <span class="o">=</span> <span class="n">timeout</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">progressbar</span> <span class="o">=</span> <span class="n">progressbar</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">chunk_size</span> <span class="o">=</span> <span class="n">chunk_size</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">progressbar</span> <span class="ow">and</span> <span class="n">tqdm</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Missing package &#39;tqdm&#39; required for progress bars.&quot;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="FTPDownloader.__call__"><a class="viewcode-back" href="../../api/generated/pooch.FTPDownloader.html#pooch.FTPDownloader.__call__">[docs]</a>    <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="n">output_file</span><span class="p">,</span> <span class="n">pooch</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Download the given URL over FTP to the given output file.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        url : str</span>
+<span class="sd">            The URL to the file you want to download.</span>
+<span class="sd">        output_file : str or file-like object</span>
+<span class="sd">            Path (and file name) to which the file will be downloaded.</span>
+<span class="sd">        pooch : :class:`~pooch.Pooch`</span>
+<span class="sd">            The instance of :class:`~pooch.Pooch` that is calling this method.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">parsed_url</span> <span class="o">=</span> <span class="n">parse_url</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+        <span class="n">ftp</span> <span class="o">=</span> <span class="n">ftplib</span><span class="o">.</span><span class="n">FTP</span><span class="p">(</span><span class="n">timeout</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">timeout</span><span class="p">)</span>
+        <span class="n">ftp</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">host</span><span class="o">=</span><span class="n">parsed_url</span><span class="p">[</span><span class="s2">&quot;netloc&quot;</span><span class="p">],</span> <span class="n">port</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">port</span><span class="p">)</span>
+        <span class="n">ispath</span> <span class="o">=</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">output_file</span><span class="p">,</span> <span class="s2">&quot;write&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">ispath</span><span class="p">:</span>
+            <span class="n">output_file</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">output_file</span><span class="p">,</span> <span class="s2">&quot;w+b&quot;</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">ftp</span><span class="o">.</span><span class="n">login</span><span class="p">(</span><span class="n">user</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">username</span><span class="p">,</span> <span class="n">passwd</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">password</span><span class="p">,</span> <span class="n">acct</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">account</span><span class="p">)</span>
+            <span class="n">command</span> <span class="o">=</span> <span class="s2">&quot;RETR </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">parsed_url</span><span class="p">[</span><span class="s2">&quot;path&quot;</span><span class="p">])</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">progressbar</span><span class="p">:</span>
+                <span class="n">size</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">ftp</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="n">parsed_url</span><span class="p">[</span><span class="s2">&quot;path&quot;</span><span class="p">]))</span>
+                <span class="n">use_ascii</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">platform</span> <span class="o">==</span> <span class="s2">&quot;win32&quot;</span><span class="p">)</span>
+                <span class="n">progress</span> <span class="o">=</span> <span class="n">tqdm</span><span class="p">(</span>
+                    <span class="n">total</span><span class="o">=</span><span class="n">size</span><span class="p">,</span>
+                    <span class="n">ncols</span><span class="o">=</span><span class="mi">79</span><span class="p">,</span>
+                    <span class="n">ascii</span><span class="o">=</span><span class="n">use_ascii</span><span class="p">,</span>
+                    <span class="n">unit</span><span class="o">=</span><span class="s2">&quot;B&quot;</span><span class="p">,</span>
+                    <span class="n">unit_scale</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                    <span class="n">leave</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="p">)</span>
+                <span class="k">with</span> <span class="n">progress</span><span class="p">:</span>
+
+                    <span class="k">def</span> <span class="nf">callback</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+                        <span class="s2">&quot;Update the progress bar and write to output&quot;</span>
+                        <span class="n">progress</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">))</span>
+                        <span class="n">output_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
+                    <span class="n">ftp</span><span class="o">.</span><span class="n">retrbinary</span><span class="p">(</span><span class="n">command</span><span class="p">,</span> <span class="n">callback</span><span class="p">,</span> <span class="n">blocksize</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">chunk_size</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">ftp</span><span class="o">.</span><span class="n">retrbinary</span><span class="p">(</span><span class="n">command</span><span class="p">,</span> <span class="n">output_file</span><span class="o">.</span><span class="n">write</span><span class="p">,</span> <span class="n">blocksize</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">chunk_size</span><span class="p">)</span>
+        <span class="k">finally</span><span class="p">:</span>
+            <span class="n">ftp</span><span class="o">.</span><span class="n">quit</span><span class="p">()</span>
             <span class="k">if</span> <span class="n">ispath</span><span class="p">:</span>
                 <span class="n">output_file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div></div>
 </pre></div>
@@ -369,7 +480,7 @@
     <p>
         &copy; Copyright 2018-2019, The Pooch Developers
       <span class="lastupdated">
-        Last updated on Oct 22, 2019.
+        Last updated on Nov 20, 2019.
       </span>
 
     </p>

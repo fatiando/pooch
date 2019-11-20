@@ -226,29 +226,17 @@
 <h1>pooch.file_hash<a class="headerlink" href="#pooch-file-hash" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="pooch.file_hash">
-<code class="descclassname">pooch.</code><code class="descname">file_hash</code><span class="sig-paren">(</span><em>fname</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pooch/utils.html#file_hash"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pooch.file_hash" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">pooch.</code><code class="sig-name descname">file_hash</code><span class="sig-paren">(</span><em class="sig-param">fname</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pooch/utils.html#file_hash"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pooch.file_hash" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculate the SHA256 hash of a given file.</p>
 <p>Useful for checking if a file has changed or been corrupted.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first docutils">
-<dt><strong>fname</strong> <span class="classifier-delimiter">:</span> <span class="classifier">str</span></dt>
-<dd><p class="first last">The name of the file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>fname</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – The name of the file.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>hash</strong> (<em>str</em>) – The hash of the file.</p>
 </dd>
 </dl>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
-<dt><strong>hash</strong> <span class="classifier-delimiter">:</span> <span class="classifier">str</span></dt>
-<dd><p class="first last">The hash of the file.</p>
-</dd>
-</dl>
-</td>
-</tr>
-</tbody>
-</table>
 <p class="rubric">Examples</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">fname</span> <span class="o">=</span> <span class="s2">&quot;test-file-for-hash.txt&quot;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
@@ -285,7 +273,7 @@
     <p>
         &copy; Copyright 2018-2019, The Pooch Developers
       <span class="lastupdated">
-        Last updated on Oct 22, 2019.
+        Last updated on Nov 20, 2019.
       </span>
 
     </p>

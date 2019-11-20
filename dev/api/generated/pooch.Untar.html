@@ -225,76 +225,56 @@
 <h1>pooch.Untar<a class="headerlink" href="#pooch-untar" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="pooch.Untar">
-<em class="property">class </em><code class="descclassname">pooch.</code><code class="descname">Untar</code><span class="sig-paren">(</span><em>members=None</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pooch/processors.html#Untar"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pooch.Untar" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">pooch.</code><code class="sig-name descname">Untar</code><span class="sig-paren">(</span><em class="sig-param">members=None</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pooch/processors.html#Untar"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pooch.Untar" title="Permalink to this definition">¶</a></dt>
 <dd><p>Processor that unpacks a tar archive and returns a list of all files.</p>
-<p>Use with <a class="reference internal" href="pooch.Pooch.html#pooch.Pooch.fetch" title="pooch.Pooch.fetch"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pooch.Pooch.fetch</span></code></a> to untar a downloaded data file into a folder in
-the local data store. <a class="reference internal" href="pooch.Pooch.html#pooch.Pooch.fetch" title="pooch.Pooch.fetch"><code class="xref py py-meth docutils literal notranslate"><span class="pre">fetch</span></code></a> will return a list with the names
-of the extracted files instead of the archive.</p>
+<p>Use with <a class="reference internal" href="pooch.Pooch.html#pooch.Pooch.fetch" title="pooch.Pooch.fetch"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pooch.Pooch.fetch</span></code></a> to untar a downloaded data file into a
+folder in the local data store. <a class="reference internal" href="pooch.Pooch.html#pooch.Pooch.fetch" title="pooch.Pooch.fetch"><code class="xref py py-meth docutils literal notranslate"><span class="pre">fetch</span></code></a> will return a
+list with the names of the extracted files instead of the archive.</p>
 <p>The output folder is <code class="docutils literal notranslate"><span class="pre">{fname}.untar</span></code>.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first last docutils">
-<dt><strong>members</strong> <span class="classifier-delimiter">:</span> <span class="classifier">list or None</span></dt>
-<dd><p class="first last">If None, will unpack all files in the archive. Otherwise, <em>members</em> must be
-a list of file names to unpack from the archive. Only these files will be
-unpacked.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>members</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)"><em>list</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><em>None</em></a>) – If None, will unpack all files in the archive. Otherwise, <em>members</em>
+must be a list of file names to unpack from the archive. Only these
+files will be unpacked.</p>
 </dd>
 </dl>
-</td>
-</tr>
-</tbody>
-</table>
-<p class="rubric">Methods</p>
-<table border="1" class="longtable docutils">
+<p class="rubric">Methods Summary</p>
+<table class="longtable docutils align-default">
 <colgroup>
-<col width="10%" />
-<col width="90%" />
+<col style="width: 10%" />
+<col style="width: 90%" />
 </colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="#pooch.Untar.__call__" title="pooch.Untar.__call__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__call__</span></code></a>(self,&nbsp;fname,&nbsp;action,&nbsp;pooch)</td>
-<td>Extract all files from the given archive.</td>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pooch.Untar.__call__" title="pooch.Untar.__call__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Untar.__call__</span></code></a>(fname, action, pooch)</p></td>
+<td><p>Extract all files from the given archive.</p></td>
 </tr>
 </tbody>
 </table>
 </dd></dl>
 
-<div style='clear:both'></div><dl class="method">
+<hr class="docutils" />
+<dl class="method">
 <dt id="pooch.Untar.__call__">
-<code class="descclassname">Untar.</code><code class="descname">__call__</code><span class="sig-paren">(</span><em>self</em>, <em>fname</em>, <em>action</em>, <em>pooch</em><span class="sig-paren">)</span><a class="headerlink" href="#pooch.Untar.__call__" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">Untar.</code><code class="sig-name descname">__call__</code><span class="sig-paren">(</span><em class="sig-param">fname</em>, <em class="sig-param">action</em>, <em class="sig-param">pooch</em><span class="sig-paren">)</span><a class="headerlink" href="#pooch.Untar.__call__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Extract all files from the given archive.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first docutils">
-<dt><strong>fname</strong> <span class="classifier-delimiter">:</span> <span class="classifier">str</span></dt>
-<dd><p class="first last">Full path of the zipped file in local storage.</p>
-</dd>
-<dt><strong>action</strong> <span class="classifier-delimiter">:</span> <span class="classifier">str</span></dt>
-<dd><p class="first">Indicates what action was taken by <a class="reference internal" href="pooch.Pooch.html#pooch.Pooch.fetch" title="pooch.Pooch.fetch"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pooch.Pooch.fetch</span></code></a>. One of:</p>
-<ul class="last simple">
-<li><code class="docutils literal notranslate"><span class="pre">&quot;download&quot;</span></code>: The file didn’t exist locally and was downloaded</li>
-<li><code class="docutils literal notranslate"><span class="pre">&quot;update&quot;</span></code>: The local file was outdated and was re-download</li>
-<li><code class="docutils literal notranslate"><span class="pre">&quot;fetch&quot;</span></code>: The file exists and is updated so it wasn’t downloaded</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fname</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – Full path of the zipped file in local storage.</p></li>
+<li><p><strong>action</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – <p>Indicates what action was taken by <a class="reference internal" href="pooch.Pooch.html#pooch.Pooch.fetch" title="pooch.Pooch.fetch"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pooch.Pooch.fetch</span></code></a>:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;download&quot;</span></code>: File didn’t exist locally and was downloaded</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;update&quot;</span></code>: Local file was outdated and was re-download</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;fetch&quot;</span></code>: File exists and is updated so it wasn’t downloaded</p></li>
+</ul>
+</p></li>
+<li><p><strong>pooch</strong> (<a class="reference internal" href="pooch.Pooch.html#pooch.Pooch" title="pooch.Pooch"><code class="xref py py-class docutils literal notranslate"><span class="pre">pooch.Pooch</span></code></a>) – The instance of <a class="reference internal" href="pooch.Pooch.html#pooch.Pooch" title="pooch.Pooch"><code class="xref py py-class docutils literal notranslate"><span class="pre">pooch.Pooch</span></code></a> that is calling this.</p></li>
 </ul>
 </dd>
-<dt><strong>pooch</strong> <span class="classifier-delimiter">:</span> <span class="classifier"><a class="reference internal" href="pooch.Pooch.html#pooch.Pooch" title="pooch.Pooch"><code class="xref py py-class docutils literal notranslate"><span class="pre">pooch.Pooch</span></code></a></span></dt>
-<dd><p class="first last">The instance of <a class="reference internal" href="pooch.Pooch.html#pooch.Pooch" title="pooch.Pooch"><code class="xref py py-class docutils literal notranslate"><span class="pre">pooch.Pooch</span></code></a> that is calling this.</p>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>fnames</strong> (<em>list of str</em>) – A list of the full path to all files in the extracted archive.</p>
 </dd>
 </dl>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
-<dt><strong>fnames</strong> <span class="classifier-delimiter">:</span> <span class="classifier">list of str</span></dt>
-<dd><p class="first last">A list of the full path to all files in the extracted archive.</p>
-</dd>
-</dl>
-</td>
-</tr>
-</tbody>
-</table>
 </dd></dl>
 
 <div style='clear:both'></div></div>
@@ -321,7 +301,7 @@ unpacked.</p>
     <p>
         &copy; Copyright 2018-2019, The Pooch Developers
       <span class="lastupdated">
-        Last updated on Oct 22, 2019.
+        Last updated on Nov 20, 2019.
       </span>
 
     </p>

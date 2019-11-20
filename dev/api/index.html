@@ -127,6 +127,7 @@
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#downloaders">Downloaders</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="generated/pooch.HTTPDownloader.html">pooch.HTTPDownloader</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pooch.FTPDownloader.html">pooch.FTPDownloader</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#processors">Processors</a><ul>
@@ -237,88 +238,91 @@
 <span id="api-reference"></span><span id="api"></span><h1>API Reference<a class="headerlink" href="#module-pooch" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="core">
 <h2>Core<a class="headerlink" href="#core" title="Permalink to this headline">¶</a></h2>
-<table border="1" class="longtable docutils">
+<table class="longtable docutils align-default">
 <colgroup>
-<col width="10%" />
-<col width="90%" />
+<col style="width: 10%" />
+<col style="width: 90%" />
 </colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="generated/pooch.create.html#pooch.create" title="pooch.create"><code class="xref py py-obj docutils literal notranslate"><span class="pre">create</span></code></a>(path,&nbsp;base_url[,&nbsp;version,&nbsp;…])</td>
-<td>Create a new <a class="reference internal" href="generated/pooch.Pooch.html#pooch.Pooch" title="pooch.Pooch"><code class="xref py py-class docutils literal notranslate"><span class="pre">Pooch</span></code></a> with sensible defaults to fetch data files.</td>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/pooch.create.html#pooch.create" title="pooch.create"><code class="xref py py-obj docutils literal notranslate"><span class="pre">create</span></code></a>(path, base_url[, version, …])</p></td>
+<td><p>Create a <a class="reference internal" href="generated/pooch.Pooch.html#pooch.Pooch" title="pooch.Pooch"><code class="xref py py-class docutils literal notranslate"><span class="pre">Pooch</span></code></a> with sensible defaults to fetch data files.</p></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pooch.Pooch.html#pooch.Pooch" title="pooch.Pooch"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Pooch</span></code></a>(path,&nbsp;base_url[,&nbsp;registry,&nbsp;urls])</td>
-<td>Manager for a local data storage that can fetch from a remote source.</td>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/pooch.Pooch.html#pooch.Pooch" title="pooch.Pooch"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Pooch</span></code></a>(path, base_url[, registry, urls])</p></td>
+<td><p>Manager for a local data storage that can fetch from a remote source.</p></td>
 </tr>
 </tbody>
 </table>
 </div>
 <div class="section" id="utilities">
 <h2>Utilities<a class="headerlink" href="#utilities" title="Permalink to this headline">¶</a></h2>
-<table border="1" class="longtable docutils">
+<table class="longtable docutils align-default">
 <colgroup>
-<col width="10%" />
-<col width="90%" />
+<col style="width: 10%" />
+<col style="width: 90%" />
 </colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="generated/pooch.os_cache.html#pooch.os_cache" title="pooch.os_cache"><code class="xref py py-obj docutils literal notranslate"><span class="pre">os_cache</span></code></a>(project)</td>
-<td>Default cache location based on the operating system.</td>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/pooch.os_cache.html#pooch.os_cache" title="pooch.os_cache"><code class="xref py py-obj docutils literal notranslate"><span class="pre">os_cache</span></code></a>(project)</p></td>
+<td><p>Default cache location based on the operating system.</p></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pooch.make_registry.html#pooch.make_registry" title="pooch.make_registry"><code class="xref py py-obj docutils literal notranslate"><span class="pre">make_registry</span></code></a>(directory,&nbsp;output[,&nbsp;recursive])</td>
-<td>Make a registry of files and hashes for the given directory.</td>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/pooch.make_registry.html#pooch.make_registry" title="pooch.make_registry"><code class="xref py py-obj docutils literal notranslate"><span class="pre">make_registry</span></code></a>(directory, output[, recursive])</p></td>
+<td><p>Make a registry of files and hashes for the given directory.</p></td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pooch.file_hash.html#pooch.file_hash" title="pooch.file_hash"><code class="xref py py-obj docutils literal notranslate"><span class="pre">file_hash</span></code></a>(fname)</td>
-<td>Calculate the SHA256 hash of a given file.</td>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/pooch.file_hash.html#pooch.file_hash" title="pooch.file_hash"><code class="xref py py-obj docutils literal notranslate"><span class="pre">file_hash</span></code></a>(fname)</p></td>
+<td><p>Calculate the SHA256 hash of a given file.</p></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pooch.check_version.html#pooch.check_version" title="pooch.check_version"><code class="xref py py-obj docutils literal notranslate"><span class="pre">check_version</span></code></a>(version[,&nbsp;fallback])</td>
-<td>Check that a version string is PEP440 compliant and there are no unreleased changes.</td>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/pooch.check_version.html#pooch.check_version" title="pooch.check_version"><code class="xref py py-obj docutils literal notranslate"><span class="pre">check_version</span></code></a>(version[, fallback])</p></td>
+<td><p>Check if a version is PEP440 compliant and there are no unreleased changes.</p></td>
 </tr>
 </tbody>
 </table>
 </div>
 <div class="section" id="downloaders">
 <h2>Downloaders<a class="headerlink" href="#downloaders" title="Permalink to this headline">¶</a></h2>
-<table border="1" class="longtable docutils">
+<table class="longtable docutils align-default">
 <colgroup>
-<col width="10%" />
-<col width="90%" />
+<col style="width: 10%" />
+<col style="width: 90%" />
 </colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="generated/pooch.HTTPDownloader.html#pooch.HTTPDownloader" title="pooch.HTTPDownloader"><code class="xref py py-obj docutils literal notranslate"><span class="pre">HTTPDownloader</span></code></a>([progressbar,&nbsp;chunk_size])</td>
-<td>Download manager for fetching files over HTTP/HTTPS.</td>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/pooch.HTTPDownloader.html#pooch.HTTPDownloader" title="pooch.HTTPDownloader"><code class="xref py py-obj docutils literal notranslate"><span class="pre">HTTPDownloader</span></code></a>([progressbar, chunk_size])</p></td>
+<td><p>Download manager for fetching files over HTTP/HTTPS.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/pooch.FTPDownloader.html#pooch.FTPDownloader" title="pooch.FTPDownloader"><code class="xref py py-obj docutils literal notranslate"><span class="pre">FTPDownloader</span></code></a>([port, username, password, …])</p></td>
+<td><p>Download manager for fetching files over FTP.</p></td>
 </tr>
 </tbody>
 </table>
 </div>
 <div class="section" id="processors">
 <h2>Processors<a class="headerlink" href="#processors" title="Permalink to this headline">¶</a></h2>
-<table border="1" class="longtable docutils">
+<table class="longtable docutils align-default">
 <colgroup>
-<col width="10%" />
-<col width="90%" />
+<col style="width: 10%" />
+<col style="width: 90%" />
 </colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="generated/pooch.Unzip.html#pooch.Unzip" title="pooch.Unzip"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Unzip</span></code></a>([members])</td>
-<td>Processor that unpacks a zip archive and returns a list of all files.</td>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/pooch.Unzip.html#pooch.Unzip" title="pooch.Unzip"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Unzip</span></code></a>([members])</p></td>
+<td><p>Processor that unpacks a zip archive and returns a list of all files.</p></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pooch.Untar.html#pooch.Untar" title="pooch.Untar"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Untar</span></code></a>([members])</td>
-<td>Processor that unpacks a tar archive and returns a list of all files.</td>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/pooch.Untar.html#pooch.Untar" title="pooch.Untar"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Untar</span></code></a>([members])</p></td>
+<td><p>Processor that unpacks a tar archive and returns a list of all files.</p></td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pooch.Decompress.html#pooch.Decompress" title="pooch.Decompress"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Decompress</span></code></a>([method])</td>
-<td>Processor that decompress a file and returns the decompressed version.</td>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/pooch.Decompress.html#pooch.Decompress" title="pooch.Decompress"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Decompress</span></code></a>([method])</p></td>
+<td><p>Processor that decompress a file and returns the decompressed version.</p></td>
 </tr>
 </tbody>
 </table>
 </div>
 <div class="section" id="miscellaneous">
 <h2>Miscellaneous<a class="headerlink" href="#miscellaneous" title="Permalink to this headline">¶</a></h2>
-<table border="1" class="longtable docutils">
+<table class="longtable docutils align-default">
 <colgroup>
-<col width="10%" />
-<col width="90%" />
+<col style="width: 10%" />
+<col style="width: 90%" />
 </colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="generated/pooch.test.html#pooch.test" title="pooch.test"><code class="xref py py-obj docutils literal notranslate"><span class="pre">test</span></code></a>([doctest,&nbsp;verbose,&nbsp;coverage])</td>
-<td>Run the test suite.</td>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/pooch.test.html#pooch.test" title="pooch.test"><code class="xref py py-obj docutils literal notranslate"><span class="pre">test</span></code></a>([doctest, verbose, coverage])</p></td>
+<td><p>Run the test suite.</p></td>
 </tr>
 </tbody>
 </table>
@@ -347,7 +351,7 @@
     <p>
         &copy; Copyright 2018-2019, The Pooch Developers
       <span class="lastupdated">
-        Last updated on Oct 22, 2019.
+        Last updated on Nov 20, 2019.
       </span>
 
     </p>

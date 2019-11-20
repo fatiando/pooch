@@ -205,99 +205,115 @@
            <div itemprop="articleBody">
             
   <div class="banner">
-    <img src="_static/banner.svg" alt="Pooch">
-    <h2>A friend to fetch you sample data files</h2>
-    <p>A part of the <a href="https://www.fatiando.org/">Fatiando a Terra</a> project.</p>
-</div><p>🚨🚨 <strong>Pooch v0.6.0 is the last release to support Python 2.7</strong> 🚨🚨</p>
-<div class="section" id="tl-dr">
-<h1>TL;DR<a class="headerlink" href="#tl-dr" title="Permalink to this headline">¶</a></h1>
-<div class="code python highlight-default notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">Module mypackage/datasets.py</span>
-<span class="sd">&quot;&quot;&quot;</span>
-<span class="kn">import</span> <span class="nn">pooch</span>
-
-<span class="c1"># Get the version string from your project. You have one of these, right?</span>
-<span class="kn">from</span> <span class="nn">.</span> <span class="k">import</span> <span class="n">version</span>
-
-
-<span class="c1"># Create a new friend to manage your sample data storage</span>
-<span class="n">GOODBOY</span> <span class="o">=</span> <span class="n">pooch</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
-    <span class="c1"># Folder where the data will be stored. For a sensible default, use the default</span>
-    <span class="c1"># cache folder for your OS.</span>
-    <span class="n">path</span><span class="o">=</span><span class="n">pooch</span><span class="o">.</span><span class="n">os_cache</span><span class="p">(</span><span class="s2">&quot;mypackage&quot;</span><span class="p">),</span>
-    <span class="c1"># Base URL of the remote data store. Will call .format on this string to insert</span>
-    <span class="c1"># the version (see below).</span>
-    <span class="n">base_url</span><span class="o">=</span><span class="s2">&quot;https://github.com/myproject/mypackage/raw/</span><span class="si">{version}</span><span class="s2">/data/&quot;</span><span class="p">,</span>
-    <span class="c1"># Pooches are versioned so that you can use multiple versions of a package</span>
-    <span class="c1"># simultaneously. Use PEP440 compliant version number. The version will be</span>
-    <span class="c1"># appended to the path.</span>
-    <span class="n">version</span><span class="o">=</span><span class="n">version</span><span class="p">,</span>
-    <span class="c1"># If a version as a &quot;+XX.XXXXX&quot; suffix, we&#39;ll assume that this is a dev version</span>
-    <span class="c1"># and replace the version with this string.</span>
-    <span class="n">version_dev</span><span class="o">=</span><span class="s2">&quot;master&quot;</span><span class="p">,</span>
-    <span class="c1"># An environment variable that overwrites the path.</span>
-    <span class="n">env</span><span class="o">=</span><span class="s2">&quot;MYPACKAGE_DATA_DIR&quot;</span><span class="p">,</span>
-    <span class="c1"># The cache file registry. A dictionary with all files managed by this pooch.</span>
-    <span class="c1"># Keys are the file names (relative to *base_url*) and values are their</span>
-    <span class="c1"># respective SHA256 hashes. Files will be downloaded automatically when needed</span>
-    <span class="c1"># (see fetch_gravity_data).</span>
-    <span class="n">registry</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;gravity-data.csv&quot;</span><span class="p">:</span> <span class="s2">&quot;89y10phsdwhs09whljwc09whcowsdhcwodcy0dcuhw&quot;</span><span class="p">}</span>
-<span class="p">)</span>
-<span class="c1"># You can also load the registry from a file. Each line contains a file name and</span>
-<span class="c1"># it&#39;s sha256 hash separated by a space. This makes it easier to manage large</span>
-<span class="c1"># numbers of data files. The registry file should be in the same directory as this</span>
-<span class="c1"># module.</span>
-<span class="n">GOODBOY</span><span class="o">.</span><span class="n">load_registry</span><span class="p">(</span><span class="s2">&quot;registry.txt&quot;</span><span class="p">)</span>
-
-
-<span class="c1"># Define functions that your users can call to get back some sample data in memory</span>
-<span class="k">def</span> <span class="nf">fetch_gravity_data</span><span class="p">():</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Load some sample gravity data to use in your docs.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="c1"># Fetch the path to a file in the local storae. If it&#39;s not there, we&#39;ll</span>
-    <span class="c1"># download it.</span>
-    <span class="n">fname</span> <span class="o">=</span> <span class="n">GOODBOY</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="s2">&quot;gravity-data.csv&quot;</span><span class="p">)</span>
-    <span class="c1"># Load it with numpy/pandas/etc</span>
-    <span class="n">data</span> <span class="o">=</span> <span class="o">...</span>
-    <span class="k">return</span> <span class="n">data</span>
-</pre></div>
-</div>
-</div>
+    <img src="_static/readme-banner.png" alt="Pooch">
+    <h2>A part of the <a href="https://www.fatiando.org/">Fatiando a Terra</a> project.</h2>
+</div><p>🚨 <strong>Python 2.7 is no longer supported. Use Pooch &lt;= 0.6.0 if you need 2.7 support.</strong> 🚨</p>
 <div class="section" id="about">
 <h1>About<a class="headerlink" href="#about" title="Permalink to this headline">¶</a></h1>
 <p><em>Does your Python package include sample datasets? Are you shipping them with the code?
 Are they getting too big?</em></p>
-<p>Pooch will manage downloading your sample data files over HTTP from a server and storing
-them in a local directory:</p>
+<p>Pooch is here to help! It will manage a data <em>registry</em> by downloading your data files
+from a server only when needed and storing them locally in a data <em>cache</em> (a folder on
+your computer).</p>
+<p>Here are Pooch’s main features:</p>
 <ul class="simple">
-<li>Download a file only if it’s not in the local storage.</li>
-<li>Check the SHA256 hash to make sure the file is not corrupted or needs updating.</li>
-<li>If the hash is different from the registry, Pooch will download a new version of the
-file.</li>
-<li>If the hash still doesn’t match, Pooch will raise an exception warning of possible
-data corruption.</li>
+<li><p>Pure Python and minimal dependencies.</p></li>
+<li><p>Download a file only if necessary (it’s not in the data cache or needs to be updated).</p></li>
+<li><p>Verify download integrity through SHA256 hashes (also used to check if a file needs to
+be updated).</p></li>
+<li><p>Designed to be extended: plug in custom download (FTP, scp, etc) and post-processing
+(unzip, decompress, rename) functions.</p></li>
+<li><p>Includes utilities to unzip/decompress the data upon download to save loading time.</p></li>
+<li><p>Can handle basic HTTP authentication (for servers that require a login) and printing
+download progress bars.</p></li>
+<li><p>Easily set up an environment variable to overwrite the data cache location.</p></li>
 </ul>
+<p><em>Are you a scientist or researcher? Pooch can help you too!</em></p>
+<ul class="simple">
+<li><p>Automatically download your data files so you don’t have to keep them in your GitHub
+repository.</p></li>
+<li><p>Make sure everyone running the code has the same version of the data files (enforced
+through the SHA256 hashes).</p></li>
+</ul>
+</div>
+<div class="section" id="example">
+<h1>Example<a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h1>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Module mypackage/datasets.py</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">pkg_resources</span>
+<span class="kn">import</span> <span class="nn">pandas</span>
+<span class="kn">import</span> <span class="nn">pooch</span>
+
+<span class="c1"># Get the version string from your project. You have one of these, right?</span>
+<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">version</span>
+
+
+<span class="c1"># Create a new friend to manage your sample data storage</span>
+<span class="n">GOODBOY</span> <span class="o">=</span> <span class="n">pooch</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+    <span class="c1"># Folder where the data will be stored. For a sensible default, use the</span>
+    <span class="c1"># default cache folder for your OS.</span>
+    <span class="n">path</span><span class="o">=</span><span class="n">pooch</span><span class="o">.</span><span class="n">os_cache</span><span class="p">(</span><span class="s2">&quot;mypackage&quot;</span><span class="p">),</span>
+    <span class="c1"># Base URL of the remote data store. Will call .format on this string</span>
+    <span class="c1"># to insert the version (see below).</span>
+    <span class="n">base_url</span><span class="o">=</span><span class="s2">&quot;https://github.com/myproject/mypackage/raw/{version}/data/&quot;</span><span class="p">,</span>
+    <span class="c1"># Pooches are versioned so that you can use multiple versions of a</span>
+    <span class="c1"># package simultaneously. Use PEP440 compliant version number. The</span>
+    <span class="c1"># version will be appended to the path.</span>
+    <span class="n">version</span><span class="o">=</span><span class="n">version</span><span class="p">,</span>
+    <span class="c1"># If a version as a &quot;+XX.XXXXX&quot; suffix, we&#39;ll assume that this is a dev</span>
+    <span class="c1"># version and replace the version with this string.</span>
+    <span class="n">version_dev</span><span class="o">=</span><span class="s2">&quot;master&quot;</span><span class="p">,</span>
+    <span class="c1"># An environment variable that overwrites the path.</span>
+    <span class="n">env</span><span class="o">=</span><span class="s2">&quot;MYPACKAGE_DATA_DIR&quot;</span><span class="p">,</span>
+    <span class="c1"># The cache file registry. A dictionary with all files managed by this</span>
+    <span class="c1"># pooch. Keys are the file names (relative to *base_url*) and values</span>
+    <span class="c1"># are their respective SHA256 hashes. Files will be downloaded</span>
+    <span class="c1"># automatically when needed (see fetch_gravity_data).</span>
+    <span class="n">registry</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;gravity-data.csv&quot;</span><span class="p">:</span> <span class="s2">&quot;89y10phsdwhs09whljwc09whcowsdhcwodcydw&quot;</span><span class="p">}</span>
+<span class="p">)</span>
+<span class="c1"># You can also load the registry from a file. Each line contains a file</span>
+<span class="c1"># name and it&#39;s sha256 hash separated by a space. This makes it easier to</span>
+<span class="c1"># manage large numbers of data files. The registry file should be packaged</span>
+<span class="c1"># and distributed with your software.</span>
+<span class="n">GOODBOY</span><span class="o">.</span><span class="n">load_registry</span><span class="p">(</span>
+    <span class="n">pkg_resources</span><span class="o">.</span><span class="n">resource_stream</span><span class="p">(</span><span class="s2">&quot;mypackage&quot;</span><span class="p">,</span> <span class="s2">&quot;registry.txt&quot;</span><span class="p">)</span>
+<span class="p">)</span>
+
+
+<span class="c1"># Define functions that your users can call to get back the data in memory</span>
+<span class="k">def</span> <span class="nf">fetch_gravity_data</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Load some sample gravity data to use in your docs.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Fetch the path to a file in the local storage. If it&#39;s not there,</span>
+    <span class="c1"># we&#39;ll download it.</span>
+    <span class="n">fname</span> <span class="o">=</span> <span class="n">GOODBOY</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="s2">&quot;gravity-data.csv&quot;</span><span class="p">)</span>
+    <span class="c1"># Load it with numpy/pandas/etc</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">pandas</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">data</span>
+</pre></div>
+</div>
 </div>
 <div class="section" id="projects-using-pooch">
 <h1>Projects using Pooch<a class="headerlink" href="#projects-using-pooch" title="Permalink to this headline">¶</a></h1>
 <ul class="simple">
-<li><a class="reference external" href="https://github.com/Unidata/MetPy">MetPy</a></li>
-<li><a class="reference external" href="https://github.com/fatiando/verde">Verde</a></li>
-<li><a class="reference external" href="https://github.com/fatiando/harmonica">Harmonica</a></li>
-<li><a class="reference external" href="https://github.com/fatiando/rockhound">RockHound</a></li>
-<li><a class="reference external" href="https://github.com/icepack/icepack">icepack</a></li>
+<li><p><a class="reference external" href="https://github.com/Unidata/MetPy">MetPy</a></p></li>
+<li><p><a class="reference external" href="https://github.com/fatiando/verde">Verde</a></p></li>
+<li><p><a class="reference external" href="https://github.com/fatiando/harmonica">Harmonica</a></p></li>
+<li><p><a class="reference external" href="https://github.com/fatiando/rockhound">RockHound</a></p></li>
+<li><p><a class="reference external" href="https://github.com/icepack/icepack">icepack</a></p></li>
 </ul>
 <p><em>If you’re using Pooch, send us a pull request adding your project to the list.</em></p>
 </div>
 <div class="section" id="contacting-us">
 <h1>Contacting Us<a class="headerlink" href="#contacting-us" title="Permalink to this headline">¶</a></h1>
 <ul class="simple">
-<li>Most discussion happens <a class="reference external" href="https://github.com/fatiando/pooch">on Github</a>.
+<li><p>Most discussion happens <a class="reference external" href="https://github.com/fatiando/pooch">on Github</a>.
 Feel free to <a class="reference external" href="https://github.com/fatiando/pooch/issues/new">open an issue</a> or comment
-on any open issue or pull request.</li>
-<li>We have <a class="reference external" href="http://contact.fatiando.org">chat room on Slack</a> where you can
-ask questions and leave comments.</li>
+on any open issue or pull request.</p></li>
+<li><p>We have <a class="reference external" href="http://contact.fatiando.org">chat room on Slack</a> where you can
+ask questions and leave comments.</p></li>
 </ul>
 </div>
 <div class="section" id="citing-pooch">
@@ -355,20 +371,21 @@ of the <strong>BSD 3-clause License</strong>. A copy of this license is provided
 <div class="section" id="documentation-for-other-versions">
 <h1>Documentation for other versions<a class="headerlink" href="#documentation-for-other-versions" title="Permalink to this headline">¶</a></h1>
 <ul class="simple">
-<li><a class="reference external" href="https://www.fatiando.org/pooch/dev">Development</a> (reflects the <em>master</em> branch on
-Github)</li>
-<li><a class="reference external" href="https://www.fatiando.org/pooch/latest">Latest release</a></li>
-<li><a class="reference external" href="https://www.fatiando.org/pooch/v0.6.0">v0.6.0</a></li>
-<li><a class="reference external" href="https://www.fatiando.org/pooch/v0.5.2">v0.5.2</a></li>
-<li><a class="reference external" href="https://www.fatiando.org/pooch/v0.5.1">v0.5.1</a></li>
-<li><a class="reference external" href="https://www.fatiando.org/pooch/v0.5.0">v0.5.0</a></li>
-<li><a class="reference external" href="https://www.fatiando.org/pooch/v0.4.0">v0.4.0</a></li>
-<li><a class="reference external" href="https://www.fatiando.org/pooch/v0.3.1">v0.3.1</a></li>
-<li><a class="reference external" href="https://www.fatiando.org/pooch/v0.3.0">v0.3.0</a></li>
-<li><a class="reference external" href="https://www.fatiando.org/pooch/v0.2.1">v0.2.1</a></li>
-<li><a class="reference external" href="https://www.fatiando.org/pooch/v0.2.0">v0.2.0</a></li>
-<li><a class="reference external" href="https://www.fatiando.org/pooch/v0.1.1">v0.1.1</a></li>
-<li><a class="reference external" href="https://www.fatiando.org/pooch/v0.1">v0.1</a></li>
+<li><p><a class="reference external" href="https://www.fatiando.org/pooch/dev">Development</a> (reflects the <em>master</em> branch on
+Github)</p></li>
+<li><p><a class="reference external" href="https://www.fatiando.org/pooch/latest">Latest release</a></p></li>
+<li><p><a class="reference external" href="https://www.fatiando.org/pooch/v0.7.0">v0.7.0</a></p></li>
+<li><p><a class="reference external" href="https://www.fatiando.org/pooch/v0.6.0">v0.6.0</a></p></li>
+<li><p><a class="reference external" href="https://www.fatiando.org/pooch/v0.5.2">v0.5.2</a></p></li>
+<li><p><a class="reference external" href="https://www.fatiando.org/pooch/v0.5.1">v0.5.1</a></p></li>
+<li><p><a class="reference external" href="https://www.fatiando.org/pooch/v0.5.0">v0.5.0</a></p></li>
+<li><p><a class="reference external" href="https://www.fatiando.org/pooch/v0.4.0">v0.4.0</a></p></li>
+<li><p><a class="reference external" href="https://www.fatiando.org/pooch/v0.3.1">v0.3.1</a></p></li>
+<li><p><a class="reference external" href="https://www.fatiando.org/pooch/v0.3.0">v0.3.0</a></p></li>
+<li><p><a class="reference external" href="https://www.fatiando.org/pooch/v0.2.1">v0.2.1</a></p></li>
+<li><p><a class="reference external" href="https://www.fatiando.org/pooch/v0.2.0">v0.2.0</a></p></li>
+<li><p><a class="reference external" href="https://www.fatiando.org/pooch/v0.1.1">v0.1.1</a></p></li>
+<li><p><a class="reference external" href="https://www.fatiando.org/pooch/v0.1">v0.1</a></p></li>
 </ul>
 <div class="toctree-wrapper compound">
 </div>
@@ -394,7 +411,7 @@ Github)</li>
     <p>
         &copy; Copyright 2018-2019, The Pooch Developers
       <span class="lastupdated">
-        Last updated on Oct 22, 2019.
+        Last updated on Nov 20, 2019.
       </span>
 
     </p>

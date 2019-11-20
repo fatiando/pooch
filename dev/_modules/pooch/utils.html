@@ -208,7 +208,7 @@
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">from</span> <span class="nn">pathlib</span> <span class="k">import</span> <span class="n">Path</span>
 <span class="kn">import</span> <span class="nn">hashlib</span>
-
+<span class="kn">from</span> <span class="nn">urllib.parse</span> <span class="k">import</span> <span class="n">urlsplit</span>
 <span class="kn">import</span> <span class="nn">appdirs</span>
 <span class="kn">from</span> <span class="nn">packaging.version</span> <span class="k">import</span> <span class="n">Version</span>
 
@@ -234,8 +234,8 @@
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    cache_path : :class:`pathlib.Path`</span>
-<span class="sd">        The default location for the data cache. User directories (``&#39;~&#39;``) are not</span>
-<span class="sd">        expanded.</span>
+<span class="sd">        The default location for the data cache. User directories (``&#39;~&#39;``) are</span>
+<span class="sd">        not expanded.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">Path</span><span class="p">(</span><span class="n">appdirs</span><span class="o">.</span><span class="n">user_cache_dir</span><span class="p">(</span><span class="n">project</span><span class="p">))</span></div>
@@ -282,12 +282,12 @@
 
 <div class="viewcode-block" id="check_version"><a class="viewcode-back" href="../../api/generated/pooch.check_version.html#pooch.check_version">[docs]</a><span class="k">def</span> <span class="nf">check_version</span><span class="p">(</span><span class="n">version</span><span class="p">,</span> <span class="n">fallback</span><span class="o">=</span><span class="s2">&quot;master&quot;</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Check that a version string is PEP440 compliant and there are no unreleased changes.</span>
+<span class="sd">    Check if a version is PEP440 compliant and there are no unreleased changes.</span>
 
-<span class="sd">    For example, ``version = &quot;0.1&quot;`` will be returned as is but</span>
-<span class="sd">    ``version = &quot;0.1+10.8dl8dh9&quot;`` will return the fallback. This is the convention used</span>
-<span class="sd">    by `versioneer &lt;https://github.com/warner/python-versioneer&gt;`__ to mark that this</span>
-<span class="sd">    version is 10 commits ahead of the last release.</span>
+<span class="sd">    For example, ``version = &quot;0.1&quot;`` will be returned as is but ``version =</span>
+<span class="sd">    &quot;0.1+10.8dl8dh9&quot;`` will return the fallback. This is the convention used by</span>
+<span class="sd">    `versioneer &lt;https://github.com/warner/python-versioneer&gt;`__ to mark that</span>
+<span class="sd">    this version is 10 commits ahead of the last release.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -299,8 +299,8 @@
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    version : str</span>
-<span class="sd">        If *version* is PEP440 compliant and there are unreleased changes, then return</span>
-<span class="sd">        *version*. Otherwise, return *fallback*.</span>
+<span class="sd">        If *version* is PEP440 compliant and there are unreleased changes, then</span>
+<span class="sd">        return *version*. Otherwise, return *fallback*.</span>
 
 <span class="sd">    Raises</span>
 <span class="sd">    ------</span>
@@ -336,12 +336,13 @@
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    directory : str</span>
-<span class="sd">        Directory of the test data to put in the registry. All file names in the</span>
-<span class="sd">        registry will be relative to this directory.</span>
+<span class="sd">        Directory of the test data to put in the registry. All file names in</span>
+<span class="sd">        the registry will be relative to this directory.</span>
 <span class="sd">    output : str</span>
 <span class="sd">        Name of the output registry file.</span>
 <span class="sd">    recursive : bool</span>
-<span class="sd">        If True, will recursively look for files in subdirectories of *directory*.</span>
+<span class="sd">        If True, will recursively look for files in subdirectories of</span>
+<span class="sd">        *directory*.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">directory</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">directory</span><span class="p">)</span>
@@ -362,9 +363,32 @@
 
     <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">output</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">outfile</span><span class="p">:</span>
         <span class="k">for</span> <span class="n">fname</span><span class="p">,</span> <span class="n">fhash</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">files</span><span class="p">,</span> <span class="n">hashes</span><span class="p">):</span>
-            <span class="c1"># Only use Unix separators for the registry so that we don&#39;t go insane</span>
-            <span class="c1"># dealing with file paths.</span>
+            <span class="c1"># Only use Unix separators for the registry so that we don&#39;t go</span>
+            <span class="c1"># insane dealing with file paths.</span>
             <span class="n">outfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> </span><span class="si">{}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">fname</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;/&quot;</span><span class="p">),</span> <span class="n">fhash</span><span class="p">))</span></div>
+
+
+<span class="k">def</span> <span class="nf">parse_url</span><span class="p">(</span><span class="n">url</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Parse a URL into 3 components:</span>
+
+<span class="sd">    &lt;protocol&gt;://&lt;netloc&gt;/&lt;path&gt;</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    url : str</span>
+<span class="sd">        URL (e.g.: http://127.0.0.1:8080/test.nc, ftp://127.0.0.1:8080/test.nc)</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    parsed_url : dict</span>
+<span class="sd">        Three components of a URL (e.g., {&#39;protocol&#39;: &#39;http&#39;, &#39;netloc&#39;:</span>
+<span class="sd">        &#39;127.0.0.1:8080&#39;, &#39;path&#39;: &#39;/test.nc&#39;})</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">parsed_url</span> <span class="o">=</span> <span class="n">urlsplit</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+    <span class="n">protocol</span> <span class="o">=</span> <span class="n">parsed_url</span><span class="o">.</span><span class="n">scheme</span> <span class="ow">or</span> <span class="s2">&quot;file&quot;</span>
+    <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;protocol&quot;</span><span class="p">:</span> <span class="n">protocol</span><span class="p">,</span> <span class="s2">&quot;netloc&quot;</span><span class="p">:</span> <span class="n">parsed_url</span><span class="o">.</span><span class="n">netloc</span><span class="p">,</span> <span class="s2">&quot;path&quot;</span><span class="p">:</span> <span class="n">parsed_url</span><span class="o">.</span><span class="n">path</span><span class="p">}</span>
 </pre></div>
 
            </div>
@@ -379,7 +403,7 @@
     <p>
         &copy; Copyright 2018-2019, The Pooch Developers
       <span class="lastupdated">
-        Last updated on Oct 22, 2019.
+        Last updated on Nov 20, 2019.
       </span>
 
     </p>

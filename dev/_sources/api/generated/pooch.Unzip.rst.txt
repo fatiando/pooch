@@ -5,9 +5,75 @@ pooch.Unzip
 
 .. autoclass:: Unzip
 
-.. raw:: html
+    .. rubric:: Methods Summary
 
-     <div style='clear:both'></div>
+    .. autosummary::
+    
+    
+        Unzip.__call__
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+----
 
 
 

@@ -226,43 +226,27 @@
 <h1>pooch.check_version<a class="headerlink" href="#pooch-check-version" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="pooch.check_version">
-<code class="descclassname">pooch.</code><code class="descname">check_version</code><span class="sig-paren">(</span><em>version</em>, <em>fallback='master'</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pooch/utils.html#check_version"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pooch.check_version" title="Permalink to this definition">¶</a></dt>
-<dd><p>Check that a version string is PEP440 compliant and there are no unreleased changes.</p>
-<p>For example, <code class="docutils literal notranslate"><span class="pre">version</span> <span class="pre">=</span> <span class="pre">&quot;0.1&quot;</span></code> will be returned as is but
-<code class="docutils literal notranslate"><span class="pre">version</span> <span class="pre">=</span> <span class="pre">&quot;0.1+10.8dl8dh9&quot;</span></code> will return the fallback. This is the convention used
-by <a class="reference external" href="https://github.com/warner/python-versioneer">versioneer</a> to mark that this
-version is 10 commits ahead of the last release.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first docutils">
-<dt><strong>version</strong> <span class="classifier-delimiter">:</span> <span class="classifier">str</span></dt>
-<dd><p class="first last">A version string.</p>
+<code class="sig-prename descclassname">pooch.</code><code class="sig-name descname">check_version</code><span class="sig-paren">(</span><em class="sig-param">version</em>, <em class="sig-param">fallback='master'</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pooch/utils.html#check_version"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pooch.check_version" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if a version is PEP440 compliant and there are no unreleased changes.</p>
+<p>For example, <code class="docutils literal notranslate"><span class="pre">version</span> <span class="pre">=</span> <span class="pre">&quot;0.1&quot;</span></code> will be returned as is but <code class="docutils literal notranslate"><span class="pre">version</span> <span class="pre">=</span>
+<span class="pre">&quot;0.1+10.8dl8dh9&quot;</span></code> will return the fallback. This is the convention used by
+<a class="reference external" href="https://github.com/warner/python-versioneer">versioneer</a> to mark that
+this version is 10 commits ahead of the last release.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>version</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – A version string.</p></li>
+<li><p><strong>fallback</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – What to return if the version string has unreleased changes.</p></li>
+</ul>
 </dd>
-<dt><strong>fallback</strong> <span class="classifier-delimiter">:</span> <span class="classifier">str</span></dt>
-<dd><p class="first last">What to return if the version string has unreleased changes.</p>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>version</strong> (<em>str</em>) – If <em>version</em> is PEP440 compliant and there are unreleased changes, then
+return <em>version</em>. Otherwise, return <em>fallback</em>.</p>
 </dd>
-</dl>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first docutils">
-<dt><strong>version</strong> <span class="classifier-delimiter">:</span> <span class="classifier">str</span></dt>
-<dd><p class="first last">If <em>version</em> is PEP440 compliant and there are unreleased changes, then return
-<em>version</em>. Otherwise, return <em>fallback</em>.</p>
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><p><strong>InvalidVersion</strong> – If <em>version</em> is not PEP440 compliant.</p>
 </dd>
 </dl>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><dl class="first last docutils">
-<dt>InvalidVersion</dt>
-<dd><p class="first last">If <em>version</em> is not PEP440 compliant.</p>
-</dd>
-</dl>
-</td>
-</tr>
-</tbody>
-</table>
 <p class="rubric">Examples</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">check_version</span><span class="p">(</span><span class="s2">&quot;0.1&quot;</span><span class="p">)</span>
 <span class="go">&#39;0.1&#39;</span>
@@ -300,7 +284,7 @@ version is 10 commits ahead of the last release.</p>
     <p>
         &copy; Copyright 2018-2019, The Pooch Developers
       <span class="lastupdated">
-        Last updated on Oct 22, 2019.
+        Last updated on Nov 20, 2019.
       </span>
 
     </p>

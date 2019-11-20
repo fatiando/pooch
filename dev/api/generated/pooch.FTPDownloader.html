@@ -10,7 +10,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
     
-    <title>pooch.Unzip &mdash; Pooch dev</title>
+    <title>pooch.FTPDownloader &mdash; Pooch dev</title>
     
 
 
@@ -41,8 +41,8 @@
   <link rel="stylesheet" href="../../_static/style.css" type="text/css" />
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="pooch.Untar" href="pooch.Untar.html" />
-    <link rel="prev" title="pooch.FTPDownloader" href="pooch.FTPDownloader.html" />
+    <link rel="next" title="pooch.Unzip" href="pooch.Unzip.html" />
+    <link rel="prev" title="pooch.HTTPDownloader" href="pooch.HTTPDownloader.html" />
     <!-- Google Analytics tracking code -->
     <script>
       (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -115,13 +115,12 @@
 <li class="toctree-l1 current"><a class="reference internal" href="../index.html">API Reference</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../index.html#core">Core</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../index.html#utilities">Utilities</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../index.html#downloaders">Downloaders</a></li>
-<li class="toctree-l2 current"><a class="reference internal" href="../index.html#processors">Processors</a><ul class="current">
-<li class="toctree-l3 current"><a class="current reference internal" href="#">pooch.Unzip</a></li>
-<li class="toctree-l3"><a class="reference internal" href="pooch.Untar.html">pooch.Untar</a></li>
-<li class="toctree-l3"><a class="reference internal" href="pooch.Decompress.html">pooch.Decompress</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html#downloaders">Downloaders</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="pooch.HTTPDownloader.html">pooch.HTTPDownloader</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">pooch.FTPDownloader</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#processors">Processors</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../index.html#miscellaneous">Miscellaneous</a></li>
 </ul>
 </li>
@@ -198,7 +197,7 @@
         
           <li><a href="../index.html">API Reference</a> &raquo;</li>
         
-      <li>pooch.Unzip</li>
+      <li>pooch.FTPDownloader</li>
     
     
     <li class="source-link">
@@ -206,7 +205,7 @@
             
                 
                 
-                <a href="https://github.com/fatiando/pooch/issues/new?title=Suggested%20improvement%20for%20api/generated/pooch.Unzip&body=Please%20describe%20what%20could%20be%20improved%20about%20this%20page%20or%20the%20typo/mistake%20that%20you%20found%3A"
+                <a href="https://github.com/fatiando/pooch/issues/new?title=Suggested%20improvement%20for%20api/generated/pooch.FTPDownloader&body=Please%20describe%20what%20could%20be%20improved%20about%20this%20page%20or%20the%20typo/mistake%20that%20you%20found%3A"
                    class="fa fa-github"> Improve this page</a>
             
         
@@ -221,21 +220,34 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="pooch-unzip">
-<h1>pooch.Unzip<a class="headerlink" href="#pooch-unzip" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="pooch-ftpdownloader">
+<h1>pooch.FTPDownloader<a class="headerlink" href="#pooch-ftpdownloader" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
-<dt id="pooch.Unzip">
-<em class="property">class </em><code class="sig-prename descclassname">pooch.</code><code class="sig-name descname">Unzip</code><span class="sig-paren">(</span><em class="sig-param">members=None</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pooch/processors.html#Unzip"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pooch.Unzip" title="Permalink to this definition">¶</a></dt>
-<dd><p>Processor that unpacks a zip archive and returns a list of all files.</p>
-<p>Use with <a class="reference internal" href="pooch.Pooch.html#pooch.Pooch.fetch" title="pooch.Pooch.fetch"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pooch.Pooch.fetch</span></code></a> to unzip a downloaded data file into a
-folder in the local data store. <a class="reference internal" href="pooch.Pooch.html#pooch.Pooch.fetch" title="pooch.Pooch.fetch"><code class="xref py py-meth docutils literal notranslate"><span class="pre">fetch</span></code></a> will return a
-list with the names of the unzipped files instead of the zip archive.</p>
-<p>The output folder is <code class="docutils literal notranslate"><span class="pre">{fname}.unzip</span></code>.</p>
+<dt id="pooch.FTPDownloader">
+<em class="property">class </em><code class="sig-prename descclassname">pooch.</code><code class="sig-name descname">FTPDownloader</code><span class="sig-paren">(</span><em class="sig-param">port=21</em>, <em class="sig-param">username='anonymous'</em>, <em class="sig-param">password=''</em>, <em class="sig-param">account=''</em>, <em class="sig-param">timeout=None</em>, <em class="sig-param">progressbar=False</em>, <em class="sig-param">chunk_size=1024</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pooch/downloaders.html#FTPDownloader"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pooch.FTPDownloader" title="Permalink to this definition">¶</a></dt>
+<dd><p>Download manager for fetching files over FTP.</p>
+<p>When called, downloads the given file URL into the specified local file.
+Uses the <a class="reference external" href="https://docs.python.org/3/library/ftplib.html#module-ftplib" title="(in Python v3.8)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ftplib</span></code></a> module to manage downloads.</p>
+<p>Use with <a class="reference internal" href="pooch.Pooch.html#pooch.Pooch.fetch" title="pooch.Pooch.fetch"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pooch.Pooch.fetch</span></code></a> to customize the download of files (for
+example, to use authentication or print a progress bar).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>members</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)"><em>list</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><em>None</em></a>) – If None, will unpack all files in the zip archive. Otherwise, <em>members</em>
-must be a list of file names to unpack from the archive. Only these
-files will be unpacked.</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>port</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – Port used for the FTP connection.</p></li>
+<li><p><strong>username</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – User name used to login to the server. Only needed if the server
+requires authentication (i.e., no anonymous FTP).</p></li>
+<li><p><strong>password</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – Password used to login to the server. Only needed if the server
+requires authentication (i.e., no anonymous FTP). Use the empty string
+to indicate no password is required.</p></li>
+<li><p><strong>account</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – Some servers also require an “account” name for authentication.</p></li>
+<li><p><strong>timeout</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – Timeout in seconds for ftp socket operations, use None to mean no
+timeout.</p></li>
+<li><p><strong>progressbar</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a>) – If True, will print a progress bar of the download to standard error
+(stderr). Requires <a class="reference external" href="https://github.com/tqdm/tqdm">tqdm</a> to be
+installed.</p></li>
+<li><p><strong>chunk_size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – Files are streamed <em>chunk_size</em> bytes at a time instead of loading
+everything into memory at one. Usually doesn’t need to be changed.</p></li>
+</ul>
 </dd>
 </dl>
 <p class="rubric">Methods Summary</p>
@@ -245,8 +257,8 @@ files will be unpacked.</p>
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#pooch.Unzip.__call__" title="pooch.Unzip.__call__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Unzip.__call__</span></code></a>(fname, action, pooch)</p></td>
-<td><p>Extract all files from the given archive.</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pooch.FTPDownloader.__call__" title="pooch.FTPDownloader.__call__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">FTPDownloader.__call__</span></code></a>(url, output_file, pooch)</p></td>
+<td><p>Download the given URL over FTP to the given output file.</p></td>
 </tr>
 </tbody>
 </table>
@@ -254,25 +266,16 @@ files will be unpacked.</p>
 
 <hr class="docutils" />
 <dl class="method">
-<dt id="pooch.Unzip.__call__">
-<code class="sig-prename descclassname">Unzip.</code><code class="sig-name descname">__call__</code><span class="sig-paren">(</span><em class="sig-param">fname</em>, <em class="sig-param">action</em>, <em class="sig-param">pooch</em><span class="sig-paren">)</span><a class="headerlink" href="#pooch.Unzip.__call__" title="Permalink to this definition">¶</a></dt>
-<dd><p>Extract all files from the given archive.</p>
+<dt id="pooch.FTPDownloader.__call__">
+<code class="sig-prename descclassname">FTPDownloader.</code><code class="sig-name descname">__call__</code><span class="sig-paren">(</span><em class="sig-param">url</em>, <em class="sig-param">output_file</em>, <em class="sig-param">pooch</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pooch/downloaders.html#FTPDownloader.__call__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pooch.FTPDownloader.__call__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Download the given URL over FTP to the given output file.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>fname</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – Full path of the zipped file in local storage.</p></li>
-<li><p><strong>action</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – <p>Indicates what action was taken by <a class="reference internal" href="pooch.Pooch.html#pooch.Pooch.fetch" title="pooch.Pooch.fetch"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pooch.Pooch.fetch</span></code></a>:</p>
-<ul>
-<li><p><code class="docutils literal notranslate"><span class="pre">&quot;download&quot;</span></code>: File didn’t exist locally and was downloaded</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">&quot;update&quot;</span></code>: Local file was outdated and was re-download</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">&quot;fetch&quot;</span></code>: File exists and is updated so it wasn’t downloaded</p></li>
+<li><p><strong>url</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – The URL to the file you want to download.</p></li>
+<li><p><strong>output_file</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a><em> or </em><em>file-like object</em>) – Path (and file name) to which the file will be downloaded.</p></li>
+<li><p><strong>pooch</strong> (<a class="reference internal" href="pooch.Pooch.html#pooch.Pooch" title="pooch.Pooch"><code class="xref py py-class docutils literal notranslate"><span class="pre">Pooch</span></code></a>) – The instance of <a class="reference internal" href="pooch.Pooch.html#pooch.Pooch" title="pooch.Pooch"><code class="xref py py-class docutils literal notranslate"><span class="pre">Pooch</span></code></a> that is calling this method.</p></li>
 </ul>
-</p></li>
-<li><p><strong>pooch</strong> (<a class="reference internal" href="pooch.Pooch.html#pooch.Pooch" title="pooch.Pooch"><code class="xref py py-class docutils literal notranslate"><span class="pre">pooch.Pooch</span></code></a>) – The instance of <a class="reference internal" href="pooch.Pooch.html#pooch.Pooch" title="pooch.Pooch"><code class="xref py py-class docutils literal notranslate"><span class="pre">pooch.Pooch</span></code></a> that is calling this.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>fnames</strong> (<em>list of str</em>) – A list of the full path to all files in the extracted archive.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -287,10 +290,10 @@ files will be unpacked.</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="pooch.Untar.html" class="btn btn-neutral float-right" title="pooch.Untar" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="pooch.Unzip.html" class="btn btn-neutral float-right" title="pooch.Unzip" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="pooch.FTPDownloader.html" class="btn btn-neutral float-left" title="pooch.FTPDownloader" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="pooch.HTTPDownloader.html" class="btn btn-neutral float-left" title="pooch.HTTPDownloader" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

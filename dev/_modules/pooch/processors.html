@@ -208,29 +208,13 @@
 <span class="sd">Post-processing hooks for Pooch.fetch</span>
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">bz2</span>
 <span class="kn">import</span> <span class="nn">gzip</span>
+<span class="kn">import</span> <span class="nn">lzma</span>
 <span class="kn">import</span> <span class="nn">shutil</span>
 <span class="kn">from</span> <span class="nn">zipfile</span> <span class="k">import</span> <span class="n">ZipFile</span>
 <span class="kn">from</span> <span class="nn">tarfile</span> <span class="k">import</span> <span class="n">TarFile</span>
 <span class="kn">from</span> <span class="nn">warnings</span> <span class="k">import</span> <span class="n">warn</span>
-
-<span class="c1"># Try getting the 2.7 backports of lzma and bz2. Can be deleted when dropping 2.7</span>
-<span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">:</span>
-    <span class="k">try</span><span class="p">:</span>
-        <span class="kn">import</span> <span class="nn">bz2file</span> <span class="k">as</span> <span class="nn">bz2</span>
-    <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
-        <span class="n">bz2</span> <span class="o">=</span> <span class="kc">None</span>
-<span class="k">else</span><span class="p">:</span>
-    <span class="kn">import</span> <span class="nn">bz2</span>
-<span class="k">try</span><span class="p">:</span>
-    <span class="kn">import</span> <span class="nn">lzma</span>
-<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
-    <span class="k">try</span><span class="p">:</span>
-        <span class="kn">from</span> <span class="nn">backports</span> <span class="k">import</span> <span class="n">lzma</span>
-    <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
-        <span class="c1"># Make this an optional dependency</span>
-        <span class="n">lzma</span> <span class="o">=</span> <span class="kc">None</span>
 
 
 <span class="k">class</span> <span class="nc">ExtractorProcessor</span><span class="p">:</span>  <span class="c1"># pylint: disable=too-few-public-methods</span>
@@ -251,7 +235,8 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">suffix</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># String appended to unpacked archive. To be implemented in subclass</span>
+    <span class="c1"># String appended to unpacked archive. To be implemented in subclass</span>
+    <span class="n">suffix</span> <span class="o">=</span> <span class="kc">None</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">members</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">members</span> <span class="o">=</span> <span class="n">members</span>
@@ -265,11 +250,11 @@
 <span class="sd">        fname : str</span>
 <span class="sd">            Full path of the zipped file in local storage.</span>
 <span class="sd">        action : str</span>
-<span class="sd">            Indicates what action was taken by :meth:`pooch.Pooch.fetch`. One of:</span>
+<span class="sd">            Indicates what action was taken by :meth:`pooch.Pooch.fetch`:</span>
 
-<span class="sd">            * ``&quot;download&quot;``: The file didn&#39;t exist locally and was downloaded</span>
-<span class="sd">            * ``&quot;update&quot;``: The local file was outdated and was re-download</span>
-<span class="sd">            * ``&quot;fetch&quot;``: The file exists and is updated so it wasn&#39;t downloaded</span>
+<span class="sd">            * ``&quot;download&quot;``: File didn&#39;t exist locally and was downloaded</span>
+<span class="sd">            * ``&quot;update&quot;``: Local file was outdated and was re-download</span>
+<span class="sd">            * ``&quot;fetch&quot;``: File exists and is updated so it wasn&#39;t downloaded</span>
 
 <span class="sd">        pooch : :class:`pooch.Pooch`</span>
 <span class="sd">            The instance of :class:`pooch.Pooch` that is calling this.</span>
@@ -290,8 +275,8 @@
             <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">extract_dir</span><span class="p">):</span>
                 <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">extract_dir</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_extract_file</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">extract_dir</span><span class="p">)</span>
-        <span class="c1"># Get a list of all file names (including subdirectories) in our folder of</span>
-        <span class="c1"># unzipped files.</span>
+        <span class="c1"># Get a list of all file names (including subdirectories) in our folder</span>
+        <span class="c1"># of unzipped files.</span>
         <span class="n">fnames</span> <span class="o">=</span> <span class="p">[</span>
             <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">fname</span><span class="p">)</span>
             <span class="k">for</span> <span class="n">path</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">files</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">walk</span><span class="p">(</span><span class="n">extract_dir</span><span class="p">)</span>
@@ -311,18 +296,18 @@
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Processor that unpacks a zip archive and returns a list of all files.</span>
 
-<span class="sd">    Use with :meth:`pooch.Pooch.fetch` to unzip a downloaded data file into a folder in</span>
-<span class="sd">    the local data store. :meth:`~pooch.Pooch.fetch` will return a list with the names</span>
-<span class="sd">    of the unzipped files instead of the zip archive.</span>
+<span class="sd">    Use with :meth:`pooch.Pooch.fetch` to unzip a downloaded data file into a</span>
+<span class="sd">    folder in the local data store. :meth:`~pooch.Pooch.fetch` will return a</span>
+<span class="sd">    list with the names of the unzipped files instead of the zip archive.</span>
 
 <span class="sd">    The output folder is ``{fname}.unzip``.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    members : list or None</span>
-<span class="sd">        If None, will unpack all files in the zip archive. Otherwise, *members* must be</span>
-<span class="sd">        a list of file names to unpack from the archive. Only these files will be</span>
-<span class="sd">        unpacked.</span>
+<span class="sd">        If None, will unpack all files in the zip archive. Otherwise, *members*</span>
+<span class="sd">        must be a list of file names to unpack from the archive. Only these</span>
+<span class="sd">        files will be unpacked.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -356,9 +341,9 @@
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Processor that unpacks a tar archive and returns a list of all files.</span>
 
-<span class="sd">    Use with :meth:`pooch.Pooch.fetch` to untar a downloaded data file into a folder in</span>
-<span class="sd">    the local data store. :meth:`~pooch.Pooch.fetch` will return a list with the names</span>
-<span class="sd">    of the extracted files instead of the archive.</span>
+<span class="sd">    Use with :meth:`pooch.Pooch.fetch` to untar a downloaded data file into a</span>
+<span class="sd">    folder in the local data store. :meth:`~pooch.Pooch.fetch` will return a</span>
+<span class="sd">    list with the names of the extracted files instead of the archive.</span>
 
 <span class="sd">    The output folder is ``{fname}.untar``.</span>
 
@@ -366,9 +351,9 @@
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    members : list or None</span>
-<span class="sd">        If None, will unpack all files in the archive. Otherwise, *members* must be</span>
-<span class="sd">        a list of file names to unpack from the archive. Only these files will be</span>
-<span class="sd">        unpacked.</span>
+<span class="sd">        If None, will unpack all files in the archive. Otherwise, *members*</span>
+<span class="sd">        must be a list of file names to unpack from the archive. Only these</span>
+<span class="sd">        files will be unpacked.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">suffix</span> <span class="o">=</span> <span class="s2">&quot;.untar&quot;</span>
@@ -405,28 +390,24 @@
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Processor that decompress a file and returns the decompressed version.</span>
 
-<span class="sd">    Use with :meth:`pooch.Pooch.fetch` to decompress a downloaded data file so that it</span>
-<span class="sd">    can be easily opened. Useful for data files that take a long time to decompress</span>
-<span class="sd">    (exchanging disk space for speed).</span>
+<span class="sd">    Use with :meth:`pooch.Pooch.fetch` to decompress a downloaded data file so</span>
+<span class="sd">    that it can be easily opened. Useful for data files that take a long time</span>
+<span class="sd">    to decompress (exchanging disk space for speed).</span>
 
 <span class="sd">    The output file is ``{fname}.decomp``.</span>
 
-<span class="sd">    Supported decompression methods are LZMA (``.xz``), bzip2 (``.bz2``), and gzip</span>
-<span class="sd">    (``.gz``).</span>
+<span class="sd">    Supported decompression methods are LZMA (``.xz``), bzip2 (``.bz2``), and</span>
+<span class="sd">    gzip (``.gz``).</span>
 
-<span class="sd">    File names with the standard extensions (see above) can use ``method=&quot;auto&quot;`` to</span>
-<span class="sd">    automatically determine the compression method. This can be overwritten by setting</span>
-<span class="sd">    the *method* argument.</span>
-
-<span class="sd">    .. warning::</span>
-
-<span class="sd">        With **Python 2.7**, methods &quot;lzma&quot;/&quot;xz&quot; and &quot;bzip2&quot; require extra dependencies</span>
-<span class="sd">        to be installed: ``backports.lzma`` for &quot;lzma&quot; and ``bz2file`` for &quot;bzip2&quot;.</span>
+<span class="sd">    File names with the standard extensions (see above) can use</span>
+<span class="sd">    ``method=&quot;auto&quot;`` to automatically determine the compression method. This</span>
+<span class="sd">    can be overwritten by setting the *method* argument.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    method : str</span>
-<span class="sd">        Name of the compression method. Can be &quot;auto&quot;, &quot;lzma&quot;, &quot;xz&quot;, &quot;bzip2&quot;, or &quot;gzip&quot;.</span>
+<span class="sd">        Name of the compression method. Can be &quot;auto&quot;, &quot;lzma&quot;, &quot;xz&quot;, &quot;bzip2&quot;,</span>
+<span class="sd">        or &quot;gzip&quot;.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -446,11 +427,11 @@
 <span class="sd">        fname : str</span>
 <span class="sd">            Full path of the compressed file in local storage.</span>
 <span class="sd">        action : str</span>
-<span class="sd">            Indicates what action was taken by :meth:`pooch.Pooch.fetch`. One of:</span>
+<span class="sd">            Indicates what action was taken by :meth:`pooch.Pooch.fetch`:</span>
 
-<span class="sd">            - ``&quot;download&quot;``: The file didn&#39;t exist locally and was downloaded</span>
-<span class="sd">            - ``&quot;update&quot;``: The local file was outdated and was re-download</span>
-<span class="sd">            - ``&quot;fetch&quot;``: The file exists and is updated so it wasn&#39;t downloaded</span>
+<span class="sd">            - ``&quot;download&quot;``: File didn&#39;t exist locally and was downloaded</span>
+<span class="sd">            - ``&quot;update&quot;``: Local file was outdated and was re-download</span>
+<span class="sd">            - ``&quot;fetch&quot;``: File exists and is updated so it wasn&#39;t downloaded</span>
 
 <span class="sd">        pooch : :class:`pooch.Pooch`</span>
 <span class="sd">            The instance of :class:`pooch.Pooch` that is calling this.</span>
@@ -475,7 +456,7 @@
 
     <span class="k">def</span> <span class="nf">_compression_module</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fname</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Get the Python compression module compatible with fname and the chosen method.</span>
+<span class="sd">        Get the Python module compatible with fname and the chosen method.</span>
 
 <span class="sd">        If the *method* attribute is &quot;auto&quot;, will select a method based on the</span>
 <span class="sd">        extension. If no recognized extension is in the file name, will raise a</span>
@@ -498,15 +479,6 @@
                     <span class="n">method</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">modules</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
                 <span class="p">)</span>
             <span class="p">)</span>
-        <span class="c1"># Check for Python 2.7 extra dependencies</span>
-        <span class="k">if</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;lzma&quot;</span><span class="p">,</span> <span class="s2">&quot;xz&quot;</span><span class="p">]</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">modules</span><span class="p">[</span><span class="s2">&quot;lzma&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="s2">&quot;LZMA/xz support requires the &#39;backports.lzma&#39; package in Python 2.7&quot;</span>
-            <span class="p">)</span>
-        <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;bzip2&quot;</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">modules</span><span class="p">[</span><span class="s2">&quot;bzip2&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="s2">&quot;bzip2 support requires the &#39;bz2file&#39; package in Python 2.7&quot;</span>
-            <span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">modules</span><span class="p">[</span><span class="n">method</span><span class="p">]</span></div>
 </pre></div>
 
@@ -522,7 +494,7 @@
     <p>
         &copy; Copyright 2018-2019, The Pooch Developers
       <span class="lastupdated">
-        Last updated on Oct 22, 2019.
+        Last updated on Nov 20, 2019.
       </span>
 
     </p>

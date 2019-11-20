@@ -226,30 +226,21 @@
 <h1>pooch.make_registry<a class="headerlink" href="#pooch-make-registry" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="pooch.make_registry">
-<code class="descclassname">pooch.</code><code class="descname">make_registry</code><span class="sig-paren">(</span><em>directory</em>, <em>output</em>, <em>recursive=True</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pooch/utils.html#make_registry"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pooch.make_registry" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">pooch.</code><code class="sig-name descname">make_registry</code><span class="sig-paren">(</span><em class="sig-param">directory</em>, <em class="sig-param">output</em>, <em class="sig-param">recursive=True</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pooch/utils.html#make_registry"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pooch.make_registry" title="Permalink to this definition">¶</a></dt>
 <dd><p>Make a registry of files and hashes for the given directory.</p>
 <p>This is helpful if you have many files in your test dataset as it keeps you
 from needing to manually update the registry.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first last docutils">
-<dt><strong>directory</strong> <span class="classifier-delimiter">:</span> <span class="classifier">str</span></dt>
-<dd><p class="first last">Directory of the test data to put in the registry. All file names in the
-registry will be relative to this directory.</p>
-</dd>
-<dt><strong>output</strong> <span class="classifier-delimiter">:</span> <span class="classifier">str</span></dt>
-<dd><p class="first last">Name of the output registry file.</p>
-</dd>
-<dt><strong>recursive</strong> <span class="classifier-delimiter">:</span> <span class="classifier">bool</span></dt>
-<dd><p class="first last">If True, will recursively look for files in subdirectories of <em>directory</em>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>directory</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – Directory of the test data to put in the registry. All file names in
+the registry will be relative to this directory.</p></li>
+<li><p><strong>output</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – Name of the output registry file.</p></li>
+<li><p><strong>recursive</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a>) – If True, will recursively look for files in subdirectories of
+<em>directory</em>.</p></li>
+</ul>
 </dd>
 </dl>
-</td>
-</tr>
-</tbody>
-</table>
 </dd></dl>
 
 <div style='clear:both'></div></div>
@@ -276,7 +267,7 @@ registry will be relative to this directory.</p>
     <p>
         &copy; Copyright 2018-2019, The Pooch Developers
       <span class="lastupdated">
-        Last updated on Oct 22, 2019.
+        Last updated on Nov 20, 2019.
       </span>
 
     </p>

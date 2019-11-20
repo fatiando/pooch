@@ -5,9 +5,75 @@ pooch.Decompress
 
 .. autoclass:: Decompress
 
-.. raw:: html
+    .. rubric:: Methods Summary
 
-     <div style='clear:both'></div>
+    .. autosummary::
+    
+    
+        Decompress.__call__
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+----
 
 
 

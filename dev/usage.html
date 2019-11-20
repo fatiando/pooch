@@ -120,7 +120,9 @@
 <li class="toctree-l2"><a class="reference internal" href="#user-defined-paths">User-defined paths</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#subdirectories">Subdirectories</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#post-processing-hooks">Post-processing hooks</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#custom-downloaders-and-authentication">Custom downloaders and authentication</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#downloaders-and-authentication">Downloaders and authentication</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ftp-with-or-without-authentication">FTP with or without authentication</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#custom-downloaders">Custom downloaders</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#printing-a-download-progress-bar">Printing a download progress bar</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#so-you-have-1000-data-files">So you have 1000 data files</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#creating-a-registry-file">Creating a registry file</a></li>
@@ -228,18 +230,18 @@
 interdimensional portals. You want to distribute sample data so that your users can
 easily try out the library by copying and pasting from the docs. You want to have a
 <code class="docutils literal notranslate"><span class="pre">plumbus.datasets</span></code> module that defines functions like <code class="docutils literal notranslate"><span class="pre">fetch_c137()</span></code> that will
-return the data loaded as a <a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v0.25.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">pandas.DataFrame</span></code></a> for convenient access.</p>
+return the data loaded as a <a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v0.25.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">pandas.DataFrame</span></code></a> for convenient access.</p>
 </div>
 <div class="section" id="assumptions">
 <h2>Assumptions<a class="headerlink" href="#assumptions" title="Permalink to this headline">¶</a></h2>
 <p>We’ll setup a <a class="reference internal" href="api/generated/pooch.Pooch.html#pooch.Pooch" title="pooch.Pooch"><code class="xref py py-class docutils literal notranslate"><span class="pre">Pooch</span></code></a> to solve your data distribution needs.
 In this example, we’ll work with the follow assumptions:</p>
 <ol class="arabic simple">
-<li>Your sample data are in a folder of your Github repository.</li>
-<li>You use git tags to mark releases of your project in the history.</li>
-<li>Your project has a variable that defines the version string.</li>
-<li>The version string contains an indicator that the current commit is not a release
-(like <code class="docutils literal notranslate"><span class="pre">'v1.2.3+12.d908jdl'</span></code> or <code class="docutils literal notranslate"><span class="pre">'v0.1+dev'</span></code>).</li>
+<li><p>Your sample data are in a folder of your Github repository.</p></li>
+<li><p>You use git tags to mark releases of your project in the history.</p></li>
+<li><p>Your project has a variable that defines the version string.</p></li>
+<li><p>The version string contains an indicator that the current commit is not a release
+(like <code class="docutils literal notranslate"><span class="pre">'v1.2.3+12.d908jdl'</span></code> or <code class="docutils literal notranslate"><span class="pre">'v0.1+dev'</span></code>).</p></li>
 </ol>
 <p>Let’s say that this is the layout of your repository on Github:</p>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>doc/
@@ -260,22 +262,22 @@ setup.py
 </div>
 <div class="section" id="setup">
 <h2>Setup<a class="headerlink" href="#setup" title="Permalink to this headline">¶</a></h2>
-<p>Pooch can download and cache your data files to the users computer automatically.
+<p>Pooch can download and cache your data files to the users’ computer automatically.
 This is what the <code class="docutils literal notranslate"><span class="pre">plumbus/datasets.py</span></code> file would look like:</p>
-<div class="code python highlight-default notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">Load sample data.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">import</span> <span class="nn">pandas</span>
 <span class="kn">import</span> <span class="nn">pooch</span>
 
-<span class="kn">from</span> <span class="nn">.</span> <span class="k">import</span> <span class="n">version</span>  <span class="c1"># The version string of your project</span>
+<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">version</span>  <span class="c1"># The version string of your project</span>
 
 
 <span class="n">GOODBOY</span> <span class="o">=</span> <span class="n">pooch</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
     <span class="c1"># Use the default cache folder for the OS</span>
     <span class="n">path</span><span class="o">=</span><span class="n">pooch</span><span class="o">.</span><span class="n">os_cache</span><span class="p">(</span><span class="s2">&quot;plumbus&quot;</span><span class="p">),</span>
     <span class="c1"># The remote data is on Github</span>
-    <span class="n">base_url</span><span class="o">=</span><span class="s2">&quot;https://github.com/rick/plumbus/raw/</span><span class="si">{version}</span><span class="s2">/data/&quot;</span><span class="p">,</span>
+    <span class="n">base_url</span><span class="o">=</span><span class="s2">&quot;https://github.com/rick/plumbus/raw/{version}/data/&quot;</span><span class="p">,</span>
     <span class="n">version</span><span class="o">=</span><span class="n">version</span><span class="p">,</span>
     <span class="c1"># If this is a development version, get the data from the master branch</span>
     <span class="n">version_dev</span><span class="o">=</span><span class="s2">&quot;master&quot;</span><span class="p">,</span>
@@ -317,21 +319,21 @@ OS. You could also provide any other path if you prefer. See the documentation f
 <p>Pooch uses <a class="reference external" href="https://en.wikipedia.org/wiki/SHA-2">SHA256</a> hashes to check if files
 are up-to-date or possibly corrupted:</p>
 <ul class="simple">
-<li>If a file exists in the local folder, Pooch will check that its hash matches the one
-in the registry. If it doesn’t, we’ll assume that it needs to be updated.</li>
-<li>If a file needs to be updated or doesn’t exist, Pooch will download it from the
+<li><p>If a file exists in the local folder, Pooch will check that its hash matches the one
+in the registry. If it doesn’t, we’ll assume that it needs to be updated.</p></li>
+<li><p>If a file needs to be updated or doesn’t exist, Pooch will download it from the
 remote source and check the hash. If the hash doesn’t match, an exception is raised to
-warn of possible file corruption.</li>
+warn of possible file corruption.</p></li>
 </ul>
 <p>You can generate hashes for your data files using the terminal:</p>
-<div class="code bash highlight-default notranslate"><div class="highlight"><pre><span></span>$ openssl sha256 data/c137.csv
-SHA256(data/c137.csv)= baee0894dba14b12085eacb204284b97e362f4f3e5a5807693cc90ef415c1b2d
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ openssl sha256 data/c137.csv
+SHA256<span class="o">(</span>data/c137.csv<span class="o">)=</span> baee0894dba14b12085eacb204284b97e362f4f3e5a5807693cc90ef415c1b2d
 </pre></div>
 </div>
 <p>Or using the <a class="reference internal" href="api/generated/pooch.file_hash.html#pooch.file_hash" title="pooch.file_hash"><code class="xref py py-func docutils literal notranslate"><span class="pre">pooch.file_hash</span></code></a> function (which is a convenient way of calling
 Python’s <a class="reference external" href="https://docs.python.org/3/library/hashlib.html#module-hashlib" title="(in Python v3.8)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">hashlib</span></code></a>):</p>
-<div class="code python highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pooch</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">pooch</span><span class="o">.</span><span class="n">file_hash</span><span class="p">(</span><span class="s2">&quot;data/c137.csv&quot;</span><span class="p">))</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pooch</span>
+<span class="k">print</span><span class="p">(</span><span class="n">pooch</span><span class="o">.</span><span class="n">file_hash</span><span class="p">(</span><span class="s2">&quot;data/c137.csv&quot;</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
@@ -351,14 +353,14 @@ for you.</p>
 </div>
 <div class="section" id="user-defined-paths">
 <h2>User-defined paths<a class="headerlink" href="#user-defined-paths" title="Permalink to this headline">¶</a></h2>
-<p>In the above example, the location of the local storage in the users computer is
+<p>In the above example, the location of the local storage in the users’ computer is
 hard-coded. There is no way for them to change it to something else. To avoid being a
 tyrant, you can allow the user to define the <code class="docutils literal notranslate"><span class="pre">path</span></code> argument using an environment
 variable:</p>
-<div class="code python highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">GOODBOY</span> <span class="o">=</span> <span class="n">pooch</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">GOODBOY</span> <span class="o">=</span> <span class="n">pooch</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
     <span class="c1"># This is still the default in case the environment variable isn&#39;t defined</span>
     <span class="n">path</span><span class="o">=</span><span class="n">pooch</span><span class="o">.</span><span class="n">os_cache</span><span class="p">(</span><span class="s2">&quot;plumbus&quot;</span><span class="p">),</span>
-    <span class="n">base_url</span><span class="o">=</span><span class="s2">&quot;https://github.com/rick/plumbus/raw/</span><span class="si">{version}</span><span class="s2">/data/&quot;</span><span class="p">,</span>
+    <span class="n">base_url</span><span class="o">=</span><span class="s2">&quot;https://github.com/rick/plumbus/raw/{version}/data/&quot;</span><span class="p">,</span>
     <span class="n">version</span><span class="o">=</span><span class="n">version</span><span class="p">,</span>
     <span class="n">version_dev</span><span class="o">=</span><span class="s2">&quot;master&quot;</span><span class="p">,</span>
     <span class="n">registry</span><span class="o">=</span><span class="p">{</span>
@@ -395,8 +397,8 @@ overwrite the file name returned by <a class="reference internal" href="api/gene
 <p>For example, let’s say our data file is zipped and we want to store an unzipped copy of
 it and read that instead. We can do this with a post-processing hook that unzips the
 file and returns the path to the unzipped file instead of the original zip archive:</p>
-<div class="code python highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">from</span> <span class="nn">zipfile</span> <span class="k">import</span> <span class="n">ZipFile</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">zipfile</span> <span class="kn">import</span> <span class="n">ZipFile</span>
 
 
 <span class="k">def</span> <span class="nf">unpack</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">action</span><span class="p">,</span> <span class="n">pup</span><span class="p">):</span>
@@ -452,7 +454,7 @@ file and returns the path to the unzipped file instead of the original zip archi
 <p>Fortunately, you don’t have to implement your own unzip processor. Pooch provides the
 <a class="reference internal" href="api/generated/pooch.Unzip.html#pooch.Unzip" title="pooch.Unzip"><code class="xref py py-class docutils literal notranslate"><span class="pre">pooch.Unzip</span></code></a> processor for exactly this use case. The above example using the
 Pooch processor would look like:</p>
-<div class="code python highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pooch</span> <span class="k">import</span> <span class="n">Unzip</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pooch</span> <span class="kn">import</span> <span class="n">Unzip</span>
 
 
 <span class="k">def</span> <span class="nf">fetch_zipped_file</span><span class="p">():</span>
@@ -474,7 +476,7 @@ Pooch processor would look like:</p>
 <p>Alternatively, your zip archive could contain multiple files that you want to unpack. In
 this case, the default behavior of <a class="reference internal" href="api/generated/pooch.Unzip.html#pooch.Unzip" title="pooch.Unzip"><code class="xref py py-class docutils literal notranslate"><span class="pre">pooch.Unzip</span></code></a> is to extract all files into a
 directory and return a list of file paths instead of a single one:</p>
-<div class="code python highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">fetch_zipped_archive</span><span class="p">():</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">fetch_zipped_archive</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Load all files from a zipped archive.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -489,7 +491,7 @@ directory and return a list of file paths instead of a single one:</p>
 files can be compressed with <code class="docutils literal notranslate"><span class="pre">gzip</span></code> to reduce download times but will need to be
 decompressed before loading, which can be slow. You can trade storage space for speed by
 keeping a decompressed copy of the file:</p>
-<div class="code python highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pooch</span> <span class="k">import</span> <span class="n">Decompress</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pooch</span> <span class="kn">import</span> <span class="n">Decompress</span>
 
 <span class="k">def</span> <span class="nf">fetch_compressed_file</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot;</span>
@@ -503,8 +505,8 @@ keeping a decompressed copy of the file:</p>
 </pre></div>
 </div>
 </div>
-<div class="section" id="custom-downloaders-and-authentication">
-<h2>Custom downloaders and authentication<a class="headerlink" href="#custom-downloaders-and-authentication" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="downloaders-and-authentication">
+<h2>Downloaders and authentication<a class="headerlink" href="#downloaders-and-authentication" title="Permalink to this headline">¶</a></h2>
 <p>By default, <a class="reference internal" href="api/generated/pooch.Pooch.html#pooch.Pooch.fetch" title="pooch.Pooch.fetch"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pooch.Pooch.fetch</span></code></a> will download files over HTTP without
 authentication. Sometimes this is not enough: some servers require logins, some are FTP
 instead of HTTP. To get around this, you can pass a <code class="docutils literal notranslate"><span class="pre">downloader</span></code> to
@@ -512,7 +514,7 @@ instead of HTTP. To get around this, you can pass a <code class="docutils litera
 <p>Pooch provides <a class="reference internal" href="api/generated/pooch.HTTPDownloader.html#pooch.HTTPDownloader" title="pooch.HTTPDownloader"><code class="xref py py-class docutils literal notranslate"><span class="pre">HTTPDownloader</span></code></a> class (which is used by default) that can
 be used to provide login credentials to HTTP servers that require authentication. For
 example:</p>
-<div class="code python highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pooch</span> <span class="k">import</span> <span class="n">HTTPDownloader</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pooch</span> <span class="kn">import</span> <span class="n">HTTPDownloader</span>
 
 
 <span class="k">def</span> <span class="nf">fetch_protected_data</span><span class="p">():</span>
@@ -529,7 +531,7 @@ example:</p>
 <p>It’s probably not a good idea to hard-code credentials in your code. One way around this
 is to ask users to set their own credentials through environment variables. The download
 code could look something like this:</p>
-<div class="code python highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
 
 
 <span class="k">def</span> <span class="nf">fetch_protected_data</span><span class="p">():</span>
@@ -546,11 +548,61 @@ code could look something like this:</p>
     <span class="k">return</span> <span class="n">data</span>
 </pre></div>
 </div>
+</div>
+<div class="section" id="ftp-with-or-without-authentication">
+<h2>FTP with or without authentication<a class="headerlink" href="#ftp-with-or-without-authentication" title="Permalink to this headline">¶</a></h2>
+<p>Pooch also comes with the <a class="reference internal" href="api/generated/pooch.FTPDownloader.html#pooch.FTPDownloader" title="pooch.FTPDownloader"><code class="xref py py-class docutils literal notranslate"><span class="pre">FTPDownloader</span></code></a> class that can be used
+when files are distributed over FTP. By default, <a class="reference internal" href="api/generated/pooch.Pooch.html#pooch.Pooch.fetch" title="pooch.Pooch.fetch"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pooch.Pooch.fetch</span></code></a> will
+automatically detect if the download URL is HTTP(S) or FTP and use the appropriate
+downloader:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">GOODBOY</span> <span class="o">=</span> <span class="n">pooch</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+    <span class="n">path</span><span class="o">=</span><span class="n">pooch</span><span class="o">.</span><span class="n">os_cache</span><span class="p">(</span><span class="s2">&quot;plumbus&quot;</span><span class="p">),</span>
+    <span class="c1"># Use an FTP server instead of HTTP. The rest is all the same.</span>
+    <span class="n">base_url</span><span class="o">=</span><span class="s2">&quot;ftp://my-data-server.org/{version}/&quot;</span><span class="p">,</span>
+    <span class="n">version</span><span class="o">=</span><span class="n">version</span><span class="p">,</span>
+    <span class="n">version_dev</span><span class="o">=</span><span class="s2">&quot;master&quot;</span><span class="p">,</span>
+    <span class="n">registry</span><span class="o">=</span><span class="p">{</span>
+        <span class="s2">&quot;c137.csv&quot;</span><span class="p">:</span> <span class="s2">&quot;19uheidhlkjdwhoiwuhc0uhcwljchw9ochwochw89dcgw9dcgwc&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;cronen.csv&quot;</span><span class="p">:</span> <span class="s2">&quot;1upodh2ioduhw9celdjhlfvhksgdwikdgcowjhcwoduchowjg8w&quot;</span><span class="p">,</span>
+    <span class="p">},</span>
+<span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">fetch_c137</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Load the C-137 sample data as a pandas.DataFrame (over FTP this time).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">fname</span> <span class="o">=</span> <span class="n">GOODBOY</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="s2">&quot;c137.csv&quot;</span><span class="p">)</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">pandas</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">data</span>
+</pre></div>
+</div>
+<p>However, sometimes the FTP server doesn’t support anonymous FTP and needs
+authentication. In these cases, pass in an <a class="reference internal" href="api/generated/pooch.FTPDownloader.html#pooch.FTPDownloader" title="pooch.FTPDownloader"><code class="xref py py-class docutils literal notranslate"><span class="pre">FTPDownloader</span></code></a>
+explicitly to <a class="reference internal" href="api/generated/pooch.Pooch.html#pooch.Pooch.fetch" title="pooch.Pooch.fetch"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pooch.Pooch.fetch</span></code></a>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+
+
+<span class="k">def</span> <span class="nf">fetch_c137</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Load the C-137 sample data as a pandas.DataFrame (over FTP this time).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">username</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;MYDATASERVER_USERNAME&quot;</span><span class="p">)</span>
+    <span class="n">password</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;MYDATASERVER_PASSWORD&quot;</span><span class="p">)</span>
+    <span class="n">download_ftp</span> <span class="o">=</span> <span class="n">pooch</span><span class="o">.</span><span class="n">FTPDownloader</span><span class="p">(</span><span class="n">username</span><span class="o">=</span><span class="n">username</span><span class="p">,</span> <span class="n">password</span><span class="o">=</span><span class="n">password</span><span class="p">)</span>
+    <span class="n">fname</span> <span class="o">=</span> <span class="n">GOODBOY</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="s2">&quot;c137.csv&quot;</span><span class="p">,</span> <span class="n">downloader</span><span class="o">=</span><span class="n">download_ftp</span><span class="p">)</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">pandas</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">data</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="custom-downloaders">
+<h2>Custom downloaders<a class="headerlink" href="#custom-downloaders" title="Permalink to this headline">¶</a></h2>
 <p>If your use case is not covered by our downloaders, you can implement your own. See
 <a class="reference internal" href="api/generated/pooch.Pooch.html#pooch.Pooch.fetch" title="pooch.Pooch.fetch"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pooch.Pooch.fetch</span></code></a> for the required format of downloaders. As an example,
 consider the case in which the login credentials need to be provided to a site that is
 redirected from the original download URL in the <a class="reference internal" href="api/generated/pooch.Pooch.html#pooch.Pooch" title="pooch.Pooch"><code class="xref py py-class docutils literal notranslate"><span class="pre">Pooch</span></code></a> registry:</p>
-<div class="code python highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">requests</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">requests</span>
 
 
 <span class="k">def</span> <span class="nf">redirect_downloader</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">output_file</span><span class="p">,</span> <span class="n">pooch</span><span class="p">):</span>
@@ -581,14 +633,14 @@ redirected from the original download URL in the <a class="reference internal" h
 <h2>Printing a download progress bar<a class="headerlink" href="#printing-a-download-progress-bar" title="Permalink to this headline">¶</a></h2>
 <p>The <a class="reference internal" href="api/generated/pooch.HTTPDownloader.html#pooch.HTTPDownloader" title="pooch.HTTPDownloader"><code class="xref py py-class docutils literal notranslate"><span class="pre">HTTPDownloader</span></code></a> can use <a class="reference external" href="https://github.com/tqdm/tqdm">tqdm</a> to
 print a download progress bar. This is turned off by default but can be enabled using:</p>
-<div class="code python highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pooch</span> <span class="k">import</span> <span class="n">HTTPDownloader</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pooch</span> <span class="kn">import</span> <span class="n">HTTPDownloader</span>
 
 
 <span class="k">def</span> <span class="nf">fetch_large_data</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Fetch a large file from a server and print a progress bar.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">download</span> <span class="o">=</span> <span class="n">HTTPDownloader</span><span class="p">(</span><span class="n">progressbar</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">download</span> <span class="o">=</span> <span class="n">HTTPDownloader</span><span class="p">(</span><span class="n">progressbar</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
     <span class="n">fname</span> <span class="o">=</span> <span class="n">GOODBOY</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="s2">&quot;large-data-file.h5&quot;</span><span class="p">,</span> <span class="n">downloader</span><span class="o">=</span><span class="n">download</span><span class="p">)</span>
     <span class="n">data</span> <span class="o">=</span> <span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">data</span>
@@ -596,12 +648,12 @@ print a download progress bar. This is turned off by default but can be enabled 
 </div>
 <p>The resulting progress bar will be printed to stderr and should look something like
 this:</p>
-<div class="code highlight-default notranslate"><div class="highlight"><pre><span></span>100%|█████████████████████████████████████████| 336/336 [...]
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>100%|█████████████████████████████████████████| 336/336 [...]
 </pre></div>
 </div>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last"><code class="docutils literal notranslate"><span class="pre">tqdm</span></code> is not installed by default with Pooch. You will have to install it
+<p class="admonition-title">Note</p>
+<p><code class="docutils literal notranslate"><span class="pre">tqdm</span></code> is not installed by default with Pooch. You will have to install it
 separately in order to use this feature.</p>
 </div>
 </div>
@@ -610,24 +662,31 @@ separately in order to use this feature.</p>
 <p>If your project has a large number of data files, it can be tedious to list them in a
 dictionary. In these cases, it’s better to store the file names and hashes in a file and
 use <a class="reference internal" href="api/generated/pooch.Pooch.html#pooch.Pooch.load_registry" title="pooch.Pooch.load_registry"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pooch.Pooch.load_registry</span></code></a> to read them:</p>
-<div class="code python highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">pkg_resources</span>
 
 <span class="n">GOODBOY</span> <span class="o">=</span> <span class="n">pooch</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
     <span class="c1"># Use the default cache folder for the OS</span>
     <span class="n">path</span><span class="o">=</span><span class="n">pooch</span><span class="o">.</span><span class="n">os_cache</span><span class="p">(</span><span class="s2">&quot;plumbus&quot;</span><span class="p">),</span>
     <span class="c1"># The remote data is on Github</span>
-    <span class="n">base_url</span><span class="o">=</span><span class="s2">&quot;https://github.com/rick/plumbus/raw/</span><span class="si">{version}</span><span class="s2">/data/&quot;</span><span class="p">,</span>
+    <span class="n">base_url</span><span class="o">=</span><span class="s2">&quot;https://github.com/rick/plumbus/raw/{version}/data/&quot;</span><span class="p">,</span>
     <span class="n">version</span><span class="o">=</span><span class="n">version</span><span class="p">,</span>
     <span class="c1"># If this is a development version, get the data from the master branch</span>
     <span class="n">version_dev</span><span class="o">=</span><span class="s2">&quot;master&quot;</span><span class="p">,</span>
     <span class="c1"># We&#39;ll load it from a file later</span>
-    <span class="n">registry</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">registry</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
 <span class="p">)</span>
-<span class="n">GOODBOY</span><span class="o">.</span><span class="n">load_registry</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="vm">__file__</span><span class="p">),</span> <span class="s2">&quot;registry.txt&quot;</span><span class="p">))</span>
+<span class="c1"># Get registry file from package_data</span>
+<span class="n">registry_file</span> <span class="o">=</span> <span class="n">pkg_resources</span><span class="o">.</span><span class="n">resource_stream</span><span class="p">(</span><span class="s2">&quot;plumbus&quot;</span><span class="p">,</span> <span class="s2">&quot;registry.txt&quot;</span><span class="p">)</span>
+<span class="c1"># Load this registry file</span>
+<span class="n">GOODBOY</span><span class="o">.</span><span class="n">load_registry</span><span class="p">(</span><span class="n">registry_file</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>The <code class="docutils literal notranslate"><span class="pre">registry.txt</span></code> file in this case is in the same directory as the <code class="docutils literal notranslate"><span class="pre">datasets.py</span></code>
-module and should be shipped with the package. It’s contents are:</p>
+<p>In this case, the <code class="docutils literal notranslate"><span class="pre">registry.txt</span></code> file is in the <code class="docutils literal notranslate"><span class="pre">plumbus/</span></code> package directory and should be
+shipped with the package (see below for instructions).
+We use <a class="reference external" href="https://setuptools.readthedocs.io/en/latest/pkg_resources.html#basic-resource-access">pkg_resources</a>
+to access the <code class="docutils literal notranslate"><span class="pre">registry.txt</span></code>, giving it the name of our Python package.</p>
+<p>The contents of <code class="docutils literal notranslate"><span class="pre">registry.txt</span></code> are:</p>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>c137.csv 19uheidhlkjdwhoiwuhc0uhcwljchw9ochwochw89dcgw9dcgwc
 cronen.csv 1upodh2ioduhw9celdjhlfvhksgdwikdgcowjhcwoduchowjg8w
 </pre></div>
@@ -638,7 +697,7 @@ your <code class="docutils literal notranslate"><span class="pre">MANIFEST.in</s
 </pre></div>
 </div>
 <p>And the following entry in the <code class="docutils literal notranslate"><span class="pre">setup</span></code> function of your <code class="docutils literal notranslate"><span class="pre">setup.py</span></code>:</p>
-<div class="code python highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">setup</span><span class="p">(</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">setup</span><span class="p">(</span>
     <span class="o">...</span>
     <span class="n">package_data</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;plumbus&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;registry.txt&quot;</span><span class="p">]},</span>
     <span class="o">...</span>
@@ -652,7 +711,7 @@ your <code class="docutils literal notranslate"><span class="pre">MANIFEST.in</s
 challenge. Function <a class="reference internal" href="api/generated/pooch.make_registry.html#pooch.make_registry" title="pooch.make_registry"><code class="xref py py-func docutils literal notranslate"><span class="pre">pooch.make_registry</span></code></a> will create a registry file with all
 contents of a directory. For example, we can generate the registry file for our
 fictitious project from the command-line:</p>
-<div class="code bash highlight-default notranslate"><div class="highlight"><pre><span></span>$ python -c &quot;import pooch; pooch.make_registry(&#39;data&#39;, &#39;plumbus/registry.txt&#39;)&quot;
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ python -c <span class="s2">&quot;import pooch; pooch.make_registry(&#39;data&#39;, &#39;plumbus/registry.txt&#39;)&quot;</span>
 </pre></div>
 </div>
 </div>
@@ -663,10 +722,10 @@ fictitious project from the command-line:</p>
 names as keys and the URLs for downloading the files as values. For example, say we have
 a <code class="docutils literal notranslate"><span class="pre">citadel.csv</span></code> file that we want to download from
 <code class="docutils literal notranslate"><span class="pre">https://www.some-data-hosting-site.com</span></code> instead:</p>
-<div class="code python highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># The basic setup is the same and we must include citadel.csv in the registry.</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># The basic setup is the same and we must include citadel.csv in the registry.</span>
 <span class="n">GOODBOY</span> <span class="o">=</span> <span class="n">pooch</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
     <span class="n">path</span><span class="o">=</span><span class="n">pooch</span><span class="o">.</span><span class="n">os_cache</span><span class="p">(</span><span class="s2">&quot;plumbus&quot;</span><span class="p">),</span>
-    <span class="n">base_url</span><span class="o">=</span><span class="s2">&quot;https://github.com/rick/plumbus/raw/</span><span class="si">{version}</span><span class="s2">/data/&quot;</span><span class="p">,</span>
+    <span class="n">base_url</span><span class="o">=</span><span class="s2">&quot;https://github.com/rick/plumbus/raw/{version}/data/&quot;</span><span class="p">,</span>
     <span class="n">version</span><span class="o">=</span><span class="n">version</span><span class="p">,</span>
     <span class="n">version_dev</span><span class="o">=</span><span class="s2">&quot;master&quot;</span><span class="p">,</span>
     <span class="n">registry</span><span class="o">=</span><span class="p">{</span>
@@ -697,13 +756,13 @@ citadel.csv 893yprofwjndcwhx9c0ehp3ue9gcwoscjwdfgh923e0hwhcwiyc https://www.some
 <p><a class="reference internal" href="api/generated/pooch.Pooch.html#pooch.Pooch.load_registry" title="pooch.Pooch.load_registry"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pooch.Pooch.load_registry</span></code></a> will automatically populate the <code class="docutils literal notranslate"><span class="pre">urls</span></code> attribute.
 This way, custom URLs don’t need to be set in the code. In fact, the module code doesn’t
 change at all:</p>
-<div class="code python highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define the Pooch exactly the same (urls is None by default)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define the Pooch exactly the same (urls is None by default)</span>
 <span class="n">GOODBOY</span> <span class="o">=</span> <span class="n">pooch</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
     <span class="n">path</span><span class="o">=</span><span class="n">pooch</span><span class="o">.</span><span class="n">os_cache</span><span class="p">(</span><span class="s2">&quot;plumbus&quot;</span><span class="p">),</span>
-    <span class="n">base_url</span><span class="o">=</span><span class="s2">&quot;https://github.com/rick/plumbus/raw/</span><span class="si">{version}</span><span class="s2">/data/&quot;</span><span class="p">,</span>
+    <span class="n">base_url</span><span class="o">=</span><span class="s2">&quot;https://github.com/rick/plumbus/raw/{version}/data/&quot;</span><span class="p">,</span>
     <span class="n">version</span><span class="o">=</span><span class="n">version</span><span class="p">,</span>
     <span class="n">version_dev</span><span class="o">=</span><span class="s2">&quot;master&quot;</span><span class="p">,</span>
-    <span class="n">registry</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">registry</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
 <span class="p">)</span>
 <span class="c1"># If custom URLs are present in the registry file, they will be set automatically</span>
 <span class="n">GOODBOY</span><span class="o">.</span><span class="n">load_registry</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="vm">__file__</span><span class="p">),</span> <span class="s2">&quot;registry.txt&quot;</span><span class="p">))</span>
@@ -734,7 +793,7 @@ change at all:</p>
     <p>
         &copy; Copyright 2018-2019, The Pooch Developers
       <span class="lastupdated">
-        Last updated on Oct 22, 2019.
+        Last updated on Nov 20, 2019.
       </span>
 
     </p>

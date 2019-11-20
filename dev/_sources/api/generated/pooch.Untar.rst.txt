@@ -5,9 +5,75 @@ pooch.Untar
 
 .. autoclass:: Untar
 
-.. raw:: html
+    .. rubric:: Methods Summary
 
-     <div style='clear:both'></div>
+    .. autosummary::
+    
+    
+        Untar.__call__
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+----
 
 
 

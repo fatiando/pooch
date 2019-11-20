@@ -225,85 +225,61 @@
 <h1>pooch.Decompress<a class="headerlink" href="#pooch-decompress" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="pooch.Decompress">
-<em class="property">class </em><code class="descclassname">pooch.</code><code class="descname">Decompress</code><span class="sig-paren">(</span><em>method='auto'</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pooch/processors.html#Decompress"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pooch.Decompress" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">pooch.</code><code class="sig-name descname">Decompress</code><span class="sig-paren">(</span><em class="sig-param">method='auto'</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pooch/processors.html#Decompress"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pooch.Decompress" title="Permalink to this definition">¶</a></dt>
 <dd><p>Processor that decompress a file and returns the decompressed version.</p>
-<p>Use with <a class="reference internal" href="pooch.Pooch.html#pooch.Pooch.fetch" title="pooch.Pooch.fetch"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pooch.Pooch.fetch</span></code></a> to decompress a downloaded data file so that it
-can be easily opened. Useful for data files that take a long time to decompress
-(exchanging disk space for speed).</p>
+<p>Use with <a class="reference internal" href="pooch.Pooch.html#pooch.Pooch.fetch" title="pooch.Pooch.fetch"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pooch.Pooch.fetch</span></code></a> to decompress a downloaded data file so
+that it can be easily opened. Useful for data files that take a long time
+to decompress (exchanging disk space for speed).</p>
 <p>The output file is <code class="docutils literal notranslate"><span class="pre">{fname}.decomp</span></code>.</p>
-<p>Supported decompression methods are LZMA (<code class="docutils literal notranslate"><span class="pre">.xz</span></code>), bzip2 (<code class="docutils literal notranslate"><span class="pre">.bz2</span></code>), and gzip
-(<code class="docutils literal notranslate"><span class="pre">.gz</span></code>).</p>
-<p>File names with the standard extensions (see above) can use <code class="docutils literal notranslate"><span class="pre">method=&quot;auto&quot;</span></code> to
-automatically determine the compression method. This can be overwritten by setting
-the <em>method</em> argument.</p>
-<div class="admonition warning">
-<p class="first admonition-title">Warning</p>
-<p class="last">With <strong>Python 2.7</strong>, methods “lzma”/”xz” and “bzip2” require extra dependencies
-to be installed: <code class="docutils literal notranslate"><span class="pre">backports.lzma</span></code> for “lzma” and <code class="docutils literal notranslate"><span class="pre">bz2file</span></code> for “bzip2”.</p>
-</div>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first last docutils">
-<dt><strong>method</strong> <span class="classifier-delimiter">:</span> <span class="classifier">str</span></dt>
-<dd><p class="first last">Name of the compression method. Can be “auto”, “lzma”, “xz”, “bzip2”, or “gzip”.</p>
+<p>Supported decompression methods are LZMA (<code class="docutils literal notranslate"><span class="pre">.xz</span></code>), bzip2 (<code class="docutils literal notranslate"><span class="pre">.bz2</span></code>), and
+gzip (<code class="docutils literal notranslate"><span class="pre">.gz</span></code>).</p>
+<p>File names with the standard extensions (see above) can use
+<code class="docutils literal notranslate"><span class="pre">method=&quot;auto&quot;</span></code> to automatically determine the compression method. This
+can be overwritten by setting the <em>method</em> argument.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>method</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – Name of the compression method. Can be “auto”, “lzma”, “xz”, “bzip2”,
+or “gzip”.</p>
 </dd>
 </dl>
-</td>
-</tr>
-</tbody>
-</table>
-<p class="rubric">Methods</p>
-<table border="1" class="longtable docutils">
+<p class="rubric">Methods Summary</p>
+<table class="longtable docutils align-default">
 <colgroup>
-<col width="10%" />
-<col width="90%" />
+<col style="width: 10%" />
+<col style="width: 90%" />
 </colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="#pooch.Decompress.__call__" title="pooch.Decompress.__call__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__call__</span></code></a>(self,&nbsp;fname,&nbsp;action,&nbsp;pooch)</td>
-<td>Decompress the given file.</td>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pooch.Decompress.__call__" title="pooch.Decompress.__call__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Decompress.__call__</span></code></a>(fname, action, pooch)</p></td>
+<td><p>Decompress the given file.</p></td>
 </tr>
 </tbody>
 </table>
 </dd></dl>
 
-<div style='clear:both'></div><dl class="method">
+<hr class="docutils" />
+<dl class="method">
 <dt id="pooch.Decompress.__call__">
-<code class="descclassname">Decompress.</code><code class="descname">__call__</code><span class="sig-paren">(</span><em>self</em>, <em>fname</em>, <em>action</em>, <em>pooch</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pooch/processors.html#Decompress.__call__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pooch.Decompress.__call__" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">Decompress.</code><code class="sig-name descname">__call__</code><span class="sig-paren">(</span><em class="sig-param">fname</em>, <em class="sig-param">action</em>, <em class="sig-param">pooch</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pooch/processors.html#Decompress.__call__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pooch.Decompress.__call__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Decompress the given file.</p>
 <p>The output file will be <code class="docutils literal notranslate"><span class="pre">fname</span></code> with <code class="docutils literal notranslate"><span class="pre">.decomp</span></code> appended to it.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first docutils">
-<dt><strong>fname</strong> <span class="classifier-delimiter">:</span> <span class="classifier">str</span></dt>
-<dd><p class="first last">Full path of the compressed file in local storage.</p>
-</dd>
-<dt><strong>action</strong> <span class="classifier-delimiter">:</span> <span class="classifier">str</span></dt>
-<dd><p class="first">Indicates what action was taken by <a class="reference internal" href="pooch.Pooch.html#pooch.Pooch.fetch" title="pooch.Pooch.fetch"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pooch.Pooch.fetch</span></code></a>. One of:</p>
-<ul class="last simple">
-<li><code class="docutils literal notranslate"><span class="pre">&quot;download&quot;</span></code>: The file didn’t exist locally and was downloaded</li>
-<li><code class="docutils literal notranslate"><span class="pre">&quot;update&quot;</span></code>: The local file was outdated and was re-download</li>
-<li><code class="docutils literal notranslate"><span class="pre">&quot;fetch&quot;</span></code>: The file exists and is updated so it wasn’t downloaded</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fname</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – Full path of the compressed file in local storage.</p></li>
+<li><p><strong>action</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – <p>Indicates what action was taken by <a class="reference internal" href="pooch.Pooch.html#pooch.Pooch.fetch" title="pooch.Pooch.fetch"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pooch.Pooch.fetch</span></code></a>:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;download&quot;</span></code>: File didn’t exist locally and was downloaded</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;update&quot;</span></code>: Local file was outdated and was re-download</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;fetch&quot;</span></code>: File exists and is updated so it wasn’t downloaded</p></li>
+</ul>
+</p></li>
+<li><p><strong>pooch</strong> (<a class="reference internal" href="pooch.Pooch.html#pooch.Pooch" title="pooch.Pooch"><code class="xref py py-class docutils literal notranslate"><span class="pre">pooch.Pooch</span></code></a>) – The instance of <a class="reference internal" href="pooch.Pooch.html#pooch.Pooch" title="pooch.Pooch"><code class="xref py py-class docutils literal notranslate"><span class="pre">pooch.Pooch</span></code></a> that is calling this.</p></li>
 </ul>
 </dd>
-<dt><strong>pooch</strong> <span class="classifier-delimiter">:</span> <span class="classifier"><a class="reference internal" href="pooch.Pooch.html#pooch.Pooch" title="pooch.Pooch"><code class="xref py py-class docutils literal notranslate"><span class="pre">pooch.Pooch</span></code></a></span></dt>
-<dd><p class="first last">The instance of <a class="reference internal" href="pooch.Pooch.html#pooch.Pooch" title="pooch.Pooch"><code class="xref py py-class docutils literal notranslate"><span class="pre">pooch.Pooch</span></code></a> that is calling this.</p>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>fname</strong> (<em>str</em>) – The full path to the decompressed file.</p>
 </dd>
 </dl>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
-<dt><strong>fname</strong> <span class="classifier-delimiter">:</span> <span class="classifier">str</span></dt>
-<dd><p class="first last">The full path to the decompressed file.</p>
-</dd>
-</dl>
-</td>
-</tr>
-</tbody>
-</table>
 </dd></dl>
 
 <div style='clear:both'></div></div>
@@ -330,7 +306,7 @@ to be installed: <code class="docutils literal notranslate"><span class="pre">ba
     <p>
         &copy; Copyright 2018-2019, The Pooch Developers
       <span class="lastupdated">
-        Last updated on Oct 22, 2019.
+        Last updated on Nov 20, 2019.
       </span>
 
     </p>

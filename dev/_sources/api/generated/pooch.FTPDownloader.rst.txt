@@ -1,16 +1,16 @@
-pooch.HTTPDownloader
-====================
+pooch.FTPDownloader
+===================
 
 .. currentmodule:: pooch
 
-.. autoclass:: HTTPDownloader
+.. autoclass:: FTPDownloader
 
     .. rubric:: Methods Summary
 
     .. autosummary::
     
     
-        HTTPDownloader.__call__
+        FTPDownloader.__call__
     
     
     
@@ -73,7 +73,7 @@ pooch.HTTPDownloader
 
 
 
-.. automethod:: HTTPDownloader.__call__
+.. automethod:: FTPDownloader.__call__
 
 
 
