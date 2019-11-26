@@ -455,9 +455,9 @@ class Pooch:
         tmphash = file_hash(downloaded)
         if tmphash != self.registry[fname]:
             raise ValueError(
-                "Hash of downloaded file '{}' doesn't match the entry in the registry:"
+                "Hash of downloaded file '{}' doesn't match the entry in the registry."
                 " Expected '{}' and got '{}'.".format(
-                    downloaded, self.registry[fname], tmphash
+                    fname, self.registry[fname], tmphash
                 )
             )
 
