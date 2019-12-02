@@ -455,9 +455,9 @@ class Pooch:
         tmphash = file_hash(downloaded)
         if tmphash != self.registry[fname]:
             raise ValueError(
-                "Hash of downloaded file '{}' doesn't match the entry in the registry:"
+                "Hash of downloaded file '{}' doesn't match the entry in the registry."
                 " Expected '{}' and got '{}'.".format(
-                    downloaded, self.registry[fname], tmphash
+                    fname, self.registry[fname], tmphash
                 )
             )
 
@@ -493,8 +493,10 @@ class Pooch:
                 elements = line.strip().split()
                 if len(elements) > 3 or len(elements) < 2:
                     raise OSError(
-                        "Expected 2 or 3 elements in line {} but got {}.".format(
-                            linenum, len(elements)
+                        "Invalid entry in Pooch registry file '{}': "
+                        "expected 2 or 3 elements in line {} but got {}. "
+                        "Offending entry: '{}'".format(
+                            fname, linenum, len(elements), line
                         )
                     )
                 file_name = elements[0]
