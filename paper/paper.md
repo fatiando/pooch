@@ -24,6 +24,9 @@ authors:
   - name: Anderson Banihirwe
     orcid: 0000-0001-6583-571X
     affiliation: 8
+  - name: John Leeman
+    orcid: 0000-0002-3624-1821
+    affiliation: 9
 affiliations:
  - name: Department of Earth, Ocean and Ecological Sciences, School of Environmental Sciences, University of Liverpool, UK
    index: 1
@@ -41,7 +44,9 @@ affiliations:
    index: 7
  - name: The US National Center for Atmospheric Research, USA
    index: 8
-date: 23 October 2019
+ - name: Leeman Geophysical, USA
+   index: 9
+date: 02 December 2019
 bibliography: paper.bib
 ---
 
