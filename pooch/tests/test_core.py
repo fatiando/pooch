@@ -3,6 +3,7 @@ Test the core class and factory function.
 """
 import os
 import sys
+import logging
 from pathlib import Path
 from tempfile import TemporaryDirectory
 import tempfile
@@ -16,7 +17,7 @@ except ImportError:
     tqdm = None
 
 from .. import Pooch, create
-from ..utils import file_hash
+from ..utils import file_hash, get_logger
 from ..downloaders import HTTPDownloader, FTPDownloader
 
 from .utils import (
@@ -53,18 +54,23 @@ def test_pooch_custom_url():
         urls = {"tiny-data.txt": BASEURL + "tiny-data.txt"}
         # Setup a pooch in a temp dir
         pup = Pooch(path=path, base_url="", registry=REGISTRY, urls=urls)
-        # Check that the warning says that the file is being updated
-        with warnings.catch_warnings(record=True) as warn:
+        # Attach a logging handler and check that the file update gets logged
+        with tempfile.NamedTemporaryFile(mode="w") as log_file:
+            handler = logging.FileHandler(log_file.name)
+            get_logger().addHandler(handler)
             fname = pup.fetch("tiny-data.txt")
-            assert len(warn) == 1
-            assert issubclass(warn[-1].category, UserWarning)
-            assert str(warn[-1].message).split()[0] == "Downloading"
-            assert str(warn[-1].message).split()[-1] == "'{}'.".format(path)
-        check_tiny_data(fname)
-        # Check that no warnings happen when not downloading
-        with warnings.catch_warnings(record=True) as warn:
+            with open(log_file.name, "r") as log_file:
+                logs = log_file.read()
+            assert logs.split()[0] == "Downloading"
+            assert logs.split()[-1] == "'{}'.".format(path)
+            check_tiny_data(fname)
+            # Check that no logging happens when there are no events
             fname = pup.fetch("tiny-data.txt")
-            assert not warn
+            with open(log_file.name, "r") as log_file:
+                new_logs = log_file.read()
+            assert new_logs == logs
+            # Remove the logging handler
+            get_logger().removeHandler(handler)
 
 
 def test_pooch_download():

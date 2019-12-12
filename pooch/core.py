@@ -10,7 +10,7 @@ from warnings import warn
 import ftplib
 
 import requests
-from .utils import file_hash, check_version, parse_url
+from .utils import file_hash, check_version, parse_url, get_logger
 from .downloaders import HTTPDownloader, FTPDownloader
 
 KNOWN_DOWNLOADERS = {
@@ -374,10 +374,20 @@ class Pooch:
 
         if action in ("download", "update"):
             action_word = dict(download="Downloading", update="Updating")
+
+            # Remove this if we switch to logging instead of warnings.
             warn(
                 "{} data file '{}' from remote data store '{}' to '{}'.".format(
                     action_word[action], fname, self.get_url(fname), str(self.path)
                 )
+            )
+
+            get_logger().info(
+                "%s data file '%s' from remote data store '%s' to '%s'.",
+                action_word[action],
+                fname,
+                self.get_url(fname),
+                str(self.path),
             )
 
             parsed_url = parse_url(url)

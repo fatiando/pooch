@@ -1,11 +1,21 @@
 """
 Misc utilities
 """
+import logging
 from pathlib import Path
 import hashlib
 from urllib.parse import urlsplit
 import appdirs
 from packaging.version import Version
+
+
+LOGGER = logging.Logger("pooch")
+LOGGER.addHandler(logging.StreamHandler())
+
+
+def get_logger():
+    r"""Return the object that logs events from pooch"""
+    return LOGGER
 
 
 def os_cache(project):
