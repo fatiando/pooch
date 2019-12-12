@@ -2,6 +2,7 @@
 Test the core class and factory function.
 """
 import os
+import io
 import sys
 import logging
 from pathlib import Path
@@ -54,23 +55,22 @@ def test_pooch_custom_url():
         urls = {"tiny-data.txt": BASEURL + "tiny-data.txt"}
         # Setup a pooch in a temp dir
         pup = Pooch(path=path, base_url="", registry=REGISTRY, urls=urls)
-        # Attach a logging handler and check that the file update gets logged
-        with tempfile.NamedTemporaryFile(mode="w") as log_file:
-            handler = logging.FileHandler(log_file.name)
-            get_logger().addHandler(handler)
-            fname = pup.fetch("tiny-data.txt")
-            with open(log_file.name, "r") as log_file:
-                logs = log_file.read()
-            assert logs.split()[0] == "Downloading"
-            assert logs.split()[-1] == "'{}'.".format(path)
-            check_tiny_data(fname)
-            # Check that no logging happens when there are no events
-            fname = pup.fetch("tiny-data.txt")
-            with open(log_file.name, "r") as log_file:
-                new_logs = log_file.read()
-            assert new_logs == logs
-            # Remove the logging handler
-            get_logger().removeHandler(handler)
+        # Create an in-memory file and a logging handler that writes events to
+        # this file, and check that downloading data gets logged
+        log_file = io.StringIO()
+        handler = logging.StreamHandler(log_file)
+        get_logger().addHandler(handler)
+        fname = pup.fetch("tiny-data.txt")
+        logs = log_file.getvalue()
+        assert logs.split()[0] == "Downloading"
+        assert logs.split()[-1] == "'{}'.".format(path)
+        check_tiny_data(fname)
+        # Check that no logging happens when there are no events
+        fname = pup.fetch("tiny-data.txt")
+        new_logs = log_file.getvalue()
+        assert new_logs == logs
+        # Remove the logging handler
+        get_logger().removeHandler(handler)
 
 
 def test_pooch_download():
