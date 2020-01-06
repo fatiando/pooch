@@ -52,19 +52,19 @@ bibliography: paper.bib
 
 # Summary
 
-Scientific software is usually created to analyze, model, and visualize data.
+Scientific software is usually created to acquire, analyze, model, and visualize data.
 As such, many software libraries include sample datasets in their distributions
 for use in documentation, tests, benchmarks, and workshops.
-The usual approach is to include smaller datasets in the GitHub repository
+A common approach is to include smaller datasets in the GitHub repository
 directly and package them with the source and binary distributions
 (e.g., scikit-learn [@scikit-learn] and scikit-image [@scikit-image] do this).
-Larger datasets require writing code to download the files from a remote server
+As data files increase in size, it becomes unfeasible to store them in GitHub
+repositories.
+Thus, larger datasets require writing code to download the files from a remote server
 to the user's computer.
 The same problem is faced by scientists using version control to manage their
 research projects.
-As data files increase in size, it becomes unfeasible to store them in GitHub
-repositories.
-While downloading a data file over HTTP can be done easily with modern Python
+While downloading a data file over HTTPS can be done easily with modern Python
 libraries, it is not trivial to manage a set of files, keep them updated, and
 check for corruption.
 Instead of scientists and library authors recreating the same code, it would be
@@ -72,9 +72,12 @@ best to have a minimalistic and easy to set up tool for fetching and maintaining
 data files.
 
 Pooch is a Python library that fills this gap.
-It manages a data *registry* by downloading files from one or more remote
-servers and storing them in a local data cache.
+It manages a data *registry* (containing file names, SHA256 hashes, and
+download URLs) by downloading files from one or more remote servers and storing
+them in a local data cache.
 Pooch is written in pure Python and has minimal dependencies.
+It can be easily installed from the Python Package Index (PyPI) and conda-forge
+on a wide range of Python versions: 2.7 (up to Pooch 0.6.0) and from 3.5 to 3.8.
 The integrity of downloads is verified by comparing the file's SHA256 hash with
 the one stored in the data registry.
 This is also the mechanism used to detect if a file needs to be re-downloaded
