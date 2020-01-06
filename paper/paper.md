@@ -67,6 +67,8 @@ research projects.
 While downloading a data file over HTTPS can be done easily with modern Python
 libraries, it is not trivial to manage a set of files, keep them updated, and
 check for corruption.
+For example, scikit-learn [@scikit-learn], Cartopy [@cartopy], and PyVista
+[@pyvista] all include code dedicated to this particular task.
 Instead of scientists and library authors recreating the same code, it would be
 best to have a minimalistic and easy to set up tool for fetching and maintaining
 data files.
