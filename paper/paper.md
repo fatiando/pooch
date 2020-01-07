@@ -148,7 +148,9 @@ The Pooch API is stable and has been field-tested by other projects:
 MetPy [@metpy], Verde [@verde], RockHound [@rockhound], predictatops
 [@predictatops], and icepack [@icepack].
 Pooch is also being implemented as the download manager for scikit-image
-([GitHub pull request number 3945](https://github.com/scikit-image/scikit-image/pull/3945)).
+([GitHub pull request number 3945](https://github.com/scikit-image/scikit-image/pull/3945)),
+which will allow the project to use larger sample data while simultaneously
+reducing the download size of source and binary distributions.
 
 
 # Acknowledgements
