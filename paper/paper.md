@@ -74,13 +74,13 @@ best to have a minimalistic and easy to set up tool for fetching and maintaining
 data files.
 
 Pooch is a Python library that fills this gap.
-It manages a data *registry* (containing file names, SHA256 hashes, and
+It manages a data *registry* (containing file names, SHA-256 hashes, and
 download URLs) by downloading files from one or more remote servers and storing
 them in a local data cache.
 Pooch is written in pure Python and has minimal dependencies.
 It can be easily installed from the Python Package Index (PyPI) and conda-forge
 on a wide range of Python versions: 2.7 (up to Pooch 0.6.0) and from 3.5 to 3.8.
-The integrity of downloads is verified by comparing the file's SHA256 hash with
+The integrity of downloads is verified by comparing the file's SHA-256 hash with
 the one stored in the data registry.
 This is also the mechanism used to detect if a file needs to be re-downloaded
 due to an update in the registry.
