@@ -74,7 +74,7 @@ best to have a minimalistic and easy to set up tool for fetching and maintaining
 data files.
 
 Pooch is a Python library that fills this gap.
-It manages a data *registry* (containing file names, SHA-256 hashes, and
+It manages a data *registry* (containing file names, SHA-256 cryptographic hashes, and
 download URLs) by downloading files from one or more remote servers and storing
 them in a local data cache.
 Pooch is written in pure Python and has minimal dependencies.
