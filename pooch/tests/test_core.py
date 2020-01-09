@@ -406,3 +406,14 @@ def test_downloader_progressbar_ftp(capsys):
         assert printed[:25] == progress
         # Check that the file was actually downloaded
         assert os.path.exists(outfile)
+
+
+def test_invalid_hash_alg():
+    "Test an invalid hashing algorithm"
+    pup = Pooch(
+        path=DATA_DIR, base_url=BASEURL, registry={"tiny-data.txt": "blah:1234"}
+    )
+    with pytest.raises(ValueError) as exc:
+        pup.fetch("tiny-data.txt")
+
+    assert "'blah'" in str(exc.value)

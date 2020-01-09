@@ -69,7 +69,7 @@ def create(
         append *version* to the end of this value as well.
     registry : dict or None
         A record of the files that are managed by this Pooch. Keys should be
-        the file names and the values should be their SHA256 hashes. Only files
+        the file names and the values should be their hashes. Only files
         in the registry can be fetched from the local storage. Files in
         subdirectories of *path* **must use Unix-style separators** (``'/'``)
         even on Windows.
@@ -99,7 +99,7 @@ def create(
     >>> print(pup.base_url)
     http://some.link.com/v0.1/
     >>> print(pup.registry)
-    {'data.txt': '9081wo2eb2gc0u...'}
+    {'data.txt': 'sha256:9081wo2eb2gc0u...'}
     >>> print(pup.registry_files)
     ['data.txt']
 
@@ -201,7 +201,7 @@ class Pooch:
         to this URL.
     registry : dict or None
         A record of the files that are managed by this good boy. Keys should be
-        the file names and the values should be their SHA256 hashes. Only files
+        the file names and the values should be their hashes. Only files
         in the registry can be fetched from the local storage. Files in
         subdirectories of *path* **must use Unix-style separators** (``'/'``)
         even on Windows.
@@ -219,7 +219,10 @@ class Pooch:
         self.base_url = base_url
         if registry is None:
             registry = dict()
-        self.registry = dict(registry)
+        self.registry = {
+            key: (value if ":" in value else "sha256:" + value)
+            for key, value in dict(registry).items()
+        }
         if urls is None:
             urls = dict()
         self.urls = dict(urls)
@@ -362,9 +365,13 @@ class Pooch:
         full_path = self.abspath / fname
         url = self.get_url(fname)
         in_storage = full_path.exists()
+        hash_alg, _ = self.registry[fname].split(":")
         if not in_storage:
             action = "download"
-        elif in_storage and file_hash(str(full_path)) != self.registry[fname]:
+        elif (
+            in_storage
+            and file_hash(str(full_path), alg=hash_alg) != self.registry[fname]
+        ):
             action = "update"
         else:
             action = "fetch"
@@ -397,7 +404,7 @@ class Pooch:
             tmp.close()
             try:
                 downloader(url, tmp.name, self)
-                self._check_download_hash(fname, tmp.name)
+                self._check_download_hash(fname, tmp.name, alg=hash_alg)
                 # Ensure the parent directory exists in case the file is in a
                 # subdirectory. Otherwise, move will cause an error.
                 if not os.path.exists(str(full_path.parent)):
@@ -434,7 +441,7 @@ class Pooch:
         self._assert_file_in_registry(fname)
         return self.urls.get(fname, "".join([self.base_url, fname]))
 
-    def _check_download_hash(self, fname, downloaded):
+    def _check_download_hash(self, fname, downloaded, alg="sha256"):
         """
         Check the hash of the downloaded file against the one in the registry.
 
@@ -451,7 +458,7 @@ class Pooch:
             If the hashes don't match.
 
         """
-        tmphash = file_hash(downloaded)
+        tmphash = file_hash(downloaded, alg=alg)
         if tmphash != self.registry[fname]:
             raise ValueError(
                 "Hash of downloaded file '{}' doesn't match the entry in the registry."
@@ -466,7 +473,7 @@ class Pooch:
 
         Use this if you are managing many files.
 
-        Each line of the file should have file name and its SHA256 hash
+        Each line of the file should have file name and its hash ("alg:checksum")
         separate by a space. Only one file per line is allowed. Custom download
         URLs for individual files can be specified as a third element on the
         line.
@@ -500,11 +507,13 @@ class Pooch:
                     )
                 if elements:
                     file_name = elements[0]
-                    file_sha256 = elements[1]
+                    file_checksum = elements[1]
+                    if ":" not in file_checksum:
+                        file_checksum = "sha256:" + file_checksum
                     if len(elements) == 3:
                         file_url = elements[2]
                         self.urls[file_name] = file_url
-                    self.registry[file_name] = file_sha256
+                    self.registry[file_name] = file_checksum
 
     def is_available(self, fname):
         """
