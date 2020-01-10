@@ -82,7 +82,7 @@ def file_hash(fname, alg="sha256"):
     >>> with open(fname, "w") as f:
     ...     __ = f.write("content of the file")
     >>> print(file_hash(fname))
-    sha256:0fc74468e6a9a829f103d069aeb2bb4f8646bad58bf146bb0e3379b759ec4a00
+    0fc74468e6a9a829f103d069aeb2bb4f8646bad58bf146bb0e3379b759ec4a00
     >>> import os
     >>> os.remove(fname)
 
@@ -97,7 +97,7 @@ def file_hash(fname, alg="sha256"):
         while buff:
             hasher.update(buff)
             buff = fin.read(chunksize)
-    return "{}:{}".format(alg, hasher.hexdigest())
+    return hasher.hexdigest()
 
 
 def check_version(version, fallback="master"):

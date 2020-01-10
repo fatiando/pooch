@@ -10,10 +10,12 @@ from ..utils import make_registry, parse_url
 from .utils import check_tiny_data
 
 DATA_DIR = str(Path(__file__).parent / "data" / "store")
-REGISTRY = "tiny-data.txt sha256:baee0894dba14b12085eacb204284b97e362f4f3e5a5807693cc90ef415c1b2d\n"
+REGISTRY = (
+    "tiny-data.txt baee0894dba14b12085eacb204284b97e362f4f3e5a5807693cc90ef415c1b2d\n"
+)
 REGISTRY_RECURSIVE = (
-    "subdir/tiny-data.txt sha256:baee0894dba14b12085eacb204284b97e362f4f3e5a5807693cc90ef415c1b2d\n"
-    "tiny-data.txt sha256:baee0894dba14b12085eacb204284b97e362f4f3e5a5807693cc90ef415c1b2d\n"
+    "subdir/tiny-data.txt baee0894dba14b12085eacb204284b97e362f4f3e5a5807693cc90ef415c1b2d\n"
+    "tiny-data.txt baee0894dba14b12085eacb204284b97e362f4f3e5a5807693cc90ef415c1b2d\n"
 )
 
 

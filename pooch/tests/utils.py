@@ -66,19 +66,16 @@ def pooch_test_registry():
 
     """
     registry = {
-        "tiny-data.txt": "sha256:baee0894dba14b12085eacb204284b97e362f4f3e5a5807693cc90ef415c1b2d",
-        "large-data.txt": "sha256:98de171fb320da82982e6bf0f3994189fff4b42b23328769afce12bdd340444a",
-        "subdir/tiny-data.txt": "sha256:baee0894dba14b12085eacb204284b97e362f4f3e5a5807693cc90ef415c1b2d",
-        "tiny-data.zip": "sha256:0d49e94f07bc1866ec57e7fd1b93a351fba36842ec9b13dd50bf94e8dfa35cbb",
-        "store.zip": "sha256:0498d2a001e71051bbd2acd2346f38da7cbd345a633cb7bf0f8a20938714b51a",
-        "tiny-data.tar.gz": (
-            "sha512:5f495fb71ba1844a1c2d6bd237fd8c9078536081a263059003f97d89714e"
-            "7bd1f376d17ecdaaa275dd887d53c27903e83493b2b1fb47350d00937ae0e96dfceb"
-        ),
-        "store.tar.gz": "sha256:088c7f4e0f1859b1c769bb6065de24376f366374817ede8691a6ac2e49f29511",
-        "tiny-data.txt.bz2": "sha256:753663687a4040c90c8578061867d1df623e6aa8011c870a5dbd88ee3c82e306",
-        "tiny-data.txt.gz": "sha256:2e2da6161291657617c32192dba95635706af80c6e7335750812907b58fd4b52",
-        "tiny-data.txt.xz": "sha256:99dcb5c32a6e916344bacb4badcbc2f2b6ee196977d1d8187610c21e7e607765",
+        "tiny-data.txt": "baee0894dba14b12085eacb204284b97e362f4f3e5a5807693cc90ef415c1b2d",
+        "large-data.txt": "98de171fb320da82982e6bf0f3994189fff4b42b23328769afce12bdd340444a",
+        "subdir/tiny-data.txt": "baee0894dba14b12085eacb204284b97e362f4f3e5a5807693cc90ef415c1b2d",
+        "tiny-data.zip": "0d49e94f07bc1866ec57e7fd1b93a351fba36842ec9b13dd50bf94e8dfa35cbb",
+        "store.zip": "0498d2a001e71051bbd2acd2346f38da7cbd345a633cb7bf0f8a20938714b51a",
+        "tiny-data.tar.gz": "41503f083814f43a01a8e9a30c28d7a9fe96839a99727a7fdd0acf7cd5bab63b",
+        "store.tar.gz": "088c7f4e0f1859b1c769bb6065de24376f366374817ede8691a6ac2e49f29511",
+        "tiny-data.txt.bz2": "753663687a4040c90c8578061867d1df623e6aa8011c870a5dbd88ee3c82e306",
+        "tiny-data.txt.gz": "2e2da6161291657617c32192dba95635706af80c6e7335750812907b58fd4b52",
+        "tiny-data.txt.xz": "99dcb5c32a6e916344bacb4badcbc2f2b6ee196977d1d8187610c21e7e607765",
     }
     return registry
 
@@ -99,3 +96,9 @@ def capture_log(level=logging.DEBUG):
     get_logger().addHandler(handler)
     yield log_file
     get_logger().removeHandler(handler)
+
+def add_hash_algs(registry):
+    return {
+        key: (value if ":" in value else "sha256:" + value)
+        for key, value in dict(registry).items()
+    }

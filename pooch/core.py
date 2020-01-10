@@ -365,16 +365,18 @@ class Pooch:
         full_path = self.abspath / fname
         url = self.get_url(fname)
         in_storage = full_path.exists()
-        hash_alg = self.registry[fname].split(":")[0]
+
         if not in_storage:
             action = "download"
-        elif (
-            in_storage
-            and file_hash(str(full_path), alg=hash_alg) != self.registry[fname]
-        ):
-            action = "update"
         else:
-            action = "fetch"
+            hash_alg = self.hash_algorithm(fname)
+            current_hash = "{}:{}".format(
+                hash_alg, file_hash(str(full_path), alg=hash_alg)
+            )
+            if current_hash != self.registry[fname]:
+                action = "update"
+            else:
+                action = "fetch"
 
         if action in ("download", "update"):
             action_word = dict(download="Downloading", update="Updating")
@@ -404,7 +406,7 @@ class Pooch:
             tmp.close()
             try:
                 downloader(url, tmp.name, self)
-                self._check_download_hash(fname, tmp.name, alg=hash_alg)
+                self._check_download_hash(fname, tmp.name)
                 # Ensure the parent directory exists in case the file is in a
                 # subdirectory. Otherwise, move will cause an error.
                 if not os.path.exists(str(full_path.parent)):
@@ -441,7 +443,7 @@ class Pooch:
         self._assert_file_in_registry(fname)
         return self.urls.get(fname, "".join([self.base_url, fname]))
 
-    def _check_download_hash(self, fname, downloaded, alg="sha256"):
+    def _check_download_hash(self, fname, downloaded):
         """
         Check the hash of the downloaded file against the one in the registry.
 
@@ -458,7 +460,10 @@ class Pooch:
             If the hashes don't match.
 
         """
-        tmphash = file_hash(downloaded, alg=alg)
+        registry_hash_alg = self.hash_algorithm(fname)
+        tmphash = "{}:{}".format(
+            registry_hash_alg, file_hash(downloaded, alg=registry_hash_alg)
+        )
         if tmphash != self.registry[fname]:
             raise ValueError(
                 "Hash of downloaded file '{}' doesn't match the entry in the registry."
@@ -473,10 +478,11 @@ class Pooch:
 
         Use this if you are managing many files.
 
-        Each line of the file should have file name and its hash ("alg:checksum")
-        separate by a space. Only one file per line is allowed. Custom download
-        URLs for individual files can be specified as a third element on the
-        line.
+        Each line of the file should have file name and its hash separated by
+        a space. Hash can specify checksum algorithm using "alg:hash" format.
+        In case no algorithm is provided, SHA256 is used by default.
+        Only one file per line is allowed. Custom download URLs for individual
+        files can be specified as a third element on the line.
 
         Parameters
         ----------
@@ -550,3 +556,21 @@ class Pooch:
             response = requests.head(source, allow_redirects=True)
             available = bool(response.status_code == 200)
         return available
+
+    def hash_algorithm(self, fname):
+        """
+        Return the hash algorithm used to compute the file's checksum.
+
+        Parameters
+        ----------
+        fname : str
+            The file name (relative to the *base_url* of the remote data
+            storage) to fetch from the local storage.
+
+        Returns
+        -------
+        alg : str
+            The name of the hashing algorithm.
+        """
+        self._assert_file_in_registry(fname)
+        return self.registry[fname].split(":")[0]
