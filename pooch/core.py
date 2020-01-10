@@ -365,7 +365,7 @@ class Pooch:
         full_path = self.abspath / fname
         url = self.get_url(fname)
         in_storage = full_path.exists()
-        hash_alg, _ = self.registry[fname].split(":")
+        hash_alg = self.registry[fname].split(":")[0]
         if not in_storage:
             action = "download"
         elif (
