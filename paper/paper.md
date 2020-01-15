@@ -149,7 +149,7 @@ Intake manages data catalogues (with download locations and extensive
 metadata), data download and caching (using fsspec), data loading,
 visualization, and browsing.
 It has built-in capabilities for loading data into standard containers,
-including numpy, pandas, and xarray.
+including NumPy, pandas, and xarray.
 While Intake and fsspec are powerful and highly configurable,
 we argue that Pooch's advantage is in its simplicity.
 Pooch has a simpler setup and is more accessible to developers without advanced
