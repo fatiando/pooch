@@ -3,6 +3,22 @@
 Changelog
 =========
 
+Version 0.7.2
+-------------
+
+*Released on: 2020/01/17*
+
+🚨 **Announcement:** 🚨
+We now have a `JOSS paper about Pooch <https://doi.org/10.21105/joss.01943>`__!
+Please :ref:`cite it <citing>` when you use Pooch for your research.
+(`#116 <https://github.com/fatiando/pooch/pull/116>`__ with reviews in
+`#132 <https://github.com/fatiando/pooch/pull/132>`__ and
+`#134 <https://github.com/fatiando/pooch/pull/134>`__)
+
+This is minor release which only updates the citation information to
+the new JOSS paper. No DOI was issued for this release since there are
+no code or documentation changes.
+
 Version 0.7.1
 -------------
 
