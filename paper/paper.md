@@ -136,13 +136,23 @@ authentication) as well as processing functions for unpacking archives (zip or
 tar) and decompressing files (gzip, lzma, and bzip2).
 
 To the best of the authors' awareness, the only other Python software with some
-overlapping functionality is [Intake](https://github.com/intake/intake).
-While Intake is powerful and can be used to manage large data archives,
-we argue that Pooch has a simpler setup and meets the
-specific needs of scientific software authors and individual scientists.
-For example, Pooch does not require users to change their data loading code to
-fit into a plug-in structure, instead only providing the file path for the
-user.
+overlapping functionality are [Intake](https://github.com/intake/intake) and
+[fsspec](https://github.com/intake/filesystem_spec) (which is used by Intake).
+The fsspec library provides a unified interface for defining file systems and
+opening files, regardless of where the files are located (local system,
+HTTPS/FTP servers, Amazon S3, Google Cloud Storage, etc).
+fsspec implements similar download and caching functionality to
+the one in Pooch, but has a wider range of download methods available.
+In the future, fsspec could be used as a backend to expand Pooch's download
+capabilities beyond HTTPS and FTP.
+Intake manages data catalogues (with download locations and extensive
+metadata), data download and caching, data loading, visualization, and
+browsing.
+It has built-in capabilities for loading data into standard containers,
+including NumPy, pandas, and xarray.
+While Intake and fsspec are powerful and highly configurable tools,
+we argue that Pooch's strong points are its simplicity, straight-forward
+documentation, and focus on solving a single problem.
 
 The Pooch API is stable and has been field-tested by other projects:
 MetPy [@metpy], Verde [@verde], RockHound [@rockhound], predictatops
