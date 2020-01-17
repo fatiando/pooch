@@ -2,9 +2,7 @@
 Test the core class and factory function.
 """
 import os
-import io
 import sys
-import logging
 from pathlib import Path
 from tempfile import TemporaryDirectory
 import tempfile
@@ -18,7 +16,7 @@ except ImportError:
     tqdm = None
 
 from .. import Pooch, create
-from ..utils import file_hash, get_logger
+from ..utils import file_hash
 from ..downloaders import HTTPDownloader, FTPDownloader
 
 from .utils import (
@@ -26,6 +24,7 @@ from .utils import (
     pooch_test_registry,
     check_tiny_data,
     check_large_data,
+    capture_log,
 )
 
 # FTP doesn't work on Travis CI so need to be able to skip tests there
@@ -55,22 +54,18 @@ def test_pooch_custom_url():
         urls = {"tiny-data.txt": BASEURL + "tiny-data.txt"}
         # Setup a pooch in a temp dir
         pup = Pooch(path=path, base_url="", registry=REGISTRY, urls=urls)
-        # Create an in-memory file and a logging handler that writes events to
-        # this file, and check that downloading data gets logged
-        log_file = io.StringIO()
-        handler = logging.StreamHandler(log_file)
-        get_logger().addHandler(handler)
-        fname = pup.fetch("tiny-data.txt")
-        logs = log_file.getvalue()
-        assert logs.split()[0] == "Downloading"
-        assert logs.split()[-1] == "'{}'.".format(path)
+        # Check that downloading data gets logged
+        with capture_log() as log_file:
+            fname = pup.fetch("tiny-data.txt")
+            logs = log_file.getvalue()
+            assert logs.split()[0] == "Downloading"
+            assert logs.split()[-1] == "'{}'.".format(path)
         check_tiny_data(fname)
         # Check that no logging happens when there are no events
-        fname = pup.fetch("tiny-data.txt")
-        new_logs = log_file.getvalue()
-        assert new_logs == logs
-        # Remove the logging handler
-        get_logger().removeHandler(handler)
+        with capture_log() as log_file:
+            fname = pup.fetch("tiny-data.txt")
+            logs = log_file.getvalue()
+            assert logs == ""
 
 
 def test_pooch_download():

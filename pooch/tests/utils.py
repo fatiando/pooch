@@ -2,9 +2,12 @@
 Utilities for testing code.
 """
 import os
+import io
+import logging
+from contextlib import contextmanager
 
 from ..version import full_version
-from ..utils import check_version
+from ..utils import check_version, get_logger
 
 
 def check_tiny_data(fname):
@@ -75,3 +78,20 @@ def pooch_test_registry():
         "tiny-data.txt.xz": "99dcb5c32a6e916344bacb4badcbc2f2b6ee196977d1d8187610c21e7e607765",
     }
     return registry
+
+
+@contextmanager
+def capture_log():
+    """
+    Create a context manager for reading from the logs.
+
+    Yields
+    ------
+    log_file : StringIO
+        a file-like object to which the logs were written
+    """
+    log_file = io.StringIO()
+    handler = logging.StreamHandler(log_file)
+    get_logger().addHandler(handler)
+    yield log_file
+    get_logger().removeHandler(handler)
