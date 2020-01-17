@@ -24,6 +24,9 @@ Part of the `Fatiando a Terra <https://www.fatiando.org>`__ project
 .. image:: https://img.shields.io/pypi/pyversions/pooch.svg?style=flat-square
     :alt: Compatible Python versions.
     :target: https://pypi.python.org/pypi/pooch
+.. image:: https://img.shields.io/badge/doi-10.21105%2Fjoss.01943-blue.svg?style=flat-square
+    :alt: Digital Object Identifier for the JOSS paper
+    :target: https://doi.org/10.21105/joss.01943
 
 
 .. placeholder-for-doc-index
