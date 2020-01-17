@@ -277,7 +277,7 @@ This is what the <code class="docutils literal notranslate"><span class="pre">pl
     <span class="c1"># Use the default cache folder for the OS</span>
     <span class="n">path</span><span class="o">=</span><span class="n">pooch</span><span class="o">.</span><span class="n">os_cache</span><span class="p">(</span><span class="s2">&quot;plumbus&quot;</span><span class="p">),</span>
     <span class="c1"># The remote data is on Github</span>
-    <span class="n">base_url</span><span class="o">=</span><span class="s2">&quot;https://github.com/rick/plumbus/raw/{version}/data/&quot;</span><span class="p">,</span>
+    <span class="n">base_url</span><span class="o">=</span><span class="s2">&quot;https://github.com/rick/plumbus/raw/</span><span class="si">{version}</span><span class="s2">/data/&quot;</span><span class="p">,</span>
     <span class="n">version</span><span class="o">=</span><span class="n">version</span><span class="p">,</span>
     <span class="c1"># If this is a development version, get the data from the master branch</span>
     <span class="n">version_dev</span><span class="o">=</span><span class="s2">&quot;master&quot;</span><span class="p">,</span>
@@ -333,7 +333,7 @@ SHA256<span class="o">(</span>data/c137.csv<span class="o">)=</span> baee0894dba
 <p>Or using the <a class="reference internal" href="api/generated/pooch.file_hash.html#pooch.file_hash" title="pooch.file_hash"><code class="xref py py-func docutils literal notranslate"><span class="pre">pooch.file_hash</span></code></a> function (which is a convenient way of calling
 Python’s <a class="reference external" href="https://docs.python.org/3/library/hashlib.html#module-hashlib" title="(in Python v3.8)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">hashlib</span></code></a>):</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pooch</span>
-<span class="k">print</span><span class="p">(</span><span class="n">pooch</span><span class="o">.</span><span class="n">file_hash</span><span class="p">(</span><span class="s2">&quot;data/c137.csv&quot;</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">pooch</span><span class="o">.</span><span class="n">file_hash</span><span class="p">(</span><span class="s2">&quot;data/c137.csv&quot;</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
@@ -360,7 +360,7 @@ variable:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">GOODBOY</span> <span class="o">=</span> <span class="n">pooch</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
     <span class="c1"># This is still the default in case the environment variable isn&#39;t defined</span>
     <span class="n">path</span><span class="o">=</span><span class="n">pooch</span><span class="o">.</span><span class="n">os_cache</span><span class="p">(</span><span class="s2">&quot;plumbus&quot;</span><span class="p">),</span>
-    <span class="n">base_url</span><span class="o">=</span><span class="s2">&quot;https://github.com/rick/plumbus/raw/{version}/data/&quot;</span><span class="p">,</span>
+    <span class="n">base_url</span><span class="o">=</span><span class="s2">&quot;https://github.com/rick/plumbus/raw/</span><span class="si">{version}</span><span class="s2">/data/&quot;</span><span class="p">,</span>
     <span class="n">version</span><span class="o">=</span><span class="n">version</span><span class="p">,</span>
     <span class="n">version_dev</span><span class="o">=</span><span class="s2">&quot;master&quot;</span><span class="p">,</span>
     <span class="n">registry</span><span class="o">=</span><span class="p">{</span>
@@ -558,7 +558,7 @@ downloader:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">GOODBOY</span> <span class="o">=</span> <span class="n">pooch</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
     <span class="n">path</span><span class="o">=</span><span class="n">pooch</span><span class="o">.</span><span class="n">os_cache</span><span class="p">(</span><span class="s2">&quot;plumbus&quot;</span><span class="p">),</span>
     <span class="c1"># Use an FTP server instead of HTTP. The rest is all the same.</span>
-    <span class="n">base_url</span><span class="o">=</span><span class="s2">&quot;ftp://my-data-server.org/{version}/&quot;</span><span class="p">,</span>
+    <span class="n">base_url</span><span class="o">=</span><span class="s2">&quot;ftp://my-data-server.org/</span><span class="si">{version}</span><span class="s2">/&quot;</span><span class="p">,</span>
     <span class="n">version</span><span class="o">=</span><span class="n">version</span><span class="p">,</span>
     <span class="n">version_dev</span><span class="o">=</span><span class="s2">&quot;master&quot;</span><span class="p">,</span>
     <span class="n">registry</span><span class="o">=</span><span class="p">{</span>
@@ -640,7 +640,7 @@ print a download progress bar. This is turned off by default but can be enabled 
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Fetch a large file from a server and print a progress bar.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">download</span> <span class="o">=</span> <span class="n">HTTPDownloader</span><span class="p">(</span><span class="n">progressbar</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">download</span> <span class="o">=</span> <span class="n">HTTPDownloader</span><span class="p">(</span><span class="n">progressbar</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="n">fname</span> <span class="o">=</span> <span class="n">GOODBOY</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="s2">&quot;large-data-file.h5&quot;</span><span class="p">,</span> <span class="n">downloader</span><span class="o">=</span><span class="n">download</span><span class="p">)</span>
     <span class="n">data</span> <span class="o">=</span> <span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">data</span>
@@ -669,12 +669,12 @@ use <a class="reference internal" href="api/generated/pooch.Pooch.html#pooch.Poo
     <span class="c1"># Use the default cache folder for the OS</span>
     <span class="n">path</span><span class="o">=</span><span class="n">pooch</span><span class="o">.</span><span class="n">os_cache</span><span class="p">(</span><span class="s2">&quot;plumbus&quot;</span><span class="p">),</span>
     <span class="c1"># The remote data is on Github</span>
-    <span class="n">base_url</span><span class="o">=</span><span class="s2">&quot;https://github.com/rick/plumbus/raw/{version}/data/&quot;</span><span class="p">,</span>
+    <span class="n">base_url</span><span class="o">=</span><span class="s2">&quot;https://github.com/rick/plumbus/raw/</span><span class="si">{version}</span><span class="s2">/data/&quot;</span><span class="p">,</span>
     <span class="n">version</span><span class="o">=</span><span class="n">version</span><span class="p">,</span>
     <span class="c1"># If this is a development version, get the data from the master branch</span>
     <span class="n">version_dev</span><span class="o">=</span><span class="s2">&quot;master&quot;</span><span class="p">,</span>
     <span class="c1"># We&#39;ll load it from a file later</span>
-    <span class="n">registry</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+    <span class="n">registry</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span>
 <span class="c1"># Get registry file from package_data</span>
 <span class="n">registry_file</span> <span class="o">=</span> <span class="n">pkg_resources</span><span class="o">.</span><span class="n">resource_stream</span><span class="p">(</span><span class="s2">&quot;plumbus&quot;</span><span class="p">,</span> <span class="s2">&quot;registry.txt&quot;</span><span class="p">)</span>
@@ -725,7 +725,7 @@ a <code class="docutils literal notranslate"><span class="pre">citadel.csv</span
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># The basic setup is the same and we must include citadel.csv in the registry.</span>
 <span class="n">GOODBOY</span> <span class="o">=</span> <span class="n">pooch</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
     <span class="n">path</span><span class="o">=</span><span class="n">pooch</span><span class="o">.</span><span class="n">os_cache</span><span class="p">(</span><span class="s2">&quot;plumbus&quot;</span><span class="p">),</span>
-    <span class="n">base_url</span><span class="o">=</span><span class="s2">&quot;https://github.com/rick/plumbus/raw/{version}/data/&quot;</span><span class="p">,</span>
+    <span class="n">base_url</span><span class="o">=</span><span class="s2">&quot;https://github.com/rick/plumbus/raw/</span><span class="si">{version}</span><span class="s2">/data/&quot;</span><span class="p">,</span>
     <span class="n">version</span><span class="o">=</span><span class="n">version</span><span class="p">,</span>
     <span class="n">version_dev</span><span class="o">=</span><span class="s2">&quot;master&quot;</span><span class="p">,</span>
     <span class="n">registry</span><span class="o">=</span><span class="p">{</span>
@@ -759,10 +759,10 @@ change at all:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define the Pooch exactly the same (urls is None by default)</span>
 <span class="n">GOODBOY</span> <span class="o">=</span> <span class="n">pooch</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
     <span class="n">path</span><span class="o">=</span><span class="n">pooch</span><span class="o">.</span><span class="n">os_cache</span><span class="p">(</span><span class="s2">&quot;plumbus&quot;</span><span class="p">),</span>
-    <span class="n">base_url</span><span class="o">=</span><span class="s2">&quot;https://github.com/rick/plumbus/raw/{version}/data/&quot;</span><span class="p">,</span>
+    <span class="n">base_url</span><span class="o">=</span><span class="s2">&quot;https://github.com/rick/plumbus/raw/</span><span class="si">{version}</span><span class="s2">/data/&quot;</span><span class="p">,</span>
     <span class="n">version</span><span class="o">=</span><span class="n">version</span><span class="p">,</span>
     <span class="n">version_dev</span><span class="o">=</span><span class="s2">&quot;master&quot;</span><span class="p">,</span>
-    <span class="n">registry</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+    <span class="n">registry</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span>
 <span class="c1"># If custom URLs are present in the registry file, they will be set automatically</span>
 <span class="n">GOODBOY</span><span class="o">.</span><span class="n">load_registry</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="vm">__file__</span><span class="p">),</span> <span class="s2">&quot;registry.txt&quot;</span><span class="p">))</span>
@@ -791,9 +791,9 @@ change at all:</p>
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2018-2019, The Pooch Developers
+        &copy; Copyright 2018-2020, The Pooch Developers
       <span class="lastupdated">
-        Last updated on Nov 20, 2019.
+        Last updated on Jan 17, 2020.
       </span>
 
     </p>

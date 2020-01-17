@@ -246,7 +246,7 @@ will be passed to <a class="reference external" href="https://3.python-requests.
 <p class="rubric">Examples</p>
 <p>Download one of the data files from the Pooch repository:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">os</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pooch</span> <span class="k">import</span> <span class="n">version</span><span class="p">,</span> <span class="n">check_version</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pooch</span> <span class="kn">import</span> <span class="n">version</span><span class="p">,</span> <span class="n">check_version</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;https://github.com/fatiando/pooch/raw/</span><span class="si">{}</span><span class="s2">/data/tiny-data.txt&quot;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">url</span> <span class="o">=</span> <span class="n">url</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">check_version</span><span class="p">(</span><span class="n">version</span><span class="o">.</span><span class="n">full_version</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">downloader</span> <span class="o">=</span> <span class="n">HTTPDownloader</span><span class="p">()</span>
@@ -344,9 +344,9 @@ whatever username and password we provide to it:</p>
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2018-2019, The Pooch Developers
+        &copy; Copyright 2018-2020, The Pooch Developers
       <span class="lastupdated">
-        Last updated on Nov 20, 2019.
+        Last updated on Jan 17, 2020.
       </span>
 
     </p>

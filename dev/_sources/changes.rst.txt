@@ -3,12 +3,54 @@
 Changelog
 =========
 
+Version 0.7.1
+-------------
+
+*Released on: 2020/01/17*
+
+.. image:: https://zenodo.org/badge/DOI/10.5281/zenodo.3611376.svg
+    :alt: Digital Object Identifier for the Zenodo archive
+    :target: https://doi.org/10.5281/zenodo.3611376
+
+Improvements:
+
+* Better error messages when hashes don't match. Include the file name in the
+  exception for a hash mismatch between a downloaded file and the registry.
+  Before, we included the name of temporary file, which wasn't very
+  informative.
+  (`#128 <https://github.com/fatiando/pooch/pull/128>`__)
+* Better error message for malformed registry files. When loading a registry
+  file, inform the name of the file and include the offending content in the
+  error message instead of just the line number.
+  (`#129 <https://github.com/fatiando/pooch/pull/129>`__)
+
+Maintenance:
+
+* Change development status flag in ``setup.py`` to "stable" instead of
+  "alpha".
+  (`#127 <https://github.com/fatiando/pooch/pull/127>`__)
+
+This release was reviewed at the `Journal of Open Source Software
+<https://github.com/openjournals/joss-reviews/issues/1943>`__. The code and
+software paper contain contributions from:
+
+* Anderson Banihirwe
+* Martin Durant
+* Mark Harfouche
+* Hugo van Kemenade
+* John Leeman
+* Rémi Rampin
+* Daniel Shapero
+* Santiago Rubén Soler
+* Matthew Turk
+* Leonardo Uieda
+
 Version 0.7.0
 -------------
 
 *Released on: 2019/11/19*
 
-.. image:: https://img.shields.io/badge/doi-10.5281%2fzenodo.3547640-blue.svg?style=flat-square
+.. image:: https://zenodo.org/badge/DOI/10.5281/zenodo.3547640.svg
     :alt: Digital Object Identifier for the Zenodo archive
     :target: https://doi.org/10.5281/zenodo.3547640
 
@@ -57,7 +99,7 @@ Version 0.6.0
 
 *Released on: 2019/10/22*
 
-.. image:: https://img.shields.io/badge/doi-10.5281%2Fzenodo.3515031-blue.svg?style=flat-square
+.. image:: https://zenodo.org/badge/DOI/10.5281/zenodo.3515031.svg
     :alt: Digital Object Identifier for the Zenodo archive
     :target: https://doi.org/10.5281/zenodo.3515031
 

@@ -256,7 +256,7 @@ through the SHA256 hashes).</p></li>
     <span class="n">path</span><span class="o">=</span><span class="n">pooch</span><span class="o">.</span><span class="n">os_cache</span><span class="p">(</span><span class="s2">&quot;mypackage&quot;</span><span class="p">),</span>
     <span class="c1"># Base URL of the remote data store. Will call .format on this string</span>
     <span class="c1"># to insert the version (see below).</span>
-    <span class="n">base_url</span><span class="o">=</span><span class="s2">&quot;https://github.com/myproject/mypackage/raw/{version}/data/&quot;</span><span class="p">,</span>
+    <span class="n">base_url</span><span class="o">=</span><span class="s2">&quot;https://github.com/myproject/mypackage/raw/</span><span class="si">{version}</span><span class="s2">/data/&quot;</span><span class="p">,</span>
     <span class="c1"># Pooches are versioned so that you can use multiple versions of a</span>
     <span class="c1"># package simultaneously. Use PEP440 compliant version number. The</span>
     <span class="c1"># version will be appended to the path.</span>
@@ -374,6 +374,7 @@ of the <strong>BSD 3-clause License</strong>. A copy of this license is provided
 <li><p><a class="reference external" href="https://www.fatiando.org/pooch/dev">Development</a> (reflects the <em>master</em> branch on
 Github)</p></li>
 <li><p><a class="reference external" href="https://www.fatiando.org/pooch/latest">Latest release</a></p></li>
+<li><p><a class="reference external" href="https://www.fatiando.org/pooch/v0.7.1">v0.7.1</a></p></li>
 <li><p><a class="reference external" href="https://www.fatiando.org/pooch/v0.7.0">v0.7.0</a></p></li>
 <li><p><a class="reference external" href="https://www.fatiando.org/pooch/v0.6.0">v0.6.0</a></p></li>
 <li><p><a class="reference external" href="https://www.fatiando.org/pooch/v0.5.2">v0.5.2</a></p></li>
@@ -409,9 +410,9 @@ Github)</p></li>
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2018-2019, The Pooch Developers
+        &copy; Copyright 2018-2020, The Pooch Developers
       <span class="lastupdated">
-        Last updated on Nov 20, 2019.
+        Last updated on Jan 17, 2020.
       </span>
 
     </p>

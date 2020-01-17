@@ -113,6 +113,7 @@
 <li class="toctree-l1"><a class="reference internal" href="usage.html">Training your Pooch</a></li>
 <li class="toctree-l1"><a class="reference internal" href="api/index.html">API Reference</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Changelog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#version-0-7-1">Version 0.7.1</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#version-0-7-0">Version 0.7.0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#version-0-6-0">Version 0.6.0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#version-0-5-2">Version 0.5.2</a></li>
@@ -220,10 +221,47 @@
             
   <div class="section" id="changelog">
 <span id="changes"></span><h1>Changelog<a class="headerlink" href="#changelog" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="version-0-7-1">
+<h2>Version 0.7.1<a class="headerlink" href="#version-0-7-1" title="Permalink to this headline">¶</a></h2>
+<p><em>Released on: 2020/01/17</em></p>
+<a class="reference external image-reference" href="https://doi.org/10.5281/zenodo.3611376"><img alt="Digital Object Identifier for the Zenodo archive" src="https://zenodo.org/badge/DOI/10.5281/zenodo.3611376.svg" /></a>
+<p>Improvements:</p>
+<ul class="simple">
+<li><p>Better error messages when hashes don’t match. Include the file name in the
+exception for a hash mismatch between a downloaded file and the registry.
+Before, we included the name of temporary file, which wasn’t very
+informative.
+(<a class="reference external" href="https://github.com/fatiando/pooch/pull/128">#128</a>)</p></li>
+<li><p>Better error message for malformed registry files. When loading a registry
+file, inform the name of the file and include the offending content in the
+error message instead of just the line number.
+(<a class="reference external" href="https://github.com/fatiando/pooch/pull/129">#129</a>)</p></li>
+</ul>
+<p>Maintenance:</p>
+<ul class="simple">
+<li><p>Change development status flag in <code class="docutils literal notranslate"><span class="pre">setup.py</span></code> to “stable” instead of
+“alpha”.
+(<a class="reference external" href="https://github.com/fatiando/pooch/pull/127">#127</a>)</p></li>
+</ul>
+<p>This release was reviewed at the <a class="reference external" href="https://github.com/openjournals/joss-reviews/issues/1943">Journal of Open Source Software</a>. The code and
+software paper contain contributions from:</p>
+<ul class="simple">
+<li><p>Anderson Banihirwe</p></li>
+<li><p>Martin Durant</p></li>
+<li><p>Mark Harfouche</p></li>
+<li><p>Hugo van Kemenade</p></li>
+<li><p>John Leeman</p></li>
+<li><p>Rémi Rampin</p></li>
+<li><p>Daniel Shapero</p></li>
+<li><p>Santiago Rubén Soler</p></li>
+<li><p>Matthew Turk</p></li>
+<li><p>Leonardo Uieda</p></li>
+</ul>
+</div>
 <div class="section" id="version-0-7-0">
 <h2>Version 0.7.0<a class="headerlink" href="#version-0-7-0" title="Permalink to this headline">¶</a></h2>
 <p><em>Released on: 2019/11/19</em></p>
-<a class="reference external image-reference" href="https://doi.org/10.5281/zenodo.3547640"><img alt="Digital Object Identifier for the Zenodo archive" src="https://img.shields.io/badge/doi-10.5281%2fzenodo.3547640-blue.svg?style=flat-square" /></a>
+<a class="reference external image-reference" href="https://doi.org/10.5281/zenodo.3547640"><img alt="Digital Object Identifier for the Zenodo archive" src="https://zenodo.org/badge/DOI/10.5281/zenodo.3547640.svg" /></a>
 <p>New features:</p>
 <ul class="simple">
 <li><p>New <code class="docutils literal notranslate"><span class="pre">pooch.FTPDownloader</span></code> class for downloading files over FTP. Uses the
@@ -268,7 +306,7 @@ longer lines made the docstring unreadable.
 <div class="section" id="version-0-6-0">
 <h2>Version 0.6.0<a class="headerlink" href="#version-0-6-0" title="Permalink to this headline">¶</a></h2>
 <p><em>Released on: 2019/10/22</em></p>
-<a class="reference external image-reference" href="https://doi.org/10.5281/zenodo.3515031"><img alt="Digital Object Identifier for the Zenodo archive" src="https://img.shields.io/badge/doi-10.5281%2Fzenodo.3515031-blue.svg?style=flat-square" /></a>
+<a class="reference external image-reference" href="https://doi.org/10.5281/zenodo.3515031"><img alt="Digital Object Identifier for the Zenodo archive" src="https://zenodo.org/badge/DOI/10.5281/zenodo.3515031.svg" /></a>
 <p>🚨 <strong>Pooch v0.6.0 is the last release to support Python 2.7</strong> 🚨</p>
 <p>New features:</p>
 <ul class="simple">
@@ -487,9 +525,9 @@ data corruption.</p></li>
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2018-2019, The Pooch Developers
+        &copy; Copyright 2018-2020, The Pooch Developers
       <span class="lastupdated">
-        Last updated on Nov 20, 2019.
+        Last updated on Jan 17, 2020.
       </span>
 
     </p>
