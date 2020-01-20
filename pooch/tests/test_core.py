@@ -6,6 +6,8 @@ import sys
 from pathlib import Path
 from tempfile import TemporaryDirectory
 import tempfile
+from io import StringIO
+from logging import StreamHandler
 
 import pytest
 
@@ -87,6 +89,31 @@ def test_pooch_download():
         with capture_log() as log_file:
             fname = pup.fetch("tiny-data.txt")
             assert log_file.getvalue() == ""
+
+
+def test_pooch_logging_level():
+    "Setup a pooch and check that no logging happens when the level is raised"
+    with TemporaryDirectory() as local_store:
+        # Add a new handler for critical events only
+        critical_log_file = StringIO()
+        critical_handler = StreamHandler(critical_log_file)
+        critical_handler.setLevel("CRITICAL")
+        get_logger().addHandler(critical_handler)
+        path = Path(local_store)
+        urls = {"tiny-data.txt": BASEURL + "tiny-data.txt"}
+        # Setup a pooch in a temp dir
+        pup = Pooch(path=path, base_url="", registry=REGISTRY, urls=urls)
+        # Check that the logs say that the file is being downloaded
+        with capture_log() as log_file:
+            fname = pup.fetch("tiny-data.txt")
+            logs = log_file.getvalue()
+            assert logs.split()[0] == "Downloading"
+            assert logs.split()[-1] == "'{}'.".format(path)
+        check_tiny_data(fname)
+        # Check that the logs for critical errors are empty
+        critical_logs = critical_log_file.getvalue()
+        assert critical_logs == ""
+        get_logger().removeHandler(critical_handler)
 
 
 def test_pooch_update():
