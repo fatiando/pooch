@@ -2,7 +2,7 @@
 # Import functions/classes to make the API
 from . import version
 from .core import Pooch, create
-from .utils import os_cache, file_hash, make_registry, check_version
+from .utils import os_cache, file_hash, make_registry, check_version, get_logger
 from .downloaders import HTTPDownloader, FTPDownloader
 from .processors import Unzip, Untar, Decompress
 
