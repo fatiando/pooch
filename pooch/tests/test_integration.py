@@ -5,13 +5,12 @@ Test the entire process of creating a Pooch and using it.
 import os
 import shutil
 from pathlib import Path
-import warnings
 
 import pytest
 
 from .. import create, os_cache
 from ..version import full_version
-from .utils import check_tiny_data
+from .utils import check_tiny_data, capture_log
 
 
 @pytest.fixture
@@ -37,18 +36,14 @@ def test_fetch(pup):
     # Make sure the storage has been cleaned up before running the tests
     assert not pup.abspath.exists()
     for target in ["tiny-data.txt", "subdir/tiny-data.txt"]:
-        with warnings.catch_warnings(record=True) as warn:
+        with capture_log() as log_file:
             fname = pup.fetch(target)
-            assert len(warn) == 1
-            assert issubclass(warn[-1].category, UserWarning)
-            assert str(warn[-1].message).split()[0] == "Downloading"
+            assert log_file.getvalue().split()[0] == "Downloading"
         check_tiny_data(fname)
         # Now modify the file to trigger an update on the next fetch
         with open(fname, "w") as fin:
             fin.write("The data is now different")
-        with warnings.catch_warnings(record=True) as warn:
+        with capture_log() as log_file:
             fname = pup.fetch(target)
-            assert len(warn) == 1
-            assert issubclass(warn[-1].category, UserWarning)
-            assert str(warn[-1].message).split()[0] == "Updating"
+            assert log_file.getvalue().split()[0] == "Updating"
         check_tiny_data(fname)
