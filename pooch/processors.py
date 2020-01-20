@@ -9,7 +9,8 @@ import lzma
 import shutil
 from zipfile import ZipFile
 from tarfile import TarFile
-from warnings import warn
+
+from .utils import get_logger
 
 
 class ExtractorProcessor:  # pylint: disable=too-few-public-methods
@@ -115,15 +116,15 @@ class Unzip(ExtractorProcessor):  # pylint: disable=too-few-public-methods
         """
         with ZipFile(fname, "r") as zip_file:
             if self.members is None:
-                warn("Unzipping contents of '{}' to '{}'".format(fname, extract_dir))
+                get_logger().info(
+                    "Unzipping contents of '%s' to '%s'", fname, extract_dir
+                )
                 # Unpack all files from the archive into our new folder
                 zip_file.extractall(path=extract_dir)
             else:
                 for member in self.members:
-                    warn(
-                        "Extracting '{}' from '{}' to '{}'".format(
-                            member, fname, extract_dir
-                        )
+                    get_logger().info(
+                        "Extracting '%s' from '%s' to '%s'", member, fname, extract_dir
                     )
                     # Extract the data file from within the archive
                     with zip_file.open(member) as data_file:
@@ -160,15 +161,15 @@ class Untar(ExtractorProcessor):  # pylint: disable=too-few-public-methods
         """
         with TarFile.open(fname, "r") as tar_file:
             if self.members is None:
-                warn("Untarring contents of '{}' to '{}'".format(fname, extract_dir))
+                get_logger().info(
+                    "Untarring contents of '%s' to '%s'", fname, extract_dir
+                )
                 # Unpack all files from the archive into our new folder
                 tar_file.extractall(path=extract_dir)
             else:
                 for member in self.members:
-                    warn(
-                        "Extracting '{}' from '{}' to '{}'".format(
-                            member, fname, extract_dir
-                        )
+                    get_logger().info(
+                        "Extracting '%s' from '%s' to '%s'", member, fname, extract_dir
                     )
                     # Extract the data file from within the archive
                     # Python 2.7: extractfile doesn't return a context manager
@@ -238,10 +239,11 @@ class Decompress:  # pylint: disable=too-few-public-methods
         """
         decompressed = fname + ".decomp"
         if action in ("update", "download") or not os.path.exists(decompressed):
-            warn(
-                "Decompressing '{}' to '{}' using method '{}'.".format(
-                    fname, decompressed, self.method
-                )
+            get_logger().info(
+                "Decompressing '%s' to '%s' using method '%s'.",
+                fname,
+                decompressed,
+                self.method,
             )
             module = self._compression_module(fname)
             with open(decompressed, "w+b") as output:
