@@ -6,11 +6,10 @@ import os
 from pathlib import Path
 import shutil
 import tempfile
-from warnings import warn
 import ftplib
 
 import requests
-from .utils import file_hash, check_version, parse_url
+from .utils import file_hash, check_version, parse_url, get_logger
 from .downloaders import HTTPDownloader, FTPDownloader
 
 KNOWN_DOWNLOADERS = {
@@ -172,17 +171,15 @@ def create(
             tempfile.NamedTemporaryFile(dir=path)
     except PermissionError:
         message = (
-            "Cannot write to data cache '{}'. "
-            "Will not be able to download remote data files. ".format(path)
+            "Cannot write to data cache '%s'. "
+            "Will not be able to download remote data files. "
         )
+        args = [path]
         if env is not None:
-            message = (
-                message
-                + "Use environment variable '{}' to specify another directory.".format(
-                    env
-                )
-            )
-        warn(message)
+            message += "Use environment variable '%s' to specify another directory."
+            args += [env]
+
+        get_logger().warning(message, *args)
     pup = Pooch(path=Path(path), base_url=base_url, registry=registry, urls=urls)
     return pup
 
@@ -374,10 +371,12 @@ class Pooch:
 
         if action in ("download", "update"):
             action_word = dict(download="Downloading", update="Updating")
-            warn(
-                "{} data file '{}' from remote data store '{}' to '{}'.".format(
-                    action_word[action], fname, self.get_url(fname), str(self.path)
-                )
+            get_logger().info(
+                "%s data file '%s' from remote data store '%s' to '%s'.",
+                action_word[action],
+                fname,
+                self.get_url(fname),
+                str(self.path),
             )
 
             parsed_url = parse_url(url)

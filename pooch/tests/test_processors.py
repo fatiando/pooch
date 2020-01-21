@@ -10,7 +10,7 @@ import pytest
 from .. import Pooch
 from ..processors import Unzip, Untar, ExtractorProcessor, Decompress
 
-from .utils import pooch_test_url, pooch_test_registry, check_tiny_data
+from .utils import pooch_test_url, pooch_test_registry, check_tiny_data, capture_log
 
 
 REGISTRY = pooch_test_registry()
@@ -30,20 +30,21 @@ def test_decompress(method, ext):
         true_path = str(path / ".".join(["tiny-data.txt", ext, "decomp"]))
         # Setup a pooch in a temp dir
         pup = Pooch(path=path, base_url=BASEURL, registry=REGISTRY)
-        # Check the warnings when downloading and from the processor
-        with warnings.catch_warnings(record=True) as warn:
+        # Check the logs when downloading and from the processor
+        with capture_log() as log_file:
             fname = pup.fetch("tiny-data.txt." + ext, processor=processor)
-            assert len(warn) == 2
-            assert all(issubclass(w.category, UserWarning) for w in warn)
-            assert str(warn[-2].message).split()[0] == "Downloading"
-            assert str(warn[-1].message).startswith("Decompressing")
-            assert method in str(warn[-1].message)
+            logs = log_file.getvalue()
+            lines = logs.splitlines()
+            assert len(lines) == 2
+            assert lines[0].split()[0] == "Downloading"
+            assert lines[1].startswith("Decompressing")
+            assert method in lines[1]
         assert fname == true_path
         check_tiny_data(fname)
         # Check that processor doesn't execute when not downloading
-        with warnings.catch_warnings(record=True) as warn:
+        with capture_log() as log_file:
             fname = pup.fetch("tiny-data.txt." + ext, processor=processor)
-            assert not warn
+            assert log_file.getvalue() == ""
         assert fname == true_path
         check_tiny_data(fname)
 
@@ -92,23 +93,25 @@ def test_processors(proc_cls, ext):
         true_path = str(path / extract_dir / "tiny-data.txt")
         # Setup a pooch in a temp dir
         pup = Pooch(path=path, base_url=BASEURL, registry=REGISTRY)
-        # Check the warnings when downloading and from the processor
-        with warnings.catch_warnings(record=True) as warn:
+        # Check the logs when downloading and from the processor
+        with capture_log() as log_file:
             fnames = pup.fetch("tiny-data" + ext, processor=processor)
             fname = fnames[0]
             assert len(fnames) == 1
-            assert len(warn) == 2
-            assert all(issubclass(w.category, UserWarning) for w in warn)
-            assert str(warn[-2].message).split()[0] == "Downloading"
-            assert str(warn[-1].message).startswith("Extracting 'tiny-data.txt'")
+            logs = log_file.getvalue()
+            lines = logs.splitlines()
+            assert len(lines) == 2
+            assert lines[0].split()[0] == "Downloading"
+            assert lines[1].startswith("Extracting 'tiny-data.txt'")
+
         assert fname == true_path
         check_tiny_data(fname)
         # Check that processor doesn't execute when not downloading
-        with warnings.catch_warnings(record=True) as warn:
+        with capture_log() as log_file:
             fnames = pup.fetch("tiny-data" + ext, processor=processor)
             fname = fnames[0]
             assert len(fnames) == 1
-            assert not warn
+            assert log_file.getvalue() == ""
         assert fname == true_path
         check_tiny_data(fname)
 
@@ -131,21 +134,22 @@ def test_processor_multiplefiles(proc_cls, ext, msg):
         }
         # Setup a pooch in a temp dir
         pup = Pooch(path=path, base_url=BASEURL, registry=REGISTRY)
-        # Check the warnings when downloading and from the processor
-        with warnings.catch_warnings(record=True) as warn:
+        # Check the logs when downloading and from the processor
+        with capture_log() as log_file:
             fnames = pup.fetch("store" + ext, processor=processor)
-            assert len(warn) == 2
-            assert all(issubclass(w.category, UserWarning) for w in warn)
-            assert str(warn[-2].message).split()[0] == "Downloading"
-            assert str(warn[-1].message).startswith("{} contents".format(msg))
+            logs = log_file.getvalue()
+            lines = logs.splitlines()
+            assert len(lines) == 2
+            assert lines[0].split()[0] == "Downloading"
+            assert lines[1].startswith("{} contents".format(msg))
             assert len(fnames) == 2
             assert true_paths == set(fnames)
             for fname in fnames:
                 check_tiny_data(fname)
         # Check that processor doesn't execute when not downloading
-        with warnings.catch_warnings(record=True) as warn:
+        with capture_log() as log_file:
             fnames = pup.fetch("store" + ext, processor=processor)
-            assert not warn
+            assert log_file.getvalue() == ""
             assert len(fnames) == 2
             assert true_paths == set(fnames)
             for fname in fnames:

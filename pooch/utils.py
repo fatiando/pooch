@@ -1,11 +1,32 @@
 """
 Misc utilities
 """
+import logging
 from pathlib import Path
 import hashlib
 from urllib.parse import urlsplit
 import appdirs
 from packaging.version import Version
+
+
+LOGGER = logging.Logger("pooch")
+LOGGER.addHandler(logging.StreamHandler())
+
+
+def get_logger():
+    r"""
+    Get the default event logger.
+
+    The logger records events like downloading files, unzipping archives, etc.
+    Use the method :meth:`logging.Logger.setLevel` of this object to adjust the
+    verbosity level from Pooch.
+
+    Returns
+    -------
+    logger : :class:`logging.Logger`
+        The logger object for Pooch
+    """
+    return LOGGER
 
 
 def os_cache(project):

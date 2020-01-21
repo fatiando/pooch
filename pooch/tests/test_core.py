@@ -6,7 +6,6 @@ import sys
 from pathlib import Path
 from tempfile import TemporaryDirectory
 import tempfile
-import warnings
 
 import pytest
 
@@ -16,7 +15,7 @@ except ImportError:
     tqdm = None
 
 from .. import Pooch, create
-from ..utils import file_hash
+from ..utils import file_hash, get_logger
 from ..downloaders import HTTPDownloader, FTPDownloader
 
 from .utils import (
@@ -24,6 +23,7 @@ from .utils import (
     pooch_test_registry,
     check_tiny_data,
     check_large_data,
+    capture_log,
 )
 
 # FTP doesn't work on Travis CI so need to be able to skip tests there
@@ -53,18 +53,17 @@ def test_pooch_custom_url():
         urls = {"tiny-data.txt": BASEURL + "tiny-data.txt"}
         # Setup a pooch in a temp dir
         pup = Pooch(path=path, base_url="", registry=REGISTRY, urls=urls)
-        # Check that the warning says that the file is being updated
-        with warnings.catch_warnings(record=True) as warn:
+        # Check that the logs say that the file is being downloaded
+        with capture_log() as log_file:
             fname = pup.fetch("tiny-data.txt")
-            assert len(warn) == 1
-            assert issubclass(warn[-1].category, UserWarning)
-            assert str(warn[-1].message).split()[0] == "Downloading"
-            assert str(warn[-1].message).split()[-1] == "'{}'.".format(path)
+            logs = log_file.getvalue()
+            assert logs.split()[0] == "Downloading"
+            assert logs.split()[-1] == "'{}'.".format(path)
         check_tiny_data(fname)
-        # Check that no warnings happen when not downloading
-        with warnings.catch_warnings(record=True) as warn:
+        # Check that no logging happens when there are no events
+        with capture_log() as log_file:
             fname = pup.fetch("tiny-data.txt")
-            assert not warn
+            assert log_file.getvalue() == ""
 
 
 def test_pooch_download():
@@ -74,21 +73,34 @@ def test_pooch_download():
         true_path = str(path / "tiny-data.txt")
         # Setup a pooch in a temp dir
         pup = Pooch(path=path, base_url=BASEURL, registry=REGISTRY)
-        # Check that the warning says that the file is being downloaded
-        with warnings.catch_warnings(record=True) as warn:
+        # Check that the logs say that the file is being downloaded
+        with capture_log() as log_file:
             fname = pup.fetch("tiny-data.txt")
-            assert len(warn) == 1
-            assert issubclass(warn[-1].category, UserWarning)
-            assert str(warn[-1].message).split()[0] == "Downloading"
-            assert str(warn[-1].message).split()[-1] == "'{}'.".format(path)
+            logs = log_file.getvalue()
+            assert logs.split()[0] == "Downloading"
+            assert logs.split()[-1] == "'{}'.".format(path)
         # Check that the downloaded file has the right content
         assert true_path == fname
         check_tiny_data(fname)
         assert file_hash(fname) == REGISTRY["tiny-data.txt"]
-        # Check that no warnings happen when not downloading
-        with warnings.catch_warnings(record=True) as warn:
+        # Check that no logging happens when not downloading
+        with capture_log() as log_file:
             fname = pup.fetch("tiny-data.txt")
-            assert not warn
+            assert log_file.getvalue() == ""
+
+
+def test_pooch_logging_level():
+    "Setup a pooch and check that no logging happens when the level is raised"
+    with TemporaryDirectory() as local_store:
+        path = Path(local_store)
+        urls = {"tiny-data.txt": BASEURL + "tiny-data.txt"}
+        # Setup a pooch in a temp dir
+        pup = Pooch(path=path, base_url="", registry=REGISTRY, urls=urls)
+        # Capture only critical logging events
+        with capture_log("CRITICAL") as log_file:
+            fname = pup.fetch("tiny-data.txt")
+            assert log_file.getvalue() == ""
+        check_tiny_data(fname)
 
 
 def test_pooch_update():
@@ -102,21 +114,20 @@ def test_pooch_update():
             fin.write("different data")
         # Setup a pooch in a temp dir
         pup = Pooch(path=path, base_url=BASEURL, registry=REGISTRY)
-        # Check that the warning says that the file is being updated
-        with warnings.catch_warnings(record=True) as warn:
+        # Check that the logs say that the file is being updated
+        with capture_log() as log_file:
             fname = pup.fetch("tiny-data.txt")
-            assert len(warn) == 1
-            assert issubclass(warn[-1].category, UserWarning)
-            assert str(warn[-1].message).split()[0] == "Updating"
-            assert str(warn[-1].message).split()[-1] == "'{}'.".format(path)
+            logs = log_file.getvalue()
+            assert logs.split()[0] == "Updating"
+            assert logs.split()[-1] == "'{}'.".format(path)
         # Check that the updated file has the right content
         assert true_path == fname
         check_tiny_data(fname)
         assert file_hash(fname) == REGISTRY["tiny-data.txt"]
-        # Check that no warnings happen when not downloading
-        with warnings.catch_warnings(record=True) as warn:
+        # Check that no logging happens when not downloading
+        with capture_log() as log_file:
             fname = pup.fetch("tiny-data.txt")
-            assert not warn
+            assert log_file.getvalue() == ""
 
 
 def test_pooch_corrupted():
@@ -125,22 +136,20 @@ def test_pooch_corrupted():
     with TemporaryDirectory() as local_store:
         path = os.path.abspath(local_store)
         pup = Pooch(path=path, base_url=BASEURL, registry=REGISTRY_CORRUPTED)
-        with warnings.catch_warnings(record=True) as warn:
+        with capture_log() as log_file:
             with pytest.raises(ValueError):
                 pup.fetch("tiny-data.txt")
-            assert len(warn) == 1
-            assert issubclass(warn[-1].category, UserWarning)
-            assert str(warn[-1].message).split()[0] == "Downloading"
-            assert str(warn[-1].message).split()[-1] == "'{}'.".format(path)
+            logs = log_file.getvalue()
+            assert logs.split()[0] == "Downloading"
+            assert logs.split()[-1] == "'{}'.".format(path)
     # and the case where the file exists but hash doesn't match
     pup = Pooch(path=DATA_DIR, base_url=BASEURL, registry=REGISTRY_CORRUPTED)
-    with warnings.catch_warnings(record=True) as warn:
+    with capture_log() as log_file:
         with pytest.raises(ValueError):
             pup.fetch("tiny-data.txt")
-        assert len(warn) == 1
-        assert issubclass(warn[-1].category, UserWarning)
-        assert str(warn[-1].message).split()[0] == "Updating"
-        assert str(warn[-1].message).split()[-1] == "'{}'.".format(DATA_DIR)
+        logs = log_file.getvalue()
+        assert logs.split()[0] == "Updating"
+        assert logs.split()[-1] == "'{}'.".format(DATA_DIR)
 
 
 def test_pooch_file_not_in_registry():
@@ -206,7 +215,7 @@ def test_create_makedirs_permissionerror(monkeypatch):
 
     monkeypatch.setattr(os, "makedirs", mockmakedirs)
 
-    with warnings.catch_warnings(record=True) as warn:
+    with capture_log() as log_file:
         pup = create(
             path=data_cache,
             base_url="",
@@ -215,10 +224,9 @@ def test_create_makedirs_permissionerror(monkeypatch):
             env="SOME_VARIABLE",
             registry={"afile.txt": "ahash"},
         )
-        assert len(warn) == 1
-        assert issubclass(warn[-1].category, UserWarning)
-        assert str(warn[-1].message).startswith("Cannot write to data cache")
-        assert "'SOME_VARIABLE'" in str(warn[-1].message)
+        logs = log_file.getvalue()
+        assert logs.startswith("Cannot write to data cache")
+        assert "'SOME_VARIABLE'" in logs
 
     with pytest.raises(PermissionError):
         pup.fetch("afile.txt")
@@ -239,7 +247,7 @@ def test_create_newfile_permissionerror(monkeypatch):
 
         monkeypatch.setattr(tempfile, "NamedTemporaryFile", mocktempfile)
 
-        with warnings.catch_warnings(record=True) as warn:
+        with capture_log() as log_file:
             pup = create(
                 path=data_cache,
                 base_url="ftp://random.ftp.com/",
@@ -248,13 +256,12 @@ def test_create_newfile_permissionerror(monkeypatch):
                 env="SOME_VARIABLE",
                 registry={"afile.txt": "ahash"},
             )
-            assert len(warn) == 1
-            assert issubclass(warn[-1].category, UserWarning)
-            assert str(warn[-1].message).startswith("Cannot write to data cache")
-            assert "'SOME_VARIABLE'" in str(warn[-1].message)
+            logs = log_file.getvalue()
+            assert logs.startswith("Cannot write to data cache")
+            assert "'SOME_VARIABLE'" in logs
 
-            with pytest.raises(PermissionError):
-                pup.fetch("afile.txt")
+        with pytest.raises(PermissionError):
+            pup.fetch("afile.txt")
 
 
 def test_unsupported_protocol():
@@ -310,28 +317,29 @@ def test_downloader(capsys):
 
     def download(url, output_file, pup):  # pylint: disable=unused-argument
         "Download through HTTP and warn that we're doing it"
-        warnings.warn("downloader executed")
+        get_logger().info("downloader executed")
         HTTPDownloader()(url, output_file, pup)
 
     with TemporaryDirectory() as local_store:
         path = Path(local_store)
         # Setup a pooch in a temp dir
         pup = Pooch(path=path, base_url=BASEURL, registry=REGISTRY)
-        # Check that the warning says that the file is being downloaded
-        with warnings.catch_warnings(record=True) as warn:
+        # Check that the logs say that the file is being downloaded
+        with capture_log() as log_file:
             fname = pup.fetch("large-data.txt", downloader=download)
-            assert len(warn) == 2
-            assert all(issubclass(w.category, UserWarning) for w in warn)
-            assert str(warn[-2].message).split()[0] == "Downloading"
-            assert str(warn[-1].message) == "downloader executed"
+            logs = log_file.getvalue()
+            lines = logs.splitlines()
+            assert len(lines) == 2
+            assert lines[0].split()[0] == "Downloading"
+            assert lines[1] == "downloader executed"
         # Read stderr and make sure no progress bar was printed by default
         assert not capsys.readouterr().err
         # Check that the downloaded file has the right content
         check_large_data(fname)
-        # Check that no warnings happen when not downloading
-        with warnings.catch_warnings(record=True) as warn:
+        # Check that no logging happens when not downloading
+        with capture_log() as log_file:
             fname = pup.fetch("large-data.txt")
-            assert not warn
+            assert log_file.getvalue() == ""
 
 
 @pytest.mark.skipif(tqdm is not None, reason="tqdm must be missing")
