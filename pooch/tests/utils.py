@@ -81,7 +81,7 @@ def pooch_test_registry():
 
 
 @contextmanager
-def capture_log():
+def capture_log(level=logging.DEBUG):
     """
     Create a context manager for reading from the logs.
 
@@ -92,6 +92,7 @@ def capture_log():
     """
     log_file = io.StringIO()
     handler = logging.StreamHandler(log_file)
+    handler.setLevel(level)
     get_logger().addHandler(handler)
     yield log_file
     get_logger().removeHandler(handler)
