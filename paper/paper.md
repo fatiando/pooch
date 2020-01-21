@@ -52,30 +52,35 @@ bibliography: paper.bib
 
 # Summary
 
-Scientific software is usually created to analyze, model, and visualize data.
+Scientific software is usually created to acquire, analyze, model, and visualize data.
 As such, many software libraries include sample datasets in their distributions
 for use in documentation, tests, benchmarks, and workshops.
-The usual approach is to include smaller datasets in the GitHub repository
+A common approach is to include smaller datasets in the GitHub repository
 directly and package them with the source and binary distributions
 (e.g., scikit-learn [@scikit-learn] and scikit-image [@scikit-image] do this).
-Larger datasets require writing code to download the files from a remote server
+As data files increase in size, it becomes unfeasible to store them in GitHub
+repositories.
+Thus, larger datasets require writing code to download the files from a remote server
 to the user's computer.
 The same problem is faced by scientists using version control to manage their
 research projects.
-As data files increase in size, it becomes unfeasible to store them in GitHub
-repositories.
-While downloading a data file over HTTP can be done easily with modern Python
+While downloading a data file over HTTPS can be done easily with modern Python
 libraries, it is not trivial to manage a set of files, keep them updated, and
 check for corruption.
+For example, scikit-learn [@scikit-learn], Cartopy [@cartopy], and PyVista
+[@pyvista] all include code dedicated to this particular task.
 Instead of scientists and library authors recreating the same code, it would be
 best to have a minimalistic and easy to set up tool for fetching and maintaining
 data files.
 
 Pooch is a Python library that fills this gap.
-It manages a data *registry* by downloading files from one or more remote
-servers and storing them in a local data cache.
+It manages a data *registry* (containing file names, SHA-256 cryptographic hashes, and
+download URLs) by downloading files from one or more remote servers and storing
+them in a local data cache.
 Pooch is written in pure Python and has minimal dependencies.
-The integrity of downloads is verified by comparing the file's SHA256 hash with
+It can be easily installed from the Python Package Index (PyPI) and conda-forge
+on a wide range of Python versions: 2.7 (up to Pooch 0.6.0) and from 3.5 to 3.8.
+The integrity of downloads is verified by comparing the file's SHA-256 hash with
 the one stored in the data registry.
 This is also the mechanism used to detect if a file needs to be re-downloaded
 due to an update in the registry.
@@ -131,19 +136,31 @@ authentication) as well as processing functions for unpacking archives (zip or
 tar) and decompressing files (gzip, lzma, and bzip2).
 
 To the best of the authors' awareness, the only other Python software with some
-overlapping functionality is [Intake](https://github.com/intake/intake).
-While Intake is powerful and can be used to manage large data archives,
-we argue that Pooch has a simpler setup and meets the
-specific needs of scientific software authors and individual scientists.
-For example, Pooch does not require users to change their data loading code to
-fit into a plug-in structure, instead only providing the file path for the
-user.
+overlapping functionality are [Intake](https://github.com/intake/intake) and
+[fsspec](https://github.com/intake/filesystem_spec) (which is used by Intake).
+The fsspec library provides a unified interface for defining file systems and
+opening files, regardless of where the files are located (local system,
+HTTPS/FTP servers, Amazon S3, Google Cloud Storage, etc).
+fsspec implements similar download and caching functionality to
+the one in Pooch, but has a wider range of download methods available.
+In the future, fsspec could be used as a backend to expand Pooch's download
+capabilities beyond HTTPS and FTP.
+Intake manages data catalogues (with download locations and extensive
+metadata), data download and caching, data loading, visualization, and
+browsing.
+It has built-in capabilities for loading data into standard containers,
+including NumPy, pandas, and xarray.
+While Intake and fsspec are powerful and highly configurable tools,
+we argue that Pooch's strong points are its simplicity, straight-forward
+documentation, and focus on solving a single problem.
 
 The Pooch API is stable and has been field-tested by other projects:
 MetPy [@metpy], Verde [@verde], RockHound [@rockhound], predictatops
 [@predictatops], and icepack [@icepack].
 Pooch is also being implemented as the download manager for scikit-image
-([GitHub pull request number 3945](https://github.com/scikit-image/scikit-image/pull/3945)).
+([GitHub pull request number 3945](https://github.com/scikit-image/scikit-image/pull/3945)),
+which will allow the project to use larger sample data while simultaneously
+reducing the download size of source and binary distributions.
 
 
 # Acknowledgements
