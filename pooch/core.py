@@ -490,20 +490,21 @@ class Pooch:
                     line = line.decode("utf-8")
 
                 elements = line.strip().split()
-                if len(elements) > 3 or len(elements) < 2:
+                if not len(elements) in [0, 2, 3]:
                     raise OSError(
                         "Invalid entry in Pooch registry file '{}': "
                         "expected 2 or 3 elements in line {} but got {}. "
                         "Offending entry: '{}'".format(
-                            fname, linenum, len(elements), line
+                            fname, linenum + 1, len(elements), line
                         )
                     )
-                file_name = elements[0]
-                file_sha256 = elements[1]
-                if len(elements) == 3:
-                    file_url = elements[2]
-                    self.urls[file_name] = file_url
-                self.registry[file_name] = file_sha256
+                if elements:
+                    file_name = elements[0]
+                    file_sha256 = elements[1]
+                    if len(elements) == 3:
+                        file_url = elements[2]
+                        self.urls[file_name] = file_url
+                    self.registry[file_name] = file_sha256
 
     def is_available(self, fname):
         """
