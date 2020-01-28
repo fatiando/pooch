@@ -3,6 +3,41 @@
 Changelog
 =========
 
+Version 1.0.0
+-------------
+
+*Released on: 2020/01/28*
+
+.. image:: https://zenodo.org/badge/DOI/10.5281/zenodo.3629329.svg
+    :alt: Digital Object Identifier for the Zenodo archive
+    :target: https://doi.org/10.5281/zenodo.3629329
+
+This release marks the stabilization of the Pooch API. Further changes to the
+1.* line will be fully backwards compatible (meaning that updating Pooch should
+not break existing code). If there is great need to make backwards incompatible
+changes, we will release a 2.* line. In that case, bug fixes will still be
+ported to the 1.* line for a period of time.
+
+Improvements:
+
+* Allow blank lines in registry files. Previously, they would cause an error.
+  (`#138 <https://github.com/fatiando/pooch/pull/138>`__)
+
+**Backwards incompatible changes**:
+
+* Using Python's ``logging`` module to instead of ``warnings`` to inform users
+  of download, update, and decompression/unpacking actions. This allows
+  messages to be logged with different priorities and the user filter out log
+  messages or silence Pooch entirely. Introduces the function
+  ``pooch.get_logger`` to access the ``logging`` object used by Pooch. **Users
+  who relied on Pooch issuing warnings will need to update to capturing logs
+  instead.** All other parts of the API remain unchanged.
+  (`#115 <https://github.com/fatiando/pooch/pull/115>`__)
+
+This release contains contributions from:
+
+* Daniel Shapero
+
 Version 0.7.2
 -------------
 
