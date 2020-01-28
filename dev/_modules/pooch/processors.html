@@ -214,7 +214,8 @@
 <span class="kn">import</span> <span class="nn">shutil</span>
 <span class="kn">from</span> <span class="nn">zipfile</span> <span class="kn">import</span> <span class="n">ZipFile</span>
 <span class="kn">from</span> <span class="nn">tarfile</span> <span class="kn">import</span> <span class="n">TarFile</span>
-<span class="kn">from</span> <span class="nn">warnings</span> <span class="kn">import</span> <span class="n">warn</span>
+
+<span class="kn">from</span> <span class="nn">.utils</span> <span class="kn">import</span> <span class="n">get_logger</span>
 
 
 <span class="k">class</span> <span class="nc">ExtractorProcessor</span><span class="p">:</span>  <span class="c1"># pylint: disable=too-few-public-methods</span>
@@ -320,15 +321,15 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">with</span> <span class="n">ZipFile</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">zip_file</span><span class="p">:</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">members</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Unzipping contents of &#39;</span><span class="si">{}</span><span class="s2">&#39; to &#39;</span><span class="si">{}</span><span class="s2">&#39;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">extract_dir</span><span class="p">))</span>
+                <span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+                    <span class="s2">&quot;Unzipping contents of &#39;</span><span class="si">%s</span><span class="s2">&#39; to &#39;</span><span class="si">%s</span><span class="s2">&#39;&quot;</span><span class="p">,</span> <span class="n">fname</span><span class="p">,</span> <span class="n">extract_dir</span>
+                <span class="p">)</span>
                 <span class="c1"># Unpack all files from the archive into our new folder</span>
                 <span class="n">zip_file</span><span class="o">.</span><span class="n">extractall</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="n">extract_dir</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">for</span> <span class="n">member</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">members</span><span class="p">:</span>
-                    <span class="n">warn</span><span class="p">(</span>
-                        <span class="s2">&quot;Extracting &#39;</span><span class="si">{}</span><span class="s2">&#39; from &#39;</span><span class="si">{}</span><span class="s2">&#39; to &#39;</span><span class="si">{}</span><span class="s2">&#39;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-                            <span class="n">member</span><span class="p">,</span> <span class="n">fname</span><span class="p">,</span> <span class="n">extract_dir</span>
-                        <span class="p">)</span>
+                    <span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+                        <span class="s2">&quot;Extracting &#39;</span><span class="si">%s</span><span class="s2">&#39; from &#39;</span><span class="si">%s</span><span class="s2">&#39; to &#39;</span><span class="si">%s</span><span class="s2">&#39;&quot;</span><span class="p">,</span> <span class="n">member</span><span class="p">,</span> <span class="n">fname</span><span class="p">,</span> <span class="n">extract_dir</span>
                     <span class="p">)</span>
                     <span class="c1"># Extract the data file from within the archive</span>
                     <span class="k">with</span> <span class="n">zip_file</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">member</span><span class="p">)</span> <span class="k">as</span> <span class="n">data_file</span><span class="p">:</span>
@@ -365,15 +366,15 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">with</span> <span class="n">TarFile</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">tar_file</span><span class="p">:</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">members</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Untarring contents of &#39;</span><span class="si">{}</span><span class="s2">&#39; to &#39;</span><span class="si">{}</span><span class="s2">&#39;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">extract_dir</span><span class="p">))</span>
+                <span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+                    <span class="s2">&quot;Untarring contents of &#39;</span><span class="si">%s</span><span class="s2">&#39; to &#39;</span><span class="si">%s</span><span class="s2">&#39;&quot;</span><span class="p">,</span> <span class="n">fname</span><span class="p">,</span> <span class="n">extract_dir</span>
+                <span class="p">)</span>
                 <span class="c1"># Unpack all files from the archive into our new folder</span>
                 <span class="n">tar_file</span><span class="o">.</span><span class="n">extractall</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="n">extract_dir</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">for</span> <span class="n">member</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">members</span><span class="p">:</span>
-                    <span class="n">warn</span><span class="p">(</span>
-                        <span class="s2">&quot;Extracting &#39;</span><span class="si">{}</span><span class="s2">&#39; from &#39;</span><span class="si">{}</span><span class="s2">&#39; to &#39;</span><span class="si">{}</span><span class="s2">&#39;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-                            <span class="n">member</span><span class="p">,</span> <span class="n">fname</span><span class="p">,</span> <span class="n">extract_dir</span>
-                        <span class="p">)</span>
+                    <span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+                        <span class="s2">&quot;Extracting &#39;</span><span class="si">%s</span><span class="s2">&#39; from &#39;</span><span class="si">%s</span><span class="s2">&#39; to &#39;</span><span class="si">%s</span><span class="s2">&#39;&quot;</span><span class="p">,</span> <span class="n">member</span><span class="p">,</span> <span class="n">fname</span><span class="p">,</span> <span class="n">extract_dir</span>
                     <span class="p">)</span>
                     <span class="c1"># Extract the data file from within the archive</span>
                     <span class="c1"># Python 2.7: extractfile doesn&#39;t return a context manager</span>
@@ -443,10 +444,11 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">decompressed</span> <span class="o">=</span> <span class="n">fname</span> <span class="o">+</span> <span class="s2">&quot;.decomp&quot;</span>
         <span class="k">if</span> <span class="n">action</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;update&quot;</span><span class="p">,</span> <span class="s2">&quot;download&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">decompressed</span><span class="p">):</span>
-            <span class="n">warn</span><span class="p">(</span>
-                <span class="s2">&quot;Decompressing &#39;</span><span class="si">{}</span><span class="s2">&#39; to &#39;</span><span class="si">{}</span><span class="s2">&#39; using method &#39;</span><span class="si">{}</span><span class="s2">&#39;.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-                    <span class="n">fname</span><span class="p">,</span> <span class="n">decompressed</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">method</span>
-                <span class="p">)</span>
+            <span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+                <span class="s2">&quot;Decompressing &#39;</span><span class="si">%s</span><span class="s2">&#39; to &#39;</span><span class="si">%s</span><span class="s2">&#39; using method &#39;</span><span class="si">%s</span><span class="s2">&#39;.&quot;</span><span class="p">,</span>
+                <span class="n">fname</span><span class="p">,</span>
+                <span class="n">decompressed</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">method</span><span class="p">,</span>
             <span class="p">)</span>
             <span class="n">module</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_compression_module</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
             <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">decompressed</span><span class="p">,</span> <span class="s2">&quot;w+b&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">output</span><span class="p">:</span>
@@ -494,7 +496,7 @@
     <p>
         &copy; Copyright 2018-2020, The Pooch Developers
       <span class="lastupdated">
-        Last updated on Jan 17, 2020.
+        Last updated on Jan 28, 2020.
       </span>
 
     </p>

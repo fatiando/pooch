@@ -26,6 +26,7 @@ Utilities
     make_registry
     file_hash
     check_version
+    get_logger
 
 Downloaders
 -----------

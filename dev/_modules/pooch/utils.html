@@ -206,11 +206,32 @@
 <span></span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">Misc utilities</span>
 <span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
 <span class="kn">import</span> <span class="nn">hashlib</span>
 <span class="kn">from</span> <span class="nn">urllib.parse</span> <span class="kn">import</span> <span class="n">urlsplit</span>
 <span class="kn">import</span> <span class="nn">appdirs</span>
 <span class="kn">from</span> <span class="nn">packaging.version</span> <span class="kn">import</span> <span class="n">Version</span>
+
+
+<span class="n">LOGGER</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">Logger</span><span class="p">(</span><span class="s2">&quot;pooch&quot;</span><span class="p">)</span>
+<span class="n">LOGGER</span><span class="o">.</span><span class="n">addHandler</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">StreamHandler</span><span class="p">())</span>
+
+
+<div class="viewcode-block" id="get_logger"><a class="viewcode-back" href="../../api/generated/pooch.get_logger.html#pooch.get_logger">[docs]</a><span class="k">def</span> <span class="nf">get_logger</span><span class="p">():</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Get the default event logger.</span>
+
+<span class="sd">    The logger records events like downloading files, unzipping archives, etc.</span>
+<span class="sd">    Use the method :meth:`logging.Logger.setLevel` of this object to adjust the</span>
+<span class="sd">    verbosity level from Pooch.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    logger : :class:`logging.Logger`</span>
+<span class="sd">        The logger object for Pooch</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">LOGGER</span></div>
 
 
 <div class="viewcode-block" id="os_cache"><a class="viewcode-back" href="../../api/generated/pooch.os_cache.html#pooch.os_cache">[docs]</a><span class="k">def</span> <span class="nf">os_cache</span><span class="p">(</span><span class="n">project</span><span class="p">):</span>
@@ -403,7 +424,7 @@
     <p>
         &copy; Copyright 2018-2020, The Pooch Developers
       <span class="lastupdated">
-        Last updated on Jan 17, 2020.
+        Last updated on Jan 28, 2020.
       </span>
 
     </p>

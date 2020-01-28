@@ -211,11 +211,10 @@
 <span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
 <span class="kn">import</span> <span class="nn">shutil</span>
 <span class="kn">import</span> <span class="nn">tempfile</span>
-<span class="kn">from</span> <span class="nn">warnings</span> <span class="kn">import</span> <span class="n">warn</span>
 <span class="kn">import</span> <span class="nn">ftplib</span>
 
 <span class="kn">import</span> <span class="nn">requests</span>
-<span class="kn">from</span> <span class="nn">.utils</span> <span class="kn">import</span> <span class="n">file_hash</span><span class="p">,</span> <span class="n">check_version</span><span class="p">,</span> <span class="n">parse_url</span>
+<span class="kn">from</span> <span class="nn">.utils</span> <span class="kn">import</span> <span class="n">file_hash</span><span class="p">,</span> <span class="n">check_version</span><span class="p">,</span> <span class="n">parse_url</span><span class="p">,</span> <span class="n">get_logger</span>
 <span class="kn">from</span> <span class="nn">.downloaders</span> <span class="kn">import</span> <span class="n">HTTPDownloader</span><span class="p">,</span> <span class="n">FTPDownloader</span>
 
 <span class="n">KNOWN_DOWNLOADERS</span> <span class="o">=</span> <span class="p">{</span>
@@ -377,17 +376,15 @@
             <span class="n">tempfile</span><span class="o">.</span><span class="n">NamedTemporaryFile</span><span class="p">(</span><span class="nb">dir</span><span class="o">=</span><span class="n">path</span><span class="p">)</span>
     <span class="k">except</span> <span class="ne">PermissionError</span><span class="p">:</span>
         <span class="n">message</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="s2">&quot;Cannot write to data cache &#39;</span><span class="si">{}</span><span class="s2">&#39;. &quot;</span>
-            <span class="s2">&quot;Will not be able to download remote data files. &quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+            <span class="s2">&quot;Cannot write to data cache &#39;</span><span class="si">%s</span><span class="s2">&#39;. &quot;</span>
+            <span class="s2">&quot;Will not be able to download remote data files. &quot;</span>
         <span class="p">)</span>
+        <span class="n">args</span> <span class="o">=</span> <span class="p">[</span><span class="n">path</span><span class="p">]</span>
         <span class="k">if</span> <span class="n">env</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">message</span> <span class="o">=</span> <span class="p">(</span>
-                <span class="n">message</span>
-                <span class="o">+</span> <span class="s2">&quot;Use environment variable &#39;</span><span class="si">{}</span><span class="s2">&#39; to specify another directory.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-                    <span class="n">env</span>
-                <span class="p">)</span>
-            <span class="p">)</span>
-        <span class="n">warn</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+            <span class="n">message</span> <span class="o">+=</span> <span class="s2">&quot;Use environment variable &#39;</span><span class="si">%s</span><span class="s2">&#39; to specify another directory.&quot;</span>
+            <span class="n">args</span> <span class="o">+=</span> <span class="p">[</span><span class="n">env</span><span class="p">]</span>
+
+        <span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="n">message</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">)</span>
     <span class="n">pup</span> <span class="o">=</span> <span class="n">Pooch</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="n">Path</span><span class="p">(</span><span class="n">path</span><span class="p">),</span> <span class="n">base_url</span><span class="o">=</span><span class="n">base_url</span><span class="p">,</span> <span class="n">registry</span><span class="o">=</span><span class="n">registry</span><span class="p">,</span> <span class="n">urls</span><span class="o">=</span><span class="n">urls</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">pup</span></div>
 
@@ -579,10 +576,12 @@
 
         <span class="k">if</span> <span class="n">action</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;download&quot;</span><span class="p">,</span> <span class="s2">&quot;update&quot;</span><span class="p">):</span>
             <span class="n">action_word</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">download</span><span class="o">=</span><span class="s2">&quot;Downloading&quot;</span><span class="p">,</span> <span class="n">update</span><span class="o">=</span><span class="s2">&quot;Updating&quot;</span><span class="p">)</span>
-            <span class="n">warn</span><span class="p">(</span>
-                <span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> data file &#39;</span><span class="si">{}</span><span class="s2">&#39; from remote data store &#39;</span><span class="si">{}</span><span class="s2">&#39; to &#39;</span><span class="si">{}</span><span class="s2">&#39;.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-                    <span class="n">action_word</span><span class="p">[</span><span class="n">action</span><span class="p">],</span> <span class="n">fname</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_url</span><span class="p">(</span><span class="n">fname</span><span class="p">),</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="p">)</span>
-                <span class="p">)</span>
+            <span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+                <span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> data file &#39;</span><span class="si">%s</span><span class="s2">&#39; from remote data store &#39;</span><span class="si">%s</span><span class="s2">&#39; to &#39;</span><span class="si">%s</span><span class="s2">&#39;.&quot;</span><span class="p">,</span>
+                <span class="n">action_word</span><span class="p">[</span><span class="n">action</span><span class="p">],</span>
+                <span class="n">fname</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">get_url</span><span class="p">(</span><span class="n">fname</span><span class="p">),</span>
+                <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="p">),</span>
             <span class="p">)</span>
 
             <span class="n">parsed_url</span> <span class="o">=</span> <span class="n">parse_url</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
@@ -696,20 +695,21 @@
                     <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span>
 
                 <span class="n">elements</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
-                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">elements</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">3</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">elements</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="nb">len</span><span class="p">(</span><span class="n">elements</span><span class="p">)</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]:</span>
                     <span class="k">raise</span> <span class="ne">OSError</span><span class="p">(</span>
                         <span class="s2">&quot;Invalid entry in Pooch registry file &#39;</span><span class="si">{}</span><span class="s2">&#39;: &quot;</span>
                         <span class="s2">&quot;expected 2 or 3 elements in line </span><span class="si">{}</span><span class="s2"> but got </span><span class="si">{}</span><span class="s2">. &quot;</span>
                         <span class="s2">&quot;Offending entry: &#39;</span><span class="si">{}</span><span class="s2">&#39;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-                            <span class="n">fname</span><span class="p">,</span> <span class="n">linenum</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">elements</span><span class="p">),</span> <span class="n">line</span>
+                            <span class="n">fname</span><span class="p">,</span> <span class="n">linenum</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">elements</span><span class="p">),</span> <span class="n">line</span>
                         <span class="p">)</span>
                     <span class="p">)</span>
-                <span class="n">file_name</span> <span class="o">=</span> <span class="n">elements</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-                <span class="n">file_sha256</span> <span class="o">=</span> <span class="n">elements</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">elements</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
-                    <span class="n">file_url</span> <span class="o">=</span> <span class="n">elements</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">urls</span><span class="p">[</span><span class="n">file_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">file_url</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">registry</span><span class="p">[</span><span class="n">file_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">file_sha256</span></div>
+                <span class="k">if</span> <span class="n">elements</span><span class="p">:</span>
+                    <span class="n">file_name</span> <span class="o">=</span> <span class="n">elements</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                    <span class="n">file_sha256</span> <span class="o">=</span> <span class="n">elements</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+                    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">elements</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+                        <span class="n">file_url</span> <span class="o">=</span> <span class="n">elements</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">urls</span><span class="p">[</span><span class="n">file_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">file_url</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">registry</span><span class="p">[</span><span class="n">file_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">file_sha256</span></div>
 
 <div class="viewcode-block" id="Pooch.is_available"><a class="viewcode-back" href="../../api/generated/pooch.Pooch.html#pooch.Pooch.is_available">[docs]</a>    <span class="k">def</span> <span class="nf">is_available</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fname</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -760,7 +760,7 @@
     <p>
         &copy; Copyright 2018-2020, The Pooch Developers
       <span class="lastupdated">
-        Last updated on Jan 17, 2020.
+        Last updated on Jan 28, 2020.
       </span>
 
     </p>

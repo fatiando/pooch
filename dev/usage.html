@@ -124,6 +124,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#ftp-with-or-without-authentication">FTP with or without authentication</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#custom-downloaders">Custom downloaders</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#printing-a-download-progress-bar">Printing a download progress bar</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#adjusting-the-logging-level">Adjusting the logging level</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#so-you-have-1000-data-files">So you have 1000 data files</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#creating-a-registry-file">Creating a registry file</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#multiple-urls">Multiple URLs</a></li>
@@ -657,6 +658,20 @@ this:</p>
 separately in order to use this feature.</p>
 </div>
 </div>
+<div class="section" id="adjusting-the-logging-level">
+<h2>Adjusting the logging level<a class="headerlink" href="#adjusting-the-logging-level" title="Permalink to this headline">¶</a></h2>
+<p>Pooch will log events like downloading a new file, updating an existing one, or
+unpacking an archive by printing to the terminal. You can change how verbose these
+events are by getting the event logger from pooch and changing the logging level:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">logger</span> <span class="o">=</span> <span class="n">pooch</span><span class="o">.</span><span class="n">get_logger</span><span class="p">()</span>
+<span class="n">logger</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="s2">&quot;WARNING&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Most of the events from Pooch are logged at the info level; this code says that you only
+care about warnings or errors, like inability to create the data cache. The event logger
+is a <a class="reference external" href="https://docs.python.org/3/library/logging.html#logging.Logger" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">logging.Logger</span></code></a> object, so you can use that class’s methods to handle
+logging events in more sophisticated ways if you wish.</p>
+</div>
 <div class="section" id="so-you-have-1000-data-files">
 <h2>So you have 1000 data files<a class="headerlink" href="#so-you-have-1000-data-files" title="Permalink to this headline">¶</a></h2>
 <p>If your project has a large number of data files, it can be tedious to list them in a
@@ -793,7 +808,7 @@ change at all:</p>
     <p>
         &copy; Copyright 2018-2020, The Pooch Developers
       <span class="lastupdated">
-        Last updated on Jan 17, 2020.
+        Last updated on Jan 28, 2020.
       </span>
 
     </p>

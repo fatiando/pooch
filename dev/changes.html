@@ -113,6 +113,7 @@
 <li class="toctree-l1"><a class="reference internal" href="usage.html">Training your Pooch</a></li>
 <li class="toctree-l1"><a class="reference internal" href="api/index.html">API Reference</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Changelog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#version-1-0-0">Version 1.0.0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#version-0-7-2">Version 0.7.2</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#version-0-7-1">Version 0.7.1</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#version-0-7-0">Version 0.7.0</a></li>
@@ -222,6 +223,36 @@
             
   <div class="section" id="changelog">
 <span id="changes"></span><h1>Changelog<a class="headerlink" href="#changelog" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="version-1-0-0">
+<h2>Version 1.0.0<a class="headerlink" href="#version-1-0-0" title="Permalink to this headline">¶</a></h2>
+<p><em>Released on: 2020/01/28</em></p>
+<a class="reference external image-reference" href="https://doi.org/10.5281/zenodo.3629329"><img alt="Digital Object Identifier for the Zenodo archive" src="https://zenodo.org/badge/DOI/10.5281/zenodo.3629329.svg" /></a>
+<p>This release marks the stabilization of the Pooch API. Further changes to the
+1.* line will be fully backwards compatible (meaning that updating Pooch should
+not break existing code). If there is great need to make backwards incompatible
+changes, we will release a 2.* line. In that case, bug fixes will still be
+ported to the 1.* line for a period of time.</p>
+<p>Improvements:</p>
+<ul class="simple">
+<li><p>Allow blank lines in registry files. Previously, they would cause an error.
+(<a class="reference external" href="https://github.com/fatiando/pooch/pull/138">#138</a>)</p></li>
+</ul>
+<p><strong>Backwards incompatible changes</strong>:</p>
+<ul class="simple">
+<li><p>Using Python’s <code class="docutils literal notranslate"><span class="pre">logging</span></code> module to instead of <code class="docutils literal notranslate"><span class="pre">warnings</span></code> to inform users
+of download, update, and decompression/unpacking actions. This allows
+messages to be logged with different priorities and the user filter out log
+messages or silence Pooch entirely. Introduces the function
+<code class="docutils literal notranslate"><span class="pre">pooch.get_logger</span></code> to access the <code class="docutils literal notranslate"><span class="pre">logging</span></code> object used by Pooch. <strong>Users
+who relied on Pooch issuing warnings will need to update to capturing logs
+instead.</strong> All other parts of the API remain unchanged.
+(<a class="reference external" href="https://github.com/fatiando/pooch/pull/115">#115</a>)</p></li>
+</ul>
+<p>This release contains contributions from:</p>
+<ul class="simple">
+<li><p>Daniel Shapero</p></li>
+</ul>
+</div>
 <div class="section" id="version-0-7-2">
 <h2>Version 0.7.2<a class="headerlink" href="#version-0-7-2" title="Permalink to this headline">¶</a></h2>
 <p><em>Released on: 2020/01/17</em></p>
@@ -541,7 +572,7 @@ data corruption.</p></li>
     <p>
         &copy; Copyright 2018-2020, The Pooch Developers
       <span class="lastupdated">
-        Last updated on Jan 17, 2020.
+        Last updated on Jan 28, 2020.
       </span>
 
     </p>

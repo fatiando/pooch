@@ -205,7 +205,7 @@
 <span class="c1"># Import functions/classes to make the API</span>
 <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">version</span>
 <span class="kn">from</span> <span class="nn">.core</span> <span class="kn">import</span> <span class="n">Pooch</span><span class="p">,</span> <span class="n">create</span>
-<span class="kn">from</span> <span class="nn">.utils</span> <span class="kn">import</span> <span class="n">os_cache</span><span class="p">,</span> <span class="n">file_hash</span><span class="p">,</span> <span class="n">make_registry</span><span class="p">,</span> <span class="n">check_version</span>
+<span class="kn">from</span> <span class="nn">.utils</span> <span class="kn">import</span> <span class="n">os_cache</span><span class="p">,</span> <span class="n">file_hash</span><span class="p">,</span> <span class="n">make_registry</span><span class="p">,</span> <span class="n">check_version</span><span class="p">,</span> <span class="n">get_logger</span>
 <span class="kn">from</span> <span class="nn">.downloaders</span> <span class="kn">import</span> <span class="n">HTTPDownloader</span><span class="p">,</span> <span class="n">FTPDownloader</span>
 <span class="kn">from</span> <span class="nn">.processors</span> <span class="kn">import</span> <span class="n">Unzip</span><span class="p">,</span> <span class="n">Untar</span><span class="p">,</span> <span class="n">Decompress</span>
 
@@ -265,7 +265,7 @@
     <p>
         &copy; Copyright 2018-2020, The Pooch Developers
       <span class="lastupdated">
-        Last updated on Jan 17, 2020.
+        Last updated on Jan 28, 2020.
       </span>
 
     </p>
