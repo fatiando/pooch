@@ -1,0 +1,388 @@
+
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+    
+    <title>API Reference &mdash; Pooch v1.0.0</title>
+    
+
+
+  
+  
+    <link rel="shortcut icon" href="../_static/favicon.png"/>
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/style.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="pooch.create" href="generated/pooch.create.html" />
+    <link rel="prev" title="Training your Pooch" href="../usage.html" />
+    <!-- Google Analytics tracking code -->
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new
+            Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+                })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-38125837-1', 'auto', {'storage': 'none'});
+      ga('set', 'anonymizeIp', true);
+      ga('send', 'pageview');
+    </script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html">
+          
+
+          
+            
+            <img src="../_static/pooch-logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                v1.0.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+    
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Documentation</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Installing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../citing.html">Citing Pooch</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../usage.html">Training your Pooch</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">API Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#core">Core</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="generated/pooch.create.html">pooch.create</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pooch.Pooch.html">pooch.Pooch</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#utilities">Utilities</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="generated/pooch.os_cache.html">pooch.os_cache</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pooch.make_registry.html">pooch.make_registry</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pooch.file_hash.html">pooch.file_hash</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pooch.check_version.html">pooch.check_version</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pooch.get_logger.html">pooch.get_logger</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#downloaders">Downloaders</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="generated/pooch.HTTPDownloader.html">pooch.HTTPDownloader</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pooch.FTPDownloader.html">pooch.FTPDownloader</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#processors">Processors</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="generated/pooch.Unzip.html">pooch.Unzip</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pooch.Untar.html">pooch.Untar</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pooch.Decompress.html">pooch.Decompress</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#miscellaneous">Miscellaneous</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="generated/pooch.test.html">pooch.test</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../changes.html">Changelog</a></li>
+</ul>
+
+            
+          
+
+    
+        <p class="caption">
+            <span class="caption-text">
+            
+                Getting help and contributing
+            
+            </span>
+        </p>
+        <ul>
+            
+                <li class="toctree-l1"><a href="https://www.fatiando.org"><i class="fa fa-external-link-square fa-fw"></i> Fatiando a Terra</a></li>
+            
+                <li class="toctree-l1"><a href="https://github.com/fatiando/pooch/blob/master/CONTRIBUTING.md"><i class="fa fa-users fa-fw"></i> Contributing</a></li>
+            
+                <li class="toctree-l1"><a href="https://github.com/fatiando/pooch/blob/master/CODE_OF_CONDUCT.md"><i class="fa fa-gavel fa-fw"></i> Code of Conduct</a></li>
+            
+                <li class="toctree-l1"><a href="http://contact.fatiando.org"><i class="fa fa-comment fa-fw"></i> Contact</a></li>
+            
+                <li class="toctree-l1"><a href="https://github.com/fatiando/pooch"><i class="fa fa-github fa-fw"></i> Source Code</a></li>
+            
+        </ul>
+    
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Pooch</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>API Reference</li>
+    
+    
+    <li class="source-link">
+        
+            
+                <a href="https://github.com/fatiando/pooch/edit/master/doc/api/index.rst"
+                   class="fa fa-github"> Improve this page</a>
+            
+        
+        
+    </li>
+
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-pooch">
+<span id="api-reference"></span><span id="api"></span><h1>API Reference<a class="headerlink" href="#module-pooch" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="core">
+<h2>Core<a class="headerlink" href="#core" title="Permalink to this headline">¶</a></h2>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/pooch.create.html#pooch.create" title="pooch.create"><code class="xref py py-obj docutils literal notranslate"><span class="pre">create</span></code></a>(path, base_url[, version, …])</p></td>
+<td><p>Create a <a class="reference internal" href="generated/pooch.Pooch.html#pooch.Pooch" title="pooch.Pooch"><code class="xref py py-class docutils literal notranslate"><span class="pre">Pooch</span></code></a> with sensible defaults to fetch data files.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/pooch.Pooch.html#pooch.Pooch" title="pooch.Pooch"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Pooch</span></code></a>(path, base_url[, registry, urls])</p></td>
+<td><p>Manager for a local data storage that can fetch from a remote source.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="utilities">
+<h2>Utilities<a class="headerlink" href="#utilities" title="Permalink to this headline">¶</a></h2>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/pooch.os_cache.html#pooch.os_cache" title="pooch.os_cache"><code class="xref py py-obj docutils literal notranslate"><span class="pre">os_cache</span></code></a>(project)</p></td>
+<td><p>Default cache location based on the operating system.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/pooch.make_registry.html#pooch.make_registry" title="pooch.make_registry"><code class="xref py py-obj docutils literal notranslate"><span class="pre">make_registry</span></code></a>(directory, output[, recursive])</p></td>
+<td><p>Make a registry of files and hashes for the given directory.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/pooch.file_hash.html#pooch.file_hash" title="pooch.file_hash"><code class="xref py py-obj docutils literal notranslate"><span class="pre">file_hash</span></code></a>(fname)</p></td>
+<td><p>Calculate the SHA256 hash of a given file.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/pooch.check_version.html#pooch.check_version" title="pooch.check_version"><code class="xref py py-obj docutils literal notranslate"><span class="pre">check_version</span></code></a>(version[, fallback])</p></td>
+<td><p>Check if a version is PEP440 compliant and there are no unreleased changes.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/pooch.get_logger.html#pooch.get_logger" title="pooch.get_logger"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_logger</span></code></a>()</p></td>
+<td><p>Get the default event logger.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="downloaders">
+<h2>Downloaders<a class="headerlink" href="#downloaders" title="Permalink to this headline">¶</a></h2>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/pooch.HTTPDownloader.html#pooch.HTTPDownloader" title="pooch.HTTPDownloader"><code class="xref py py-obj docutils literal notranslate"><span class="pre">HTTPDownloader</span></code></a>([progressbar, chunk_size])</p></td>
+<td><p>Download manager for fetching files over HTTP/HTTPS.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/pooch.FTPDownloader.html#pooch.FTPDownloader" title="pooch.FTPDownloader"><code class="xref py py-obj docutils literal notranslate"><span class="pre">FTPDownloader</span></code></a>([port, username, password, …])</p></td>
+<td><p>Download manager for fetching files over FTP.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="processors">
+<h2>Processors<a class="headerlink" href="#processors" title="Permalink to this headline">¶</a></h2>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/pooch.Unzip.html#pooch.Unzip" title="pooch.Unzip"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Unzip</span></code></a>([members])</p></td>
+<td><p>Processor that unpacks a zip archive and returns a list of all files.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/pooch.Untar.html#pooch.Untar" title="pooch.Untar"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Untar</span></code></a>([members])</p></td>
+<td><p>Processor that unpacks a tar archive and returns a list of all files.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/pooch.Decompress.html#pooch.Decompress" title="pooch.Decompress"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Decompress</span></code></a>([method])</p></td>
+<td><p>Processor that decompress a file and returns the decompressed version.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="miscellaneous">
+<h2>Miscellaneous<a class="headerlink" href="#miscellaneous" title="Permalink to this headline">¶</a></h2>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/pooch.test.html#pooch.test" title="pooch.test"><code class="xref py py-obj docutils literal notranslate"><span class="pre">test</span></code></a>([doctest, verbose, coverage])</p></td>
+<td><p>Run the test suite.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="generated/pooch.create.html" class="btn btn-neutral float-right" title="pooch.create" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="../usage.html" class="btn btn-neutral float-left" title="Training your Pooch" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018-2020, The Pooch Developers
+      <span class="lastupdated">
+        Last updated on Jan 28, 2020.
+      </span>
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
