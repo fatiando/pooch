@@ -1,6 +1,7 @@
 """
 Test the core class and factory function.
 """
+import hashlib
 import os
 import sys
 from pathlib import Path
@@ -417,3 +418,18 @@ def test_invalid_hash_alg():
         pup.fetch("tiny-data.txt")
 
     assert "'blah'" in str(exc.value)
+
+
+def test_alternative_hashing_algorithms():
+    "Test different hashing algorithms using local data"
+    fname = os.path.join(DATA_DIR, "tiny-data.txt")
+    check_tiny_data(fname)
+    with open(fname, "rb") as fin:
+        data = fin.read()
+    for alg in ("sha512", "md5"):
+        hasher = hashlib.new(alg)
+        hasher.update(data)
+        registry = {"tiny-data.txt": "{}:{}".format(alg, hasher.hexdigest())}
+        pup = Pooch(path=DATA_DIR, base_url="some bogus URL", registry=registry)
+        assert fname == pup.fetch("tiny-data.txt")
+        check_tiny_data(fname)

@@ -106,8 +106,8 @@ OS. You could also provide any other path if you prefer. See the documentation f
 Hashes
 ------
 
-Pooch uses `SHA256 <https://en.wikipedia.org/wiki/SHA-2>`__ hashes to check if files
-are up-to-date or possibly corrupted:
+Pooch uses `SHA256 <https://en.wikipedia.org/wiki/SHA-2>`__ hashes by default to check
+if files are up-to-date or possibly corrupted:
 
 * If a file exists in the local folder, Pooch will check that its hash matches the one
   in the registry. If it doesn't, we'll assume that it needs to be updated.
@@ -129,6 +129,13 @@ Python's :mod:`hashlib`):
 
     import pooch
     print(pooch.file_hash("data/c137.csv"))
+
+Alternative hashing algorithms supported by :mod:`hashlib` can be used if necessary:
+
+.. code:: python
+
+    import pooch
+    print(pooch.file_hash("data/c137.csv", alg="sha512"))
 
 
 Versioning
@@ -550,6 +557,14 @@ The contents of ``registry.txt`` are:
 
     c137.csv 19uheidhlkjdwhoiwuhc0uhcwljchw9ochwochw89dcgw9dcgwc
     cronen.csv 1upodh2ioduhw9celdjhlfvhksgdwikdgcowjhcwoduchowjg8w
+
+A specific hashing algorithm can be enforced, if a checksum for a file is
+prefixed with ``alg:``, e.g.
+
+.. code-block:: none
+
+    c137.csv sha1:e32b18dab23935bc091c353b308f724f18edcb5e
+    cronen.csv md5:b53c08d3570b82665784cedde591a8b0
 
 To make sure the registry file is shipped with your package, include the following in
 your ``MANIFEST.in`` file:
