@@ -219,13 +219,31 @@ class Pooch:
         self.base_url = base_url
         if registry is None:
             registry = dict()
-        self.registry = {
-            key: (value if ":" in value else "sha256:" + value)
-            for key, value in dict(registry).items()
-        }
+        self.registry = self.add_hash_algs(registry)
         if urls is None:
             urls = dict()
         self.urls = dict(urls)
+
+    @staticmethod
+    def add_hash_algs(registry):
+        """
+        Add the default hashing alg to the registry that is using old format.
+
+        Parameters
+        ----------
+        registry
+            Dictionary with pooch's data files and their hashes.
+
+        Returns
+        -------
+        result
+            Dictionary with pooch's data files and their hashes and algs.
+
+        """
+        return {
+            key: (value if ":" in value else "sha256:" + value)
+            for key, value in dict(registry).items()
+        }
 
     @property
     def abspath(self):

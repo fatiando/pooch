@@ -96,23 +96,3 @@ def capture_log(level=logging.DEBUG):
     get_logger().addHandler(handler)
     yield log_file
     get_logger().removeHandler(handler)
-
-def add_hash_algs(registry):
-    """
-    Add the default hashing alg to the registry that is using old format.
-
-    Parameters
-    ----------
-    registry
-        Dictionary with pooch's test data files and their hashes.
-
-    Returns
-    -------
-    result
-        Dictionary with pooch's test data files and their hashes and algs.
-
-    """
-    return {
-        key: (value if ":" in value else "sha256:" + value)
-        for key, value in dict(registry).items()
-    }

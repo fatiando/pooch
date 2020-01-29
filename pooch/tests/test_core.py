@@ -24,7 +24,6 @@ from .utils import (
     check_tiny_data,
     check_large_data,
     capture_log,
-    add_hash_algs,
 )
 
 # FTP doesn't work on Travis CI so need to be able to skip tests there
@@ -166,7 +165,7 @@ def test_pooch_load_registry():
     "Loading the registry from a file should work"
     pup = Pooch(path="", base_url="")
     pup.load_registry(os.path.join(DATA_DIR, "registry.txt"))
-    assert pup.registry == add_hash_algs(REGISTRY)
+    assert pup.registry == Pooch.add_hash_algs(REGISTRY)
     assert pup.registry_files.sort() == list(REGISTRY).sort()
 
 
@@ -178,14 +177,14 @@ def test_pooch_load_registry_fileobj():
     pup = Pooch(path="", base_url="")
     with open(path, "rb") as fin:
         pup.load_registry(fin)
-    assert pup.registry == add_hash_algs(REGISTRY)
+    assert pup.registry == Pooch.add_hash_algs(REGISTRY)
     assert pup.registry_files.sort() == list(REGISTRY).sort()
 
     # Text mode
     pup = Pooch(path="", base_url="")
     with open(path, "r") as fin:
         pup.load_registry(fin)
-    assert pup.registry == add_hash_algs(REGISTRY)
+    assert pup.registry == Pooch.add_hash_algs(REGISTRY)
     assert pup.registry_files.sort() == list(REGISTRY).sort()
 
 
@@ -193,7 +192,7 @@ def test_pooch_load_registry_custom_url():
     "Load the registry from a file with a custom URL inserted"
     pup = Pooch(path="", base_url="")
     pup.load_registry(os.path.join(DATA_DIR, "registry-custom-url.txt"))
-    assert pup.registry == add_hash_algs(REGISTRY)
+    assert pup.registry == Pooch.add_hash_algs(REGISTRY)
     assert pup.urls == {"tiny-data.txt": "https://some-site/tiny-data.txt"}
 
 
