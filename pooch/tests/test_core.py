@@ -206,7 +206,7 @@ def test_pooch_load_registry_invalid_line():
 def test_create_makedirs_permissionerror(monkeypatch):
     "Should warn the user when can't create the local data dir"
 
-    def mockmakedirs(path):  # pylint: disable=unused-argument
+    def mockmakedirs(path, exist_ok=False):  # pylint: disable=unused-argument
         "Raise an exception to mimic permission issues"
         raise PermissionError("Fake error")
 

@@ -377,8 +377,7 @@ class Pooch:
         self._assert_file_in_registry(fname)
 
         # Create the local data directory if it doesn't already exist
-        if not self.abspath.exists():
-            os.makedirs(str(self.abspath))
+        os.makedirs(str(self.abspath), exist_ok=True)
 
         full_path = self.abspath / fname
         url = self.get_url(fname)
