@@ -57,9 +57,9 @@ def os_cache(project):
     return Path(appdirs.user_cache_dir(project))
 
 
-def file_hash(fname):
+def file_hash(fname, alg="sha256"):
     """
-    Calculate the SHA256 hash of a given file.
+    Calculate the hash of a given file.
 
     Useful for checking if a file has changed or been corrupted.
 
@@ -67,6 +67,8 @@ def file_hash(fname):
     ----------
     fname : str
         The name of the file.
+    alg : str
+        The type of the hashing algorithm
 
     Returns
     -------
@@ -87,7 +89,9 @@ def file_hash(fname):
     """
     # Calculate the hash in chunks to avoid overloading the memory
     chunksize = 65536
-    hasher = hashlib.sha256()
+    if alg not in hashlib.algorithms_available:
+        raise ValueError("Algorithm '{}' not available in hashlib".format(alg))
+    hasher = hashlib.new(alg)
     with open(fname, "rb") as fin:
         buff = fin.read(chunksize)
         while buff:

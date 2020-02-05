@@ -1,6 +1,7 @@
 """
 Test the core class and factory function.
 """
+import hashlib
 import os
 import sys
 from pathlib import Path
@@ -165,7 +166,7 @@ def test_pooch_load_registry():
     "Loading the registry from a file should work"
     pup = Pooch(path="", base_url="")
     pup.load_registry(os.path.join(DATA_DIR, "registry.txt"))
-    assert pup.registry == REGISTRY
+    assert pup.registry == Pooch.add_hash_algs(REGISTRY)
     assert pup.registry_files.sort() == list(REGISTRY).sort()
 
 
@@ -177,14 +178,14 @@ def test_pooch_load_registry_fileobj():
     pup = Pooch(path="", base_url="")
     with open(path, "rb") as fin:
         pup.load_registry(fin)
-    assert pup.registry == REGISTRY
+    assert pup.registry == Pooch.add_hash_algs(REGISTRY)
     assert pup.registry_files.sort() == list(REGISTRY).sort()
 
     # Text mode
     pup = Pooch(path="", base_url="")
     with open(path, "r") as fin:
         pup.load_registry(fin)
-    assert pup.registry == REGISTRY
+    assert pup.registry == Pooch.add_hash_algs(REGISTRY)
     assert pup.registry_files.sort() == list(REGISTRY).sort()
 
 
@@ -192,7 +193,7 @@ def test_pooch_load_registry_custom_url():
     "Load the registry from a file with a custom URL inserted"
     pup = Pooch(path="", base_url="")
     pup.load_registry(os.path.join(DATA_DIR, "registry-custom-url.txt"))
-    assert pup.registry == REGISTRY
+    assert pup.registry == Pooch.add_hash_algs(REGISTRY)
     assert pup.urls == {"tiny-data.txt": "https://some-site/tiny-data.txt"}
 
 
@@ -206,7 +207,7 @@ def test_pooch_load_registry_invalid_line():
 def test_create_makedirs_permissionerror(monkeypatch):
     "Should warn the user when can't create the local data dir"
 
-    def mockmakedirs(path):  # pylint: disable=unused-argument
+    def mockmakedirs(path, exist_ok=False):  # pylint: disable=unused-argument
         "Raise an exception to mimic permission issues"
         raise PermissionError("Fake error")
 
@@ -406,3 +407,29 @@ def test_downloader_progressbar_ftp(capsys):
         assert printed[:25] == progress
         # Check that the file was actually downloaded
         assert os.path.exists(outfile)
+
+
+def test_invalid_hash_alg():
+    "Test an invalid hashing algorithm"
+    pup = Pooch(
+        path=DATA_DIR, base_url=BASEURL, registry={"tiny-data.txt": "blah:1234"}
+    )
+    with pytest.raises(ValueError) as exc:
+        pup.fetch("tiny-data.txt")
+
+    assert "'blah'" in str(exc.value)
+
+
+def test_alternative_hashing_algorithms():
+    "Test different hashing algorithms using local data"
+    fname = os.path.join(DATA_DIR, "tiny-data.txt")
+    check_tiny_data(fname)
+    with open(fname, "rb") as fin:
+        data = fin.read()
+    for alg in ("sha512", "md5"):
+        hasher = hashlib.new(alg)
+        hasher.update(data)
+        registry = {"tiny-data.txt": "{}:{}".format(alg, hasher.hexdigest())}
+        pup = Pooch(path=DATA_DIR, base_url="some bogus URL", registry=registry)
+        assert fname == pup.fetch("tiny-data.txt")
+        check_tiny_data(fname)
