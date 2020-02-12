@@ -38,7 +38,7 @@ def os_cache(project):
     `appdirs documentation <https://github.com/ActiveState/appdirs>`__):
 
     * Mac: ``~/Library/Application Support/<project>``
-    * Unix: ``~/.local/share/<project>`` or the value of the ``XDG_DATA_HOME``
+    * Unix: ``~/.local/share/<project>`` or the value of the ``XDG_CACHE_HOME``
       environment variable, if defined.
     * Windows: ``C:\Users\<user>\AppData\Roaming\<project>\<project>``
 
