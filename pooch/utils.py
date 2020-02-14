@@ -41,7 +41,7 @@ def os_cache(project):
     * Mac: ``~/Library/Caches/<AppName>``
     * Unix: ``~/.cache/<AppName>`` or the value of the ``XDG_CACHE_HOME``
       environment variable, if defined.
-    * Windows: ``C:\Users\<username>\AppData\Local\<AppAuthor>\<AppName>\Cache``
+    * Windows: ``C:\Users\<user>\AppData\Local\<AppAuthor>\<AppName>\Cache``
 
     Parameters
     ----------
