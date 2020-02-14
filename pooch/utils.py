@@ -33,7 +33,8 @@ def os_cache(project):
     r"""
     Default cache location based on the operating system.
 
-    The folder locations are defined by the ``appdirs``  package.
+    The folder locations are defined by the ``appdirs``  package
+    using the ``user_cache_directory`` function.
     Usually, the locations will be following (see the
     `appdirs documentation <https://github.com/ActiveState/appdirs>`__):
 
