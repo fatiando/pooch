@@ -33,14 +33,15 @@ def os_cache(project):
     r"""
     Default cache location based on the operating system.
 
-    The folder locations are defined by the ``appdirs``  package.
+    The folder locations are defined by the ``appdirs``  package
+    using the ``user_cache_dir`` function.
     Usually, the locations will be following (see the
     `appdirs documentation <https://github.com/ActiveState/appdirs>`__):
 
-    * Mac: ``~/Library/Application Support/<project>``
-    * Unix: ``~/.local/share/<project>`` or the value of the ``XDG_DATA_HOME``
+    * Mac: ``~/Library/Caches/<AppName>``
+    * Unix: ``~/.cache/<AppName>`` or the value of the ``XDG_CACHE_HOME``
       environment variable, if defined.
-    * Windows: ``C:\Users\<user>\AppData\Roaming\<project>\<project>``
+    * Windows: ``C:\Users\<user>\AppData\Local\<AppAuthor>\<AppName>\Cache``
 
     Parameters
     ----------
