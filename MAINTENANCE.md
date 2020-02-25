@@ -40,7 +40,7 @@ The main advantages of this are:
 
 ## Continuous Integration
 
-We use TravisCI and Azure Pipelines continuous integration (CI) services to build and 
+We use TravisCI and Azure Pipelines continuous integration (CI) services to build and
 test the project on Windows, Linux, and Mac.
 The configuration files for these services are `.travis.yml` and `.azure-pipelines.yml`.
 Both rely on the `requirements.txt` file to install the required dependencies using
@@ -78,15 +78,13 @@ file of your project. Then:
 
 1. Delete all existing files (they will be replaced with the new version).
 2. Reserve a DOI and save the release draft.
-3. Include as authors anyone who made contributions between now and the last release.
+3. Add as authors any new contributors who have added themselves to `AUTHORS.md`.
 
 On the other hand, if you're making the first release of the project, you need to create
 a **New upload** for it inside the
 [Fatiando a Terra community at Zenodo](https://zenodo.org/communities/fatiando/).
-
-1. Make sure the Fatiando a Terra community is chosen when filling the release draft.
-2. Reserve a DOI and save the release draft.
-3. Include as authors anyone who made contributions between now and the last release.
+Make sure the Fatiando a Terra community is chosen when filling the release draft.
+The rest of the process is the same as above.
 
 ### Updating the changelog
 
@@ -103,13 +101,14 @@ a **New upload** for it inside the
    to make the change automatically.
 4. Copy the remaining changes to `doc/changes.rst` under a new section for the
    intended release.
+5. Add a list of people who contributed to the release (use `git shortlog HEAD...v1.2.0 -sne`).
 5. Include the DOI badge in the changelog. Remember to replace your DOI inside the badge
    url.
 
     ```
-    .. image:: https://img.shields.io/badge/doi-<DOI-FIRST-PART>%2F<DOI-SECOND-PART>-blue.svg?style=flat-square
+    .. image:: https://zenodo.org/badge/DOI/<INSERT-DOI-HERE>.svg
         :alt: Digital Object Identifier for the Zenodo archive
-        :target: https://doi.org/<INSERT-YOUR-DOI>
+        :target: https://doi.org/<INSERT-DOI-HERE>
     ```
 
 6. Add a link to the new release version documentation in `README.rst`.
