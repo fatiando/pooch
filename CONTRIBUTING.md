@@ -35,6 +35,7 @@ read it carefully.
 
 * [What Can I Do?](#what-can-i-do)
 * [How Can I Talk to You?](#how-can-i-talk-to-you)
+* [Getting credit for contributions](#getting-credit-for-contributions)
 * [Reporting a Bug](#reporting-a-bug)
 * [Editing the Documentation](#editing-the-documentation)
 * [Contributing Code](#contributing-code)
@@ -63,6 +64,16 @@ read it carefully.
 Discussion often happens in the issues and pull requests.
 In addition, there is a [Slack chat room](http://contact.fatiando.org) for the
 Fatiando a Terra project where you can ask questions.
+
+
+## Getting credit for contributions
+
+We appreciate the effort that goes into making a contribution to our
+open-source projects. To say "thank you" and provide an extra incentive, we
+have established some criteria for giving credit to contributors in different
+ways: from having your name in the changelog, to authorship on academic
+publications. Please read the [Authorship Guidelines](AUTHORSHIP.md) for more
+information.
 
 
 ## Reporting a Bug
