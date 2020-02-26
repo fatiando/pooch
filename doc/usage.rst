@@ -138,6 +138,37 @@ Alternative hashing algorithms supported by :mod:`hashlib` can be used if necess
     print(pooch.file_hash("data/c137.csv", alg="sha512"))
 
 
+Fetching Mutating Data
+----------------------
+
+Another scenario is if you are wishing to download a mutating dataset, where the contents
+are changing frequently (potentially daily).
+
+In this example, we are downloading a list of weather stations around Australia:
+
+.. code:: python
+
+    import datetime
+    from unittest import mock  
+    import pooch
+
+    CURRENT_DATE = datetime.datetime.now().date()
+    
+    GOODBOY = pooch.create(
+        path=pooch.os_cache("bom_daily_stations") / CURRENT_DATE,
+        base_url="ftp://ftp.bom.gov.au/anon2/home/ncc/metadata/sitelists/",
+        # Use `mock.ANY` for the hash value if you do not care that it changes
+        registry={
+            "stations.zip": mock.ANY,
+        },
+    )
+
+Pooch will fetch the files **once** per day, even if run multiple times. If you omit ``CURRENT_DATE`` from the path,
+then Pooch will only fetch the files once, unless they are deleted from the cache.
+
+**NOTE**: If run over a period of time, your cache directory will increase in size, as the files are stored in daily subdirectories.
+
+
 Versioning
 ----------
 
