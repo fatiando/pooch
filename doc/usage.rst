@@ -138,11 +138,13 @@ Alternative hashing algorithms supported by :mod:`hashlib` can be used if necess
     print(pooch.file_hash("data/c137.csv", alg="sha512"))
 
 
-Fetching Mutating Data
-----------------------
+Bypassing the hash check
+------------------------
 
-Another scenario is if you are wishing to download a mutating dataset, where the contents
-are changing frequently (potentially daily).
+Sometimes we might not know the hash of the file or it could change on the server
+periodically. In these cases, we need a way of bypassing the hash check.
+One way of doing that is with Python's ``unittest.mock`` module, and setting the
+hash value to ``ANY`` (a special object which passes all equality tests).
 
 In this example, we are downloading a list of weather stations around Australia:
 
