@@ -1,10 +1,25 @@
 # Maintainers Guide
 
-This page contains instructions for project maintainers about how our setup works,
-making releases, creating packages, etc.
+This page contains instructions for project maintainers about how our setup
+works, making releases, creating packages, etc.
 
 If you want to make a contribution to the project, see the
 [Contributing Guide](CONTRIBUTING.md) instead.
+
+
+## Contents
+
+* [Branches](#branches)
+* [Reviewing and merging pull requests](#reviewing-and-merging-pull-requests)
+* [Continuous Integration](#continuous-integration)
+* [Citations](#citations)
+* [Making a Release](#making-a-release)
+  * [Draft a new Zenodo release](#draft-a-new-zenodo-release)
+  * [Update the changelog](#update-the-changelog)
+  * [Check the README syntax](#check-the-readme-syntax)
+  * [Release](#release)
+  * [Archive on Zenodo](#archive-on-zenodo)
+  * [Update the conda package](#update-the-conda-package)
 
 
 ## Branches
@@ -62,6 +77,43 @@ If you find any problems with the test setup and deployment, please create issue
 submit pull requests to that repository.
 
 
+## Citations
+
+The citation for a package that doesn't have an associated paper will be the
+Zenodo DOI for all versions. This citation will include everyone who has
+contributed to the project and met our [authorship criteria](AUTHORSHIP.md).
+
+Include the following text in the `CITATION.rst` file:
+
+```
+This is research software **made by scientists**. Citations help us justify the
+effort that goes into building and maintaining this project.
+
+If you used this software in your research, please consider
+citing the following source: https://doi.org/10.5281/zenodo.3530749
+
+The link above includes full citation information and export formats (BibTeX,
+Mendeley, etc).
+```
+
+If the project has been publish as an academic paper (for example, on
+[JOSS](https://joss.theoj.org)), **update the `CITATION.rst` to point to the
+paper instead of the Zenodo archive**.
+
+```
+If you used this software in your research, please consider citing the
+following publication:
+
+    <full citation including authors, title, journal, DOI, etc>
+
+This is an open-access publication. The paper and the associated reviews can be
+freely accessed at: https://doi.org/<INSERT-DOI-HERE>
+
+The link above includes full citation information and export formats (BibTeX,
+Mendeley, etc).
+```
+
+
 ## Making a Release
 
 We try to automate the release process as much as possible.
@@ -70,7 +122,7 @@ The version number is set automatically using versioneer based information it ge
 git.
 There are a few steps that still must be done manually, though.
 
-### Drafting a new Zenodo release
+### Draft a new Zenodo release
 
 If the project already has releases on [Zenodo](https://zenodo.org/), you need to create
 a **New version** of it. Find the link to the latest Zenodo release on the `README.md`
@@ -79,6 +131,7 @@ file of your project. Then:
 1. Delete all existing files (they will be replaced with the new version).
 2. Reserve a DOI and save the release draft.
 3. Add as authors any new contributors who have added themselves to `AUTHORS.md`.
+4. Update release date.
 
 On the other hand, if you're making the first release of the project, you need to create
 a **New upload** for it inside the
@@ -86,7 +139,7 @@ a **New upload** for it inside the
 Make sure the Fatiando a Terra community is chosen when filling the release draft.
 The rest of the process is the same as above.
 
-### Updating the changelog
+### Update the changelog
 
 1. Generate a list of commits between the last release tag and now:
 
@@ -126,39 +179,52 @@ python setup.py --long-description | rst2html.py --no-raw > index.html
 
 Open `index.html` and check for any flaws or error messages.
 
-### Pushing to PyPI and updating the documentation
+### Release
 
-After the changelog is updated, making a release should be as simple as creating a new
-git tag and pushing it to Github:
-
-```bash
-git tag v0.2.0
-git push --tags
-```
+After the changelog is updated, making a release should be as simple as
+creating a new git tag.
+The continuous integration services will take care of pushing the package to
+PyPI and creating a new version of the documentation.
+A new folder with version number containing the HTML documentation will be
+pushed to *gh-pages*, and the `latest` link will be updated to point to this
+new folder.
 
 The tag should be version number (following [Semantic Versioning](https://semver.org/))
-with a leading `v`.
-This should trigger Travis to do all the work for us.
-A new source distribution will be uploaded to PyPI, a new folder with the documentation
-HTML will be pushed to *gh-pages*, and the `latest` link will be updated to point to
-this new folder.
+with a leading `v` (`v1.5.7`).
 
-### Archiving on Zenodo
+To create a new tag, go to `https://github.com/fatiando/PROJECT/releases` and
+click on "Draft a new release":
+
+1. Use the version number (including the `v`) as the "Tag version" and "Release
+   title".
+2. The first line of the release description should be the DOI of the release:
+   ```
+   DOI: https://doi.org/<INSERT-DOI-HERE>
+   ```
+3. Fill the release description with a Markdown version of the **latest**
+   changelog entry. The `doc/changes.rst` file can be converted to Markdown
+   using `pandoc`:
+   ```
+   pandoc -s doc/changes.rst -o changes.md
+   ```
+4. Publish the release.
+
+### Archive on Zenodo
 
 Grab a zip file from the Github release and upload to Zenodo using the previously
 reserved DOI.
 
-### Updating the conda package
+### Update the conda package
 
-After Travis is done building the tag and all builds pass, we need to update the conda
-package.
-Unfortunately, this needs to be done manually for now.
+After Travis is done building the tag and all builds pass, we need to update
+the conda package.
+Fortunately, the conda-forge bot will submit a PR updating the package for us
+(it may take a couple of hours to do so).
+Most releases can be merged right away but some might need further changes to
+the conda recipe:
 
-1. Fork the feedstock repository (https://github.com/conda-forge/PROJECT-feedstock) if
-   you haven't already. If you have a fork, update it.
-2. Update the version number and sha256 hash on `recipe/meta.yaml`. You can get the hash
-   from the PyPI "Download files" section.
-3. Add or remove any new dependencies (most are probably only `run` dependencies).
-4. Make a new branch, commit, and push your changes **to your fork**.
-5. Create a PR against the original feedstock master.
-6. Once the CIs are passing, merge or as a maintainer to do so.
+1. If the release added new dependencies, make sure they are included in the
+   `meta.yaml` file.
+2. If dropping/adding support for Python versions (or version of other
+   packages) make sure the correct version restrictions are applied in
+   `meta.yaml`.
