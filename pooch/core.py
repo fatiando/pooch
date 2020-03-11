@@ -9,7 +9,7 @@ import tempfile
 import ftplib
 
 import requests
-from .utils import file_hash, check_version, parse_url, get_logger
+from .utils import file_hash, check_version, parse_url, get_logger, make_local_storage
 from .downloaders import HTTPDownloader, FTPDownloader
 
 KNOWN_DOWNLOADERS = {
@@ -154,33 +154,11 @@ def create(
     ('myproject', 'env', 'v0.1')
 
     """
-    if isinstance(path, (list, tuple)):
-        path = os.path.join(*path)
-    if env is not None and env in os.environ and os.environ[env]:
-        path = os.environ[env]
     if version is not None:
         version = check_version(version, fallback=version_dev)
-        path = os.path.join(str(path), version)
         base_url = base_url.format(version=version)
-    path = os.path.expanduser(str(path))
-    # Check that the data directory is writable
-    try:
-        if not os.path.exists(path):
-            os.makedirs(path)
-        else:
-            tempfile.NamedTemporaryFile(dir=path)
-    except PermissionError:
-        message = (
-            "Cannot write to data cache '%s'. "
-            "Will not be able to download remote data files. "
-        )
-        args = [path]
-        if env is not None:
-            message += "Use environment variable '%s' to specify another directory."
-            args += [env]
-
-        get_logger().warning(message, *args)
-    pup = Pooch(path=Path(path), base_url=base_url, registry=registry, urls=urls)
+    path = make_local_storage(path, env, version)
+    pup = Pooch(path=path, base_url=base_url, registry=registry, urls=urls)
     return pup
 
 

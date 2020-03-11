@@ -6,7 +6,6 @@ import os
 import sys
 from pathlib import Path
 from tempfile import TemporaryDirectory
-import tempfile
 
 import pytest
 
@@ -202,67 +201,6 @@ def test_pooch_load_registry_invalid_line():
     pup = Pooch(path="", base_url="", registry={})
     with pytest.raises(IOError):
         pup.load_registry(os.path.join(DATA_DIR, "registry-invalid.txt"))
-
-
-def test_create_makedirs_permissionerror(monkeypatch):
-    "Should warn the user when can't create the local data dir"
-
-    def mockmakedirs(path, exist_ok=False):  # pylint: disable=unused-argument
-        "Raise an exception to mimic permission issues"
-        raise PermissionError("Fake error")
-
-    data_cache = os.path.join(os.curdir, "test_permission")
-    assert not os.path.exists(data_cache)
-
-    monkeypatch.setattr(os, "makedirs", mockmakedirs)
-
-    with capture_log() as log_file:
-        pup = create(
-            path=data_cache,
-            base_url="",
-            version="1.0",
-            version_dev="master",
-            env="SOME_VARIABLE",
-            registry={"afile.txt": "ahash"},
-        )
-        logs = log_file.getvalue()
-        assert logs.startswith("Cannot write to data cache")
-        assert "'SOME_VARIABLE'" in logs
-
-    with pytest.raises(PermissionError):
-        pup.fetch("afile.txt")
-
-
-def test_create_newfile_permissionerror(monkeypatch):
-    "Should warn the user when can't write to the local data dir"
-    # This is a separate function because there should be a warning if the data
-    # dir already exists but we can't write to it.
-
-    def mocktempfile(**kwargs):  # pylint: disable=unused-argument
-        "Raise an exception to mimic permission issues"
-        raise PermissionError("Fake error")
-
-    with TemporaryDirectory() as data_cache:
-        os.makedirs(os.path.join(data_cache, "1.0"))
-        assert os.path.exists(data_cache)
-
-        monkeypatch.setattr(tempfile, "NamedTemporaryFile", mocktempfile)
-
-        with capture_log() as log_file:
-            pup = create(
-                path=data_cache,
-                base_url="ftp://random.ftp.com/",
-                version="1.0",
-                version_dev="master",
-                env="SOME_VARIABLE",
-                registry={"afile.txt": "ahash"},
-            )
-            logs = log_file.getvalue()
-            assert logs.startswith("Cannot write to data cache")
-            assert "'SOME_VARIABLE'" in logs
-
-        with pytest.raises(PermissionError):
-            pup.fetch("afile.txt")
 
 
 def test_unsupported_protocol():

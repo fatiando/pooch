@@ -3,11 +3,12 @@ Test the utility functions.
 """
 import os
 from pathlib import Path
-from tempfile import NamedTemporaryFile
+import tempfile
+from tempfile import NamedTemporaryFile, TemporaryDirectory
 
 from ..core import Pooch
-from ..utils import make_registry, parse_url
-from .utils import check_tiny_data
+from ..utils import make_registry, parse_url, make_local_storage
+from .utils import check_tiny_data, capture_log
 
 DATA_DIR = str(Path(__file__).parent / "data" / "store")
 REGISTRY = (
@@ -17,6 +18,51 @@ REGISTRY_RECURSIVE = (
     "subdir/tiny-data.txt baee0894dba14b12085eacb204284b97e362f4f3e5a5807693cc90ef415c1b2d\n"
     "tiny-data.txt baee0894dba14b12085eacb204284b97e362f4f3e5a5807693cc90ef415c1b2d\n"
 )
+
+
+def test_local_storage_makedirs_permissionerror(monkeypatch):
+    "Should warn the user when can't create the local data dir"
+
+    def mockmakedirs(path, exist_ok=False):  # pylint: disable=unused-argument
+        "Raise an exception to mimic permission issues"
+        raise PermissionError("Fake error")
+
+    data_cache = os.path.join(os.curdir, "test_permission")
+    assert not os.path.exists(data_cache)
+
+    monkeypatch.setattr(os, "makedirs", mockmakedirs)
+
+    with capture_log() as log_file:
+        make_local_storage(
+            path=data_cache, version="1.0", env="SOME_VARIABLE",
+        )
+        logs = log_file.getvalue()
+        assert logs.startswith("Cannot create data cache")
+        assert "'SOME_VARIABLE'" in logs
+
+
+def test_local_storage_newfile_permissionerror(monkeypatch):
+    "Should warn the user when can't write to the local data dir"
+    # This is a separate function because there should be a warning if the data
+    # dir already exists but we can't write to it.
+
+    def mocktempfile(**kwargs):  # pylint: disable=unused-argument
+        "Raise an exception to mimic permission issues"
+        raise PermissionError("Fake error")
+
+    with TemporaryDirectory() as data_cache:
+        os.makedirs(os.path.join(data_cache, "1.0"))
+        assert os.path.exists(data_cache)
+
+        monkeypatch.setattr(tempfile, "NamedTemporaryFile", mocktempfile)
+
+        with capture_log() as log_file:
+            make_local_storage(
+                path=data_cache, version="1.0", env="SOME_VARIABLE",
+            )
+            logs = log_file.getvalue()
+            assert logs.startswith("Cannot write to data cache")
+            assert "'SOME_VARIABLE'" in logs
 
 
 def test_registry_builder():
