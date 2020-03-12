@@ -2,6 +2,8 @@
 Misc utilities
 """
 import logging
+import os
+import tempfile
 from pathlib import Path
 import hashlib
 from urllib.parse import urlsplit
@@ -210,3 +212,58 @@ def parse_url(url):
     parsed_url = urlsplit(url)
     protocol = parsed_url.scheme or "file"
     return {"protocol": protocol, "netloc": parsed_url.netloc, "path": parsed_url.path}
+
+
+def make_local_storage(path, env=None, version=None):
+    """
+    Create the local cache directory and make sure it's writable.
+
+    If the directory doesn't exist, it will be created.
+
+    Parameters
+    ----------
+    path : str, PathLike, list or tuple
+        The path to the local data storage folder. If this is a list or tuple,
+        we'll join the parts with the appropriate separator. Use
+        :func:`pooch.os_cache` for a sensible default.
+    version : str or None
+        The version string for your project. Will be appended to given path if
+        not None.
+    env : str or None
+        An environment variable that can be used to overwrite *path*. This
+        allows users to control where they want the data to be stored. We'll
+        append *version* to the end of this value as well.
+
+    Returns
+    -------
+    local_path : PathLike
+        The path to the local directory.
+
+    """
+    if env is not None and env in os.environ and os.environ[env]:
+        path = os.environ[env]
+    if isinstance(path, (list, tuple)):
+        path = os.path.join(*path)
+    if version is not None:
+        path = os.path.join(str(path), version)
+    path = os.path.expanduser(str(path))
+    # Check that the data directory is writable
+    try:
+        if not os.path.exists(path):
+            action = "create"
+            os.makedirs(path)
+        else:
+            action = "write to"
+            tempfile.NamedTemporaryFile(dir=path)
+    except PermissionError:
+        message = (
+            "Cannot %s data cache folder '%s'. "
+            "Will not be able to download remote data files. "
+        )
+        args = [action, path]
+        if env is not None:
+            message += "Use environment variable '%s' to specify another directory."
+            args += [env]
+
+        get_logger().warning(message, *args)
+    return Path(path)
