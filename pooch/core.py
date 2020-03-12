@@ -9,7 +9,14 @@ import tempfile
 import ftplib
 
 import requests
-from .utils import file_hash, check_version, parse_url, get_logger, make_local_storage
+from .utils import (
+    file_hash,
+    check_version,
+    parse_url,
+    get_logger,
+    make_local_storage,
+    hash_algorithm,
+)
 from .downloaders import HTTPDownloader, FTPDownloader
 
 KNOWN_DOWNLOADERS = {
@@ -364,7 +371,7 @@ class Pooch:
         if not in_storage:
             action = "download"
         else:
-            hash_alg = self.hash_algorithm(fname)
+            hash_alg = hash_algorithm(self.registry[fname])
             current_hash = "{}:{}".format(
                 hash_alg, file_hash(str(full_path), alg=hash_alg)
             )
@@ -455,7 +462,7 @@ class Pooch:
             If the hashes don't match.
 
         """
-        registry_hash_alg = self.hash_algorithm(fname)
+        registry_hash_alg = hash_algorithm(self.registry[fname])
         tmphash = "{}:{}".format(
             registry_hash_alg, file_hash(downloaded, alg=registry_hash_alg)
         )
@@ -551,21 +558,3 @@ class Pooch:
             response = requests.head(source, allow_redirects=True)
             available = bool(response.status_code == 200)
         return available
-
-    def hash_algorithm(self, fname):
-        """
-        Return the hash algorithm used to compute the file's checksum.
-
-        Parameters
-        ----------
-        fname : str
-            The file name (relative to the *base_url* of the remote data
-            storage) to fetch from the local storage.
-
-        Returns
-        -------
-        alg : str
-            The name of the hashing algorithm.
-        """
-        self._assert_file_in_registry(fname)
-        return self.registry[fname].split(":")[0]
