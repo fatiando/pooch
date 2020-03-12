@@ -327,3 +327,22 @@ def hash_matches(fname, known_hash):
     """
     new_hash = file_hash(fname, alg=hash_algorithm(known_hash))
     return new_hash == known_hash.split(":")[-1]
+
+
+def make_unique_file_name(url):
+    """
+    Create a unique file name based on the given url.
+
+    Will use the last part of the url and the MD5 checksum of the url to create
+    the file name.
+
+    Parameters
+    ----------
+    url : str
+        The url.
+    
+    Returns
+    -------
+    fname : str
+        
+    """

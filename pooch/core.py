@@ -7,6 +7,7 @@ from pathlib import Path
 import shutil
 import tempfile
 import ftplib
+import hashlib
 
 import requests
 from .utils import (
@@ -17,6 +18,8 @@ from .utils import (
     make_local_storage,
     hash_algorithm,
     hash_matches,
+    os_cache,
+    make_unique_file_name,
 )
 from .downloaders import HTTPDownloader, FTPDownloader
 
@@ -25,6 +28,75 @@ KNOWN_DOWNLOADERS = {
     "https": HTTPDownloader,
     "http": HTTPDownloader,
 }
+
+
+def retrieve(url, hash, path=None, fname=None, processor=None, downloader=None):
+    """
+    """
+    if path is None:
+        path = os_cache("pooch")
+    # Normalize the path and make sure it's an absolute path
+    path = Path(os.path.abspath(os.path.expanduser(str(path))))
+    # Create the local data directory if it doesn't already exist
+    os.makedirs(str(path), exist_ok=True)
+
+    in_storage = full_path.exists()
+
+    if not in_storage:
+        action = "download"
+    elif not hash_matches(str(full_path), self.registry[fname]):
+        action = "update"
+    else:
+        action = "fetch"
+
+    if action in ("download", "update"):
+        action_word = dict(download="Downloading", update="Updating")
+        get_logger().info(
+            "%s data file '%s' from remote data store '%s' to '%s'.",
+            action_word[action],
+            fname,
+            self.get_url(fname),
+            str(self.path),
+        )
+
+        parsed_url = parse_url(url)
+        if parsed_url["protocol"] not in KNOWN_DOWNLOADERS:
+            raise ValueError(
+                "Unrecognized URL protocol '{}' in '{}'. Must be one of {}.".format(
+                    parsed_url["protocol"], url, KNOWN_DOWNLOADERS.keys()
+                )
+            )
+
+        if downloader is None:
+            downloader = KNOWN_DOWNLOADERS[parsed_url["protocol"]]()
+        # Stream the file to a temporary so that we can safely check its
+        # hash before overwriting the original
+        tmp = tempfile.NamedTemporaryFile(delete=False, dir=str(self.abspath))
+        # Close the temp file so that the downloader can decide how to
+        # opened it
+        tmp.close()
+        try:
+            downloader(url, tmp.name, self)
+            if not hash_matches(tmp.name, self.registry[fname]):
+                raise ValueError(
+                    "Hash of downloaded file '{}' doesn't match the entry in the"
+                    " registry. Expected '{}' and got '{}'.".format(
+                        fname,
+                        self.registry[fname],
+                        file_hash(tmp.name, alg=hash_algorithm(self.registry[fname])),
+                    )
+                )
+            # Ensure the parent directory exists in case the file is in a
+            # subdirectory. Otherwise, move will cause an error.
+            if not os.path.exists(str(full_path.parent)):
+                os.makedirs(str(full_path.parent))
+            shutil.move(tmp.name, str(full_path))
+        finally:
+            if os.path.exists(tmp.name):
+                os.remove(tmp.name)
+
+    if processor is not None:
+        return processor(str(full_path), action, self)
 
 
 def create(
@@ -340,12 +412,12 @@ class Pooch:
 
         """
         self._assert_file_in_registry(fname)
+        full_path = self.abspath / fname
+        url = self.get_url(fname)
 
         # Create the local data directory if it doesn't already exist
         os.makedirs(str(self.abspath), exist_ok=True)
 
-        full_path = self.abspath / fname
-        url = self.get_url(fname)
         in_storage = full_path.exists()
 
         if not in_storage:
