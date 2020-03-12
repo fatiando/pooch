@@ -2,12 +2,15 @@
 Test the utility functions.
 """
 import os
+import hashlib
 from pathlib import Path
 import tempfile
 from tempfile import NamedTemporaryFile, TemporaryDirectory
 
+import pytest
+
 from ..core import Pooch
-from ..utils import make_registry, parse_url, make_local_storage
+from ..utils import make_registry, parse_url, make_local_storage, file_hash, hash_matches
 from .utils import check_tiny_data, capture_log
 
 DATA_DIR = str(Path(__file__).parent / "data" / "store")
@@ -123,3 +126,34 @@ def test_parse_url():
         "netloc": "127.0.0.1:8080",
         "path": "/test.nc",
     }
+
+
+def test_file_hash_invalid_algorithm():
+    "Test an invalid hashing algorithm"
+    with pytest.raises(ValueError) as exc:
+        file_hash(fname="something", alg="blah")
+    assert "'blah'" in str(exc.value)
+
+
+def test_hash_matches():
+    "Make sure the hash checking function works"
+    fname = os.path.join(DATA_DIR, "tiny-data.txt")
+    check_tiny_data(fname)
+    with open(fname, "rb") as fin:
+        data = fin.read()
+    # Check if the check passes
+    hasher = hashlib.new("sha256")
+    hasher.update(data)
+    known_hash = "{}".format(hasher.hexdigest())
+    assert hash_matches(fname, known_hash)
+    for alg in ("sha512", "md5"):
+        hasher = hashlib.new(alg)
+        hasher.update(data)
+        known_hash = "{}:{}".format(alg, hasher.hexdigest())
+        assert hash_matches(fname, known_hash)
+    # And also if it fails
+    known_hash = "p98oh2dl2j2h2p8e9yfho3fi2e9fhd"
+    assert not hash_matches(fname, known_hash)
+    for alg in ("sha512", "md5"):
+        known_hash = "{}:p98oh2dl2j2h2p8e9yfho3fi2e9fhd".format(alg)
+        assert not hash_matches(fname, known_hash)

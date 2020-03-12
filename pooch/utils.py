@@ -90,10 +90,10 @@ def file_hash(fname, alg="sha256"):
     >>> os.remove(fname)
 
     """
-    # Calculate the hash in chunks to avoid overloading the memory
-    chunksize = 65536
     if alg not in hashlib.algorithms_available:
         raise ValueError("Algorithm '{}' not available in hashlib".format(alg))
+    # Calculate the hash in chunks to avoid overloading the memory
+    chunksize = 65536
     hasher = hashlib.new(alg)
     with open(fname, "rb") as fin:
         buff = fin.read(chunksize)
@@ -305,3 +305,25 @@ def hash_algorithm(hash_string):
     else:
         algorithm = parts[0]
     return algorithm
+
+
+def hash_matches(fname, known_hash):
+    """
+    Check if the hash of a file matches a known hash.
+
+    Parameters
+    ----------
+    fname : str or PathLike
+        The path to the file.
+    known_hash : str
+        The known hash. Optionally, prepend ``alg:`` to the hash to specify the
+        hashing algorithm. Default is SHA256.
+
+    Returns
+    -------
+    is_same : bool
+        True if the hash matches, False otherwise.
+
+    """
+    new_hash = file_hash(fname, alg=hash_algorithm(known_hash))
+    return new_hash == known_hash.split(":")[-1]
