@@ -90,10 +90,10 @@ def file_hash(fname, alg="sha256"):
     >>> os.remove(fname)
 
     """
-    # Calculate the hash in chunks to avoid overloading the memory
-    chunksize = 65536
     if alg not in hashlib.algorithms_available:
         raise ValueError("Algorithm '{}' not available in hashlib".format(alg))
+    # Calculate the hash in chunks to avoid overloading the memory
+    chunksize = 65536
     hasher = hashlib.new(alg)
     with open(fname, "rb") as fin:
         buff = fin.read(chunksize)
@@ -267,3 +267,63 @@ def make_local_storage(path, env=None, version=None):
 
         get_logger().warning(message, *args)
     return Path(path)
+
+
+def hash_algorithm(hash_string):
+    """
+    Parse the name of the hash method from the hash string.
+
+    The hash string should have the following form ``algorithm:hash``, where
+    algorithm can be the name of any algorithm known to :mod:`hashlib`.
+
+    If the algorithm is omitted, will default to ``"sha256"``.
+
+    Parameters
+    ----------
+    hash_string : str
+        The hash string with optional algorithm prepended.
+
+    Returns
+    -------
+    hash_algorithm : str
+        The name of the algorithm.
+
+    Examples
+    --------
+
+    >>> print(hash_algorithm("qouuwhwd2j192y1lb1iwgowdj2898wd2d9"))
+    sha256
+    >>> print(hash_algorithm("md5:qouuwhwd2j192y1lb1iwgowdj2898wd2d9"))
+    md5
+    >>> print(hash_algorithm("sha256:qouuwhwd2j192y1lb1iwgowdj2898wd2d9"))
+    sha256
+
+    """
+    parts = hash_string.split(":")
+    if len(parts) == 1:
+        algorithm = "sha256"
+    else:
+        algorithm = parts[0]
+    return algorithm
+
+
+def hash_matches(fname, known_hash):
+    """
+    Check if the hash of a file matches a known hash.
+
+    Parameters
+    ----------
+    fname : str or PathLike
+        The path to the file.
+    known_hash : str
+        The known hash. Optionally, prepend ``alg:`` to the hash to specify the
+        hashing algorithm. Default is SHA256.
+
+    Returns
+    -------
+    is_same : bool
+        True if the hash matches, False otherwise.
+
+    """
+    new_hash = file_hash(fname, alg=hash_algorithm(known_hash))
+    return new_hash == known_hash.split(":")[-1]

@@ -9,7 +9,15 @@ import tempfile
 import ftplib
 
 import requests
-from .utils import file_hash, check_version, parse_url, get_logger, make_local_storage
+from .utils import (
+    file_hash,
+    check_version,
+    parse_url,
+    get_logger,
+    make_local_storage,
+    hash_algorithm,
+    hash_matches,
+)
 from .downloaders import HTTPDownloader, FTPDownloader
 
 KNOWN_DOWNLOADERS = {
@@ -99,7 +107,7 @@ def create(
     >>> print(pup.base_url)
     http://some.link.com/v0.1/
     >>> print(pup.registry)
-    {'data.txt': 'sha256:9081wo2eb2gc0u...'}
+    {'data.txt': '9081wo2eb2gc0u...'}
     >>> print(pup.registry_files)
     ['data.txt']
 
@@ -197,31 +205,10 @@ class Pooch:
         self.base_url = base_url
         if registry is None:
             registry = dict()
-        self.registry = self.add_hash_algs(registry)
+        self.registry = registry
         if urls is None:
             urls = dict()
         self.urls = dict(urls)
-
-    @staticmethod
-    def add_hash_algs(registry):
-        """
-        Add the default hashing alg to the registry that is using old format.
-
-        Parameters
-        ----------
-        registry
-            Dictionary with pooch's data files and their hashes.
-
-        Returns
-        -------
-        result
-            Dictionary with pooch's data files and their hashes and algs.
-
-        """
-        return {
-            key: (value if ":" in value else "sha256:" + value)
-            for key, value in dict(registry).items()
-        }
 
     @property
     def abspath(self):
@@ -363,15 +350,10 @@ class Pooch:
 
         if not in_storage:
             action = "download"
+        elif not hash_matches(str(full_path), self.registry[fname]):
+            action = "update"
         else:
-            hash_alg = self.hash_algorithm(fname)
-            current_hash = "{}:{}".format(
-                hash_alg, file_hash(str(full_path), alg=hash_alg)
-            )
-            if current_hash != self.registry[fname]:
-                action = "update"
-            else:
-                action = "fetch"
+            action = "fetch"
 
         if action in ("download", "update"):
             action_word = dict(download="Downloading", update="Updating")
@@ -401,7 +383,17 @@ class Pooch:
             tmp.close()
             try:
                 downloader(url, tmp.name, self)
-                self._check_download_hash(fname, tmp.name)
+                if not hash_matches(tmp.name, self.registry[fname]):
+                    raise ValueError(
+                        "Hash of downloaded file '{}' doesn't match the entry in the"
+                        " registry. Expected '{}' and got '{}'.".format(
+                            fname,
+                            self.registry[fname],
+                            file_hash(
+                                tmp.name, alg=hash_algorithm(self.registry[fname])
+                            ),
+                        )
+                    )
                 # Ensure the parent directory exists in case the file is in a
                 # subdirectory. Otherwise, move will cause an error.
                 if not os.path.exists(str(full_path.parent)):
@@ -437,35 +429,6 @@ class Pooch:
         """
         self._assert_file_in_registry(fname)
         return self.urls.get(fname, "".join([self.base_url, fname]))
-
-    def _check_download_hash(self, fname, downloaded):
-        """
-        Check the hash of the downloaded file against the one in the registry.
-
-        Parameters
-        ----------
-        fname : str
-            The file name in the registry.
-        downloaded : str
-            The pull path to the downloaded file.
-
-        Raises
-        ------
-        :class:`ValueError`
-            If the hashes don't match.
-
-        """
-        registry_hash_alg = self.hash_algorithm(fname)
-        tmphash = "{}:{}".format(
-            registry_hash_alg, file_hash(downloaded, alg=registry_hash_alg)
-        )
-        if tmphash != self.registry[fname]:
-            raise ValueError(
-                "Hash of downloaded file '{}' doesn't match the entry in the registry."
-                " Expected '{}' and got '{}'.".format(
-                    fname, self.registry[fname], tmphash
-                )
-            )
 
     def load_registry(self, fname):
         """
@@ -509,8 +472,6 @@ class Pooch:
                 if elements:
                     file_name = elements[0]
                     file_checksum = elements[1]
-                    if ":" not in file_checksum:
-                        file_checksum = "sha256:" + file_checksum
                     if len(elements) == 3:
                         file_url = elements[2]
                         self.urls[file_name] = file_url
@@ -551,21 +512,3 @@ class Pooch:
             response = requests.head(source, allow_redirects=True)
             available = bool(response.status_code == 200)
         return available
-
-    def hash_algorithm(self, fname):
-        """
-        Return the hash algorithm used to compute the file's checksum.
-
-        Parameters
-        ----------
-        fname : str
-            The file name (relative to the *base_url* of the remote data
-            storage) to fetch from the local storage.
-
-        Returns
-        -------
-        alg : str
-            The name of the hashing algorithm.
-        """
-        self._assert_file_in_registry(fname)
-        return self.registry[fname].split(":")[0]
