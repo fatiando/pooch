@@ -389,7 +389,9 @@ class Pooch:
                         " registry. Expected '{}' and got '{}'.".format(
                             fname,
                             self.registry[fname],
-                            file_hash(tmp.name, alg=hash_algorithm(self.registry[fname])),
+                            file_hash(
+                                tmp.name, alg=hash_algorithm(self.registry[fname])
+                            ),
                         )
                     )
                 # Ensure the parent directory exists in case the file is in a
