@@ -9,6 +9,12 @@ trigger:
     - master
     - refs/tags/*
 
+# Make sure triggers are set for PRs to any branch.
+pr:
+  branches:
+    include:
+    - '*'
+
 
 jobs:
 
