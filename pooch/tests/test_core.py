@@ -14,7 +14,7 @@ try:
 except ImportError:
     tqdm = None
 
-from .. import Pooch, create
+from .. import Pooch, create, retrieve
 from ..utils import file_hash, get_logger
 from ..downloaders import HTTPDownloader, FTPDownloader
 
@@ -35,6 +35,47 @@ REGISTRY_CORRUPTED = {
     # The same data file but I changed the hash manually to a wrong one
     "tiny-data.txt": "098h0894dba14b12085eacb204284b97e362f4f3e5a5807693cc90ef415c1b2d"
 }
+
+
+def test_retrieve():
+    "Try downloading some data with retrieve"
+    with TemporaryDirectory() as local_store:
+        path = Path(local_store)
+        data_file = "tiny-data.txt"
+        true_path = str(path / data_file)
+        url = BASEURL + data_file
+        # Check that the logs say that the file is being downloaded
+        with capture_log() as log_file:
+            fname = retrieve(url, hash=None, fname=data_file, path=path)
+            logs = log_file.getvalue()
+            assert logs.split()[0] == "Downloading"
+            assert logs.split()[-1] == "'{}'.".format(path)
+        # Check that the downloaded file has the right content
+        assert true_path == fname
+        check_tiny_data(fname)
+        assert file_hash(fname) == REGISTRY[data_file]
+        # Check that no logging happens when not downloading
+        with capture_log() as log_file:
+            fname = retrieve(url, file_hash=file_hash(fname), fname=data_file, path=path)
+            assert log_file.getvalue() == ""
+
+
+def test_retrieve_defaults():
+    "Try downloading some data with retrieve using all default values"
+    data_file = "tiny-data.txt"
+    url = BASEURL + data_file
+    # Check that the logs say that the file is being downloaded
+    with capture_log() as log_file:
+        fname = retrieve(url, hash=None)
+        logs = log_file.getvalue()
+        assert logs.split()[0] == "Downloading"
+    # Check that the downloaded file has the right content
+    check_tiny_data(fname)
+    assert file_hash(fname) == REGISTRY[data_file]
+    # Check that no logging happens when not downloading
+    with capture_log() as log_file:
+        fname = retrieve(url, hash=None)
+        assert log_file.getvalue() == ""
 
 
 def test_pooch_local():
