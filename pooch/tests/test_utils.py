@@ -10,7 +10,13 @@ from tempfile import NamedTemporaryFile, TemporaryDirectory
 import pytest
 
 from ..core import Pooch
-from ..utils import make_registry, parse_url, make_local_storage, file_hash, hash_matches
+from ..utils import (
+    make_registry,
+    parse_url,
+    make_local_storage,
+    file_hash,
+    hash_matches,
+)
 from .utils import check_tiny_data, capture_log
 
 DATA_DIR = str(Path(__file__).parent / "data" / "store")

@@ -412,12 +412,12 @@ class Pooch:
 
         """
         self._assert_file_in_registry(fname)
-        full_path = self.abspath / fname
-        url = self.get_url(fname)
 
         # Create the local data directory if it doesn't already exist
         os.makedirs(str(self.abspath), exist_ok=True)
 
+        full_path = self.abspath / fname
+        url = self.get_url(fname)
         in_storage = full_path.exists()
 
         if not in_storage:
@@ -461,7 +461,9 @@ class Pooch:
                         " registry. Expected '{}' and got '{}'.".format(
                             fname,
                             self.registry[fname],
-                            file_hash(tmp.name, alg=hash_algorithm(self.registry[fname])),
+                            file_hash(
+                                tmp.name, alg=hash_algorithm(self.registry[fname])
+                            ),
                         )
                     )
                 # Ensure the parent directory exists in case the file is in a
