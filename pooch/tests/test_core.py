@@ -56,7 +56,9 @@ def test_retrieve():
         assert file_hash(fname) == REGISTRY[data_file]
         # Check that no logging happens when not downloading
         with capture_log() as log_file:
-            fname = retrieve(url, file_hash=file_hash(fname), fname=data_file, path=path)
+            fname = retrieve(
+                url, file_hash=file_hash(fname), fname=data_file, path=path
+            )
             assert log_file.getvalue() == ""
 
 

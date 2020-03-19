@@ -41,7 +41,9 @@ def retrieve(url, hash, path=None, fname=None, processor=None, downloader=None):
     os.makedirs(str(path), exist_ok=True)
 
 
-def _download_if_needed(url, path, fname, hash, pooch=None, processor=None, downloader=None):
+def _download_if_needed(
+    url, path, fname, hash, pooch=None, processor=None, downloader=None
+):
 
     full_path = path / fname
 
