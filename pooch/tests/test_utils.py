@@ -16,6 +16,7 @@ from ..utils import (
     make_local_storage,
     file_hash,
     hash_matches,
+    unique_file_name,
 )
 from .utils import check_tiny_data, capture_log
 
@@ -27,6 +28,16 @@ REGISTRY_RECURSIVE = (
     "subdir/tiny-data.txt baee0894dba14b12085eacb204284b97e362f4f3e5a5807693cc90ef415c1b2d\n"
     "tiny-data.txt baee0894dba14b12085eacb204284b97e362f4f3e5a5807693cc90ef415c1b2d\n"
 )
+
+
+def test_unique_name_long():
+    "The file name should never be longer than 255 characters"
+    url = "https://www.something.com/data{}.txt".format("a" * 500)
+    assert len(url) > 255
+    fname = unique_file_name(url)
+    assert len(fname) == 255
+    assert fname[-10:] == "aaaaaa.txt"
+    assert fname.split(":")[1][:10] == "aaaaaaaaaa"
 
 
 def test_local_storage_makedirs_permissionerror(monkeypatch):

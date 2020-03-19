@@ -366,5 +366,8 @@ def unique_file_name(url):
     """
     md5 = hashlib.md5(url.encode()).hexdigest()
     fname = parse_url(url)["path"].split("/")[-1]
-    unique_name = "{}:{}".format(md5, fname[::-1][:255 - len(md5) - 1][::-1])
+    # Crop the start of the file name to fit 255 characters including the hash
+    # and the :
+    fname = fname[-(255 - len(md5) - 1) :]
+    unique_name = "{}:{}".format(md5, fname)
     return unique_name
