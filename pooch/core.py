@@ -20,14 +20,7 @@ from .utils import (
     os_cache,
     unique_file_name,
 )
-from .downloaders import HTTPDownloader, FTPDownloader
-
-
-KNOWN_DOWNLOADERS = {
-    "ftp": FTPDownloader,
-    "https": HTTPDownloader,
-    "http": HTTPDownloader,
-}
+from .downloaders import choose_downloader
 
 
 def retrieve(url, known_hash, fname=None, path=None, processor=None, downloader=None):
@@ -81,14 +74,7 @@ def _download_if_needed(
         )
 
         if downloader is None:
-            parsed_url = parse_url(url)
-            if parsed_url["protocol"] not in KNOWN_DOWNLOADERS:
-                raise ValueError(
-                    "Unrecognized URL protocol '{}' in '{}'. Must be one of {}.".format(
-                        parsed_url["protocol"], url, KNOWN_DOWNLOADERS.keys()
-                    )
-                )
-            downloader = KNOWN_DOWNLOADERS[parsed_url["protocol"]]()
+            downloader = choose_downloader(url)
 
         # Stream the file to a temporary so that we can safely check its hash
         # before overwriting the original

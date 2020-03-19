@@ -83,7 +83,7 @@ def test_pooch_custom_url():
             fname = pup.fetch("tiny-data.txt")
             logs = log_file.getvalue()
             assert logs.split()[0] == "Downloading"
-            assert logs.split()[-1] == "'{}'.".format(path)
+            assert logs.split()[-1] == "{}".format(path)
         check_tiny_data(fname)
         # Check that no logging happens when there are no events
         with capture_log() as log_file:
@@ -103,7 +103,7 @@ def test_pooch_download():
             fname = pup.fetch("tiny-data.txt")
             logs = log_file.getvalue()
             assert logs.split()[0] == "Downloading"
-            assert logs.split()[-1] == "'{}'.".format(path)
+            assert logs.split()[-1] == "{}".format(path)
         # Check that the downloaded file has the right content
         assert true_path == fname
         check_tiny_data(fname)
@@ -144,7 +144,7 @@ def test_pooch_update():
             fname = pup.fetch("tiny-data.txt")
             logs = log_file.getvalue()
             assert logs.split()[0] == "Updating"
-            assert logs.split()[-1] == "'{}'.".format(path)
+            assert logs.split()[-1] == "{}".format(path)
         # Check that the updated file has the right content
         assert true_path == fname
         check_tiny_data(fname)
@@ -166,7 +166,7 @@ def test_pooch_corrupted():
                 pup.fetch("tiny-data.txt")
             logs = log_file.getvalue()
             assert logs.split()[0] == "Downloading"
-            assert logs.split()[-1] == "'{}'.".format(path)
+            assert logs.split()[-1] == "{}".format(path)
     # and the case where the file exists but hash doesn't match
     pup = Pooch(path=DATA_DIR, base_url=BASEURL, registry=REGISTRY_CORRUPTED)
     with capture_log() as log_file:
@@ -174,7 +174,7 @@ def test_pooch_corrupted():
             pup.fetch("tiny-data.txt")
         logs = log_file.getvalue()
         assert logs.split()[0] == "Updating"
-        assert logs.split()[-1] == "'{}'.".format(DATA_DIR)
+        assert logs.split()[-1] == "{}".format(DATA_DIR)
 
 
 def test_pooch_file_not_in_registry():
@@ -293,9 +293,9 @@ def test_downloader(capsys):
             fname = pup.fetch("large-data.txt", downloader=download)
             logs = log_file.getvalue()
             lines = logs.splitlines()
-            assert len(lines) == 2
+            assert len(lines) == 4
             assert lines[0].split()[0] == "Downloading"
-            assert lines[1] == "downloader executed"
+            assert lines[-1] == "downloader executed"
         # Read stderr and make sure no progress bar was printed by default
         assert not capsys.readouterr().err
         # Check that the downloaded file has the right content
