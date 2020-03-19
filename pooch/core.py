@@ -19,7 +19,7 @@ from .utils import (
     hash_algorithm,
     hash_matches,
     os_cache,
-    make_unique_file_name,
+    unique_file_name,
 )
 from .downloaders import HTTPDownloader, FTPDownloader
 
