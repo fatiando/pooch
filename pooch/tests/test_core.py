@@ -40,44 +40,26 @@ REGISTRY_CORRUPTED = {
 def test_retrieve():
     "Try downloading some data with retrieve"
     with TemporaryDirectory() as local_store:
-        path = Path(local_store)
         data_file = "tiny-data.txt"
-        true_path = str(path / data_file)
         url = BASEURL + data_file
         # Check that the logs say that the file is being downloaded
         with capture_log() as log_file:
-            fname = retrieve(url, hash=None, fname=data_file, path=path)
+            fname = retrieve(url, known_hash=None, path=local_store)
             logs = log_file.getvalue()
             assert logs.split()[0] == "Downloading"
-            assert logs.split()[-1] == "'{}'.".format(path)
+            assert local_store in logs
+            assert "SHA256 hash of downloaded file" in logs
         # Check that the downloaded file has the right content
-        assert true_path == fname
+        assert data_file == fname[-len(data_file) :]
         check_tiny_data(fname)
         assert file_hash(fname) == REGISTRY[data_file]
         # Check that no logging happens when not downloading
         with capture_log() as log_file:
-            fname = retrieve(
-                url, file_hash=file_hash(fname), fname=data_file, path=path
-            )
+            fname = retrieve(url, known_hash=None, path=local_store)
             assert log_file.getvalue() == ""
-
-
-def test_retrieve_defaults():
-    "Try downloading some data with retrieve using all default values"
-    data_file = "tiny-data.txt"
-    url = BASEURL + data_file
-    # Check that the logs say that the file is being downloaded
-    with capture_log() as log_file:
-        fname = retrieve(url, hash=None)
-        logs = log_file.getvalue()
-        assert logs.split()[0] == "Downloading"
-    # Check that the downloaded file has the right content
-    check_tiny_data(fname)
-    assert file_hash(fname) == REGISTRY[data_file]
-    # Check that no logging happens when not downloading
-    with capture_log() as log_file:
-        fname = retrieve(url, hash=None)
-        assert log_file.getvalue() == ""
+        with capture_log() as log_file:
+            fname = retrieve(url, known_hash=REGISTRY[data_file], path=local_store)
+            assert log_file.getvalue() == ""
 
 
 def test_pooch_local():

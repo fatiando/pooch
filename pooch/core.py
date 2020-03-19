@@ -7,7 +7,6 @@ from pathlib import Path
 import shutil
 import tempfile
 import ftplib
-import hashlib
 
 import requests
 from .utils import (
@@ -23,6 +22,7 @@ from .utils import (
 )
 from .downloaders import HTTPDownloader, FTPDownloader
 
+
 KNOWN_DOWNLOADERS = {
     "ftp": FTPDownloader,
     "https": HTTPDownloader,
@@ -30,40 +30,54 @@ KNOWN_DOWNLOADERS = {
 }
 
 
-def retrieve(url, hash, path=None, fname=None, processor=None, downloader=None):
+def retrieve(url, known_hash, fname=None, path=None, processor=None, downloader=None):
     """
     """
     if path is None:
         path = os_cache("pooch")
-    # Normalize the path and make sure it's an absolute path
-    path = Path(os.path.abspath(os.path.expanduser(str(path))))
-    # Create the local data directory if it doesn't already exist
-    os.makedirs(str(path), exist_ok=True)
+    if fname is None:
+        fname = unique_file_name(url)
+    # Create the local data directory if it doesn't already exist and make the
+    # path absolute.
+    path = make_local_storage(path, env=None, version=None).resolve()
+    downloaded = _download_if_needed(
+        url,
+        path,
+        fname,
+        known_hash,
+        processor=processor,
+        downloader=downloader,
+        pooch=None,
+    )
+    return downloaded
 
 
 def _download_if_needed(
-    url, path, fname, hash, pooch=None, processor=None, downloader=None
+    url, path, fname, known_hash, pooch=None, processor=None, downloader=None
 ):
+    """
+    Download the file if missing or needs to be updated.
 
+    Returns the file path on the system.
+    """
     full_path = path / fname
-
     in_storage = full_path.exists()
 
     if not in_storage:
         action = "download"
-    elif hash is not None and not hash_matches(str(full_path), hash):
+    elif known_hash is not None and not hash_matches(str(full_path), known_hash):
         action = "update"
     else:
         action = "fetch"
 
     if action in ("download", "update"):
         action_word = dict(download="Downloading", update="Updating")
+        get_logger().info("%s file '%s':", action_word[action], fname)
         get_logger().info(
-            "%s data file '%s' from '%s' to '%s'.",
-            action_word[action],
-            fname,
-            url,
-            str(path),
+            "  source: %s", url,
+        )
+        get_logger().info(
+            "  destination: %s", str(path),
         )
 
         if downloader is None:
@@ -79,22 +93,36 @@ def _download_if_needed(
         # Stream the file to a temporary so that we can safely check its hash
         # before overwriting the original
         tmp = tempfile.NamedTemporaryFile(delete=False, dir=str(path))
-        # Close the temp file so that the downloader can decide how to opened
-        # it
+        # Close the file so that the downloader can decide how to opened it
         tmp.close()
+
         try:
             downloader(url, tmp.name, pooch)
 
-            # AVOID REPEAT CALCULATION OF THE HASH
-            # MAYBE CHANGE HASH_MATCHES TO TAKE THE HASH INSTEAD OF THE FILE
+            # Calculate the hash of the newly downloaded file and check against
+            # the known hash (if available). Do this instead of using
+            # "hash_matches" because we need the hash value for the logging
+            # event and potential error message.
+            new_hash = file_hash(tmp.name, alg=hash_algorithm(known_hash))
 
-            if not hash_matches(tmp.name, hash):
+            # Print the hash if one wasn't given so that the user can
+            # copy-paste it to check the hash next time.
+            if known_hash is None:
+                get_logger().info(
+                    "%s hash of downloaded file: %s",
+                    hash_algorithm(known_hash).upper(),
+                    new_hash,
+                )
+                get_logger().info(
+                    "Use this hash as the 'known_hash' argument of 'pooch.retrieve'"
+                    " to ensure the file hasn't changed if downloaded in the future.",
+                )
+
+            if known_hash is not None and new_hash != known_hash:
                 raise ValueError(
                     "Hash of downloaded file '{}' does not match the known hash."
                     " Expected '{}' and got '{}'.".format(
-                        str(full_path),
-                        hash,
-                        file_hash(tmp.name, alg=hash_algorithm(hash)),
+                        str(full_path), known_hash, new_hash,
                     )
                 )
 
@@ -102,7 +130,10 @@ def _download_if_needed(
             # subdirectory. Otherwise, move will cause an error.
             if not os.path.exists(str(full_path.parent)):
                 os.makedirs(str(full_path.parent))
+
             shutil.move(tmp.name, str(full_path))
+
+        # Make sure we clean up the temporary file
         finally:
             if os.path.exists(tmp.name):
                 os.remove(tmp.name)
@@ -299,7 +330,7 @@ class Pooch:
     @property
     def abspath(self):
         "Absolute path to the local storage"
-        return Path(os.path.abspath(os.path.expanduser(str(self.path))))
+        return Path(str(self.path)).expanduser().resolve()
 
     @property
     def registry_files(self):
@@ -426,73 +457,18 @@ class Pooch:
 
         """
         self._assert_file_in_registry(fname)
-
         # Create the local data directory if it doesn't already exist
         os.makedirs(str(self.abspath), exist_ok=True)
-
-        full_path = self.abspath / fname
-        url = self.get_url(fname)
-        in_storage = full_path.exists()
-
-        if not in_storage:
-            action = "download"
-        elif not hash_matches(str(full_path), self.registry[fname]):
-            action = "update"
-        else:
-            action = "fetch"
-
-        if action in ("download", "update"):
-            action_word = dict(download="Downloading", update="Updating")
-            get_logger().info(
-                "%s data file '%s' from remote data store '%s' to '%s'.",
-                action_word[action],
-                fname,
-                self.get_url(fname),
-                str(self.path),
-            )
-
-            parsed_url = parse_url(url)
-            if parsed_url["protocol"] not in KNOWN_DOWNLOADERS:
-                raise ValueError(
-                    "Unrecognized URL protocol '{}' in '{}'. Must be one of {}.".format(
-                        parsed_url["protocol"], url, KNOWN_DOWNLOADERS.keys()
-                    )
-                )
-
-            if downloader is None:
-                downloader = KNOWN_DOWNLOADERS[parsed_url["protocol"]]()
-            # Stream the file to a temporary so that we can safely check its
-            # hash before overwriting the original
-            tmp = tempfile.NamedTemporaryFile(delete=False, dir=str(self.abspath))
-            # Close the temp file so that the downloader can decide how to
-            # opened it
-            tmp.close()
-            try:
-                downloader(url, tmp.name, self)
-                if not hash_matches(tmp.name, self.registry[fname]):
-                    raise ValueError(
-                        "Hash of downloaded file '{}' doesn't match the entry in the"
-                        " registry. Expected '{}' and got '{}'.".format(
-                            fname,
-                            self.registry[fname],
-                            file_hash(
-                                tmp.name, alg=hash_algorithm(self.registry[fname])
-                            ),
-                        )
-                    )
-                # Ensure the parent directory exists in case the file is in a
-                # subdirectory. Otherwise, move will cause an error.
-                if not os.path.exists(str(full_path.parent)):
-                    os.makedirs(str(full_path.parent))
-                shutil.move(tmp.name, str(full_path))
-            finally:
-                if os.path.exists(tmp.name):
-                    os.remove(tmp.name)
-
-        if processor is not None:
-            return processor(str(full_path), action, self)
-
-        return str(full_path)
+        downloaded = _download_if_needed(
+            url=self.get_url(fname),
+            path=self.abspath,
+            fname=fname,
+            known_hash=self.registry[fname],
+            pooch=self,
+            processor=processor,
+            downloader=downloader,
+        )
+        return downloaded
 
     def _assert_file_in_registry(self, fname):
         """

@@ -277,7 +277,8 @@ def hash_algorithm(hash_string):
     The hash string should have the following form ``algorithm:hash``, where
     algorithm can be the name of any algorithm known to :mod:`hashlib`.
 
-    If the algorithm is omitted, will default to ``"sha256"``.
+    If the algorithm is omitted or the hash string is None, will default to
+    ``"sha256"``.
 
     Parameters
     ----------
@@ -298,13 +299,17 @@ def hash_algorithm(hash_string):
     md5
     >>> print(hash_algorithm("sha256:qouuwhwd2j192y1lb1iwgowdj2898wd2d9"))
     sha256
+    >>> print(hash_algorithm(None))
+    sha256
 
     """
-    parts = hash_string.split(":")
-    if len(parts) == 1:
-        algorithm = "sha256"
+    default = "sha256"
+    if hash_string is None:
+        algorithm = default
+    elif ":" not in hash_string:
+        algorithm = default
     else:
-        algorithm = parts[0]
+        algorithm = hash_string.split(":")[0]
     return algorithm
 
 
