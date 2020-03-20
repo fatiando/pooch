@@ -332,7 +332,10 @@ def download_if_needed(
                 raise ValueError(
                     "Hash ({}) of downloaded file '{}' does not match the known hash."
                     " Expected '{}' and got '{}'.".format(
-                        hash_algorithm(known_hash), str(full_path), known_hash, new_hash,
+                        hash_algorithm(known_hash),
+                        str(full_path),
+                        known_hash,
+                        new_hash,
                     )
                 )
 
