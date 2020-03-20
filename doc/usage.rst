@@ -144,26 +144,26 @@ Bypassing the hash check
 Sometimes we might not know the hash of the file or it could change on the server
 periodically. In these cases, we need a way of bypassing the hash check.
 One way of doing that is with Python's ``unittest.mock`` module. It defines the object
-``unittest.mock.ANY`` which passes all equality tests made against it. To bypass the 
-check, we can set the hash value to ``unittest.mock.ANY`` when specifying the 
+``unittest.mock.ANY`` which passes all equality tests made against it. To bypass the
+check, we can set the hash value to ``unittest.mock.ANY`` when specifying the
 ``registry`` argument for :func:`pooch.create`.
 
-In this example, we want to use Pooch to download a list of weather stations around 
-Australia. The file with the stations is in an FTP server and we want to store it locally 
-in separate folders for each day that the code is run. The problem is that the 
-``stations.zip`` file is updated on the server instead of creating a new one, so the 
+In this example, we want to use Pooch to download a list of weather stations around
+Australia. The file with the stations is in an FTP server and we want to store it locally
+in separate folders for each day that the code is run. The problem is that the
+``stations.zip`` file is updated on the server instead of creating a new one, so the
 hash check would fail. This is how you can solve this problem:
 
 
 .. code:: python
 
     import datetime
-    import unittest.mock  
+    import unittest.mock
     import pooch
 
     # Get the current data to store the files in separate folders
     CURRENT_DATE = datetime.datetime.now().date()
-    
+
     GOODBOY = pooch.create(
         path=pooch.os_cache("bom_daily_stations") / CURRENT_DATE,
         base_url="ftp://ftp.bom.gov.au/anon2/home/ncc/metadata/sitelists/",
@@ -173,14 +173,14 @@ hash check would fail. This is how you can solve this problem:
         },
     )
 
-Because hash check is always ``True``, Pooch will only download the file once. When running 
-again at a different date, the file will be downloaded again because the local cache folder 
-changed and the file is no longer present in it. If you omit ``CURRENT_DATE`` from the cache 
+Because hash check is always ``True``, Pooch will only download the file once. When running
+again at a different date, the file will be downloaded again because the local cache folder
+changed and the file is no longer present in it. If you omit ``CURRENT_DATE`` from the cache
 path, then Pooch will only fetch the files once, unless they are deleted from the cache.
 
-.. note:: 
+.. note::
 
-    If run over a period of time, your cache directory will increase in size, as the 
+    If run over a period of time, your cache directory will increase in size, as the
     files are stored in daily subdirectories.
 
 
@@ -239,6 +239,8 @@ saved to the same subdirectories in the local storage folder. Note, however, tha
 names of these files in the registry **must use Unix-style separators** (``'/'``) even
 on Windows. We will handle the appropriate conversions.
 
+
+.. _processors:
 
 Post-processing hooks
 ---------------------
@@ -373,6 +375,8 @@ keeping a decompressed copy of the file:
         data = numpy.load(fname)
         return data
 
+
+.. _downloaders:
 
 Downloaders and authentication
 ------------------------------

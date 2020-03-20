@@ -109,9 +109,9 @@ def retrieve(url, known_hash, fname=None, path=None, processor=None, downloader=
     >>> url = "https://github.com/fatiando/pooch/raw/{}/data/tiny-data.txt"
     >>> url = url.format(check_version(version.full_version))
     >>> # Download the file and save it locally. Will check the MD5 checksum of
-    >>> # the downloaded file against the given value to make it's the right
-    >>> # file. You can use other hashes by specifying different algorithm
-    >>> # names (sha256, sha1, etc).
+    >>> # the downloaded file against the given value to make sure it's the
+    >>> # right file. You can use other hashes by specifying different
+    >>> # algorithm names (sha256, sha1, etc).
     >>> fname = retrieve(
     ...     url, known_hash="md5:70e2afd3fd7e336ae478b1e740a5f08e",
     ... )
