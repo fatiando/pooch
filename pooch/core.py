@@ -25,6 +25,175 @@ from .downloaders import choose_downloader
 
 def retrieve(url, known_hash, fname=None, path=None, processor=None, downloader=None):
     """
+    Download and cache a single file locally.
+
+    Uses HTTP or FTP by default, depending on the protocol in the given *url*.
+    Other download methods can be controlled through the *downloader* argument
+    (see below).
+
+    The file will be downloaded to a temporary location first and its hash will
+    be compared to the given *known_hash*. This is done to ensure that the
+    download happened correctly and securely. If the hash doesn't match, the
+    file will be deleted and an exception will be raised.
+
+    If the file already exists locally, its hash will be compared to
+    *known_hash*. If they are not the same, this is interpreted as the file
+    needing to be updated and it will be downloaded again.
+
+    You can bypass these checks by passing ``known_hash=None``. If this is
+    done, the SHA256 hash of the downloaded file will be logged to the screen.
+    It is highly recommended that you copy and paste this hash as *known_hash*
+    so that future downloads are guaranteed to be the exact same file. This is
+    crucial for reproducible computations.
+
+    If the file exists in the given *path* with the given *fname* and the hash
+    matches, it will not be downloaded and the absolute path to the file will
+    be returned.
+
+    .. note::
+
+        This function is meant for downloading single files. If you need to
+        manage the download and caching of several files, with versioning, use
+        :func:`pooch.create` and :class:`pooch.Pooch` instead.
+
+    Parameters
+    ----------
+    url : str
+        The URL to the file that is to be downloaded. Ideally, the URL should
+        end in a file name.
+    known_hash : str
+        A known hash (checksum) of the file. Will be used to verify the
+        download or check if an existing file needs to be updated. By default,
+        will assume it's a SHA256 hash. To specify a different hashing method,
+        prepend the hash with ``algorithm:``, for example
+        ``md5:pw9co2iun29juoh`` or ``sha1:092odwhi2ujdp2du2od2odh2wod2``. If
+        None, will NOT check the hash of the downloaded file or check if an
+        existing file needs to be updated.
+    fname : str or None
+        The name that will be used to save the file. Should NOT include the
+        full the path, just the file name (it will be appended to *path*). If
+        None, will create a unique file name using a combination of the last
+        part of the URL (assuming it's the file name) and the MD5 hash of the
+        URL. For example, ``81whdo2d2e928yd1wi22:data-file.csv``. This ensures
+        that files from different URLs never overwrite each other, even if they
+        have the same name.
+    path : str or PathLike or None
+        The location of the cache folder on disk. This is where the file will
+        be saved. If None, will save to a ``pooch`` folder in the default cache
+        location for your operating system (see :func:`pooch.os_cache`).
+    processor : None or callable
+        If not None, then a function (or callable object) that will be called
+        before returning the full path and after the file has been downloaded
+        (if required). See :meth:`pooch.Pooch.fetch` for details.
+    downloader : None or callable
+        If not None, then a function (or callable object) that will be called
+        to download a given URL to a provided local file name. By default,
+        downloads are done through HTTP without authentication using
+        :class:`pooch.HTTPDownloader`. See :meth:`pooch.Pooch.fetch` for
+        details.
+
+    Returns
+    -------
+    full_path : str
+        The absolute path (including the file name) of the file in the local
+        storage.
+
+    Examples
+    --------
+
+    Download one of the data files from the Pooch repository on GitHub:
+
+    >>> import os
+    >>> from pooch import version, check_version, retrieve
+    >>> # Make a URL for the version of pooch we have installed
+    >>> url = "https://github.com/fatiando/pooch/raw/{}/data/tiny-data.txt"
+    >>> url = url.format(check_version(version.full_version))
+    >>> # Download the file and save it locally. Will check the MD5 checksum of
+    >>> # the downloaded file against the given value to make it's the right
+    >>> # file. You can use other hashes by specifying different algorithm
+    >>> # names (sha256, sha1, etc).
+    >>> fname = retrieve(
+    ...     url, known_hash="md5:70e2afd3fd7e336ae478b1e740a5f08e",
+    ... )
+    >>> with open(fname) as f:
+    ...     print(f.read().strip())
+    # A tiny data file for test purposes only
+    1  2  3  4  5  6
+    >>> # Running again won't trigger a download and only return the path to
+    >>> # the existing file.
+    >>> fname2 = retrieve(
+    ...     url, known_hash="md5:70e2afd3fd7e336ae478b1e740a5f08e",
+    ... )
+    >>> print(fname2 == fname)
+    True
+    >>> os.remove(fname)
+
+    Files that are compressed with gzip, xz/lzma, or bzip2 can be automatically
+    decompressed by passing using the :class:`pooch.Decompress` processor:
+
+    >>> from pooch import Decompress
+    >>> # URLs to a gzip compressed version of the data file.
+    >>> url = ("https://github.com/fatiando/pooch/raw/{}/"
+    ...        + "pooch/tests/data/tiny-data.txt.gz")
+    >>> url = url.format(check_version(version.full_version))
+    >>> # By default, you would have to decompress the file yourself
+    >>> fname = retrieve(
+    ...     url,
+    ...     known_hash="md5:8812ba10b6c7778014fdae81b03f9def",
+    ... )
+    >>> print(os.path.splitext(fname)[1])
+    .gz
+    >>> # Use the processor to decompress after download automatically and
+    >>> # return the path to the decompressed file instead.
+    >>> fname2 = retrieve(
+    ...     url,
+    ...     known_hash="md5:8812ba10b6c7778014fdae81b03f9def",
+    ...     processor=Decompress(),
+    ... )
+    >>> print(fname != fname2)
+    True
+    >>> with open(fname2) as f:
+    ...     print(f.read().strip())
+    # A tiny data file for test purposes only
+    1  2  3  4  5  6
+    >>> os.remove(fname)
+    >>> os.remove(fname2)
+
+    When downloading archives (zip or tar), it can be useful to unpack them
+    after download to avoid having to do that yourself. Use the processors
+    :class:`pooch.Unzip` or :class:`pooch.Untar` to do this automatically:
+
+    >>> from pooch import Unzip
+    >>> # URLs to a zip archive with a single data file.
+    >>> url = ("https://github.com/fatiando/pooch/raw/{}/"
+    ...        + "pooch/tests/data/tiny-data.zip")
+    >>> url = url.format(check_version(version.full_version))
+    >>> # By default, you would get the path to the archive
+    >>> fname = retrieve(
+    ...     url,
+    ...     known_hash="md5:e9592cb46cf3514a1079051f8a148148",
+    ... )
+    >>> print(os.path.splitext(fname)[1])
+    .zip
+    >>> # Using the processor, the archive will be unzipped and a list with the
+    >>> # path to every file will be returned instead of a single path.
+    >>> fnames = retrieve(
+    ...     url,
+    ...     known_hash="md5:e9592cb46cf3514a1079051f8a148148",
+    ...     processor=Unzip(),
+    ... )
+    >>> # There was only a single file in our archive.
+    >>> print(len(fnames))
+    1
+    >>> with open(fnames[0]) as f:
+    ...     print(f.read().strip())
+    # A tiny data file for test purposes only
+    1  2  3  4  5  6
+    >>> os.remove(fname)
+    >>> for f in fnames:
+    ...     os.remove(f)
+
+
     """
     if path is None:
         path = os_cache("pooch")
@@ -159,11 +328,11 @@ def download_if_needed(
                     " to ensure the file hasn't changed if downloaded in the future.",
                 )
 
-            if known_hash is not None and new_hash != known_hash:
+            if known_hash is not None and new_hash != known_hash.split(":")[-1]:
                 raise ValueError(
-                    "Hash of downloaded file '{}' does not match the known hash."
+                    "Hash ({}) of downloaded file '{}' does not match the known hash."
                     " Expected '{}' and got '{}'.".format(
-                        str(full_path), known_hash, new_hash,
+                        hash_algorithm(known_hash), str(full_path), known_hash, new_hash,
                     )
                 )
 
