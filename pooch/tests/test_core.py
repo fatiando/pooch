@@ -15,7 +15,7 @@ except ImportError:
     tqdm = None
 
 from .. import Pooch, create, retrieve
-from ..utils import file_hash, get_logger
+from ..utils import file_hash, get_logger, os_cache
 from ..downloaders import HTTPDownloader, FTPDownloader
 
 from .utils import (
@@ -60,6 +60,46 @@ def test_retrieve():
         with capture_log() as log_file:
             fname = retrieve(url, known_hash=REGISTRY[data_file], path=local_store)
             assert log_file.getvalue() == ""
+
+
+def test_retrieve_fname():
+    "Try downloading some data with retrieve and setting the file name"
+    with TemporaryDirectory() as local_store:
+        data_file = "tiny-data.txt"
+        url = BASEURL + data_file
+        # Check that the logs say that the file is being downloaded
+        with capture_log() as log_file:
+            fname = retrieve(url, known_hash=None, path=local_store, fname=data_file)
+            logs = log_file.getvalue()
+            assert logs.split()[0] == "Downloading"
+            assert local_store in logs
+            assert "SHA256 hash of downloaded file" in logs
+        # Check that the downloaded file has the right content
+        assert data_file == os.path.split(fname)[1]
+        check_tiny_data(fname)
+        assert file_hash(fname) == REGISTRY[data_file]
+
+
+def test_retrieve_default_path():
+    "Try downloading some data with retrieve to the default cache location"
+    data_file = "tiny-data.txt"
+    url = BASEURL + data_file
+    expected_location = (os_cache("pooch") / data_file).resolve()
+    try:
+        # Check that the logs say that the file is being downloaded
+        with capture_log() as log_file:
+            fname = retrieve(url, known_hash=None, fname=data_file)
+            logs = log_file.getvalue()
+            assert logs.split()[0] == "Downloading"
+            assert str(os_cache("pooch").resolve()) in logs
+            assert "SHA256 hash of downloaded file" in logs
+        # Check that the downloaded file has the right content
+        assert fname == str(expected_location)
+        check_tiny_data(fname)
+        assert file_hash(fname) == REGISTRY[data_file]
+    finally:
+        if os.path.exists(str(expected_location)):
+            os.remove(str(expected_location))
 
 
 def test_pooch_local():

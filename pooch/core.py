@@ -33,7 +33,7 @@ def retrieve(url, known_hash, fname=None, path=None, processor=None, downloader=
     # Create the local data directory if it doesn't already exist and make the
     # path absolute.
     path = make_local_storage(path, env=None, version=None).resolve()
-    downloaded = _download_if_needed(
+    downloaded = download_if_needed(
         url,
         path,
         fname,
@@ -45,15 +45,70 @@ def retrieve(url, known_hash, fname=None, path=None, processor=None, downloader=
     return downloaded
 
 
-def _download_if_needed(
+def download_if_needed(
     url, path, fname, known_hash, pooch=None, processor=None, downloader=None
 ):
     """
-    Download the file if missing or needs to be updated.
+    Download a file if its missing from the cache or needs to be updated.
 
-    Returns the file path on the system.
+    Uses HTTP or FTP by default, depending on the protocol in the given *url*.
+
+    The file will be downloaded to a temporary location first and its hash will
+    be compared to the given *known_hash* (if not None). This is done to ensure
+    that the download happened correctly and securely. If the hash doesn't
+    match, the file will be deleted and an exception will be raised.
+
+    If the file exists in the given *path* with the given *fname* and the hash
+    matches (if not None), will not download and only return the absolute path
+    to the file.
+
+    When downloading, will log the action being taken (downloading for the
+    first time or updating), the URL, and the destination path. If the known
+    hash is not given, will also log the SHA256 hash of the downloaded. This
+    can be copied and pasted as the *known_hash* to ensure future downloads are
+    retrieving the exact same file.
+
+    Parameters
+    ----------
+    url : str
+        The URL to the file that is to be downloaded. Ideally, the URL should
+        end in a file name.
+    path : str or PathLike
+        The location of the cache folder on disk. This is where the file will
+        be saved.
+    fname : str
+        The name that will be used to save the file. Should NOT include the
+        full the path, just the file name (it will be appended to *path*).
+    known_hash : str
+        A known hash (checksum) of the file. Will be used to verify the
+        download or check if an existing file needs to be updated. By default,
+        will assume it's a SHA256 hash. To specify a different hashing method,
+        prepend the hash with ``algorithm:``, for example
+        ``md5:pw9co2iun29juoh`` or ``sha1:092odwhi2ujdp2du2od2odh2wod2``. If
+        None, will NOT check the hash of the downloaded file or check if an
+        existing file needs to be updated.
+    pooch : :class:`~pooch.Pooch`
+        If used inside a method of :class:`pooch.Pooch`, should be the instance
+        that is calling this function. Otherwise, defaults to None.
+    processor : None or callable
+        If not None, then a function (or callable object) that will be called
+        before returning the full path and after the file has been downloaded
+        (if required). See :meth:`pooch.Pooch.fetch` for details.
+    downloader : None or callable
+        If not None, then a function (or callable object) that will be called
+        to download a given URL to a provided local file name. By default,
+        downloads are done through HTTP without authentication using
+        :class:`pooch.HTTPDownloader`. See :meth:`pooch.Pooch.fetch` for
+        details.
+
+    Returns
+    -------
+    full_path : str
+        The absolute path (including the file name) of the file in the local
+        storage.
+
     """
-    full_path = path / fname
+    full_path = Path(path) / fname
     in_storage = full_path.exists()
 
     if not in_storage:
@@ -445,7 +500,7 @@ class Pooch:
         self._assert_file_in_registry(fname)
         # Create the local data directory if it doesn't already exist
         os.makedirs(str(self.abspath), exist_ok=True)
-        downloaded = _download_if_needed(
+        downloaded = download_if_needed(
             url=self.get_url(fname),
             path=self.abspath,
             fname=fname,
