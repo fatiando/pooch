@@ -3,7 +3,6 @@ Test the downloader classes and functions separately from the Pooch core.
 """
 import os
 import sys
-from pathlib import Path
 from tempfile import TemporaryDirectory
 
 import pytest
@@ -14,22 +13,12 @@ except ImportError:
     tqdm = None
 
 from ..downloaders import HTTPDownloader, FTPDownloader, choose_downloader
+from .utils import pooch_test_url, check_large_data
 
-from .utils import (
-    pooch_test_url,
-    pooch_test_registry,
-    check_large_data,
-)
 
 # FTP doesn't work on Travis CI so need to be able to skip tests there
 ON_TRAVIS = bool(os.environ.get("TRAVIS", None))
-DATA_DIR = str(Path(__file__).parent / "data")
-REGISTRY = pooch_test_registry()
 BASEURL = pooch_test_url()
-REGISTRY_CORRUPTED = {
-    # The same data file but I changed the hash manually to a wrong one
-    "tiny-data.txt": "098h0894dba14b12085eacb204284b97e362f4f3e5a5807693cc90ef415c1b2d"
-}
 
 
 def test_unsupported_protocol():
