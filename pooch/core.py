@@ -346,11 +346,13 @@ class Pooch:
 
         full_path = self.abspath / fname
         url = self.get_url(fname)
+        known_hash = self.registry[fname]
+
         in_storage = full_path.exists()
 
         if not in_storage:
             action = "download"
-        elif not hash_matches(str(full_path), self.registry[fname]):
+        elif not hash_matches(str(full_path), known_hash):
             action = "update"
         else:
             action = "fetch"
@@ -383,17 +385,7 @@ class Pooch:
             tmp.close()
             try:
                 downloader(url, tmp.name, self)
-                if not hash_matches(tmp.name, self.registry[fname]):
-                    raise ValueError(
-                        "Hash of downloaded file '{}' doesn't match the entry in the"
-                        " registry. Expected '{}' and got '{}'.".format(
-                            fname,
-                            self.registry[fname],
-                            file_hash(
-                                tmp.name, alg=hash_algorithm(self.registry[fname])
-                            ),
-                        )
-                    )
+                hash_matches(tmp.name, known_hash, strict=True)
                 # Ensure the parent directory exists in case the file is in a
                 # subdirectory. Otherwise, move will cause an error.
                 if not os.path.exists(str(full_path.parent)):
