@@ -68,6 +68,25 @@ Here are Pooch's main features:
 Example
 -------
 
+For a **scientist downloading a data file** for analysis:
+
+.. code:: python
+
+    from pooch import retrieve
+
+
+    # Download the file and save it locally. Running this again will not cause
+    # a download. Pooch will check the hash (checksum) of the downloaded file
+    # against the given value to make sure it's the right file (not corrupted
+    # or outdated).
+    fname = retrieve(
+        url="https://some-data-server.org/a-data-file.nc",
+        known_hash="md5:70e2afd3fd7e336ae478b1e740a5f08e",
+    )
+
+
+For **package developers** including sample data in their projects:
+
 .. code:: python
 
     """
