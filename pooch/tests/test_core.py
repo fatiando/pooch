@@ -4,11 +4,11 @@ Test the core class and factory function.
 import hashlib
 import os
 from pathlib import Path
-from tempfile import TemporaryDirectory
+from tempfile import TemporaryDirectory, NamedTemporaryFile
 
 import pytest
 
-from .. import Pooch
+from ..core import Pooch, download_action
 from ..utils import file_hash, get_logger
 from ..downloaders import HTTPDownloader
 
@@ -284,3 +284,24 @@ def test_alternative_hashing_algorithms():
         pup = Pooch(path=DATA_DIR, base_url="some bogus URL", registry=registry)
         assert fname == pup.fetch("tiny-data.txt")
         check_tiny_data(fname)
+
+
+def test_download_action():
+    "Test that the right action is performed based on file existing"
+    action, verb = download_action(
+        Path("this_file_does_not_exist.txt"), known_hash=None
+    )
+    assert action == "download"
+    assert verb == "Downloading"
+
+    with NamedTemporaryFile() as tmp:
+        action, verb = download_action(
+            Path(tmp.name), known_hash="not the correct hash"
+        )
+    assert action == "update"
+    assert verb == "Updating"
+
+    with NamedTemporaryFile() as tmp:
+        action, verb = download_action(Path(tmp.name), known_hash=file_hash(tmp.name))
+    assert action == "fetch"
+    assert verb == "Fetching"
