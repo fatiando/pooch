@@ -7,6 +7,9 @@ import tempfile
 from pathlib import Path
 import hashlib
 from urllib.parse import urlsplit
+from tempfile import NamedTemporaryFile
+from contextlib import contextmanager
+
 import appdirs
 from packaging.version import Version
 
@@ -327,3 +330,34 @@ def hash_matches(fname, known_hash):
     """
     new_hash = file_hash(fname, alg=hash_algorithm(known_hash))
     return new_hash == known_hash.split(":")[-1]
+
+
+@contextmanager
+def temporary_file(path=None):
+    """
+    Create a closed and named temporary file and make sure it's cleaned up.
+
+    Using :class:`tempfile.NamedTemporaryFile` will fail on Windows if trying
+    to open the file a second time (when passing its name to Pooch function,
+    for example). This context manager creates the file, closes it, yields the
+    file path, and makes sure it's deleted in the end.
+
+    Parameters
+    ----------
+    path : str or PathLike
+        The directory in which the temporary file will be created.
+
+    Yields
+    ------
+    fname : PathLike
+        A :mod:`pathlib` object with the path to the temporary file.
+
+    """
+    tmp = tempfile.NamedTemporaryFile(delete=False, dir=path)
+    # Close the temp file so that it can be opened elsewhere
+    tmp.close()
+    try:
+        yield Path(tmp.name)
+    finally:
+        if os.path.exists(tmp.name):
+            os.remove(tmp.name)
