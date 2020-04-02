@@ -344,25 +344,14 @@ class Pooch:
         # Create the local data directory if it doesn't already exist
         os.makedirs(str(self.abspath), exist_ok=True)
 
-        full_path = self.abspath / fname
         url = self.get_url(fname)
-        in_storage = full_path.exists()
-
-        if not in_storage:
-            action = "download"
-        elif not hash_matches(str(full_path), self.registry[fname]):
-            action = "update"
-        else:
-            action = "fetch"
+        full_path = self.abspath / fname
+        known_hash = self.registry[fname]
+        action, verb = download_action(full_path, known_hash)
 
         if action in ("download", "update"):
-            action_word = dict(download="Downloading", update="Updating")
             get_logger().info(
-                "%s data file '%s' from remote data store '%s' to '%s'.",
-                action_word[action],
-                fname,
-                self.get_url(fname),
-                str(self.path),
+                "%s file '%s' from '%s' to '%s'.", verb, fname, url, str(full_path),
             )
 
             parsed_url = parse_url(url)
@@ -382,6 +371,7 @@ class Pooch:
             # Close the temp file so that the downloader can decide how to
             # opened it
             tmp.close()
+
             try:
                 downloader(url, tmp.name, self)
                 if not hash_matches(tmp.name, self.registry[fname]):
@@ -551,123 +541,3 @@ def download_action(path, known_hash):
         action = "fetch"
         verb = "Fetching"
     return action, verb
-
-
-def download_if_needed(
-    url, path, fname, known_hash, pooch=None, processor=None, downloader=None
-):
-    """
-    Download a file if its missing from the cache or needs to be updated.
-
-    Uses HTTP or FTP by default, depending on the protocol in the given *url*.
-
-    The file will be downloaded to a temporary location first and its hash will
-    be compared to the given *known_hash*. This is done to ensure that the
-    download happened correctly and securely. If the hash doesn't match, the
-    file will be deleted and an exception will be raised.
-
-    If the file exists in the given *path* with the given *fname* and the hash
-    matches, will not download and only return the absolute path to the file.
-
-    When downloading, will log the action being taken (downloading for the
-    first time or updating), the URL, and the destination path.
-
-    Parameters
-    ----------
-    url : str
-        The URL to the file that is to be downloaded. Ideally, the URL should
-        end in a file name.
-    path : str or PathLike
-        The location of the cache folder on disk. This is where the file will
-        be saved.
-    fname : str
-        The name that will be used to save the file. Should NOT include the
-        full the path, just the file name (it will be appended to *path*).
-    known_hash : str
-        A known hash (checksum) of the file. Will be used to verify the
-        download or check if an existing file needs to be updated. By default,
-        will assume it's a SHA256 hash. To specify a different hashing method,
-        prepend the hash with ``algorithm:``, for example
-        ``md5:pw9co2iun29juoh`` or ``sha1:092odwhi2ujdp2du2od2odh2wod2``.
-    pooch : :class:`~pooch.Pooch`
-        If used inside a method of :class:`pooch.Pooch`, should be the instance
-        that is calling this function. Otherwise, defaults to None.
-    processor : None or callable
-        If not None, then a function (or callable object) that will be called
-        before returning the full path and after the file has been downloaded
-        (if required). See :meth:`pooch.Pooch.fetch` for details.
-    downloader : None or callable
-        If not None, then a function (or callable object) that will be called
-        to download a given URL to a provided local file name. By default,
-        downloads are done through HTTP without authentication using
-        :class:`pooch.HTTPDownloader`. See :meth:`pooch.Pooch.fetch` for
-        details.
-
-    Returns
-    -------
-    full_path : str
-        The absolute path (including the file name) of the file in the local
-        storage.
-
-    """
-    full_path = Path(path) / fname
-
-    action, verb = download_action(full_path, known_hash)
-
-    if action in ("download", "update"):
-        get_logger().info(
-            "%s file '%s' from '%s' to '%s'.", verb, fname, url, str(path),
-        )
-
-        parsed_url = parse_url(url)
-        if parsed_url["protocol"] not in KNOWN_DOWNLOADERS:
-            raise ValueError(
-                "Unrecognized URL protocol '{}' in '{}'. Must be one of {}.".format(
-                    parsed_url["protocol"], url, KNOWN_DOWNLOADERS.keys()
-                )
-            )
-
-        if downloader is None:
-            downloader = KNOWN_DOWNLOADERS[parsed_url["protocol"]]()
-
-        # Stream the file to a temporary so that we can safely check its hash
-        # before overwriting the original
-        tmp = tempfile.NamedTemporaryFile(delete=False, dir=str(path))
-        # Close the file so that the downloader can decide how to opened it
-        tmp.close()
-
-        try:
-            downloader(url, tmp.name, pooch)
-
-            # Calculate the hash of the newly downloaded file and check against
-            # the known hash. Do this instead of using "hash_matches" because
-            # we need the hash value for the error message.
-            new_hash = file_hash(tmp.name, alg=hash_algorithm(known_hash))
-
-            if new_hash != known_hash.split(":")[-1]:
-                raise ValueError(
-                    "{} hash of file '{}' does not match the known hash:"
-                    " expected '{}' but got '{}'.".format(
-                        hash_algorithm(known_hash).upper(),
-                        str(full_path),
-                        known_hash,
-                        new_hash,
-                    )
-                )
-
-            # Ensure the parent directory exists in case the file is in a
-            # subdirectory. Otherwise, move will cause an error.
-            if not os.path.exists(str(full_path.parent)):
-                os.makedirs(str(full_path.parent))
-
-            shutil.move(tmp.name, str(full_path))
-
-        # Make sure we clean up the temporary file
-        finally:
-            if os.path.exists(tmp.name):
-                os.remove(tmp.name)
-
-    if processor is not None:
-        return processor(str(full_path), action, pooch)
-
-    return str(full_path)
