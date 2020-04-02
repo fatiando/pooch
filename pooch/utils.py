@@ -7,6 +7,7 @@ import tempfile
 from pathlib import Path
 import hashlib
 from urllib.parse import urlsplit
+from contextlib import contextmanager
 
 import appdirs
 from packaging.version import Version
@@ -255,7 +256,8 @@ def make_local_storage(path, env=None, version=None):
             os.makedirs(path)
         else:
             action = "write to"
-            tempfile.NamedTemporaryFile(dir=path)
+            with tempfile.NamedTemporaryFile(dir=path):
+                pass
     except PermissionError:
         message = (
             "Cannot %s data cache folder '%s'. "
@@ -313,9 +315,11 @@ def hash_algorithm(hash_string):
     return algorithm
 
 
-def hash_matches(fname, known_hash):
+def hash_matches(fname, known_hash, strict=False):
     """
     Check if the hash of a file matches a known hash.
+
+    If the *known_hash* is None, will always return True.
 
     Parameters
     ----------
@@ -324,6 +328,9 @@ def hash_matches(fname, known_hash):
     known_hash : str
         The known hash. Optionally, prepend ``alg:`` to the hash to specify the
         hashing algorithm. Default is SHA256.
+    strict : bool
+        If True, will raise a :class:`ValueError` if the hash does not match
+        informing the user that the file may be corrupted.
 
     Returns
     -------
@@ -331,8 +338,51 @@ def hash_matches(fname, known_hash):
         True if the hash matches, False otherwise.
 
     """
-    new_hash = file_hash(fname, alg=hash_algorithm(known_hash))
-    return new_hash == known_hash.split(":")[-1]
+    if known_hash is None:
+        return True
+    algorithm = hash_algorithm(known_hash)
+    new_hash = file_hash(fname, alg=algorithm)
+    matches = new_hash == known_hash.split(":")[-1]
+    if strict and not matches:
+        raise ValueError(
+            "{} hash of file '{}' does not match the known hash:"
+            " expected '{}' but got '{}'. "
+            " The file may be corrupted or the known hash may be outdated.".format(
+                algorithm.upper(), fname, known_hash, new_hash,
+            )
+        )
+    return matches
+
+
+@contextmanager
+def temporary_file(path=None):
+    """
+    Create a closed and named temporary file and make sure it's cleaned up.
+
+    Using :class:`tempfile.NamedTemporaryFile` will fail on Windows if trying
+    to open the file a second time (when passing its name to Pooch function,
+    for example). This context manager creates the file, closes it, yields the
+    file path, and makes sure it's deleted in the end.
+
+    Parameters
+    ----------
+    path : str or PathLike
+        The directory in which the temporary file will be created.
+
+    Yields
+    ------
+    fname : str
+        The path to the temporary file.
+
+    """
+    tmp = tempfile.NamedTemporaryFile(delete=False, dir=path)
+    # Close the temp file so that it can be opened elsewhere
+    tmp.close()
+    try:
+        yield tmp.name
+    finally:
+        if os.path.exists(tmp.name):
+            os.remove(tmp.name)
 
 
 def unique_file_name(url):

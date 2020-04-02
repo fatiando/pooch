@@ -35,7 +35,7 @@ def test_decompress(method, ext):
             fname = pup.fetch("tiny-data.txt." + ext, processor=processor)
             logs = log_file.getvalue()
             lines = logs.splitlines()
-            assert len(lines) == 4
+            assert len(lines) == 2
             assert lines[0].split()[0] == "Downloading"
             assert lines[-1].startswith("Decompressing")
             assert method in lines[-1]
@@ -100,7 +100,7 @@ def test_processors(proc_cls, ext):
             assert len(fnames) == 1
             logs = log_file.getvalue()
             lines = logs.splitlines()
-            assert len(lines) == 4
+            assert len(lines) == 2
             assert lines[0].split()[0] == "Downloading"
             assert lines[-1].startswith("Extracting 'tiny-data.txt'")
 
@@ -139,7 +139,7 @@ def test_processor_multiplefiles(proc_cls, ext, msg):
             fnames = pup.fetch("store" + ext, processor=processor)
             logs = log_file.getvalue()
             lines = logs.splitlines()
-            assert len(lines) == 4
+            assert len(lines) == 2
             assert lines[0].split()[0] == "Downloading"
             assert lines[-1].startswith("{} contents".format(msg))
             assert len(fnames) == 2

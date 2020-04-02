@@ -16,6 +16,7 @@ from ..utils import (
     make_local_storage,
     file_hash,
     hash_matches,
+    temporary_file,
     unique_file_name,
 )
 from .utils import check_tiny_data, capture_log
@@ -174,3 +175,73 @@ def test_hash_matches():
     for alg in ("sha512", "md5"):
         known_hash = "{}:p98oh2dl2j2h2p8e9yfho3fi2e9fhd".format(alg)
         assert not hash_matches(fname, known_hash)
+
+
+def test_hash_matches_strict():
+    "Make sure the hash checking function raises an exception if strict"
+    fname = os.path.join(DATA_DIR, "tiny-data.txt")
+    check_tiny_data(fname)
+    with open(fname, "rb") as fin:
+        data = fin.read()
+    # Check if the check passes
+    hasher = hashlib.new("sha256")
+    hasher.update(data)
+    known_hash = "{}".format(hasher.hexdigest())
+    assert hash_matches(fname, known_hash, strict=True)
+    for alg in ("sha512", "md5"):
+        hasher = hashlib.new(alg)
+        hasher.update(data)
+        known_hash = "{}:{}".format(alg, hasher.hexdigest())
+        assert hash_matches(fname, known_hash, strict=True)
+    # And also if it fails
+    bad_hash = "p98oh2dl2j2h2p8e9yfho3fi2e9fhd"
+    with pytest.raises(ValueError):
+        hash_matches(fname, bad_hash, strict=True)
+    for alg in ("sha512", "md5"):
+        bad_hash = "{}:p98oh2dl2j2h2p8e9yfho3fi2e9fhd".format(alg)
+        with pytest.raises(ValueError):
+            hash_matches(fname, bad_hash, strict=True)
+
+
+def test_hash_matches_none():
+    "The hash checking function should always returns True if known_hash=None"
+    fname = os.path.join(DATA_DIR, "tiny-data.txt")
+    assert hash_matches(fname, known_hash=None)
+    # Should work even if the file is invalid
+    assert hash_matches(fname="", known_hash=None)
+    # strict should cause an error if this wasn't working
+    assert hash_matches(fname, known_hash=None, strict=True)
+
+
+def test_temporary_file():
+    "Make sure the file is writable and cleaned up in the end"
+    with temporary_file() as tmp:
+        assert Path(tmp).exists()
+        with open(tmp, "w") as outfile:
+            outfile.write("Meh")
+        with open(tmp, "r") as infile:
+            assert infile.read().strip() == "Meh"
+    assert not Path(tmp).exists()
+
+
+def test_temporary_file_path():
+    "Make sure the file is writable and cleaned up in the end when given a dir"
+    with TemporaryDirectory() as path:
+        with temporary_file(path) as tmp:
+            assert Path(tmp).exists()
+            assert path in tmp
+            with open(tmp, "w") as outfile:
+                outfile.write("Meh")
+            with open(tmp, "r") as infile:
+                assert infile.read().strip() == "Meh"
+        assert not Path(tmp).exists()
+
+
+def test_temporary_file_exception():
+    "Make sure the file is writable and cleaned up when there is an exception"
+    try:
+        with temporary_file() as tmp:
+            assert Path(tmp).exists()
+            raise ValueError("Nooooooooo!")
+    except ValueError:
+        assert not Path(tmp).exists()

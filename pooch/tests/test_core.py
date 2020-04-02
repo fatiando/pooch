@@ -3,20 +3,14 @@ Test the core class and factory function.
 """
 import hashlib
 import os
-import sys
 from pathlib import Path
 from tempfile import TemporaryDirectory
 
 import pytest
 
-try:
-    import tqdm
-except ImportError:
-    tqdm = None
-
-from .. import Pooch, create, retrieve
-from ..utils import file_hash, get_logger, os_cache
-from ..downloaders import HTTPDownloader, FTPDownloader
+from ..core import Pooch, retrieve, download_action, stream_download
+from ..utils import file_hash, get_logger, temporary_file, os_cache
+from ..downloaders import HTTPDownloader
 
 from .utils import (
     pooch_test_url,
@@ -48,7 +42,8 @@ def test_retrieve():
             logs = log_file.getvalue()
             assert logs.split()[0] == "Downloading"
             assert local_store in logs
-            assert "SHA256 hash of downloaded file" in logs
+            assert "SHA256 hash of downloaded file:" in logs
+            assert REGISTRY[data_file] in logs
         # Check that the downloaded file has the right content
         assert data_file == fname[-len(data_file) :]
         check_tiny_data(fname)
@@ -73,8 +68,9 @@ def test_retrieve_fname():
             logs = log_file.getvalue()
             assert logs.split()[0] == "Downloading"
             assert local_store in logs
-            assert "SHA256 hash of downloaded file" in logs
-        # Check that the downloaded file has the right content
+            assert "SHA256 hash of downloaded file:" in logs
+            assert REGISTRY[data_file] in logs
+        # Check that the downloaded file has the right name and content
         assert data_file == os.path.split(fname)[1]
         check_tiny_data(fname)
         assert file_hash(fname) == REGISTRY[data_file]
@@ -93,6 +89,7 @@ def test_retrieve_default_path():
             assert logs.split()[0] == "Downloading"
             assert str(os_cache("pooch").resolve()) in logs
             assert "SHA256 hash of downloaded file" in logs
+            assert REGISTRY[data_file] in logs
         # Check that the downloaded file has the right content
         assert fname == str(expected_location)
         check_tiny_data(fname)
@@ -123,7 +120,7 @@ def test_pooch_custom_url():
             fname = pup.fetch("tiny-data.txt")
             logs = log_file.getvalue()
             assert logs.split()[0] == "Downloading"
-            assert logs.split()[-1] == "{}".format(path)
+            assert logs.split()[-1] == "'{}'.".format(path)
         check_tiny_data(fname)
         # Check that no logging happens when there are no events
         with capture_log() as log_file:
@@ -143,7 +140,7 @@ def test_pooch_download():
             fname = pup.fetch("tiny-data.txt")
             logs = log_file.getvalue()
             assert logs.split()[0] == "Downloading"
-            assert logs.split()[-1] == "{}".format(path)
+            assert logs.split()[-1] == "'{}'.".format(path)
         # Check that the downloaded file has the right content
         assert true_path == fname
         check_tiny_data(fname)
@@ -184,7 +181,7 @@ def test_pooch_update():
             fname = pup.fetch("tiny-data.txt")
             logs = log_file.getvalue()
             assert logs.split()[0] == "Updating"
-            assert logs.split()[-1] == "{}".format(path)
+            assert logs.split()[-1] == "'{}'.".format(path)
         # Check that the updated file has the right content
         assert true_path == fname
         check_tiny_data(fname)
@@ -206,7 +203,7 @@ def test_pooch_corrupted():
                 pup.fetch("tiny-data.txt")
             logs = log_file.getvalue()
             assert logs.split()[0] == "Downloading"
-            assert logs.split()[-1] == "{}".format(path)
+            assert logs.split()[-1] == "'{}'.".format(path)
     # and the case where the file exists but hash doesn't match
     pup = Pooch(path=DATA_DIR, base_url=BASEURL, registry=REGISTRY_CORRUPTED)
     with capture_log() as log_file:
@@ -214,7 +211,7 @@ def test_pooch_corrupted():
             pup.fetch("tiny-data.txt")
         logs = log_file.getvalue()
         assert logs.split()[0] == "Updating"
-        assert logs.split()[-1] == "{}".format(DATA_DIR)
+        assert logs.split()[-1] == "'{}'.".format(DATA_DIR)
 
 
 def test_pooch_file_not_in_registry():
@@ -268,21 +265,6 @@ def test_pooch_load_registry_invalid_line():
         pup.load_registry(os.path.join(DATA_DIR, "registry-invalid.txt"))
 
 
-def test_unsupported_protocol():
-    "Should raise ValueError when protocol not in {'https', 'http', 'ftp'}"
-    with TemporaryDirectory() as data_cache:
-        pup = create(
-            path=data_cache,
-            base_url="/home/johndoe/",
-            version="1.0",
-            version_dev="master",
-            env="SOME_VARIABLE",
-            registry={"afile.txt": "ahash"},
-        )
-        with pytest.raises(ValueError):
-            pup.fetch("afile.txt")
-
-
 def test_check_availability():
     "Should correctly check availability of existing and non existing files"
     # Check available remote file
@@ -316,7 +298,7 @@ def test_check_availability_on_ftp():
     assert not pup.is_available("doesnot_exist.zip")
 
 
-def test_downloader(capsys):
+def test_fetch_with_downloader(capsys):
     "Setup a downloader function for fetch"
 
     def download(url, output_file, pup):  # pylint: disable=unused-argument
@@ -333,9 +315,9 @@ def test_downloader(capsys):
             fname = pup.fetch("large-data.txt", downloader=download)
             logs = log_file.getvalue()
             lines = logs.splitlines()
-            assert len(lines) == 4
+            assert len(lines) == 2
             assert lines[0].split()[0] == "Downloading"
-            assert lines[-1] == "downloader executed"
+            assert lines[1] == "downloader executed"
         # Read stderr and make sure no progress bar was printed by default
         assert not capsys.readouterr().err
         # Check that the downloaded file has the right content
@@ -344,72 +326,6 @@ def test_downloader(capsys):
         with capture_log() as log_file:
             fname = pup.fetch("large-data.txt")
             assert log_file.getvalue() == ""
-
-
-@pytest.mark.skipif(tqdm is not None, reason="tqdm must be missing")
-@pytest.mark.parametrize("downloader", [HTTPDownloader, FTPDownloader])
-def test_downloader_progressbar_fails(downloader):
-    "Make sure an error is raised if trying to use progressbar without tqdm"
-    with pytest.raises(ValueError):
-        downloader(progressbar=True)
-
-
-@pytest.mark.skipif(tqdm is None, reason="requires tqdm")
-def test_downloader_progressbar(capsys):
-    "Setup a downloader function that prints a progress bar for fetch"
-    download = HTTPDownloader(progressbar=True)
-    with TemporaryDirectory() as local_store:
-        path = Path(local_store)
-        # Setup a pooch in a temp dir
-        pup = Pooch(path=path, base_url=BASEURL, registry=REGISTRY)
-        fname = pup.fetch("large-data.txt", downloader=download)
-        # Read stderr and make sure the progress bar is printed only when told
-        captured = capsys.readouterr()
-        printed = captured.err.split("\r")[-1].strip()
-        assert len(printed) == 79
-        if sys.platform == "win32":
-            progress = "100%|####################"
-        else:
-            progress = "100%|████████████████████"
-        # Bar size is not always the same so can't reliably test the whole bar.
-        assert printed[:25] == progress
-        # Check that the downloaded file has the right content
-        check_large_data(fname)
-
-
-# https://blog.travis-ci.com/2018-07-23-the-tale-of-ftp-at-travis-ci
-@pytest.mark.skipif(ON_TRAVIS, reason="FTP is not allowed on Travis CI")
-def test_ftp_downloader():
-    "Test ftp downloader"
-    with TemporaryDirectory() as local_store:
-        downloader = FTPDownloader()
-        url = "ftp://speedtest.tele2.net/100KB.zip"
-        outfile = os.path.join(local_store, "100KB.zip")
-        downloader(url, outfile, None)
-        assert os.path.exists(outfile)
-
-
-@pytest.mark.skipif(tqdm is None, reason="requires tqdm")
-@pytest.mark.skipif(ON_TRAVIS, reason="FTP is not allowed on Travis CI")
-def test_downloader_progressbar_ftp(capsys):
-    "Setup an FTP downloader function that prints a progress bar for fetch"
-    download = FTPDownloader(progressbar=True)
-    with TemporaryDirectory() as local_store:
-        url = "ftp://speedtest.tele2.net/100KB.zip"
-        outfile = os.path.join(local_store, "100KB.zip")
-        download(url, outfile, None)
-        # Read stderr and make sure the progress bar is printed only when told
-        captured = capsys.readouterr()
-        printed = captured.err.split("\r")[-1].strip()
-        assert len(printed) == 79
-        if sys.platform == "win32":
-            progress = "100%|####################"
-        else:
-            progress = "100%|████████████████████"
-        # Bar size is not always the same so can't reliably test the whole bar.
-        assert printed[:25] == progress
-        # Check that the file was actually downloaded
-        assert os.path.exists(outfile)
 
 
 def test_invalid_hash_alg():
@@ -436,3 +352,39 @@ def test_alternative_hashing_algorithms():
         pup = Pooch(path=DATA_DIR, base_url="some bogus URL", registry=registry)
         assert fname == pup.fetch("tiny-data.txt")
         check_tiny_data(fname)
+
+
+def test_download_action():
+    "Test that the right action is performed based on file existing"
+    action, verb = download_action(
+        Path("this_file_does_not_exist.txt"), known_hash=None
+    )
+    assert action == "download"
+    assert verb == "Downloading"
+
+    with temporary_file() as tmp:
+        action, verb = download_action(Path(tmp), known_hash="not the correct hash")
+    assert action == "update"
+    assert verb == "Updating"
+
+    with temporary_file() as tmp:
+        with open(tmp, "w") as output:
+            output.write("some data")
+        action, verb = download_action(Path(tmp), known_hash=file_hash(tmp))
+    assert action == "fetch"
+    assert verb == "Fetching"
+
+
+@pytest.mark.parametrize("fname", ["tiny-data.txt", "subdir/tiny-data.txt"])
+def test_stream_download(fname):
+    "Check that downloading a file over HTTP works as expected"
+    # Use the data in store/ because the subdir is in there for some reason
+    url = BASEURL + "store/" + fname
+    known_hash = REGISTRY[fname]
+    downloader = HTTPDownloader()
+    with TemporaryDirectory() as local_store:
+        destination = Path(local_store) / fname
+        assert not destination.exists()
+        stream_download(url, destination, known_hash, downloader, pooch=None)
+        assert destination.exists()
+        check_tiny_data(str(destination))

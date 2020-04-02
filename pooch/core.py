@@ -5,20 +5,19 @@ import contextlib
 import os
 from pathlib import Path
 import shutil
-import tempfile
 import ftplib
 
 import requests
 from .utils import (
-    file_hash,
     check_version,
     parse_url,
     get_logger,
     make_local_storage,
-    hash_algorithm,
     hash_matches,
+    temporary_file,
     os_cache,
     unique_file_name,
+    file_hash,
 )
 from .downloaders import choose_downloader
 
@@ -150,8 +149,8 @@ def retrieve(url, known_hash, fname=None, path=None, processor=None, downloader=
     ...     known_hash="md5:8812ba10b6c7778014fdae81b03f9def",
     ...     processor=Decompress(),
     ... )
-    >>> print(fname != fname2)
-    True
+    >>> print(fname2 == fname)
+    False
     >>> with open(fname2) as f:
     ...     print(f.read().strip())
     # A tiny data file for test purposes only
@@ -202,157 +201,31 @@ def retrieve(url, known_hash, fname=None, path=None, processor=None, downloader=
     # Create the local data directory if it doesn't already exist and make the
     # path absolute.
     path = make_local_storage(path, env=None, version=None).resolve()
-    downloaded = download_if_needed(
-        url,
-        path,
-        fname,
-        known_hash,
-        processor=processor,
-        downloader=downloader,
-        pooch=None,
-    )
-    return downloaded
 
-
-def download_if_needed(
-    url, path, fname, known_hash, pooch=None, processor=None, downloader=None
-):
-    """
-    Download a file if its missing from the cache or needs to be updated.
-
-    Uses HTTP or FTP by default, depending on the protocol in the given *url*.
-
-    The file will be downloaded to a temporary location first and its hash will
-    be compared to the given *known_hash* (if not None). This is done to ensure
-    that the download happened correctly and securely. If the hash doesn't
-    match, the file will be deleted and an exception will be raised.
-
-    If the file exists in the given *path* with the given *fname* and the hash
-    matches (if not None), will not download and only return the absolute path
-    to the file.
-
-    When downloading, will log the action being taken (downloading for the
-    first time or updating), the URL, and the destination path. If the known
-    hash is not given, will also log the SHA256 hash of the downloaded. This
-    can be copied and pasted as the *known_hash* to ensure future downloads are
-    retrieving the exact same file.
-
-    Parameters
-    ----------
-    url : str
-        The URL to the file that is to be downloaded. Ideally, the URL should
-        end in a file name.
-    path : str or PathLike
-        The location of the cache folder on disk. This is where the file will
-        be saved.
-    fname : str
-        The name that will be used to save the file. Should NOT include the
-        full the path, just the file name (it will be appended to *path*).
-    known_hash : str
-        A known hash (checksum) of the file. Will be used to verify the
-        download or check if an existing file needs to be updated. By default,
-        will assume it's a SHA256 hash. To specify a different hashing method,
-        prepend the hash with ``algorithm:``, for example
-        ``md5:pw9co2iun29juoh`` or ``sha1:092odwhi2ujdp2du2od2odh2wod2``. If
-        None, will NOT check the hash of the downloaded file or check if an
-        existing file needs to be updated.
-    pooch : :class:`~pooch.Pooch`
-        If used inside a method of :class:`pooch.Pooch`, should be the instance
-        that is calling this function. Otherwise, defaults to None.
-    processor : None or callable
-        If not None, then a function (or callable object) that will be called
-        before returning the full path and after the file has been downloaded
-        (if required). See :meth:`pooch.Pooch.fetch` for details.
-    downloader : None or callable
-        If not None, then a function (or callable object) that will be called
-        to download a given URL to a provided local file name. By default,
-        downloads are done through HTTP without authentication using
-        :class:`pooch.HTTPDownloader`. See :meth:`pooch.Pooch.fetch` for
-        details.
-
-    Returns
-    -------
-    full_path : str
-        The absolute path (including the file name) of the file in the local
-        storage.
-
-    """
-    full_path = Path(path) / fname
-    in_storage = full_path.exists()
-
-    if not in_storage:
-        action = "download"
-    elif known_hash is not None and not hash_matches(str(full_path), known_hash):
-        action = "update"
-    else:
-        action = "fetch"
+    full_path = path / fname
+    action, verb = download_action(full_path, known_hash)
 
     if action in ("download", "update"):
-        action_word = dict(download="Downloading", update="Updating")
-        get_logger().info("%s file '%s':", action_word[action], fname)
         get_logger().info(
-            "  source: %s", url,
-        )
-        get_logger().info(
-            "  destination: %s", str(path),
+            "%s data from '%s' to file '%s'.", verb, url, str(full_path),
         )
 
         if downloader is None:
             downloader = choose_downloader(url)
 
-        # Stream the file to a temporary so that we can safely check its hash
-        # before overwriting the original
-        tmp = tempfile.NamedTemporaryFile(delete=False, dir=str(path))
-        # Close the file so that the downloader can decide how to opened it
-        tmp.close()
+        stream_download(url, full_path, known_hash, downloader, pooch=None)
 
-        try:
-            downloader(url, tmp.name, pooch)
-
-            # Calculate the hash of the newly downloaded file and check against
-            # the known hash (if available). Do this instead of using
-            # "hash_matches" because we need the hash value for the logging
-            # event and potential error message.
-            new_hash = file_hash(tmp.name, alg=hash_algorithm(known_hash))
-
-            # Print the hash if one wasn't given so that the user can
-            # copy-paste it to check the hash next time.
-            if known_hash is None:
-                get_logger().info(
-                    "%s hash of downloaded file: %s",
-                    hash_algorithm(known_hash).upper(),
-                    new_hash,
-                )
-                get_logger().info(
-                    "Use this hash as the 'known_hash' argument of 'pooch.retrieve'"
-                    " to ensure the file hasn't changed if downloaded in the future.",
-                )
-
-            if known_hash is not None and new_hash != known_hash.split(":")[-1]:
-                raise ValueError(
-                    "Hash ({}) of downloaded file '{}' does not match the known hash."
-                    " Expected '{}' and got '{}'.".format(
-                        hash_algorithm(known_hash),
-                        str(full_path),
-                        known_hash,
-                        new_hash,
-                    )
-                )
-
-            # Ensure the parent directory exists in case the file is in a
-            # subdirectory. Otherwise, move will cause an error.
-            if not os.path.exists(str(full_path.parent)):
-                os.makedirs(str(full_path.parent))
-
-            shutil.move(tmp.name, str(full_path))
-
-        # Make sure we clean up the temporary file
-        finally:
-            if os.path.exists(tmp.name):
-                os.remove(tmp.name)
+        if known_hash is None:
+            get_logger().info(
+                "SHA256 hash of downloaded file: %s\n"
+                "Use this value as the 'known_hash' argument of 'pooch.retrieve'"
+                " to ensure that the file hasn't changed if it is downloaded again"
+                " in the future.",
+                file_hash(full_path),
+            )
 
     if processor is not None:
-        return processor(str(full_path), action, pooch)
+        return processor(str(full_path), action, None)
 
     return str(full_path)
 
@@ -670,18 +543,29 @@ class Pooch:
 
         """
         self._assert_file_in_registry(fname)
+
         # Create the local data directory if it doesn't already exist
         os.makedirs(str(self.abspath), exist_ok=True)
-        downloaded = download_if_needed(
-            url=self.get_url(fname),
-            path=self.abspath,
-            fname=fname,
-            known_hash=self.registry[fname],
-            pooch=self,
-            processor=processor,
-            downloader=downloader,
-        )
-        return downloaded
+
+        url = self.get_url(fname)
+        full_path = self.abspath / fname
+        known_hash = self.registry[fname]
+        action, verb = download_action(full_path, known_hash)
+
+        if action in ("download", "update"):
+            get_logger().info(
+                "%s file '%s' from '%s' to '%s'.", verb, fname, url, str(self.abspath),
+            )
+
+            if downloader is None:
+                downloader = choose_downloader(url)
+
+            stream_download(url, full_path, known_hash, downloader, pooch=self)
+
+        if processor is not None:
+            return processor(str(full_path), action, self)
+
+        return str(full_path)
 
     def _assert_file_in_registry(self, fname):
         """
@@ -787,3 +671,63 @@ class Pooch:
             response = requests.head(source, allow_redirects=True)
             available = bool(response.status_code == 200)
         return available
+
+
+def download_action(path, known_hash):
+    """
+    Determine the action that is needed to get the file on disk.
+
+    Parameters
+    ----------
+    path : PathLike
+        The path to the file on disk.
+    known_hash : str
+        A known hash (checksum) of the file. Will be used to verify the
+        download or check if an existing file needs to be updated. By default,
+        will assume it's a SHA256 hash. To specify a different hashing method,
+        prepend the hash with ``algorithm:``, for example
+        ``md5:pw9co2iun29juoh`` or ``sha1:092odwhi2ujdp2du2od2odh2wod2``.
+
+    Returns
+    -------
+    action, verb : str
+        The action that must be taken and the English verb (infinitive form of
+        *action*) used in the log:
+        * ``'download'``: File does not exist locally and must be downloaded.
+        * ``'update'``: File exists locally but needs to be updated.
+        * ``'fetch'``: File exists locally and only need to inform its path.
+
+
+    """
+    if not path.exists():
+        action = "download"
+        verb = "Downloading"
+    elif not hash_matches(str(path), known_hash):
+        action = "update"
+        verb = "Updating"
+    else:
+        action = "fetch"
+        verb = "Fetching"
+    return action, verb
+
+
+def stream_download(url, fname, known_hash, downloader, pooch=None):
+    """
+    Stream the file and check that its hash matches the known one.
+
+    The file is first downloaded to a temporary file name in the cache folder.
+    It will be moved to the desired file name only if the hash matches the
+    known hash. Otherwise, the temporary file is deleted.
+
+    """
+    # Ensure the parent directory exists in case the file is in a subdirectory.
+    # Otherwise, move will cause an error.
+    if not fname.parent.exists():
+        os.makedirs(str(fname.parent))
+
+    # Stream the file to a temporary so that we can safely check its hash
+    # before overwriting the original.
+    with temporary_file(path=str(fname.parent)) as tmp:
+        downloader(url, tmp, pooch)
+        hash_matches(tmp, known_hash, strict=True)
+        shutil.move(tmp, str(fname))
