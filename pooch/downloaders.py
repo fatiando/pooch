@@ -13,6 +13,51 @@ except ImportError:
     tqdm = None
 
 
+def choose_downloader(url):
+    """
+    Choose the appropriate downloader for the given URL based on the protocol.
+
+    Parameters
+    ----------
+    url : str
+        A URL (including protocol).
+
+    Returns
+    -------
+    downloader
+        A downloader class (either :class:`pooch.HTTPDownloader` or
+        :class:`pooch.FTPDownloader`).
+
+    Examples
+    --------
+
+    >>> downloader = choose_downloader("http://something.com")
+    >>> print(downloader.__class__.__name__)
+    HTTPDownloader
+    >>> downloader = choose_downloader("https://something.com")
+    >>> print(downloader.__class__.__name__)
+    HTTPDownloader
+    >>> downloader = choose_downloader("ftp://something.com")
+    >>> print(downloader.__class__.__name__)
+    FTPDownloader
+
+    """
+    known_downloaders = {
+        "ftp": FTPDownloader,
+        "https": HTTPDownloader,
+        "http": HTTPDownloader,
+    }
+    parsed_url = parse_url(url)
+    if parsed_url["protocol"] not in known_downloaders:
+        raise ValueError(
+            "Unrecognized URL protocol '{}' in '{}'. Must be one of {}.".format(
+                parsed_url["protocol"], url, known_downloaders.keys()
+            )
+        )
+    downloader = known_downloaders[parsed_url["protocol"]]()
+    return downloader
+
+
 class HTTPDownloader:  # pylint: disable=too-few-public-methods
     """
     Download manager for fetching files over HTTP/HTTPS.
