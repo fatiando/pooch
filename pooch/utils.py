@@ -7,7 +7,6 @@ import tempfile
 from pathlib import Path
 import hashlib
 from urllib.parse import urlsplit
-from tempfile import NamedTemporaryFile
 from contextlib import contextmanager
 
 import appdirs
@@ -257,7 +256,8 @@ def make_local_storage(path, env=None, version=None):
             os.makedirs(path)
         else:
             action = "write to"
-            tempfile.NamedTemporaryFile(dir=path)
+            with tempfile.NamedTemporaryFile(dir=path):
+                pass
     except PermissionError:
         message = (
             "Cannot %s data cache folder '%s'. "

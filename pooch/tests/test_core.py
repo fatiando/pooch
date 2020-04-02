@@ -4,12 +4,12 @@ Test the core class and factory function.
 import hashlib
 import os
 from pathlib import Path
-from tempfile import TemporaryDirectory, NamedTemporaryFile
+from tempfile import TemporaryDirectory
 
 import pytest
 
 from ..core import Pooch, download_action, stream_download
-from ..utils import file_hash, get_logger
+from ..utils import file_hash, get_logger, temporary_file
 from ..downloaders import HTTPDownloader
 
 from .utils import (
@@ -294,15 +294,15 @@ def test_download_action():
     assert action == "download"
     assert verb == "Downloading"
 
-    with NamedTemporaryFile() as tmp:
-        action, verb = download_action(
-            Path(tmp.name), known_hash="not the correct hash"
-        )
+    with temporary_file() as tmp:
+        action, verb = download_action(Path(tmp), known_hash="not the correct hash")
     assert action == "update"
     assert verb == "Updating"
 
-    with NamedTemporaryFile() as tmp:
-        action, verb = download_action(Path(tmp.name), known_hash=file_hash(tmp.name))
+    with temporary_file() as tmp:
+        with open(tmp, "w") as output:
+            output.write("some data")
+        action, verb = download_action(Path(tmp), known_hash=file_hash(tmp))
     assert action == "fetch"
     assert verb == "Fetching"
 

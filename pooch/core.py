@@ -5,7 +5,6 @@ import contextlib
 import os
 from pathlib import Path
 import shutil
-import tempfile
 import ftplib
 
 import requests
@@ -17,6 +16,7 @@ from .utils import (
     make_local_storage,
     hash_algorithm,
     hash_matches,
+    temporary_file,
 )
 from .downloaders import choose_downloader
 
@@ -518,22 +518,13 @@ def stream_download(url, fname, known_hash, downloader, pooch=None):
 
     # Stream the file to a temporary so that we can safely check its hash
     # before overwriting the original.
-    tmp = tempfile.NamedTemporaryFile(delete=False, dir=str(fname.parent))
-    # Close the temp file so that the downloader can decide how to opened it.
-    tmp.close()
-
-    try:
-        downloader(url, tmp.name, pooch)
-        if not hash_matches(tmp.name, known_hash):
+    with temporary_file(path=str(fname.parent)) as tmp:
+        downloader(url, tmp, pooch)
+        if not hash_matches(tmp, known_hash):
             raise ValueError(
                 "Hash of downloaded file '{}' doesn't match the entry in the"
                 " registry. Expected '{}' and got '{}'.".format(
-                    fname,
-                    known_hash,
-                    file_hash(tmp.name, alg=hash_algorithm(known_hash)),
+                    fname, known_hash, file_hash(tmp, alg=hash_algorithm(known_hash)),
                 )
             )
-        shutil.move(tmp.name, str(fname))
-    finally:
-        if os.path.exists(tmp.name):
-            os.remove(tmp.name)
+        shutil.move(tmp, str(fname))
