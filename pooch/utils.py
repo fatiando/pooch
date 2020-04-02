@@ -328,14 +328,15 @@ def hash_matches(fname, known_hash, strict=False):
         True if the hash matches, False otherwise.
 
     """
-    new_hash = file_hash(fname, alg=hash_algorithm(known_hash))
+    algorithm = hash_algorithm(known_hash)
+    new_hash = file_hash(fname, alg=algorithm)
     matches = new_hash == known_hash.split(":")[-1]
-    if not matches:
+    if strict and not matches:
         raise ValueError(
             "{} hash of file '{}' does not match the known hash:"
             " expected '{}' but got '{}'. "
             " The file may be corrupted or the known hash may be outdated.".format(
-                fname, known_hash, new_hash,
+                algorithm.upper(), fname, known_hash, new_hash,
             )
         )
     return matches

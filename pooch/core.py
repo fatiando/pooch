@@ -10,12 +10,10 @@ import ftplib
 
 import requests
 from .utils import (
-    file_hash,
     check_version,
     parse_url,
     get_logger,
     make_local_storage,
-    hash_algorithm,
     hash_matches,
 )
 from .downloaders import choose_downloader
