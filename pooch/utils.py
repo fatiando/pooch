@@ -7,6 +7,8 @@ import tempfile
 from pathlib import Path
 import hashlib
 from urllib.parse import urlsplit
+from contextlib import contextmanager
+
 import appdirs
 from packaging.version import Version
 
@@ -254,7 +256,8 @@ def make_local_storage(path, env=None, version=None):
             os.makedirs(path)
         else:
             action = "write to"
-            tempfile.NamedTemporaryFile(dir=path)
+            with tempfile.NamedTemporaryFile(dir=path):
+                pass
     except PermissionError:
         message = (
             "Cannot %s data cache folder '%s'. "
@@ -340,3 +343,34 @@ def hash_matches(fname, known_hash, strict=False):
             )
         )
     return matches
+
+
+@contextmanager
+def temporary_file(path=None):
+    """
+    Create a closed and named temporary file and make sure it's cleaned up.
+
+    Using :class:`tempfile.NamedTemporaryFile` will fail on Windows if trying
+    to open the file a second time (when passing its name to Pooch function,
+    for example). This context manager creates the file, closes it, yields the
+    file path, and makes sure it's deleted in the end.
+
+    Parameters
+    ----------
+    path : str or PathLike
+        The directory in which the temporary file will be created.
+
+    Yields
+    ------
+    fname : str
+        The path to the temporary file.
+
+    """
+    tmp = tempfile.NamedTemporaryFile(delete=False, dir=path)
+    # Close the temp file so that it can be opened elsewhere
+    tmp.close()
+    try:
+        yield tmp.name
+    finally:
+        if os.path.exists(tmp.name):
+            os.remove(tmp.name)

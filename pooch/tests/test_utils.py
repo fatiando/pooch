@@ -16,6 +16,7 @@ from ..utils import (
     make_local_storage,
     file_hash,
     hash_matches,
+    temporary_file,
 )
 from .utils import check_tiny_data, capture_log
 
@@ -189,3 +190,37 @@ def test_hash_matches_strict():
         bad_hash = "{}:p98oh2dl2j2h2p8e9yfho3fi2e9fhd".format(alg)
         with pytest.raises(ValueError):
             hash_matches(fname, bad_hash, strict=True)
+
+
+def test_temporary_file():
+    "Make sure the file is writable and cleaned up in the end"
+    with temporary_file() as tmp:
+        assert Path(tmp).exists()
+        with open(tmp, "w") as outfile:
+            outfile.write("Meh")
+        with open(tmp, "r") as infile:
+            assert infile.read().strip() == "Meh"
+    assert not Path(tmp).exists()
+
+
+def test_temporary_file_path():
+    "Make sure the file is writable and cleaned up in the end when given a dir"
+    with TemporaryDirectory() as path:
+        with temporary_file(path) as tmp:
+            assert Path(tmp).exists()
+            assert path in tmp
+            with open(tmp, "w") as outfile:
+                outfile.write("Meh")
+            with open(tmp, "r") as infile:
+                assert infile.read().strip() == "Meh"
+        assert not Path(tmp).exists()
+
+
+def test_temporary_file_exception():
+    "Make sure the file is writable and cleaned up when there is an exception"
+    try:
+        with temporary_file() as tmp:
+            assert Path(tmp).exists()
+            raise ValueError("Nooooooooo!")
+    except ValueError:
+        assert not Path(tmp).exists()

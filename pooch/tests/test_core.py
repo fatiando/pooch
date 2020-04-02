@@ -8,8 +8,8 @@ from tempfile import TemporaryDirectory
 
 import pytest
 
-from .. import Pooch
-from ..utils import file_hash, get_logger
+from ..core import Pooch, download_action, stream_download
+from ..utils import file_hash, get_logger, temporary_file
 from ..downloaders import HTTPDownloader
 
 from .utils import (
@@ -284,3 +284,39 @@ def test_alternative_hashing_algorithms():
         pup = Pooch(path=DATA_DIR, base_url="some bogus URL", registry=registry)
         assert fname == pup.fetch("tiny-data.txt")
         check_tiny_data(fname)
+
+
+def test_download_action():
+    "Test that the right action is performed based on file existing"
+    action, verb = download_action(
+        Path("this_file_does_not_exist.txt"), known_hash=None
+    )
+    assert action == "download"
+    assert verb == "Downloading"
+
+    with temporary_file() as tmp:
+        action, verb = download_action(Path(tmp), known_hash="not the correct hash")
+    assert action == "update"
+    assert verb == "Updating"
+
+    with temporary_file() as tmp:
+        with open(tmp, "w") as output:
+            output.write("some data")
+        action, verb = download_action(Path(tmp), known_hash=file_hash(tmp))
+    assert action == "fetch"
+    assert verb == "Fetching"
+
+
+@pytest.mark.parametrize("fname", ["tiny-data.txt", "subdir/tiny-data.txt"])
+def test_stream_download(fname):
+    "Check that downloading a file over HTTP works as expected"
+    # Use the data in store/ because the subdir is in there for some reason
+    url = BASEURL + "store/" + fname
+    known_hash = REGISTRY[fname]
+    downloader = HTTPDownloader()
+    with TemporaryDirectory() as local_store:
+        destination = Path(local_store) / fname
+        assert not destination.exists()
+        stream_download(url, destination, known_hash, downloader, pooch=None)
+        assert destination.exists()
+        check_tiny_data(str(destination))

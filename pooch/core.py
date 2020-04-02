@@ -5,7 +5,6 @@ import contextlib
 import os
 from pathlib import Path
 import shutil
-import tempfile
 import ftplib
 
 import requests
@@ -15,6 +14,7 @@ from .utils import (
     get_logger,
     make_local_storage,
     hash_matches,
+    temporary_file,
 )
 from .downloaders import choose_downloader
 
@@ -336,49 +336,20 @@ class Pooch:
         # Create the local data directory if it doesn't already exist
         os.makedirs(str(self.abspath), exist_ok=True)
 
-        full_path = self.abspath / fname
         url = self.get_url(fname)
+        full_path = self.abspath / fname
         known_hash = self.registry[fname]
-
-        in_storage = full_path.exists()
-
-        if not in_storage:
-            action = "download"
-        elif not hash_matches(str(full_path), known_hash):
-            action = "update"
-        else:
-            action = "fetch"
+        action, verb = download_action(full_path, known_hash)
 
         if action in ("download", "update"):
-            action_word = dict(download="Downloading", update="Updating")
             get_logger().info(
-                "%s data file '%s' from remote data store '%s' to '%s'.",
-                action_word[action],
-                fname,
-                self.get_url(fname),
-                str(self.path),
+                "%s file '%s' from '%s' to '%s'.", verb, fname, url, str(self.abspath),
             )
 
             if downloader is None:
                 downloader = choose_downloader(url)
 
-            # Stream the file to a temporary so that we can safely check its
-            # hash before overwriting the original
-            tmp = tempfile.NamedTemporaryFile(delete=False, dir=str(self.abspath))
-            # Close the temp file so that the downloader can decide how to
-            # opened it
-            tmp.close()
-            try:
-                downloader(url, tmp.name, self)
-                hash_matches(tmp.name, known_hash, strict=True)
-                # Ensure the parent directory exists in case the file is in a
-                # subdirectory. Otherwise, move will cause an error.
-                if not os.path.exists(str(full_path.parent)):
-                    os.makedirs(str(full_path.parent))
-                shutil.move(tmp.name, str(full_path))
-            finally:
-                if os.path.exists(tmp.name):
-                    os.remove(tmp.name)
+            stream_download(url, full_path, known_hash, downloader, pooch=self)
 
         if processor is not None:
             return processor(str(full_path), action, self)
@@ -489,3 +460,63 @@ class Pooch:
             response = requests.head(source, allow_redirects=True)
             available = bool(response.status_code == 200)
         return available
+
+
+def download_action(path, known_hash):
+    """
+    Determine the action that is needed to get the file on disk.
+
+    Parameters
+    ----------
+    path : PathLike
+        The path to the file on disk.
+    known_hash : str
+        A known hash (checksum) of the file. Will be used to verify the
+        download or check if an existing file needs to be updated. By default,
+        will assume it's a SHA256 hash. To specify a different hashing method,
+        prepend the hash with ``algorithm:``, for example
+        ``md5:pw9co2iun29juoh`` or ``sha1:092odwhi2ujdp2du2od2odh2wod2``.
+
+    Returns
+    -------
+    action, verb : str
+        The action that must be taken and the English verb (infinitive form of
+        *action*) used in the log:
+        * ``'download'``: File does not exist locally and must be downloaded.
+        * ``'update'``: File exists locally but needs to be updated.
+        * ``'fetch'``: File exists locally and only need to inform its path.
+
+
+    """
+    if not path.exists():
+        action = "download"
+        verb = "Downloading"
+    elif not hash_matches(str(path), known_hash):
+        action = "update"
+        verb = "Updating"
+    else:
+        action = "fetch"
+        verb = "Fetching"
+    return action, verb
+
+
+def stream_download(url, fname, known_hash, downloader, pooch=None):
+    """
+    Stream the file and check that its hash matches the known one.
+
+    The file is first downloaded to a temporary file name in the cache folder.
+    It will be moved to the desired file name only if the hash matches the
+    known hash. Otherwise, the temporary file is deleted.
+
+    """
+    # Ensure the parent directory exists in case the file is in a subdirectory.
+    # Otherwise, move will cause an error.
+    if not fname.parent.exists():
+        os.makedirs(str(fname.parent))
+
+    # Stream the file to a temporary so that we can safely check its hash
+    # before overwriting the original.
+    with temporary_file(path=str(fname.parent)) as tmp:
+        downloader(url, tmp, pooch)
+        hash_matches(tmp, known_hash, strict=True)
+        shutil.move(tmp, str(fname))
