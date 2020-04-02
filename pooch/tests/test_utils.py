@@ -170,9 +170,9 @@ def test_temporary_file():
     "Make sure the file is writable and cleaned up in the end"
     with temporary_file() as tmp:
         assert tmp.exists()
-        with open(tmp, "w") as outfile:
+        with open(str(tmp), "w") as outfile:
             outfile.write("Meh")
-        with open(tmp, "r") as infile:
+        with open(str(tmp), "r") as infile:
             assert infile.read().strip() == "Meh"
     assert not tmp.exists()
 
@@ -182,10 +182,10 @@ def test_temporary_file_path():
     with TemporaryDirectory() as path:
         with temporary_file(path) as tmp:
             assert tmp.exists()
-            assert path in str(tmp.expanduser().resolve())
-            with open(tmp, "w") as outfile:
+            assert path in str(tmp)
+            with open(str(tmp), "w") as outfile:
                 outfile.write("Meh")
-            with open(tmp, "r") as infile:
+            with open(str(tmp), "r") as infile:
                 assert infile.read().strip() == "Meh"
         assert not tmp.exists()
 
