@@ -169,32 +169,32 @@ def test_hash_matches():
 def test_temporary_file():
     "Make sure the file is writable and cleaned up in the end"
     with temporary_file() as tmp:
-        assert tmp.exists()
-        with open(str(tmp), "w") as outfile:
+        assert Path(tmp).exists()
+        with open(tmp, "w") as outfile:
             outfile.write("Meh")
-        with open(str(tmp), "r") as infile:
+        with open(tmp, "r") as infile:
             assert infile.read().strip() == "Meh"
-    assert not tmp.exists()
+    assert not Path(tmp).exists()
 
 
 def test_temporary_file_path():
     "Make sure the file is writable and cleaned up in the end when given a dir"
     with TemporaryDirectory() as path:
         with temporary_file(path) as tmp:
-            assert tmp.exists()
-            assert path in str(tmp)
-            with open(str(tmp), "w") as outfile:
+            assert Path(tmp).exists()
+            assert path in tmp
+            with open(tmp, "w") as outfile:
                 outfile.write("Meh")
-            with open(str(tmp), "r") as infile:
+            with open(tmp, "r") as infile:
                 assert infile.read().strip() == "Meh"
-        assert not tmp.exists()
+        assert not Path(tmp).exists()
 
 
 def test_temporary_file_exception():
     "Make sure the file is writable and cleaned up when there is an exception"
     try:
         with temporary_file() as tmp:
-            assert tmp.exists()
+            assert Path(tmp).exists()
             raise ValueError("Nooooooooo!")
     except ValueError:
-        assert not tmp.exists()
+        assert not Path(tmp).exists()

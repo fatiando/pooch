@@ -349,15 +349,15 @@ def temporary_file(path=None):
 
     Yields
     ------
-    fname : PathLike
-        A :mod:`pathlib` object with the path to the temporary file.
+    fname : str
+        The path to the temporary file.
 
     """
     tmp = tempfile.NamedTemporaryFile(delete=False, dir=path)
     # Close the temp file so that it can be opened elsewhere
     tmp.close()
     try:
-        yield Path(tmp.name)
+        yield tmp.name
     finally:
         if os.path.exists(tmp.name):
             os.remove(tmp.name)
