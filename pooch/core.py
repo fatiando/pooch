@@ -345,40 +345,13 @@ class Pooch:
 
         if action in ("download", "update"):
             get_logger().info(
-                "%s file '%s' from '%s' to '%s'.", verb, fname, url, str(full_path),
+                "%s file '%s' from '%s' to '%s'.", verb, fname, url, str(self.abspath),
             )
 
             if downloader is None:
                 downloader = choose_downloader(url)
 
-            # Stream the file to a temporary so that we can safely check its
-            # hash before overwriting the original
-            tmp = tempfile.NamedTemporaryFile(delete=False, dir=str(self.abspath))
-            # Close the temp file so that the downloader can decide how to
-            # opened it
-            tmp.close()
-
-            try:
-                downloader(url, tmp.name, self)
-                if not hash_matches(tmp.name, self.registry[fname]):
-                    raise ValueError(
-                        "Hash of downloaded file '{}' doesn't match the entry in the"
-                        " registry. Expected '{}' and got '{}'.".format(
-                            fname,
-                            self.registry[fname],
-                            file_hash(
-                                tmp.name, alg=hash_algorithm(self.registry[fname])
-                            ),
-                        )
-                    )
-                # Ensure the parent directory exists in case the file is in a
-                # subdirectory. Otherwise, move will cause an error.
-                if not os.path.exists(str(full_path.parent)):
-                    os.makedirs(str(full_path.parent))
-                shutil.move(tmp.name, str(full_path))
-            finally:
-                if os.path.exists(tmp.name):
-                    os.remove(tmp.name)
+            stream_download(url, full_path, known_hash, downloader, pooch=self)
 
         if processor is not None:
             return processor(str(full_path), action, self)
@@ -527,3 +500,40 @@ def download_action(path, known_hash):
         action = "fetch"
         verb = "Fetching"
     return action, verb
+
+
+def stream_download(url, fname, known_hash, downloader, pooch=None):
+    """
+    Stream the file and check that its hash matches the known one.
+
+    The file is first downloaded to a temporary file name in the cache folder.
+    It will be moved to the desired file name only if the hash matches the
+    known hash. Otherwise, the temporary file is deleted.
+
+    """
+    # Ensure the parent directory exists in case the file is in a subdirectory.
+    # Otherwise, move will cause an error.
+    if not fname.parent.exists():
+        os.makedirs(str(fname.parent))
+
+    # Stream the file to a temporary so that we can safely check its hash
+    # before overwriting the original.
+    tmp = tempfile.NamedTemporaryFile(delete=False, dir=str(fname.parent))
+    # Close the temp file so that the downloader can decide how to opened it.
+    tmp.close()
+
+    try:
+        downloader(url, tmp.name, pooch)
+        if not hash_matches(tmp.name, known_hash):
+            raise ValueError(
+                "Hash of downloaded file '{}' doesn't match the entry in the"
+                " registry. Expected '{}' and got '{}'.".format(
+                    fname,
+                    known_hash,
+                    file_hash(tmp.name, alg=hash_algorithm(known_hash)),
+                )
+            )
+        shutil.move(tmp.name, str(fname))
+    finally:
+        if os.path.exists(tmp.name):
+            os.remove(tmp.name)

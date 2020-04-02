@@ -8,7 +8,7 @@ from tempfile import TemporaryDirectory, NamedTemporaryFile
 
 import pytest
 
-from ..core import Pooch, download_action
+from ..core import Pooch, download_action, stream_download
 from ..utils import file_hash, get_logger
 from ..downloaders import HTTPDownloader
 
@@ -305,3 +305,18 @@ def test_download_action():
         action, verb = download_action(Path(tmp.name), known_hash=file_hash(tmp.name))
     assert action == "fetch"
     assert verb == "Fetching"
+
+
+@pytest.mark.parametrize("fname", ["tiny-data.txt", "subdir/tiny-data.txt"])
+def test_stream_download(fname):
+    "Check that downloading a file over HTTP works as expected"
+    # Use the data in store/ because the subdir is in there for some reason
+    url = BASEURL + "store/" + fname
+    known_hash = REGISTRY[fname]
+    downloader = HTTPDownloader()
+    with TemporaryDirectory() as local_store:
+        destination = Path(local_store) / fname
+        assert not destination.exists()
+        stream_download(url, destination, known_hash, downloader, pooch=None)
+        assert destination.exists()
+        check_tiny_data(str(destination))
