@@ -310,7 +310,7 @@ def hash_algorithm(hash_string):
     return algorithm
 
 
-def hash_matches(fname, known_hash):
+def hash_matches(fname, known_hash, strict=False):
     """
     Check if the hash of a file matches a known hash.
 
@@ -321,6 +321,9 @@ def hash_matches(fname, known_hash):
     known_hash : str
         The known hash. Optionally, prepend ``alg:`` to the hash to specify the
         hashing algorithm. Default is SHA256.
+    strict : bool
+        If True, will raise a :class:`ValueError` if the hash does not match
+        informing the user that the file may be corrupted.
 
     Returns
     -------
@@ -328,8 +331,18 @@ def hash_matches(fname, known_hash):
         True if the hash matches, False otherwise.
 
     """
-    new_hash = file_hash(fname, alg=hash_algorithm(known_hash))
-    return new_hash == known_hash.split(":")[-1]
+    algorithm = hash_algorithm(known_hash)
+    new_hash = file_hash(fname, alg=algorithm)
+    matches = new_hash == known_hash.split(":")[-1]
+    if strict and not matches:
+        raise ValueError(
+            "{} hash of file '{}' does not match the known hash:"
+            " expected '{}' but got '{}'. "
+            " The file may be corrupted or the known hash may be outdated.".format(
+                algorithm.upper(), fname, known_hash, new_hash,
+            )
+        )
+    return matches
 
 
 @contextmanager

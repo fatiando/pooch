@@ -9,12 +9,10 @@ import ftplib
 
 import requests
 from .utils import (
-    file_hash,
     check_version,
     parse_url,
     get_logger,
     make_local_storage,
-    hash_algorithm,
     hash_matches,
     temporary_file,
 )
@@ -520,11 +518,5 @@ def stream_download(url, fname, known_hash, downloader, pooch=None):
     # before overwriting the original.
     with temporary_file(path=str(fname.parent)) as tmp:
         downloader(url, tmp, pooch)
-        if not hash_matches(tmp, known_hash):
-            raise ValueError(
-                "Hash of downloaded file '{}' doesn't match the entry in the"
-                " registry. Expected '{}' and got '{}'.".format(
-                    fname, known_hash, file_hash(tmp, alg=hash_algorithm(known_hash)),
-                )
-            )
+        hash_matches(tmp, known_hash, strict=True)
         shutil.move(tmp, str(fname))

@@ -166,6 +166,32 @@ def test_hash_matches():
         assert not hash_matches(fname, known_hash)
 
 
+def test_hash_matches_strict():
+    "Make sure the hash checking function raises an exception if strict"
+    fname = os.path.join(DATA_DIR, "tiny-data.txt")
+    check_tiny_data(fname)
+    with open(fname, "rb") as fin:
+        data = fin.read()
+    # Check if the check passes
+    hasher = hashlib.new("sha256")
+    hasher.update(data)
+    known_hash = "{}".format(hasher.hexdigest())
+    assert hash_matches(fname, known_hash, strict=True)
+    for alg in ("sha512", "md5"):
+        hasher = hashlib.new(alg)
+        hasher.update(data)
+        known_hash = "{}:{}".format(alg, hasher.hexdigest())
+        assert hash_matches(fname, known_hash, strict=True)
+    # And also if it fails
+    bad_hash = "p98oh2dl2j2h2p8e9yfho3fi2e9fhd"
+    with pytest.raises(ValueError):
+        hash_matches(fname, bad_hash, strict=True)
+    for alg in ("sha512", "md5"):
+        bad_hash = "{}:p98oh2dl2j2h2p8e9yfho3fi2e9fhd".format(alg)
+        with pytest.raises(ValueError):
+            hash_matches(fname, bad_hash, strict=True)
+
+
 def test_temporary_file():
     "Make sure the file is writable and cleaned up in the end"
     with temporary_file() as tmp:
