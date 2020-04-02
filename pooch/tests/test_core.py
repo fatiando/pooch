@@ -3,20 +3,14 @@ Test the core class and factory function.
 """
 import hashlib
 import os
-import sys
 from pathlib import Path
 from tempfile import TemporaryDirectory
 
 import pytest
 
-try:
-    import tqdm
-except ImportError:
-    tqdm = None
-
-from .. import Pooch, create
+from .. import Pooch
 from ..utils import file_hash, get_logger
-from ..downloaders import HTTPDownloader, FTPDownloader
+from ..downloaders import HTTPDownloader
 
 from .utils import (
     pooch_test_url,
@@ -203,21 +197,6 @@ def test_pooch_load_registry_invalid_line():
         pup.load_registry(os.path.join(DATA_DIR, "registry-invalid.txt"))
 
 
-def test_unsupported_protocol():
-    "Should raise ValueError when protocol not in {'https', 'http', 'ftp'}"
-    with TemporaryDirectory() as data_cache:
-        pup = create(
-            path=data_cache,
-            base_url="/home/johndoe/",
-            version="1.0",
-            version_dev="master",
-            env="SOME_VARIABLE",
-            registry={"afile.txt": "ahash"},
-        )
-        with pytest.raises(ValueError):
-            pup.fetch("afile.txt")
-
-
 def test_check_availability():
     "Should correctly check availability of existing and non existing files"
     # Check available remote file
@@ -251,7 +230,7 @@ def test_check_availability_on_ftp():
     assert not pup.is_available("doesnot_exist.zip")
 
 
-def test_downloader(capsys):
+def test_fetch_with_downloader(capsys):
     "Setup a downloader function for fetch"
 
     def download(url, output_file, pup):  # pylint: disable=unused-argument
@@ -279,72 +258,6 @@ def test_downloader(capsys):
         with capture_log() as log_file:
             fname = pup.fetch("large-data.txt")
             assert log_file.getvalue() == ""
-
-
-@pytest.mark.skipif(tqdm is not None, reason="tqdm must be missing")
-@pytest.mark.parametrize("downloader", [HTTPDownloader, FTPDownloader])
-def test_downloader_progressbar_fails(downloader):
-    "Make sure an error is raised if trying to use progressbar without tqdm"
-    with pytest.raises(ValueError):
-        downloader(progressbar=True)
-
-
-@pytest.mark.skipif(tqdm is None, reason="requires tqdm")
-def test_downloader_progressbar(capsys):
-    "Setup a downloader function that prints a progress bar for fetch"
-    download = HTTPDownloader(progressbar=True)
-    with TemporaryDirectory() as local_store:
-        path = Path(local_store)
-        # Setup a pooch in a temp dir
-        pup = Pooch(path=path, base_url=BASEURL, registry=REGISTRY)
-        fname = pup.fetch("large-data.txt", downloader=download)
-        # Read stderr and make sure the progress bar is printed only when told
-        captured = capsys.readouterr()
-        printed = captured.err.split("\r")[-1].strip()
-        assert len(printed) == 79
-        if sys.platform == "win32":
-            progress = "100%|####################"
-        else:
-            progress = "100%|████████████████████"
-        # Bar size is not always the same so can't reliably test the whole bar.
-        assert printed[:25] == progress
-        # Check that the downloaded file has the right content
-        check_large_data(fname)
-
-
-# https://blog.travis-ci.com/2018-07-23-the-tale-of-ftp-at-travis-ci
-@pytest.mark.skipif(ON_TRAVIS, reason="FTP is not allowed on Travis CI")
-def test_ftp_downloader():
-    "Test ftp downloader"
-    with TemporaryDirectory() as local_store:
-        downloader = FTPDownloader()
-        url = "ftp://speedtest.tele2.net/100KB.zip"
-        outfile = os.path.join(local_store, "100KB.zip")
-        downloader(url, outfile, None)
-        assert os.path.exists(outfile)
-
-
-@pytest.mark.skipif(tqdm is None, reason="requires tqdm")
-@pytest.mark.skipif(ON_TRAVIS, reason="FTP is not allowed on Travis CI")
-def test_downloader_progressbar_ftp(capsys):
-    "Setup an FTP downloader function that prints a progress bar for fetch"
-    download = FTPDownloader(progressbar=True)
-    with TemporaryDirectory() as local_store:
-        url = "ftp://speedtest.tele2.net/100KB.zip"
-        outfile = os.path.join(local_store, "100KB.zip")
-        download(url, outfile, None)
-        # Read stderr and make sure the progress bar is printed only when told
-        captured = capsys.readouterr()
-        printed = captured.err.split("\r")[-1].strip()
-        assert len(printed) == 79
-        if sys.platform == "win32":
-            progress = "100%|####################"
-        else:
-            progress = "100%|████████████████████"
-        # Bar size is not always the same so can't reliably test the whole bar.
-        assert printed[:25] == progress
-        # Check that the file was actually downloaded
-        assert os.path.exists(outfile)
 
 
 def test_invalid_hash_alg():
