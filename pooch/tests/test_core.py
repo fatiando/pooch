@@ -80,7 +80,7 @@ def test_retrieve_default_path():
     "Try downloading some data with retrieve to the default cache location"
     data_file = "tiny-data.txt"
     url = BASEURL + data_file
-    expected_location = (os_cache("pooch") / data_file).resolve()
+    expected_location = os_cache("pooch") / data_file
     try:
         # Check that the logs say that the file is being downloaded
         with capture_log() as log_file:
@@ -91,7 +91,7 @@ def test_retrieve_default_path():
             assert "SHA256 hash of downloaded file" in logs
             assert REGISTRY[data_file] in logs
         # Check that the downloaded file has the right content
-        assert fname == str(expected_location)
+        assert fname == str(expected_location.resolve())
         check_tiny_data(fname)
         assert file_hash(fname) == REGISTRY[data_file]
     finally:

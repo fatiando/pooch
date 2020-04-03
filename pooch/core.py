@@ -174,6 +174,7 @@ def retrieve(url, known_hash, fname=None, path=None, processor=None, downloader=
     ... )
     >>> print(os.path.splitext(fname)[1])
     .zip
+    >>> os.remove(fname)
     >>> # Using the processor, the archive will be unzipped and a list with the
     >>> # path to every file will be returned instead of a single path.
     >>> fnames = retrieve(
@@ -188,7 +189,6 @@ def retrieve(url, known_hash, fname=None, path=None, processor=None, downloader=
     ...     print(f.read().strip())
     # A tiny data file for test purposes only
     1  2  3  4  5  6
-    >>> os.remove(fname)
     >>> for f in fnames:
     ...     os.remove(f)
 
@@ -221,7 +221,7 @@ def retrieve(url, known_hash, fname=None, path=None, processor=None, downloader=
                 "Use this value as the 'known_hash' argument of 'pooch.retrieve'"
                 " to ensure that the file hasn't changed if it is downloaded again"
                 " in the future.",
-                file_hash(full_path),
+                file_hash(str(full_path)),
             )
 
     if processor is not None:
@@ -416,7 +416,7 @@ class Pooch:
     @property
     def abspath(self):
         "Absolute path to the local storage"
-        return Path(str(self.path)).expanduser().resolve()
+        return Path(os.path.abspath(os.path.expanduser(str(self.path))))
 
     @property
     def registry_files(self):
