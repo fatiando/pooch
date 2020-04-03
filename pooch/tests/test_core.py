@@ -41,7 +41,7 @@ def test_retrieve():
             fname = retrieve(url, known_hash=None, path=local_store)
             logs = log_file.getvalue()
             assert logs.split()[0] == "Downloading"
-            assert os.path.abspath(local_store) in logs
+            assert os.path.abspath(os.path.expanduser(local_store)) in logs
             assert "SHA256 hash of downloaded file:" in logs
             assert REGISTRY[data_file] in logs
         # Check that the downloaded file has the right content
@@ -67,7 +67,7 @@ def test_retrieve_fname():
             fname = retrieve(url, known_hash=None, path=local_store, fname=data_file)
             logs = log_file.getvalue()
             assert logs.split()[0] == "Downloading"
-            assert os.path.abspath(local_store) in logs
+            assert os.path.abspath(os.path.expanduser(local_store)) in logs
             assert "SHA256 hash of downloaded file:" in logs
             assert REGISTRY[data_file] in logs
         # Check that the downloaded file has the right name and content
