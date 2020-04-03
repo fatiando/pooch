@@ -185,12 +185,13 @@ def test_hash_matches_strict():
     # And also if it fails
     bad_hash = "p98oh2dl2j2h2p8e9yfho3fi2e9fhd"
     with pytest.raises(ValueError) as error:
-        hash_matches(fname, bad_hash, strict=True, url="Neverland")
+        hash_matches(fname, bad_hash, strict=True, source="Neverland")
     assert "Neverland" in str(error.value)
     for alg in ("sha512", "md5"):
         bad_hash = "{}:p98oh2dl2j2h2p8e9yfho3fi2e9fhd".format(alg)
-        with pytest.raises(ValueError):
+        with pytest.raises(ValueError) as error:
             hash_matches(fname, bad_hash, strict=True)
+        assert fname in str(error.value)
 
 
 def test_temporary_file():
