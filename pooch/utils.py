@@ -393,7 +393,7 @@ def unique_file_name(url):
     hash (hex digest) of the URL. The name will also include the last portion
     of the URL.
 
-    The format will be: ``{md5}:{filename}.{ext}``
+    The format will be: ``{md5}-{filename}.{ext}``
 
     The file name will be cropped so that the entire name (including the hash)
     is less than 255 characters long (the limit on most file systems).
@@ -412,11 +412,11 @@ def unique_file_name(url):
     --------
 
     >>> print(unique_file_name("https://www.some-server.org/2020/data.txt"))
-    02ddee027ce5ebb3d7059fb23d210604:data.txt
+    02ddee027ce5ebb3d7059fb23d210604-data.txt
     >>> print(unique_file_name("https://www.some-server.org/2019/data.txt"))
-    9780092867b497fca6fc87d8308f1025:data.txt
+    9780092867b497fca6fc87d8308f1025-data.txt
     >>> print(unique_file_name("https://www.some-server.org/2020/data.txt.gz"))
-    181a9d52e908219c2076f55145d6a344:data.txt.gz
+    181a9d52e908219c2076f55145d6a344-data.txt.gz
 
     """
     md5 = hashlib.md5(url.encode()).hexdigest()
@@ -424,5 +424,5 @@ def unique_file_name(url):
     # Crop the start of the file name to fit 255 characters including the hash
     # and the :
     fname = fname[-(255 - len(md5) - 1) :]
-    unique_name = "{}:{}".format(md5, fname)
+    unique_name = "{}-{}".format(md5, fname)
     return unique_name

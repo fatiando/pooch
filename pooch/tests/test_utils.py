@@ -38,7 +38,7 @@ def test_unique_name_long():
     fname = unique_file_name(url)
     assert len(fname) == 255
     assert fname[-10:] == "aaaaaa.txt"
-    assert fname.split(":")[1][:10] == "aaaaaaaaaa"
+    assert fname.split("-")[1][:10] == "aaaaaaaaaa"
 
 
 def test_local_storage_makedirs_permissionerror(monkeypatch):
