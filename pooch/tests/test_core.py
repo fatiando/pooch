@@ -197,16 +197,18 @@ def test_pooch_corrupted():
         path = os.path.abspath(local_store)
         pup = Pooch(path=path, base_url=BASEURL, registry=REGISTRY_CORRUPTED)
         with capture_log() as log_file:
-            with pytest.raises(ValueError):
+            with pytest.raises(ValueError) as error:
                 pup.fetch("tiny-data.txt")
+            assert "(tiny-data.txt)" in str(error.value)
             logs = log_file.getvalue()
             assert logs.split()[0] == "Downloading"
             assert logs.split()[-1] == "'{}'.".format(path)
     # and the case where the file exists but hash doesn't match
     pup = Pooch(path=DATA_DIR, base_url=BASEURL, registry=REGISTRY_CORRUPTED)
     with capture_log() as log_file:
-        with pytest.raises(ValueError):
+        with pytest.raises(ValueError) as error:
             pup.fetch("tiny-data.txt")
+        assert "(tiny-data.txt)" in str(error.value)
         logs = log_file.getvalue()
         assert logs.split()[0] == "Updating"
         assert logs.split()[-1] == "'{}'.".format(DATA_DIR)
