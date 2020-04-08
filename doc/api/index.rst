@@ -15,6 +15,7 @@ Core
 
     create
     Pooch
+    retrieve
 
 Utilities
 ---------

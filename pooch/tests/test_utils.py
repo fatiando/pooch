@@ -17,6 +17,7 @@ from ..utils import (
     file_hash,
     hash_matches,
     temporary_file,
+    unique_file_name,
 )
 from .utils import check_tiny_data, capture_log
 
@@ -28,6 +29,16 @@ REGISTRY_RECURSIVE = (
     "subdir/tiny-data.txt baee0894dba14b12085eacb204284b97e362f4f3e5a5807693cc90ef415c1b2d\n"
     "tiny-data.txt baee0894dba14b12085eacb204284b97e362f4f3e5a5807693cc90ef415c1b2d\n"
 )
+
+
+def test_unique_name_long():
+    "The file name should never be longer than 255 characters"
+    url = "https://www.something.com/data{}.txt".format("a" * 500)
+    assert len(url) > 255
+    fname = unique_file_name(url)
+    assert len(fname) == 255
+    assert fname[-10:] == "aaaaaa.txt"
+    assert fname.split("-")[1][:10] == "aaaaaaaaaa"
 
 
 def test_local_storage_makedirs_permissionerror(monkeypatch):
@@ -192,6 +203,16 @@ def test_hash_matches_strict():
         with pytest.raises(ValueError) as error:
             hash_matches(fname, bad_hash, strict=True)
         assert fname in str(error.value)
+
+
+def test_hash_matches_none():
+    "The hash checking function should always returns True if known_hash=None"
+    fname = os.path.join(DATA_DIR, "tiny-data.txt")
+    assert hash_matches(fname, known_hash=None)
+    # Should work even if the file is invalid
+    assert hash_matches(fname="", known_hash=None)
+    # strict should cause an error if this wasn't working
+    assert hash_matches(fname, known_hash=None, strict=True)
 
 
 def test_temporary_file():

@@ -3,7 +3,9 @@ Download hooks for Pooch.fetch
 """
 import sys
 import ftplib
+
 import requests
+
 from .utils import parse_url
 
 

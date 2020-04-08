@@ -17,5 +17,6 @@
     install.rst
     citing.rst
     usage.rst
+    retrieve.rst
     api/index.rst
     changes.rst

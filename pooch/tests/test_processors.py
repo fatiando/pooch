@@ -37,8 +37,8 @@ def test_decompress(method, ext):
             lines = logs.splitlines()
             assert len(lines) == 2
             assert lines[0].split()[0] == "Downloading"
-            assert lines[1].startswith("Decompressing")
-            assert method in lines[1]
+            assert lines[-1].startswith("Decompressing")
+            assert method in lines[-1]
         assert fname == true_path
         check_tiny_data(fname)
         # Check that processor doesn't execute when not downloading
@@ -102,7 +102,7 @@ def test_processors(proc_cls, ext):
             lines = logs.splitlines()
             assert len(lines) == 2
             assert lines[0].split()[0] == "Downloading"
-            assert lines[1].startswith("Extracting 'tiny-data.txt'")
+            assert lines[-1].startswith("Extracting 'tiny-data.txt'")
 
         assert fname == true_path
         check_tiny_data(fname)
@@ -141,7 +141,7 @@ def test_processor_multiplefiles(proc_cls, ext, msg):
             lines = logs.splitlines()
             assert len(lines) == 2
             assert lines[0].split()[0] == "Downloading"
-            assert lines[1].startswith("{} contents".format(msg))
+            assert lines[-1].startswith("{} contents".format(msg))
             assert len(fnames) == 2
             assert true_paths == set(fnames)
             for fname in fnames:

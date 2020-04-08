@@ -279,7 +279,8 @@ def hash_algorithm(hash_string):
     The hash string should have the following form ``algorithm:hash``, where
     algorithm can be the name of any algorithm known to :mod:`hashlib`.
 
-    If the algorithm is omitted, will default to ``"sha256"``.
+    If the algorithm is omitted or the hash string is None, will default to
+    ``"sha256"``.
 
     Parameters
     ----------
@@ -300,19 +301,25 @@ def hash_algorithm(hash_string):
     md5
     >>> print(hash_algorithm("sha256:qouuwhwd2j192y1lb1iwgowdj2898wd2d9"))
     sha256
+    >>> print(hash_algorithm(None))
+    sha256
 
     """
-    parts = hash_string.split(":")
-    if len(parts) == 1:
-        algorithm = "sha256"
+    default = "sha256"
+    if hash_string is None:
+        algorithm = default
+    elif ":" not in hash_string:
+        algorithm = default
     else:
-        algorithm = parts[0]
+        algorithm = hash_string.split(":")[0]
     return algorithm
 
 
 def hash_matches(fname, known_hash, strict=False, source=None):
     """
     Check if the hash of a file matches a known hash.
+
+    If the *known_hash* is None, will always return True.
 
     Parameters
     ----------
@@ -336,6 +343,8 @@ def hash_matches(fname, known_hash, strict=False, source=None):
         True if the hash matches, False otherwise.
 
     """
+    if known_hash is None:
+        return True
     algorithm = hash_algorithm(known_hash)
     new_hash = file_hash(fname, alg=algorithm)
     matches = new_hash == known_hash.split(":")[-1]
@@ -382,3 +391,46 @@ def temporary_file(path=None):
     finally:
         if os.path.exists(tmp.name):
             os.remove(tmp.name)
+
+
+def unique_file_name(url):
+    """
+    Create a unique file name based on the given URL.
+
+    The file name will be unique to the URL by prepending the name with the MD5
+    hash (hex digest) of the URL. The name will also include the last portion
+    of the URL.
+
+    The format will be: ``{md5}-{filename}.{ext}``
+
+    The file name will be cropped so that the entire name (including the hash)
+    is less than 255 characters long (the limit on most file systems).
+
+    Parameters
+    ----------
+    url : str
+        The URL with a file name at the end.
+
+    Returns
+    -------
+    fname : str
+        The file name, unique to this URL.
+
+    Examples
+    --------
+
+    >>> print(unique_file_name("https://www.some-server.org/2020/data.txt"))
+    02ddee027ce5ebb3d7059fb23d210604-data.txt
+    >>> print(unique_file_name("https://www.some-server.org/2019/data.txt"))
+    9780092867b497fca6fc87d8308f1025-data.txt
+    >>> print(unique_file_name("https://www.some-server.org/2020/data.txt.gz"))
+    181a9d52e908219c2076f55145d6a344-data.txt.gz
+
+    """
+    md5 = hashlib.md5(url.encode()).hexdigest()
+    fname = parse_url(url)["path"].split("/")[-1]
+    # Crop the start of the file name to fit 255 characters including the hash
+    # and the :
+    fname = fname[-(255 - len(md5) - 1) :]
+    unique_name = "{}-{}".format(md5, fname)
+    return unique_name
