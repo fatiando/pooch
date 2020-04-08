@@ -708,3 +708,71 @@ change at all:
     )
     # If custom URLs are present in the registry file, they will be set automatically
     GOODBOY.load_registry(os.path.join(os.path.dirname(__file__), "registry.txt"))
+
+
+Create registry file from remote files
+--------------------------------------
+
+If you want to create a registry file for a large number of data files that are
+available for download but you don't have either its hashes nor any local copy
+of them, you must download them first. Manually downloading each one of them
+can be tedious. However, we can automatically download each data file through
+:func:`pooch.retrieve` and then create the registry file.
+
+If the data files share the same base url, we can use :func:`pooch.retrieve`
+to download them and then use :func:`pooch.make_registry` to create the
+registry:
+
+.. code:: python
+
+    import os
+
+    # Names of the data files
+    filenames = ["c137.csv", "cronen.csv", "citadel.csv"]
+
+    # Base url from which the data files can be downloaded from
+    base_url = "https://www.some-data-hosting-site.com/files/"
+
+    # Create a new directory where all files will be downloaded
+    directory = "data_files"
+    os.makedirs(directory)
+
+    # Download each data file to data_files
+    for fname in filenames:
+        path = pooch.retrieve(
+            url=base_url + fname, known_hash=None, fname=fname, path=directory
+        )
+
+    # Create the registry file
+    pooch.make_registry("data_files", "registry.txt")
+
+If each data file has its own url, the registry file can be manually created
+after downloading each data file through :func:`pooch.retrieve`:
+
+.. code:: python
+
+    import os
+
+    # Names and urls of the data files
+    # (file names are only used for naming the downloaded files)
+    fnames_and_urls = {
+        "c137.csv": "https://www.some-data-hosting-site.com/c137/data.csv",
+        "cronen.csv": "https://www.some-data-hosting-site.com/cronen/data.csv",
+        "citadel.csv": "https://www.some-data-hosting-site.com/citadel/data.csv",
+    }
+
+    # Create a new directory where all files will be downloaded
+    directory = "data_files"
+    os.makedirs(directory)
+
+    # Create a new registry file
+    with open("registry.txt", "w") as registry:
+        for fname, url in fnames_and_urls.items():
+            # Download each data file to the pooch cache directory
+            path = pooch.retrieve(
+                url=url, known_hash=None, fname=fname, path=directory
+            )
+            # Add file name, its hash and its url to the new registry file
+            registry.write(
+                "{} {} {}\n".format(fname, pooch.file_hash(path), url)
+            )
