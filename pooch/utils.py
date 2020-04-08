@@ -310,7 +310,7 @@ def hash_algorithm(hash_string):
     return algorithm
 
 
-def hash_matches(fname, known_hash, strict=False):
+def hash_matches(fname, known_hash, strict=False, source=None):
     """
     Check if the hash of a file matches a known hash.
 
@@ -324,6 +324,11 @@ def hash_matches(fname, known_hash, strict=False):
     strict : bool
         If True, will raise a :class:`ValueError` if the hash does not match
         informing the user that the file may be corrupted.
+    source : str
+        The source of the downloaded file (name or URL, for example). Will be
+        used in the error message if *strict* is True. Has no other use other
+        than reporting to the user where the file came from in case of hash
+        mismatch. If None, will default to *fname*.
 
     Returns
     -------
@@ -335,11 +340,14 @@ def hash_matches(fname, known_hash, strict=False):
     new_hash = file_hash(fname, alg=algorithm)
     matches = new_hash == known_hash.split(":")[-1]
     if strict and not matches:
+        if source is None:
+            source = str(fname)
         raise ValueError(
-            "{} hash of file '{}' does not match the known hash:"
-            " expected '{}' but got '{}'. "
-            " The file may be corrupted or the known hash may be outdated.".format(
-                algorithm.upper(), fname, known_hash, new_hash,
+            "{} hash of downloaded file ({}) does not match the known hash:"
+            " expected {} but got {}. Deleted download for safety."
+            " The downloaded file may have been corrupted or"
+            " the known hash may be outdated.".format(
+                algorithm.upper(), source, known_hash, new_hash,
             )
         )
     return matches

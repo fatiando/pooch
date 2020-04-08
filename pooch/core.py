@@ -518,5 +518,5 @@ def stream_download(url, fname, known_hash, downloader, pooch=None):
     # before overwriting the original.
     with temporary_file(path=str(fname.parent)) as tmp:
         downloader(url, tmp, pooch)
-        hash_matches(tmp, known_hash, strict=True)
+        hash_matches(tmp, known_hash, strict=True, source=str(fname.name))
         shutil.move(tmp, str(fname))
