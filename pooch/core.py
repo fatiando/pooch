@@ -73,7 +73,7 @@ def retrieve(url, known_hash, fname=None, path=None, processor=None, downloader=
         full the path, just the file name (it will be appended to *path*). If
         None, will create a unique file name using a combination of the last
         part of the URL (assuming it's the file name) and the MD5 hash of the
-        URL. For example, ``81whdo2d2e928yd1wi22:data-file.csv``. This ensures
+        URL. For example, ``81whdo2d2e928yd1wi22-data-file.csv``. This ensures
         that files from different URLs never overwrite each other, even if they
         have the same name.
     path : str or PathLike or None
