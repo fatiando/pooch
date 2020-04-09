@@ -3,6 +3,55 @@
 Changelog
 =========
 
+Version 1.1.0
+-------------
+
+*Released on: 2020/04/XX*
+
+.. image:: https://zenodo.org/badge/DOI/.svg
+    :alt: Digital Object Identifier for the Zenodo archive
+    :target: https://doi.org/
+
+New features:
+
+* New function ``pooch.retrieve`` to fetch single files This is much more
+  convenient than setting up a ``Pooch`` while retaining the hash checks and
+  use of downloaders and processors. It automatically selects a unique file
+  name and saves files to a cache folder.
+  (`#152 <https://github.com/fatiando/pooch/pull/152>`__)
+* Allow to use of different hashing algorithms (other than SHA256). Optionally
+  specify the hash as ``alg:hash`` and allow ``pooch.Pooch`` to recognize the
+  algorithm when comparing hashes. Setting an algorithsm is optional and
+  omiting it defaults to SHA256. This is particularly useful when data are
+  coming from external sources and published hashes are already available.
+  (`#133 <https://github.com/fatiando/pooch/pull/133>`__)
+
+Documentation:
+
+* Add example for fetching datasets that change on the server, for which the
+  hash check would always fail.
+  (`#144 <https://github.com/fatiando/pooch/pull/144>`__)
+* Fix path examples in docstring of ``pooch.os_cache``. The docstring mentioned
+  the data path as examples instead of the cache path.
+  (`#140 <https://github.com/fatiando/pooch/pull/140>`__)
+
+Maintenance:
+
+* A lot of general refactoring of the internals of Pooch to facilitate
+  development of the new ``pooch.retrieve`` function
+  (`#159 <https://github.com/fatiando/pooch/pull/159>`__
+  `#157 <https://github.com/fatiando/pooch/pull/157>`__
+  `#156 <https://github.com/fatiando/pooch/pull/156>`__
+  `#151 <https://github.com/fatiando/pooch/pull/151>`__
+  `#149 <https://github.com/fatiando/pooch/pull/149>`__)
+
+This release contains contributions from:
+
+* Leonardo Uieda
+* Kacper Kowalik
+* Lucas Martin-King
+* Zac Flamig
+
 Version 1.0.0
 -------------
 
