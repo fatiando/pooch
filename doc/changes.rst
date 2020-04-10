@@ -8,9 +8,9 @@ Version 1.1.0
 
 *Released on: 2020/04/XX*
 
-.. image:: https://zenodo.org/badge/DOI/.svg
+.. image:: https://zenodo.org/badge/DOI/10.5281/zenodo.3747184.svg
     :alt: Digital Object Identifier for the Zenodo archive
-    :target: https://doi.org/
+    :target: https://doi.org/10.5281/zenodo.3747184
 
 New features:
 
