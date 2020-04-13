@@ -714,10 +714,10 @@ Create registry file from remote files
 --------------------------------------
 
 If you want to create a registry file for a large number of data files that are
-available for download but you don't have either its hashes nor any local copy
-of them, you must download them first. Manually downloading each one of them
-can be tedious. However, we can automatically download each data file through
-:func:`pooch.retrieve` and then create the registry file.
+available for download but you don't have their hashes or any local copies, 
+you must download them first. Manually downloading each file
+can be tedious. However, we can automate the process using
+:func:`pooch.retrieve`. Below, we'll explore two different scenarios.
 
 If the data files share the same base url, we can use :func:`pooch.retrieve`
 to download them and then use :func:`pooch.make_registry` to create the
