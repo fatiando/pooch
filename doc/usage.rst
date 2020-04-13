@@ -743,7 +743,7 @@ registry:
             url=base_url + fname, known_hash=None, fname=fname, path=directory
         )
 
-    # Create the registry file
+    # Create the registry file from the downloaded data files
     pooch.make_registry("data_files", "registry.txt")
 
 If each data file has its own url, the registry file can be manually created
