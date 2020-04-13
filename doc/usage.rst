@@ -753,8 +753,8 @@ after downloading each data file through :func:`pooch.retrieve`:
 
     import os
 
-    # Names and urls of the data files
-    # (file names are only used for naming the downloaded files)
+    # Names and urls of the data files. The file names are used for naming the 
+    # downloaded files. These are the names that will be included in the registry.
     fnames_and_urls = {
         "c137.csv": "https://www.some-data-hosting-site.com/c137/data.csv",
         "cronen.csv": "https://www.some-data-hosting-site.com/cronen/data.csv",
