@@ -10,7 +10,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
     
-    <title>Training your Pooch &mdash; Pooch dev</title>
+    <title>Training your Pooch &mdash; Pooch v1.1.0</title>
     
 
 
@@ -41,7 +41,7 @@
   <link rel="stylesheet" href="_static/style.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="API Reference" href="api/index.html" />
+    <link rel="next" title="Downloading a single file" href="retrieve.html" />
     <link rel="prev" title="Citing Pooch" href="citing.html" />
     <!-- Google Analytics tracking code -->
     <script>
@@ -82,7 +82,7 @@
             
             
               <div class="version">
-                dev
+                v1.1.0
               </div>
             
           
@@ -116,6 +116,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#assumptions">Assumptions</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#setup">Setup</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#hashes">Hashes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#bypassing-the-hash-check">Bypassing the hash check</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#versioning">Versioning</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#user-defined-paths">User-defined paths</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#subdirectories">Subdirectories</a></li>
@@ -128,8 +129,10 @@
 <li class="toctree-l2"><a class="reference internal" href="#so-you-have-1000-data-files">So you have 1000 data files</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#creating-a-registry-file">Creating a registry file</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#multiple-urls">Multiple URLs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#create-registry-file-from-remote-files">Create registry file from remote files</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="retrieve.html">Downloading a single file</a></li>
 <li class="toctree-l1"><a class="reference internal" href="api/index.html">API Reference</a></li>
 <li class="toctree-l1"><a class="reference internal" href="changes.html">Changelog</a></li>
 </ul>
@@ -231,7 +234,7 @@
 interdimensional portals. You want to distribute sample data so that your users can
 easily try out the library by copying and pasting from the docs. You want to have a
 <code class="docutils literal notranslate"><span class="pre">plumbus.datasets</span></code> module that defines functions like <code class="docutils literal notranslate"><span class="pre">fetch_c137()</span></code> that will
-return the data loaded as a <a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v0.25.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">pandas.DataFrame</span></code></a> for convenient access.</p>
+return the data loaded as a <a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v1.0.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">pandas.DataFrame</span></code></a> for convenient access.</p>
 </div>
 <div class="section" id="assumptions">
 <h2>Assumptions<a class="headerlink" href="#assumptions" title="Permalink to this headline">¶</a></h2>
@@ -317,8 +320,8 @@ OS. You could also provide any other path if you prefer. See the documentation f
 </div>
 <div class="section" id="hashes">
 <h2>Hashes<a class="headerlink" href="#hashes" title="Permalink to this headline">¶</a></h2>
-<p>Pooch uses <a class="reference external" href="https://en.wikipedia.org/wiki/SHA-2">SHA256</a> hashes to check if files
-are up-to-date or possibly corrupted:</p>
+<p>Pooch uses <a class="reference external" href="https://en.wikipedia.org/wiki/SHA-2">SHA256</a> hashes by default to check
+if files are up-to-date or possibly corrupted:</p>
 <ul class="simple">
 <li><p>If a file exists in the local folder, Pooch will check that its hash matches the one
 in the registry. If it doesn’t, we’ll assume that it needs to be updated.</p></li>
@@ -336,6 +339,51 @@ Python’s <a class="reference external" href="https://docs.python.org/3/library
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pooch</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">pooch</span><span class="o">.</span><span class="n">file_hash</span><span class="p">(</span><span class="s2">&quot;data/c137.csv&quot;</span><span class="p">))</span>
 </pre></div>
+</div>
+<p>Alternative hashing algorithms supported by <a class="reference external" href="https://docs.python.org/3/library/hashlib.html#module-hashlib" title="(in Python v3.8)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">hashlib</span></code></a> can be used if necessary:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pooch</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">pooch</span><span class="o">.</span><span class="n">file_hash</span><span class="p">(</span><span class="s2">&quot;data/c137.csv&quot;</span><span class="p">,</span> <span class="n">alg</span><span class="o">=</span><span class="s2">&quot;sha512&quot;</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="bypassing-the-hash-check">
+<h2>Bypassing the hash check<a class="headerlink" href="#bypassing-the-hash-check" title="Permalink to this headline">¶</a></h2>
+<p>Sometimes we might not know the hash of the file or it could change on the server
+periodically. In these cases, we need a way of bypassing the hash check.
+One way of doing that is with Python’s <code class="docutils literal notranslate"><span class="pre">unittest.mock</span></code> module. It defines the object
+<code class="docutils literal notranslate"><span class="pre">unittest.mock.ANY</span></code> which passes all equality tests made against it. To bypass the
+check, we can set the hash value to <code class="docutils literal notranslate"><span class="pre">unittest.mock.ANY</span></code> when specifying the
+<code class="docutils literal notranslate"><span class="pre">registry</span></code> argument for <a class="reference internal" href="api/generated/pooch.create.html#pooch.create" title="pooch.create"><code class="xref py py-func docutils literal notranslate"><span class="pre">pooch.create</span></code></a>.</p>
+<p>In this example, we want to use Pooch to download a list of weather stations around
+Australia. The file with the stations is in an FTP server and we want to store it locally
+in separate folders for each day that the code is run. The problem is that the
+<code class="docutils literal notranslate"><span class="pre">stations.zip</span></code> file is updated on the server instead of creating a new one, so the
+hash check would fail. This is how you can solve this problem:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">datetime</span>
+<span class="kn">import</span> <span class="nn">unittest.mock</span>
+<span class="kn">import</span> <span class="nn">pooch</span>
+
+<span class="c1"># Get the current data to store the files in separate folders</span>
+<span class="n">CURRENT_DATE</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">date</span><span class="p">()</span>
+
+<span class="n">GOODBOY</span> <span class="o">=</span> <span class="n">pooch</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+    <span class="n">path</span><span class="o">=</span><span class="n">pooch</span><span class="o">.</span><span class="n">os_cache</span><span class="p">(</span><span class="s2">&quot;bom_daily_stations&quot;</span><span class="p">)</span> <span class="o">/</span> <span class="n">CURRENT_DATE</span><span class="p">,</span>
+    <span class="n">base_url</span><span class="o">=</span><span class="s2">&quot;ftp://ftp.bom.gov.au/anon2/home/ncc/metadata/sitelists/&quot;</span><span class="p">,</span>
+    <span class="c1"># Use ANY for the hash value to ignore the checks</span>
+    <span class="n">registry</span><span class="o">=</span><span class="p">{</span>
+        <span class="s2">&quot;stations.zip&quot;</span><span class="p">:</span> <span class="n">unittest</span><span class="o">.</span><span class="n">mock</span><span class="o">.</span><span class="n">ANY</span><span class="p">,</span>
+    <span class="p">},</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>Because hash check is always <code class="docutils literal notranslate"><span class="pre">True</span></code>, Pooch will only download the file once. When running
+again at a different date, the file will be downloaded again because the local cache folder
+changed and the file is no longer present in it. If you omit <code class="docutils literal notranslate"><span class="pre">CURRENT_DATE</span></code> from the cache
+path, then Pooch will only fetch the files once, unless they are deleted from the cache.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If run over a period of time, your cache directory will increase in size, as the
+files are stored in daily subdirectories.</p>
 </div>
 </div>
 <div class="section" id="versioning">
@@ -385,7 +433,7 @@ names of these files in the registry <strong>must use Unix-style separators</str
 on Windows. We will handle the appropriate conversions.</p>
 </div>
 <div class="section" id="post-processing-hooks">
-<h2>Post-processing hooks<a class="headerlink" href="#post-processing-hooks" title="Permalink to this headline">¶</a></h2>
+<span id="processors"></span><h2>Post-processing hooks<a class="headerlink" href="#post-processing-hooks" title="Permalink to this headline">¶</a></h2>
 <p>Sometimes further post-processing actions need to be taken on downloaded files
 (unzipping, conversion to a more efficient format, etc). If these actions are time or
 memory consuming, it would be best to do this only once when the file is actually
@@ -507,7 +555,7 @@ keeping a decompressed copy of the file:</p>
 </div>
 </div>
 <div class="section" id="downloaders-and-authentication">
-<h2>Downloaders and authentication<a class="headerlink" href="#downloaders-and-authentication" title="Permalink to this headline">¶</a></h2>
+<span id="downloaders"></span><h2>Downloaders and authentication<a class="headerlink" href="#downloaders-and-authentication" title="Permalink to this headline">¶</a></h2>
 <p>By default, <a class="reference internal" href="api/generated/pooch.Pooch.html#pooch.Pooch.fetch" title="pooch.Pooch.fetch"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pooch.Pooch.fetch</span></code></a> will download files over HTTP without
 authentication. Sometimes this is not enough: some servers require logins, some are FTP
 instead of HTTP. To get around this, you can pass a <code class="docutils literal notranslate"><span class="pre">downloader</span></code> to
@@ -706,6 +754,12 @@ to access the <code class="docutils literal notranslate"><span class="pre">regis
 cronen.csv 1upodh2ioduhw9celdjhlfvhksgdwikdgcowjhcwoduchowjg8w
 </pre></div>
 </div>
+<p>A specific hashing algorithm can be enforced, if a checksum for a file is
+prefixed with <code class="docutils literal notranslate"><span class="pre">alg:</span></code>, e.g.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>c137.csv sha1:e32b18dab23935bc091c353b308f724f18edcb5e
+cronen.csv md5:b53c08d3570b82665784cedde591a8b0
+</pre></div>
+</div>
 <p>To make sure the registry file is shipped with your package, include the following in
 your <code class="docutils literal notranslate"><span class="pre">MANIFEST.in</span></code> file:</p>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>include plumbus/registry.txt
@@ -784,6 +838,75 @@ change at all:</p>
 </pre></div>
 </div>
 </div>
+<div class="section" id="create-registry-file-from-remote-files">
+<h2>Create registry file from remote files<a class="headerlink" href="#create-registry-file-from-remote-files" title="Permalink to this headline">¶</a></h2>
+<p>If you want to create a registry file for a large number of data files that are
+available for download but you don’t have their hashes or any local copies,
+you must download them first. Manually downloading each file
+can be tedious. However, we can automate the process using
+<a class="reference internal" href="api/generated/pooch.retrieve.html#pooch.retrieve" title="pooch.retrieve"><code class="xref py py-func docutils literal notranslate"><span class="pre">pooch.retrieve</span></code></a>. Below, we’ll explore two different scenarios.</p>
+<p>If the data files share the same base url, we can use <a class="reference internal" href="api/generated/pooch.retrieve.html#pooch.retrieve" title="pooch.retrieve"><code class="xref py py-func docutils literal notranslate"><span class="pre">pooch.retrieve</span></code></a>
+to download them and then use <a class="reference internal" href="api/generated/pooch.make_registry.html#pooch.make_registry" title="pooch.make_registry"><code class="xref py py-func docutils literal notranslate"><span class="pre">pooch.make_registry</span></code></a> to create the
+registry:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+
+<span class="c1"># Names of the data files</span>
+<span class="n">filenames</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;c137.csv&quot;</span><span class="p">,</span> <span class="s2">&quot;cronen.csv&quot;</span><span class="p">,</span> <span class="s2">&quot;citadel.csv&quot;</span><span class="p">]</span>
+
+<span class="c1"># Base url from which the data files can be downloaded from</span>
+<span class="n">base_url</span> <span class="o">=</span> <span class="s2">&quot;https://www.some-data-hosting-site.com/files/&quot;</span>
+
+<span class="c1"># Create a new directory where all files will be downloaded</span>
+<span class="n">directory</span> <span class="o">=</span> <span class="s2">&quot;data_files&quot;</span>
+<span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">directory</span><span class="p">)</span>
+
+<span class="c1"># Download each data file to data_files</span>
+<span class="k">for</span> <span class="n">fname</span> <span class="ow">in</span> <span class="n">filenames</span><span class="p">:</span>
+    <span class="n">path</span> <span class="o">=</span> <span class="n">pooch</span><span class="o">.</span><span class="n">retrieve</span><span class="p">(</span>
+        <span class="n">url</span><span class="o">=</span><span class="n">base_url</span> <span class="o">+</span> <span class="n">fname</span><span class="p">,</span> <span class="n">known_hash</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">fname</span><span class="o">=</span><span class="n">fname</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="n">directory</span>
+    <span class="p">)</span>
+
+<span class="c1"># Create the registry file from the downloaded data files</span>
+<span class="n">pooch</span><span class="o">.</span><span class="n">make_registry</span><span class="p">(</span><span class="s2">&quot;data_files&quot;</span><span class="p">,</span> <span class="s2">&quot;registry.txt&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>If each data file has its own url, the registry file can be manually created
+after downloading each data file through <a class="reference internal" href="api/generated/pooch.retrieve.html#pooch.retrieve" title="pooch.retrieve"><code class="xref py py-func docutils literal notranslate"><span class="pre">pooch.retrieve</span></code></a>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+
+<span class="c1"># Names and urls of the data files. The file names are used for naming the</span>
+<span class="c1"># downloaded files. These are the names that will be included in the registry.</span>
+<span class="n">fnames_and_urls</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;c137.csv&quot;</span><span class="p">:</span> <span class="s2">&quot;https://www.some-data-hosting-site.com/c137/data.csv&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;cronen.csv&quot;</span><span class="p">:</span> <span class="s2">&quot;https://www.some-data-hosting-site.com/cronen/data.csv&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;citadel.csv&quot;</span><span class="p">:</span> <span class="s2">&quot;https://www.some-data-hosting-site.com/citadel/data.csv&quot;</span><span class="p">,</span>
+<span class="p">}</span>
+
+<span class="c1"># Create a new directory where all files will be downloaded</span>
+<span class="n">directory</span> <span class="o">=</span> <span class="s2">&quot;data_files&quot;</span>
+<span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">directory</span><span class="p">)</span>
+
+<span class="c1"># Create a new registry file</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;registry.txt&quot;</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">registry</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">fname</span><span class="p">,</span> <span class="n">url</span> <span class="ow">in</span> <span class="n">fnames_and_urls</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="c1"># Download each data file to the specified directory</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="n">pooch</span><span class="o">.</span><span class="n">retrieve</span><span class="p">(</span>
+            <span class="n">url</span><span class="o">=</span><span class="n">url</span><span class="p">,</span> <span class="n">known_hash</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">fname</span><span class="o">=</span><span class="n">fname</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="n">directory</span>
+        <span class="p">)</span>
+        <span class="c1"># Add the name, hash, and url of the file to the new registry file</span>
+        <span class="n">registry</span><span class="o">.</span><span class="n">write</span><span class="p">(</span>
+            <span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> </span><span class="si">{}</span><span class="s2"> </span><span class="si">{}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">pooch</span><span class="o">.</span><span class="n">file_hash</span><span class="p">(</span><span class="n">path</span><span class="p">),</span> <span class="n">url</span><span class="p">)</span>
+        <span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Notice that there are <strong>no checks for download integrity</strong> (since we don’t know the
+file hashes before hand). Only do this for trusted data sources and over a secure
+connection. If you have access to file hashes/checksums, <strong>we highly recommend
+using them</strong> to set the <code class="docutils literal notranslate"><span class="pre">known_hash</span></code> argument.</p>
+</div>
+</div>
 </div>
 
 
@@ -794,7 +917,7 @@ change at all:</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="api/index.html" class="btn btn-neutral float-right" title="API Reference" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="retrieve.html" class="btn btn-neutral float-right" title="Downloading a single file" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="citing.html" class="btn btn-neutral float-left" title="Citing Pooch" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
@@ -808,7 +931,7 @@ change at all:</p>
     <p>
         &copy; Copyright 2018-2020, The Pooch Developers
       <span class="lastupdated">
-        Last updated on Jan 28, 2020.
+        Last updated on Apr 13, 2020.
       </span>
 
     </p>

@@ -10,7 +10,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
     
-        <title>Pooch dev</title>
+        <title>Pooch v1.1.0</title>
     
 
 
@@ -81,7 +81,7 @@
             
             
               <div class="version">
-                dev
+                v1.1.0
               </div>
             
           
@@ -111,6 +111,7 @@
 <li class="toctree-l1"><a class="reference internal" href="install.html">Installing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="citing.html">Citing Pooch</a></li>
 <li class="toctree-l1"><a class="reference internal" href="usage.html">Training your Pooch</a></li>
+<li class="toctree-l1"><a class="reference internal" href="retrieve.html">Downloading a single file</a></li>
 <li class="toctree-l1"><a class="reference internal" href="api/index.html">API Reference</a></li>
 <li class="toctree-l1"><a class="reference internal" href="changes.html">Changelog</a></li>
 </ul>
@@ -238,6 +239,21 @@ through the SHA256 hashes).</p></li>
 </div>
 <div class="section" id="example">
 <h1>Example<a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h1>
+<p>For a <strong>scientist downloading a data file</strong> for analysis:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pooch</span> <span class="kn">import</span> <span class="n">retrieve</span>
+
+
+<span class="c1"># Download the file and save it locally. Running this again will not cause</span>
+<span class="c1"># a download. Pooch will check the hash (checksum) of the downloaded file</span>
+<span class="c1"># against the given value to make sure it&#39;s the right file (not corrupted</span>
+<span class="c1"># or outdated).</span>
+<span class="n">fname</span> <span class="o">=</span> <span class="n">retrieve</span><span class="p">(</span>
+    <span class="n">url</span><span class="o">=</span><span class="s2">&quot;https://some-data-server.org/a-data-file.nc&quot;</span><span class="p">,</span>
+    <span class="n">known_hash</span><span class="o">=</span><span class="s2">&quot;md5:70e2afd3fd7e336ae478b1e740a5f08e&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>For <strong>package developers</strong> including sample data in their projects:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">Module mypackage/datasets.py</span>
 <span class="sd">&quot;&quot;&quot;</span>
@@ -374,6 +390,7 @@ of the <strong>BSD 3-clause License</strong>. A copy of this license is provided
 <li><p><a class="reference external" href="https://www.fatiando.org/pooch/dev">Development</a> (reflects the <em>master</em> branch on
 Github)</p></li>
 <li><p><a class="reference external" href="https://www.fatiando.org/pooch/latest">Latest release</a></p></li>
+<li><p><a class="reference external" href="https://www.fatiando.org/pooch/v1.1.0">v1.1.0</a></p></li>
 <li><p><a class="reference external" href="https://www.fatiando.org/pooch/v1.0.0">v1.0.0</a></p></li>
 <li><p><a class="reference external" href="https://www.fatiando.org/pooch/v0.7.1">v0.7.1</a></p></li>
 <li><p><a class="reference external" href="https://www.fatiando.org/pooch/v0.7.0">v0.7.0</a></p></li>
@@ -413,7 +430,7 @@ Github)</p></li>
     <p>
         &copy; Copyright 2018-2020, The Pooch Developers
       <span class="lastupdated">
-        Last updated on Jan 28, 2020.
+        Last updated on Apr 13, 2020.
       </span>
 
     </p>

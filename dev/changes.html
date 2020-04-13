@@ -10,7 +10,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
     
-    <title>Changelog &mdash; Pooch dev</title>
+    <title>Changelog &mdash; Pooch v1.1.0</title>
     
 
 
@@ -81,7 +81,7 @@
             
             
               <div class="version">
-                dev
+                v1.1.0
               </div>
             
           
@@ -111,8 +111,10 @@
 <li class="toctree-l1"><a class="reference internal" href="install.html">Installing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="citing.html">Citing Pooch</a></li>
 <li class="toctree-l1"><a class="reference internal" href="usage.html">Training your Pooch</a></li>
+<li class="toctree-l1"><a class="reference internal" href="retrieve.html">Downloading a single file</a></li>
 <li class="toctree-l1"><a class="reference internal" href="api/index.html">API Reference</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Changelog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#version-1-1-0">Version 1.1.0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#version-1-0-0">Version 1.0.0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#version-0-7-2">Version 0.7.2</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#version-0-7-1">Version 0.7.1</a></li>
@@ -223,6 +225,58 @@
             
   <div class="section" id="changelog">
 <span id="changes"></span><h1>Changelog<a class="headerlink" href="#changelog" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="version-1-1-0">
+<h2>Version 1.1.0<a class="headerlink" href="#version-1-1-0" title="Permalink to this headline">¶</a></h2>
+<p><em>Released on: 2020/04/13</em></p>
+<a class="reference external image-reference" href="https://doi.org/10.5281/zenodo.3747184"><img alt="Digital Object Identifier for the Zenodo archive" src="https://zenodo.org/badge/DOI/10.5281/zenodo.3747184.svg" /></a>
+<p>New features:</p>
+<ul class="simple">
+<li><p>New function <code class="docutils literal notranslate"><span class="pre">pooch.retrieve</span></code> to fetch single files This is much more
+convenient than setting up a <code class="docutils literal notranslate"><span class="pre">Pooch</span></code> while retaining the hash checks and
+use of downloaders and processors. It automatically selects a unique file
+name and saves files to a cache folder.
+(<a class="reference external" href="https://github.com/fatiando/pooch/pull/152">#152</a>)</p></li>
+<li><p>Allow to use of different hashing algorithms (other than SHA256). Optionally
+specify the hash as <code class="docutils literal notranslate"><span class="pre">alg:hash</span></code> and allow <code class="docutils literal notranslate"><span class="pre">pooch.Pooch</span></code> to recognize the
+algorithm when comparing hashes. Setting an algorithsm is optional and
+omiting it defaults to SHA256. This is particularly useful when data are
+coming from external sources and published hashes are already available.
+(<a class="reference external" href="https://github.com/fatiando/pooch/pull/133">#133</a>)</p></li>
+</ul>
+<p>Documentation:</p>
+<ul class="simple">
+<li><p>Add example for fetching datasets that change on the server, for which the
+hash check would always fail.
+(<a class="reference external" href="https://github.com/fatiando/pooch/pull/144">#144</a>)</p></li>
+<li><p>Fix path examples in docstring of <code class="docutils literal notranslate"><span class="pre">pooch.os_cache</span></code>. The docstring mentioned
+the data path as examples instead of the cache path.
+(<a class="reference external" href="https://github.com/fatiando/pooch/pull/140">#140</a>)</p></li>
+<li><p>Add example of creating a registry when you don’t have the data files locally
+and would have to download them manually. The example uses the
+<code class="docutils literal notranslate"><span class="pre">pooch.retrieve</span></code> function to automate the process. The example covers two
+cases: when all remote files share the same base URL and when every file has
+its own URL.
+(<a class="reference external" href="https://github.com/fatiando/pooch/pull/161">#161</a>)</p></li>
+</ul>
+<p>Maintenance:</p>
+<ul class="simple">
+<li><p>A lot of general refactoring of the internals of Pooch to facilitate
+development of the new <code class="docutils literal notranslate"><span class="pre">pooch.retrieve</span></code> function
+(<a class="reference external" href="https://github.com/fatiando/pooch/pull/159">#159</a>
+<a class="reference external" href="https://github.com/fatiando/pooch/pull/157">#157</a>
+<a class="reference external" href="https://github.com/fatiando/pooch/pull/156">#156</a>
+<a class="reference external" href="https://github.com/fatiando/pooch/pull/151">#151</a>
+<a class="reference external" href="https://github.com/fatiando/pooch/pull/149">#149</a>)</p></li>
+</ul>
+<p>This release contains contributions from:</p>
+<ul class="simple">
+<li><p>Leonardo Uieda</p></li>
+<li><p>Santiago Soler</p></li>
+<li><p>Kacper Kowalik</p></li>
+<li><p>Lucas Martin-King</p></li>
+<li><p>Zac Flamig</p></li>
+</ul>
+</div>
 <div class="section" id="version-1-0-0">
 <h2>Version 1.0.0<a class="headerlink" href="#version-1-0-0" title="Permalink to this headline">¶</a></h2>
 <p><em>Released on: 2020/01/28</em></p>
@@ -572,7 +626,7 @@ data corruption.</p></li>
     <p>
         &copy; Copyright 2018-2020, The Pooch Developers
       <span class="lastupdated">
-        Last updated on Jan 28, 2020.
+        Last updated on Apr 13, 2020.
       </span>
 
     </p>

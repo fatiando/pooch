@@ -10,7 +10,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
     
-    <title>API Reference &mdash; Pooch dev</title>
+    <title>API Reference &mdash; Pooch v1.1.0</title>
     
 
 
@@ -42,7 +42,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="pooch.create" href="generated/pooch.create.html" />
-    <link rel="prev" title="Training your Pooch" href="../usage.html" />
+    <link rel="prev" title="Downloading a single file" href="../retrieve.html" />
     <!-- Google Analytics tracking code -->
     <script>
       (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -82,7 +82,7 @@
             
             
               <div class="version">
-                dev
+                v1.1.0
               </div>
             
           
@@ -112,10 +112,12 @@
 <li class="toctree-l1"><a class="reference internal" href="../install.html">Installing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../citing.html">Citing Pooch</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../usage.html">Training your Pooch</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../retrieve.html">Downloading a single file</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">API Reference</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#core">Core</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="generated/pooch.create.html">pooch.create</a></li>
 <li class="toctree-l3"><a class="reference internal" href="generated/pooch.Pooch.html">pooch.Pooch</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/pooch.retrieve.html">pooch.retrieve</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#utilities">Utilities</a><ul>
@@ -251,6 +253,9 @@
 <tr class="row-even"><td><p><a class="reference internal" href="generated/pooch.Pooch.html#pooch.Pooch" title="pooch.Pooch"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Pooch</span></code></a>(path, base_url[, registry, urls])</p></td>
 <td><p>Manager for a local data storage that can fetch from a remote source.</p></td>
 </tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/pooch.retrieve.html#pooch.retrieve" title="pooch.retrieve"><code class="xref py py-obj docutils literal notranslate"><span class="pre">retrieve</span></code></a>(url, known_hash[, fname, path, …])</p></td>
+<td><p>Download and cache a single file locally.</p></td>
+</tr>
 </tbody>
 </table>
 </div>
@@ -268,8 +273,8 @@
 <tr class="row-even"><td><p><a class="reference internal" href="generated/pooch.make_registry.html#pooch.make_registry" title="pooch.make_registry"><code class="xref py py-obj docutils literal notranslate"><span class="pre">make_registry</span></code></a>(directory, output[, recursive])</p></td>
 <td><p>Make a registry of files and hashes for the given directory.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="generated/pooch.file_hash.html#pooch.file_hash" title="pooch.file_hash"><code class="xref py py-obj docutils literal notranslate"><span class="pre">file_hash</span></code></a>(fname)</p></td>
-<td><p>Calculate the SHA256 hash of a given file.</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/pooch.file_hash.html#pooch.file_hash" title="pooch.file_hash"><code class="xref py py-obj docutils literal notranslate"><span class="pre">file_hash</span></code></a>(fname[, alg])</p></td>
+<td><p>Calculate the hash of a given file.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="generated/pooch.check_version.html#pooch.check_version" title="pooch.check_version"><code class="xref py py-obj docutils literal notranslate"><span class="pre">check_version</span></code></a>(version[, fallback])</p></td>
 <td><p>Check if a version is PEP440 compliant and there are no unreleased changes.</p></td>
@@ -344,7 +349,7 @@
         <a href="generated/pooch.create.html" class="btn btn-neutral float-right" title="pooch.create" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="../usage.html" class="btn btn-neutral float-left" title="Training your Pooch" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="../retrieve.html" class="btn btn-neutral float-left" title="Downloading a single file" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -355,7 +360,7 @@
     <p>
         &copy; Copyright 2018-2020, The Pooch Developers
       <span class="lastupdated">
-        Last updated on Jan 28, 2020.
+        Last updated on Apr 13, 2020.
       </span>
 
     </p>

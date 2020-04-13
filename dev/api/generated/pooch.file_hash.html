@@ -10,7 +10,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
     
-    <title>pooch.file_hash &mdash; Pooch dev</title>
+    <title>pooch.file_hash &mdash; Pooch v1.1.0</title>
     
 
 
@@ -82,7 +82,7 @@
             
             
               <div class="version">
-                dev
+                v1.1.0
               </div>
             
           
@@ -112,6 +112,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../install.html">Installing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../citing.html">Citing Pooch</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../usage.html">Training your Pooch</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../retrieve.html">Downloading a single file</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../index.html">API Reference</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../index.html#core">Core</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="../index.html#utilities">Utilities</a><ul class="current">
@@ -227,12 +228,15 @@
 <h1>pooch.file_hash<a class="headerlink" href="#pooch-file-hash" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="pooch.file_hash">
-<code class="sig-prename descclassname">pooch.</code><code class="sig-name descname">file_hash</code><span class="sig-paren">(</span><em class="sig-param">fname</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pooch/utils.html#file_hash"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pooch.file_hash" title="Permalink to this definition">¶</a></dt>
-<dd><p>Calculate the SHA256 hash of a given file.</p>
+<code class="sig-prename descclassname">pooch.</code><code class="sig-name descname">file_hash</code><span class="sig-paren">(</span><em class="sig-param">fname</em>, <em class="sig-param">alg='sha256'</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pooch/utils.html#file_hash"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pooch.file_hash" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the hash of a given file.</p>
 <p>Useful for checking if a file has changed or been corrupted.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>fname</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – The name of the file.</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fname</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – The name of the file.</p></li>
+<li><p><strong>alg</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – The type of the hashing algorithm</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p><strong>hash</strong> (<em>str</em>) – The hash of the file.</p>
@@ -274,7 +278,7 @@
     <p>
         &copy; Copyright 2018-2020, The Pooch Developers
       <span class="lastupdated">
-        Last updated on Jan 28, 2020.
+        Last updated on Apr 13, 2020.
       </span>
 
     </p>

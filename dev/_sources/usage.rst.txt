@@ -106,8 +106,8 @@ OS. You could also provide any other path if you prefer. See the documentation f
 Hashes
 ------
 
-Pooch uses `SHA256 <https://en.wikipedia.org/wiki/SHA-2>`__ hashes to check if files
-are up-to-date or possibly corrupted:
+Pooch uses `SHA256 <https://en.wikipedia.org/wiki/SHA-2>`__ hashes by default to check
+if files are up-to-date or possibly corrupted:
 
 * If a file exists in the local folder, Pooch will check that its hash matches the one
   in the registry. If it doesn't, we'll assume that it needs to be updated.
@@ -129,6 +129,59 @@ Python's :mod:`hashlib`):
 
     import pooch
     print(pooch.file_hash("data/c137.csv"))
+
+Alternative hashing algorithms supported by :mod:`hashlib` can be used if necessary:
+
+.. code:: python
+
+    import pooch
+    print(pooch.file_hash("data/c137.csv", alg="sha512"))
+
+
+Bypassing the hash check
+------------------------
+
+Sometimes we might not know the hash of the file or it could change on the server
+periodically. In these cases, we need a way of bypassing the hash check.
+One way of doing that is with Python's ``unittest.mock`` module. It defines the object
+``unittest.mock.ANY`` which passes all equality tests made against it. To bypass the
+check, we can set the hash value to ``unittest.mock.ANY`` when specifying the
+``registry`` argument for :func:`pooch.create`.
+
+In this example, we want to use Pooch to download a list of weather stations around
+Australia. The file with the stations is in an FTP server and we want to store it locally
+in separate folders for each day that the code is run. The problem is that the
+``stations.zip`` file is updated on the server instead of creating a new one, so the
+hash check would fail. This is how you can solve this problem:
+
+
+.. code:: python
+
+    import datetime
+    import unittest.mock
+    import pooch
+
+    # Get the current data to store the files in separate folders
+    CURRENT_DATE = datetime.datetime.now().date()
+
+    GOODBOY = pooch.create(
+        path=pooch.os_cache("bom_daily_stations") / CURRENT_DATE,
+        base_url="ftp://ftp.bom.gov.au/anon2/home/ncc/metadata/sitelists/",
+        # Use ANY for the hash value to ignore the checks
+        registry={
+            "stations.zip": unittest.mock.ANY,
+        },
+    )
+
+Because hash check is always ``True``, Pooch will only download the file once. When running
+again at a different date, the file will be downloaded again because the local cache folder
+changed and the file is no longer present in it. If you omit ``CURRENT_DATE`` from the cache
+path, then Pooch will only fetch the files once, unless they are deleted from the cache.
+
+.. note::
+
+    If run over a period of time, your cache directory will increase in size, as the
+    files are stored in daily subdirectories.
 
 
 Versioning
@@ -186,6 +239,8 @@ saved to the same subdirectories in the local storage folder. Note, however, tha
 names of these files in the registry **must use Unix-style separators** (``'/'``) even
 on Windows. We will handle the appropriate conversions.
 
+
+.. _processors:
 
 Post-processing hooks
 ---------------------
@@ -320,6 +375,8 @@ keeping a decompressed copy of the file:
         data = numpy.load(fname)
         return data
 
+
+.. _downloaders:
 
 Downloaders and authentication
 ------------------------------
@@ -551,6 +608,14 @@ The contents of ``registry.txt`` are:
     c137.csv 19uheidhlkjdwhoiwuhc0uhcwljchw9ochwochw89dcgw9dcgwc
     cronen.csv 1upodh2ioduhw9celdjhlfvhksgdwikdgcowjhcwoduchowjg8w
 
+A specific hashing algorithm can be enforced, if a checksum for a file is
+prefixed with ``alg:``, e.g.
+
+.. code-block:: none
+
+    c137.csv sha1:e32b18dab23935bc091c353b308f724f18edcb5e
+    cronen.csv md5:b53c08d3570b82665784cedde591a8b0
+
 To make sure the registry file is shipped with your package, include the following in
 your ``MANIFEST.in`` file:
 
@@ -643,3 +708,78 @@ change at all:
     )
     # If custom URLs are present in the registry file, they will be set automatically
     GOODBOY.load_registry(os.path.join(os.path.dirname(__file__), "registry.txt"))
+
+
+Create registry file from remote files
+--------------------------------------
+
+If you want to create a registry file for a large number of data files that are
+available for download but you don't have their hashes or any local copies, 
+you must download them first. Manually downloading each file
+can be tedious. However, we can automate the process using
+:func:`pooch.retrieve`. Below, we'll explore two different scenarios.
+
+If the data files share the same base url, we can use :func:`pooch.retrieve`
+to download them and then use :func:`pooch.make_registry` to create the
+registry:
+
+.. code:: python
+
+    import os
+
+    # Names of the data files
+    filenames = ["c137.csv", "cronen.csv", "citadel.csv"]
+
+    # Base url from which the data files can be downloaded from
+    base_url = "https://www.some-data-hosting-site.com/files/"
+
+    # Create a new directory where all files will be downloaded
+    directory = "data_files"
+    os.makedirs(directory)
+
+    # Download each data file to data_files
+    for fname in filenames:
+        path = pooch.retrieve(
+            url=base_url + fname, known_hash=None, fname=fname, path=directory
+        )
+
+    # Create the registry file from the downloaded data files
+    pooch.make_registry("data_files", "registry.txt")
+
+If each data file has its own url, the registry file can be manually created
+after downloading each data file through :func:`pooch.retrieve`:
+
+.. code:: python
+
+    import os
+
+    # Names and urls of the data files. The file names are used for naming the 
+    # downloaded files. These are the names that will be included in the registry.
+    fnames_and_urls = {
+        "c137.csv": "https://www.some-data-hosting-site.com/c137/data.csv",
+        "cronen.csv": "https://www.some-data-hosting-site.com/cronen/data.csv",
+        "citadel.csv": "https://www.some-data-hosting-site.com/citadel/data.csv",
+    }
+
+    # Create a new directory where all files will be downloaded
+    directory = "data_files"
+    os.makedirs(directory)
+
+    # Create a new registry file
+    with open("registry.txt", "w") as registry:
+        for fname, url in fnames_and_urls.items():
+            # Download each data file to the specified directory
+            path = pooch.retrieve(
+                url=url, known_hash=None, fname=fname, path=directory
+            )
+            # Add the name, hash, and url of the file to the new registry file
+            registry.write(
+                "{} {} {}\n".format(fname, pooch.file_hash(path), url)
+            )
+            
+.. warning::
+    
+    Notice that there are **no checks for download integrity** (since we don't know the
+    file hashes before hand). Only do this for trusted data sources and over a secure 
+    connection. If you have access to file hashes/checksums, **we highly recommend
+    using them** to set the ``known_hash`` argument. 
