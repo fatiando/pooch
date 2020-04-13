@@ -768,7 +768,7 @@ after downloading each data file through :func:`pooch.retrieve`:
     # Create a new registry file
     with open("registry.txt", "w") as registry:
         for fname, url in fnames_and_urls.items():
-            # Download each data file to the pooch cache directory
+            # Download each data file to the specified directory
             path = pooch.retrieve(
                 url=url, known_hash=None, fname=fname, path=directory
             )
