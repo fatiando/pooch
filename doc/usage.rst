@@ -772,7 +772,7 @@ after downloading each data file through :func:`pooch.retrieve`:
             path = pooch.retrieve(
                 url=url, known_hash=None, fname=fname, path=directory
             )
-            # Add file name, its hash and its url to the new registry file
+            # Add the name, hash, and url of the file to the new registry file
             registry.write(
                 "{} {} {}\n".format(fname, pooch.file_hash(path), url)
             )
