@@ -6,7 +6,7 @@ Changelog
 Version 1.1.0
 -------------
 
-*Released on: 2020/04/XX*
+*Released on: 2020/04/13*
 
 .. image:: https://zenodo.org/badge/DOI/10.5281/zenodo.3747184.svg
     :alt: Digital Object Identifier for the Zenodo archive
@@ -34,6 +34,12 @@ Documentation:
 * Fix path examples in docstring of ``pooch.os_cache``. The docstring mentioned
   the data path as examples instead of the cache path.
   (`#140 <https://github.com/fatiando/pooch/pull/140>`__)
+* Add example of creating a registry when you don't have the data files locally
+  and would have to download them manually. The example uses the
+  ``pooch.retrieve`` function to automate the process. The example covers two
+  cases: when all remote files share the same base URL and when every file has
+  its own URL.
+  (`#161 <https://github.com/fatiando/pooch/pull/161>`__)
 
 Maintenance:
 
@@ -48,6 +54,7 @@ Maintenance:
 This release contains contributions from:
 
 * Leonardo Uieda
+* Santiago Soler
 * Kacper Kowalik
 * Lucas Martin-King
 * Zac Flamig
