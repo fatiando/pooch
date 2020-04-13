@@ -776,3 +776,10 @@ after downloading each data file through :func:`pooch.retrieve`:
             registry.write(
                 "{} {} {}\n".format(fname, pooch.file_hash(path), url)
             )
+            
+.. warning::
+    
+    Notice that there are **no checks for download integrity** (since we don't know the
+    file hashes before hand). Only do this for trusted data sources and over a secure 
+    connection. If you have access to file hashes/checksums, **we highly recommend
+    using them** to set the ``known_hash`` argument. 
