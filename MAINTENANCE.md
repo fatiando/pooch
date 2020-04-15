@@ -130,8 +130,11 @@ file of your project. Then:
 
 1. Delete all existing files (they will be replaced with the new version).
 2. Reserve a DOI and save the release draft.
-3. Add as authors any new contributors who have added themselves to `AUTHORS.md`.
-4. Update release date.
+3. Add as authors any new contributors who have added themselves to
+   [`AUTHORS.md`](AUTHORS.md).
+4. Review author order to make sure it follows the guidelines on our
+   [Authorship Guide](AUTHORSHIP.md)
+5. Update release date.
 
 On the other hand, if you're making the first release of the project, you need to create
 a **New upload** for it inside the
@@ -197,17 +200,13 @@ click on "Draft a new release":
 
 1. Use the version number (including the `v`) as the "Tag version" and "Release
    title".
-2. The first line of the release description should be the DOI of the release:
+2. Fill the release description with a Markdown version of the **latest**
+   changelog entry (including the DOI badge). The `doc/changes.rst` file can be
+   converted to Markdown using `pandoc`:
    ```
-   DOI: https://doi.org/<INSERT-DOI-HERE>
+   pandoc -s doc/changes.rst -o changes.md --wrap=none
    ```
-3. Fill the release description with a Markdown version of the **latest**
-   changelog entry. The `doc/changes.rst` file can be converted to Markdown
-   using `pandoc`:
-   ```
-   pandoc -s doc/changes.rst -o changes.md
-   ```
-4. Publish the release.
+3. Publish the release.
 
 ### Archive on Zenodo
 
