@@ -349,7 +349,7 @@ class SFTPDownloader:  # pylint: disable=too-few-public-methods
 
     def __init__(
         self,
-        port=21,
+        port=22,
         username="anonymous",
         password="",
         account="",
@@ -383,36 +383,43 @@ class SFTPDownloader:  # pylint: disable=too-few-public-methods
         """
 
         parsed_url = parse_url(url)
-        ftp = ftplib.FTP(timeout=self.timeout)
-        ftp.connect(host=parsed_url["netloc"], port=self.port)
         ispath = not hasattr(output_file, "write")
         if ispath:
-            output_file = open(output_file, "w+b")
+            output_obj = open(output_file, "wb")
         try:
-            ftp.login(user=self.username, passwd=self.password, acct=self.account)
-            command = "RETR {}".format(parsed_url["path"])
+            cnopts = pysftp.CnOpts()
+            cnopts.hostkeys = None
+            sftp = pysftp.Connection(
+                host=parsed_url['netloc'],
+                port=self.port,
+                username=self.username,
+                password=self.password,
+                cnopts=cnopts,
+            )
+
             if self.progressbar:
-                size = int(ftp.size(parsed_url["path"]))
-                use_ascii = bool(sys.platform == "win32")
-                progress = tqdm(
-                    total=size,
-                    ncols=79,
-                    ascii=use_ascii,
-                    unit="B",
-                    unit_scale=True,
-                    leave=True,
-                )
-                with progress:
+                class TqdmWrap(tqdm):
+                    def viewBar(self, a, b):
+                        self.total = int(b)
+                        self.update(int(a - self.n))
 
-                    def callback(data):
-                        "Update the progress bar and write to output"
-                        progress.update(len(data))
-                        output_file.write(data)
+                with output_obj:
+                    size = int(sftp.stat(parsed_url["path"]).st_size)
+                    use_ascii = bool(sys.platform == "win32")
+                    progress = TqdmWrap(
+                        total=size,
+                        ncols=79,
+                        ascii=use_ascii,
+                        unit="B",
+                        unit_scale=True,
+                        leave=True)
 
-                    ftp.retrbinary(command, callback, blocksize=self.chunk_size)
+                    with progress:
+                        sftp.get(parsed_url["path"], output_file, callback=progress.viewBar)
             else:
-                ftp.retrbinary(command, output_file.write, blocksize=self.chunk_size)
+                with output_obj:
+                    sftp.get(parsed_url["path"], output_file)
         finally:
-            ftp.quit()
+            sftp.close()
             if ispath:
-                output_file.close()
+                output_obj.close()

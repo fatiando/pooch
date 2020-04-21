@@ -12,7 +12,7 @@ try:
 except ImportError:
     tqdm = None
 
-from ..downloaders import HTTPDownloader, FTPDownloader, choose_downloader
+from ..downloaders import HTTPDownloader, FTPDownloader, SFTPDownloader, choose_downloader
 from .utils import pooch_test_url, check_large_data
 
 
@@ -39,8 +39,19 @@ def test_ftp_downloader():
         assert os.path.exists(outfile)
 
 
+@pytest.mark.skipif(ON_TRAVIS, reason="SFTP is not allowed on Travis CI")
+def test_sftp_downloader():
+    "Test sftp downloader"
+    with TemporaryDirectory() as local_store:
+        downloader = SFTPDownloader(username='demo', password='password')
+        url = "sftp://test.rebex.net/pub/example/pocketftp.png"
+        outfile = os.path.join(local_store, "pocketftp.png")
+        downloader(url, outfile, None)
+        assert os.path.exists(outfile)
+
+
 @pytest.mark.skipif(tqdm is not None, reason="tqdm must be missing")
-@pytest.mark.parametrize("downloader", [HTTPDownloader, FTPDownloader])
+@pytest.mark.parametrize("downloader", [HTTPDownloader, FTPDownloader, SFTPDownloader])
 def test_downloader_progressbar_fails(downloader):
     "Make sure an error is raised if trying to use progressbar without tqdm"
     with pytest.raises(ValueError):
@@ -79,6 +90,29 @@ def test_downloader_progressbar_ftp(capsys):
         url = "ftp://speedtest.tele2.net/100KB.zip"
         outfile = os.path.join(local_store, "100KB.zip")
         download(url, outfile, None)
+        # Read stderr and make sure the progress bar is printed only when told
+        captured = capsys.readouterr()
+        printed = captured.err.split("\r")[-1].strip()
+        assert len(printed) == 79
+        if sys.platform == "win32":
+            progress = "100%|####################"
+        else:
+            progress = "100%|████████████████████"
+        # Bar size is not always the same so can't reliably test the whole bar.
+        assert printed[:25] == progress
+        # Check that the file was actually downloaded
+        assert os.path.exists(outfile)
+
+
+@pytest.mark.skipif(tqdm is None, reason="requires tqdm")
+@pytest.mark.skipif(ON_TRAVIS, reason="FTP is not allowed on Travis CI")
+def test_downloader_progressbar_sftp(capsys):
+    "Setup an SFTP downloader function that prints a progress bar for fetch"
+    downloader = SFTPDownloader(progressbar=True, username='demo', password='password')
+    with TemporaryDirectory() as local_store:
+        url = "sftp://test.rebex.net/pub/example/pocketftp.png"
+        outfile = os.path.join(local_store, "pocketftp.png")
+        downloader(url, outfile, None)
         # Read stderr and make sure the progress bar is printed only when told
         captured = capsys.readouterr()
         printed = captured.err.split("\r")[-1].strip()
