@@ -332,18 +332,13 @@ class SFTPDownloader:  # pylint: disable=too-few-public-methods
         Password used to login to the server. Only needed if the server
         requires authentication (i.e., no anonymous SFTP). Use the empty string
         to indicate no password is required.
-    account : str
-        Some servers also require an "account" name for authentication.
     timeout : int
-        Timeout in seconds for ftp socket operations, use None to mean no
+        Timeout in seconds for sftp socket operations, use None to mean no
         timeout.
     progressbar : bool
         If True, will print a progress bar of the download to standard error
         (stderr). Requires `tqdm <https://github.com/tqdm/tqdm>`__ to be
         installed.
-    chunk_size : int
-        Files are streamed *chunk_size* bytes at a time instead of loading
-        everything into memory at one. Usually doesn't need to be changed.
 
     """
 
@@ -355,7 +350,6 @@ class SFTPDownloader:  # pylint: disable=too-few-public-methods
         account="",
         timeout=None,
         progressbar=False,
-        chunk_size=1024,
     ):
 
         self.port = port
@@ -364,13 +358,12 @@ class SFTPDownloader:  # pylint: disable=too-few-public-methods
         self.account = account
         self.timeout = timeout
         self.progressbar = progressbar
-        self.chunk_size = chunk_size
         if self.progressbar and tqdm is None:
             raise ValueError("Missing package 'tqdm' required for progress bars.")
 
     def __call__(self, url, output_file, pooch):
         """
-        Download the given URL over FTP to the given output file.
+        Download the given URL over SFTP to the given output file.
 
         Parameters
         ----------
@@ -396,6 +389,7 @@ class SFTPDownloader:  # pylint: disable=too-few-public-methods
                 password=self.password,
                 cnopts=cnopts,
             )
+            sftp.timeout = self.timeout
 
             if self.progressbar:
 

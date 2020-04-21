@@ -37,6 +37,7 @@ Downloaders
 
    HTTPDownloader
    FTPDownloader
+   SFTPDownloader
 
 Processors
 ----------
