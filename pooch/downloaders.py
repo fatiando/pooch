@@ -394,9 +394,11 @@ class SFTPDownloader:  # pylint: disable=too-few-public-methods
             if self.progressbar:
 
                 class TqdmWrap(tqdm):
-                    def viewBar(self, a, b):
-                        self.total = int(b)
-                        self.update(int(a - self.n))
+                    """Wrapper for tqdm to show sftp progress"""
+                    def view_bar(self, progr, size):
+                        """callback for sftp.get"""
+                        self.total = int(size)
+                        self.update(int(progr - self.n))
 
                 with output_obj:
                     size = int(sftp.stat(parsed_url["path"]).st_size)
@@ -412,7 +414,7 @@ class SFTPDownloader:  # pylint: disable=too-few-public-methods
 
                     with progress:
                         sftp.get(
-                            parsed_url["path"], output_file, callback=progress.viewBar
+                            parsed_url["path"], output_file, callback=progress.view_bar
                         )
             else:
                 with output_obj:
