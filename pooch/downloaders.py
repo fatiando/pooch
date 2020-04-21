@@ -390,7 +390,7 @@ class SFTPDownloader:  # pylint: disable=too-few-public-methods
             cnopts = pysftp.CnOpts()
             cnopts.hostkeys = None
             sftp = pysftp.Connection(
-                host=parsed_url['netloc'],
+                host=parsed_url["netloc"],
                 port=self.port,
                 username=self.username,
                 password=self.password,
@@ -398,6 +398,7 @@ class SFTPDownloader:  # pylint: disable=too-few-public-methods
             )
 
             if self.progressbar:
+
                 class TqdmWrap(tqdm):
                     def viewBar(self, a, b):
                         self.total = int(b)
@@ -412,10 +413,13 @@ class SFTPDownloader:  # pylint: disable=too-few-public-methods
                         ascii=use_ascii,
                         unit="B",
                         unit_scale=True,
-                        leave=True)
+                        leave=True,
+                    )
 
                     with progress:
-                        sftp.get(parsed_url["path"], output_file, callback=progress.viewBar)
+                        sftp.get(
+                            parsed_url["path"], output_file, callback=progress.viewBar
+                        )
             else:
                 with output_obj:
                     sftp.get(parsed_url["path"], output_file)

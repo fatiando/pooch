@@ -12,7 +12,12 @@ try:
 except ImportError:
     tqdm = None
 
-from ..downloaders import HTTPDownloader, FTPDownloader, SFTPDownloader, choose_downloader
+from ..downloaders import (
+    HTTPDownloader,
+    FTPDownloader,
+    SFTPDownloader,
+    choose_downloader,
+)
 from .utils import pooch_test_url, check_large_data
 
 
@@ -43,7 +48,7 @@ def test_ftp_downloader():
 def test_sftp_downloader():
     "Test sftp downloader"
     with TemporaryDirectory() as local_store:
-        downloader = SFTPDownloader(username='demo', password='password')
+        downloader = SFTPDownloader(username="demo", password="password")
         url = "sftp://test.rebex.net/pub/example/pocketftp.png"
         outfile = os.path.join(local_store, "pocketftp.png")
         downloader(url, outfile, None)
@@ -108,7 +113,7 @@ def test_downloader_progressbar_ftp(capsys):
 @pytest.mark.skipif(ON_TRAVIS, reason="FTP is not allowed on Travis CI")
 def test_downloader_progressbar_sftp(capsys):
     "Setup an SFTP downloader function that prints a progress bar for fetch"
-    downloader = SFTPDownloader(progressbar=True, username='demo', password='password')
+    downloader = SFTPDownloader(progressbar=True, username="demo", password="password")
     with TemporaryDirectory() as local_store:
         url = "sftp://test.rebex.net/pub/example/pocketftp.png"
         outfile = os.path.join(local_store, "pocketftp.png")
