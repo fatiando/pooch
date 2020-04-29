@@ -46,9 +46,6 @@ def choose_downloader(url):
     >>> downloader = choose_downloader("ftp://something.com")
     >>> print(downloader.__class__.__name__)
     FTPDownloader
-    >>> downloader = choose_downloader("sftp://something.com")
-    >>> print(downloader.__class__.__name__)
-    SFTPDownloader
 
     """
     known_downloaders = {
