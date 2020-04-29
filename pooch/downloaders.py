@@ -391,6 +391,9 @@ if paramiko is not None:
             connection = paramiko.Transport(sock=(parsed_url["netloc"], self.port))
 
             if isfile:
+                # paramiko requires a file name as a string, not a file object
+                # file is first closed to avoid any errors and then get name
+                output_file.close()
                 output_file = output_file.name
             sftp = None
             try:

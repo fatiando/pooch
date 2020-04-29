@@ -56,8 +56,7 @@ def test_sftp_downloader():
         downloader = SFTPDownloader(username="demo", password="password")
         url = "sftp://test.rebex.net/pub/example/pocketftp.png"
         outfile = os.path.join(local_store, "pocketftp.png")
-        outfileobj = open(outfile, "wb")
-        downloader(url, outfileobj, None)
+        downloader(url, outfile, None)
         assert os.path.exists(outfile)
 
 
