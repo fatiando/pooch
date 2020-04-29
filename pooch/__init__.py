@@ -3,8 +3,13 @@
 from . import version
 from .core import Pooch, create, retrieve
 from .utils import os_cache, file_hash, make_registry, check_version, get_logger
-from .downloaders import HTTPDownloader, FTPDownloader, SFTPDownloader
+from .downloaders import HTTPDownloader, FTPDownloader
 from .processors import Unzip, Untar, Decompress
+
+try:
+    from .downloaders import SFTPDownloader
+except ImportError:
+    pass
 
 
 def test(doctest=True, verbose=True, coverage=False):

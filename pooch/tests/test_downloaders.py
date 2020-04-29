@@ -15,10 +15,14 @@ except ImportError:
 from ..downloaders import (
     HTTPDownloader,
     FTPDownloader,
-    SFTPDownloader,
     choose_downloader,
 )
 from .utils import pooch_test_url, check_large_data
+
+try:
+    from ..downloaders import SFTPDownloader
+except ImportError:
+    SFTPDownloader = None
 
 
 # FTP doesn't work on Travis CI so need to be able to skip tests there
@@ -44,6 +48,7 @@ def test_ftp_downloader():
         assert os.path.exists(outfile)
 
 
+@pytest.mark.skipif(SFTPDownloader is None, reason="requires paramiko")
 @pytest.mark.skipif(ON_TRAVIS, reason="SFTP is not allowed on Travis CI")
 def test_sftp_downloader():
     "Test sftp downloader"
@@ -51,12 +56,13 @@ def test_sftp_downloader():
         downloader = SFTPDownloader(username="demo", password="password")
         url = "sftp://test.rebex.net/pub/example/pocketftp.png"
         outfile = os.path.join(local_store, "pocketftp.png")
-        downloader(url, outfile, None)
+        outfileobj = open(outfile, "wb")
+        downloader(url, outfileobj, None)
         assert os.path.exists(outfile)
 
 
 @pytest.mark.skipif(tqdm is not None, reason="tqdm must be missing")
-@pytest.mark.parametrize("downloader", [HTTPDownloader, FTPDownloader, SFTPDownloader])
+@pytest.mark.parametrize("downloader", [HTTPDownloader, FTPDownloader])
 def test_downloader_progressbar_fails(downloader):
     "Make sure an error is raised if trying to use progressbar without tqdm"
     with pytest.raises(ValueError):
@@ -110,8 +116,10 @@ def test_downloader_progressbar_ftp(capsys):
 
 
 @pytest.mark.skipif(tqdm is None, reason="requires tqdm")
-@pytest.mark.skipif(ON_TRAVIS, reason="FTP is not allowed on Travis CI")
+@pytest.mark.skipif(SFTPDownloader is None, reason="requires paramiko")
+@pytest.mark.skipif(ON_TRAVIS, reason="SFTP is not allowed on Travis CI")
 def test_downloader_progressbar_sftp(capsys):
+
     "Setup an SFTP downloader function that prints a progress bar for fetch"
     downloader = SFTPDownloader(progressbar=True, username="demo", password="password")
     with TemporaryDirectory() as local_store:

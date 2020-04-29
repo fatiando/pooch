@@ -8,7 +8,6 @@ dependencies:
     - requests
     - packaging
     - appdirs
-    - pysftp
     # Development requirements
     - pytest
     - pytest-cov

@@ -33,6 +33,7 @@ Optional:
 
 * `tqdm <https://github.com/tqdm/tqdm>`__: Required to print a download progress bar
   (see :class:`pooch.HTTPDownloader`).
+* `paramiko <https://github.com/paramiko/paramiko>`__: Required for SFTP downloads
 
 
 Installing with conda

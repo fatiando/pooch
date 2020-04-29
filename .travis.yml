@@ -43,7 +43,7 @@ matrix:
           os: linux
           env:
               - PYTHON=3.7
-              - CONDA_INSTALL_EXTRA="codecov tqdm"
+              - CONDA_INSTALL_EXTRA="codecov tqdm paramiko"
         - name: "Linux - Python 3.6"
           os: linux
           env:

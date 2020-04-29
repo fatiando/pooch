@@ -3,17 +3,20 @@ Download hooks for Pooch.fetch
 """
 import sys
 import ftplib
-import pysftp
 
 import requests
 
 from .utils import parse_url
 
-
 try:
     from tqdm import tqdm
 except ImportError:
     tqdm = None
+
+try:
+    import paramiko
+except ImportError:
+    paramiko = None
 
 
 def choose_downloader(url):
@@ -28,8 +31,8 @@ def choose_downloader(url):
     Returns
     -------
     downloader
-        A downloader class (either :class:`pooch.HTTPDownloader` or
-        :class:`pooch.FTPDownloader`).
+        A downloader class (either :class:`pooch.HTTPDownloader`,
+        :class:`pooch.FTPDownloader`, or :class: `pooch.SFTPDownloader`).
 
     Examples
     --------
@@ -43,6 +46,9 @@ def choose_downloader(url):
     >>> downloader = choose_downloader("ftp://something.com")
     >>> print(downloader.__class__.__name__)
     FTPDownloader
+    >>> downloader = choose_downloader("sftp://something.com")
+    >>> print(downloader.__class__.__name__)
+    SFTPDownloader
 
     """
     known_downloaders = {
@@ -50,6 +56,10 @@ def choose_downloader(url):
         "https": HTTPDownloader,
         "http": HTTPDownloader,
     }
+
+    if paramiko is not None:
+        known_downloaders.update({"sftp": SFTPDownloader})
+
     parsed_url = parse_url(url)
     if parsed_url["protocol"] not in known_downloaders:
         raise ValueError(
@@ -311,100 +321,90 @@ class FTPDownloader:  # pylint: disable=too-few-public-methods
                 output_file.close()
 
 
-class SFTPDownloader:  # pylint: disable=too-few-public-methods
-    """
-    Download manager for fetching files over SFTP.
+if paramiko is not None:
 
-    When called, downloads the given file URL into the specified local file.
-    Uses the :mod:`pysftp` module to manage downloads.
-
-    Use with :meth:`pooch.Pooch.fetch` to customize the download of files (for
-    example, to use authentication or print a progress bar).
-
-    Parameters
-    ----------
-    port : int
-        Port used for the SFTP connection.
-    username : str
-        User name used to login to the server. Only needed if the server
-        requires authentication (i.e., no anonymous SFTP).
-    password : str
-        Password used to login to the server. Only needed if the server
-        requires authentication (i.e., no anonymous SFTP). Use the empty string
-        to indicate no password is required.
-    timeout : int
-        Timeout in seconds for sftp socket operations, use None to mean no
-        timeout.
-    progressbar : bool
-        If True, will print a progress bar of the download to standard error
-        (stderr). Requires `tqdm <https://github.com/tqdm/tqdm>`__ to be
-        installed.
-
-    """
-
-    def __init__(
-        self,
-        port=22,
-        username="anonymous",
-        password="",
-        account="",
-        timeout=None,
-        progressbar=False,
-    ):
-
-        self.port = port
-        self.username = username
-        self.password = password
-        self.account = account
-        self.timeout = timeout
-        self.progressbar = progressbar
-        if self.progressbar and tqdm is None:
-            raise ValueError("Missing package 'tqdm' required for progress bars.")
-
-    def __call__(self, url, output_file, pooch):
+    class SFTPDownloader:  # pylint: disable=too-few-public-methods
         """
-        Download the given URL over SFTP to the given output file.
+        Download manager for fetching files over SFTP.
+
+        When called, downloads the given file URL into the specified local file
+        Uses the :mod:`paramiko` module to manage downloads.
+
+        Use with :meth:`pooch.Pooch.fetch` to customize the download of files
+        (for example, to use authentication or print a progress bar).
 
         Parameters
         ----------
-        url : str
-            The URL to the file you want to download.
-        output_file : str or file-like object
-            Path (and file name) to which the file will be downloaded.
-        pooch : :class:`~pooch.Pooch`
-            The instance of :class:`~pooch.Pooch` that is calling this method.
+        port : int
+            Port used for the SFTP connection.
+        username : str
+            User name used to login to the server. Only needed if the server
+            requires authentication (i.e., no anonymous SFTP).
+        password : str
+            Password used to login to the server. Only needed if the server
+            requires authentication (i.e., no anonymous SFTP). Use the empty
+            string to indicate no password is required.
+        timeout : int
+            Timeout in seconds for sftp socket operations, use None to mean no
+            timeout.
+        progressbar : bool
+            If True, will print a progress bar of the download to standard
+            error (stderr). Requires `tqdm <https://github.com/tqdm/tqdm>`__ to
+            be installed.
+
         """
 
-        parsed_url = parse_url(url)
-        ispath = not hasattr(output_file, "write")
-        if ispath:
-            output_obj = open(output_file, "wb")
-        try:
-            cnopts = pysftp.CnOpts()
-            cnopts.hostkeys = None
-            sftp = pysftp.Connection(
-                host=parsed_url["netloc"],
-                port=self.port,
-                username=self.username,
-                password=self.password,
-                cnopts=cnopts,
-            )
-            sftp.timeout = self.timeout
+        def __init__(
+            self,
+            port=22,
+            username="anonymous",
+            password="",
+            account="",
+            timeout=None,
+            progressbar=False,
+        ):
 
-            if self.progressbar:
+            self.port = port
+            self.username = username
+            self.password = password
+            self.account = account
+            self.timeout = timeout
+            self.progressbar = progressbar
+            if self.progressbar and tqdm is None:
+                raise ValueError("Missing package 'tqdm' required for progress bars.")
 
-                class TqdmWrap(tqdm):
-                    """Wrapper for tqdm to show sftp progress"""
+        def __call__(self, url, output_file, pooch):
+            """
+            Download the given URL over SFTP to the given output file.
 
-                    def view_bar(self, progr, size):
-                        """callback for sftp.get"""
-                        self.total = int(size)
-                        self.update(int(progr - self.n))
+            Parameters
+            ----------
+            url : str
+                The URL to the file you want to download.
+            output_file : str or file-like object
+                Path (and file name) to which the file will be downloaded.
+            pooch : :class:`~pooch.Pooch`
+                The instance of :class:`~pooch.Pooch` that is calling this
+                method.
+            """
 
-                with output_obj:
+            parsed_url = parse_url(url)
+            isfile = hasattr(output_file, "write")
+
+            connection = paramiko.Transport(sock=(parsed_url["netloc"], self.port))
+
+            if isfile:
+                output_file = output_file.name
+            sftp = None
+            try:
+                connection.connect(username=self.username, password=self.password)
+                sftp = paramiko.SFTPClient.from_transport(connection)
+                sftp.get_channel().settimeout = self.timeout
+
+                if self.progressbar:
                     size = int(sftp.stat(parsed_url["path"]).st_size)
                     use_ascii = bool(sys.platform == "win32")
-                    progress = TqdmWrap(
+                    progress = tqdm(
                         total=size,
                         ncols=79,
                         ascii=use_ascii,
@@ -412,15 +412,17 @@ class SFTPDownloader:  # pylint: disable=too-few-public-methods
                         unit_scale=True,
                         leave=True,
                     )
-
                     with progress:
-                        sftp.get(
-                            parsed_url["path"], output_file, callback=progress.view_bar
-                        )
-            else:
-                with output_obj:
+
+                        def callback(current, total):
+                            "Update the progress bar and write to output"
+                            progress.total = int(total)
+                            progress.update(int(current - progress.n))
+
+                        sftp.get(parsed_url["path"], output_file, callback=callback)
+                else:
                     sftp.get(parsed_url["path"], output_file)
-        finally:
-            sftp.close()
-            if ispath:
-                output_obj.close()
+            finally:
+                connection.close()
+                if sftp is not None:
+                    sftp.close()
