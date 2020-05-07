@@ -148,6 +148,7 @@ For **package developers** including sample data in their projects:
 Projects using Pooch
 --------------------
 
+* `scikit-image <https://github.com/scikit-image/scikit-image>`__
 * `MetPy <https://github.com/Unidata/MetPy>`__
 * `Verde <https://github.com/fatiando/verde>`__
 * `Harmonica <https://github.com/fatiando/harmonica>`__
