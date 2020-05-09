@@ -12,17 +12,18 @@ try:
 except ImportError:
     tqdm = None
 
+try:
+    import paramiko
+except ImportError:
+    paramiko = None
+
 from ..downloaders import (
     HTTPDownloader,
     FTPDownloader,
+    SFTPDownloader,
     choose_downloader,
 )
 from .utils import pooch_test_url, check_large_data
-
-try:
-    from ..downloaders import SFTPDownloader
-except ImportError:
-    SFTPDownloader = None
 
 
 # FTP doesn't work on Travis CI so need to be able to skip tests there
@@ -48,7 +49,7 @@ def test_ftp_downloader():
         assert os.path.exists(outfile)
 
 
-@pytest.mark.skipif(SFTPDownloader is None, reason="requires paramiko")
+@pytest.mark.skipif(paramiko is None, reason="requires paramiko to run SFTP")
 @pytest.mark.skipif(ON_TRAVIS, reason="SFTP is not allowed on Travis CI")
 def test_sftp_downloader():
     "Test sftp downloader"
@@ -58,6 +59,15 @@ def test_sftp_downloader():
         outfile = os.path.join(local_store, "pocketftp.png")
         downloader(url, outfile, None)
         assert os.path.exists(outfile)
+
+
+@pytest.mark.skipif(paramiko is not None, reason="pass if paramiko installed")
+def test_sftp_downloader_fail_if_paramiko_missing():
+    "test must fail if paramiko is not installed"
+    try:
+        SFTPDownloader()
+    except ImportError:
+        pass
 
 
 @pytest.mark.skipif(tqdm is not None, reason="tqdm must be missing")
@@ -115,7 +125,7 @@ def test_downloader_progressbar_ftp(capsys):
 
 
 @pytest.mark.skipif(tqdm is None, reason="requires tqdm")
-@pytest.mark.skipif(SFTPDownloader is None, reason="requires paramiko")
+@pytest.mark.skipif(paramiko is None, reason="requires paramiko")
 @pytest.mark.skipif(ON_TRAVIS, reason="SFTP is not allowed on Travis CI")
 def test_downloader_progressbar_sftp(capsys):
 
