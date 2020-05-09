@@ -256,7 +256,7 @@ def make_local_storage(path, env=None, version=None):
             # When running in parallel, it's possible that multiple jobs will
             # try to create the path at the same time. Use exist_ok to avoid
             # raising an error.
-            os.makedirs(path)
+            os.makedirs(path, exist_ok=True)
         else:
             action = "write to"
             with tempfile.NamedTemporaryFile(dir=path):
