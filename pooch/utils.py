@@ -253,12 +253,21 @@ def make_local_storage(path, env=None, version=None):
     try:
         if not os.path.exists(path):
             action = "create"
-            os.makedirs(path)
+            # When running in parallel, it's possible that multiple jobs will
+            # try to create the path at the same time. Use exist_ok to avoid
+            # raising an error.
+            os.makedirs(path, exist_ok=True)
         else:
             action = "write to"
             with tempfile.NamedTemporaryFile(dir=path):
                 pass
     except PermissionError:
+        # Only log an error message instead of raising an exception. The cache
+        # is usually created at import time, so raising an exception here would
+        # cause packages to crash immediately, even if users aren't using the
+        # sample data at all. So issue a warning here just in case and only
+        # crash with an exception when the user actually tries to download
+        # data (Pooch.fetch or retrieve).
         message = (
             "Cannot %s data cache folder '%s'. "
             "Will not be able to download remote data files. "
