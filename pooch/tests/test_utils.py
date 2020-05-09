@@ -2,10 +2,13 @@
 Test the utility functions.
 """
 import os
+import shutil
 import hashlib
+import time
 from pathlib import Path
 import tempfile
 from tempfile import NamedTemporaryFile, TemporaryDirectory
+from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor
 
 import pytest
 
@@ -39,6 +42,45 @@ def test_unique_name_long():
     assert len(fname) == 255
     assert fname[-10:] == "aaaaaa.txt"
     assert fname.split("-")[1][:10] == "aaaaaaaaaa"
+
+
+@pytest.mark.parametrize(
+    "pool", [ThreadPoolExecutor, ProcessPoolExecutor], ids=["threads", "processes"],
+)
+def test_make_local_storage_parallel(pool, monkeypatch):
+    "Try to create the cache folder in parallel"
+    # Can cause multiple attempts at creating the folder which leads to an
+    # exception. Check that this doesn't happen.
+    # See https://github.com/fatiando/pooch/issues/170
+
+    # Monkey path makedirs to make it delay before creating the directory.
+    # Otherwise, the dispatch is too fast and the directory will exist before
+    # another process tries to create it.
+
+    # Need to keep a reference to the original function to avoid infinite
+    # recursions from the monkey patching.
+    makedirs = os.makedirs
+
+    def mockmakedirs(path, exist_ok=False):  # pylint: disable=unused-argument
+        "Delay before calling makedirs"
+        time.sleep(0.5)
+        makedirs(path, exist_ok=exist_ok)
+
+    monkeypatch.setattr(os, "makedirs", mockmakedirs)
+
+    data_cache = os.path.join(os.curdir, "test_parallel_cache")
+    assert not os.path.exists(data_cache)
+
+    try:
+        with pool() as executor:
+            futures = [
+                executor.submit(make_local_storage, data_cache) for i in range(4)
+            ]
+            for future in futures:
+                assert os.path.exists(str(future.result()))
+    finally:
+        if os.path.exists(data_cache):
+            shutil.rmtree(data_cache)
 
 
 def test_local_storage_makedirs_permissionerror(monkeypatch):

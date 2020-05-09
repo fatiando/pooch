@@ -253,6 +253,9 @@ def make_local_storage(path, env=None, version=None):
     try:
         if not os.path.exists(path):
             action = "create"
+            # When running in parallel, it's possible that multiple jobs will
+            # try to create the path at the same time. Use exist_ok to avoid
+            # raising an error.
             os.makedirs(path)
         else:
             action = "write to"
