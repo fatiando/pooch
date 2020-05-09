@@ -63,7 +63,7 @@ def test_make_local_storage_parallel(pool, monkeypatch):
 
     def mockmakedirs(path, exist_ok=False):  # pylint: disable=unused-argument
         "Delay before calling makedirs"
-        time.sleep(0.5)
+        time.sleep(1.5)
         makedirs(path, exist_ok=exist_ok)
 
     monkeypatch.setattr(os, "makedirs", mockmakedirs)
