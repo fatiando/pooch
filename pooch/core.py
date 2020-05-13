@@ -255,6 +255,12 @@ def create(
     ``https://github.com/fatiando/pooch/raw/v0.1/data``). If the version string
     contains ``+XX.XXXXX``, it will be interpreted as a development version.
 
+    Does **not** create the local data storage folder if it doesn't exist. The
+    folder will only be created the first time a download is attempted with
+    :meth:`pooch.Pooch.fetch`. This makes it safe to use this function at the
+    module level (so it's executed on ``import`` and the resulting
+    :class:`~pooch.Pooch` is a global variable).
+
     Parameters
     ----------
     path : str, PathLike, list or tuple
@@ -373,6 +379,11 @@ def create(
     if version is not None:
         version = check_version(version, fallback=version_dev)
         base_url = base_url.format(version=version)
+    # Don't create the cache folder here! This function is usually called in
+    # the module context (at import time), so touching the file system is not
+    # recommended. It could cause crashes when multiple processes/threads try
+    # to import at the same time (which would try to create the folder several
+    # times at once).
     path = cache_location(path, env, version)
     pup = Pooch(path=path, base_url=base_url, registry=registry, urls=urls)
     return pup

@@ -96,13 +96,12 @@ def test_local_storage_makedirs_permissionerror(monkeypatch):
 
     monkeypatch.setattr(os, "makedirs", mockmakedirs)
 
-    with capture_log() as log_file:
+    with pytest.raises(PermissionError) as error:
         make_local_storage(
             path=data_cache, env="SOME_VARIABLE",
         )
-        logs = log_file.getvalue()
-        assert logs.startswith("Cannot create data cache")
-        assert "'SOME_VARIABLE'" in logs
+        assert "Pooch could not create data cache" in str(error)
+        assert "'SOME_VARIABLE'" in str(error)
 
 
 def test_local_storage_newfile_permissionerror(monkeypatch):
@@ -120,13 +119,12 @@ def test_local_storage_newfile_permissionerror(monkeypatch):
 
         monkeypatch.setattr(tempfile, "NamedTemporaryFile", mocktempfile)
 
-        with capture_log() as log_file:
+        with pytest.raises(PermissionError) as error:
             make_local_storage(
                 path=data_cache, env="SOME_VARIABLE",
             )
-            logs = log_file.getvalue()
-            assert logs.startswith("Cannot write to data cache")
-            assert "'SOME_VARIABLE'" in logs
+            assert "Pooch could not write to data cache" in str(error)
+            assert "'SOME_VARIABLE'" in str(error)
 
 
 def test_registry_builder():

@@ -278,22 +278,19 @@ def make_local_storage(path, env=None):
             action = "write to"
             with tempfile.NamedTemporaryFile(dir=path):
                 pass
-    except PermissionError:
-        # Only log an error message instead of raising an exception. The cache
-        # is usually created at import time, so raising an exception here would
-        # cause packages to crash immediately, even if users aren't using the
-        # sample data at all. So issue a warning here just in case and only
-        # crash with an exception when the user actually tries to download
-        # data (Pooch.fetch or retrieve).
-        message = (
-            "Cannot %s data cache folder '%s'. "
-            "Will not be able to download remote data files. "
-        )
-        args = [action, path]
+    except PermissionError as error:
+        message = [
+            str(error),
+            "| Pooch could not {} data cache folder '{}'.".format(action, path),
+            "Will not be able to download data files.",
+        ]
         if env is not None:
-            message += "Use environment variable '%s' to specify another directory."
-            args += [env]
-        get_logger().warning(message, *args)
+            message.append(
+                "Use environment variable '{}' to specify a different location.".format(
+                    env
+                )
+            )
+        raise PermissionError(" ".join(message)) from error
 
 
 def hash_algorithm(hash_string):
