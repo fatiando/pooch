@@ -201,10 +201,10 @@ def retrieve(url, known_hash, fname=None, path=None, processor=None, downloader=
         fname = unique_file_name(url)
     # Create the local data directory if it doesn't already exist and make the
     # path absolute.
-    path = cache_location(path, env=None, version=None).resolve()
+    path = cache_location(path, env=None, version=None)
     make_local_storage(path)
 
-    full_path = path / fname
+    full_path = path.resolve() / fname
     action, verb = download_action(full_path, known_hash)
 
     if action in ("download", "update"):

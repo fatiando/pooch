@@ -13,7 +13,7 @@ from .utils import check_tiny_data, capture_log
 
 def test_create_and_fetch():
     "Fetch a data file from the local storage"
-    path = os_cache("pooch-testing").resolve()
+    path = os_cache("pooch-testing")
     if path.exists():
         shutil.rmtree(str(path))
     pup = create(
