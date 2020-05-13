@@ -77,7 +77,8 @@ def test_make_local_storage_parallel(pool, monkeypatch):
                 executor.submit(make_local_storage, data_cache) for i in range(4)
             ]
             for future in futures:
-                assert os.path.exists(str(future.result()))
+                future.result()
+            assert os.path.exists(data_cache)
     finally:
         if os.path.exists(data_cache):
             shutil.rmtree(data_cache)
@@ -97,7 +98,7 @@ def test_local_storage_makedirs_permissionerror(monkeypatch):
 
     with capture_log() as log_file:
         make_local_storage(
-            path=data_cache, version="1.0", env="SOME_VARIABLE",
+            path=data_cache, env="SOME_VARIABLE",
         )
         logs = log_file.getvalue()
         assert logs.startswith("Cannot create data cache")
@@ -121,7 +122,7 @@ def test_local_storage_newfile_permissionerror(monkeypatch):
 
         with capture_log() as log_file:
             make_local_storage(
-                path=data_cache, version="1.0", env="SOME_VARIABLE",
+                path=data_cache, env="SOME_VARIABLE",
             )
             logs = log_file.getvalue()
             assert logs.startswith("Cannot write to data cache")

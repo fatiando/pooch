@@ -216,11 +216,12 @@ def parse_url(url):
     return {"protocol": protocol, "netloc": parsed_url.netloc, "path": parsed_url.path}
 
 
-def make_local_storage(path, env=None, version=None):
+def cache_location(path, env=None, version=None):
     """
-    Create the local cache directory and make sure it's writable.
+    Location of the cache given a base path and optional configuration.
 
-    If the directory doesn't exist, it will be created.
+    Checks for the environment variable to overwrite the path of the local
+    cache. Optionally add *version* to the path if given.
 
     Parameters
     ----------
@@ -249,6 +250,22 @@ def make_local_storage(path, env=None, version=None):
     if version is not None:
         path = os.path.join(str(path), version)
     path = os.path.expanduser(str(path))
+    return Path(path)
+
+
+def make_local_storage(path, env=None):
+    """
+    Create the local cache directory and make sure it's writable.
+
+    Parameters
+    ----------
+    path : str or PathLike
+        The path to the local data storage folder.
+    env : str or None
+        An environment variable that can be used to overwrite *path*. Only used
+        in the error message in case the folder is not writable.
+    """
+    path = str(path)
     # Check that the data directory is writable
     try:
         if not os.path.exists(path):
@@ -276,9 +293,7 @@ def make_local_storage(path, env=None, version=None):
         if env is not None:
             message += "Use environment variable '%s' to specify another directory."
             args += [env]
-
         get_logger().warning(message, *args)
-    return Path(path)
 
 
 def hash_algorithm(hash_string):

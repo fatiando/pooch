@@ -13,6 +13,7 @@ from .utils import (
     parse_url,
     get_logger,
     make_local_storage,
+    cache_location,
     hash_matches,
     temporary_file,
     os_cache,
@@ -200,7 +201,8 @@ def retrieve(url, known_hash, fname=None, path=None, processor=None, downloader=
         fname = unique_file_name(url)
     # Create the local data directory if it doesn't already exist and make the
     # path absolute.
-    path = make_local_storage(path, env=None, version=None).resolve()
+    path = cache_location(path, env=None, version=None).resolve()
+    make_local_storage(path)
 
     full_path = path / fname
     action, verb = download_action(full_path, known_hash)
@@ -368,7 +370,7 @@ def create(
     if version is not None:
         version = check_version(version, fallback=version_dev)
         base_url = base_url.format(version=version)
-    path = make_local_storage(path, env, version)
+    path = cache_location(path, env, version)
     pup = Pooch(path=path, base_url=base_url, registry=registry, urls=urls)
     return pup
 
@@ -545,7 +547,7 @@ class Pooch:
         self._assert_file_in_registry(fname)
 
         # Create the local data directory if it doesn't already exist
-        os.makedirs(str(self.abspath), exist_ok=True)
+        make_local_storage(str(self.abspath))
 
         url = self.get_url(fname)
         full_path = self.abspath / fname
