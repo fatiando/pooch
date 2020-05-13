@@ -22,7 +22,7 @@ from ..utils import (
     temporary_file,
     unique_file_name,
 )
-from .utils import check_tiny_data, capture_log
+from .utils import check_tiny_data
 
 DATA_DIR = str(Path(__file__).parent / "data" / "store")
 REGISTRY = (
