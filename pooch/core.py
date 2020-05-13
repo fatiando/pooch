@@ -309,6 +309,9 @@ def create(
     ...              registry={"data.txt": "9081wo2eb2gc0u..."})
     >>> print(pup.path.parts)  # The path is a pathlib.Path
     ('myproject', 'v0.1')
+    >>> # The local folder is only created when a dataset is first downloaded
+    >>> print(pup.path.exists())
+    False
     >>> print(pup.base_url)
     http://some.link.com/v0.1/
     >>> print(pup.registry)
