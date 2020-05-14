@@ -1,0 +1,482 @@
+
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+    
+    <title>pooch.Pooch &mdash; Pooch v1.1.1</title>
+    
+
+
+  
+  
+    <link rel="shortcut icon" href="../../_static/favicon.png"/>
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/style.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="pooch.retrieve" href="pooch.retrieve.html" />
+    <link rel="prev" title="pooch.create" href="pooch.create.html" />
+    <!-- Google Analytics tracking code -->
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new
+            Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+                })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-38125837-1', 'auto', {'storage': 'none'});
+      ga('set', 'anonymizeIp', true);
+      ga('send', 'pageview');
+    </script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html">
+          
+
+          
+            
+            <img src="../../_static/pooch-logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                v1.1.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+    
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Documentation</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../install.html">Installing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../citing.html">Citing Pooch</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../usage.html">Training your Pooch</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../retrieve.html">Downloading a single file</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">API Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html#core">Core</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="pooch.create.html">pooch.create</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">pooch.Pooch</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pooch.retrieve.html">pooch.retrieve</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#utilities">Utilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#downloaders">Downloaders</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#processors">Processors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#miscellaneous">Miscellaneous</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../changes.html">Changelog</a></li>
+</ul>
+
+            
+          
+
+    
+        <p class="caption">
+            <span class="caption-text">
+            
+                Getting help and contributing
+            
+            </span>
+        </p>
+        <ul>
+            
+                <li class="toctree-l1"><a href="https://www.fatiando.org"><i class="fa fa-external-link-square fa-fw"></i> Fatiando a Terra</a></li>
+            
+                <li class="toctree-l1"><a href="https://github.com/fatiando/pooch/blob/master/CONTRIBUTING.md"><i class="fa fa-users fa-fw"></i> Contributing</a></li>
+            
+                <li class="toctree-l1"><a href="https://github.com/fatiando/pooch/blob/master/CODE_OF_CONDUCT.md"><i class="fa fa-gavel fa-fw"></i> Code of Conduct</a></li>
+            
+                <li class="toctree-l1"><a href="http://contact.fatiando.org"><i class="fa fa-comment fa-fw"></i> Contact</a></li>
+            
+                <li class="toctree-l1"><a href="https://github.com/fatiando/pooch"><i class="fa fa-github fa-fw"></i> Source Code</a></li>
+            
+        </ul>
+    
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Pooch</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">API Reference</a> &raquo;</li>
+        
+      <li>pooch.Pooch</li>
+    
+    
+    <li class="source-link">
+        
+            
+                
+                
+                <a href="https://github.com/fatiando/pooch/issues/new?title=Suggested%20improvement%20for%20api/generated/pooch.Pooch&body=Please%20describe%20what%20could%20be%20improved%20about%20this%20page%20or%20the%20typo/mistake%20that%20you%20found%3A"
+                   class="fa fa-github"> Improve this page</a>
+            
+        
+        
+    </li>
+
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="pooch-pooch">
+<h1>pooch.Pooch<a class="headerlink" href="#pooch-pooch" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="pooch.Pooch">
+<em class="property">class </em><code class="sig-prename descclassname">pooch.</code><code class="sig-name descname">Pooch</code><span class="sig-paren">(</span><em class="sig-param">path</em>, <em class="sig-param">base_url</em>, <em class="sig-param">registry=None</em>, <em class="sig-param">urls=None</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pooch/core.html#Pooch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pooch.Pooch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Manager for a local data storage that can fetch from a remote source.</p>
+<p>Avoid creating <code class="docutils literal notranslate"><span class="pre">Pooch</span></code> instances directly. Use <a class="reference internal" href="pooch.create.html#pooch.create" title="pooch.create"><code class="xref py py-func docutils literal notranslate"><span class="pre">pooch.create</span></code></a>
+instead.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – The path to the local data storage folder. The path must exist in the
+file system.</p></li>
+<li><p><strong>base_url</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – Base URL for the remote data source. All requests will be made relative
+to this URL.</p></li>
+<li><p><strong>registry</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)"><em>dict</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><em>None</em></a>) – A record of the files that are managed by this good boy. Keys should be
+the file names and the values should be their hashes. Only files
+in the registry can be fetched from the local storage. Files in
+subdirectories of <em>path</em> <strong>must use Unix-style separators</strong> (<code class="docutils literal notranslate"><span class="pre">'/'</span></code>)
+even on Windows.</p></li>
+<li><p><strong>urls</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)"><em>dict</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><em>None</em></a>) – Custom URLs for downloading individual files in the registry. A
+dictionary with the file names as keys and the custom URLs as values.
+Not all files in <em>registry</em> need an entry in <em>urls</em>. If a file has an
+entry in <em>urls</em>, the <em>base_url</em> will be ignored when downloading it in
+favor of <code class="docutils literal notranslate"><span class="pre">urls[fname]</span></code>.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Methods Summary</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pooch.Pooch.fetch" title="pooch.Pooch.fetch"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Pooch.fetch</span></code></a>(fname[, processor, downloader])</p></td>
+<td><p>Get the absolute path to a file in the local storage.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#pooch.Pooch.get_url" title="pooch.Pooch.get_url"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Pooch.get_url</span></code></a>(fname)</p></td>
+<td><p>Get the full URL to download a file in the registry.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pooch.Pooch.is_available" title="pooch.Pooch.is_available"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Pooch.is_available</span></code></a>(fname)</p></td>
+<td><p>Check availability of a remote file without downloading it.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#pooch.Pooch.load_registry" title="pooch.Pooch.load_registry"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Pooch.load_registry</span></code></a>(fname)</p></td>
+<td><p>Load entries from a file and add them to the registry.</p></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<hr class="docutils" />
+<dl class="method">
+<dt id="pooch.Pooch.fetch">
+<code class="sig-prename descclassname">Pooch.</code><code class="sig-name descname">fetch</code><span class="sig-paren">(</span><em class="sig-param">fname</em>, <em class="sig-param">processor=None</em>, <em class="sig-param">downloader=None</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pooch/core.html#Pooch.fetch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pooch.Pooch.fetch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the absolute path to a file in the local storage.</p>
+<p>If it’s not in the local storage, it will be downloaded. If the hash of
+the file in local storage doesn’t match the one in the registry, will
+download a new copy of the file. This is considered a sign that the
+file was updated in the remote storage. If the hash of the downloaded
+file still doesn’t match the one in the registry, will raise an
+exception to warn of possible file corruption.</p>
+<p>Post-processing actions sometimes need to be taken on downloaded files
+(unzipping, conversion to a more efficient format, etc). If these
+actions are time or memory consuming, it would be best to do this only
+once when the file is actually downloaded. Use the <em>processor</em> argument
+to specify a function that is executed after the downloaded (if
+required) to perform these actions. See below.</p>
+<p>Custom file downloaders can be provided through the <em>downloader</em>
+argument. By default, files are downloaded over HTTP. If the server for
+a given file requires authentication (username and password) or if the
+file is served over FTP, use custom downloaders that support these
+features. Downloaders can also be used to print custom messages (like a
+progress bar), etc. See below for details.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fname</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – The file name (relative to the <em>base_url</em> of the remote data
+storage) to fetch from the local storage.</p></li>
+<li><p><strong>processor</strong> (<a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><em>None</em></a><em> or </em><em>callable</em>) – If not None, then a function (or callable object) that will be
+called before returning the full path and after the file has been
+downloaded (if required). See below for details.</p></li>
+<li><p><strong>downloader</strong> (<a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><em>None</em></a><em> or </em><em>callable</em>) – If not None, then a function (or callable object) that will be
+called to download a given URL to a provided local file name. By
+default, downloads are done through HTTP without authentication
+using <a class="reference internal" href="pooch.HTTPDownloader.html#pooch.HTTPDownloader" title="pooch.HTTPDownloader"><code class="xref py py-class docutils literal notranslate"><span class="pre">pooch.HTTPDownloader</span></code></a>. See below for details.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>full_path</strong> (<em>str</em>) – The absolute path (including the file name) of the file in the
+local storage.</p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p><strong>Processor</strong> functions should have the following format:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">myprocessor</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">action</span><span class="p">,</span> <span class="n">pooch</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Processes the downloaded file and returns a new file name.</span>
+
+<span class="sd">    The function **must** take as arguments (in order):</span>
+
+<span class="sd">    fname : str</span>
+<span class="sd">        The full path of the file in the local data storage</span>
+<span class="sd">    action : str</span>
+<span class="sd">        Either: &quot;download&quot; (file doesn&#39;t exist and will be</span>
+<span class="sd">        downloaded), &quot;update&quot; (file is outdated and will be</span>
+<span class="sd">        downloaded), or &quot;fetch&quot; (file exists and is updated so no</span>
+<span class="sd">        download is necessary).</span>
+<span class="sd">    pooch : pooch.Pooch</span>
+<span class="sd">        The instance of the Pooch class that is calling this</span>
+<span class="sd">        function.</span>
+
+<span class="sd">    The return value can be anything but is usually a full path to</span>
+<span class="sd">    a file (or list of files). This is what will be returned by</span>
+<span class="sd">    *fetch* in place of the original file path.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="o">...</span>
+    <span class="k">return</span> <span class="n">full_path</span>
+</pre></div>
+</div>
+<p><strong>Downloader</strong> functions should have the following format:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">mydownloader</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">output_file</span><span class="p">,</span> <span class="n">pooch</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Download a file from the given URL to the given local file.</span>
+
+<span class="sd">    The function **must** take as arguments (in order):</span>
+
+<span class="sd">    url : str</span>
+<span class="sd">        The URL to the file you want to download.</span>
+<span class="sd">    output_file : str or file-like object</span>
+<span class="sd">        Path (and file name) to which the file will be downloaded.</span>
+<span class="sd">    pooch : pooch.Pooch</span>
+<span class="sd">        The instance of the Pooch class that is calling this</span>
+<span class="sd">        function.</span>
+
+<span class="sd">    No return value is required.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="o">...</span>
+</pre></div>
+</div>
+<p><strong>Authentication</strong> through HTTP can be handled by
+<a class="reference internal" href="pooch.HTTPDownloader.html#pooch.HTTPDownloader" title="pooch.HTTPDownloader"><code class="xref py py-class docutils literal notranslate"><span class="pre">pooch.HTTPDownloader</span></code></a>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">authdownload</span> <span class="o">=</span> <span class="n">HTTPDownloader</span><span class="p">(</span><span class="n">auth</span><span class="o">=</span><span class="p">(</span><span class="n">username</span><span class="p">,</span> <span class="n">password</span><span class="p">))</span>
+<span class="n">mypooch</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="s2">&quot;some-data-file.txt&quot;</span><span class="p">,</span> <span class="n">downloader</span><span class="o">=</span><span class="n">authdownload</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Progress bar</strong> for the download can be printed by
+<a class="reference internal" href="pooch.HTTPDownloader.html#pooch.HTTPDownloader" title="pooch.HTTPDownloader"><code class="xref py py-class docutils literal notranslate"><span class="pre">pooch.HTTPDownloader</span></code></a> by passing the argument
+<code class="docutils literal notranslate"><span class="pre">progressbar=True</span></code>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">progress_download</span> <span class="o">=</span> <span class="n">HTTPDownloader</span><span class="p">(</span><span class="n">progressbar</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">mypooch</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="s2">&quot;some-data-file.txt&quot;</span><span class="p">,</span> <span class="n">downloader</span><span class="o">=</span><span class="n">progress_download</span><span class="p">)</span>
+<span class="c1"># Will print a progress bar to standard error like:</span>
+<span class="c1"># 100%|█████████████████████████████████████████| 336/336 [...]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="pooch.Pooch.get_url">
+<code class="sig-prename descclassname">Pooch.</code><code class="sig-name descname">get_url</code><span class="sig-paren">(</span><em class="sig-param">fname</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pooch/core.html#Pooch.get_url"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pooch.Pooch.get_url" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the full URL to download a file in the registry.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>fname</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – The file name (relative to the <em>base_url</em> of the remote data
+storage) to fetch from the local storage.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pooch.Pooch.is_available">
+<code class="sig-prename descclassname">Pooch.</code><code class="sig-name descname">is_available</code><span class="sig-paren">(</span><em class="sig-param">fname</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pooch/core.html#Pooch.is_available"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pooch.Pooch.is_available" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check availability of a remote file without downloading it.</p>
+<p>Use this method when working with large files to check if they are
+available for download.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>fname</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – The file name (relative to the <em>base_url</em> of the remote data
+storage) to fetch from the local storage.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>status</strong> (<em>bool</em>) – True if the file is available for download. False otherwise.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pooch.Pooch.load_registry">
+<code class="sig-prename descclassname">Pooch.</code><code class="sig-name descname">load_registry</code><span class="sig-paren">(</span><em class="sig-param">fname</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pooch/core.html#Pooch.load_registry"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pooch.Pooch.load_registry" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load entries from a file and add them to the registry.</p>
+<p>Use this if you are managing many files.</p>
+<p>Each line of the file should have file name and its hash separated by
+a space. Hash can specify checksum algorithm using “alg:hash” format.
+In case no algorithm is provided, SHA256 is used by default.
+Only one file per line is allowed. Custom download URLs for individual
+files can be specified as a third element on the line.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>fname</strong> (<em>str | fileobj</em>) – Path (or open file object) to the registry file.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<div style='clear:both'></div></div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="pooch.retrieve.html" class="btn btn-neutral float-right" title="pooch.retrieve" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="pooch.create.html" class="btn btn-neutral float-left" title="pooch.create" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018-2020, The Pooch Developers
+      <span class="lastupdated">
+        Last updated on May 14, 2020.
+      </span>
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
