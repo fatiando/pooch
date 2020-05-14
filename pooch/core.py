@@ -13,6 +13,7 @@ from .utils import (
     parse_url,
     get_logger,
     make_local_storage,
+    cache_location,
     hash_matches,
     temporary_file,
     os_cache,
@@ -200,9 +201,10 @@ def retrieve(url, known_hash, fname=None, path=None, processor=None, downloader=
         fname = unique_file_name(url)
     # Create the local data directory if it doesn't already exist and make the
     # path absolute.
-    path = make_local_storage(path, env=None, version=None).resolve()
+    path = cache_location(path, env=None, version=None)
+    make_local_storage(path)
 
-    full_path = path / fname
+    full_path = path.resolve() / fname
     action, verb = download_action(full_path, known_hash)
 
     if action in ("download", "update"):
@@ -252,6 +254,12 @@ def create(
     base URL (for example,
     ``https://github.com/fatiando/pooch/raw/v0.1/data``). If the version string
     contains ``+XX.XXXXX``, it will be interpreted as a development version.
+
+    Does **not** create the local data storage folder. The folder will only be
+    created the first time a download is attempted with
+    :meth:`pooch.Pooch.fetch`. This makes it safe to use this function at the
+    module level (so it's executed on ``import`` and the resulting
+    :class:`~pooch.Pooch` is a global variable).
 
     Parameters
     ----------
@@ -307,6 +315,9 @@ def create(
     ...              registry={"data.txt": "9081wo2eb2gc0u..."})
     >>> print(pup.path.parts)  # The path is a pathlib.Path
     ('myproject', 'v0.1')
+    >>> # The local folder is only created when a dataset is first downloaded
+    >>> print(pup.path.exists())
+    False
     >>> print(pup.base_url)
     http://some.link.com/v0.1/
     >>> print(pup.registry)
@@ -368,7 +379,12 @@ def create(
     if version is not None:
         version = check_version(version, fallback=version_dev)
         base_url = base_url.format(version=version)
-    path = make_local_storage(path, env, version)
+    # Don't create the cache folder here! This function is usually called in
+    # the module context (at import time), so touching the file system is not
+    # recommended. It could cause crashes when multiple processes/threads try
+    # to import at the same time (which would try to create the folder several
+    # times at once).
+    path = cache_location(path, env, version)
     pup = Pooch(path=path, base_url=base_url, registry=registry, urls=urls)
     return pup
 
@@ -545,7 +561,7 @@ class Pooch:
         self._assert_file_in_registry(fname)
 
         # Create the local data directory if it doesn't already exist
-        os.makedirs(str(self.abspath), exist_ok=True)
+        make_local_storage(str(self.abspath))
 
         url = self.get_url(fname)
         full_path = self.abspath / fname

@@ -216,11 +216,12 @@ def parse_url(url):
     return {"protocol": protocol, "netloc": parsed_url.netloc, "path": parsed_url.path}
 
 
-def make_local_storage(path, env=None, version=None):
+def cache_location(path, env=None, version=None):
     """
-    Create the local cache directory and make sure it's writable.
+    Location of the cache given a base path and optional configuration.
 
-    If the directory doesn't exist, it will be created.
+    Checks for the environment variable to overwrite the path of the local
+    cache. Optionally add *version* to the path if given.
 
     Parameters
     ----------
@@ -249,6 +250,22 @@ def make_local_storage(path, env=None, version=None):
     if version is not None:
         path = os.path.join(str(path), version)
     path = os.path.expanduser(str(path))
+    return Path(path)
+
+
+def make_local_storage(path, env=None):
+    """
+    Create the local cache directory and make sure it's writable.
+
+    Parameters
+    ----------
+    path : str or PathLike
+        The path to the local data storage folder.
+    env : str or None
+        An environment variable that can be used to overwrite *path*. Only used
+        in the error message in case the folder is not writable.
+    """
+    path = str(path)
     # Check that the data directory is writable
     try:
         if not os.path.exists(path):
@@ -261,24 +278,19 @@ def make_local_storage(path, env=None, version=None):
             action = "write to"
             with tempfile.NamedTemporaryFile(dir=path):
                 pass
-    except PermissionError:
-        # Only log an error message instead of raising an exception. The cache
-        # is usually created at import time, so raising an exception here would
-        # cause packages to crash immediately, even if users aren't using the
-        # sample data at all. So issue a warning here just in case and only
-        # crash with an exception when the user actually tries to download
-        # data (Pooch.fetch or retrieve).
-        message = (
-            "Cannot %s data cache folder '%s'. "
-            "Will not be able to download remote data files. "
-        )
-        args = [action, path]
+    except PermissionError as error:
+        message = [
+            str(error),
+            "| Pooch could not {} data cache folder '{}'.".format(action, path),
+            "Will not be able to download data files.",
+        ]
         if env is not None:
-            message += "Use environment variable '%s' to specify another directory."
-            args += [env]
-
-        get_logger().warning(message, *args)
-    return Path(path)
+            message.append(
+                "Use environment variable '{}' to specify a different location.".format(
+                    env
+                )
+            )
+        raise PermissionError(" ".join(message)) from error
 
 
 def hash_algorithm(hash_string):

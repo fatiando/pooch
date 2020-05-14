@@ -22,7 +22,7 @@ from ..utils import (
     temporary_file,
     unique_file_name,
 )
-from .utils import check_tiny_data, capture_log
+from .utils import check_tiny_data
 
 DATA_DIR = str(Path(__file__).parent / "data" / "store")
 REGISTRY = (
@@ -77,7 +77,8 @@ def test_make_local_storage_parallel(pool, monkeypatch):
                 executor.submit(make_local_storage, data_cache) for i in range(4)
             ]
             for future in futures:
-                assert os.path.exists(str(future.result()))
+                future.result()
+            assert os.path.exists(data_cache)
     finally:
         if os.path.exists(data_cache):
             shutil.rmtree(data_cache)
@@ -95,13 +96,12 @@ def test_local_storage_makedirs_permissionerror(monkeypatch):
 
     monkeypatch.setattr(os, "makedirs", mockmakedirs)
 
-    with capture_log() as log_file:
+    with pytest.raises(PermissionError) as error:
         make_local_storage(
-            path=data_cache, version="1.0", env="SOME_VARIABLE",
+            path=data_cache, env="SOME_VARIABLE",
         )
-        logs = log_file.getvalue()
-        assert logs.startswith("Cannot create data cache")
-        assert "'SOME_VARIABLE'" in logs
+        assert "Pooch could not create data cache" in str(error)
+        assert "'SOME_VARIABLE'" in str(error)
 
 
 def test_local_storage_newfile_permissionerror(monkeypatch):
@@ -119,13 +119,12 @@ def test_local_storage_newfile_permissionerror(monkeypatch):
 
         monkeypatch.setattr(tempfile, "NamedTemporaryFile", mocktempfile)
 
-        with capture_log() as log_file:
+        with pytest.raises(PermissionError) as error:
             make_local_storage(
-                path=data_cache, version="1.0", env="SOME_VARIABLE",
+                path=data_cache, env="SOME_VARIABLE",
             )
-            logs = log_file.getvalue()
-            assert logs.startswith("Cannot write to data cache")
-            assert "'SOME_VARIABLE'" in logs
+            assert "Pooch could not write to data cache" in str(error)
+            assert "'SOME_VARIABLE'" in str(error)
 
 
 def test_registry_builder():
