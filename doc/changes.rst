@@ -3,6 +3,43 @@
 Changelog
 =========
 
+Version 1.1.1
+-------------
+
+*Released on: 2020/05/14*
+
+.. image:: https://zenodo.org/badge/DOI/10.5281/zenodo.3826458.svg
+    :alt: Digital Object Identifier for the Zenodo archive
+    :target: https://doi.org/10.5281/zenodo.3826458
+
+Bug fixes:
+
+* Delay data cache folder creation until the first download is attempted. As
+  seen in `recent issues in scikit-image
+  <https://github.com/scikit-image/scikit-image/issues/4719>`__, creating the
+  data folder in ``pooch.create`` can cause problems since this function is
+  called at import time. This means that importing the package in parallel can
+  cause race conditions and crashes. To prevent that from happening, delay the
+  creation of the cache folder until ``Pooch.fetch`` or ``retrieve`` are
+  called.
+  (`#173 <https://github.com/fatiando/pooch/pull/173>`__)
+* Allow the data folder to already exist when creating it. This is can help
+  cope with parallel execution as well.
+  (`#171 <https://github.com/fatiando/pooch/pull/171>`__)
+
+Documentation:
+
+* Added scikit-image to list of Pooch users.
+  (`#168 <https://github.com/fatiando/pooch/pull/168>`__)
+* Fix typo in README and front page contributing section.
+  (`#166 <https://github.com/fatiando/pooch/pull/166>`__)
+
+This release contains contributions from:
+
+* Leonardo Uieda
+* Egor Panfilov
+* Rowan Cockett
+
 Version 1.1.0
 -------------
 
