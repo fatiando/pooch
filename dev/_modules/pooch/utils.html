@@ -10,7 +10,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
     
-    <title>pooch.utils &mdash; Pooch v1.1.0</title>
+    <title>pooch.utils &mdash; Pooch dev</title>
     
 
 
@@ -80,7 +80,7 @@
             
             
               <div class="version">
-                v1.1.0
+                dev
               </div>
             
           
@@ -422,11 +422,12 @@
     <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;protocol&quot;</span><span class="p">:</span> <span class="n">protocol</span><span class="p">,</span> <span class="s2">&quot;netloc&quot;</span><span class="p">:</span> <span class="n">parsed_url</span><span class="o">.</span><span class="n">netloc</span><span class="p">,</span> <span class="s2">&quot;path&quot;</span><span class="p">:</span> <span class="n">parsed_url</span><span class="o">.</span><span class="n">path</span><span class="p">}</span>
 
 
-<span class="k">def</span> <span class="nf">make_local_storage</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">env</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">cache_location</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">env</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Create the local cache directory and make sure it&#39;s writable.</span>
+<span class="sd">    Location of the cache given a base path and optional configuration.</span>
 
-<span class="sd">    If the directory doesn&#39;t exist, it will be created.</span>
+<span class="sd">    Checks for the environment variable to overwrite the path of the local</span>
+<span class="sd">    cache. Optionally add *version* to the path if given.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -455,27 +456,47 @@
     <span class="k">if</span> <span class="n">version</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">path</span><span class="p">),</span> <span class="n">version</span><span class="p">)</span>
     <span class="n">path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">path</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">Path</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">make_local_storage</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">env</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Create the local cache directory and make sure it&#39;s writable.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    path : str or PathLike</span>
+<span class="sd">        The path to the local data storage folder.</span>
+<span class="sd">    env : str or None</span>
+<span class="sd">        An environment variable that can be used to overwrite *path*. Only used</span>
+<span class="sd">        in the error message in case the folder is not writable.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">path</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
     <span class="c1"># Check that the data directory is writable</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
             <span class="n">action</span> <span class="o">=</span> <span class="s2">&quot;create&quot;</span>
-            <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+            <span class="c1"># When running in parallel, it&#39;s possible that multiple jobs will</span>
+            <span class="c1"># try to create the path at the same time. Use exist_ok to avoid</span>
+            <span class="c1"># raising an error.</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">action</span> <span class="o">=</span> <span class="s2">&quot;write to&quot;</span>
             <span class="k">with</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">NamedTemporaryFile</span><span class="p">(</span><span class="nb">dir</span><span class="o">=</span><span class="n">path</span><span class="p">):</span>
                 <span class="k">pass</span>
-    <span class="k">except</span> <span class="ne">PermissionError</span><span class="p">:</span>
-        <span class="n">message</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="s2">&quot;Cannot </span><span class="si">%s</span><span class="s2"> data cache folder &#39;</span><span class="si">%s</span><span class="s2">&#39;. &quot;</span>
-            <span class="s2">&quot;Will not be able to download remote data files. &quot;</span>
-        <span class="p">)</span>
-        <span class="n">args</span> <span class="o">=</span> <span class="p">[</span><span class="n">action</span><span class="p">,</span> <span class="n">path</span><span class="p">]</span>
+    <span class="k">except</span> <span class="ne">PermissionError</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
+        <span class="n">message</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="nb">str</span><span class="p">(</span><span class="n">error</span><span class="p">),</span>
+            <span class="s2">&quot;| Pooch could not </span><span class="si">{}</span><span class="s2"> data cache folder &#39;</span><span class="si">{}</span><span class="s2">&#39;.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">action</span><span class="p">,</span> <span class="n">path</span><span class="p">),</span>
+            <span class="s2">&quot;Will not be able to download data files.&quot;</span><span class="p">,</span>
+        <span class="p">]</span>
         <span class="k">if</span> <span class="n">env</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">message</span> <span class="o">+=</span> <span class="s2">&quot;Use environment variable &#39;</span><span class="si">%s</span><span class="s2">&#39; to specify another directory.&quot;</span>
-            <span class="n">args</span> <span class="o">+=</span> <span class="p">[</span><span class="n">env</span><span class="p">]</span>
-
-        <span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="n">message</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">Path</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+            <span class="n">message</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="s2">&quot;Use environment variable &#39;</span><span class="si">{}</span><span class="s2">&#39; to specify a different location.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                    <span class="n">env</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">PermissionError</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">message</span><span class="p">))</span> <span class="kn">from</span> <span class="nn">error</span>
 
 
 <span class="k">def</span> <span class="nf">hash_algorithm</span><span class="p">(</span><span class="n">hash_string</span><span class="p">):</span>
@@ -654,7 +675,7 @@
     <p>
         &copy; Copyright 2018-2020, The Pooch Developers
       <span class="lastupdated">
-        Last updated on Apr 13, 2020.
+        Last updated on May 14, 2020.
       </span>
 
     </p>

@@ -10,7 +10,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
     
-    <title>pooch.create &mdash; Pooch v1.1.0</title>
+    <title>pooch.create &mdash; Pooch dev</title>
     
 
 
@@ -82,7 +82,7 @@
             
             
               <div class="version">
-                v1.1.0
+                dev
               </div>
             
           
@@ -238,6 +238,11 @@ storage path (for example, <code class="docutils literal notranslate"><span clas
 base URL (for example,
 <code class="docutils literal notranslate"><span class="pre">https://github.com/fatiando/pooch/raw/v0.1/data</span></code>). If the version string
 contains <code class="docutils literal notranslate"><span class="pre">+XX.XXXXX</span></code>, it will be interpreted as a development version.</p>
+<p>Does <strong>not</strong> create the local data storage folder. The folder will only be
+created the first time a download is attempted with
+<a class="reference internal" href="pooch.Pooch.html#pooch.Pooch.fetch" title="pooch.Pooch.fetch"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pooch.Pooch.fetch</span></code></a>. This makes it safe to use this function at the
+module level (so it’s executed on <code class="docutils literal notranslate"><span class="pre">import</span></code> and the resulting
+<a class="reference internal" href="pooch.Pooch.html#pooch.Pooch" title="pooch.Pooch"><code class="xref py py-class docutils literal notranslate"><span class="pre">Pooch</span></code></a> is a global variable).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -283,6 +288,9 @@ favor of <code class="docutils literal notranslate"><span class="pre">urls[fname
 <span class="gp">... </span>             <span class="n">registry</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;data.txt&quot;</span><span class="p">:</span> <span class="s2">&quot;9081wo2eb2gc0u...&quot;</span><span class="p">})</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">pup</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">parts</span><span class="p">)</span>  <span class="c1"># The path is a pathlib.Path</span>
 <span class="go">(&#39;myproject&#39;, &#39;v0.1&#39;)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># The local folder is only created when a dataset is first downloaded</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">pup</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">())</span>
+<span class="go">False</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">pup</span><span class="o">.</span><span class="n">base_url</span><span class="p">)</span>
 <span class="go">http://some.link.com/v0.1/</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">pup</span><span class="o">.</span><span class="n">registry</span><span class="p">)</span>
@@ -367,7 +375,7 @@ system:</p>
     <p>
         &copy; Copyright 2018-2020, The Pooch Developers
       <span class="lastupdated">
-        Last updated on Apr 13, 2020.
+        Last updated on May 14, 2020.
       </span>
 
     </p>

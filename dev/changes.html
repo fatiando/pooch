@@ -10,7 +10,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
     
-    <title>Changelog &mdash; Pooch v1.1.0</title>
+    <title>Changelog &mdash; Pooch dev</title>
     
 
 
@@ -81,7 +81,7 @@
             
             
               <div class="version">
-                v1.1.0
+                dev
               </div>
             
           
@@ -114,6 +114,7 @@
 <li class="toctree-l1"><a class="reference internal" href="retrieve.html">Downloading a single file</a></li>
 <li class="toctree-l1"><a class="reference internal" href="api/index.html">API Reference</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Changelog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#version-1-1-1">Version 1.1.1</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#version-1-1-0">Version 1.1.0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#version-1-0-0">Version 1.0.0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#version-0-7-2">Version 0.7.2</a></li>
@@ -225,6 +226,38 @@
             
   <div class="section" id="changelog">
 <span id="changes"></span><h1>Changelog<a class="headerlink" href="#changelog" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="version-1-1-1">
+<h2>Version 1.1.1<a class="headerlink" href="#version-1-1-1" title="Permalink to this headline">¶</a></h2>
+<p><em>Released on: 2020/05/14</em></p>
+<a class="reference external image-reference" href="https://doi.org/10.5281/zenodo.3826458"><img alt="Digital Object Identifier for the Zenodo archive" src="https://zenodo.org/badge/DOI/10.5281/zenodo.3826458.svg" /></a>
+<p>Bug fixes:</p>
+<ul class="simple">
+<li><p>Delay data cache folder creation until the first download is attempted. As
+seen in <a class="reference external" href="https://github.com/scikit-image/scikit-image/issues/4719">recent issues in scikit-image</a>, creating the
+data folder in <code class="docutils literal notranslate"><span class="pre">pooch.create</span></code> can cause problems since this function is
+called at import time. This means that importing the package in parallel can
+cause race conditions and crashes. To prevent that from happening, delay the
+creation of the cache folder until <code class="docutils literal notranslate"><span class="pre">Pooch.fetch</span></code> or <code class="docutils literal notranslate"><span class="pre">retrieve</span></code> are
+called.
+(<a class="reference external" href="https://github.com/fatiando/pooch/pull/173">#173</a>)</p></li>
+<li><p>Allow the data folder to already exist when creating it. This is can help
+cope with parallel execution as well.
+(<a class="reference external" href="https://github.com/fatiando/pooch/pull/171">#171</a>)</p></li>
+</ul>
+<p>Documentation:</p>
+<ul class="simple">
+<li><p>Added scikit-image to list of Pooch users.
+(<a class="reference external" href="https://github.com/fatiando/pooch/pull/168">#168</a>)</p></li>
+<li><p>Fix typo in README and front page contributing section.
+(<a class="reference external" href="https://github.com/fatiando/pooch/pull/166">#166</a>)</p></li>
+</ul>
+<p>This release contains contributions from:</p>
+<ul class="simple">
+<li><p>Leonardo Uieda</p></li>
+<li><p>Egor Panfilov</p></li>
+<li><p>Rowan Cockett</p></li>
+</ul>
+</div>
 <div class="section" id="version-1-1-0">
 <h2>Version 1.1.0<a class="headerlink" href="#version-1-1-0" title="Permalink to this headline">¶</a></h2>
 <p><em>Released on: 2020/04/13</em></p>
@@ -626,7 +659,7 @@ data corruption.</p></li>
     <p>
         &copy; Copyright 2018-2020, The Pooch Developers
       <span class="lastupdated">
-        Last updated on Apr 13, 2020.
+        Last updated on May 14, 2020.
       </span>
 
     </p>
