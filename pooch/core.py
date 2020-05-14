@@ -255,8 +255,8 @@ def create(
     ``https://github.com/fatiando/pooch/raw/v0.1/data``). If the version string
     contains ``+XX.XXXXX``, it will be interpreted as a development version.
 
-    Does **not** create the local data storage folder if it doesn't exist. The
-    folder will only be created the first time a download is attempted with
+    Does **not** create the local data storage folder. The folder will only be
+    created the first time a download is attempted with
     :meth:`pooch.Pooch.fetch`. This makes it safe to use this function at the
     module level (so it's executed on ``import`` and the resulting
     :class:`~pooch.Pooch` is a global variable).
