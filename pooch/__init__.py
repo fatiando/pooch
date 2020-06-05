@@ -7,6 +7,9 @@ from .downloaders import HTTPDownloader, FTPDownloader
 from .processors import Unzip, Untar, Decompress
 
 
+__version__ = version.full_version
+
+
 def test(doctest=True, verbose=True, coverage=False):
     """
     Run the test suite.
