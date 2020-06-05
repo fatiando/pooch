@@ -615,8 +615,8 @@ class Pooch:
         a space. Hash can specify checksum algorithm using "alg:hash" format.
         In case no algorithm is provided, SHA256 is used by default.
         Only one file per line is allowed. Custom download URLs for individual
-        files can be specified as a third element on the line. Line comments can
-        be added and must be prepended with ``#``.
+        files can be specified as a third element on the line. Line comments
+        can be added and must be prepended with ``#``.
 
         Parameters
         ----------
