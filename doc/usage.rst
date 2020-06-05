@@ -616,6 +616,22 @@ prefixed with ``alg:``, e.g.
     c137.csv sha1:e32b18dab23935bc091c353b308f724f18edcb5e
     cronen.csv md5:b53c08d3570b82665784cedde591a8b0
 
+From version 1.2.0 the registry file can also contain line comments prepended with a ``#``, e.g.:
+
+.. code-block:: none
+
+    # C-137 sample data
+    c137.csv sha1:e32b18dab23935bc091c353b308f724f18edcb5e
+    # Cronenberg sample data
+    cronen.csv md5:b53c08d3570b82665784cedde591a8b0
+
+    .. note::
+
+        Make sure you set the pooch version in your ``setup.py`` to version 1.2 or later
+        as earlier versions cannot handle comments:
+        ``INSTALL_REQUIRES = [..., "pooch>=1.2", ...]``
+
+
 To make sure the registry file is shipped with your package, include the following in
 your ``MANIFEST.in`` file:
 
@@ -714,7 +730,7 @@ Create registry file from remote files
 --------------------------------------
 
 If you want to create a registry file for a large number of data files that are
-available for download but you don't have their hashes or any local copies, 
+available for download but you don't have their hashes or any local copies,
 you must download them first. Manually downloading each file
 can be tedious. However, we can automate the process using
 :func:`pooch.retrieve`. Below, we'll explore two different scenarios.
@@ -753,7 +769,7 @@ after downloading each data file through :func:`pooch.retrieve`:
 
     import os
 
-    # Names and urls of the data files. The file names are used for naming the 
+    # Names and urls of the data files. The file names are used for naming the
     # downloaded files. These are the names that will be included in the registry.
     fnames_and_urls = {
         "c137.csv": "https://www.some-data-hosting-site.com/c137/data.csv",
@@ -776,10 +792,10 @@ after downloading each data file through :func:`pooch.retrieve`:
             registry.write(
                 "{} {} {}\n".format(fname, pooch.file_hash(path), url)
             )
-            
+
 .. warning::
-    
+
     Notice that there are **no checks for download integrity** (since we don't know the
-    file hashes before hand). Only do this for trusted data sources and over a secure 
+    file hashes before hand). Only do this for trusted data sources and over a secure
     connection. If you have access to file hashes/checksums, **we highly recommend
-    using them** to set the ``known_hash`` argument. 
+    using them** to set the ``known_hash`` argument.
