@@ -625,11 +625,10 @@ From version 1.2.0 the registry file can also contain line comments prepended wi
     # Cronenberg sample data
     cronen.csv md5:b53c08d3570b82665784cedde591a8b0
 
-    .. note::
+.. note::
 
-        Make sure you set the pooch version in your ``setup.py`` to version 1.2 or later
-        as earlier versions cannot handle comments:
-        ``INSTALL_REQUIRES = [..., "pooch>=1.2", ...]``
+    Make sure you set the pooch version in your ``setup.py`` to version 1.2 or later as
+    earlier versions cannot handle comments: ``INSTALL_REQUIRES = [..., "pooch>=1.2", ...]``
 
 
 To make sure the registry file is shipped with your package, include the following in
