@@ -627,8 +627,9 @@ From version 1.2 the registry file can also contain line comments, prepended wit
 
 .. note::
 
-    Make sure you set the pooch version in your ``setup.py`` to version 1.2 or later as
-    earlier versions cannot handle comments: ``INSTALL_REQUIRES = [..., "pooch>=1.2", ...]``
+    Make sure you set the pooch version in your ``setup.py`` to version 1.2 or
+    later when using comments as earlier versions cannot handle them:
+     ``install_requires = [..., "pooch>=1.2", ...]``
 
 
 To make sure the registry file is shipped with your package, include the following in
