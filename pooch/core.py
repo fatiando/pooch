@@ -615,7 +615,8 @@ class Pooch:
         a space. Hash can specify checksum algorithm using "alg:hash" format.
         In case no algorithm is provided, SHA256 is used by default.
         Only one file per line is allowed. Custom download URLs for individual
-        files can be specified as a third element on the line.
+        files can be specified as a third element on the line. Line comments can
+        be added and must be prepended with ``#``.
 
         Parameters
         ----------
@@ -635,7 +636,12 @@ class Pooch:
                 if isinstance(line, bytes):
                     line = line.decode("utf-8")
 
-                elements = line.strip().split()
+                line = line.strip()
+                # skip line comments
+                if line.startswith("#"):
+                    continue
+
+                elements = line.split()
                 if not len(elements) in [0, 2, 3]:
                     raise OSError(
                         "Invalid entry in Pooch registry file '{}': "
