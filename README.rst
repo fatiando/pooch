@@ -8,13 +8,13 @@ Part of the `Fatiando a Terra <https://www.fatiando.org>`__ project
 
 .. image:: https://img.shields.io/pypi/v/pooch.svg?style=flat-square
     :alt: Latest version on PyPI
-    :target: https://pypi.python.org/pypi/pooch
+    :target: https://pypi.org/project/pooch/
 .. image:: https://img.shields.io/conda/vn/conda-forge/pooch.svg?style=flat-square
     :alt: Latest version on conda-forge
     :target: https://github.com/conda-forge/pooch-feedstock
-.. image:: https://img.shields.io/travis/fatiando/pooch/master.svg?style=flat-square&label=TravisCI
-    :alt: TravisCI build status
-    :target: https://travis-ci.org/fatiando/pooch
+.. image:: https://img.shields.io/travis/fatiando/pooch/master.svg?style=flat-square&label=Travis%20CI
+    :alt: Travis CI build status
+    :target: https://travis-ci.com/github/fatiando/pooch
 .. image:: https://img.shields.io/azure-devops/build/fatiando/cb775164-4881-4854-81fd-7eaa170192e0/6/master.svg?label=Azure&style=flat-square
     :alt: Azure Pipelines build status
     :target: https://dev.azure.com/fatiando/pooch/_build
@@ -23,7 +23,7 @@ Part of the `Fatiando a Terra <https://www.fatiando.org>`__ project
     :target: https://codecov.io/gh/fatiando/pooch
 .. image:: https://img.shields.io/pypi/pyversions/pooch.svg?style=flat-square
     :alt: Compatible Python versions.
-    :target: https://pypi.python.org/pypi/pooch
+    :target: https://pypi.org/project/pooch/
 .. image:: https://img.shields.io/badge/doi-10.21105%2Fjoss.01943-blue.svg?style=flat-square
     :alt: Digital Object Identifier for the JOSS paper
     :target: https://doi.org/10.21105/joss.01943
@@ -148,6 +148,7 @@ For **package developers** including sample data in their projects:
 Projects using Pooch
 --------------------
 
+* `scikit-image <https://github.com/scikit-image/scikit-image>`__
 * `MetPy <https://github.com/Unidata/MetPy>`__
 * `Verde <https://github.com/fatiando/verde>`__
 * `Harmonica <https://github.com/fatiando/harmonica>`__
@@ -210,7 +211,7 @@ What could you possibly offer?
 We assure you that the little voice in your head is wrong.
 
 **Being a contributor doesn't just mean writing code**.
-Equality important contributions include:
+Equally important contributions include:
 writing or proof-reading documentation, suggesting or implementing tests, or
 even giving feedback about the project (including giving feedback about the
 contribution process).
@@ -239,6 +240,7 @@ Documentation for other versions
 * `Development <https://www.fatiando.org/pooch/dev>`__ (reflects the *master* branch on
   Github)
 * `Latest release <https://www.fatiando.org/pooch/latest>`__
+* `v1.1.1 <https://www.fatiando.org/pooch/v1.1.1>`__
 * `v1.1.0 <https://www.fatiando.org/pooch/v1.1.0>`__
 * `v1.0.0 <https://www.fatiando.org/pooch/v1.0.0>`__
 * `v0.7.1 <https://www.fatiando.org/pooch/v0.7.1>`__

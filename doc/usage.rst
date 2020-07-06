@@ -616,6 +616,22 @@ prefixed with ``alg:``, e.g.
     c137.csv sha1:e32b18dab23935bc091c353b308f724f18edcb5e
     cronen.csv md5:b53c08d3570b82665784cedde591a8b0
 
+From version 1.2 the registry file can also contain line comments, prepended with a ``#``, e.g.:
+
+.. code-block:: none
+
+    # C-137 sample data
+    c137.csv 19uheidhlkjdwhoiwuhc0uhcwljchw9ochwochw89dcgw9dcgwc
+    # Cronenberg sample data
+    cronen.csv 1upodh2ioduhw9celdjhlfvhksgdwikdgcowjhcwoduchowjg8w
+
+.. note::
+
+    Make sure you set the pooch version in your ``setup.py`` to version 1.2 or
+    later when using comments as earlier versions cannot handle them:
+     ``install_requires = [..., "pooch>=1.2", ...]``
+
+
 To make sure the registry file is shipped with your package, include the following in
 your ``MANIFEST.in`` file:
 

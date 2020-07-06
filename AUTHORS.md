@@ -4,6 +4,7 @@ The following people have made contributions to the project (in alphabetical
 order by last name) and are considered "The Pooch Developers":
 
 * [Anderson Banihirwe](https://github.com/andersy005) - The US National Center for Atmospheric Research, USA (ORCID: [0000-0001-6583-571X](https://orcid.org/0000-0001-6583-571X))
+* [Mathias Hauser](https://github.com/mathause) - Institute for Atmospheric and Climate Science, ETH Zurich, Zurich, Switzerland (ORCID: [0000-0002-0057-4878](https://orcid.org/0000-0002-0057-4878))
 * [Hugo van Kemenade](https://github.com/hugovk) - Independent (Non-affiliated) (ORCID: [0000-0001-5715-8632](https://www.orcid.org/0000-0001-5715-8632))
 * [Kacper Kowalik](https://github.com/Xarthisius) - National Center for Supercomputing Applications, Univeristy of Illinois at Urbana-Champaign, USA (ORCID: [0000-0003-1709-3744](https://www.orcid.org/0000-0003-1709-3744))
 * [John Leeman](https://github.com/jrleeman)
