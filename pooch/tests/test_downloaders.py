@@ -13,7 +13,7 @@ except ImportError:
     tqdm = None
 
 from ..downloaders import HTTPDownloader, FTPDownloader, choose_downloader
-from .utils import pooch_test_url, check_large_data
+from .utils import pooch_test_url, check_large_data, check_tiny_data, data_over_ftp
 
 
 # FTP doesn't work on Travis CI so need to be able to skip tests there
@@ -28,15 +28,15 @@ def test_unsupported_protocol():
 
 
 # https://blog.travis-ci.com/2018-07-23-the-tale-of-ftp-at-travis-ci
-@pytest.mark.skipif(ON_TRAVIS, reason="FTP is not allowed on Travis CI")
-def test_ftp_downloader():
+# @pytest.mark.skipif(ON_TRAVIS, reason="FTP is not allowed on Travis CI")
+def test_ftp_downloader(ftpserver):
     "Test ftp downloader"
-    with TemporaryDirectory() as local_store:
-        downloader = FTPDownloader()
-        url = "ftp://speedtest.tele2.net/100KB.zip"
-        outfile = os.path.join(local_store, "100KB.zip")
-        downloader(url, outfile, None)
-        assert os.path.exists(outfile)
+    with data_over_ftp(ftpserver, "tiny-data.txt") as url:
+        with TemporaryDirectory() as local_store:
+            downloader = FTPDownloader(port=ftpserver.server_port)
+            outfile = os.path.join(local_store, "tiny-data.txt")
+            downloader(url, outfile, None)
+            check_tiny_data(outfile)
 
 
 @pytest.mark.skipif(tqdm is not None, reason="tqdm must be missing")
@@ -70,24 +70,26 @@ def test_downloader_progressbar(capsys):
         check_large_data(outfile)
 
 
+# @pytest.mark.skipif(ON_TRAVIS, reason="FTP is not allowed on Travis CI")
 @pytest.mark.skipif(tqdm is None, reason="requires tqdm")
-@pytest.mark.skipif(ON_TRAVIS, reason="FTP is not allowed on Travis CI")
-def test_downloader_progressbar_ftp(capsys):
+def test_downloader_progressbar_ftp(capsys, ftpserver):
     "Setup an FTP downloader function that prints a progress bar for fetch"
-    download = FTPDownloader(progressbar=True)
-    with TemporaryDirectory() as local_store:
-        url = "ftp://speedtest.tele2.net/100KB.zip"
-        outfile = os.path.join(local_store, "100KB.zip")
-        download(url, outfile, None)
-        # Read stderr and make sure the progress bar is printed only when told
-        captured = capsys.readouterr()
-        printed = captured.err.split("\r")[-1].strip()
-        assert len(printed) == 79
-        if sys.platform == "win32":
-            progress = "100%|####################"
-        else:
-            progress = "100%|████████████████████"
-        # Bar size is not always the same so can't reliably test the whole bar.
-        assert printed[:25] == progress
-        # Check that the file was actually downloaded
-        assert os.path.exists(outfile)
+    with data_over_ftp(ftpserver, "tiny-data.txt") as url:
+        download = FTPDownloader(progressbar=True, port=ftpserver.server_port)
+        with TemporaryDirectory() as local_store:
+            outfile = os.path.join(local_store, "tiny-data.txt")
+            download(url, outfile, None)
+            # Read stderr and make sure the progress bar is printed only when
+            # told
+            captured = capsys.readouterr()
+            printed = captured.err.split("\r")[-1].strip()
+            assert len(printed) == 79
+            if sys.platform == "win32":
+                progress = "100%|####################"
+            else:
+                progress = "100%|████████████████████"
+            # Bar size is not always the same so can't reliably test the whole
+            # bar.
+            assert printed[:25] == progress
+            # Check that the file was actually downloaded
+            check_tiny_data(outfile)
