@@ -16,8 +16,6 @@ from ..downloaders import HTTPDownloader, FTPDownloader, choose_downloader
 from .utils import pooch_test_url, check_large_data, check_tiny_data, data_over_ftp
 
 
-# FTP doesn't work on Travis CI so need to be able to skip tests there
-ON_TRAVIS = bool(os.environ.get("TRAVIS", None))
 BASEURL = pooch_test_url()
 
 
@@ -27,8 +25,6 @@ def test_unsupported_protocol():
         choose_downloader("httpup://some-invalid-url.com")
 
 
-# https://blog.travis-ci.com/2018-07-23-the-tale-of-ftp-at-travis-ci
-# @pytest.mark.skipif(ON_TRAVIS, reason="FTP is not allowed on Travis CI")
 def test_ftp_downloader(ftpserver):
     "Test ftp downloader"
     with data_over_ftp(ftpserver, "tiny-data.txt") as url:
@@ -70,7 +66,6 @@ def test_downloader_progressbar(capsys):
         check_large_data(outfile)
 
 
-# @pytest.mark.skipif(ON_TRAVIS, reason="FTP is not allowed on Travis CI")
 @pytest.mark.skipif(tqdm is None, reason="requires tqdm")
 def test_downloader_progressbar_ftp(capsys, ftpserver):
     "Setup an FTP downloader function that prints a progress bar for fetch"
