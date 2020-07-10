@@ -681,12 +681,12 @@ class Pooch:
         source = self.get_url(fname)
         parsed_url = parse_url(source)
         if parsed_url["protocol"] == "ftp":
-            directory = os.path.dirname(parsed_url["path"])
+            directory, file_name = os.path.split(parsed_url["path"])
             ftp = ftplib.FTP()
             ftp.connect(host=parsed_url["netloc"])
             try:
                 ftp.login()
-                available = parsed_url["path"] in ftp.nlst(directory)
+                available = file_name in ftp.nlst(directory)
             finally:
                 ftp.close()
         else:
