@@ -295,13 +295,13 @@ def test_check_availability_on_ftp():
     # Check available remote file on FTP server
     pup = Pooch(
         path=DATA_DIR,
-        base_url="ftp://speedtest.tele2.net/",
+        base_url="ftp://data-out.unavco.org/pub/products/velocity/rel_201712/",
         registry={
-            "100KB.zip": "f627ca4c2c322f15db26152df306bd4f983f0146409b81a4341b9b340c365a16",
+            "pbo.final_igs08.20171202.vel": "md5:0b75d4049dedd0e179615f4b5e956156",
             "doesnot_exist.zip": "jdjdjdjdflld",
         },
     )
-    assert pup.is_available("100KB.zip")
+    assert pup.is_available("pbo.final_igs08.20171202.vel")
     # Check non available remote file
     assert not pup.is_available("doesnot_exist.zip")
 
