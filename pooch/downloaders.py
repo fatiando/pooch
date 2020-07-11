@@ -376,23 +376,18 @@ class SFTPDownloader:  # pylint: disable=too-few-public-methods
         ----------
         url : str
             The URL to the file you want to download.
-        output_file : str or file-like object
+        output_file : str
             Path (and file name) to which the file will be downloaded.
+            Cannot be a file object - else will fail.
         pooch : :class:`~pooch.Pooch`
             The instance of :class:`~pooch.Pooch` that is calling this
             method.
         """
 
         parsed_url = parse_url(url)
-        isfile = hasattr(output_file, "write")
 
         connection = paramiko.Transport(sock=(parsed_url["netloc"], self.port))
 
-        if isfile:
-            # paramiko requires a file name as a string, not a file object
-            # file is first closed to avoid any errors and then get name
-            output_file.close()
-            output_file = output_file.name
         sftp = None
         try:
             connection.connect(username=self.username, password=self.password)

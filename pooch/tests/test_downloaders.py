@@ -61,6 +61,20 @@ def test_sftp_downloader():
         assert os.path.exists(outfile)
 
 
+@pytest.mark.skipif(paramiko is None, reason="requires paramiko to run SFTP")
+@pytest.mark.skipif(ON_TRAVIS, reason="SFTP is not allowed on Travis CI")
+def test_sftp_downloader_fail_if_fobj():
+    "SFTP downloader should fail when a file object rather than string "
+    "path is passed"
+    with TemporaryDirectory() as local_store:
+        downloader = SFTPDownloader(username="demo", password="password")
+        url = "sftp://test.rebex.net/pub/example/pocketftp.png"
+        outfile = os.path.join(local_store, "pocketftp.png")
+        outfile_obj = open(outfile, "wb")
+        with pytest.raises(TypeError):
+            downloader(url, outfile_obj, None)
+
+
 @pytest.mark.skipif(paramiko is not None, reason="pass if paramiko installed")
 def test_sftp_downloader_fail_if_paramiko_missing():
     "test must fail if paramiko is not installed"
@@ -76,6 +90,14 @@ def test_downloader_progressbar_fails(downloader):
     "Make sure an error is raised if trying to use progressbar without tqdm"
     with pytest.raises(ValueError):
         downloader(progressbar=True)
+
+
+@pytest.mark.skipif(tqdm is not None, reason="tqdm must be missing")
+@pytest.mark.skipif(paramiko is None, reason="requires paramiko to run SFTP")
+def test_downloader_progressbar_fails_SFTP():
+    "Cannot be parametrized as SFTP might not exist in some test instances"
+    with pytest.raises(ValueError):
+        SFTPDownloader(progressbar=True)
 
 
 @pytest.mark.skipif(tqdm is None, reason="requires tqdm")

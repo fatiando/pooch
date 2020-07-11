@@ -429,13 +429,15 @@ code could look something like this:
         return data
 
 
-FTP with or without authentication
-----------------------------------
+FTP/SFTP with or without authentication
+---------------------------------------
 
-Pooch also comes with the :class:`~pooch.FTPDownloader` class that can be used
-when files are distributed over FTP. By default, :meth:`pooch.Pooch.fetch` will
-automatically detect if the download URL is HTTP(S) or FTP and use the appropriate
-downloader:
+Pooch also comes with the :class:`~pooch.FTPDownloader` and 
+:class:`~pooch.SFTPDownloader` classes that can be used
+when files are distributed over FTP or SFTP (secure FTP). 
+By default, :meth:`pooch.Pooch.fetch` will automatically detect 
+if the download URL is HTTP(S), FTP or SFTP and use the
+appropriate downloader:
 
 .. code:: python
 
@@ -480,6 +482,12 @@ explicitly to :meth:`pooch.Pooch.fetch`:
         fname = GOODBOY.fetch("c137.csv", downloader=download_ftp)
         data = pandas.read_csv(fname)
         return data
+
+
+To download files hosted on SFTP servers, the package `paramiko` needs to be 
+installed. The usage of SFTP is identical to the example given above for the 
+authenticated :class:`~pooch.FTPDownloader` where :class:`~pooch.SFTPDownloader`
+is used instead. 
 
 
 Custom downloaders
