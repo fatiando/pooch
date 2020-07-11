@@ -78,10 +78,8 @@ def test_sftp_downloader_fail_if_fobj():
 @pytest.mark.skipif(paramiko is not None, reason="pass if paramiko installed")
 def test_sftp_downloader_fail_if_paramiko_missing():
     "test must fail if paramiko is not installed"
-    try:
+    with pytest.raises(ImportError):
         SFTPDownloader()
-    except ImportError:
-        pass
 
 
 @pytest.mark.skipif(tqdm is not None, reason="tqdm must be missing")
@@ -90,14 +88,6 @@ def test_downloader_progressbar_fails(downloader):
     "Make sure an error is raised if trying to use progressbar without tqdm"
     with pytest.raises(ValueError):
         downloader(progressbar=True)
-
-
-@pytest.mark.skipif(tqdm is not None, reason="tqdm must be missing")
-@pytest.mark.skipif(paramiko is None, reason="requires paramiko to run SFTP")
-def test_downloader_progressbar_fails_SFTP():
-    "Cannot be parametrized as SFTP might not exist in some test instances"
-    with pytest.raises(ValueError):
-        SFTPDownloader(progressbar=True)
 
 
 @pytest.mark.skipif(tqdm is None, reason="requires tqdm")
@@ -169,3 +159,11 @@ def test_downloader_progressbar_sftp(capsys):
         assert printed[:25] == progress
         # Check that the file was actually downloaded
         assert os.path.exists(outfile)
+
+
+@pytest.mark.skipif(tqdm is not None, reason="tqdm must be missing")
+@pytest.mark.skipif(paramiko is None, reason="requires paramiko to run SFTP")
+def test_downloader_progressbar_fails_sftp():
+    "Cannot be parametrized as SFTP might not exist in some test instances"
+    with pytest.raises(ValueError):
+        SFTPDownloader(progressbar=True)
