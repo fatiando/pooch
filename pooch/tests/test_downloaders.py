@@ -64,8 +64,7 @@ def test_sftp_downloader():
 @pytest.mark.skipif(paramiko is None, reason="requires paramiko to run SFTP")
 @pytest.mark.skipif(ON_TRAVIS, reason="SFTP is not allowed on Travis CI")
 def test_sftp_downloader_fail_if_fobj():
-    "SFTP downloader should fail when a file object rather than string "
-    "path is passed"
+    "Downloader should fail when a file object rather than string is passed"
     with TemporaryDirectory() as local_store:
         downloader = SFTPDownloader(username="demo", password="password")
         url = "sftp://test.rebex.net/pub/example/pocketftp.png"
