@@ -154,6 +154,7 @@ Projects using Pooch
 * `Harmonica <https://github.com/fatiando/harmonica>`__
 * `RockHound <https://github.com/fatiando/rockhound>`__
 * `icepack <https://github.com/icepack/icepack>`__
+* `histolab <https://github.com/histolab/histolab>`__
 
 *If you're using Pooch, send us a pull request adding your project to the list.*
 
