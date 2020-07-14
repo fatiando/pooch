@@ -284,6 +284,9 @@ class FTPDownloader:  # pylint: disable=too-few-public-methods
             ftp.login(user=self.username, passwd=self.password, acct=self.account)
             command = "RETR {}".format(parsed_url["path"])
             if self.progressbar:
+                # Make sure the file is set to binary mode, otherwise we can't
+                # get the file size. See: https://stackoverflow.com/a/22093848
+                ftp.voidcmd("TYPE I")
                 size = int(ftp.size(parsed_url["path"]))
                 use_ascii = bool(sys.platform == "win32")
                 progress = tqdm(
