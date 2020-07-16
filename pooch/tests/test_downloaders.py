@@ -23,11 +23,9 @@ from ..downloaders import (
     SFTPDownloader,
     choose_downloader,
 )
-from .utils import pooch_test_url, check_large_data
+from .utils import pooch_test_url, check_large_data, check_tiny_data, data_over_ftp
 
 
-# FTP doesn't work on Travis CI so need to be able to skip tests there
-ON_TRAVIS = bool(os.environ.get("TRAVIS", None))
 BASEURL = pooch_test_url()
 
 
@@ -37,16 +35,14 @@ def test_unsupported_protocol():
         choose_downloader("httpup://some-invalid-url.com")
 
 
-# https://blog.travis-ci.com/2018-07-23-the-tale-of-ftp-at-travis-ci
-@pytest.mark.skipif(ON_TRAVIS, reason="FTP is not allowed on Travis CI")
-def test_ftp_downloader():
+def test_ftp_downloader(ftpserver):
     "Test ftp downloader"
-    with TemporaryDirectory() as local_store:
-        downloader = FTPDownloader()
-        url = "ftp://speedtest.tele2.net/100KB.zip"
-        outfile = os.path.join(local_store, "100KB.zip")
-        downloader(url, outfile, None)
-        assert os.path.exists(outfile)
+    with data_over_ftp(ftpserver, "tiny-data.txt") as url:
+        with TemporaryDirectory() as local_store:
+            downloader = FTPDownloader(port=ftpserver.server_port)
+            outfile = os.path.join(local_store, "tiny-data.txt")
+            downloader(url, outfile, None)
+            check_tiny_data(outfile)
 
 
 @pytest.mark.skipif(paramiko is None, reason="requires paramiko to run SFTP")
@@ -89,6 +85,14 @@ def test_downloader_progressbar_fails(downloader):
         downloader(progressbar=True)
 
 
+@pytest.mark.skipif(tqdm is not None, reason="tqdm must be missing")
+@pytest.mark.skipif(paramiko is None, reason="requires paramiko to run SFTP")
+def test_downloader_progressbar_fails_sftp():
+    "Cannot be parametrized as SFTP might not exist in some test instances"
+    with pytest.raises(ValueError):
+        SFTPDownloader(progressbar=True)
+
+
 @pytest.mark.skipif(tqdm is None, reason="requires tqdm")
 def test_downloader_progressbar(capsys):
     "Setup a downloader function that prints a progress bar for fetch"
@@ -113,33 +117,33 @@ def test_downloader_progressbar(capsys):
 
 
 @pytest.mark.skipif(tqdm is None, reason="requires tqdm")
-@pytest.mark.skipif(ON_TRAVIS, reason="FTP is not allowed on Travis CI")
-def test_downloader_progressbar_ftp(capsys):
+def test_downloader_progressbar_ftp(capsys, ftpserver):
     "Setup an FTP downloader function that prints a progress bar for fetch"
-    download = FTPDownloader(progressbar=True)
-    with TemporaryDirectory() as local_store:
-        url = "ftp://speedtest.tele2.net/100KB.zip"
-        outfile = os.path.join(local_store, "100KB.zip")
-        download(url, outfile, None)
-        # Read stderr and make sure the progress bar is printed only when told
-        captured = capsys.readouterr()
-        printed = captured.err.split("\r")[-1].strip()
-        assert len(printed) == 79
-        if sys.platform == "win32":
-            progress = "100%|####################"
-        else:
-            progress = "100%|████████████████████"
-        # Bar size is not always the same so can't reliably test the whole bar.
-        assert printed[:25] == progress
-        # Check that the file was actually downloaded
-        assert os.path.exists(outfile)
+    with data_over_ftp(ftpserver, "tiny-data.txt") as url:
+        download = FTPDownloader(progressbar=True, port=ftpserver.server_port)
+        with TemporaryDirectory() as local_store:
+            outfile = os.path.join(local_store, "tiny-data.txt")
+            download(url, outfile, None)
+            # Read stderr and make sure the progress bar is printed only when
+            # told
+            captured = capsys.readouterr()
+            printed = captured.err.split("\r")[-1].strip()
+            assert len(printed) == 79
+            if sys.platform == "win32":
+                progress = "100%|####################"
+            else:
+                progress = "100%|████████████████████"
+            # Bar size is not always the same so can't reliably test the whole
+            # bar.
+            assert printed[:25] == progress
+            # Check that the file was actually downloaded
+            check_tiny_data(outfile)
 
 
 @pytest.mark.skipif(tqdm is None, reason="requires tqdm")
 @pytest.mark.skipif(paramiko is None, reason="requires paramiko")
 @pytest.mark.skipif(ON_TRAVIS, reason="SFTP is not allowed on Travis CI")
 def test_downloader_progressbar_sftp(capsys):
-
     "Setup an SFTP downloader function that prints a progress bar for fetch"
     downloader = SFTPDownloader(progressbar=True, username="demo", password="password")
     with TemporaryDirectory() as local_store:
@@ -157,12 +161,4 @@ def test_downloader_progressbar_sftp(capsys):
         # Bar size is not always the same so can't reliably test the whole bar.
         assert printed[:25] == progress
         # Check that the file was actually downloaded
-        assert os.path.exists(outfile)
-
-
-@pytest.mark.skipif(tqdm is not None, reason="tqdm must be missing")
-@pytest.mark.skipif(paramiko is None, reason="requires paramiko to run SFTP")
-def test_downloader_progressbar_fails_sftp():
-    "Cannot be parametrized as SFTP might not exist in some test instances"
-    with pytest.raises(ValueError):
-        SFTPDownloader(progressbar=True)
+        assert os.path.exists(outfile) 

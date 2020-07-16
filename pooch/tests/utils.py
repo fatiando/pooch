@@ -4,6 +4,8 @@ Utilities for testing code.
 import os
 import io
 import logging
+import shutil
+from pathlib import Path
 from contextlib import contextmanager
 
 from ..version import full_version
@@ -96,3 +98,33 @@ def capture_log(level=logging.DEBUG):
     get_logger().addHandler(handler)
     yield log_file
     get_logger().removeHandler(handler)
+
+
+@contextmanager
+def data_over_ftp(server, fname):
+    """
+    Add a test data file to the test FTP server and clean it up afterwards.
+
+    Parameters
+    ----------
+    server
+        The ``ftpserver`` fixture provided by pytest-localftpserver.
+    fname : str
+        The name of a file *relative* to the test data folder of the package
+        (usually just the file name, not the full path).
+
+    Yields
+    ------
+    url : str
+        The download URL of the data file from the test FTP server.
+
+    """
+    package_path = str(Path(__file__).parent / "data" / fname)
+    server_path = os.path.join(server.anon_root, fname)
+    try:
+        shutil.copyfile(package_path, server_path)
+        url = "ftp://localhost/{}".format(fname)
+        yield url
+    finally:
+        if os.path.exists(server_path):
+            os.remove(server_path)
