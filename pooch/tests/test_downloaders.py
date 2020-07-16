@@ -26,6 +26,8 @@ from ..downloaders import (
 from .utils import pooch_test_url, check_large_data, check_tiny_data, data_over_ftp
 
 
+# FTP doesn't work on Travis CI so need to be able to skip tests there
+ON_TRAVIS = bool(os.environ.get("TRAVIS", None))
 BASEURL = pooch_test_url()
 
 
@@ -161,4 +163,4 @@ def test_downloader_progressbar_sftp(capsys):
         # Bar size is not always the same so can't reliably test the whole bar.
         assert printed[:25] == progress
         # Check that the file was actually downloaded
-        assert os.path.exists(outfile) 
+        assert os.path.exists(outfile)
