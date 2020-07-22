@@ -360,7 +360,7 @@ class SFTPDownloader:  # pylint: disable=too-few-public-methods
         progressbar=False,
     ):
         if paramiko is None:
-            raise ImportError("SFTP is only supported if paramiko is installed")
+            raise ValueError("Missing package 'paramiko' required for SFTP downloads.")
 
         self.port = port
         self.username = username
