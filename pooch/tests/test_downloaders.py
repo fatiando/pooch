@@ -75,7 +75,7 @@ def test_sftp_downloader_fail_if_fobj():
 @pytest.mark.skipif(paramiko is not None, reason="pass if paramiko installed")
 def test_sftp_downloader_fail_if_paramiko_missing():
     "test must fail if paramiko is not installed"
-    with pytest.raises(ImportError):
+    with pytest.raises(ValueError):
         SFTPDownloader()
 
 
