@@ -14,4 +14,3 @@ doc/api/generated
 *.egg-info
 MANIFEST
 .coverage.*
-.vscode/settings.json
