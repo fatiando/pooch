@@ -484,7 +484,7 @@ explicitly to :meth:`pooch.Pooch.fetch`:
         return data
 
 
-To download files hosted on SFTP servers, the package `paramiko` needs to be 
+To download files hosted on SFTP servers, the package `paramiko <https://github.com/paramiko/paramiko>`__ needs to be 
 installed. The usage of SFTP is identical to the example given above for the 
 authenticated :class:`~pooch.FTPDownloader` where :class:`~pooch.SFTPDownloader`
 is used instead. 
