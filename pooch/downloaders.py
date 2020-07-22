@@ -323,7 +323,7 @@ class SFTPDownloader:  # pylint: disable=too-few-public-methods
     """
     Download manager for fetching files over SFTP.
 
-    When called, downloads the given file URL into the specified local file
+    When called, downloads the given file URL into the specified local file.
     Requires :mod:`paramiko` to be installed.
 
     Use with :meth:`pooch.Pooch.fetch` to customize the download of files
