@@ -67,9 +67,9 @@ def test_sftp_downloader_fail_if_fobj():
         downloader = SFTPDownloader(username="demo", password="password")
         url = "sftp://test.rebex.net/pub/example/pocketftp.png"
         outfile = os.path.join(local_store, "pocketftp.png")
-        outfile_obj = open(outfile, "wb")
-        with pytest.raises(TypeError):
-            downloader(url, outfile_obj, None)
+        with open(outfile, "wb") as outfile_obj:
+            with pytest.raises(TypeError):
+                downloader(url, outfile_obj, None)
 
 
 @pytest.mark.skipif(paramiko is not None, reason="pass if paramiko installed")
