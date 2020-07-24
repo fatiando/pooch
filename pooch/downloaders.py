@@ -8,11 +8,15 @@ import requests
 
 from .utils import parse_url
 
-
 try:
     from tqdm import tqdm
 except ImportError:
     tqdm = None
+
+try:
+    import paramiko
+except ImportError:
+    paramiko = None
 
 
 def choose_downloader(url):
@@ -27,8 +31,8 @@ def choose_downloader(url):
     Returns
     -------
     downloader
-        A downloader class (either :class:`pooch.HTTPDownloader` or
-        :class:`pooch.FTPDownloader`).
+        A downloader class (either :class:`pooch.HTTPDownloader`,
+        :class:`pooch.FTPDownloader`, or :class: `pooch.SFTPDownloader`).
 
     Examples
     --------
@@ -48,7 +52,9 @@ def choose_downloader(url):
         "ftp": FTPDownloader,
         "https": HTTPDownloader,
         "http": HTTPDownloader,
+        "sftp": SFTPDownloader,
     }
+
     parsed_url = parse_url(url)
     if parsed_url["protocol"] not in known_downloaders:
         raise ValueError(
@@ -311,3 +317,112 @@ class FTPDownloader:  # pylint: disable=too-few-public-methods
             ftp.quit()
             if ispath:
                 output_file.close()
+
+
+class SFTPDownloader:  # pylint: disable=too-few-public-methods
+    """
+    Download manager for fetching files over SFTP.
+
+    When called, downloads the given file URL into the specified local file.
+    Requires `paramiko <https://github.com/paramiko/paramiko>`__ to be
+    installed.
+
+    Use with :meth:`pooch.Pooch.fetch` to customize the download of files
+    (for example, to use authentication or print a progress bar).
+
+    Parameters
+    ----------
+    port : int
+        Port used for the SFTP connection.
+    username : str
+        User name used to login to the server. Only needed if the server
+        requires authentication (i.e., no anonymous SFTP).
+    password : str
+        Password used to login to the server. Only needed if the server
+        requires authentication (i.e., no anonymous SFTP). Use the empty
+        string to indicate no password is required.
+    timeout : int
+        Timeout in seconds for sftp socket operations, use None to mean no
+        timeout.
+    progressbar : bool
+        If True, will print a progress bar of the download to standard
+        error (stderr). Requires `tqdm <https://github.com/tqdm/tqdm>`__ to
+        be installed.
+
+    """
+
+    def __init__(
+        self,
+        port=22,
+        username="anonymous",
+        password="",
+        account="",
+        timeout=None,
+        progressbar=False,
+    ):
+        self.port = port
+        self.username = username
+        self.password = password
+        self.account = account
+        self.timeout = timeout
+        self.progressbar = progressbar
+        # Collect errors and raise only once so that both missing packages are
+        # captured. Otherwise, the user is only warned of one of them at a
+        # time (and we can't test properly when they are both missing).
+        errors = []
+        if self.progressbar and tqdm is None:
+            errors.append("Missing package 'tqdm' required for progress bars.")
+        if paramiko is None:
+            errors.append("Missing package 'paramiko' required for SFTP downloads.")
+        if errors:
+            raise ValueError(" ".join(errors))
+
+    def __call__(self, url, output_file, pooch):
+        """
+        Download the given URL over SFTP to the given output file.
+
+        The output file must be given as a string (file name/path) and not an
+        open file object! Otherwise, paramiko cannot save to that file.
+
+        Parameters
+        ----------
+        url : str
+            The URL to the file you want to download.
+        output_file : str
+            Path (and file name) to which the file will be downloaded. **Cannot
+            be a file object**.
+        pooch : :class:`~pooch.Pooch`
+            The instance of :class:`~pooch.Pooch` that is calling this method.
+        """
+        parsed_url = parse_url(url)
+        connection = paramiko.Transport(sock=(parsed_url["netloc"], self.port))
+        sftp = None
+        try:
+            connection.connect(username=self.username, password=self.password)
+            sftp = paramiko.SFTPClient.from_transport(connection)
+            sftp.get_channel().settimeout = self.timeout
+            if self.progressbar:
+                size = int(sftp.stat(parsed_url["path"]).st_size)
+                use_ascii = bool(sys.platform == "win32")
+                progress = tqdm(
+                    total=size,
+                    ncols=79,
+                    ascii=use_ascii,
+                    unit="B",
+                    unit_scale=True,
+                    leave=True,
+                )
+                with progress:
+
+                    def callback(current, total):
+                        "Update the progress bar and write to output"
+                        progress.total = int(total)
+                        progress.update(int(current - progress.n))
+
+                    sftp.get(parsed_url["path"], output_file, callback=callback)
+            else:
+                sftp.get(parsed_url["path"], output_file)
+        finally:
+            connection.close()
+            if sftp is not None:
+                sftp.close()

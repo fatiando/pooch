@@ -95,7 +95,7 @@ jobs:
       Python37-optional:
         python.version: '3.7'
         PYTHON: '3.7'
-        CONDA_INSTALL_EXTRA: "codecov tqdm"
+        CONDA_INSTALL_EXTRA: "codecov tqdm paramiko"
       Python36:
         python.version: '3.6'
         PYTHON: '3.6'
@@ -191,7 +191,7 @@ jobs:
       Python37-optional:
         python.version: '3.7'
         PYTHON: '3.7'
-        CONDA_INSTALL_EXTRA: "codecov tqdm"
+        CONDA_INSTALL_EXTRA: "codecov tqdm paramiko"
       Python36:
         python.version: '3.6'
         PYTHON: '3.6'
