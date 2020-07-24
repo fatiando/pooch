@@ -49,7 +49,7 @@ jobs:
         run: make lint
 
   test:
-    name: Test on ${{ matrix.os }} / Python ${{ matrix.python }}
+    name: ${{ matrix.os }} - Python ${{ matrix.python }}
     runs-on: ${{ matrix.os }}
     strategy:
       # Otherwise, the workflow would stop if a single job fails. We want to
@@ -82,7 +82,6 @@ jobs:
           channels: conda-forge,defaults
           show-channel-urls: true
           activate-environment: testing
-        run: conda config --show
 
       - name: Install requirements
         run: |
