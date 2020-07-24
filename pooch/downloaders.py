@@ -324,7 +324,8 @@ class SFTPDownloader:  # pylint: disable=too-few-public-methods
     Download manager for fetching files over SFTP.
 
     When called, downloads the given file URL into the specified local file.
-    Requires :mod:`paramiko` to be installed.
+    Requires `paramiko <https://github.com/paramiko/paramiko>`__ to be
+    installed.
 
     Use with :meth:`pooch.Pooch.fetch` to customize the download of files
     (for example, to use authentication or print a progress bar).
@@ -359,44 +360,47 @@ class SFTPDownloader:  # pylint: disable=too-few-public-methods
         timeout=None,
         progressbar=False,
     ):
-        if paramiko is None:
-            raise ValueError("Missing package 'paramiko' required for SFTP downloads.")
-
         self.port = port
         self.username = username
         self.password = password
         self.account = account
         self.timeout = timeout
         self.progressbar = progressbar
+        # Collect errors and raise only once so that both missing packages are
+        # captured. Otherwise, the user is only warned of one of them at a
+        # time (and we can't test properly when they are both missing).
+        errors = []
         if self.progressbar and tqdm is None:
-            raise ValueError("Missing package 'tqdm' required for progress bars.")
+            errors.append("Missing package 'tqdm' required for progress bars.")
+        if paramiko is None:
+            errors.append("Missing package 'paramiko' required for SFTP downloads.")
+        if errors:
+            raise ValueError(" ".join(errors))
 
     def __call__(self, url, output_file, pooch):
         """
         Download the given URL over SFTP to the given output file.
+
+        The output file must be given as a string (file name/path) and not an
+        open file object! Otherwise, paramiko cannot save to that file.
 
         Parameters
         ----------
         url : str
             The URL to the file you want to download.
         output_file : str
-            Path (and file name) to which the file will be downloaded.
-            Cannot be a file object - else will fail.
+            Path (and file name) to which the file will be downloaded. **Cannot
+            be a file object**.
         pooch : :class:`~pooch.Pooch`
-            The instance of :class:`~pooch.Pooch` that is calling this
-            method.
+            The instance of :class:`~pooch.Pooch` that is calling this method.
         """
-
         parsed_url = parse_url(url)
-
         connection = paramiko.Transport(sock=(parsed_url["netloc"], self.port))
-
         sftp = None
         try:
             connection.connect(username=self.username, password=self.password)
             sftp = paramiko.SFTPClient.from_transport(connection)
             sftp.get_channel().settimeout = self.timeout
-
             if self.progressbar:
                 size = int(sftp.stat(parsed_url["path"]).st_size)
                 use_ascii = bool(sys.platform == "win32")
