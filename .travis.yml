@@ -31,19 +31,6 @@ env:
 # Specify the build configurations. Be sure to only deploy from a single build.
 matrix:
     include:
-        - name: "Linux - Python 3.8"
-          os: linux
-          env:
-              - PYTHON=3.8
-        - name: "Linux - Python 3.7"
-          os: linux
-          env:
-              - PYTHON=3.7
-        - name: "Linux - Python 3.7 [optional dependencies]"
-          os: linux
-          env:
-              - PYTHON=3.7
-              - CONDA_INSTALL_EXTRA="codecov tqdm paramiko"
         - name: "Linux - Python 3.6"
           os: linux
           env:
@@ -51,13 +38,6 @@ matrix:
               - DEPLOY_DOCS=true
               - DEPLOY_PYPI=true
               - CONDA_INSTALL_EXTRA="codecov twine"
-        - name: "Linux - Python 3.5"
-          os: linux
-          env:
-              - PYTHON=3.5
-              # Need to use sphinx=2.0.0 because 2.2.0 crashes
-              - CONDA_INSTALL_EXTRA="codecov pip pytest pytest-cov pytest-localftpserver coverage sphinx=2.0.0 sphinx_rtd_theme=0.4.3"
-              - CONDA_REQUIREMENTS_DEV=""
 
 # Setup the build environment
 before_install:
