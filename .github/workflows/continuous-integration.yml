@@ -72,8 +72,9 @@ jobs:
     env:
       CONDA_REQUIREMENTS: requirements.txt
       CONDA_REQUIREMENTS_DEV: requirements-dev.txt
-      CONDA_INSTALL_EXTRA:
+      CONDA_INSTALL_EXTRA: codecov
       CONDA_INSTALL_OPTIONAL: tqdm paramiko
+      DEPENDENCIES: ${{ matrix.dependencies }}
       # Used to tag codecov submissions
       OS: ${{ matrix.os }}
       PYTHON: ${{ matrix.python }}
@@ -108,7 +109,7 @@ jobs:
           python-version: ${{ matrix.python }}
           miniconda-version: "latest"
           auto-update-conda: true
-          channels: conda-forge,defaults
+          channels: conda-forge
           show-channel-urls: true
           activate-environment: testing
 
@@ -129,7 +130,7 @@ jobs:
               # Use xargs to print one argument per line
               echo $CONDA_INSTALL_EXTRA | xargs -n 1 >> $requirements_file
           fi
-          if [ ${{ matrix.dependencies }} == "optional" ]; then
+          if [ "$DEPENDENCIES" == "optional" ]; then
               echo "Capturing optional dependencies: $CONDA_INSTALL_OPTIONAL"
               echo "# Optional" >> $requirements_file
               # Use xargs to print one argument per line
@@ -155,15 +156,13 @@ jobs:
       - name: Test
         run: |
           make test
-          # Convert the coverage results to XML for exporting to codecov
-          coverage xml
 
       - name: Build the documentation
         run: make -C doc clean all
 
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v1
-        with:
-          file: ./coverage.xml
-          env_vars: OS,PYTHON
-          fail_ci_if_error: true
+        run: |
+          # Convert the coverage results to XML for exporting to codecov
+          coverage xml
+          echo "\nUploading coverage to codedov:\n"
+          codecov -e PYTHON OS DEPENDENCIES
