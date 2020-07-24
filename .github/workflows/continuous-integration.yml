@@ -49,7 +49,7 @@ jobs:
         run: make lint
 
   test:
-    name: Test: ${{ matrix.os }} / Python ${{ matrix.python }}
+    name: Test on ${{ matrix.os }} / Python ${{ matrix.python }}
     runs-on: ${{ matrix.os }}
     strategy:
       # Otherwise, the workflow would stop if a single job fails. We want to
