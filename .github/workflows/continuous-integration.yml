@@ -55,7 +55,7 @@ jobs:
       # run all of them to catch failures in different combinations.
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, macos-latest]
+        os: [ubuntu-latest]
         python: [3.7, 3.8]
         dependencies: [""]
         include:
