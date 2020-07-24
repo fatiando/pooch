@@ -88,11 +88,11 @@ jobs:
           # the last release is greater than this, the version still be wrong.
           # Increase if necessary.
           fetch-depth: 50
-          #ref: ${{ github.event.pull_request.head.sha }}
 
+      # Need the tags so that versioneer can form a valid version number
       - name: Fetch git tags
         run: |
-          git fetch --prune --unshallow --tags
+          git fetch --tags
           git tag --list
 
       - name: Setup Miniconda
@@ -141,6 +141,8 @@ jobs:
       - name: Test
         run: |
           make test
+          # Convert the coverage results to XML for exporting to codecov
+          coverage xml
 
       - name: Build the documentation
         run: |
