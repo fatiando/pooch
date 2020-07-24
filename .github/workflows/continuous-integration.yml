@@ -1,0 +1,39 @@
+# Continuous integration configuration for testing and deploying with GitHub
+# Actions
+name: continuous-integration
+
+# Only build PRs, the master branch, and tags. Pushes to branches will only be
+# built when a PR is opened.
+on:
+  pull_request:
+  push:
+    branches:
+      - master
+      # TODO: add selector for tags
+
+jobs:
+
+  style_checks:
+    name: Style Checks
+    runs-on: ubuntu-latest
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.8'
+
+      - name: Install requirements
+        run: pip install black flake8 pylint==2.4.*
+
+      - name: List installed packages
+        run: pip freeze
+
+      - name: Formatting check (black and flake8)
+        run: make check
+
+      - name: Linting (pylint)
+        run: make lint
