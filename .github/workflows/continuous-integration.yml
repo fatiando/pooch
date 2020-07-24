@@ -47,6 +47,7 @@ jobs:
       - name: Linting (pylint)
         run: make lint
 
+  # Run tests, build the docs, and deploy if needed
   test:
     name: ${{ matrix.os }} - Python ${{ matrix.python }} ${{ matrix.dependencies }}
     runs-on: ${{ matrix.os }}
@@ -56,7 +57,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
-        python: [3.6, 3.7, 3.8]
+        python: [3.5, 3.6, 3.7, 3.8]
         dependencies: [""]
         include:
           - os: ubuntu-latest
@@ -123,21 +124,28 @@ jobs:
               cat $CONDA_REQUIREMENTS_DEV >> $requirements_file
           fi
           if [ ! -z "$CONDA_INSTALL_EXTRA" ]; then
+              echo "Capturing extra dependencies: $CONDA_INSTALL_EXTRA"
+              echo "# Extra" >> $requirements_file
               # Use xargs to print one argument per line
               echo $CONDA_INSTALL_EXTRA | xargs -n 1 >> $requirements_file
           fi
           if [ ${{ matrix.dependencies }} == "optional" ]; then
+              echo "Capturing optional dependencies: $CONDA_INSTALL_OPTIONAL"
+              echo "# Optional" >> $requirements_file
               # Use xargs to print one argument per line
               echo $CONDA_INSTALL_OPTIONAL | xargs -n 1 >> $requirements_file
           fi
           if [ -f $requirements_file ]; then
-              echo "Installing collected dependencies:"
+              echo "Collected dependencies:"
               cat $requirements_file
+              echo ""
               conda install --quiet --file $requirements_file python=$PYTHON
           else
               echo "No requirements defined."
           fi
-          conda list
+
+      - name: List installed packages
+        run: conda list
 
       - name: Install the package
         run: |
@@ -151,11 +159,9 @@ jobs:
           coverage xml
 
       - name: Build the documentation
-        run: |
-          make -C doc clean all
+        run: make -C doc clean all
 
       - name: Upload coverage to Codecov
-        if: success()
         uses: codecov/codecov-action@v1
         with:
           file: ./coverage.xml
