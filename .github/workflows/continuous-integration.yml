@@ -48,7 +48,7 @@ jobs:
         run: make lint
 
   test:
-    name: ${{ matrix.os }} - Python ${{ matrix.python }} - ${{ matrix.dependencies }}
+    name: ${{ matrix.os }} - Python ${{ matrix.python }} ${{ matrix.dependencies }}
     runs-on: ${{ matrix.os }}
     strategy:
       # Otherwise, the workflow would stop if a single job fails. We want to
@@ -57,7 +57,11 @@ jobs:
       matrix:
         os: [ubuntu-latest, macos-latest]
         python: [3.7, 3.8]
-        dependencies: [default, optional]
+        dependencies: [""]
+        include:
+          - os: ubuntu-latest
+            python: 3.8
+            dependencies: optional
     env:
       CONDA_REQUIREMENTS: requirements.txt
       CONDA_REQUIREMENTS_DEV: requirements-dev.txt
