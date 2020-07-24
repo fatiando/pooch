@@ -62,6 +62,9 @@ jobs:
           - os: ubuntu-latest
             python: 3.8
             dependencies: optional
+          - os: macos-latest
+            python: 3.8
+            dependencies: optional
     env:
       CONDA_REQUIREMENTS: requirements.txt
       CONDA_REQUIREMENTS_DEV: requirements-dev.txt
