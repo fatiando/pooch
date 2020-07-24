@@ -1,6 +1,5 @@
-# Continuous integration configuration for testing and deploying with GitHub
-# Actions
-name: continuous-integration
+# Configuration for testing and deploying with GitHub Actions
+name: CI
 
 # Only build PRs, the master branch, and tags. Pushes to branches will only be
 # built when a PR is opened.
@@ -49,7 +48,7 @@ jobs:
         run: make lint
 
   test:
-    name: ${{ matrix.os }} - Python ${{ matrix.python }}
+    name: ${{ matrix.os }} - Python ${{ matrix.python }} - ${{ matrix.dependencies }}
     runs-on: ${{ matrix.os }}
     strategy:
       # Otherwise, the workflow would stop if a single job fails. We want to
@@ -58,7 +57,7 @@ jobs:
       matrix:
         os: [ubuntu-latest]
         python: [3.7, 3.8]
-        optional: [false, true]
+        dependencies: [default, optional]
     env:
       CONDA_REQUIREMENTS: requirements.txt
       CONDA_REQUIREMENTS_DEV: requirements-dev.txt
@@ -72,6 +71,11 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE
       - name: Checkout
         uses: actions/checkout@v2
+        # Need to fetch more than the last commit so that versioneer can create
+        # the correct version string. If the number of commits since the last
+        # release is greater than this, the version still be wrong. Increase if
+        # necessary.
+        fetch-depth: 50
 
       - name: Setup Miniconda
         uses: goanpeca/setup-miniconda@v1
@@ -98,7 +102,7 @@ jobs:
               # Use xargs to print one argument per line
               echo $CONDA_INSTALL_EXTRA | xargs -n 1 >> $requirements_file
           fi
-          if [ ${{ matrix.optional }} == true ]; then
+          if [ ${{ matrix.dependencies }} == "optional" ]; then
               # Use xargs to print one argument per line
               echo $CONDA_INSTALL_OPTIONAL | xargs -n 1 >> $requirements_file
           fi
