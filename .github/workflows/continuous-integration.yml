@@ -70,7 +70,14 @@ jobs:
       # Used to tag codecov submissions
       OS: ${{ matrix.os }}
       PYTHON: ${{ matrix.python }}
+
     steps:
+
+      # Cancel all workflows that are still pending
+      - name: Cancel uncompleted workflows
+        uses: styfle/cancel-workflow-action@0.4.1
+        with:
+          access_token: ${{ github.token }}
 
       # Checks-out your repository under $GITHUB_WORKSPACE
       - name: Checkout
@@ -81,7 +88,12 @@ jobs:
           # the last release is greater than this, the version still be wrong.
           # Increase if necessary.
           fetch-depth: 50
-          ref: ${{ github.event.pull_request.head.sha }}
+          #ref: ${{ github.event.pull_request.head.sha }}
+
+      - name: Fetch git tags
+        run: |
+          git fetch --prune --unshallow --tags
+          git tag --list
 
       - name: Setup Miniconda
         uses: goanpeca/setup-miniconda@v1
