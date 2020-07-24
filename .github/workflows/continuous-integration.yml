@@ -92,7 +92,7 @@ jobs:
       # Need the tags so that versioneer can form a valid version number
       - name: Fetch git tags
         run: |
-          git fetch --tags
+          git fetch 'refs/tags/*:refs/tags/*'
           git tag --list
 
       - name: Setup Miniconda
