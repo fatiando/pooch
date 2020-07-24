@@ -11,8 +11,17 @@ on:
       - master
       # TODO: add selector for tags
 
+# Use bash by default in all jobs
+defaults:
+  run:
+    # The -l {0} is necessary for conda environments to be activated
+    shell: bash -l {0}
+
+###############################################################################
 jobs:
 
+  # Check code style and linting. Run separately so this finishes fast and
+  # reports problems right away.
   style_checks:
     name: Style Checks
     runs-on: ubuntu-latest
@@ -21,6 +30,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
+      # Use the default Python (not miniconda) to run faster
       - name: Setup Python
         uses: actions/setup-python@v2
         with:
@@ -37,3 +47,87 @@ jobs:
 
       - name: Linting (pylint)
         run: make lint
+
+  test:
+    name: Test: ${{ matrix.os }} / Python ${{ matrix.python }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      # Otherwise, the workflow would stop if a single job fails. We want to
+      # run all of them to catch failures in different combinations.
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest]
+        python: [3.7, 3.8]
+        optional: [false, true]
+    env:
+      CONDA_REQUIREMENTS: requirements.txt
+      CONDA_REQUIREMENTS_DEV: requirements-dev.txt
+      CONDA_INSTALL_EXTRA:
+      CONDA_INSTALL_OPTIONAL: tqdm paramiko
+      # Used to tag codecov submissions
+      OS: ${{ matrix.os }}
+      PYTHON: ${{ matrix.python }}
+    steps:
+
+      # Checks-out your repository under $GITHUB_WORKSPACE
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup Miniconda
+        uses: goanpeca/setup-miniconda@v1
+        with:
+          python-version: ${{ matrix.python }}
+          miniconda-version: "latest"
+          auto-update-conda: true
+          channels: conda-forge,defaults
+          show-channel-urls: true
+          activate-environment: testing
+        run: conda config --show
+
+      - name: Install requirements
+        run: |
+          requirements_file=full-conda-requirements.txt
+          if [ ! -z "$CONDA_REQUIREMENTS" ]; then
+              echo "Capturing dependencies from $CONDA_REQUIREMENTS"
+              cat $CONDA_REQUIREMENTS >> $requirements_file
+          fi
+          if [ ! -z "$CONDA_REQUIREMENTS_DEV" ]; then
+              echo "Capturing dependencies from $CONDA_REQUIREMENTS_DEV"
+              cat $CONDA_REQUIREMENTS_DEV >> $requirements_file
+          fi
+          if [ ! -z "$CONDA_INSTALL_EXTRA" ]; then
+              # Use xargs to print one argument per line
+              echo $CONDA_INSTALL_EXTRA | xargs -n 1 >> $requirements_file
+          fi
+          if [ ${{ matrix.optional }} == true ]; then
+              # Use xargs to print one argument per line
+              echo $CONDA_INSTALL_OPTIONAL | xargs -n 1 >> $requirements_file
+          fi
+          if [ -f $requirements_file ]; then
+              echo "Installing collected dependencies:"
+              cat $requirements_file
+              conda install --quiet --file $requirements_file python=$PYTHON
+          else
+              echo "No requirements defined."
+          fi
+          conda list
+
+      - name: Install the package
+        run: |
+          python setup.py sdist --formats=zip
+          pip install dist/*
+
+      - name: Test
+        run: |
+          make test
+
+      - name: Build the documentation
+        run: |
+          make -C doc clean all
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v1
+        with:
+          file: ./coverage.xml
+          env_vars: OS,PYTHON
+          fail_ci_if_error: true
