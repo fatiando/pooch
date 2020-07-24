@@ -81,6 +81,7 @@ jobs:
           # the last release is greater than this, the version still be wrong.
           # Increase if necessary.
           fetch-depth: 50
+          ref: ${{ github.event.pull_request.head.sha }}
 
       - name: Setup Miniconda
         uses: goanpeca/setup-miniconda@v1
