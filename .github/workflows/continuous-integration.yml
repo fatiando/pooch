@@ -8,7 +8,8 @@ on:
   push:
     branches:
       - master
-      # TODO: add selector for tags
+    tags:
+      - v*
 
 # Use bash by default in all jobs
 defaults:
