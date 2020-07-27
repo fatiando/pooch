@@ -7,6 +7,7 @@ on:
   push:
     branches:
       - master
+      # FOR TESTING ONLY! REMOVE BEFORE MERGING
       - deploy-pypi
   release:
     types:
@@ -81,8 +82,7 @@ jobs:
       - name: Publish to PyPI
         # Only publish to PyPI when a release triggers the build
         if: success() && github.event_name == 'release'
-        run: echo "YEAH!"
-        #uses: pypa/gh-action-pypi-publish@bce3b74dbf8cc32833ffba9d15f83425c1a736e0
-        #with:
-          #user: __token__
-          #password: ${{ secrets.PYPI_TOKEN}}
+        uses: pypa/gh-action-pypi-publish@bce3b74dbf8cc32833ffba9d15f83425c1a736e0
+        with:
+          user: __token__
+          password: ${{ secrets.PYPI_TOKEN}}
