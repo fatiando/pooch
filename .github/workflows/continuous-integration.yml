@@ -78,7 +78,13 @@ jobs:
           git fetch origin 'refs/tags/*:refs/tags/*'
           git tag --list
 
-      - name: Setup Miniconda
+      - name: Setup caching for conda packages
+        uses: actions/cache@v2
+        with:
+          path: ~/conda_pkgs_dir
+          key: ${{ runner.os }}-${{ matrix.python }}-${{ hashFiles('requirements*.txt') }}
+
+      - name: Setup miniconda
         uses: goanpeca/setup-miniconda@v1
         with:
           python-version: ${{ matrix.python }}
@@ -87,6 +93,8 @@ jobs:
           channels: conda-forge
           show-channel-urls: true
           activate-environment: testing
+          # Needed for caching
+          use-only-tar-bz2: true
 
       - name: Install requirements
         run: |
@@ -110,7 +118,7 @@ jobs:
               echo $CONDA_INSTALL_EXTRA | xargs -n 1 >> $requirements_file
           fi
           if [ -f $requirements_file ]; then
-              echo "Collected dependencies:"
+              echo "Collected dependencies:\n"
               cat $requirements_file
               echo ""
               conda install --quiet --file $requirements_file python=$PYTHON
@@ -121,16 +129,17 @@ jobs:
       - name: List installed packages
         run: conda list
 
-      - name: Install the package
+      - name: Build source and wheel distributions
         run: |
           python setup.py sdist bdist_wheel
-          pip install dist/*
+          echo "\nGenerated files:"
+          ls -lh dist/
 
-      - name: Test
-        run: |
-          make test
-          # Convert the coverage results to XML for exporting to codecov
-          coverage xml
+      - name: Install the package
+        run: pip install dist/*.whl
+
+      - name: Run the tests
+        run: make test
 
       - name: Build the documentation
         run: make -C doc clean all
@@ -142,6 +151,9 @@ jobs:
         with:
           name: docs-${{ matrix.os }}-${{ matrix.python }}${{ matrix.dependencies }}
           path: doc/_build/html
+
+      - name: Convert coverage report to XML for codecov
+        run: coverage xml
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v1
