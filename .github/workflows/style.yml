@@ -1,5 +1,5 @@
 # Linting and style checks with GitHub Actions
-name: Code Style
+name: code-style
 
 # Only build PRs and the master branch. Pushes to branches will only be built
 # when a PR is opened.

@@ -1,0 +1,80 @@
+# Configuration for publishing archives to PyPI and documentation pages to
+# GitHub Pages using GitHub Actions
+name: deploy
+
+# Only run for pushes to the master branch and releases.
+on:
+  push:
+    branches:
+      - master
+      - deploy-pypi
+  release:
+    types:
+      - published
+
+jobs:
+
+  #############################################################################
+  # Publish built wheels and source archives to PyPI and test PyPI
+  pypi:
+    name: PyPI
+    runs-on: ubuntu-latest
+    # Only publish from the origin repository, not forks
+    if: github.repository == 'fatiando/pooch'
+    # Only run after the tests finish successfully
+    needs: test
+
+    steps:
+
+      # Checks-out your repository under $GITHUB_WORKSPACE
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          # Need to fetch more than the last commit so that versioneer can
+          # create the correct version string. If the number of commits since
+          # the last release is greater than this, the version still be wrong.
+          # Increase if necessary.
+          fetch-depth: 100
+
+      # Need the tags so that versioneer can form a valid version number
+      - name: Fetch git tags
+        run: |
+          git fetch origin 'refs/tags/*:refs/tags/*'
+          git tag --list
+
+      - name: Setup Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.8'
+
+      - name: Install requirements
+        run: python -m pip install setuptools twine wheel
+
+      - name: List installed packages
+        run: python -m pip freeze
+
+      - name: Build source and wheel distributions
+        run: |
+          python setup.py sdist bdist_wheel
+          echo ""
+          echo "Generated files:"
+          ls -lh dist/
+
+      - name: Check the archives
+        run: twine check dist/*
+
+      - name: Publish to Test PyPI
+        if: success() && github.event_name == 'pull_request'
+        uses: pypa/gh-action-pypi-publish@v1
+        with:
+          user: __token__
+          password: ${{ secrets.TEST_PYPI_TOKEN}}
+          repository_url: https://test.pypi.org/legacy/
+
+      #- name: Publish to PyPI
+        ## Only publish to PyPI when a release triggers the build
+        #if: success() && github.event.action == 'published'
+        #uses: pypa/gh-action-pypi-publish@v1
+        #with:
+          #user: __token__
+          #password: ${{ secrets.PYPI_TOKEN}}
