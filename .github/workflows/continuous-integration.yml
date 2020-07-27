@@ -67,6 +67,18 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE
       - name: Checkout
         uses: actions/checkout@v2
+        with:
+          # Need to fetch more than the last commit so that versioneer can
+          # create the correct version string. If the number of commits since
+          # the last release is greater than this, the version still be wrong.
+          # Increase if necessary.
+          fetch-depth: 100
+
+      # Need the tags so that versioneer can form a valid version number
+      - name: Fetch git tags
+        run: |
+          git fetch origin 'refs/tags/*:refs/tags/*'
+          git tag --list
 
       - name: Setup caching for conda packages
         uses: actions/cache@v2
