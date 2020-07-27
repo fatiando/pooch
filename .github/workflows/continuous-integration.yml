@@ -22,7 +22,7 @@ jobs:
 
   # Run tests, build the docs, and deploy if needed
   test:
-    name: ${{ matrix.os }} ${{ matrix.python }} ${{ matrix.dependencies }}
+    name: ${{ matrix.os }} py${{ matrix.python }} ${{ matrix.dependencies }}
     runs-on: ${{ matrix.os }}-latest
     strategy:
       # Otherwise, the workflow would stop if a single job fails. We want to
@@ -31,6 +31,8 @@ jobs:
       matrix:
         os: [ubuntu, macos, windows]
         python: [3.6, 3.7, 3.8]
+        # If "optional", will install non-required dependencies in the build
+        # environment. Otherwise, only required dependencies are installed.
         dependencies: [""]
         include:
           - os: ubuntu
@@ -134,6 +136,12 @@ jobs:
 
       - name: Build the documentation
         run: make -C doc clean all
+
+      - name: Upload HTML documentation as an artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: docs-${{ matrix.os }}-${{ matrix.python }}${{ matrix.dependencies }}
+          path: doc/_build/html
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v1
