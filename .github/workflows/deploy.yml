@@ -36,9 +36,7 @@ jobs:
 
       # Need the tags so that versioneer can form a valid version number
       - name: Fetch git tags
-        run: |
-          git fetch origin 'refs/tags/*:refs/tags/*'
-          git tag --list
+        run: git fetch origin 'refs/tags/*:refs/tags/*'
 
       - name: Setup Python
         uses: actions/setup-python@v2
@@ -53,6 +51,11 @@ jobs:
 
       - name: Build source and wheel distributions
         run: |
+          # Change the versioneer format to "pre" so that the commit hash isn't
+          # included (PyPI doesn't allow it). Can't do this permanently because
+          # we rely the hash to indicate to the tests that this is a local
+          # verison instead of a published version.
+          #sed --in-place "s/pep440/pep440-pre/g" setup.cfg
           python setup.py sdist bdist_wheel
           echo ""
           echo "Generated files:"
@@ -77,8 +80,9 @@ jobs:
 
       - name: Publish to PyPI
         # Only publish to PyPI when a release triggers the build
+        if: success()
         #if: success() && github.event.action == 'published'
-        run: echo "YEAH! ${{ github.event_name }}"
+        run: echo "YEAH!"
         #uses: pypa/gh-action-pypi-publish@bce3b74dbf8cc32833ffba9d15f83425c1a736e0
         #with:
           #user: __token__
