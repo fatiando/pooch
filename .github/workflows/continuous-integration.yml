@@ -164,7 +164,7 @@ jobs:
         run: make -C doc clean all
 
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v1.0.12
+        uses: codecov/codecov-action@v1
         with:
           file: ./coverage.xml
           env_vars: OS,PYTHON,DEPENDENCIES
