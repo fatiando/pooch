@@ -119,7 +119,6 @@ jobs:
           fi
           if [ -f $requirements_file ]; then
               echo "Collected dependencies:"
-              echo ""
               cat $requirements_file
               echo ""
               conda install --quiet --file $requirements_file python=$PYTHON
@@ -146,8 +145,8 @@ jobs:
       - name: Build the documentation
         run: make -C doc clean all
 
-      # Store the docs as a build artifact on GitHub so we can check it in case
-      # it's failing for a PR
+      # Store the docs as a build artifact on GitHub so we can use/check it if
+      # needed. Can also use the artifact to deploy in a separate job.
       - name: Upload HTML documentation as an artifact
         uses: actions/upload-artifact@v2
         with:
@@ -162,4 +161,7 @@ jobs:
         with:
           file: ./coverage.xml
           env_vars: OS,PYTHON,DEPENDENCIES
-          fail_ci_if_error: true
+          # Don't mark the job as failed if the upload fails for some reason.
+          # It does sometimes but shouldn't be the reason for running
+          # everything again unless something else is broken.
+          fail_ci_if_error: false
