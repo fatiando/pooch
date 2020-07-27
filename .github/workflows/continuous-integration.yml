@@ -76,9 +76,7 @@ jobs:
 
       # Need the tags so that versioneer can form a valid version number
       - name: Fetch git tags
-        run: |
-          git fetch origin 'refs/tags/*:refs/tags/*'
-          git tag --list
+        run: git fetch origin 'refs/tags/*:refs/tags/*'
 
       - name: Setup caching for conda packages
         uses: actions/cache@v2
