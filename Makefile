@@ -30,8 +30,12 @@ test:
 format:
 	black $(BLACK_FILES)
 
-check:
+check: black-check flake8
+
+black-check:
 	black --check $(BLACK_FILES)
+
+flake8:
 	flake8 $(FLAKE8_FILES)
 
 lint:

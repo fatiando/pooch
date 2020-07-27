@@ -1,0 +1,168 @@
+# Configuration for testing and deploying with GitHub Actions
+name: Test
+
+# Only build PRs, the master branch, and release tags. Pushes to branches will
+# only be built when a PR is opened. This avoids duplicated buids in PRs
+# comming from branches in the origin repository (1 for PR and 1 for push).
+on:
+  pull_request:
+  push:
+    branches:
+      - master
+    tags:
+      - 'v[0-9]+.[0-9]+.[0-9]+*'
+
+# Use bash by default in all jobs
+defaults:
+  run:
+    # The -l {0} is necessary for conda environments to be activated
+    shell: bash -l {0}
+
+###############################################################################
+jobs:
+
+  # Run tests, build the docs, and deploy if needed
+  test:
+    name: ${{ matrix.os }} py${{ matrix.python }} ${{ matrix.dependencies }}
+    runs-on: ${{ matrix.os }}-latest
+    strategy:
+      # Otherwise, the workflow would stop if a single job fails. We want to
+      # run all of them to catch failures in different combinations.
+      fail-fast: false
+      matrix:
+        os: [ubuntu, macos, windows]
+        python: [3.5, 3.6, 3.7, 3.8]
+        # If "optional", will install non-required dependencies in the build
+        # environment. Otherwise, only required dependencies are installed.
+        dependencies: [""]
+        include:
+          - os: ubuntu
+            python: 3.8
+            dependencies: optional
+          - os: macos
+            python: 3.8
+            dependencies: optional
+          - os: windows
+            python: 3.8
+            dependencies: optional
+    env:
+      CONDA_REQUIREMENTS: requirements.txt
+      CONDA_REQUIREMENTS_DEV: requirements-dev.txt
+      CONDA_REQUIREMENTS_OPTIONAL: requirements-optional.txt
+      CONDA_INSTALL_EXTRA:
+      DEPENDENCIES: ${{ matrix.dependencies }}
+      # Used to tag codecov submissions
+      OS: ${{ matrix.os }}
+      PYTHON: ${{ matrix.python }}
+
+    steps:
+
+      # Cancel all workflows that are still pending
+      - name: Cancel uncompleted workflows
+        uses: styfle/cancel-workflow-action@0.4.1
+        with:
+          access_token: ${{ github.token }}
+
+      # Checks-out your repository under $GITHUB_WORKSPACE
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          # Need to fetch more than the last commit so that versioneer can
+          # create the correct version string. If the number of commits since
+          # the last release is greater than this, the version still be wrong.
+          # Increase if necessary.
+          fetch-depth: 100
+
+      # Need the tags so that versioneer can form a valid version number
+      - name: Fetch git tags
+        run: |
+          git fetch origin 'refs/tags/*:refs/tags/*'
+          git tag --list
+
+      - name: Setup caching for conda packages
+        uses: actions/cache@v2
+        with:
+          path: ~/conda_pkgs_dir
+          key: conda-${{ runner.os }}-${{ matrix.python }}-${{ hashFiles('requirements*.txt') }}
+
+      - name: Setup miniconda
+        uses: goanpeca/setup-miniconda@v1
+        with:
+          python-version: ${{ matrix.python }}
+          miniconda-version: "latest"
+          auto-update-conda: true
+          channels: conda-forge
+          show-channel-urls: true
+          activate-environment: testing
+          # Needed for caching
+          use-only-tar-bz2: true
+
+      - name: Install requirements
+        run: |
+          requirements_file=full-conda-requirements.txt
+          if [ ! -z "$CONDA_REQUIREMENTS" ]; then
+              echo "Capturing dependencies from $CONDA_REQUIREMENTS"
+              cat $CONDA_REQUIREMENTS >> $requirements_file
+          fi
+          if [ ! -z "$CONDA_REQUIREMENTS_DEV" ]; then
+              echo "Capturing dependencies from $CONDA_REQUIREMENTS_DEV"
+              cat $CONDA_REQUIREMENTS_DEV >> $requirements_file
+          fi
+          if [ "$DEPENDENCIES" == "optional" ]; then
+              echo "Capturing optional dependencies from $CONDA_REQUIREMENTS_OPTIONAL"
+              cat $CONDA_REQUIREMENTS_OPTIONAL >> $requirements_file
+          fi
+          if [ ! -z "$CONDA_INSTALL_EXTRA" ]; then
+              echo "Capturing extra dependencies: $CONDA_INSTALL_EXTRA"
+              echo "# Extra" >> $requirements_file
+              # Use xargs to print one argument per line
+              echo $CONDA_INSTALL_EXTRA | xargs -n 1 >> $requirements_file
+          fi
+          if [ -f $requirements_file ]; then
+              echo "Collected dependencies:"
+              cat $requirements_file
+              echo ""
+              conda install --quiet --file $requirements_file python=$PYTHON
+          else
+              echo "No requirements defined."
+          fi
+
+      - name: List installed packages
+        run: conda list
+
+      - name: Build source and wheel distributions
+        run: |
+          python setup.py sdist bdist_wheel
+          echo ""
+          echo "Generated files:"
+          ls -lh dist/
+
+      - name: Install the package
+        run: pip install --no-deps dist/*.whl
+
+      - name: Run the tests
+        run: make test
+
+      - name: Build the documentation
+        run: make -C doc clean all
+
+      # Store the docs as a build artifact on GitHub so we can use/check it if
+      # needed. Can also use the artifact to deploy in a separate job.
+      - name: Upload HTML documentation as an artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: docs-${{ matrix.os }}-${{ matrix.python }}${{ matrix.dependencies }}
+          path: doc/_build/html
+
+      - name: Convert coverage report to XML for codecov
+        run: coverage xml
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v1
+        with:
+          file: ./coverage.xml
+          env_vars: OS,PYTHON,DEPENDENCIES
+          # Don't mark the job as failed if the upload fails for some reason.
+          # It does sometimes but shouldn't be the reason for running
+          # everything again unless something else is broken.
+          fail_ci_if_error: false
