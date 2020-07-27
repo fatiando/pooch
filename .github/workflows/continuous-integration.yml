@@ -123,7 +123,7 @@ jobs:
 
       - name: Install the package
         run: |
-          python setup.py sdist
+          python setup.py sdist bdist_wheel
           pip install dist/*
 
       - name: Test
@@ -135,6 +135,8 @@ jobs:
       - name: Build the documentation
         run: make -C doc clean all
 
+      # Store the docs as a build artifact on GitHub so we can check it in case
+      # it's failing for a PR
       - name: Upload HTML documentation as an artifact
         uses: actions/upload-artifact@v2
         with:
