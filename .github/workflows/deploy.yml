@@ -55,7 +55,7 @@ jobs:
           # included (PyPI doesn't allow it). Can't do this permanently because
           # we rely the hash to indicate to the tests that this is a local
           # verison instead of a published version.
-          #sed --in-place "s/pep440/pep440-pre/g" setup.cfg
+          sed --in-place "s/pep440/pep440-pre/g" setup.cfg
           python setup.py sdist bdist_wheel
           echo ""
           echo "Generated files:"
