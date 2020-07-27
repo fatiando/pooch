@@ -21,8 +21,6 @@ jobs:
     runs-on: ubuntu-latest
     # Only publish from the origin repository, not forks
     if: github.repository == 'fatiando/pooch'
-    # Only run after the tests finish successfully
-    needs: test
 
     steps:
 
