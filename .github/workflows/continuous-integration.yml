@@ -47,8 +47,8 @@ jobs:
     env:
       CONDA_REQUIREMENTS: requirements.txt
       CONDA_REQUIREMENTS_DEV: requirements-dev.txt
-      CONDA_INSTALL_EXTRA: codecov
-      CONDA_INSTALL_OPTIONAL: tqdm paramiko
+      CONDA_REQUIREMENTS_OPTIONAL: requirements-optional.txt
+      CONDA_INSTALL_EXTRA:
       DEPENDENCIES: ${{ matrix.dependencies }}
       # Used to tag codecov submissions
       OS: ${{ matrix.os }}
@@ -70,7 +70,7 @@ jobs:
           # create the correct version string. If the number of commits since
           # the last release is greater than this, the version still be wrong.
           # Increase if necessary.
-          fetch-depth: 50
+          fetch-depth: 100
 
       # Need the tags so that versioneer can form a valid version number
       - name: Fetch git tags
@@ -99,17 +99,15 @@ jobs:
               echo "Capturing dependencies from $CONDA_REQUIREMENTS_DEV"
               cat $CONDA_REQUIREMENTS_DEV >> $requirements_file
           fi
+          if [ "$DEPENDENCIES" == "optional" ]; then
+              echo "Capturing optional dependencies from $CONDA_REQUIREMENTS_OPTIONAL"
+              cat $CONDA_REQUIREMENTS_OPTIONAL >> $requirements_file
+          fi
           if [ ! -z "$CONDA_INSTALL_EXTRA" ]; then
               echo "Capturing extra dependencies: $CONDA_INSTALL_EXTRA"
               echo "# Extra" >> $requirements_file
               # Use xargs to print one argument per line
               echo $CONDA_INSTALL_EXTRA | xargs -n 1 >> $requirements_file
-          fi
-          if [ "$DEPENDENCIES" == "optional" ]; then
-              echo "Capturing optional dependencies: $CONDA_INSTALL_OPTIONAL"
-              echo "# Optional" >> $requirements_file
-              # Use xargs to print one argument per line
-              echo $CONDA_INSTALL_OPTIONAL | xargs -n 1 >> $requirements_file
           fi
           if [ -f $requirements_file ]; then
               echo "Collected dependencies:"
