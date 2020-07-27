@@ -62,17 +62,23 @@ jobs:
         run: twine check dist/*
 
       - name: Publish to Test PyPI
-        if: success() && github.event_name == 'pull_request'
-        uses: pypa/gh-action-pypi-publish@v1
+        if: success()
+        # Pin to a specific commit to avoid having the authentication token
+        # stolen if the Action is compromised:
+        # https://github.com/pypa/gh-action-pypi-publish/issues/27#issuecomment-596082795
+        uses: pypa/gh-action-pypi-publish@bce3b74dbf8cc32833ffba9d15f83425c1a736e0
         with:
           user: __token__
           password: ${{ secrets.TEST_PYPI_TOKEN}}
           repository_url: https://test.pypi.org/legacy/
+          # Allow existing releases on test PyPI without errors.
+          # NOT TO BE USED in PyPI!
+          skip_existing: true
 
       #- name: Publish to PyPI
         ## Only publish to PyPI when a release triggers the build
         #if: success() && github.event.action == 'published'
-        #uses: pypa/gh-action-pypi-publish@v1
+        #uses: pypa/gh-action-pypi-publish@bce3b74dbf8cc32833ffba9d15f83425c1a736e0
         #with:
           #user: __token__
           #password: ${{ secrets.PYPI_TOKEN}}
