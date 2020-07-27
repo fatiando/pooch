@@ -138,7 +138,7 @@ jobs:
           ls -lh dist/
 
       - name: Install the package
-        run: pip install dist/*.whl
+        run: pip install --no-deps dist/*.whl
 
       - name: Run the tests
         run: make test
