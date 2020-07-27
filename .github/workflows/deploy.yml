@@ -75,9 +75,10 @@ jobs:
           # NOT TO BE USED in PyPI!
           skip_existing: true
 
-      #- name: Publish to PyPI
-        ## Only publish to PyPI when a release triggers the build
+      - name: Publish to PyPI
+        # Only publish to PyPI when a release triggers the build
         #if: success() && github.event.action == 'published'
+        run: echo "YEAH! ${{ github.event_name }}"
         #uses: pypa/gh-action-pypi-publish@bce3b74dbf8cc32833ffba9d15f83425c1a736e0
         #with:
           #user: __token__
