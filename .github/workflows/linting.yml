@@ -1,5 +1,5 @@
 # Linting and style checks with GitHub Actions
-name: Style Checks
+name: Code Style
 
 # Only build PRs and the master branch. Pushes to branches will only be built
 # when a PR is opened.
@@ -13,7 +13,7 @@ on:
 jobs:
 
   black:
-    name: black (format)
+    name: black [format]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -25,16 +25,16 @@ jobs:
           python-version: '3.8'
 
       - name: Install requirements
-        run: pip install flake8
+        run: pip install black
 
       - name: List installed packages
         run: pip freeze
 
-      - name: Formatting check (black and flake8)
+      - name: Check code format
         run: make black-check
 
   flake8:
-    name: flake8 (style)
+    name: flake8 [style]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -51,11 +51,11 @@ jobs:
       - name: List installed packages
         run: pip freeze
 
-      - name: Formatting check (black and flake8)
+      - name: Check code style
         run: make flake8
 
   pylint:
-    name: pylint (style)
+    name: pylint [style]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout

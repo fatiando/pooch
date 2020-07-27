@@ -1,5 +1,5 @@
 # Configuration for testing and deploying with GitHub Actions
-name: CI
+name: Test
 
 # Only build PRs, the master branch, and tags. Pushes to branches will only be
 # built when a PR is opened.
@@ -33,13 +33,13 @@ jobs:
         python: [3.6, 3.7, 3.8]
         dependencies: [""]
         include:
-          - os: ubuntu-latest
+          - os: ubuntu
             python: 3.8
             dependencies: optional
-          - os: macos-latest
+          - os: macos
             python: 3.8
             dependencies: optional
-          - os: windows-latest
+          - os: windows
             python: 3.8
             dependencies: optional
     env:
