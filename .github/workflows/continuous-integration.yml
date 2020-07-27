@@ -82,7 +82,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: ~/conda_pkgs_dir
-          key: ${{ runner.os }}-${{ matrix.python }}-${{ hashFiles('requirements*.txt') }}
+          key: conda-${{ runner.os }}-${{ matrix.python }}-${{ hashFiles('requirements*.txt') }}
 
       - name: Setup miniconda
         uses: goanpeca/setup-miniconda@v1
@@ -118,7 +118,8 @@ jobs:
               echo $CONDA_INSTALL_EXTRA | xargs -n 1 >> $requirements_file
           fi
           if [ -f $requirements_file ]; then
-              echo "Collected dependencies:\n"
+              echo "Collected dependencies:"
+              echo ""
               cat $requirements_file
               echo ""
               conda install --quiet --file $requirements_file python=$PYTHON
@@ -132,7 +133,8 @@ jobs:
       - name: Build source and wheel distributions
         run: |
           python setup.py sdist bdist_wheel
-          echo "\nGenerated files:"
+          echo ""
+          echo "Generated files:"
           ls -lh dist/
 
       - name: Install the package
