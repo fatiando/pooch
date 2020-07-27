@@ -1,15 +1,16 @@
 # Configuration for testing and deploying with GitHub Actions
 name: Test
 
-# Only build PRs, the master branch, and tags. Pushes to branches will only be
-# built when a PR is opened.
+# Only build PRs, the master branch, and release tags. Pushes to branches will
+# only be built when a PR is opened. This avoids duplicated buids in PRs
+# comming from branches in the origin repository (1 for PR and 1 for push).
 on:
   pull_request:
   push:
     branches:
       - master
     tags:
-      - v*
+      - 'v[0-9]+.[0-9]+.[0-9]+*'
 
 # Use bash by default in all jobs
 defaults:
@@ -30,7 +31,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu, macos, windows]
-        python: [3.6, 3.7, 3.8]
+        python: [3.5, 3.6, 3.7, 3.8]
         # If "optional", will install non-required dependencies in the build
         # environment. Otherwise, only required dependencies are installed.
         dependencies: [""]
