@@ -12,12 +12,15 @@ Part of the `Fatiando a Terra <https://www.fatiando.org>`__ project
 .. image:: https://img.shields.io/conda/vn/conda-forge/pooch.svg?style=flat-square
     :alt: Latest version on conda-forge
     :target: https://github.com/conda-forge/pooch-feedstock
-.. image:: https://img.shields.io/travis/fatiando/pooch/master.svg?style=flat-square&label=Travis%20CI
-    :alt: Travis CI build status
-    :target: https://travis-ci.com/github/fatiando/pooch
-.. image:: https://img.shields.io/azure-devops/build/fatiando/cb775164-4881-4854-81fd-7eaa170192e0/6/master.svg?label=Azure&style=flat-square
-    :alt: Azure Pipelines build status
-    :target: https://dev.azure.com/fatiando/pooch/_build
+.. image:: https://img.shields.io/github/workflow/status/fatiando/pooch/code-style/master?label=style&style=flat-square   
+    :alt: GitHub workflow status for code style
+    :target: https://github.com/fatiando/pooch/actions?query=workflow%3Acode-style
+.. image:: https://img.shields.io/github/workflow/status/fatiando/pooch/test/master?label=test&style=flat-square   
+    :alt: GitHub workflow status for tests
+    :target: https://github.com/fatiando/pooch/actions?query=workflow%3Atest
+.. image:: https://img.shields.io/github/workflow/status/fatiando/pooch/deploy/master?label=deploy&style=flat-square   
+    :alt: GitHub workflow status for deployments
+    :target: https://github.com/fatiando/pooch/actions?query=workflow%3Adeploy
 .. image:: https://img.shields.io/codecov/c/github/fatiando/pooch/master.svg?style=flat-square
     :alt: Test coverage status
     :target: https://codecov.io/gh/fatiando/pooch
