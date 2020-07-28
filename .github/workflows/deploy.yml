@@ -33,13 +33,14 @@ jobs:
 
       # Checks-out your repository under $GITHUB_WORKSPACE
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@28c7f3d2b5162b5ddd3dfd9a45aa55eaf396478b
         with:
           # Need to fetch more than the last commit so that versioneer can
           # create the correct version string. If the number of commits since
           # the last release is greater than this, the version will still be wrong.
           # Increase if necessary.
           fetch-depth: 100
+          persist-credentials: false
 
       # Need the tags so that versioneer can form a valid version number
       - name: Fetch git tags
@@ -112,13 +113,14 @@ jobs:
 
       # Checks-out your repository under $GITHUB_WORKSPACE
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@28c7f3d2b5162b5ddd3dfd9a45aa55eaf396478b
         with:
           # Need to fetch more than the last commit so that versioneer can
           # create the correct version string. If the number of commits since
           # the last release is greater than this, the version still be wrong.
           # Increase if necessary.
           fetch-depth: 100
+          persist-credentials: false
 
       # Need the tags so that versioneer can form a valid version number
       - name: Fetch git tags
@@ -188,22 +190,22 @@ jobs:
       - name: Build the documentation
         run: make -C doc clean all
 
-      - name: Set the output directory
-        id: save_to
-        run: echo "::set-output name=folder::dev"
-
+      - name: Checkout gh-pages
+        uses: actions/checkout@28c7f3d2b5162b5ddd3dfd9a45aa55eaf396478b
+        with:
+          ref: gh-pages-test
+          path: deploy
+          # Download the entire history
+          fetch-depth: 0
 
       - name: Push to gh-pages
-        #if: success() && github.event_name == 'push'
-        uses: peaceiris/actions-gh-pages@23abc3124adf2dd2cc1147230c113a9f04fbe851
-        with:
-          # FOR TESTING REMOVE BEFORE MERGING
-          publish_branch: gh-pages-test
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./doc/_build/html
-          destination_dir: ${{ steps.save_to.folder }}
-          keep_files: true
-          # Only keep the latest commit to avoid bloating the repository
-          force_orphan: true
-          user_name: 'github-actions[bot]'
-          user_email: 'github-actions[bot]@users.noreply.github.com'
+        run: |
+          if [[ "${{ github.event_name }}" == "release" ]]; then
+              version="${GITHUB_REF#refs/*/}"
+          else
+              version=dev
+          fi
+          bla="${GITHUB_REF#refs/*/}"
+          echo $bla
+          cd deploy
+          ls
