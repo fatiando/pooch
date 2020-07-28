@@ -95,26 +95,112 @@ jobs:
     # Only publish from the origin repository, not forks
     if: github.repository == 'fatiando/pooch'
 
+    strategy:
+      matrix:
+        python: [3.8]
+    env:
+      CONDA_REQUIREMENTS: requirements.txt
+      CONDA_REQUIREMENTS_DEV: requirements-dev.txt
+      CONDA_REQUIREMENTS_OPTIONAL: requirements-optional.txt
+      CONDA_INSTALL_EXTRA:
+      DEPENDENCIES:
+
     steps:
 
       # Checks-out your repository under $GITHUB_WORKSPACE
       - name: Checkout
         uses: actions/checkout@v2
-
-      # Download the built docs from the test workflow
-      - name: Download built documentation artifacts
-        uses: actions/download-artifact@v2
         with:
-          name: docs-ubuntu-3.8
+          # Need to fetch more than the last commit so that versioneer can
+          # create the correct version string. If the number of commits since
+          # the last release is greater than this, the version still be wrong.
+          # Increase if necessary.
+          fetch-depth: 100
 
-      - name: What's in here
-        run: ls -R
+      # Need the tags so that versioneer can form a valid version number
+      - name: Fetch git tags
+        run: git fetch origin 'refs/tags/*:refs/tags/*'
 
-      #- name: Push to gh-pages
-        ##if: success() && github.event_name == 'push'
-        #uses: peaceiris/actions-gh-pages@8a36f3edfc5d1cbae6b09e6f5a7d7b19e5b7a73b
-        #with:
-          #github_token: ${{ secrets.GITHUB_TOKEN }}
-          #publish_dir: ./output
-          #user_name: 'github-actions[bot]'
-          #user_email: 'github-actions[bot]@users.noreply.github.com'
+      - name: Setup caching for conda packages
+        uses: actions/cache@v2
+        with:
+          path: ~/conda_pkgs_dir
+          key: conda-${{ runner.os }}-${{ matrix.python }}-${{ hashFiles('requirements*.txt') }}
+
+      - name: Setup miniconda
+        uses: goanpeca/setup-miniconda@v1
+        with:
+          python-version: ${{ matrix.python }}
+          miniconda-version: "latest"
+          auto-update-conda: true
+          channels: conda-forge
+          show-channel-urls: true
+          activate-environment: testing
+          # Needed for caching
+          use-only-tar-bz2: true
+
+      - name: Install requirements
+        run: |
+          requirements_file=full-conda-requirements.txt
+          if [ ! -z "$CONDA_REQUIREMENTS" ]; then
+              echo "Capturing dependencies from $CONDA_REQUIREMENTS"
+              cat $CONDA_REQUIREMENTS >> $requirements_file
+          fi
+          if [ ! -z "$CONDA_REQUIREMENTS_DEV" ]; then
+              echo "Capturing dependencies from $CONDA_REQUIREMENTS_DEV"
+              cat $CONDA_REQUIREMENTS_DEV >> $requirements_file
+          fi
+          if [ "$DEPENDENCIES" == "optional" ]; then
+              echo "Capturing optional dependencies from $CONDA_REQUIREMENTS_OPTIONAL"
+              cat $CONDA_REQUIREMENTS_OPTIONAL >> $requirements_file
+          fi
+          if [ ! -z "$CONDA_INSTALL_EXTRA" ]; then
+              echo "Capturing extra dependencies: $CONDA_INSTALL_EXTRA"
+              echo "# Extra" >> $requirements_file
+              # Use xargs to print one argument per line
+              echo $CONDA_INSTALL_EXTRA | xargs -n 1 >> $requirements_file
+          fi
+          if [ -f $requirements_file ]; then
+              echo "Collected dependencies:"
+              cat $requirements_file
+              echo ""
+              conda install --quiet --file $requirements_file python=$PYTHON
+          else
+              echo "No requirements defined."
+          fi
+
+      - name: List installed packages
+        run: conda list
+
+      - name: Build source and wheel distributions
+        run: |
+          python setup.py sdist bdist_wheel
+          echo ""
+          echo "Generated files:"
+          ls -lh dist/
+
+      - name: Install the package
+        run: pip install --no-deps dist/*.whl
+
+      - name: Build the documentation
+        run: make -C doc clean all
+
+      - name: Set the output directory
+        id: save_to
+        run: echo "::set-output name=folder::dev"
+
+
+      - name: Push to gh-pages
+        #if: success() && github.event_name == 'push'
+        uses: peaceiris/actions-gh-pages@8a36f3edfc5d1cbae6b09e6f5a7d7b19e5b7a73b
+        with:
+          # FOR TESTING REMOVE BEFORE MERGING
+          publish_branch: gh-pages-test
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./doc/_build/html
+          destination_dir: ${{ steps.save_to.folder }}
+          keep_files: true
+          # Only keep the latest commit to avoid bloating the repository
+          force_orphan: true
+          user_name: 'github-actions[bot]'
+          user_email: 'github-actions[bot]@users.noreply.github.com'

@@ -58,12 +58,6 @@ jobs:
 
     steps:
 
-      # Cancel all workflows that are still pending
-      - name: Cancel uncompleted workflows
-        uses: styfle/cancel-workflow-action@0.4.1
-        with:
-          access_token: ${{ github.token }}
-
       # Checks-out your repository under $GITHUB_WORKSPACE
       - name: Checkout
         uses: actions/checkout@v2
@@ -145,12 +139,12 @@ jobs:
       - name: Build the documentation
         run: make -C doc clean all
 
-      # Store the docs as a build artifact on GitHub so we can use/check it if
-      # needed. Can also use the artifact to deploy in a separate job.
+      # Store the docs as a build artifact on GitHub so we can check it if
+      # needed.
       - name: Upload HTML documentation as an artifact
         uses: actions/upload-artifact@v2
         with:
-          name: docs-${{ matrix.os }}-${{ matrix.python }}${{ matrix.dependencies }}
+          name: docs-${{ matrix.os }}-${{ matrix.python }}${{ matrix.dependencies }}-{{ github.sha }}
           path: doc/_build/html
 
       - name: Convert coverage report to XML for codecov
