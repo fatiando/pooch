@@ -13,6 +13,12 @@ on:
     types:
       - published
 
+# Use bash by default in all jobs
+defaults:
+  run:
+    # The -l {0} is necessary for conda environments to be activated
+    shell: bash -l {0}
+
 jobs:
 
   #############################################################################
@@ -94,16 +100,13 @@ jobs:
     runs-on: ubuntu-latest
     # Only publish from the origin repository, not forks
     if: github.repository == 'fatiando/pooch'
-
-    strategy:
-      matrix:
-        python: [3.8]
     env:
       CONDA_REQUIREMENTS: requirements.txt
       CONDA_REQUIREMENTS_DEV: requirements-dev.txt
       CONDA_REQUIREMENTS_OPTIONAL: requirements-optional.txt
       CONDA_INSTALL_EXTRA:
       DEPENDENCIES:
+      PYTHON: 3.8
 
     steps:
 
@@ -125,12 +128,12 @@ jobs:
         uses: actions/cache@v2
         with:
           path: ~/conda_pkgs_dir
-          key: conda-${{ runner.os }}-${{ matrix.python }}-${{ hashFiles('requirements*.txt') }}
+          key: conda-${{ runner.os }}-${{ env.PYTHON }}-${{ hashFiles('requirements*.txt') }}
 
       - name: Setup miniconda
         uses: goanpeca/setup-miniconda@v1
         with:
-          python-version: ${{ matrix.python }}
+          python-version: ${{ env.PYTHON }}
           miniconda-version: "latest"
           auto-update-conda: true
           channels: conda-forge
