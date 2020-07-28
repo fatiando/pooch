@@ -7,8 +7,6 @@ on:
   push:
     branches:
       - master
-      # FOR TESTING ONLY! REMOVE BEFORE MERGING
-      - deploy-pypi
   release:
     types:
       - published
