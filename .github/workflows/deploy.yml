@@ -191,7 +191,7 @@ jobs:
       - name: Build the documentation
         run: make -C doc clean all
 
-      - name: Checkout the gh-pages in a separate folder
+      - name: Checkout the gh-pages branch in a separate folder
         uses: actions/checkout@28c7f3d2b5162b5ddd3dfd9a45aa55eaf396478b
         with:
           ref: ${{ env.GHPAGES_BRANCH }}
@@ -201,7 +201,6 @@ jobs:
 
       - name: Push the built HTML to gh-pages
         run: |
-
           # Detect if this is a release or from the master branch
           if [[ "${{ github.event_name }}" == "release" ]]; then
               # Get the tag name without the "refs/tags/" part
@@ -209,10 +208,11 @@ jobs:
           else
               version=dev
           fi
-
-          version=v1.2.0
-
           echo "Deploying version: $version"
+
+          # Make the new commit message. Needs to happen before cd into deploy
+          # to get the right commit hash.
+          message="Deploy $version from $(git rev-parse --short HEAD)"
 
           cd deploy
 
@@ -240,9 +240,6 @@ jobs:
           # Configure git to be the GitHub Actions account
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git config user.name "github-actions[bot]"
-
-          # Make the new commit message
-          message="Deploy $version from $(git rev-parse --short HEAD)"
 
           # If this is a dev build and the last commit was from a dev build
           # (detect if "dev" was in the previous commit message), reuse the
