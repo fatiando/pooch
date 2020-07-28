@@ -208,7 +208,8 @@ jobs:
               version=dev
           fi
 
-          commit=`git rev-parse --short HEAD`
+          message="Deploy $version from $(git rev-parse --short HEAD)"
+          echo "Message: $message"
 
           cd deploy
 
@@ -238,10 +239,10 @@ jobs:
           # reuse the same commit
           if [[ "${version}" == "dev" && `git log -1 --format='%s'` == *"dev"* ]]; then
               echo -e "Amending last commit"
-              git commit --amend --reset-author --no-edit
+              git commit --amend --reset-author -m "$message"
           else
               echo -e "Making a new commit"
-              git commit -m "Deploy $version: $commit"
+              git commit -m "$message"
           fi
 
           echo -e "Pushing..."
