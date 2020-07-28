@@ -7,6 +7,8 @@ on:
   push:
     branches:
       - master
+      # FOR TESTING REMOVE BEFORE MERGING
+      - deploy-docs
   release:
     types:
       - published
@@ -63,24 +65,56 @@ jobs:
       - name: Check the archives
         run: twine check dist/*
 
-      - name: Publish to Test PyPI
-        if: success()
-        # Pin to a specific commit to avoid having the authentication token
-        # stolen if the Action is compromised:
-        # https://github.com/pypa/gh-action-pypi-publish/issues/27#issuecomment-596082795
-        uses: pypa/gh-action-pypi-publish@bce3b74dbf8cc32833ffba9d15f83425c1a736e0
-        with:
-          user: __token__
-          password: ${{ secrets.TEST_PYPI_TOKEN}}
-          repository_url: https://test.pypi.org/legacy/
-          # Allow existing releases on test PyPI without errors.
-          # NOT TO BE USED in PyPI!
-          skip_existing: true
+      #- name: Publish to Test PyPI
+        #if: success()
+        ## Pin to a specific commit to avoid having the authentication token
+        ## stolen if the Action is compromised:
+        ## https://github.com/pypa/gh-action-pypi-publish/issues/27#issuecomment-596082795
+        #uses: pypa/gh-action-pypi-publish@bce3b74dbf8cc32833ffba9d15f83425c1a736e0
+        #with:
+          #user: __token__
+          #password: ${{ secrets.TEST_PYPI_TOKEN}}
+          #repository_url: https://test.pypi.org/legacy/
+          ## Allow existing releases on test PyPI without errors.
+          ## NOT TO BE USED in PyPI!
+          #skip_existing: true
 
-      - name: Publish to PyPI
-        # Only publish to PyPI when a release triggers the build
-        if: success() && github.event_name == 'release'
-        uses: pypa/gh-action-pypi-publish@bce3b74dbf8cc32833ffba9d15f83425c1a736e0
+      #- name: Publish to PyPI
+        ## Only publish to PyPI when a release triggers the build
+        #if: success() && github.event_name == 'release'
+        #uses: pypa/gh-action-pypi-publish@bce3b74dbf8cc32833ffba9d15f83425c1a736e0
+        #with:
+          #user: __token__
+          #password: ${{ secrets.PYPI_TOKEN}}
+
+  #############################################################################
+  # Publish the documentation to gh-pages
+  docs:
+    name: docs
+    runs-on: ubuntu-latest
+    # Only publish from the origin repository, not forks
+    if: github.repository == 'fatiando/pooch'
+
+    steps:
+
+      # Checks-out your repository under $GITHUB_WORKSPACE
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      # Download the built docs from the test workflow
+      - name: Download built documentation artifacts
+        uses: actions/download-artifact@v2
         with:
-          user: __token__
-          password: ${{ secrets.PYPI_TOKEN}}
+          name: docs-ubuntu-3.8
+
+      - name: What's in here
+        run: ls -R
+
+      #- name: Push to gh-pages
+        ##if: success() && github.event_name == 'push'
+        #uses: peaceiris/actions-gh-pages@8a36f3edfc5d1cbae6b09e6f5a7d7b19e5b7a73b
+        #with:
+          #github_token: ${{ secrets.GITHUB_TOKEN }}
+          #publish_dir: ./output
+          #user_name: 'github-actions[bot]'
+          #user_email: 'github-actions[bot]@users.noreply.github.com'
