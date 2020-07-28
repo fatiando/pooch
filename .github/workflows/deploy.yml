@@ -219,6 +219,10 @@ jobs:
           # Need to have this file so that Github doesn't try to run Jekyll
           touch .nojekyll
 
+
+          # REMOVE!!!
+          echo "meh" > dummyfile.txt
+
           # Delete all the files and replace with our new  set
           echo -e "\nRemoving old files from previous builds of ${version}:"
           rm -rvf ${version}
