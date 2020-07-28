@@ -1,16 +1,17 @@
 # Configuration for testing and deploying with GitHub Actions
-name: Test
+name: test
 
-# Only build PRs, the master branch, and release tags. Pushes to branches will
-# only be built when a PR is opened. This avoids duplicated buids in PRs
-# comming from branches in the origin repository (1 for PR and 1 for push).
+# Only build PRs, the master branch, and releases. Pushes to branches will only
+# be built when a PR is opened. This avoids duplicated buids in PRs comming
+# from branches in the origin repository (1 for PR and 1 for push).
 on:
   pull_request:
   push:
     branches:
       - master
-    tags:
-      - 'v[0-9]+.[0-9]+.[0-9]+*'
+  release:
+    types:
+      - published
 
 # Use bash by default in all jobs
 defaults:
@@ -18,9 +19,9 @@ defaults:
     # The -l {0} is necessary for conda environments to be activated
     shell: bash -l {0}
 
-###############################################################################
 jobs:
 
+  #############################################################################
   # Run tests, build the docs, and deploy if needed
   test:
     name: ${{ matrix.os }} py${{ matrix.python }} ${{ matrix.dependencies }}
@@ -75,9 +76,7 @@ jobs:
 
       # Need the tags so that versioneer can form a valid version number
       - name: Fetch git tags
-        run: |
-          git fetch origin 'refs/tags/*:refs/tags/*'
-          git tag --list
+        run: git fetch origin 'refs/tags/*:refs/tags/*'
 
       - name: Setup caching for conda packages
         uses: actions/cache@v2
