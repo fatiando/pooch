@@ -195,7 +195,7 @@ jobs:
 
       - name: Push to gh-pages
         #if: success() && github.event_name == 'push'
-        uses: peaceiris/actions-gh-pages@8a36f3edfc5d1cbae6b09e6f5a7d7b19e5b7a73b
+        uses: peaceiris/actions-gh-pages@23abc3124adf2dd2cc1147230c113a9f04fbe851
         with:
           # FOR TESTING REMOVE BEFORE MERGING
           publish_branch: gh-pages-test
