@@ -12,7 +12,7 @@ Part of the `Fatiando a Terra <https://www.fatiando.org>`__ project
 .. image:: https://img.shields.io/conda/vn/conda-forge/pooch.svg?style=flat-square
     :alt: Latest version on conda-forge
     :target: https://github.com/conda-forge/pooch-feedstock
-.. image:: https://img.shields.io/github/workflow/status/fatiando/pooch/code-style/master?label=code-style&style=flat-square   
+.. image:: https://img.shields.io/github/workflow/status/fatiando/pooch/code-style/master?label=style&style=flat-square   
     :alt: GitHub workflow status for code style
     :target: https://github.com/fatiando/pooch/actions?query=workflow%3Acode-style
 .. image:: https://img.shields.io/github/workflow/status/fatiando/pooch/test/master?label=test&style=flat-square   
