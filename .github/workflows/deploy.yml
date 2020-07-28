@@ -202,8 +202,6 @@ jobs:
       - name: Push the built HTML to gh-pages
         run: |
 
-          version=v1.2.0
-
           # Detect if this is a release or from the master branch
           if [[ "${{ github.event_name }}" == "release" ]]; then
               # Get the tag name without the "refs/tags/" part
@@ -211,6 +209,9 @@ jobs:
           else
               version=dev
           fi
+
+          version=v1.2.0
+
           echo "Deploying version: $version"
 
           cd deploy
@@ -219,7 +220,7 @@ jobs:
           touch .nojekyll
 
           # Delete all the files and replace with our new  set
-          echo -e "\nRemoving old files from previous builds:"
+          echo -e "\nRemoving old files from previous builds of ${version}:"
           rm -rvf ${version}
           echo -e "\nCopying HTML files to ${version}:"
           cp -Rvf ../doc/_build/html/ ${version}/
