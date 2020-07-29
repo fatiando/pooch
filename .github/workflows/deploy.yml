@@ -1,5 +1,9 @@
 # Configuration for publishing archives to PyPI and documentation pages to
-# GitHub Pages using GitHub Actions
+# GitHub Pages using GitHub Actions.
+#
+# NOTE: Pin to a specific commit to avoid having the authentication token
+# stolen if the Action is compromised:
+# https://github.com/pypa/gh-action-pypi-publish/issues/27#issuecomment-596082795
 name: deploy
 
 # Only run for pushes to the master branch and releases.
@@ -7,8 +11,6 @@ on:
   push:
     branches:
       - master
-      # FOR TESTING REMOVE BEFORE MERGING
-      - deploy-docs
   release:
     types:
       - published
@@ -72,27 +74,24 @@ jobs:
       - name: Check the archives
         run: twine check dist/*
 
-      #- name: Publish to Test PyPI
-        #if: success()
-        ## Pin to a specific commit to avoid having the authentication token
-        ## stolen if the Action is compromised:
-        ## https://github.com/pypa/gh-action-pypi-publish/issues/27#issuecomment-596082795
-        #uses: pypa/gh-action-pypi-publish@bce3b74dbf8cc32833ffba9d15f83425c1a736e0
-        #with:
-          #user: __token__
-          #password: ${{ secrets.TEST_PYPI_TOKEN}}
-          #repository_url: https://test.pypi.org/legacy/
-          ## Allow existing releases on test PyPI without errors.
-          ## NOT TO BE USED in PyPI!
-          #skip_existing: true
+      - name: Publish to Test PyPI
+        if: success()
+        uses: pypa/gh-action-pypi-publish@bce3b74dbf8cc32833ffba9d15f83425c1a736e0
+        with:
+          user: __token__
+          password: ${{ secrets.TEST_PYPI_TOKEN}}
+          repository_url: https://test.pypi.org/legacy/
+          # Allow existing releases on test PyPI without errors.
+          # NOT TO BE USED in PyPI!
+          skip_existing: true
 
-      #- name: Publish to PyPI
-        ## Only publish to PyPI when a release triggers the build
-        #if: success() && github.event_name == 'release'
-        #uses: pypa/gh-action-pypi-publish@bce3b74dbf8cc32833ffba9d15f83425c1a736e0
-        #with:
-          #user: __token__
-          #password: ${{ secrets.PYPI_TOKEN}}
+      - name: Publish to PyPI
+        # Only publish to PyPI when a release triggers the build
+        if: success() && github.event_name == 'release'
+        uses: pypa/gh-action-pypi-publish@bce3b74dbf8cc32833ffba9d15f83425c1a736e0
+        with:
+          user: __token__
+          password: ${{ secrets.PYPI_TOKEN}}
 
   #############################################################################
   # Publish the documentation to gh-pages
@@ -108,7 +107,6 @@ jobs:
       CONDA_INSTALL_EXTRA:
       DEPENDENCIES:
       PYTHON: 3.8
-      GHPAGES_BRANCH: gh-pages-test
 
     steps:
 
@@ -194,7 +192,7 @@ jobs:
       - name: Checkout the gh-pages branch in a separate folder
         uses: actions/checkout@28c7f3d2b5162b5ddd3dfd9a45aa55eaf396478b
         with:
-          ref: ${{ env.GHPAGES_BRANCH }}
+          ref: gh-pages
           # Checkout to this folder instead of the current one
           path: deploy
           # Download the entire history
@@ -255,7 +253,7 @@ jobs:
 
           # Make the push quiet just in case there is anything that could leak
           # sensitive information.
-          echo -e "\nPushing changes to ${GHPAGES_BRANCH}."
-          git push -fq origin $GHPAGES_BRANCH 2>&1 >/dev/null
+          echo -e "\nPushing changes to gh-pages."
+          git push -fq origin gh-pages 2>&1 >/dev/null
 
           echo -e "\nFinished uploading generated files."
