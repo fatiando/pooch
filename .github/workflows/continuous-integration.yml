@@ -1,4 +1,9 @@
 # Configuration for testing and deploying with GitHub Actions
+#
+# NOTE: Pin actions to a specific commit to avoid having the authentication
+# token stolen if the Action is compromised. See the comments and links here:
+# https://github.com/pypa/gh-action-pypi-publish/issues/27
+#
 name: test
 
 # Only build PRs, the master branch, and releases. Pushes to branches will only
@@ -67,6 +72,9 @@ jobs:
           # the last release is greater than this, the version still be wrong.
           # Increase if necessary.
           fetch-depth: 100
+          # The GitHub token is preserved by default but this job doesn't need
+          # to be able to push to GitHub.
+          persist-credentials: false
 
       # Need the tags so that versioneer can form a valid version number
       - name: Fetch git tags

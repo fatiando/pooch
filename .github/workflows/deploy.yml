@@ -1,9 +1,10 @@
 # Configuration for publishing archives to PyPI and documentation pages to
 # GitHub Pages using GitHub Actions.
 #
-# NOTE: Pin to a specific commit to avoid having the authentication token
-# stolen if the Action is compromised:
-# https://github.com/pypa/gh-action-pypi-publish/issues/27#issuecomment-596082795
+# NOTE: Pin actions to a specific commit to avoid having the authentication
+# token stolen if the Action is compromised. See the comments and links here:
+# https://github.com/pypa/gh-action-pypi-publish/issues/27
+#
 name: deploy
 
 # Only run for pushes to the master branch and releases.
@@ -35,13 +36,15 @@ jobs:
 
       # Checks-out your repository under $GITHUB_WORKSPACE
       - name: Checkout
-        uses: actions/checkout@28c7f3d2b5162b5ddd3dfd9a45aa55eaf396478b
+        uses: actions/checkout@v2
         with:
           # Need to fetch more than the last commit so that versioneer can
           # create the correct version string. If the number of commits since
           # the last release is greater than this, the version will still be wrong.
           # Increase if necessary.
           fetch-depth: 100
+          # The GitHub token is preserved by default but this job doesn't need
+          # to be able to push to GitHub.
           persist-credentials: false
 
       # Need the tags so that versioneer can form a valid version number
@@ -112,13 +115,15 @@ jobs:
 
       # Checks-out your repository under $GITHUB_WORKSPACE
       - name: Checkout
-        uses: actions/checkout@28c7f3d2b5162b5ddd3dfd9a45aa55eaf396478b
+        uses: actions/checkout@v2
         with:
           # Need to fetch more than the last commit so that versioneer can
           # create the correct version string. If the number of commits since
           # the last release is greater than this, the version still be wrong.
           # Increase if necessary.
           fetch-depth: 100
+          # The GitHub token is preserved by default but this job doesn't need
+          # to be able to push to GitHub.
           persist-credentials: false
 
       # Need the tags so that versioneer can form a valid version number
