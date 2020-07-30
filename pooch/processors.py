@@ -199,6 +199,11 @@ class Decompress:  # pylint: disable=too-few-public-methods
     ``method="auto"`` to automatically determine the compression method. This
     can be overwritten by setting the *method* argument.
 
+    .. note::
+
+        To unpack zip and tar archives with one or more files, use
+        :class:`pooch.Unzip` and :class:`pooch.Untar` instead.
+
     Parameters
     ----------
     method : str
@@ -207,7 +212,8 @@ class Decompress:  # pylint: disable=too-few-public-methods
 
     """
 
-    modules = {"lzma": lzma, "xz": lzma, "gzip": gzip, "bzip2": bz2}
+    modules = {"auto": None, "lzma": lzma, "xz": lzma, "gzip": gzip, "bzip2": bz2}
+    extensions = {".xz": "lzma", ".gz": "gzip", ".bz2": "bzip2"}
 
     def __init__(self, method="auto"):
         self.method = method
@@ -259,21 +265,22 @@ class Decompress:  # pylint: disable=too-few-public-methods
         extension. If no recognized extension is in the file name, will raise a
         ValueError.
         """
-        method = self.method
-        if method == "auto":
-            ext = os.path.splitext(fname)[-1]
-            valid_methods = {".xz": "lzma", ".gz": "gzip", ".bz2": "bzip2"}
-            if ext not in valid_methods:
-                raise ValueError(
-                    "Unrecognized extension '{}'. Must be one of '{}'.".format(
-                        ext, list(valid_methods.keys())
-                    )
-                )
-            method = valid_methods[ext]
-        if method not in self.modules:
-            raise ValueError(
-                "Invalid compression method '{}'. Must be one of '{}'.".format(
-                    method, list(self.modules.keys())
-                )
+        error_archives = "To unpack zip/tar archives, use pooch.Unzip/Untar instead."
+        if self.method not in self.modules:
+            message = "Invalid compression method '{}'. Must be one of '{}'.".format(
+                self.method, list(self.modules.keys())
             )
-        return self.modules[method]
+            if self.method in {"zip", "tar"}:
+                message = " ".join([message, error_archives])
+            raise ValueError(message)
+        if self.method == "auto":
+            ext = os.path.splitext(fname)[-1]
+            if ext not in self.extensions:
+                message = "Unrecognized file extension '{}'. Must be one of '{}'.".format(
+                    ext, list(self.extensions.keys())
+                )
+                if ext in {".zip", ".tar"}:
+                    message = " ".join([message, error_archives])
+                raise ValueError(message)
+            return self.modules[self.extensions[ext]]
+        return self.modules[self.method]

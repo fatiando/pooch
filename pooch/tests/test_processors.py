@@ -54,15 +54,29 @@ def test_decompress_fails():
     with TemporaryDirectory() as local_store:
         path = Path(local_store)
         pup = Pooch(path=path, base_url=BASEURL, registry=REGISTRY)
+        # Invalid extension
         with pytest.raises(ValueError) as exception:
             with warnings.catch_warnings():
                 pup.fetch("tiny-data.txt", processor=Decompress(method="auto"))
-        assert exception.value.args[0].startswith("Unrecognized extension '.txt'")
+        assert exception.value.args[0].startswith("Unrecognized file extension '.txt'")
+        assert "pooch.Unzip/Untar" not in exception.value.args[0]
         # Should also fail for a bad method name
         with pytest.raises(ValueError) as exception:
             with warnings.catch_warnings():
                 pup.fetch("tiny-data.txt", processor=Decompress(method="bla"))
         assert exception.value.args[0].startswith("Invalid compression method 'bla'")
+        assert "pooch.Unzip/Untar" not in exception.value.args[0]
+        # Point people to Untar and Unzip
+        with pytest.raises(ValueError) as exception:
+            with warnings.catch_warnings():
+                pup.fetch("tiny-data.txt", processor=Decompress(method="zip"))
+        assert exception.value.args[0].startswith("Invalid compression method 'zip'")
+        assert "pooch.Unzip/Untar" in exception.value.args[0]
+        with pytest.raises(ValueError) as exception:
+            with warnings.catch_warnings():
+                pup.fetch("store.zip", processor=Decompress(method="auto"))
+        assert exception.value.args[0].startswith("Unrecognized file extension '.zip'")
+        assert "pooch.Unzip/Untar" in exception.value.args[0]
 
 
 def test_extractprocessor_fails():
