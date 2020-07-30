@@ -1,5 +1,10 @@
 # Configuration for publishing archives to PyPI and documentation pages to
-# GitHub Pages using GitHub Actions
+# GitHub Pages using GitHub Actions.
+#
+# NOTE: Pin actions to a specific commit to avoid having the authentication
+# token stolen if the Action is compromised. See the comments and links here:
+# https://github.com/pypa/gh-action-pypi-publish/issues/27
+#
 name: deploy
 
 # Only run for pushes to the master branch and releases.
@@ -10,6 +15,12 @@ on:
   release:
     types:
       - published
+
+# Use bash by default in all jobs
+defaults:
+  run:
+    # The -l {0} is necessary for conda environments to be activated
+    shell: bash -l {0}
 
 jobs:
 
@@ -32,6 +43,9 @@ jobs:
           # the last release is greater than this, the version will still be wrong.
           # Increase if necessary.
           fetch-depth: 100
+          # The GitHub token is preserved by default but this job doesn't need
+          # to be able to push to GitHub.
+          persist-credentials: false
 
       # Need the tags so that versioneer can form a valid version number
       - name: Fetch git tags
@@ -65,9 +79,6 @@ jobs:
 
       - name: Publish to Test PyPI
         if: success()
-        # Pin to a specific commit to avoid having the authentication token
-        # stolen if the Action is compromised:
-        # https://github.com/pypa/gh-action-pypi-publish/issues/27#issuecomment-596082795
         uses: pypa/gh-action-pypi-publish@bce3b74dbf8cc32833ffba9d15f83425c1a736e0
         with:
           user: __token__
@@ -84,3 +95,170 @@ jobs:
         with:
           user: __token__
           password: ${{ secrets.PYPI_TOKEN}}
+
+  #############################################################################
+  # Publish the documentation to gh-pages
+  docs:
+    name: docs
+    runs-on: ubuntu-latest
+    # Only publish from the origin repository, not forks
+    if: github.repository == 'fatiando/pooch'
+    env:
+      CONDA_REQUIREMENTS: requirements.txt
+      CONDA_REQUIREMENTS_DEV: requirements-dev.txt
+      CONDA_REQUIREMENTS_OPTIONAL: requirements-optional.txt
+      CONDA_INSTALL_EXTRA:
+      DEPENDENCIES:
+      PYTHON: 3.8
+
+    steps:
+
+      # Checks-out your repository under $GITHUB_WORKSPACE
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          # Need to fetch more than the last commit so that versioneer can
+          # create the correct version string. If the number of commits since
+          # the last release is greater than this, the version still be wrong.
+          # Increase if necessary.
+          fetch-depth: 100
+          # The GitHub token is preserved by default but this job doesn't need
+          # to be able to push to GitHub.
+          persist-credentials: false
+
+      # Need the tags so that versioneer can form a valid version number
+      - name: Fetch git tags
+        run: git fetch origin 'refs/tags/*:refs/tags/*'
+
+      - name: Setup caching for conda packages
+        uses: actions/cache@v2
+        with:
+          path: ~/conda_pkgs_dir
+          key: conda-${{ runner.os }}-${{ env.PYTHON }}-${{ hashFiles('requirements*.txt') }}
+
+      - name: Setup miniconda
+        uses: goanpeca/setup-miniconda@v1
+        with:
+          python-version: ${{ env.PYTHON }}
+          miniconda-version: "latest"
+          auto-update-conda: true
+          channels: conda-forge
+          show-channel-urls: true
+          activate-environment: testing
+          # Needed for caching
+          use-only-tar-bz2: true
+
+      - name: Install requirements
+        run: |
+          requirements_file=full-conda-requirements.txt
+          if [ ! -z "$CONDA_REQUIREMENTS" ]; then
+              echo "Capturing dependencies from $CONDA_REQUIREMENTS"
+              cat $CONDA_REQUIREMENTS >> $requirements_file
+          fi
+          if [ ! -z "$CONDA_REQUIREMENTS_DEV" ]; then
+              echo "Capturing dependencies from $CONDA_REQUIREMENTS_DEV"
+              cat $CONDA_REQUIREMENTS_DEV >> $requirements_file
+          fi
+          if [ "$DEPENDENCIES" == "optional" ]; then
+              echo "Capturing optional dependencies from $CONDA_REQUIREMENTS_OPTIONAL"
+              cat $CONDA_REQUIREMENTS_OPTIONAL >> $requirements_file
+          fi
+          if [ ! -z "$CONDA_INSTALL_EXTRA" ]; then
+              echo "Capturing extra dependencies: $CONDA_INSTALL_EXTRA"
+              echo "# Extra" >> $requirements_file
+              # Use xargs to print one argument per line
+              echo $CONDA_INSTALL_EXTRA | xargs -n 1 >> $requirements_file
+          fi
+          if [ -f $requirements_file ]; then
+              echo "Collected dependencies:"
+              cat $requirements_file
+              echo ""
+              conda install --quiet --file $requirements_file python=$PYTHON
+          else
+              echo "No requirements defined."
+          fi
+
+      - name: List installed packages
+        run: conda list
+
+      - name: Build source and wheel distributions
+        run: |
+          python setup.py sdist bdist_wheel
+          echo ""
+          echo "Generated files:"
+          ls -lh dist/
+
+      - name: Install the package
+        run: pip install --no-deps dist/*.whl
+
+      - name: Build the documentation
+        run: make -C doc clean all
+
+      - name: Checkout the gh-pages branch in a separate folder
+        uses: actions/checkout@28c7f3d2b5162b5ddd3dfd9a45aa55eaf396478b
+        with:
+          ref: gh-pages
+          # Checkout to this folder instead of the current one
+          path: deploy
+          # Download the entire history
+          fetch-depth: 0
+
+      - name: Push the built HTML to gh-pages
+        run: |
+          # Detect if this is a release or from the master branch
+          if [[ "${{ github.event_name }}" == "release" ]]; then
+              # Get the tag name without the "refs/tags/" part
+              version="${GITHUB_REF#refs/*/}"
+          else
+              version=dev
+          fi
+          echo "Deploying version: $version"
+
+          # Make the new commit message. Needs to happen before cd into deploy
+          # to get the right commit hash.
+          message="Deploy $version from $(git rev-parse --short HEAD)"
+
+          cd deploy
+
+          # Need to have this file so that Github doesn't try to run Jekyll
+          touch .nojekyll
+
+          # Delete all the files and replace with our new  set
+          echo -e "\nRemoving old files from previous builds of ${version}:"
+          rm -rvf ${version}
+          echo -e "\nCopying HTML files to ${version}:"
+          cp -Rvf ../doc/_build/html/ ${version}/
+
+          # If this is a new release, update the link from /latest to it
+          if [[ "${version}" != "dev" ]]; then
+              echo -e "\nSetup link from ${version} to 'latest'."
+              rm -f latest
+              ln -sf ${version} latest
+          fi
+
+          # Stage the commit
+          git add -A .
+          echo -e "\nChanges to be applied:"
+          git status
+
+          # Configure git to be the GitHub Actions account
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git config user.name "github-actions[bot]"
+
+          # If this is a dev build and the last commit was from a dev build
+          # (detect if "dev" was in the previous commit message), reuse the
+          # same commit
+          if [[ "${version}" == "dev" && `git log -1 --format='%s'` == *"dev"* ]]; then
+              echo -e "\nAmending last commit:"
+              git commit --amend --reset-author -m "$message"
+          else
+              echo -e "\nMaking a new commit:"
+              git commit -m "$message"
+          fi
+
+          # Make the push quiet just in case there is anything that could leak
+          # sensitive information.
+          echo -e "\nPushing changes to gh-pages."
+          git push -fq origin gh-pages 2>&1 >/dev/null
+
+          echo -e "\nFinished uploading generated files."
