@@ -195,15 +195,14 @@ class Decompress:  # pylint: disable=too-few-public-methods
     Supported decompression methods are LZMA (``.xz``), bzip2 (``.bz2``), and
     gzip (``.gz``).
 
-    .. note::
-
-        To unpack zip and tar archives with one or more files, use
-        :class:`pooch.Unzip` and :class:`pooch.Untar` instead. This processor
-        only decompresses single files.
-
     File names with the standard extensions (see above) can use
     ``method="auto"`` to automatically determine the compression method. This
     can be overwritten by setting the *method* argument.
+
+    .. note::
+
+        To unpack zip and tar archives with one or more files, use
+        :class:`pooch.Unzip` and :class:`pooch.Untar` instead.
 
     Parameters
     ----------
