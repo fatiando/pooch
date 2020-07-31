@@ -12,11 +12,26 @@
 .. toctree::
     :maxdepth: 2
     :hidden:
-    :caption: Documentation
+    :caption: Getting Started
 
     install.rst
     citing.rst
+
+.. toctree::
+    :maxdepth: 2
+    :hidden:
+    :caption: User Guide
+
     usage.rst
     retrieve.rst
+    downloaders.rst
+    processors.rst
+    advanced.rst
+
+.. toctree::
+    :maxdepth: 2
+    :hidden:
+    :caption: Reference Documentation
+
     api/index.rst
     changes.rst

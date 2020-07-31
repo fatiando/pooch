@@ -1,7 +1,7 @@
 .. _retrieve:
 
-Downloading a single file
-=========================
+Retrieving single a file
+========================
 
 Sometimes, you just want to download a single file (caching it locally and
 checking the hash to make sure you have the right one). In these cases,
@@ -38,10 +38,9 @@ else) you can guarantee that the exact same file is downloaded. This is a way
 to help make sure the results of your code are reproducible.
 
 Function :func:`~pooch.retrieve` has support for all of Pooch's
-:ref:`custom downloaders <downloaders>` and
-:ref:`post-processing hooks <processors>`. So you can use HTTP and FTP (with or
-without authentication), decompress files, unpack archives, and print progress
-bars with a bit of configuration.
+:ref:`downloaders <downloaders>` and :ref:`processors <processors>`. So you can
+use HTTP and FTP (with or without authentication), decompress files, unpack
+archives, and print progress bars with a bit of configuration.
 
 .. note::
 
