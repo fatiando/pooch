@@ -12,13 +12,13 @@ Part of the `Fatiando a Terra <https://www.fatiando.org>`__ project
 .. image:: https://img.shields.io/conda/vn/conda-forge/pooch.svg?style=flat-square
     :alt: Latest version on conda-forge
     :target: https://github.com/conda-forge/pooch-feedstock
-.. image:: https://img.shields.io/github/workflow/status/fatiando/pooch/code-style/master?label=style&style=flat-square   
+.. image:: https://img.shields.io/github/workflow/status/fatiando/pooch/code-style/master?label=style&style=flat-square
     :alt: GitHub workflow status for code style
     :target: https://github.com/fatiando/pooch/actions?query=workflow%3Acode-style
-.. image:: https://img.shields.io/github/workflow/status/fatiando/pooch/test/master?label=test&style=flat-square   
+.. image:: https://img.shields.io/github/workflow/status/fatiando/pooch/test/master?label=test&style=flat-square
     :alt: GitHub workflow status for tests
     :target: https://github.com/fatiando/pooch/actions?query=workflow%3Atest
-.. image:: https://img.shields.io/github/workflow/status/fatiando/pooch/deploy/master?label=deploy&style=flat-square   
+.. image:: https://img.shields.io/github/workflow/status/fatiando/pooch/deploy/master?label=deploy&style=flat-square
     :alt: GitHub workflow status for deployments
     :target: https://github.com/fatiando/pooch/actions?query=workflow%3Adeploy
 .. image:: https://img.shields.io/codecov/c/github/fatiando/pooch/master.svg?style=flat-square
@@ -31,11 +31,9 @@ Part of the `Fatiando a Terra <https://www.fatiando.org>`__ project
     :alt: Digital Object Identifier for the JOSS paper
     :target: https://doi.org/10.21105/joss.01943
 
-
 .. placeholder-for-doc-index
 
-🚨 **Python 2.7 is no longer supported. Use Pooch <= 0.6.0 if you need 2.7 support.** 🚨
-
+🚨 **Pooch v1.2.0 is the last release that is compatible with Python 3.5.** 🚨
 
 About
 -----
