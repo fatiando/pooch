@@ -23,10 +23,11 @@
     :caption: User Guide
 
     usage.rst
+    intermediate.rst
+    advanced.rst
     retrieve.rst
     downloaders.rst
     processors.rst
-    advanced.rst
 
 .. toctree::
     :maxdepth: 2
