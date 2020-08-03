@@ -48,6 +48,18 @@ If the file is updated on the server and ``known_hash`` is set to the checksum
 of the new file, Pooch will automatically detect that the file needs to be
 updated and download the new version.
 
+.. note::
+
+    The :func:`pooch.retrieve` function is useful when you have one or two
+    files to download. **If you need to manage the download and caching of
+    several files** (for example, if you're developing a Python package or for
+    large data analysis projects), then you should start using the full
+    capabilities of the :class:`pooch.Pooch` class. It can handle sandboxing
+    data for different package versions, allow users to set the download
+    locations, and more.
+
+    See :ref:`beginner` and :ref:`intermediate` to get started.
+
 
 Unknown file hash
 -----------------
@@ -70,12 +82,3 @@ Function :func:`pooch.retrieve` has support for all of Pooch's
 :ref:`downloaders <downloaders>` and :ref:`processors <processors>`. You can
 use HTTP, FTP, and SFTP (with or without authentication), decompress files, unpack
 archives, show progress bars, and more with a bit of configuration.
-
-
-Downloading multiple files
---------------------------
-
-The :func:`pooch.retrieve` function is useful when you have one or two files to
-download. If you need to manage the download and caching of several files, with
-versioning, then you should start using Pooch's full capabilities. See
-:ref:`beginner` to get started.
