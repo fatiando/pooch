@@ -27,16 +27,17 @@ to have a ``plumbus.datasets`` module that defines functions like
 Assumptions
 -----------
 
-We'll setup a :class:`~pooch.Pooch` to solve your data distribution needs.
+We'll set up Pooch to solve your data distribution needs.
 In this example, we'll work with the follow assumptions:
 
-1. Your sample data are in a folder of your Github repository.
+1. Your sample data are in a folder of your GitHub repository.
 2. You use git tags to mark releases of your project in the history.
 3. Your project has a variable that defines the version string.
 4. The version string contains an indicator that the current commit is not a
    release (like ``'v1.2.3+12.d908jdl'`` or ``'v0.1+dev'``).
 
-Let's say that this is the layout of your repository on GitHub:
+Other use cases can also be handled (see :ref:`intermediate`).
+For now, let's say that this is the layout of your repository on GitHub:
 
 .. code-block:: none
 
@@ -73,7 +74,7 @@ automatically. This is what the ``plumbus/datasets.py`` file would look like:
     from . import version  # The version string of your project
 
 
-    GOODBOY = pooch.create(
+    POOCH = pooch.create(
         # Use the default cache folder for the OS
         path=pooch.os_cache("plumbus"),
         # The remote data is on Github
@@ -97,7 +98,7 @@ automatically. This is what the ``plumbus/datasets.py`` file would look like:
         # The file will be downloaded automatically the first time this is run
         # returns the file path to the downloaded file. Afterwards, Pooch finds
         # it in the local cache and doesn't repeat the download.
-        fname = GOODBOY.fetch("c137.csv")
+        fname = POOCH.fetch("c137.csv")
         # The "fetch" method returns the full path to the downloaded data file.
         # All we need to do now is load it with our standard Python tools.
         data = pandas.read_csv(fname)
@@ -108,20 +109,28 @@ automatically. This is what the ``plumbus/datasets.py`` file would look like:
         """
         Load the Cronenberg sample data as a pandas.DataFrame.
         """
-        fname = GOODBOY.fetch("cronen.csv")
+        fname = POOCH.fetch("cronen.csv")
         data = pandas.read_csv(fname)
         return data
 
 
+The ``POOCH`` returned by :func:`pooch.create` is an instance of the
+:class:`~pooch.Pooch` class. The class contains the data registry (files, URLs,
+hashes, etc) and handles downloading files from the registry using the
+:meth:`~pooch.Pooch.fetch` method.
+
 When the user calls ``plumbus.datasets.fetch_c137()`` for the first time, the
 data file will be downloaded and stored in the local storage. In this case,
 we're using :func:`pooch.os_cache` to set the local folder to the default cache
-location for your OS. You could also provide any other path if you prefer.
+location for your OS. You could also provide any other path if you prefer. The
+download is only performed once and after that Pooch knows to only return the
+path to the already downloaded file.
 
-The ``GOODBOY`` returned by :func:`pooch.create` is an instance of the
-:class:`~pooch.Pooch` class, which handles downloading files from the registry
-using the :meth:`~pooch.Pooch.fetch` method. See the documentation for
-:func:`pooch.create` and :func:`pooch.Pooch` for more options.
+The setup shown here is the minimum required to use Pooch if your package
+follows the assumptions laid out above. Pooch also supports downloading files
+from multiple sources (including FTP), and more. See the :ref:`intermediate`
+tutorial and the documentation for :func:`pooch.create` and :func:`pooch.Pooch`
+for more options.
 
 
 Hashes

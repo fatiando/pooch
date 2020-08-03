@@ -19,7 +19,7 @@ using an environment variable:
 
 .. code:: python
 
-    GOODBOY = pooch.create(
+    POOCH = pooch.create(
         # This is still the default
         path=pooch.os_cache("plumbus"),
         base_url="https://github.com/rick/plumbus/raw/{version}/data/",
@@ -51,7 +51,7 @@ hashes in a file and use :meth:`pooch.Pooch.load_registry` to read them:
     import os
     import pkg_resources
 
-    GOODBOY = pooch.create(
+    POOCH = pooch.create(
         # Use the default cache folder for the OS
         path=pooch.os_cache("plumbus"),
         # The remote data is on Github
@@ -65,7 +65,7 @@ hashes in a file and use :meth:`pooch.Pooch.load_registry` to read them:
     # Get registry file from package_data
     registry_file = pkg_resources.resource_stream("plumbus", "registry.txt")
     # Load this registry file
-    GOODBOY.load_registry(registry_file)
+    POOCH.load_registry(registry_file)
 
 In this case, the ``registry.txt`` file is in the ``plumbus/`` package
 directory and should be shipped with the package (see below for instructions).
@@ -147,7 +147,7 @@ download from ``https://www.some-data-hosting-site.com`` instead:
 .. code:: python
 
     # The basic setup is the same
-    GOODBOY = pooch.create(
+    POOCH = pooch.create(
         path=pooch.os_cache("plumbus"),
         base_url="https://github.com/rick/plumbus/raw/{version}/data/",
         version=version,
@@ -189,7 +189,7 @@ module code doesn't change at all:
 .. code:: python
 
     # Define the Pooch exactly the same (urls is None by default)
-    GOODBOY = pooch.create(
+    POOCH = pooch.create(
         path=pooch.os_cache("plumbus"),
         base_url="https://github.com/rick/plumbus/raw/{version}/data/",
         version=version,
@@ -198,7 +198,7 @@ module code doesn't change at all:
     )
     # If custom URLs are present in the registry file, they will be set
     # automatically.
-    GOODBOY.load_registry(os.path.join(os.path.dirname(__file__), "registry.txt"))
+    POOCH.load_registry(os.path.join(os.path.dirname(__file__), "registry.txt"))
 
 
 Download protocols
@@ -211,7 +211,7 @@ use the following setup:
 
 .. code:: python
 
-    GOODBOY = pooch.create(
+    POOCH = pooch.create(
         path=pooch.os_cache("plumbus"),
         # Use an FTP server instead of HTTP. The rest is all the same.
         base_url="ftp://garage-basement.org/{version}/",
@@ -228,7 +228,7 @@ use the following setup:
         """
         Load the C-137 sample data as a pandas.DataFrame (over FTP this time).
         """
-        fname = GOODBOY.fetch("c137.csv")
+        fname = POOCH.fetch("c137.csv")
         data = pandas.read_csv(fname)
         return data
 
@@ -268,7 +268,7 @@ enabled using:
         Fetch a large file from a server and print a progress bar.
         """
         download = HTTPDownloader(progressbar=True)
-        fname = GOODBOY.fetch("large-data-file.h5", downloader=download)
+        fname = POOCH.fetch("large-data-file.h5", downloader=download)
         data = h5py.File(fname, "r")
         return data
 
