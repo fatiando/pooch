@@ -98,6 +98,8 @@ automatically. This is what the ``plumbus/datasets.py`` file would look like:
         # returns the file path to the downloaded file. Afterwards, Pooch finds
         # it in the local cache and doesn't repeat the download.
         fname = GOODBOY.fetch("c137.csv")
+        # The "fetch" method returns the full path to the downloaded data file.
+        # All we need to do now is load it with our standard Python tools.
         data = pandas.read_csv(fname)
         return data
 
@@ -114,8 +116,12 @@ automatically. This is what the ``plumbus/datasets.py`` file would look like:
 When the user calls ``plumbus.datasets.fetch_c137()`` for the first time, the
 data file will be downloaded and stored in the local storage. In this case,
 we're using :func:`pooch.os_cache` to set the local folder to the default cache
-location for your OS. You could also provide any other path if you prefer. See
-the documentation for :func:`pooch.create` for more options.
+location for your OS. You could also provide any other path if you prefer.
+
+The ``GOODBOY`` returned by :func:`pooch.create` is an instance of the
+:class:`~pooch.Pooch` class, which handles downloading files from the registry
+using the :meth:`~pooch.Pooch.fetch` method. See the documentation for
+:func:`pooch.create` and :func:`pooch.Pooch` for more options.
 
 
 Hashes
