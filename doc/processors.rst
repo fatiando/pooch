@@ -180,3 +180,19 @@ function:
         # pandas directly
         data = pandas.read_csv(fname)
         return data
+
+
+Similarly, you could build any custom processor function so long as it receives
+the ``fname, action, pup`` arguments. Example use cases for this would be:
+
+* Converting data from a download-friendly format (compressed and minimal file
+  size) to a more user friendly format (easy to open and fast to load into
+  memory).
+* Add missing metadata to data from public servers. You might be using public
+  data that has known issues (poorly formated entries, missing metadata, etc)
+  which can be fixed when the file is downloaded.
+
+The main advantage to using a processor for these actions is that they are
+performed only when the file is downloaded. A modified version of the file can
+be kept on disk so that loading the file is easier. This is particularly
+convenient if the processor task takes a long time to run.

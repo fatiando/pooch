@@ -15,17 +15,17 @@
     :caption: Getting Started
 
     install.rst
+    retrieve.rst
     citing.rst
 
 .. toctree::
     :maxdepth: 2
     :hidden:
-    :caption: User Guide
+    :caption: Training your Pooch
 
-    usage.rst
+    beginner.rst
     intermediate.rst
     advanced.rst
-    retrieve.rst
     downloaders.rst
     processors.rst
 

@@ -3,8 +3,8 @@
 Advanced tricks
 ===============
 
-These are more advanced things that can be done for specific use cases. Most
-setups will not require these.
+These are more advanced things that can be done for specific use cases. **Most
+projects will not require these**.
 
 
 Adjusting the logging level
@@ -25,40 +25,6 @@ you only care about warnings or errors, like inability to create the data
 cache. The event logger is a :class:`logging.Logger` object, so you can use
 that class's methods to handle logging events in more sophisticated ways if you
 wish.
-
-
-Printing a download progress bar
---------------------------------
-
-The :class:`~pooch.HTTPDownloader` can use `tqdm <https://github.com/tqdm/tqdm>`__
-to print a download progress bar. This is turned off by default but can be
-enabled using:
-
-.. code:: python
-
-    from pooch import HTTPDownloader
-
-
-    def fetch_large_data():
-        """
-        Fetch a large file from a server and print a progress bar.
-        """
-        download = HTTPDownloader(progressbar=True)
-        fname = GOODBOY.fetch("large-data-file.h5", downloader=download)
-        data = h5py.File(fname, "r")
-        return data
-
-The resulting progress bar will be printed to stderr and should look something
-like this:
-
-.. code::
-
-    100%|█████████████████████████████████████████| 336/336 [...]
-
-.. note::
-
-    ``tqdm`` is not installed by default with Pooch. You will have to install
-    it separately in order to use this feature.
 
 
 Bypassing the hash check

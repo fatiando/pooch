@@ -111,7 +111,7 @@ downloader class explicitly (works with both FTP and SFTP):
 
 .. note::
 
-    To download files hosted on SFTP servers, the package `paramiko
+    To download files over SFTP, the package `paramiko
     <https://github.com/paramiko/paramiko>`__ needs to be installed.
 
 

@@ -3,6 +3,11 @@
 Intermediate tricks
 ===================
 
+This section covers intermediate configuration that, while not strictly
+necessary, you might want to consider using on your project. In particular,
+allowing users to **control the local storage location** and **registry files**
+are **recommended** for most projects.
+
 
 User-defined local storage location
 -----------------------------------
@@ -32,16 +37,6 @@ In this case, if the user defines the ``PLUMBUS_DATA_DIR`` environment
 variable, we'll use its value instead of ``path``. Pooch will still append the
 value of ``version`` to the path, so the value of ``PLUMBUS_DATA_DIR`` should
 not include a version number.
-
-
-Subdirectories
---------------
-
-You can have data files in subdirectories of the remote data store. These files
-will be saved to the same subdirectories in the local storage folder. Note,
-however, that the names of these files in the registry **must use Unix-style
-separators** (``'/'``) even on Windows. We will handle the appropriate
-conversions.
 
 
 Registry files (dealing with large registries)
@@ -204,3 +199,87 @@ module code doesn't change at all:
     # If custom URLs are present in the registry file, they will be set
     # automatically.
     GOODBOY.load_registry(os.path.join(os.path.dirname(__file__), "registry.txt"))
+
+
+Download protocols
+------------------
+
+Pooch supports the HTTP, FTP, and SFTP protocols by default. It will detect the
+correct protocol from the URL and use the appropriate download method. For
+example, if our data were hosted on an FTP server instead of GitHub, we could
+use the following setup:
+
+.. code:: python
+
+    GOODBOY = pooch.create(
+        path=pooch.os_cache("plumbus"),
+        # Use an FTP server instead of HTTP. The rest is all the same.
+        base_url="ftp://garage-basement.org/{version}/",
+        version=version,
+        version_dev="master",
+        registry={
+            "c137.csv": "19uheidhlkjdwhoiwuhc0uhcwljchw9ochwochw89dcgw9dcgwc",
+            "cronen.csv": "1upodh2ioduhw9celdjhlfvhksgdwikdgcowjhcwoduchowjg8w",
+        },
+    )
+
+
+    def fetch_c137():
+        """
+        Load the C-137 sample data as a pandas.DataFrame (over FTP this time).
+        """
+        fname = GOODBOY.fetch("c137.csv")
+        data = pandas.read_csv(fname)
+        return data
+
+You can even specify custom functions for the download or login credentials for
+authentication. See :ref:`downloaders` for more information.
+
+.. note::
+
+    To download files over SFTP, the package `paramiko
+    <https://github.com/paramiko/paramiko>`__ needs to be installed.
+
+
+Subdirectories
+--------------
+
+You can have data files in subdirectories of the remote data store. These files
+will be saved to the same subdirectories in the local storage folder. Note,
+however, that the names of these files in the registry **must use Unix-style
+separators** (``'/'``) even on Windows. We will handle the appropriate
+conversions.
+
+
+Printing a download progress bar
+--------------------------------
+
+The :class:`~pooch.HTTPDownloader` can use `tqdm <https://github.com/tqdm/tqdm>`__
+to print a download progress bar. This is turned off by default but can be
+enabled using:
+
+.. code:: python
+
+    from pooch import HTTPDownloader
+
+
+    def fetch_large_data():
+        """
+        Fetch a large file from a server and print a progress bar.
+        """
+        download = HTTPDownloader(progressbar=True)
+        fname = GOODBOY.fetch("large-data-file.h5", downloader=download)
+        data = h5py.File(fname, "r")
+        return data
+
+The resulting progress bar will be printed to stderr and should look something
+like this:
+
+.. code::
+
+    100%|█████████████████████████████████████████| 336/336 [...]
+
+.. note::
+
+    ``tqdm`` is not installed by default with Pooch. You will have to install
+    it separately in order to use this feature.

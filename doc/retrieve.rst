@@ -1,7 +1,7 @@
 .. _retrieve:
 
-Retrieving single a file
-========================
+Retrieving a data file
+======================
 
 Sometimes, you just want to download a single file (caching it locally and
 checking the hash to make sure you have the right one). In these cases,
@@ -46,5 +46,5 @@ archives, and print progress bars with a bit of configuration.
 
     This function is meant for downloading single files. If you need to
     manage the download and caching of several files, with versioning, use
-    :func:`pooch.create` and :class:`pooch.Pooch` instead. See :ref:`usage`.
+    :func:`pooch.create` and :class:`pooch.Pooch` instead. See :ref:`beginner`.
 

@@ -1,15 +1,16 @@
-.. _usage:
+.. _beginner:
 
-Training your Pooch
-===================
+Beginner tricks
+===============
+
+This section covers the minimal setup required to use Pooch to manage your data
+collection. We highly recommend looking at the :ref:`intermediate` tutorial as
+well after you're done with this one.
 
 .. note::
 
-    This section covers the standard use case for Pooch. You can also
-    have :ref:`finner control over the download <downloaders>` (authentication,
-    progress bars, etc) or specify
-    :ref:`post-download processing actions <processors>` (unzip/tar archives,
-    decompress files, etc). See :ref:`advanced` for more configuration options.
+    If you're only looking to download a single file, see :ref:`retrieve`
+    instead.
 
 
 The problem
@@ -117,41 +118,6 @@ location for your OS. You could also provide any other path if you prefer. See
 the documentation for :func:`pooch.create` for more options.
 
 
-Download protocols
-------------------
-
-Pooch supports the HTTP, FTP, and SFTP protocols by default. It will detect the
-correct protocol from the URL and use the appropriate download method. For
-example, if our data were hosted on an FTP server instead of GitHub, we could
-use the following setup:
-
-.. code:: python
-
-    GOODBOY = pooch.create(
-        path=pooch.os_cache("plumbus"),
-        # Use an FTP server instead of HTTP. The rest is all the same.
-        base_url="ftp://garage-basement.org/{version}/",
-        version=version,
-        version_dev="master",
-        registry={
-            "c137.csv": "19uheidhlkjdwhoiwuhc0uhcwljchw9ochwochw89dcgw9dcgwc",
-            "cronen.csv": "1upodh2ioduhw9celdjhlfvhksgdwikdgcowjhcwoduchowjg8w",
-        },
-    )
-
-
-    def fetch_c137():
-        """
-        Load the C-137 sample data as a pandas.DataFrame (over FTP this time).
-        """
-        fname = GOODBOY.fetch("c137.csv")
-        data = pandas.read_csv(fname)
-        return data
-
-You can even specify custom functions for the download or login credentials for
-authentication. See :ref:`downloaders` for more information.
-
-
 Hashes
 ------
 
@@ -209,3 +175,19 @@ that Pooch substitutes for you.
 
 Versioning is optional and can be ignored by omitting the ``version`` and
 ``version_dev`` arguments or setting them to ``None``.
+
+
+Where to go from here
+---------------------
+
+Pooch has more features for handling different download protocols, handling
+large registries, downloading from multiple sources, and more. Check out the
+:ref:`intermediate` and :ref:`advanced` for more information.
+
+You can also customize the download itself (adding authentication, progress
+bars, etc) and apply post-download steps (unzipping an archive, decompressing a
+file, etc) through its :ref:`downloaders` and :ref:`processors`.
+
+If you any questions, please feel free to ask on our
+`Slack chatroom <http://contact.fatiando.org/>`__ or by opening an
+`issue on GitHub <https://github.com/fatiando/pooch/issues>`__.
