@@ -50,6 +50,7 @@ def test_decompress(method, ext):
 
 
 def test_decompress_rename():
+    "Check that decompression rename customization works"
     method = "auto"
     ext = "gz"
     processor = Decompress(method, lambda fname: fname[:-3])
