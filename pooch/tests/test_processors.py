@@ -49,6 +49,34 @@ def test_decompress(method, ext):
         check_tiny_data(fname)
 
 
+def test_decompress_rename():
+    method = "auto"
+    ext = "gz"
+    processor = Decompress(method, lambda fname: fname[:-3])
+    with TemporaryDirectory() as local_store:
+        path = Path(local_store)
+        true_path = str(path / "tiny-data.txt")
+        # Setup a pooch in a temp dir
+        pup = Pooch(path=path, base_url=BASEURL, registry=REGISTRY)
+        # Check the logs when downloading and from the processor
+        with capture_log() as log_file:
+            fname = pup.fetch("tiny-data.txt." + ext, processor=processor)
+            logs = log_file.getvalue()
+            lines = logs.splitlines()
+            assert len(lines) == 2
+            assert lines[0].split()[0] == "Downloading"
+            assert lines[-1].startswith("Decompressing")
+            assert method in lines[-1]
+        assert fname == true_path
+        check_tiny_data(fname)
+        # Check that processor doesn't execute when not downloading
+        with capture_log() as log_file:
+            fname = pup.fetch("tiny-data.txt." + ext, processor=processor)
+            assert log_file.getvalue() == ""
+        assert fname == true_path
+        check_tiny_data(fname)
+
+
 def test_decompress_fails():
     "Should fail if method='auto' and no extension is given in the file name"
     with TemporaryDirectory() as local_store:
