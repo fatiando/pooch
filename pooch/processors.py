@@ -190,7 +190,8 @@ class Decompress:  # pylint: disable=too-few-public-methods
     that it can be easily opened. Useful for data files that take a long time
     to decompress (exchanging disk space for speed).
 
-    The output file is ``{fname}.decomp``.
+    The output file is ``{fname}.decomp`` by default. It can be changed by
+    passing a callback.
 
     Supported decompression methods are LZMA (``.xz``), bzip2 (``.bz2``), and
     gzip (``.gz``).
@@ -209,20 +210,28 @@ class Decompress:  # pylint: disable=too-few-public-methods
     method : str
         Name of the compression method. Can be "auto", "lzma", "xz", "bzip2",
         or "gzip".
-
+    rename : None or function
+        Defines the decompressed file name. It will be ``{fname}.decomp`` if
+        ``None``. Pass a function to define your own naming. Defaults to
+        ``None``.
     """
 
     modules = {"auto": None, "lzma": lzma, "xz": lzma, "gzip": gzip, "bzip2": bz2}
     extensions = {".xz": "lzma", ".gz": "gzip", ".bz2": "bzip2"}
 
-    def __init__(self, method="auto"):
+    def __init__(self, method="auto", rename=None):
         self.method = method
+        if rename is None:
+            self.rename = lambda fname: fname + ".decomp"
+        else:
+            self.rename = rename
 
     def __call__(self, fname, action, pooch):
         """
         Decompress the given file.
 
-        The output file will be ``fname`` with ``.decomp`` appended to it.
+        The output file will be ``fname`` with ``.decomp`` appended to it by
+        default, or as defined by ``rename`` callback.
 
         Parameters
         ----------
@@ -243,7 +252,7 @@ class Decompress:  # pylint: disable=too-few-public-methods
         fname : str
             The full path to the decompressed file.
         """
-        decompressed = fname + ".decomp"
+        decompressed = self.rename(fname)
         if action in ("update", "download") or not os.path.exists(decompressed):
             get_logger().info(
                 "Decompressing '%s' to '%s' using method '%s'.",
