@@ -1,5 +1,5 @@
 """
-Download hooks for Pooch.fetch
+The classes that actually handle the downloads.
 """
 import sys
 import ftplib
@@ -73,8 +73,9 @@ class HTTPDownloader:  # pylint: disable=too-few-public-methods
     When called, downloads the given file URL into the specified local file.
     Uses the :mod:`requests` library to manage downloads.
 
-    Use with :meth:`pooch.Pooch.fetch` to customize the download of files (for
-    example, to use authentication or print a progress bar).
+    Use with :meth:`pooch.Pooch.fetch` or :func:`pooch.retrieve` to customize
+    the download of files (for example, to use authentication or print a
+    progress bar).
 
     Parameters
     ----------
@@ -216,8 +217,9 @@ class FTPDownloader:  # pylint: disable=too-few-public-methods
     When called, downloads the given file URL into the specified local file.
     Uses the :mod:`ftplib` module to manage downloads.
 
-    Use with :meth:`pooch.Pooch.fetch` to customize the download of files (for
-    example, to use authentication or print a progress bar).
+    Use with :meth:`pooch.Pooch.fetch` or :func:`pooch.retrieve` to customize
+    the download of files (for example, to use authentication or print a
+    progress bar).
 
     Parameters
     ----------
@@ -327,8 +329,9 @@ class SFTPDownloader:  # pylint: disable=too-few-public-methods
     Requires `paramiko <https://github.com/paramiko/paramiko>`__ to be
     installed.
 
-    Use with :meth:`pooch.Pooch.fetch` to customize the download of files
-    (for example, to use authentication or print a progress bar).
+    Use with :meth:`pooch.Pooch.fetch` or :func:`pooch.retrieve` to customize
+    the download of files (for example, to use authentication or print a
+    progress bar).
 
     Parameters
     ----------
