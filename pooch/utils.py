@@ -93,7 +93,7 @@ def file_hash(fname, alg="sha256"):
 
     """
     if alg not in hashlib.algorithms_available:
-        raise ValueError("Algorithm '{}' not available in hashlib".format(alg))
+        raise ValueError(f"Algorithm '{alg}' not available in hashlib")
     # Calculate the hash in chunks to avoid overloading the memory
     chunksize = 65536
     hasher = hashlib.new(alg)
@@ -281,7 +281,7 @@ def make_local_storage(path, env=None):
     except PermissionError as error:
         message = [
             str(error),
-            "| Pooch could not {} data cache folder '{}'.".format(action, path),
+            f"| Pooch could not {action} data cache folder '{path}'.",
             "Will not be able to download data files.",
         ]
         if env is not None:
@@ -453,5 +453,5 @@ def unique_file_name(url):
     # Crop the start of the file name to fit 255 characters including the hash
     # and the :
     fname = fname[-(255 - len(md5) - 1) :]
-    unique_name = "{}-{}".format(md5, fname)
+    unique_name = f"{md5}-{fname}"
     return unique_name

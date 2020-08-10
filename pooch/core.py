@@ -514,7 +514,7 @@ class Pooch:
         it's not.
         """
         if fname not in self.registry:
-            raise ValueError("File '{}' is not in the registry.".format(fname))
+            raise ValueError(f"File '{fname}' is not in the registry.")
 
     def get_url(self, fname):
         """

@@ -203,18 +203,18 @@ def test_hash_matches():
     # Check if the check passes
     hasher = hashlib.new("sha256")
     hasher.update(data)
-    known_hash = "{}".format(hasher.hexdigest())
+    known_hash = f"{hasher.hexdigest()}"
     assert hash_matches(fname, known_hash)
     for alg in ("sha512", "md5"):
         hasher = hashlib.new(alg)
         hasher.update(data)
-        known_hash = "{}:{}".format(alg, hasher.hexdigest())
+        known_hash = f"{alg}:{hasher.hexdigest()}"
         assert hash_matches(fname, known_hash)
     # And also if it fails
     known_hash = "p98oh2dl2j2h2p8e9yfho3fi2e9fhd"
     assert not hash_matches(fname, known_hash)
     for alg in ("sha512", "md5"):
-        known_hash = "{}:p98oh2dl2j2h2p8e9yfho3fi2e9fhd".format(alg)
+        known_hash = f"{alg}:p98oh2dl2j2h2p8e9yfho3fi2e9fhd"
         assert not hash_matches(fname, known_hash)
 
 
@@ -227,12 +227,12 @@ def test_hash_matches_strict():
     # Check if the check passes
     hasher = hashlib.new("sha256")
     hasher.update(data)
-    known_hash = "{}".format(hasher.hexdigest())
+    known_hash = f"{hasher.hexdigest()}"
     assert hash_matches(fname, known_hash, strict=True)
     for alg in ("sha512", "md5"):
         hasher = hashlib.new(alg)
         hasher.update(data)
-        known_hash = "{}:{}".format(alg, hasher.hexdigest())
+        known_hash = f"{alg}:{hasher.hexdigest()}"
         assert hash_matches(fname, known_hash, strict=True)
     # And also if it fails
     bad_hash = "p98oh2dl2j2h2p8e9yfho3fi2e9fhd"
@@ -240,7 +240,7 @@ def test_hash_matches_strict():
         hash_matches(fname, bad_hash, strict=True, source="Neverland")
     assert "Neverland" in str(error.value)
     for alg in ("sha512", "md5"):
-        bad_hash = "{}:p98oh2dl2j2h2p8e9yfho3fi2e9fhd".format(alg)
+        bad_hash = f"{alg}:p98oh2dl2j2h2p8e9yfho3fi2e9fhd"
         with pytest.raises(ValueError) as error:
             hash_matches(fname, bad_hash, strict=True)
         assert fname in str(error.value)
@@ -262,7 +262,7 @@ def test_temporary_file():
         assert Path(tmp).exists()
         with open(tmp, "w") as outfile:
             outfile.write("Meh")
-        with open(tmp, "r") as infile:
+        with open(tmp) as infile:
             assert infile.read().strip() == "Meh"
     assert not Path(tmp).exists()
 
@@ -275,7 +275,7 @@ def test_temporary_file_path():
             assert path in tmp
             with open(tmp, "w") as outfile:
                 outfile.write("Meh")
-            with open(tmp, "r") as infile:
+            with open(tmp) as infile:
                 assert infile.read().strip() == "Meh"
         assert not Path(tmp).exists()
 

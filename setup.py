@@ -40,7 +40,7 @@ CLASSIFIERS = [
     "Programming Language :: Python :: 3.7",
     "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3 :: Only",
-    "License :: OSI Approved :: {}".format(LICENSE),
+    f"License :: OSI Approved :: {LICENSE}",
 ]
 PLATFORMS = "Any"
 PACKAGES = find_packages(exclude=["doc"])
