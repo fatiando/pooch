@@ -36,7 +36,7 @@ REGISTRY_RECURSIVE = (
 
 def test_unique_name_long():
     "The file name should never be longer than 255 characters"
-    url = "https://www.something.com/data{}.txt".format("a" * 500)
+    url = f"https://www.something.com/data{'a' * 500}.txt"
     assert len(url) > 255
     fname = unique_file_name(url)
     assert len(fname) == 255

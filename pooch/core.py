@@ -569,11 +569,9 @@ class Pooch:
                 elements = line.split()
                 if not len(elements) in [0, 2, 3]:
                     raise OSError(
-                        "Invalid entry in Pooch registry file '{}': "
-                        "expected 2 or 3 elements in line {} but got {}. "
-                        "Offending entry: '{}'".format(
-                            fname, linenum + 1, len(elements), line
-                        )
+                        f"Invalid entry in Pooch registry file '{fname}': "
+                        f"expected 2 or 3 elements in line {linenum + 1} but got "
+                        f"{len(elements)}. Offending entry: '{line}'"
                     )
                 if elements:
                     file_name = elements[0]

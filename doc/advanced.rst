@@ -138,7 +138,7 @@ after downloading each data file through :func:`pooch.retrieve`:
             )
             # Add the name, hash, and url of the file to the new registry file
             registry.write(
-                "{} {} {}\n".format(fname, pooch.file_hash(path), url)
+                f"{fname} {pooch.file_hash(path)} {url}\n"
             )
 
 .. warning::

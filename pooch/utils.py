@@ -286,9 +286,7 @@ def make_local_storage(path, env=None):
         ]
         if env is not None:
             message.append(
-                "Use environment variable '{}' to specify a different location.".format(
-                    env
-                )
+                f"Use environment variable '{env}' to specify a different location."
             )
         raise PermissionError(" ".join(message)) from error
 
@@ -373,12 +371,10 @@ def hash_matches(fname, known_hash, strict=False, source=None):
         if source is None:
             source = str(fname)
         raise ValueError(
-            "{} hash of downloaded file ({}) does not match the known hash:"
-            " expected {} but got {}. Deleted download for safety."
-            " The downloaded file may have been corrupted or"
-            " the known hash may be outdated.".format(
-                algorithm.upper(), source, known_hash, new_hash,
-            )
+            f"{algorithm.upper()} hash of downloaded file ({source}) does not match"
+            f" the known hash: expected {known_hash} but got {new_hash}. Deleted"
+            " download for safety. The downloaded file may have been corrupted or"
+            " the known hash may be outdated."
         )
     return matches
 
