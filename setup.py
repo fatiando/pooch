@@ -36,7 +36,6 @@ CLASSIFIERS = [
     "Topic :: Scientific/Engineering",
     "Topic :: Software Development :: Libraries",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.5",
     "Programming Language :: Python :: 3.6",
     "Programming Language :: Python :: 3.7",
     "Programming Language :: Python :: 3.8",
@@ -54,7 +53,7 @@ PACKAGE_DATA = {
     ]
 }
 INSTALL_REQUIRES = ["requests", "packaging", "appdirs"]
-PYTHON_REQUIRES = ">=3.5"
+PYTHON_REQUIRES = ">=3.6"
 
 if __name__ == "__main__":
     setup(
