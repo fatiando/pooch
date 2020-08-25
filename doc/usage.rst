@@ -381,6 +381,7 @@ callback instead:
 
 .. code:: python
 
+    import os
     from pooch import Decompress
 
     def fetch_compressed_file():
