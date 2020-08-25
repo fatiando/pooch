@@ -210,10 +210,11 @@ class Decompress:  # pylint: disable=too-few-public-methods
     method : str
         Name of the compression method. Can be "auto", "lzma", "xz", "bzip2",
         or "gzip".
-    rename : None or function
-        Defines the decompressed file name. It will be ``{fname}.decomp`` if
-        ``None``. Pass a function to define your own naming. Defaults to
-        ``None``.
+    rename : None or callable
+        Function to change the name of the decompressed file. It must take 
+        a single ``fname`` argument that stores the name of the compressed file.
+        If ``None``, the output file is ``{fname}.decomp``.
+        Defaults to ``None``.
     """
 
     modules = {"auto": None, "lzma": lzma, "xz": lzma, "gzip": gzip, "bzip2": bz2}
