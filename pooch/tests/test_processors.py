@@ -61,7 +61,7 @@ def test_decompress_rename():
         pup = Pooch(path=path, base_url=BASEURL, registry=REGISTRY)
         # Check the logs when downloading and from the processor
         with capture_log() as log_file:
-            fname = pup.fetch("tiny-data.txt." + ext, processor=processor)
+            fname = pup.fetch(fname + ext, processor=processor)
             logs = log_file.getvalue()
             lines = logs.splitlines()
             assert len(lines) == 2
