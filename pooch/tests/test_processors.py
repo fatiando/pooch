@@ -72,7 +72,7 @@ def test_decompress_rename():
         check_tiny_data(fname)
         # Check that processor doesn't execute when not downloading
         with capture_log() as log_file:
-            fname = pup.fetch("tiny-data.txt." + ext, processor=processor)
+            fname = pup.fetch(fname + ext, processor=processor)
             assert log_file.getvalue() == ""
         assert fname == true_path
         check_tiny_data(fname)
