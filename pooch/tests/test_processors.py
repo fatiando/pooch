@@ -53,7 +53,7 @@ def test_decompress_rename():
     "Check that decompression rename customization works"
     method = "auto"
     ext = "gz"
-    processor = Decompress(method, lambda fname: fname[:-3])
+    processor = Decompress(method, lambda fname: os.path.splitext(fname)[0])
     with TemporaryDirectory() as local_store:
         path = Path(local_store)
         true_path = str(path / "tiny-data.txt")
