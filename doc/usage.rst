@@ -388,8 +388,10 @@ callback instead:
         Load a large binary file that has been gzip compressed.
         """
         # Pass in the processor to decompress the file on download
-        fname = GOODBOY.fetch("large-binary-file.npy.gz",
-                              processor=Decompress(rename=lambda fname: fname[:-3]))
+        fname = GOODBOY.fetch("
+            large-binary-file.npy.gz",
+            processor=Decompress(rename=lambda fname: os.path.splitext(fname)[0]),
+        )
         # The file returned is now named as large-binary-file.npy
         data = numpy.load(fname)
         return data
