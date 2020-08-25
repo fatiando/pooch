@@ -56,7 +56,8 @@ def test_decompress_rename():
     processor = Decompress(method, lambda fname: os.path.splitext(fname)[0])
     with TemporaryDirectory() as local_store:
         path = Path(local_store)
-        true_path = str(path / "tiny-data.txt")
+        fname = "tiny-data.txt"
+        true_path = str(path / fname)
         # Setup a pooch in a temp dir
         pup = Pooch(path=path, base_url=BASEURL, registry=REGISTRY)
         # Check the logs when downloading and from the processor
