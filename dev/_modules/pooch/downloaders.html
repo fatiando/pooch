@@ -105,12 +105,22 @@
               
             
             
-              <p class="caption"><span class="caption-text">Documentation</span></p>
+              <p class="caption"><span class="caption-text">Getting Started</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../install.html">Installing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../retrieve.html">Retrieving a data file</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../citing.html">Citing Pooch</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../usage.html">Training your Pooch</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../retrieve.html">Downloading a single file</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Training your Pooch</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../beginner.html">Beginner tricks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../intermediate.html">Intermediate tricks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../advanced.html">Advanced tricks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../downloaders.html">Downloaders</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../processors.html">Processors</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Reference Documentation</span></p>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="../../api/index.html">API Reference</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../changes.html">Changelog</a></li>
 </ul>
@@ -205,7 +215,7 @@
             
   <h1>Source code for pooch.downloaders</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">Download hooks for Pooch.fetch</span>
+<span class="sd">The classes that actually handle the downloads.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">ftplib</span>
@@ -214,11 +224,15 @@
 
 <span class="kn">from</span> <span class="nn">.utils</span> <span class="kn">import</span> <span class="n">parse_url</span>
 
-
 <span class="k">try</span><span class="p">:</span>
     <span class="kn">from</span> <span class="nn">tqdm</span> <span class="kn">import</span> <span class="n">tqdm</span>
 <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
     <span class="n">tqdm</span> <span class="o">=</span> <span class="kc">None</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">paramiko</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="n">paramiko</span> <span class="o">=</span> <span class="kc">None</span>
 
 
 <span class="k">def</span> <span class="nf">choose_downloader</span><span class="p">(</span><span class="n">url</span><span class="p">):</span>
@@ -233,8 +247,8 @@
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    downloader</span>
-<span class="sd">        A downloader class (either :class:`pooch.HTTPDownloader` or</span>
-<span class="sd">        :class:`pooch.FTPDownloader`).</span>
+<span class="sd">        A downloader class (either :class:`pooch.HTTPDownloader`,</span>
+<span class="sd">        :class:`pooch.FTPDownloader`, or :class: `pooch.SFTPDownloader`).</span>
 
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
@@ -254,7 +268,9 @@
         <span class="s2">&quot;ftp&quot;</span><span class="p">:</span> <span class="n">FTPDownloader</span><span class="p">,</span>
         <span class="s2">&quot;https&quot;</span><span class="p">:</span> <span class="n">HTTPDownloader</span><span class="p">,</span>
         <span class="s2">&quot;http&quot;</span><span class="p">:</span> <span class="n">HTTPDownloader</span><span class="p">,</span>
+        <span class="s2">&quot;sftp&quot;</span><span class="p">:</span> <span class="n">SFTPDownloader</span><span class="p">,</span>
     <span class="p">}</span>
+
     <span class="n">parsed_url</span> <span class="o">=</span> <span class="n">parse_url</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">parsed_url</span><span class="p">[</span><span class="s2">&quot;protocol&quot;</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">known_downloaders</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
@@ -273,8 +289,9 @@
 <span class="sd">    When called, downloads the given file URL into the specified local file.</span>
 <span class="sd">    Uses the :mod:`requests` library to manage downloads.</span>
 
-<span class="sd">    Use with :meth:`pooch.Pooch.fetch` to customize the download of files (for</span>
-<span class="sd">    example, to use authentication or print a progress bar).</span>
+<span class="sd">    Use with :meth:`pooch.Pooch.fetch` or :func:`pooch.retrieve` to customize</span>
+<span class="sd">    the download of files (for example, to use authentication or print a</span>
+<span class="sd">    progress bar).</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -416,8 +433,9 @@
 <span class="sd">    When called, downloads the given file URL into the specified local file.</span>
 <span class="sd">    Uses the :mod:`ftplib` module to manage downloads.</span>
 
-<span class="sd">    Use with :meth:`pooch.Pooch.fetch` to customize the download of files (for</span>
-<span class="sd">    example, to use authentication or print a progress bar).</span>
+<span class="sd">    Use with :meth:`pooch.Pooch.fetch` or :func:`pooch.retrieve` to customize</span>
+<span class="sd">    the download of files (for example, to use authentication or print a</span>
+<span class="sd">    progress bar).</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -490,6 +508,9 @@
             <span class="n">ftp</span><span class="o">.</span><span class="n">login</span><span class="p">(</span><span class="n">user</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">username</span><span class="p">,</span> <span class="n">passwd</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">password</span><span class="p">,</span> <span class="n">acct</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">account</span><span class="p">)</span>
             <span class="n">command</span> <span class="o">=</span> <span class="s2">&quot;RETR </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">parsed_url</span><span class="p">[</span><span class="s2">&quot;path&quot;</span><span class="p">])</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">progressbar</span><span class="p">:</span>
+                <span class="c1"># Make sure the file is set to binary mode, otherwise we can&#39;t</span>
+                <span class="c1"># get the file size. See: https://stackoverflow.com/a/22093848</span>
+                <span class="n">ftp</span><span class="o">.</span><span class="n">voidcmd</span><span class="p">(</span><span class="s2">&quot;TYPE I&quot;</span><span class="p">)</span>
                 <span class="n">size</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">ftp</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="n">parsed_url</span><span class="p">[</span><span class="s2">&quot;path&quot;</span><span class="p">]))</span>
                 <span class="n">use_ascii</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">platform</span> <span class="o">==</span> <span class="s2">&quot;win32&quot;</span><span class="p">)</span>
                 <span class="n">progress</span> <span class="o">=</span> <span class="n">tqdm</span><span class="p">(</span>
@@ -514,6 +535,116 @@
             <span class="n">ftp</span><span class="o">.</span><span class="n">quit</span><span class="p">()</span>
             <span class="k">if</span> <span class="n">ispath</span><span class="p">:</span>
                 <span class="n">output_file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div></div>
+
+
+<div class="viewcode-block" id="SFTPDownloader"><a class="viewcode-back" href="../../api/generated/pooch.SFTPDownloader.html#pooch.SFTPDownloader">[docs]</a><span class="k">class</span> <span class="nc">SFTPDownloader</span><span class="p">:</span>  <span class="c1"># pylint: disable=too-few-public-methods</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Download manager for fetching files over SFTP.</span>
+
+<span class="sd">    When called, downloads the given file URL into the specified local file.</span>
+<span class="sd">    Requires `paramiko &lt;https://github.com/paramiko/paramiko&gt;`__ to be</span>
+<span class="sd">    installed.</span>
+
+<span class="sd">    Use with :meth:`pooch.Pooch.fetch` or :func:`pooch.retrieve` to customize</span>
+<span class="sd">    the download of files (for example, to use authentication or print a</span>
+<span class="sd">    progress bar).</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    port : int</span>
+<span class="sd">        Port used for the SFTP connection.</span>
+<span class="sd">    username : str</span>
+<span class="sd">        User name used to login to the server. Only needed if the server</span>
+<span class="sd">        requires authentication (i.e., no anonymous SFTP).</span>
+<span class="sd">    password : str</span>
+<span class="sd">        Password used to login to the server. Only needed if the server</span>
+<span class="sd">        requires authentication (i.e., no anonymous SFTP). Use the empty</span>
+<span class="sd">        string to indicate no password is required.</span>
+<span class="sd">    timeout : int</span>
+<span class="sd">        Timeout in seconds for sftp socket operations, use None to mean no</span>
+<span class="sd">        timeout.</span>
+<span class="sd">    progressbar : bool</span>
+<span class="sd">        If True, will print a progress bar of the download to standard</span>
+<span class="sd">        error (stderr). Requires `tqdm &lt;https://github.com/tqdm/tqdm&gt;`__ to</span>
+<span class="sd">        be installed.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">port</span><span class="o">=</span><span class="mi">22</span><span class="p">,</span>
+        <span class="n">username</span><span class="o">=</span><span class="s2">&quot;anonymous&quot;</span><span class="p">,</span>
+        <span class="n">password</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+        <span class="n">account</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+        <span class="n">timeout</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">progressbar</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">port</span> <span class="o">=</span> <span class="n">port</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">username</span> <span class="o">=</span> <span class="n">username</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">password</span> <span class="o">=</span> <span class="n">password</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">account</span> <span class="o">=</span> <span class="n">account</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">timeout</span> <span class="o">=</span> <span class="n">timeout</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">progressbar</span> <span class="o">=</span> <span class="n">progressbar</span>
+        <span class="c1"># Collect errors and raise only once so that both missing packages are</span>
+        <span class="c1"># captured. Otherwise, the user is only warned of one of them at a</span>
+        <span class="c1"># time (and we can&#39;t test properly when they are both missing).</span>
+        <span class="n">errors</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">progressbar</span> <span class="ow">and</span> <span class="n">tqdm</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">errors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;Missing package &#39;tqdm&#39; required for progress bars.&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">paramiko</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">errors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;Missing package &#39;paramiko&#39; required for SFTP downloads.&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">errors</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">errors</span><span class="p">))</span>
+
+<div class="viewcode-block" id="SFTPDownloader.__call__"><a class="viewcode-back" href="../../api/generated/pooch.SFTPDownloader.html#pooch.SFTPDownloader.__call__">[docs]</a>    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="n">output_file</span><span class="p">,</span> <span class="n">pooch</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Download the given URL over SFTP to the given output file.</span>
+
+<span class="sd">        The output file must be given as a string (file name/path) and not an</span>
+<span class="sd">        open file object! Otherwise, paramiko cannot save to that file.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        url : str</span>
+<span class="sd">            The URL to the file you want to download.</span>
+<span class="sd">        output_file : str</span>
+<span class="sd">            Path (and file name) to which the file will be downloaded. **Cannot</span>
+<span class="sd">            be a file object**.</span>
+<span class="sd">        pooch : :class:`~pooch.Pooch`</span>
+<span class="sd">            The instance of :class:`~pooch.Pooch` that is calling this method.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">parsed_url</span> <span class="o">=</span> <span class="n">parse_url</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+        <span class="n">connection</span> <span class="o">=</span> <span class="n">paramiko</span><span class="o">.</span><span class="n">Transport</span><span class="p">(</span><span class="n">sock</span><span class="o">=</span><span class="p">(</span><span class="n">parsed_url</span><span class="p">[</span><span class="s2">&quot;netloc&quot;</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">port</span><span class="p">))</span>
+        <span class="n">sftp</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">connection</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">username</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">username</span><span class="p">,</span> <span class="n">password</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">password</span><span class="p">)</span>
+            <span class="n">sftp</span> <span class="o">=</span> <span class="n">paramiko</span><span class="o">.</span><span class="n">SFTPClient</span><span class="o">.</span><span class="n">from_transport</span><span class="p">(</span><span class="n">connection</span><span class="p">)</span>
+            <span class="n">sftp</span><span class="o">.</span><span class="n">get_channel</span><span class="p">()</span><span class="o">.</span><span class="n">settimeout</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">timeout</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">progressbar</span><span class="p">:</span>
+                <span class="n">size</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">sftp</span><span class="o">.</span><span class="n">stat</span><span class="p">(</span><span class="n">parsed_url</span><span class="p">[</span><span class="s2">&quot;path&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">st_size</span><span class="p">)</span>
+                <span class="n">use_ascii</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">platform</span> <span class="o">==</span> <span class="s2">&quot;win32&quot;</span><span class="p">)</span>
+                <span class="n">progress</span> <span class="o">=</span> <span class="n">tqdm</span><span class="p">(</span>
+                    <span class="n">total</span><span class="o">=</span><span class="n">size</span><span class="p">,</span>
+                    <span class="n">ncols</span><span class="o">=</span><span class="mi">79</span><span class="p">,</span>
+                    <span class="n">ascii</span><span class="o">=</span><span class="n">use_ascii</span><span class="p">,</span>
+                    <span class="n">unit</span><span class="o">=</span><span class="s2">&quot;B&quot;</span><span class="p">,</span>
+                    <span class="n">unit_scale</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                    <span class="n">leave</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="p">)</span>
+                <span class="k">with</span> <span class="n">progress</span><span class="p">:</span>
+
+                    <span class="k">def</span> <span class="nf">callback</span><span class="p">(</span><span class="n">current</span><span class="p">,</span> <span class="n">total</span><span class="p">):</span>
+                        <span class="s2">&quot;Update the progress bar and write to output&quot;</span>
+                        <span class="n">progress</span><span class="o">.</span><span class="n">total</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">total</span><span class="p">)</span>
+                        <span class="n">progress</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">current</span> <span class="o">-</span> <span class="n">progress</span><span class="o">.</span><span class="n">n</span><span class="p">))</span>
+
+                    <span class="n">sftp</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">parsed_url</span><span class="p">[</span><span class="s2">&quot;path&quot;</span><span class="p">],</span> <span class="n">output_file</span><span class="p">,</span> <span class="n">callback</span><span class="o">=</span><span class="n">callback</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">sftp</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">parsed_url</span><span class="p">[</span><span class="s2">&quot;path&quot;</span><span class="p">],</span> <span class="n">output_file</span><span class="p">)</span>
+        <span class="k">finally</span><span class="p">:</span>
+            <span class="n">connection</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">sftp</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">sftp</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div></div>
 </pre></div>
 
            </div>
@@ -528,7 +659,7 @@
     <p>
         &copy; Copyright 2018-2020, The Pooch Developers
       <span class="lastupdated">
-        Last updated on May 14, 2020.
+        Last updated on Sep 10, 2020.
       </span>
 
     </p>

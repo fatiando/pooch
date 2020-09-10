@@ -106,14 +106,25 @@
               
             
             
-              <p class="caption"><span class="caption-text">Documentation</span></p>
-<ul class="current">
+              <p class="caption"><span class="caption-text">Getting Started</span></p>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="install.html">Installing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="retrieve.html">Retrieving a data file</a></li>
 <li class="toctree-l1"><a class="reference internal" href="citing.html">Citing Pooch</a></li>
-<li class="toctree-l1"><a class="reference internal" href="usage.html">Training your Pooch</a></li>
-<li class="toctree-l1"><a class="reference internal" href="retrieve.html">Downloading a single file</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Training your Pooch</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="beginner.html">Beginner tricks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="intermediate.html">Intermediate tricks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="advanced.html">Advanced tricks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="downloaders.html">Downloaders</a></li>
+<li class="toctree-l1"><a class="reference internal" href="processors.html">Processors</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Reference Documentation</span></p>
+<ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="api/index.html">API Reference</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Changelog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#version-1-2-0">Version 1.2.0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#version-1-1-1">Version 1.1.1</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#version-1-1-0">Version 1.1.0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#version-1-0-0">Version 1.0.0</a></li>
@@ -226,6 +237,54 @@
             
   <div class="section" id="changelog">
 <span id="changes"></span><h1>Changelog<a class="headerlink" href="#changelog" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="version-1-2-0">
+<h2>Version 1.2.0<a class="headerlink" href="#version-1-2-0" title="Permalink to this headline">¶</a></h2>
+<p><em>Released on: 2020/09/10</em></p>
+<a class="reference external image-reference" href="https://doi.org/10.5281/zenodo.4022246"><img alt="Digital Object Identifier for the Zenodo archive" src="https://zenodo.org/badge/DOI/10.5281/zenodo.4022246.svg" /></a>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p><strong>Pooch v1.2.0 is the last release that is compatible with Python 3.5.</strong></p>
+</div>
+<p>Bug fixes:</p>
+<ul class="simple">
+<li><p>Fix FTP availability check when the file is in a directory. If the data file
+is not in the base directory, the <code class="docutils literal notranslate"><span class="pre">Pooch.is_available</span></code> test was broken
+since we were checking for the full path in <code class="docutils literal notranslate"><span class="pre">ftp.nlst</span></code> instead of just the
+file name. (<a class="reference external" href="https://github.com/fatiando/pooch/pull/191">#191</a>)</p></li>
+</ul>
+<p>New features:</p>
+<ul class="simple">
+<li><p>Add the SFTPDownloader class for secure FTP downloads (<a class="reference external" href="https://github.com/fatiando/pooch/pull/165">#165</a>)</p></li>
+<li><p>Expose Pooch version as <code class="docutils literal notranslate"><span class="pre">pooch.__version__</span></code> (<a class="reference external" href="https://github.com/fatiando/pooch/pull/179">#179</a>)</p></li>
+<li><p>Allow line comments in registry files with <code class="docutils literal notranslate"><span class="pre">#</span></code> (<a class="reference external" href="https://github.com/fatiando/pooch/pull/180">#180</a>)</p></li>
+</ul>
+<p>Enhancements:</p>
+<ul class="simple">
+<li><p>Point to Unzip/tar from Decompress docs and errors (<a class="reference external" href="https://github.com/fatiando/pooch/pull/200">#200</a>)</p></li>
+</ul>
+<p>Documentation:</p>
+<ul class="simple">
+<li><p>Re-factor the documentation into separate pages (<a class="reference external" href="https://github.com/fatiando/pooch/pull/202">#202</a>)</p></li>
+<li><p>Add warning to the docs about dropping Python 3.5 (<a class="reference external" href="https://github.com/fatiando/pooch/pull/201">#201</a>)</p></li>
+<li><p>Add <a class="reference external" href="https://github.com/histolab/histolab">histolab</a> to the Pooch-powered
+projects (<a class="reference external" href="https://github.com/fatiando/pooch/pull/189">#189</a>)</p></li>
+</ul>
+<p>Maintenance:</p>
+<ul class="simple">
+<li><p>Push documentation to GitHub Pages using Actions (<a class="reference external" href="https://github.com/fatiando/pooch/pull/198">#198</a>)</p></li>
+<li><p>Add GitHub Actions workflow for publishing to PyPI (<a class="reference external" href="https://github.com/fatiando/pooch/pull/196">#196</a>)</p></li>
+<li><p>Set up GitHub Actions for testing and linting (<a class="reference external" href="https://github.com/fatiando/pooch/pull/194">#194</a>)</p></li>
+<li><p>Test FTP downloads using a local test server (<a class="reference external" href="https://github.com/fatiando/pooch/pull/192">#192</a>)</p></li>
+</ul>
+<p>This release contains contributions from:</p>
+<ul class="simple">
+<li><p>Leonardo Uieda</p></li>
+<li><p>Hugo van Kemenade</p></li>
+<li><p>Alessia Marcolini</p></li>
+<li><p>Luke Gregor</p></li>
+<li><p>Mathias Hauser</p></li>
+</ul>
+</div>
 <div class="section" id="version-1-1-1">
 <h2>Version 1.1.1<a class="headerlink" href="#version-1-1-1" title="Permalink to this headline">¶</a></h2>
 <p><em>Released on: 2020/05/14</em></p>
@@ -659,7 +718,7 @@ data corruption.</p></li>
     <p>
         &copy; Copyright 2018-2020, The Pooch Developers
       <span class="lastupdated">
-        Last updated on May 14, 2020.
+        Last updated on Sep 10, 2020.
       </span>
 
     </p>

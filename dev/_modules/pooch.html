@@ -105,12 +105,22 @@
               
             
             
-              <p class="caption"><span class="caption-text">Documentation</span></p>
+              <p class="caption"><span class="caption-text">Getting Started</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../install.html">Installing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../retrieve.html">Retrieving a data file</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../citing.html">Citing Pooch</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../usage.html">Training your Pooch</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../retrieve.html">Downloading a single file</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Training your Pooch</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../beginner.html">Beginner tricks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../intermediate.html">Intermediate tricks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../advanced.html">Advanced tricks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../downloaders.html">Downloaders</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../processors.html">Processors</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Reference Documentation</span></p>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="../api/index.html">API Reference</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../changes.html">Changelog</a></li>
 </ul>
@@ -207,8 +217,11 @@
 <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">version</span>
 <span class="kn">from</span> <span class="nn">.core</span> <span class="kn">import</span> <span class="n">Pooch</span><span class="p">,</span> <span class="n">create</span><span class="p">,</span> <span class="n">retrieve</span>
 <span class="kn">from</span> <span class="nn">.utils</span> <span class="kn">import</span> <span class="n">os_cache</span><span class="p">,</span> <span class="n">file_hash</span><span class="p">,</span> <span class="n">make_registry</span><span class="p">,</span> <span class="n">check_version</span><span class="p">,</span> <span class="n">get_logger</span>
-<span class="kn">from</span> <span class="nn">.downloaders</span> <span class="kn">import</span> <span class="n">HTTPDownloader</span><span class="p">,</span> <span class="n">FTPDownloader</span>
+<span class="kn">from</span> <span class="nn">.downloaders</span> <span class="kn">import</span> <span class="n">HTTPDownloader</span><span class="p">,</span> <span class="n">FTPDownloader</span><span class="p">,</span> <span class="n">SFTPDownloader</span>
 <span class="kn">from</span> <span class="nn">.processors</span> <span class="kn">import</span> <span class="n">Unzip</span><span class="p">,</span> <span class="n">Untar</span><span class="p">,</span> <span class="n">Decompress</span>
+
+
+<span class="n">__version__</span> <span class="o">=</span> <span class="n">version</span><span class="o">.</span><span class="n">full_version</span>
 
 
 <div class="viewcode-block" id="test"><a class="viewcode-back" href="../api/generated/pooch.test.html#pooch.test">[docs]</a><span class="k">def</span> <span class="nf">test</span><span class="p">(</span><span class="n">doctest</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">coverage</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
@@ -266,7 +279,7 @@
     <p>
         &copy; Copyright 2018-2020, The Pooch Developers
       <span class="lastupdated">
-        Last updated on May 14, 2020.
+        Last updated on Sep 10, 2020.
       </span>
 
     </p>

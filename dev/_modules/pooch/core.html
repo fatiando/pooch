@@ -105,12 +105,22 @@
               
             
             
-              <p class="caption"><span class="caption-text">Documentation</span></p>
+              <p class="caption"><span class="caption-text">Getting Started</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../install.html">Installing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../retrieve.html">Retrieving a data file</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../citing.html">Citing Pooch</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../usage.html">Training your Pooch</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../retrieve.html">Downloading a single file</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Training your Pooch</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../beginner.html">Beginner tricks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../intermediate.html">Intermediate tricks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../advanced.html">Advanced tricks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../downloaders.html">Downloaders</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../processors.html">Processors</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Reference Documentation</span></p>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="../../api/index.html">API Reference</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../changes.html">Changelog</a></li>
 </ul>
@@ -290,13 +300,11 @@
 <span class="sd">    processor : None or callable</span>
 <span class="sd">        If not None, then a function (or callable object) that will be called</span>
 <span class="sd">        before returning the full path and after the file has been downloaded</span>
-<span class="sd">        (if required). See :meth:`pooch.Pooch.fetch` for details.</span>
+<span class="sd">        (if required). See :ref:`processors` for details.</span>
 <span class="sd">    downloader : None or callable</span>
 <span class="sd">        If not None, then a function (or callable object) that will be called</span>
-<span class="sd">        to download a given URL to a provided local file name. By default,</span>
-<span class="sd">        downloads are done through HTTP without authentication using</span>
-<span class="sd">        :class:`pooch.HTTPDownloader`. See :meth:`pooch.Pooch.fetch` for</span>
-<span class="sd">        details.</span>
+<span class="sd">        to download a given URL to a provided local file name. See</span>
+<span class="sd">        :ref:`downloaders` for details.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -415,7 +423,10 @@
 
     <span class="k">if</span> <span class="n">action</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;download&quot;</span><span class="p">,</span> <span class="s2">&quot;update&quot;</span><span class="p">):</span>
         <span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
-            <span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> data from &#39;</span><span class="si">%s</span><span class="s2">&#39; to file &#39;</span><span class="si">%s</span><span class="s2">&#39;.&quot;</span><span class="p">,</span> <span class="n">verb</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">full_path</span><span class="p">),</span>
+            <span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> data from &#39;</span><span class="si">%s</span><span class="s2">&#39; to file &#39;</span><span class="si">%s</span><span class="s2">&#39;.&quot;</span><span class="p">,</span>
+            <span class="n">verb</span><span class="p">,</span>
+            <span class="n">url</span><span class="p">,</span>
+            <span class="nb">str</span><span class="p">(</span><span class="n">full_path</span><span class="p">),</span>
         <span class="p">)</span>
 
         <span class="k">if</span> <span class="n">downloader</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -659,16 +670,16 @@
 <span class="sd">        Post-processing actions sometimes need to be taken on downloaded files</span>
 <span class="sd">        (unzipping, conversion to a more efficient format, etc). If these</span>
 <span class="sd">        actions are time or memory consuming, it would be best to do this only</span>
-<span class="sd">        once when the file is actually downloaded. Use the *processor* argument</span>
-<span class="sd">        to specify a function that is executed after the downloaded (if</span>
-<span class="sd">        required) to perform these actions. See below.</span>
+<span class="sd">        once right after the file is downloaded. Use the *processor* argument</span>
+<span class="sd">        to specify a function that is executed after the download to perform</span>
+<span class="sd">        these actions. See :ref:`processors` for details.</span>
 
 <span class="sd">        Custom file downloaders can be provided through the *downloader*</span>
-<span class="sd">        argument. By default, files are downloaded over HTTP. If the server for</span>
-<span class="sd">        a given file requires authentication (username and password) or if the</span>
-<span class="sd">        file is served over FTP, use custom downloaders that support these</span>
-<span class="sd">        features. Downloaders can also be used to print custom messages (like a</span>
-<span class="sd">        progress bar), etc. See below for details.</span>
+<span class="sd">        argument. By default, Pooch will determine the download protocol from</span>
+<span class="sd">        the URL in the registry. If the server for a given file requires</span>
+<span class="sd">        authentication (username and password), use a downloader that support</span>
+<span class="sd">        these features. Downloaders can also be used to print custom messages</span>
+<span class="sd">        (like a progress bar), etc. See :ref:`downloaders` for details.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -678,90 +689,17 @@
 <span class="sd">        processor : None or callable</span>
 <span class="sd">            If not None, then a function (or callable object) that will be</span>
 <span class="sd">            called before returning the full path and after the file has been</span>
-<span class="sd">            downloaded (if required). See below for details.</span>
+<span class="sd">            downloaded. See :ref:`processors` for details.</span>
 <span class="sd">        downloader : None or callable</span>
 <span class="sd">            If not None, then a function (or callable object) that will be</span>
-<span class="sd">            called to download a given URL to a provided local file name. By</span>
-<span class="sd">            default, downloads are done through HTTP without authentication</span>
-<span class="sd">            using :class:`pooch.HTTPDownloader`. See below for details.</span>
+<span class="sd">            called to download a given URL to a provided local file name. See</span>
+<span class="sd">            :ref:`downloaders` for details.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        full_path : str</span>
 <span class="sd">            The absolute path (including the file name) of the file in the</span>
 <span class="sd">            local storage.</span>
-
-<span class="sd">        Notes</span>
-<span class="sd">        -----</span>
-
-<span class="sd">        **Processor** functions should have the following format:</span>
-
-<span class="sd">        .. code:: python</span>
-
-<span class="sd">            def myprocessor(fname, action, pooch):</span>
-<span class="sd">                &#39;&#39;&#39;</span>
-<span class="sd">                Processes the downloaded file and returns a new file name.</span>
-
-<span class="sd">                The function **must** take as arguments (in order):</span>
-
-<span class="sd">                fname : str</span>
-<span class="sd">                    The full path of the file in the local data storage</span>
-<span class="sd">                action : str</span>
-<span class="sd">                    Either: &quot;download&quot; (file doesn&#39;t exist and will be</span>
-<span class="sd">                    downloaded), &quot;update&quot; (file is outdated and will be</span>
-<span class="sd">                    downloaded), or &quot;fetch&quot; (file exists and is updated so no</span>
-<span class="sd">                    download is necessary).</span>
-<span class="sd">                pooch : pooch.Pooch</span>
-<span class="sd">                    The instance of the Pooch class that is calling this</span>
-<span class="sd">                    function.</span>
-
-<span class="sd">                The return value can be anything but is usually a full path to</span>
-<span class="sd">                a file (or list of files). This is what will be returned by</span>
-<span class="sd">                *fetch* in place of the original file path.</span>
-<span class="sd">                &#39;&#39;&#39;</span>
-<span class="sd">                ...</span>
-<span class="sd">                return full_path</span>
-
-<span class="sd">        **Downloader** functions should have the following format:</span>
-
-<span class="sd">        .. code:: python</span>
-
-<span class="sd">            def mydownloader(url, output_file, pooch):</span>
-<span class="sd">                &#39;&#39;&#39;</span>
-<span class="sd">                Download a file from the given URL to the given local file.</span>
-
-<span class="sd">                The function **must** take as arguments (in order):</span>
-
-<span class="sd">                url : str</span>
-<span class="sd">                    The URL to the file you want to download.</span>
-<span class="sd">                output_file : str or file-like object</span>
-<span class="sd">                    Path (and file name) to which the file will be downloaded.</span>
-<span class="sd">                pooch : pooch.Pooch</span>
-<span class="sd">                    The instance of the Pooch class that is calling this</span>
-<span class="sd">                    function.</span>
-
-<span class="sd">                No return value is required.</span>
-<span class="sd">                &#39;&#39;&#39;</span>
-<span class="sd">                ...</span>
-
-<span class="sd">        **Authentication** through HTTP can be handled by</span>
-<span class="sd">        :class:`pooch.HTTPDownloader`:</span>
-
-<span class="sd">        .. code:: python</span>
-
-<span class="sd">            authdownload = HTTPDownloader(auth=(username, password))</span>
-<span class="sd">            mypooch.fetch(&quot;some-data-file.txt&quot;, downloader=authdownload)</span>
-
-<span class="sd">        **Progress bar** for the download can be printed by</span>
-<span class="sd">        :class:`pooch.HTTPDownloader` by passing the argument</span>
-<span class="sd">        ``progressbar=True``:</span>
-
-<span class="sd">        .. code:: python</span>
-
-<span class="sd">            progress_download = HTTPDownloader(progressbar=True)</span>
-<span class="sd">            mypooch.fetch(&quot;some-data-file.txt&quot;, downloader=progress_download)</span>
-<span class="sd">            # Will print a progress bar to standard error like:</span>
-<span class="sd">            # 100%|█████████████████████████████████████████| 336/336 [...]</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_assert_file_in_registry</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
@@ -776,7 +714,11 @@
 
         <span class="k">if</span> <span class="n">action</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;download&quot;</span><span class="p">,</span> <span class="s2">&quot;update&quot;</span><span class="p">):</span>
             <span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
-                <span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> file &#39;</span><span class="si">%s</span><span class="s2">&#39; from &#39;</span><span class="si">%s</span><span class="s2">&#39; to &#39;</span><span class="si">%s</span><span class="s2">&#39;.&quot;</span><span class="p">,</span> <span class="n">verb</span><span class="p">,</span> <span class="n">fname</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">abspath</span><span class="p">),</span>
+                <span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> file &#39;</span><span class="si">%s</span><span class="s2">&#39; from &#39;</span><span class="si">%s</span><span class="s2">&#39; to &#39;</span><span class="si">%s</span><span class="s2">&#39;.&quot;</span><span class="p">,</span>
+                <span class="n">verb</span><span class="p">,</span>
+                <span class="n">fname</span><span class="p">,</span>
+                <span class="n">url</span><span class="p">,</span>
+                <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">abspath</span><span class="p">),</span>
             <span class="p">)</span>
 
             <span class="k">if</span> <span class="n">downloader</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -821,7 +763,8 @@
 <span class="sd">        a space. Hash can specify checksum algorithm using &quot;alg:hash&quot; format.</span>
 <span class="sd">        In case no algorithm is provided, SHA256 is used by default.</span>
 <span class="sd">        Only one file per line is allowed. Custom download URLs for individual</span>
-<span class="sd">        files can be specified as a third element on the line.</span>
+<span class="sd">        files can be specified as a third element on the line. Line comments</span>
+<span class="sd">        can be added and must be prepended with ``#``.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -841,7 +784,12 @@
                 <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">line</span><span class="p">,</span> <span class="nb">bytes</span><span class="p">):</span>
                     <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span>
 
-                <span class="n">elements</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+                <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+                <span class="c1"># skip line comments</span>
+                <span class="k">if</span> <span class="n">line</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;#&quot;</span><span class="p">):</span>
+                    <span class="k">continue</span>
+
+                <span class="n">elements</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
                 <span class="k">if</span> <span class="ow">not</span> <span class="nb">len</span><span class="p">(</span><span class="n">elements</span><span class="p">)</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]:</span>
                     <span class="k">raise</span> <span class="ne">OSError</span><span class="p">(</span>
                         <span class="s2">&quot;Invalid entry in Pooch registry file &#39;</span><span class="si">{}</span><span class="s2">&#39;: &quot;</span>
@@ -881,12 +829,12 @@
         <span class="n">source</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_url</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
         <span class="n">parsed_url</span> <span class="o">=</span> <span class="n">parse_url</span><span class="p">(</span><span class="n">source</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">parsed_url</span><span class="p">[</span><span class="s2">&quot;protocol&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;ftp&quot;</span><span class="p">:</span>
-            <span class="n">directory</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">parsed_url</span><span class="p">[</span><span class="s2">&quot;path&quot;</span><span class="p">])</span>
+            <span class="n">directory</span><span class="p">,</span> <span class="n">file_name</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">parsed_url</span><span class="p">[</span><span class="s2">&quot;path&quot;</span><span class="p">])</span>
             <span class="n">ftp</span> <span class="o">=</span> <span class="n">ftplib</span><span class="o">.</span><span class="n">FTP</span><span class="p">()</span>
             <span class="n">ftp</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">host</span><span class="o">=</span><span class="n">parsed_url</span><span class="p">[</span><span class="s2">&quot;netloc&quot;</span><span class="p">])</span>
             <span class="k">try</span><span class="p">:</span>
                 <span class="n">ftp</span><span class="o">.</span><span class="n">login</span><span class="p">()</span>
-                <span class="n">available</span> <span class="o">=</span> <span class="n">parsed_url</span><span class="p">[</span><span class="s2">&quot;path&quot;</span><span class="p">]</span> <span class="ow">in</span> <span class="n">ftp</span><span class="o">.</span><span class="n">nlst</span><span class="p">(</span><span class="n">directory</span><span class="p">)</span>
+                <span class="n">available</span> <span class="o">=</span> <span class="n">file_name</span> <span class="ow">in</span> <span class="n">ftp</span><span class="o">.</span><span class="n">nlst</span><span class="p">(</span><span class="n">directory</span><span class="p">)</span>
             <span class="k">finally</span><span class="p">:</span>
                 <span class="n">ftp</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
         <span class="k">else</span><span class="p">:</span>
@@ -967,7 +915,7 @@
     <p>
         &copy; Copyright 2018-2020, The Pooch Developers
       <span class="lastupdated">
-        Last updated on May 14, 2020.
+        Last updated on Sep 10, 2020.
       </span>
 
     </p>

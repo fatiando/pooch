@@ -107,12 +107,22 @@
               
             
             
-              <p class="caption"><span class="caption-text">Documentation</span></p>
-<ul class="current">
+              <p class="caption"><span class="caption-text">Getting Started</span></p>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="../../install.html">Installing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../retrieve.html">Retrieving a data file</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../citing.html">Citing Pooch</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../usage.html">Training your Pooch</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../retrieve.html">Downloading a single file</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Training your Pooch</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../beginner.html">Beginner tricks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../intermediate.html">Intermediate tricks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../advanced.html">Advanced tricks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../downloaders.html">Downloaders</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../processors.html">Processors</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Reference Documentation</span></p>
+<ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="../index.html">API Reference</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="../index.html#core">Core</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="pooch.create.html">pooch.create</a></li>
@@ -287,15 +297,15 @@ exception to warn of possible file corruption.</p>
 <p>Post-processing actions sometimes need to be taken on downloaded files
 (unzipping, conversion to a more efficient format, etc). If these
 actions are time or memory consuming, it would be best to do this only
-once when the file is actually downloaded. Use the <em>processor</em> argument
-to specify a function that is executed after the downloaded (if
-required) to perform these actions. See below.</p>
+once right after the file is downloaded. Use the <em>processor</em> argument
+to specify a function that is executed after the download to perform
+these actions. See <a class="reference internal" href="../../processors.html#processors"><span class="std std-ref">Processors</span></a> for details.</p>
 <p>Custom file downloaders can be provided through the <em>downloader</em>
-argument. By default, files are downloaded over HTTP. If the server for
-a given file requires authentication (username and password) or if the
-file is served over FTP, use custom downloaders that support these
-features. Downloaders can also be used to print custom messages (like a
-progress bar), etc. See below for details.</p>
+argument. By default, Pooch will determine the download protocol from
+the URL in the registry. If the server for a given file requires
+authentication (username and password), use a downloader that support
+these features. Downloaders can also be used to print custom messages
+(like a progress bar), etc. See <a class="reference internal" href="../../downloaders.html#downloaders"><span class="std std-ref">Downloaders</span></a> for details.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -303,11 +313,10 @@ progress bar), etc. See below for details.</p>
 storage) to fetch from the local storage.</p></li>
 <li><p><strong>processor</strong> (<a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><em>None</em></a><em> or </em><em>callable</em>) – If not None, then a function (or callable object) that will be
 called before returning the full path and after the file has been
-downloaded (if required). See below for details.</p></li>
+downloaded. See <a class="reference internal" href="../../processors.html#processors"><span class="std std-ref">Processors</span></a> for details.</p></li>
 <li><p><strong>downloader</strong> (<a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><em>None</em></a><em> or </em><em>callable</em>) – If not None, then a function (or callable object) that will be
-called to download a given URL to a provided local file name. By
-default, downloads are done through HTTP without authentication
-using <a class="reference internal" href="pooch.HTTPDownloader.html#pooch.HTTPDownloader" title="pooch.HTTPDownloader"><code class="xref py py-class docutils literal notranslate"><span class="pre">pooch.HTTPDownloader</span></code></a>. See below for details.</p></li>
+called to download a given URL to a provided local file name. See
+<a class="reference internal" href="../../downloaders.html#downloaders"><span class="std std-ref">Downloaders</span></a> for details.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -315,68 +324,6 @@ using <a class="reference internal" href="pooch.HTTPDownloader.html#pooch.HTTPDo
 local storage.</p>
 </dd>
 </dl>
-<p class="rubric">Notes</p>
-<p><strong>Processor</strong> functions should have the following format:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">myprocessor</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">action</span><span class="p">,</span> <span class="n">pooch</span><span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39;</span>
-<span class="sd">    Processes the downloaded file and returns a new file name.</span>
-
-<span class="sd">    The function **must** take as arguments (in order):</span>
-
-<span class="sd">    fname : str</span>
-<span class="sd">        The full path of the file in the local data storage</span>
-<span class="sd">    action : str</span>
-<span class="sd">        Either: &quot;download&quot; (file doesn&#39;t exist and will be</span>
-<span class="sd">        downloaded), &quot;update&quot; (file is outdated and will be</span>
-<span class="sd">        downloaded), or &quot;fetch&quot; (file exists and is updated so no</span>
-<span class="sd">        download is necessary).</span>
-<span class="sd">    pooch : pooch.Pooch</span>
-<span class="sd">        The instance of the Pooch class that is calling this</span>
-<span class="sd">        function.</span>
-
-<span class="sd">    The return value can be anything but is usually a full path to</span>
-<span class="sd">    a file (or list of files). This is what will be returned by</span>
-<span class="sd">    *fetch* in place of the original file path.</span>
-<span class="sd">    &#39;&#39;&#39;</span>
-    <span class="o">...</span>
-    <span class="k">return</span> <span class="n">full_path</span>
-</pre></div>
-</div>
-<p><strong>Downloader</strong> functions should have the following format:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">mydownloader</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">output_file</span><span class="p">,</span> <span class="n">pooch</span><span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39;</span>
-<span class="sd">    Download a file from the given URL to the given local file.</span>
-
-<span class="sd">    The function **must** take as arguments (in order):</span>
-
-<span class="sd">    url : str</span>
-<span class="sd">        The URL to the file you want to download.</span>
-<span class="sd">    output_file : str or file-like object</span>
-<span class="sd">        Path (and file name) to which the file will be downloaded.</span>
-<span class="sd">    pooch : pooch.Pooch</span>
-<span class="sd">        The instance of the Pooch class that is calling this</span>
-<span class="sd">        function.</span>
-
-<span class="sd">    No return value is required.</span>
-<span class="sd">    &#39;&#39;&#39;</span>
-    <span class="o">...</span>
-</pre></div>
-</div>
-<p><strong>Authentication</strong> through HTTP can be handled by
-<a class="reference internal" href="pooch.HTTPDownloader.html#pooch.HTTPDownloader" title="pooch.HTTPDownloader"><code class="xref py py-class docutils literal notranslate"><span class="pre">pooch.HTTPDownloader</span></code></a>:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">authdownload</span> <span class="o">=</span> <span class="n">HTTPDownloader</span><span class="p">(</span><span class="n">auth</span><span class="o">=</span><span class="p">(</span><span class="n">username</span><span class="p">,</span> <span class="n">password</span><span class="p">))</span>
-<span class="n">mypooch</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="s2">&quot;some-data-file.txt&quot;</span><span class="p">,</span> <span class="n">downloader</span><span class="o">=</span><span class="n">authdownload</span><span class="p">)</span>
-</pre></div>
-</div>
-<p><strong>Progress bar</strong> for the download can be printed by
-<a class="reference internal" href="pooch.HTTPDownloader.html#pooch.HTTPDownloader" title="pooch.HTTPDownloader"><code class="xref py py-class docutils literal notranslate"><span class="pre">pooch.HTTPDownloader</span></code></a> by passing the argument
-<code class="docutils literal notranslate"><span class="pre">progressbar=True</span></code>:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">progress_download</span> <span class="o">=</span> <span class="n">HTTPDownloader</span><span class="p">(</span><span class="n">progressbar</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="n">mypooch</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="s2">&quot;some-data-file.txt&quot;</span><span class="p">,</span> <span class="n">downloader</span><span class="o">=</span><span class="n">progress_download</span><span class="p">)</span>
-<span class="c1"># Will print a progress bar to standard error like:</span>
-<span class="c1"># 100%|█████████████████████████████████████████| 336/336 [...]</span>
-</pre></div>
-</div>
 </dd></dl>
 
 <dl class="method">
@@ -417,7 +364,8 @@ storage) to fetch from the local storage.</p>
 a space. Hash can specify checksum algorithm using “alg:hash” format.
 In case no algorithm is provided, SHA256 is used by default.
 Only one file per line is allowed. Custom download URLs for individual
-files can be specified as a third element on the line.</p>
+files can be specified as a third element on the line. Line comments
+can be added and must be prepended with <code class="docutils literal notranslate"><span class="pre">#</span></code>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>fname</strong> (<em>str | fileobj</em>) – Path (or open file object) to the registry file.</p>
@@ -449,7 +397,7 @@ files can be specified as a third element on the line.</p>
     <p>
         &copy; Copyright 2018-2020, The Pooch Developers
       <span class="lastupdated">
-        Last updated on May 14, 2020.
+        Last updated on Sep 10, 2020.
       </span>
 
     </p>

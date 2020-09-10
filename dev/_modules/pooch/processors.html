@@ -105,12 +105,22 @@
               
             
             
-              <p class="caption"><span class="caption-text">Documentation</span></p>
+              <p class="caption"><span class="caption-text">Getting Started</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../install.html">Installing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../retrieve.html">Retrieving a data file</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../citing.html">Citing Pooch</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../usage.html">Training your Pooch</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../retrieve.html">Downloading a single file</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Training your Pooch</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../beginner.html">Beginner tricks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../intermediate.html">Intermediate tricks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../advanced.html">Advanced tricks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../downloaders.html">Downloaders</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../processors.html">Processors</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Reference Documentation</span></p>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="../../api/index.html">API Reference</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../changes.html">Changelog</a></li>
 </ul>
@@ -206,7 +216,7 @@
   <h1>Source code for pooch.processors</h1><div class="highlight"><pre>
 <span></span><span class="c1"># pylint: disable=line-too-long</span>
 <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">Post-processing hooks for Pooch.fetch</span>
+<span class="sd">Post-processing hooks</span>
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">bz2</span>
@@ -223,10 +233,10 @@
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Base class for extractions from compressed archives.</span>
 
-<span class="sd">    Subclasses can be used with :meth:`pooch.Pooch.fetch` to unzip a downloaded</span>
-<span class="sd">    data file into a folder in the local data store. :meth:`~pooch.Pooch.fetch`</span>
-<span class="sd">    will return a list with the names of the extracted files instead of the</span>
-<span class="sd">    archive.</span>
+<span class="sd">    Subclasses can be used with :meth:`pooch.Pooch.fetch` and</span>
+<span class="sd">    :func:`pooch.retrieve` to unzip a downloaded data file into a folder in the</span>
+<span class="sd">    local data store. :meth:`~pooch.Pooch.fetch` will return a list with the</span>
+<span class="sd">    names of the extracted files instead of the archive.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -252,7 +262,8 @@
 <span class="sd">        fname : str</span>
 <span class="sd">            Full path of the zipped file in local storage.</span>
 <span class="sd">        action : str</span>
-<span class="sd">            Indicates what action was taken by :meth:`pooch.Pooch.fetch`:</span>
+<span class="sd">            Indicates what action was taken by :meth:`pooch.Pooch.fetch` or</span>
+<span class="sd">            :func:`pooch.retrieve`:</span>
 
 <span class="sd">            * ``&quot;download&quot;``: File didn&#39;t exist locally and was downloaded</span>
 <span class="sd">            * ``&quot;update&quot;``: Local file was outdated and was re-download</span>
@@ -298,9 +309,10 @@
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Processor that unpacks a zip archive and returns a list of all files.</span>
 
-<span class="sd">    Use with :meth:`pooch.Pooch.fetch` to unzip a downloaded data file into a</span>
-<span class="sd">    folder in the local data store. :meth:`~pooch.Pooch.fetch` will return a</span>
-<span class="sd">    list with the names of the unzipped files instead of the zip archive.</span>
+<span class="sd">    Use with :meth:`pooch.Pooch.fetch` or :func:`pooch.retrieve` to unzip a</span>
+<span class="sd">    downloaded data file into a folder in the local data store. The</span>
+<span class="sd">    method/function will return a list with the names of the unzipped files</span>
+<span class="sd">    instead of the zip archive.</span>
 
 <span class="sd">    The output folder is ``{fname}.unzip``.</span>
 
@@ -343,9 +355,10 @@
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Processor that unpacks a tar archive and returns a list of all files.</span>
 
-<span class="sd">    Use with :meth:`pooch.Pooch.fetch` to untar a downloaded data file into a</span>
-<span class="sd">    folder in the local data store. :meth:`~pooch.Pooch.fetch` will return a</span>
-<span class="sd">    list with the names of the extracted files instead of the archive.</span>
+<span class="sd">    Use with :meth:`pooch.Pooch.fetch` or :func:`pooch.retrieve` to untar a</span>
+<span class="sd">    downloaded data file into a folder in the local data store. The</span>
+<span class="sd">    method/function will return a list with the names of the extracted files</span>
+<span class="sd">    instead of the archive.</span>
 
 <span class="sd">    The output folder is ``{fname}.untar``.</span>
 
@@ -392,9 +405,10 @@
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Processor that decompress a file and returns the decompressed version.</span>
 
-<span class="sd">    Use with :meth:`pooch.Pooch.fetch` to decompress a downloaded data file so</span>
-<span class="sd">    that it can be easily opened. Useful for data files that take a long time</span>
-<span class="sd">    to decompress (exchanging disk space for speed).</span>
+<span class="sd">    Use with :meth:`pooch.Pooch.fetch` or :func:`pooch.retrieve` to decompress</span>
+<span class="sd">    a downloaded data file so that it can be easily opened. Useful for data</span>
+<span class="sd">    files that take a long time to decompress (exchanging disk space for</span>
+<span class="sd">    speed).</span>
 
 <span class="sd">    The output file is ``{fname}.decomp``.</span>
 
@@ -405,6 +419,11 @@
 <span class="sd">    ``method=&quot;auto&quot;`` to automatically determine the compression method. This</span>
 <span class="sd">    can be overwritten by setting the *method* argument.</span>
 
+<span class="sd">    .. note::</span>
+
+<span class="sd">        To unpack zip and tar archives with one or more files, use</span>
+<span class="sd">        :class:`pooch.Unzip` and :class:`pooch.Untar` instead.</span>
+
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    method : str</span>
@@ -413,7 +432,8 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">modules</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;lzma&quot;</span><span class="p">:</span> <span class="n">lzma</span><span class="p">,</span> <span class="s2">&quot;xz&quot;</span><span class="p">:</span> <span class="n">lzma</span><span class="p">,</span> <span class="s2">&quot;gzip&quot;</span><span class="p">:</span> <span class="n">gzip</span><span class="p">,</span> <span class="s2">&quot;bzip2&quot;</span><span class="p">:</span> <span class="n">bz2</span><span class="p">}</span>
+    <span class="n">modules</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;auto&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;lzma&quot;</span><span class="p">:</span> <span class="n">lzma</span><span class="p">,</span> <span class="s2">&quot;xz&quot;</span><span class="p">:</span> <span class="n">lzma</span><span class="p">,</span> <span class="s2">&quot;gzip&quot;</span><span class="p">:</span> <span class="n">gzip</span><span class="p">,</span> <span class="s2">&quot;bzip2&quot;</span><span class="p">:</span> <span class="n">bz2</span><span class="p">}</span>
+    <span class="n">extensions</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;.xz&quot;</span><span class="p">:</span> <span class="s2">&quot;lzma&quot;</span><span class="p">,</span> <span class="s2">&quot;.gz&quot;</span><span class="p">:</span> <span class="s2">&quot;gzip&quot;</span><span class="p">,</span> <span class="s2">&quot;.bz2&quot;</span><span class="p">:</span> <span class="s2">&quot;bzip2&quot;</span><span class="p">}</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;auto&quot;</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">method</span> <span class="o">=</span> <span class="n">method</span>
@@ -429,7 +449,8 @@
 <span class="sd">        fname : str</span>
 <span class="sd">            Full path of the compressed file in local storage.</span>
 <span class="sd">        action : str</span>
-<span class="sd">            Indicates what action was taken by :meth:`pooch.Pooch.fetch`:</span>
+<span class="sd">            Indicates what action was taken by :meth:`pooch.Pooch.fetch` or</span>
+<span class="sd">            :func:`pooch.retrieve`:</span>
 
 <span class="sd">            - ``&quot;download&quot;``: File didn&#39;t exist locally and was downloaded</span>
 <span class="sd">            - ``&quot;update&quot;``: Local file was outdated and was re-download</span>
@@ -465,24 +486,27 @@
 <span class="sd">        extension. If no recognized extension is in the file name, will raise a</span>
 <span class="sd">        ValueError.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">method</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">method</span>
-        <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;auto&quot;</span><span class="p">:</span>
+        <span class="n">error_archives</span> <span class="o">=</span> <span class="s2">&quot;To unpack zip/tar archives, use pooch.Unzip/Untar instead.&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">method</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">modules</span><span class="p">:</span>
+            <span class="n">message</span> <span class="o">=</span> <span class="s2">&quot;Invalid compression method &#39;</span><span class="si">{}</span><span class="s2">&#39;. Must be one of &#39;</span><span class="si">{}</span><span class="s2">&#39;.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">method</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">modules</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+            <span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">method</span> <span class="ow">in</span> <span class="p">{</span><span class="s2">&quot;zip&quot;</span><span class="p">,</span> <span class="s2">&quot;tar&quot;</span><span class="p">}:</span>
+                <span class="n">message</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">message</span><span class="p">,</span> <span class="n">error_archives</span><span class="p">])</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;auto&quot;</span><span class="p">:</span>
             <span class="n">ext</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">fname</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-            <span class="n">valid_methods</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;.xz&quot;</span><span class="p">:</span> <span class="s2">&quot;lzma&quot;</span><span class="p">,</span> <span class="s2">&quot;.gz&quot;</span><span class="p">:</span> <span class="s2">&quot;gzip&quot;</span><span class="p">,</span> <span class="s2">&quot;.bz2&quot;</span><span class="p">:</span> <span class="s2">&quot;bzip2&quot;</span><span class="p">}</span>
-            <span class="k">if</span> <span class="n">ext</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">valid_methods</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                    <span class="s2">&quot;Unrecognized extension &#39;</span><span class="si">{}</span><span class="s2">&#39;. Must be one of &#39;</span><span class="si">{}</span><span class="s2">&#39;.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-                        <span class="n">ext</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="n">valid_methods</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+            <span class="k">if</span> <span class="n">ext</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">extensions</span><span class="p">:</span>
+                <span class="n">message</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="s2">&quot;Unrecognized file extension &#39;</span><span class="si">{}</span><span class="s2">&#39;. Must be one of &#39;</span><span class="si">{}</span><span class="s2">&#39;.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                        <span class="n">ext</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">extensions</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
                     <span class="p">)</span>
                 <span class="p">)</span>
-            <span class="n">method</span> <span class="o">=</span> <span class="n">valid_methods</span><span class="p">[</span><span class="n">ext</span><span class="p">]</span>
-        <span class="k">if</span> <span class="n">method</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">modules</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="s2">&quot;Invalid compression method &#39;</span><span class="si">{}</span><span class="s2">&#39;. Must be one of &#39;</span><span class="si">{}</span><span class="s2">&#39;.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-                    <span class="n">method</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">modules</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
-                <span class="p">)</span>
-            <span class="p">)</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">modules</span><span class="p">[</span><span class="n">method</span><span class="p">]</span></div>
+                <span class="k">if</span> <span class="n">ext</span> <span class="ow">in</span> <span class="p">{</span><span class="s2">&quot;.zip&quot;</span><span class="p">,</span> <span class="s2">&quot;.tar&quot;</span><span class="p">}:</span>
+                    <span class="n">message</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">message</span><span class="p">,</span> <span class="n">error_archives</span><span class="p">])</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">modules</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">extensions</span><span class="p">[</span><span class="n">ext</span><span class="p">]]</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">modules</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">method</span><span class="p">]</span></div>
 </pre></div>
 
            </div>
@@ -497,7 +521,7 @@
     <p>
         &copy; Copyright 2018-2020, The Pooch Developers
       <span class="lastupdated">
-        Last updated on May 14, 2020.
+        Last updated on Sep 10, 2020.
       </span>
 
     </p>

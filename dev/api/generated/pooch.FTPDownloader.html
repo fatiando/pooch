@@ -41,7 +41,7 @@
   <link rel="stylesheet" href="../../_static/style.css" type="text/css" />
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="pooch.Unzip" href="pooch.Unzip.html" />
+    <link rel="next" title="pooch.SFTPDownloader" href="pooch.SFTPDownloader.html" />
     <link rel="prev" title="pooch.HTTPDownloader" href="pooch.HTTPDownloader.html" />
     <!-- Google Analytics tracking code -->
     <script>
@@ -107,18 +107,29 @@
               
             
             
-              <p class="caption"><span class="caption-text">Documentation</span></p>
-<ul class="current">
+              <p class="caption"><span class="caption-text">Getting Started</span></p>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="../../install.html">Installing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../retrieve.html">Retrieving a data file</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../citing.html">Citing Pooch</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../usage.html">Training your Pooch</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../retrieve.html">Downloading a single file</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Training your Pooch</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../beginner.html">Beginner tricks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../intermediate.html">Intermediate tricks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../advanced.html">Advanced tricks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../downloaders.html">Downloaders</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../processors.html">Processors</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Reference Documentation</span></p>
+<ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="../index.html">API Reference</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../index.html#core">Core</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../index.html#utilities">Utilities</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="../index.html#downloaders">Downloaders</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="pooch.HTTPDownloader.html">pooch.HTTPDownloader</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">pooch.FTPDownloader</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pooch.SFTPDownloader.html">pooch.SFTPDownloader</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../index.html#processors">Processors</a></li>
@@ -229,8 +240,9 @@
 <dd><p>Download manager for fetching files over FTP.</p>
 <p>When called, downloads the given file URL into the specified local file.
 Uses the <a class="reference external" href="https://docs.python.org/3/library/ftplib.html#module-ftplib" title="(in Python v3.8)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ftplib</span></code></a> module to manage downloads.</p>
-<p>Use with <a class="reference internal" href="pooch.Pooch.html#pooch.Pooch.fetch" title="pooch.Pooch.fetch"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pooch.Pooch.fetch</span></code></a> to customize the download of files (for
-example, to use authentication or print a progress bar).</p>
+<p>Use with <a class="reference internal" href="pooch.Pooch.html#pooch.Pooch.fetch" title="pooch.Pooch.fetch"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pooch.Pooch.fetch</span></code></a> or <a class="reference internal" href="pooch.retrieve.html#pooch.retrieve" title="pooch.retrieve"><code class="xref py py-func docutils literal notranslate"><span class="pre">pooch.retrieve</span></code></a> to customize
+the download of files (for example, to use authentication or print a
+progress bar).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -291,7 +303,7 @@ everything into memory at one. Usually doesn’t need to be changed.</p></li>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="pooch.Unzip.html" class="btn btn-neutral float-right" title="pooch.Unzip" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="pooch.SFTPDownloader.html" class="btn btn-neutral float-right" title="pooch.SFTPDownloader" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="pooch.HTTPDownloader.html" class="btn btn-neutral float-left" title="pooch.HTTPDownloader" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
@@ -305,7 +317,7 @@ everything into memory at one. Usually doesn’t need to be changed.</p></li>
     <p>
         &copy; Copyright 2018-2020, The Pooch Developers
       <span class="lastupdated">
-        Last updated on May 14, 2020.
+        Last updated on Sep 10, 2020.
       </span>
 
     </p>

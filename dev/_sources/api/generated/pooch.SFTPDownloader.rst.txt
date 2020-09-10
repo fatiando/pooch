@@ -1,22 +1,16 @@
-pooch.Decompress
-================
+pooch.SFTPDownloader
+====================
 
 .. currentmodule:: pooch
 
-.. autoclass:: Decompress
+.. autoclass:: SFTPDownloader
 
     .. rubric:: Methods Summary
 
     .. autosummary::
     
     
-        Decompress.__call__
-    
-    
-    
-    
-    
-    
+        SFTPDownloader.__call__
     
     
     
@@ -79,13 +73,7 @@ pooch.Decompress
 
 
 
-.. automethod:: Decompress.__call__
-
-
-
-
-
-
+.. automethod:: SFTPDownloader.__call__
 
 
 

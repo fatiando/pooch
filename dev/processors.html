@@ -1,0 +1,454 @@
+
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+    
+    <title>Processors &mdash; Pooch dev</title>
+    
+
+
+  
+  
+    <link rel="shortcut icon" href="_static/favicon.png"/>
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/style.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="API Reference" href="api/index.html" />
+    <link rel="prev" title="Downloaders" href="downloaders.html" />
+    <!-- Google Analytics tracking code -->
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new
+            Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+                })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-38125837-1', 'auto', {'storage': 'none'});
+      ga('set', 'anonymizeIp', true);
+      ga('send', 'pageview');
+    </script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html">
+          
+
+          
+            
+            <img src="_static/pooch-logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                dev
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+    
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="retrieve.html">Retrieving a data file</a></li>
+<li class="toctree-l1"><a class="reference internal" href="citing.html">Citing Pooch</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Training your Pooch</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="beginner.html">Beginner tricks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="intermediate.html">Intermediate tricks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="advanced.html">Advanced tricks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="downloaders.html">Downloaders</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Processors</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#unpacking-archives">Unpacking archives</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#decompressing">Decompressing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#custom-processors">Custom processors</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">Reference Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api/index.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changes.html">Changelog</a></li>
+</ul>
+
+            
+          
+
+    
+        <p class="caption">
+            <span class="caption-text">
+            
+                Getting help and contributing
+            
+            </span>
+        </p>
+        <ul>
+            
+                <li class="toctree-l1"><a href="https://www.fatiando.org"><i class="fa fa-external-link-square fa-fw"></i> Fatiando a Terra</a></li>
+            
+                <li class="toctree-l1"><a href="https://github.com/fatiando/pooch/blob/master/CONTRIBUTING.md"><i class="fa fa-users fa-fw"></i> Contributing</a></li>
+            
+                <li class="toctree-l1"><a href="https://github.com/fatiando/pooch/blob/master/CODE_OF_CONDUCT.md"><i class="fa fa-gavel fa-fw"></i> Code of Conduct</a></li>
+            
+                <li class="toctree-l1"><a href="http://contact.fatiando.org"><i class="fa fa-comment fa-fw"></i> Contact</a></li>
+            
+                <li class="toctree-l1"><a href="https://github.com/fatiando/pooch"><i class="fa fa-github fa-fw"></i> Source Code</a></li>
+            
+        </ul>
+    
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Pooch</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Processors</li>
+    
+    
+    <li class="source-link">
+        
+            
+                <a href="https://github.com/fatiando/pooch/edit/master/doc/processors.rst"
+                   class="fa fa-github"> Improve this page</a>
+            
+        
+        
+    </li>
+
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="processors">
+<span id="id1"></span><h1>Processors<a class="headerlink" href="#processors" title="Permalink to this headline">¶</a></h1>
+<p>Post-download actions sometimes need to be taken on downloaded files
+(unzipping, conversion to a more efficient format, etc). If these actions are
+time or memory consuming, it might be worth doing them only once after the file
+is downloaded. This is a way of trading disk space for computation time.
+<a class="reference internal" href="api/generated/pooch.Pooch.html#pooch.Pooch.fetch" title="pooch.Pooch.fetch"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pooch.Pooch.fetch</span></code></a> and <a class="reference internal" href="api/generated/pooch.retrieve.html#pooch.retrieve" title="pooch.retrieve"><code class="xref py py-func docutils literal notranslate"><span class="pre">pooch.retrieve</span></code></a> accept the <code class="docutils literal notranslate"><span class="pre">processor</span></code>
+argument to handle these situations.</p>
+<p>Processors are Python <em>callable objects</em>  (like functions or classes with a
+<code class="docutils literal notranslate"><span class="pre">__call__</span></code> method) that are executed after a file is downloaded to perform
+these actions. They must have the following format:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">myprocessor</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">action</span><span class="p">,</span> <span class="n">pooch</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Processes the downloaded file and returns a new file name.</span>
+
+<span class="sd">    The function **must** take as arguments (in order):</span>
+
+<span class="sd">    fname : str</span>
+<span class="sd">        The full path of the file in the local data storage</span>
+<span class="sd">    action : str</span>
+<span class="sd">        Either: &quot;download&quot; (file doesn&#39;t exist and will be downloaded),</span>
+<span class="sd">        &quot;update&quot; (file is outdated and will be downloaded), or &quot;fetch&quot;</span>
+<span class="sd">        (file exists and is updated so no download is necessary).</span>
+<span class="sd">    pooch : pooch.Pooch</span>
+<span class="sd">        The instance of the Pooch class that is calling this function.</span>
+
+<span class="sd">    The return value can be anything but is usually a full path to a file</span>
+<span class="sd">    (or list of files). This is what will be returned by Pooch.fetch and</span>
+<span class="sd">    pooch.retrieve in place of the original file path.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="o">...</span>
+    <span class="k">return</span> <span class="n">full_path</span>
+</pre></div>
+</div>
+<p>The processor is executed after a file downloaded attempted (whether the
+download actually happens or not) and before returning the path to the
+downloaded file. The processor lets us intercept the returned path, perform
+actions, and possibly return a different path.</p>
+<p>Pooch provides built-in processors for common tasks, like decompressing files
+and unpacking tar and zip archives. See the <a class="reference internal" href="api/index.html#api"><span class="std std-ref">API Reference</span></a> for a full list.</p>
+<div class="section" id="unpacking-archives">
+<h2>Unpacking archives<a class="headerlink" href="#unpacking-archives" title="Permalink to this headline">¶</a></h2>
+<p>Let’s say our data file is actually a zip (or tar) archive with a collection of files.
+We may want to store an unpacked version of the archive or extract just a
+single file from it. We can do both operations with the <a class="reference internal" href="api/generated/pooch.Unzip.html#pooch.Unzip" title="pooch.Unzip"><code class="xref py py-class docutils literal notranslate"><span class="pre">pooch.Unzip</span></code></a>
+and <a class="reference internal" href="api/generated/pooch.Untar.html#pooch.Untar" title="pooch.Untar"><code class="xref py py-class docutils literal notranslate"><span class="pre">pooch.Untar</span></code></a> processors.</p>
+<p>For example, to extract a single file from a zip archive:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pooch</span> <span class="kn">import</span> <span class="n">Unzip</span>
+
+
+<span class="k">def</span> <span class="nf">fetch_zipped_file</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Load a large zipped sample data as a pandas.DataFrame.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Extract the file &quot;actual-data-file.txt&quot; from the archive</span>
+    <span class="n">unpack</span> <span class="o">=</span>  <span class="n">Unzip</span><span class="p">(</span><span class="n">members</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;actual-data-file.txt&quot;</span><span class="p">])</span>
+    <span class="c1"># Pass in the processor to unzip the data file</span>
+    <span class="n">fnames</span> <span class="o">=</span> <span class="n">GOODBOY</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="s2">&quot;zipped-data-file.zip&quot;</span><span class="p">,</span> <span class="n">processor</span><span class="o">=</span><span class="n">unpack</span><span class="p">)</span>
+    <span class="c1"># Returns the paths of all extract members (in our case, only one)</span>
+    <span class="n">fname</span> <span class="o">=</span> <span class="n">fnames</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="c1"># fname is now the path of the unzipped file (&quot;actual-data-file.txt&quot;)</span>
+    <span class="c1"># which can be loaded by pandas directly</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">pandas</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">data</span>
+</pre></div>
+</div>
+<p>Or to extract all files into a folder and return the path to each file:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">fetch_zipped_archive</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Load all files from a zipped archive.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Pass in the processor to unzip the data file</span>
+    <span class="n">fnames</span> <span class="o">=</span> <span class="n">GOODBOY</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="s2">&quot;zipped-archive.zip&quot;</span><span class="p">,</span> <span class="n">processor</span><span class="o">=</span><span class="n">Unzip</span><span class="p">())</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="p">[</span><span class="n">pandas</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span> <span class="k">for</span> <span class="n">fname</span> <span class="ow">in</span> <span class="n">fnames</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">data</span>
+</pre></div>
+</div>
+<p>Use <a class="reference internal" href="api/generated/pooch.Untar.html#pooch.Untar" title="pooch.Untar"><code class="xref py py-class docutils literal notranslate"><span class="pre">pooch.Untar</span></code></a> to do the exact same for tar archives (with optional
+compression).</p>
+</div>
+<div class="section" id="decompressing">
+<h2>Decompressing<a class="headerlink" href="#decompressing" title="Permalink to this headline">¶</a></h2>
+<p>If you have a compressed file that is not an archive (zip or tar), you can use
+<a class="reference internal" href="api/generated/pooch.Decompress.html#pooch.Decompress" title="pooch.Decompress"><code class="xref py py-class docutils literal notranslate"><span class="pre">pooch.Decompress</span></code></a> to decompress it after download. For example, large
+binary files can be compressed with <code class="docutils literal notranslate"><span class="pre">gzip</span></code> to reduce download times but will
+need to be decompressed before loading, which can be slow. You can trade
+storage space for speed by keeping a decompressed copy of the file:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pooch</span> <span class="kn">import</span> <span class="n">Decompress</span>
+
+<span class="k">def</span> <span class="nf">fetch_compressed_file</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Load a large binary file that has been gzip compressed.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Pass in the processor to decompress the file on download</span>
+    <span class="n">fname</span> <span class="o">=</span> <span class="n">GOODBOY</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="s2">&quot;large-binary-file.npy.gz&quot;</span><span class="p">,</span> <span class="n">processor</span><span class="o">=</span><span class="n">Decompress</span><span class="p">())</span>
+    <span class="c1"># The file returned is the decompressed version which can be loaded by</span>
+    <span class="c1"># numpy</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">data</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="custom-processors">
+<h2>Custom processors<a class="headerlink" href="#custom-processors" title="Permalink to this headline">¶</a></h2>
+<p>Let’s say we want to implement the <a class="reference internal" href="api/generated/pooch.Unzip.html#pooch.Unzip" title="pooch.Unzip"><code class="xref py py-class docutils literal notranslate"><span class="pre">pooch.Unzip</span></code></a> processor ourselves to
+extract a single file from the archive. We could do that with the following
+function:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">zipfile</span> <span class="kn">import</span> <span class="n">ZipFile</span>
+
+
+<span class="k">def</span> <span class="nf">unpack</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">action</span><span class="p">,</span> <span class="n">pup</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Post-processing hook to unzip a file and return the unzipped file name.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    fname : str</span>
+<span class="sd">       Full path of the zipped file in local storage</span>
+<span class="sd">    action : str</span>
+<span class="sd">       One of &quot;download&quot; (file doesn&#39;t exist and will download),</span>
+<span class="sd">       &quot;update&quot; (file is outdated and will download), and</span>
+<span class="sd">       &quot;fetch&quot; (file exists and is updated so no download).</span>
+<span class="sd">    pup : Pooch</span>
+<span class="sd">       The instance of Pooch that called the processor function.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    fname : str</span>
+<span class="sd">       The full path to the unzipped file. (Return the same fname is your</span>
+<span class="sd">       processor doesn&#39;t modify the file).</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Create a new name for the unzipped file. Appending something to the</span>
+    <span class="c1"># name is a relatively safe way of making sure there are no clashes</span>
+    <span class="c1"># with other files in the registry.</span>
+    <span class="n">unzipped</span> <span class="o">=</span> <span class="n">fname</span> <span class="o">+</span> <span class="s2">&quot;.unzipped&quot;</span>
+    <span class="c1"># Don&#39;t unzip if file already exists and is not being downloaded</span>
+    <span class="k">if</span> <span class="n">action</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;update&quot;</span><span class="p">,</span> <span class="s2">&quot;download&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">unzipped</span><span class="p">):</span>
+        <span class="k">with</span> <span class="n">ZipFile</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">zip_file</span><span class="p">:</span>
+            <span class="c1"># Extract the data file from within the archive</span>
+            <span class="k">with</span> <span class="n">zip_file</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s2">&quot;actual-data-file.txt&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">data_file</span><span class="p">:</span>
+                <span class="c1"># Save it to our desired file name</span>
+                <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">unzipped</span><span class="p">,</span> <span class="s2">&quot;wb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">output</span><span class="p">:</span>
+                    <span class="n">output</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">data_file</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
+    <span class="c1"># Return the path of the unzipped file</span>
+    <span class="k">return</span> <span class="n">unzipped</span>
+
+
+<span class="k">def</span> <span class="nf">fetch_zipped_file</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Load a large zipped sample data as a pandas.DataFrame.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Pass in the processor to unzip the data file</span>
+    <span class="n">fname</span> <span class="o">=</span> <span class="n">GOODBOY</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="s2">&quot;zipped-data-file.zip&quot;</span><span class="p">,</span> <span class="n">processor</span><span class="o">=</span><span class="n">unpack</span><span class="p">)</span>
+    <span class="c1"># fname is now the path of the unzipped file which can be loaded by</span>
+    <span class="c1"># pandas directly</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">pandas</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">data</span>
+</pre></div>
+</div>
+<p>Similarly, you could build any custom processor function so long as it receives
+the <code class="docutils literal notranslate"><span class="pre">fname,</span> <span class="pre">action,</span> <span class="pre">pup</span></code> arguments. Example use cases for this would be:</p>
+<ul class="simple">
+<li><p>Converting data from a download-friendly format (compressed and minimal file
+size) to a more user friendly format (easy to open and fast to load into
+memory).</p></li>
+<li><p>Add missing metadata to data from public servers. You might be using public
+data that has known issues (poorly formated entries, missing metadata, etc)
+which can be fixed when the file is downloaded.</p></li>
+</ul>
+<p>The main advantage to using a processor for these actions is that they are
+performed only when the file is downloaded. A modified version of the file can
+be kept on disk so that loading the file is easier. This is particularly
+convenient if the processor task takes a long time to run.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="api/index.html" class="btn btn-neutral float-right" title="API Reference" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="downloaders.html" class="btn btn-neutral float-left" title="Downloaders" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018-2020, The Pooch Developers
+      <span class="lastupdated">
+        Last updated on Sep 10, 2020.
+      </span>
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
