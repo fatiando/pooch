@@ -281,8 +281,10 @@ class Decompress:  # pylint: disable=too-few-public-methods
         if self.method == "auto":
             ext = os.path.splitext(fname)[-1]
             if ext not in self.extensions:
-                message = "Unrecognized file extension '{}'. Must be one of '{}'.".format(
-                    ext, list(self.extensions.keys())
+                message = (
+                    "Unrecognized file extension '{}'. Must be one of '{}'.".format(
+                        ext, list(self.extensions.keys())
+                    )
                 )
                 if ext in {".zip", ".tar"}:
                     message = " ".join([message, error_archives])

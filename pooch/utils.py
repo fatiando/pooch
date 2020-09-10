@@ -377,7 +377,10 @@ def hash_matches(fname, known_hash, strict=False, source=None):
             " expected {} but got {}. Deleted download for safety."
             " The downloaded file may have been corrupted or"
             " the known hash may be outdated.".format(
-                algorithm.upper(), source, known_hash, new_hash,
+                algorithm.upper(),
+                source,
+                known_hash,
+                new_hash,
             )
         )
     return matches
