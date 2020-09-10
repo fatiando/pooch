@@ -377,7 +377,7 @@ keeping a decompressed copy of the file:
 
 :class:`pooch.Decompress` returns ``"large-binary-file.npy.gz.decomp"`` as the
 decompressed file name by default. You can change its behaviour by passing a
-callback instead:
+file name instead:
 
 .. code:: python
 
@@ -389,9 +389,8 @@ callback instead:
         Load a large binary file that has been gzip compressed.
         """
         # Pass in the processor to decompress the file on download
-        fname = GOODBOY.fetch("
-            large-binary-file.npy.gz",
-            processor=Decompress(rename=lambda fname: os.path.splitext(fname)[0]),
+        fname = GOODBOY.fetch("large-binary-file.npy.gz",
+            processor=Decompress(name="large-binary-file.npy"),
         )
         # The file returned is now named as large-binary-file.npy
         data = numpy.load(fname)

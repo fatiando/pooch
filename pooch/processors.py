@@ -190,8 +190,8 @@ class Decompress:  # pylint: disable=too-few-public-methods
     that it can be easily opened. Useful for data files that take a long time
     to decompress (exchanging disk space for speed).
 
-    The output file is ``{fname}.decomp`` by default. It can be changed by
-    passing a callback.
+    The output file is ``{fname}.decomp`` by default but it can be changed by
+    setting the ``name`` parameter.
 
     Supported decompression methods are LZMA (``.xz``), bzip2 (``.bz2``), and
     gzip (``.gz``).
@@ -210,29 +210,24 @@ class Decompress:  # pylint: disable=too-few-public-methods
     method : str
         Name of the compression method. Can be "auto", "lzma", "xz", "bzip2",
         or "gzip".
-    rename : None or callable
-        Function to change the name of the decompressed file. It must take 
-        a single ``fname`` argument that stores the name of the compressed file.
-        If ``None``, the output file is ``{fname}.decomp``.
-        Defaults to ``None``.
+    name : None or str
+        Defines the decompressed file name. The file name will be
+        ``{fname}.decomp`` if ``None`` (Default) or ``name`` otherwise.
     """
 
     modules = {"auto": None, "lzma": lzma, "xz": lzma, "gzip": gzip, "bzip2": bz2}
     extensions = {".xz": "lzma", ".gz": "gzip", ".bz2": "bzip2"}
 
-    def __init__(self, method="auto", rename=None):
+    def __init__(self, method="auto", name=None):
         self.method = method
-        if rename is None:
-            self.rename = lambda fname: fname + ".decomp"
-        else:
-            self.rename = rename
+        self.name = name
 
     def __call__(self, fname, action, pooch):
         """
         Decompress the given file.
 
-        The output file will be ``fname`` with ``.decomp`` appended to it by
-        default, or as defined by ``rename`` callback.
+        The output file will be either ``{fname}.decomp`` if
+        ``self.name == None`` or ``self.name`` otherwise.
 
         Parameters
         ----------
@@ -253,7 +248,10 @@ class Decompress:  # pylint: disable=too-few-public-methods
         fname : str
             The full path to the decompressed file.
         """
-        decompressed = self.rename(fname)
+        if self.name is None:
+            decompressed = fname + ".decomp"
+        else:
+            decompressed = os.path.dirname(fname) + os.path.sep + str(self.name)
         if action in ("update", "download") or not os.path.exists(decompressed):
             get_logger().info(
                 "Decompressing '%s' to '%s' using method '%s'.",
