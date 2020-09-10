@@ -25,8 +25,7 @@ def test_create_and_fetch():
     )
     # Make sure the storage isn't created until a download is required
     assert not pup.abspath.exists()
-    # The str conversion is needed in Python 3.5
-    pup.load_registry(str(Path(os.path.dirname(__file__), "data", "registry.txt")))
+    pup.load_registry(Path(os.path.dirname(__file__), "data", "registry.txt"))
     for target in ["tiny-data.txt", "subdir/tiny-data.txt"]:
         with capture_log() as log_file:
             fname = pup.fetch(target)

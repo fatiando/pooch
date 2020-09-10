@@ -43,7 +43,7 @@ def test(doctest=True, verbose=True, coverage=False):
     if verbose:
         args.append("-vv")
     if coverage:
-        args.append("--cov={}".format(package))
+        args.append(f"--cov={package}")
         args.append("--cov-report=term-missing")
     if doctest:
         args.append("--doctest-modules")

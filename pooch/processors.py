@@ -272,8 +272,9 @@ class Decompress:  # pylint: disable=too-few-public-methods
         """
         error_archives = "To unpack zip/tar archives, use pooch.Unzip/Untar instead."
         if self.method not in self.modules:
-            message = "Invalid compression method '{}'. Must be one of '{}'.".format(
-                self.method, list(self.modules.keys())
+            message = (
+                f"Invalid compression method '{self.method}'. "
+                f"Must be one of '{list(self.modules.keys())}'."
             )
             if self.method in {"zip", "tar"}:
                 message = " ".join([message, error_archives])
@@ -282,9 +283,8 @@ class Decompress:  # pylint: disable=too-few-public-methods
             ext = os.path.splitext(fname)[-1]
             if ext not in self.extensions:
                 message = (
-                    "Unrecognized file extension '{}'. Must be one of '{}'.".format(
-                        ext, list(self.extensions.keys())
-                    )
+                    f"Unrecognized file extension '{ext}'. "
+                    f"Must be one of '{list(self.extensions.keys())}'."
                 )
                 if ext in {".zip", ".tar"}:
                     message = " ".join([message, error_archives])
