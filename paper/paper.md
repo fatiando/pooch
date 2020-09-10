@@ -79,7 +79,7 @@ download URLs) by downloading files from one or more remote servers and storing
 them in a local data cache.
 Pooch is written in pure Python and has minimal dependencies.
 It can be easily installed from the Python Package Index (PyPI) and conda-forge
-on a wide range of Python versions: 2.7 (up to Pooch 0.6.0) and from 3.6 to 3.8.
+on a wide range of Python versions: 2.7 (up to Pooch 0.6.0) and from 3.5 to 3.8.
 The integrity of downloads is verified by comparing the file's SHA-256 hash with
 the one stored in the data registry.
 This is also the mechanism used to detect if a file needs to be re-downloaded
