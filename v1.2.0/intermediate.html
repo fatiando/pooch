@@ -1,0 +1,521 @@
+
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+    
+    <title>Intermediate tricks &mdash; Pooch v1.2.0</title>
+    
+
+
+  
+  
+    <link rel="shortcut icon" href="_static/favicon.png"/>
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/style.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Advanced tricks" href="advanced.html" />
+    <link rel="prev" title="Beginner tricks" href="beginner.html" />
+    <!-- Google Analytics tracking code -->
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new
+            Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+                })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-38125837-1', 'auto', {'storage': 'none'});
+      ga('set', 'anonymizeIp', true);
+      ga('send', 'pageview');
+    </script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html">
+          
+
+          
+            
+            <img src="_static/pooch-logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                v1.2.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+    
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="retrieve.html">Retrieving a data file</a></li>
+<li class="toctree-l1"><a class="reference internal" href="citing.html">Citing Pooch</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Training your Pooch</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="beginner.html">Beginner tricks</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Intermediate tricks</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#user-defined-local-storage-location">User-defined local storage location</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#registry-files-dealing-with-large-registries">Registry files (dealing with large registries)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#creating-a-registry-file">Creating a registry file</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#file-specific-urls">File-specific URLs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#download-protocols">Download protocols</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#subdirectories">Subdirectories</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#printing-a-download-progress-bar">Printing a download progress bar</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="advanced.html">Advanced tricks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="downloaders.html">Downloaders</a></li>
+<li class="toctree-l1"><a class="reference internal" href="processors.html">Processors</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Reference Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api/index.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changes.html">Changelog</a></li>
+</ul>
+
+            
+          
+
+    
+        <p class="caption">
+            <span class="caption-text">
+            
+                Getting help and contributing
+            
+            </span>
+        </p>
+        <ul>
+            
+                <li class="toctree-l1"><a href="https://www.fatiando.org"><i class="fa fa-external-link-square fa-fw"></i> Fatiando a Terra</a></li>
+            
+                <li class="toctree-l1"><a href="https://github.com/fatiando/pooch/blob/master/CONTRIBUTING.md"><i class="fa fa-users fa-fw"></i> Contributing</a></li>
+            
+                <li class="toctree-l1"><a href="https://github.com/fatiando/pooch/blob/master/CODE_OF_CONDUCT.md"><i class="fa fa-gavel fa-fw"></i> Code of Conduct</a></li>
+            
+                <li class="toctree-l1"><a href="http://contact.fatiando.org"><i class="fa fa-comment fa-fw"></i> Contact</a></li>
+            
+                <li class="toctree-l1"><a href="https://github.com/fatiando/pooch"><i class="fa fa-github fa-fw"></i> Source Code</a></li>
+            
+        </ul>
+    
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Pooch</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Intermediate tricks</li>
+    
+    
+    <li class="source-link">
+        
+            
+                <a href="https://github.com/fatiando/pooch/edit/master/doc/intermediate.rst"
+                   class="fa fa-github"> Improve this page</a>
+            
+        
+        
+    </li>
+
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="intermediate-tricks">
+<span id="intermediate"></span><h1>Intermediate tricks<a class="headerlink" href="#intermediate-tricks" title="Permalink to this headline">¶</a></h1>
+<p>This section covers intermediate configuration that, while not strictly
+necessary, you might want to consider using on your project. In particular,
+allowing users to <strong>control the local storage location</strong> and <strong>registry files</strong>
+are <strong>recommended</strong> for most projects.</p>
+<div class="section" id="user-defined-local-storage-location">
+<h2>User-defined local storage location<a class="headerlink" href="#user-defined-local-storage-location" title="Permalink to this headline">¶</a></h2>
+<p>In the above example, the location of the local storage in the users’ computer
+is hard-coded. There is no way for them to change it to something else. To
+avoid being a tyrant, you can allow the user to define the <code class="docutils literal notranslate"><span class="pre">path</span></code> argument
+using an environment variable:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">POOCH</span> <span class="o">=</span> <span class="n">pooch</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+    <span class="c1"># This is still the default</span>
+    <span class="n">path</span><span class="o">=</span><span class="n">pooch</span><span class="o">.</span><span class="n">os_cache</span><span class="p">(</span><span class="s2">&quot;plumbus&quot;</span><span class="p">),</span>
+    <span class="n">base_url</span><span class="o">=</span><span class="s2">&quot;https://github.com/rick/plumbus/raw/</span><span class="si">{version}</span><span class="s2">/data/&quot;</span><span class="p">,</span>
+    <span class="n">version</span><span class="o">=</span><span class="n">version</span><span class="p">,</span>
+    <span class="n">version_dev</span><span class="o">=</span><span class="s2">&quot;master&quot;</span><span class="p">,</span>
+    <span class="n">registry</span><span class="o">=</span><span class="p">{</span>
+        <span class="s2">&quot;c137.csv&quot;</span><span class="p">:</span> <span class="s2">&quot;19uheidhlkjdwhoiwuhc0uhcwljchw9ochwochw89dcgw9dcgwc&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;cronen.csv&quot;</span><span class="p">:</span> <span class="s2">&quot;1upodh2ioduhw9celdjhlfvhksgdwikdgcowjhcwoduchowjg8w&quot;</span><span class="p">,</span>
+    <span class="p">},</span>
+    <span class="c1"># The name of an environment variable that can overwrite the path</span>
+    <span class="n">env</span><span class="o">=</span><span class="s2">&quot;PLUMBUS_DATA_DIR&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>In this case, if the user defines the <code class="docutils literal notranslate"><span class="pre">PLUMBUS_DATA_DIR</span></code> environment
+variable, we’ll use its value instead of <code class="docutils literal notranslate"><span class="pre">path</span></code>. Pooch will still append the
+value of <code class="docutils literal notranslate"><span class="pre">version</span></code> to the path, so the value of <code class="docutils literal notranslate"><span class="pre">PLUMBUS_DATA_DIR</span></code> should
+not include a version number.</p>
+</div>
+<div class="section" id="registry-files-dealing-with-large-registries">
+<h2>Registry files (dealing with large registries)<a class="headerlink" href="#registry-files-dealing-with-large-registries" title="Permalink to this headline">¶</a></h2>
+<p>If your project has a large number of data files, it can be tedious to list
+them in a dictionary. In these cases, it’s better to store the file names and
+hashes in a file and use <a class="reference internal" href="api/generated/pooch.Pooch.html#pooch.Pooch.load_registry" title="pooch.Pooch.load_registry"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pooch.Pooch.load_registry</span></code></a> to read them:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">pkg_resources</span>
+
+<span class="n">POOCH</span> <span class="o">=</span> <span class="n">pooch</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+    <span class="c1"># Use the default cache folder for the OS</span>
+    <span class="n">path</span><span class="o">=</span><span class="n">pooch</span><span class="o">.</span><span class="n">os_cache</span><span class="p">(</span><span class="s2">&quot;plumbus&quot;</span><span class="p">),</span>
+    <span class="c1"># The remote data is on Github</span>
+    <span class="n">base_url</span><span class="o">=</span><span class="s2">&quot;https://github.com/rick/plumbus/raw/</span><span class="si">{version}</span><span class="s2">/data/&quot;</span><span class="p">,</span>
+    <span class="n">version</span><span class="o">=</span><span class="n">version</span><span class="p">,</span>
+    <span class="c1"># If this is a development version, get the data from the master branch</span>
+    <span class="n">version_dev</span><span class="o">=</span><span class="s2">&quot;master&quot;</span><span class="p">,</span>
+    <span class="c1"># We&#39;ll load it from a file later</span>
+    <span class="n">registry</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="c1"># Get registry file from package_data</span>
+<span class="n">registry_file</span> <span class="o">=</span> <span class="n">pkg_resources</span><span class="o">.</span><span class="n">resource_stream</span><span class="p">(</span><span class="s2">&quot;plumbus&quot;</span><span class="p">,</span> <span class="s2">&quot;registry.txt&quot;</span><span class="p">)</span>
+<span class="c1"># Load this registry file</span>
+<span class="n">POOCH</span><span class="o">.</span><span class="n">load_registry</span><span class="p">(</span><span class="n">registry_file</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>In this case, the <code class="docutils literal notranslate"><span class="pre">registry.txt</span></code> file is in the <code class="docutils literal notranslate"><span class="pre">plumbus/</span></code> package
+directory and should be shipped with the package (see below for instructions).
+We use <a class="reference external" href="https://setuptools.readthedocs.io/en/latest/pkg_resources.html#basic-resource-access">pkg_resources</a>
+to access the <code class="docutils literal notranslate"><span class="pre">registry.txt</span></code>, giving it the name of our Python package.</p>
+<p>The contents of <code class="docutils literal notranslate"><span class="pre">registry.txt</span></code> are:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>c137.csv 19uheidhlkjdwhoiwuhc0uhcwljchw9ochwochw89dcgw9dcgwc
+cronen.csv 1upodh2ioduhw9celdjhlfvhksgdwikdgcowjhcwoduchowjg8w
+</pre></div>
+</div>
+<p>A specific hashing algorithm can be enforced, if a checksum for a file is
+prefixed with <code class="docutils literal notranslate"><span class="pre">alg:</span></code>, e.g.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>c137.csv sha1:e32b18dab23935bc091c353b308f724f18edcb5e
+cronen.csv md5:b53c08d3570b82665784cedde591a8b0
+</pre></div>
+</div>
+<p>To make sure the registry file is shipped with your package, include the
+following in your <code class="docutils literal notranslate"><span class="pre">MANIFEST.in</span></code> file:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>include plumbus/registry.txt
+</pre></div>
+</div>
+<p>And the following entry in the <code class="docutils literal notranslate"><span class="pre">setup</span></code> function of your <code class="docutils literal notranslate"><span class="pre">setup.py</span></code> file:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">setup</span><span class="p">(</span>
+    <span class="o">...</span>
+    <span class="n">package_data</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;plumbus&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;registry.txt&quot;</span><span class="p">]},</span>
+    <span class="o">...</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>From Pooch v1.2.0 the registry file can also contain line comments, prepended
+with a <code class="docutils literal notranslate"><span class="pre">#</span></code>, e.g.:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span># C-137 sample data
+c137.csv 19uheidhlkjdwhoiwuhc0uhcwljchw9ochwochw89dcgw9dcgwc
+# Cronenberg sample data
+cronen.csv 1upodh2ioduhw9celdjhlfvhksgdwikdgcowjhcwoduchowjg8w
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Make sure you set the Pooch version in your <code class="docutils literal notranslate"><span class="pre">setup.py</span></code> to &gt;=1.2.0 when
+using comments as earlier versions cannot handle them:
+<code class="docutils literal notranslate"><span class="pre">install_requires</span> <span class="pre">=</span> <span class="pre">[...,</span> <span class="pre">&quot;pooch&gt;=1.2.0&quot;,</span> <span class="pre">...]</span></code></p>
+</div>
+</div>
+<div class="section" id="creating-a-registry-file">
+<h2>Creating a registry file<a class="headerlink" href="#creating-a-registry-file" title="Permalink to this headline">¶</a></h2>
+<p>If you have many data files, creating the registry and keeping it updated can
+be a challenge. Function <a class="reference internal" href="api/generated/pooch.make_registry.html#pooch.make_registry" title="pooch.make_registry"><code class="xref py py-func docutils literal notranslate"><span class="pre">pooch.make_registry</span></code></a> will create a registry
+file with all contents of a directory. For example, we can generate the
+registry file for our fictitious project from the command-line:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ python -c <span class="s2">&quot;import pooch; pooch.make_registry(&#39;data&#39;, &#39;plumbus/registry.txt&#39;)&quot;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="file-specific-urls">
+<h2>File-specific URLs<a class="headerlink" href="#file-specific-urls" title="Permalink to this headline">¶</a></h2>
+<p>You can set a custom download URL for individual files with the <code class="docutils literal notranslate"><span class="pre">urls</span></code>
+argument of <a class="reference internal" href="api/generated/pooch.create.html#pooch.create" title="pooch.create"><code class="xref py py-func docutils literal notranslate"><span class="pre">pooch.create</span></code></a> or <a class="reference internal" href="api/generated/pooch.Pooch.html#pooch.Pooch" title="pooch.Pooch"><code class="xref py py-class docutils literal notranslate"><span class="pre">pooch.Pooch</span></code></a>. It should be a
+dictionary with the file names as keys and the URLs for downloading the files
+as values. For example, say we have a <code class="docutils literal notranslate"><span class="pre">citadel.csv</span></code> file that we want to
+download from <code class="docutils literal notranslate"><span class="pre">https://www.some-data-hosting-site.com</span></code> instead:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># The basic setup is the same</span>
+<span class="n">POOCH</span> <span class="o">=</span> <span class="n">pooch</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+    <span class="n">path</span><span class="o">=</span><span class="n">pooch</span><span class="o">.</span><span class="n">os_cache</span><span class="p">(</span><span class="s2">&quot;plumbus&quot;</span><span class="p">),</span>
+    <span class="n">base_url</span><span class="o">=</span><span class="s2">&quot;https://github.com/rick/plumbus/raw/</span><span class="si">{version}</span><span class="s2">/data/&quot;</span><span class="p">,</span>
+    <span class="n">version</span><span class="o">=</span><span class="n">version</span><span class="p">,</span>
+    <span class="n">version_dev</span><span class="o">=</span><span class="s2">&quot;master&quot;</span><span class="p">,</span>
+    <span class="n">registry</span><span class="o">=</span><span class="p">{</span>
+        <span class="s2">&quot;c137.csv&quot;</span><span class="p">:</span> <span class="s2">&quot;19uheidhlkjdwhoiwuhc0uhcwljchw9ochwochw89dcgw9dcgwc&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;cronen.csv&quot;</span><span class="p">:</span> <span class="s2">&quot;1upodh2ioduhw9celdjhlfvhksgdwikdgcowjhcwoduchowjg8w&quot;</span><span class="p">,</span>
+        <span class="c1"># Still include the file in the registry</span>
+        <span class="s2">&quot;citadel.csv&quot;</span><span class="p">:</span> <span class="s2">&quot;893yprofwjndcwhx9c0ehp3ue9gcwoscjwdfgh923e0hwhcwiyc&quot;</span><span class="p">,</span>
+    <span class="p">},</span>
+    <span class="c1"># Now specify custom URLs for some of the files in the registry.</span>
+    <span class="n">urls</span><span class="o">=</span><span class="p">{</span>
+        <span class="s2">&quot;citadel.csv&quot;</span><span class="p">:</span> <span class="s2">&quot;https://www.some-data-hosting-site.com/files/citadel.csv&quot;</span><span class="p">,</span>
+    <span class="p">},</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>Notice that versioning of custom URLs is not supported (since they are assumed
+to be data files independent of your project) and the file name will not be
+appended automatically to the URL (in case you want to change the file name in
+local storage).</p>
+<p>Custom URLs can be used along side <code class="docutils literal notranslate"><span class="pre">base_url</span></code> or you can omit <code class="docutils literal notranslate"><span class="pre">base_url</span></code>
+entirely by setting it to an empty string (<code class="docutils literal notranslate"><span class="pre">base_url=&quot;&quot;</span></code>). However, doing so
+requires setting a custom URL for every file in the registry.</p>
+<p>You can also include custom URLs in a registry file by adding the URL for a
+file to end of the line (separated by a space):</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>c137.csv 19uheidhlkjdwhoiwuhc0uhcwljchw9ochwochw89dcgw9dcgwc
+cronen.csv 1upodh2ioduhw9celdjhlfvhksgdwikdgcowjhcwoduchowjg8w
+citadel.csv 893yprofwjndcwhx9c0ehp3ue9gcwoscjwdfgh923e0hwhcwiyc https://www.some-data-hosting-site.com/files/citadel.csv
+</pre></div>
+</div>
+<p><a class="reference internal" href="api/generated/pooch.Pooch.html#pooch.Pooch.load_registry" title="pooch.Pooch.load_registry"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pooch.Pooch.load_registry</span></code></a> will automatically populate the <code class="docutils literal notranslate"><span class="pre">urls</span></code>
+attribute. This way, custom URLs don’t need to be set in the code. In fact, the
+module code doesn’t change at all:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define the Pooch exactly the same (urls is None by default)</span>
+<span class="n">POOCH</span> <span class="o">=</span> <span class="n">pooch</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+    <span class="n">path</span><span class="o">=</span><span class="n">pooch</span><span class="o">.</span><span class="n">os_cache</span><span class="p">(</span><span class="s2">&quot;plumbus&quot;</span><span class="p">),</span>
+    <span class="n">base_url</span><span class="o">=</span><span class="s2">&quot;https://github.com/rick/plumbus/raw/</span><span class="si">{version}</span><span class="s2">/data/&quot;</span><span class="p">,</span>
+    <span class="n">version</span><span class="o">=</span><span class="n">version</span><span class="p">,</span>
+    <span class="n">version_dev</span><span class="o">=</span><span class="s2">&quot;master&quot;</span><span class="p">,</span>
+    <span class="n">registry</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="c1"># If custom URLs are present in the registry file, they will be set</span>
+<span class="c1"># automatically.</span>
+<span class="n">POOCH</span><span class="o">.</span><span class="n">load_registry</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="vm">__file__</span><span class="p">),</span> <span class="s2">&quot;registry.txt&quot;</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="download-protocols">
+<h2>Download protocols<a class="headerlink" href="#download-protocols" title="Permalink to this headline">¶</a></h2>
+<p>Pooch supports the HTTP, FTP, and SFTP protocols by default. It will detect the
+correct protocol from the URL and use the appropriate download method. For
+example, if our data were hosted on an FTP server instead of GitHub, we could
+use the following setup:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">POOCH</span> <span class="o">=</span> <span class="n">pooch</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+    <span class="n">path</span><span class="o">=</span><span class="n">pooch</span><span class="o">.</span><span class="n">os_cache</span><span class="p">(</span><span class="s2">&quot;plumbus&quot;</span><span class="p">),</span>
+    <span class="c1"># Use an FTP server instead of HTTP. The rest is all the same.</span>
+    <span class="n">base_url</span><span class="o">=</span><span class="s2">&quot;ftp://garage-basement.org/</span><span class="si">{version}</span><span class="s2">/&quot;</span><span class="p">,</span>
+    <span class="n">version</span><span class="o">=</span><span class="n">version</span><span class="p">,</span>
+    <span class="n">version_dev</span><span class="o">=</span><span class="s2">&quot;master&quot;</span><span class="p">,</span>
+    <span class="n">registry</span><span class="o">=</span><span class="p">{</span>
+        <span class="s2">&quot;c137.csv&quot;</span><span class="p">:</span> <span class="s2">&quot;19uheidhlkjdwhoiwuhc0uhcwljchw9ochwochw89dcgw9dcgwc&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;cronen.csv&quot;</span><span class="p">:</span> <span class="s2">&quot;1upodh2ioduhw9celdjhlfvhksgdwikdgcowjhcwoduchowjg8w&quot;</span><span class="p">,</span>
+    <span class="p">},</span>
+<span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">fetch_c137</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Load the C-137 sample data as a pandas.DataFrame (over FTP this time).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">fname</span> <span class="o">=</span> <span class="n">POOCH</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="s2">&quot;c137.csv&quot;</span><span class="p">)</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">pandas</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">data</span>
+</pre></div>
+</div>
+<p>You can even specify custom functions for the download or login credentials for
+authentication. See <a class="reference internal" href="downloaders.html#downloaders"><span class="std std-ref">Downloaders</span></a> for more information.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>To download files over SFTP, the package <a class="reference external" href="https://github.com/paramiko/paramiko">paramiko</a> needs to be installed.</p>
+</div>
+</div>
+<div class="section" id="subdirectories">
+<h2>Subdirectories<a class="headerlink" href="#subdirectories" title="Permalink to this headline">¶</a></h2>
+<p>You can have data files in subdirectories of the remote data store. These files
+will be saved to the same subdirectories in the local storage folder. Note,
+however, that the names of these files in the registry <strong>must use Unix-style
+separators</strong> (<code class="docutils literal notranslate"><span class="pre">'/'</span></code>) even on Windows. We will handle the appropriate
+conversions.</p>
+</div>
+<div class="section" id="printing-a-download-progress-bar">
+<h2>Printing a download progress bar<a class="headerlink" href="#printing-a-download-progress-bar" title="Permalink to this headline">¶</a></h2>
+<p>The <a class="reference internal" href="api/generated/pooch.HTTPDownloader.html#pooch.HTTPDownloader" title="pooch.HTTPDownloader"><code class="xref py py-class docutils literal notranslate"><span class="pre">HTTPDownloader</span></code></a> can use <a class="reference external" href="https://github.com/tqdm/tqdm">tqdm</a>
+to print a download progress bar. This is turned off by default but can be
+enabled using:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pooch</span> <span class="kn">import</span> <span class="n">HTTPDownloader</span>
+
+
+<span class="k">def</span> <span class="nf">fetch_large_data</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Fetch a large file from a server and print a progress bar.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">download</span> <span class="o">=</span> <span class="n">HTTPDownloader</span><span class="p">(</span><span class="n">progressbar</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">fname</span> <span class="o">=</span> <span class="n">POOCH</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="s2">&quot;large-data-file.h5&quot;</span><span class="p">,</span> <span class="n">downloader</span><span class="o">=</span><span class="n">download</span><span class="p">)</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">data</span>
+</pre></div>
+</div>
+<p>The resulting progress bar will be printed to stderr and should look something
+like this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>100%|█████████████████████████████████████████| 336/336 [...]
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><code class="docutils literal notranslate"><span class="pre">tqdm</span></code> is not installed by default with Pooch. You will have to install
+it separately in order to use this feature.</p>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="advanced.html" class="btn btn-neutral float-right" title="Advanced tricks" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="beginner.html" class="btn btn-neutral float-left" title="Beginner tricks" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018-2020, The Pooch Developers
+      <span class="lastupdated">
+        Last updated on Sep 10, 2020.
+      </span>
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
