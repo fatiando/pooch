@@ -45,7 +45,9 @@ def test_unique_name_long():
 
 
 @pytest.mark.parametrize(
-    "pool", [ThreadPoolExecutor, ProcessPoolExecutor], ids=["threads", "processes"],
+    "pool",
+    [ThreadPoolExecutor, ProcessPoolExecutor],
+    ids=["threads", "processes"],
 )
 def test_make_local_storage_parallel(pool, monkeypatch):
     "Try to create the cache folder in parallel"
@@ -98,7 +100,8 @@ def test_local_storage_makedirs_permissionerror(monkeypatch):
 
     with pytest.raises(PermissionError) as error:
         make_local_storage(
-            path=data_cache, env="SOME_VARIABLE",
+            path=data_cache,
+            env="SOME_VARIABLE",
         )
         assert "Pooch could not create data cache" in str(error)
         assert "'SOME_VARIABLE'" in str(error)
@@ -121,7 +124,8 @@ def test_local_storage_newfile_permissionerror(monkeypatch):
 
         with pytest.raises(PermissionError) as error:
             make_local_storage(
-                path=data_cache, env="SOME_VARIABLE",
+                path=data_cache,
+                env="SOME_VARIABLE",
             )
             assert "Pooch could not write to data cache" in str(error)
             assert "'SOME_VARIABLE'" in str(error)

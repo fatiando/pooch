@@ -207,7 +207,10 @@ def retrieve(url, known_hash, fname=None, path=None, processor=None, downloader=
 
     if action in ("download", "update"):
         get_logger().info(
-            "%s data from '%s' to file '%s'.", verb, url, str(full_path),
+            "%s data from '%s' to file '%s'.",
+            verb,
+            url,
+            str(full_path),
         )
 
         if downloader is None:
@@ -495,7 +498,11 @@ class Pooch:
 
         if action in ("download", "update"):
             get_logger().info(
-                "%s file '%s' from '%s' to '%s'.", verb, fname, url, str(self.abspath),
+                "%s file '%s' from '%s' to '%s'.",
+                verb,
+                fname,
+                url,
+                str(self.abspath),
             )
 
             if downloader is None:
