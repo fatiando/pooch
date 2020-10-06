@@ -194,9 +194,6 @@ class Decompress:  # pylint: disable=too-few-public-methods
     files that take a long time to decompress (exchanging disk space for
     speed).
 
-    The output file is ``{fname}.decomp`` by default but it can be changed by
-    setting the ``name`` parameter.
-
     Supported decompression methods are LZMA (``.xz``), bzip2 (``.bz2``), and
     gzip (``.gz``).
 
@@ -209,6 +206,16 @@ class Decompress:  # pylint: disable=too-few-public-methods
         To unpack zip and tar archives with one or more files, use
         :class:`pooch.Unzip` and :class:`pooch.Untar` instead.
 
+    The output file is ``{fname}.decomp`` by default but it can be changed by
+    setting the ``name`` parameter.
+
+    .. warning::
+
+        Passing in ``name`` can cause existing data to be lost! For example, if
+        a file already exists with the specified name it will be overwritten
+        with the new decompressed file content. **Use this option with
+        caution.**
+
     Parameters
     ----------
     method : str
@@ -216,7 +223,10 @@ class Decompress:  # pylint: disable=too-few-public-methods
         or "gzip".
     name : None or str
         Defines the decompressed file name. The file name will be
-        ``{fname}.decomp`` if ``None`` (Default) or ``name`` otherwise.
+        ``{fname}.decomp`` if ``None`` (default) or the given name otherwise.
+        Note that the name should **not** include the full (or relative) path,
+        it should be just the file name itself.
+
     """
 
     modules = {"auto": None, "lzma": lzma, "xz": lzma, "gzip": gzip, "bzip2": bz2}
@@ -230,8 +240,8 @@ class Decompress:  # pylint: disable=too-few-public-methods
         """
         Decompress the given file.
 
-        The output file will be either ``{fname}.decomp`` if
-        ``self.name == None`` or ``self.name`` otherwise.
+        The output file will be either ``{fname}.decomp`` or the given *name*
+        class attribute.
 
         Parameters
         ----------
