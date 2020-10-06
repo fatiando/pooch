@@ -123,7 +123,7 @@ def data_over_ftp(server, fname):
     server_path = os.path.join(server.anon_root, fname)
     try:
         shutil.copyfile(package_path, server_path)
-        url = "ftp://localhost/{}".format(fname)
+        url = f"ftp://localhost/{fname}"
         yield url
     finally:
         if os.path.exists(server_path):

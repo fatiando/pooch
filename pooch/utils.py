@@ -93,7 +93,7 @@ def file_hash(fname, alg="sha256"):
 
     """
     if alg not in hashlib.algorithms_available:
-        raise ValueError("Algorithm '{}' not available in hashlib".format(alg))
+        raise ValueError(f"Algorithm '{alg}' not available in hashlib")
     # Calculate the hash in chunks to avoid overloading the memory
     chunksize = 65536
     hasher = hashlib.new(alg)
@@ -281,14 +281,12 @@ def make_local_storage(path, env=None):
     except PermissionError as error:
         message = [
             str(error),
-            "| Pooch could not {} data cache folder '{}'.".format(action, path),
+            f"| Pooch could not {action} data cache folder '{path}'.",
             "Will not be able to download data files.",
         ]
         if env is not None:
             message.append(
-                "Use environment variable '{}' to specify a different location.".format(
-                    env
-                )
+                f"Use environment variable '{env}' to specify a different location."
             )
         raise PermissionError(" ".join(message)) from error
 
@@ -373,12 +371,10 @@ def hash_matches(fname, known_hash, strict=False, source=None):
         if source is None:
             source = str(fname)
         raise ValueError(
-            "{} hash of downloaded file ({}) does not match the known hash:"
-            " expected {} but got {}. Deleted download for safety."
-            " The downloaded file may have been corrupted or"
-            " the known hash may be outdated.".format(
-                algorithm.upper(), source, known_hash, new_hash,
-            )
+            f"{algorithm.upper()} hash of downloaded file ({source}) does not match"
+            f" the known hash: expected {known_hash} but got {new_hash}. Deleted"
+            " download for safety. The downloaded file may have been corrupted or"
+            " the known hash may be outdated."
         )
     return matches
 
@@ -453,5 +449,5 @@ def unique_file_name(url):
     # Crop the start of the file name to fit 255 characters including the hash
     # and the :
     fname = fname[-(255 - len(md5) - 1) :]
-    unique_name = "{}-{}".format(md5, fname)
+    unique_name = f"{md5}-{fname}"
     return unique_name

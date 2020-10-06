@@ -3,6 +3,68 @@
 Changelog
 =========
 
+Version 1.2.0
+-------------
+
+*Released on: 2020/09/10*
+
+.. image:: https://zenodo.org/badge/DOI/10.5281/zenodo.4022246.svg
+    :alt: Digital Object Identifier for the Zenodo archive
+    :target: https://doi.org/10.5281/zenodo.4022246
+
+.. warning::
+
+    **Pooch v1.2.0 is the last release that is compatible with Python 3.5.**
+
+Bug fixes:
+
+* Fix FTP availability check when the file is in a directory. If the data file
+  is not in the base directory, the ``Pooch.is_available`` test was broken
+  since we were checking for the full path in ``ftp.nlst`` instead of just the
+  file name. (`#191 <https://github.com/fatiando/pooch/pull/191>`__)
+
+New features:
+
+* Add the SFTPDownloader class for secure FTP downloads (`#165
+  <https://github.com/fatiando/pooch/pull/165>`__)
+* Expose Pooch version as ``pooch.__version__`` (`#179
+  <https://github.com/fatiando/pooch/pull/179>`__)
+* Allow line comments in registry files with ``#`` (`#180
+  <https://github.com/fatiando/pooch/pull/180>`__)
+
+Enhancements:
+
+* Point to Unzip/tar from Decompress docs and errors (`#200
+  <https://github.com/fatiando/pooch/pull/200>`__)
+
+Documentation:
+
+* Re-factor the documentation into separate pages (`#202
+  <https://github.com/fatiando/pooch/pull/202>`__)
+* Add warning to the docs about dropping Python 3.5 (`#201
+  <https://github.com/fatiando/pooch/pull/201>`__)
+* Add `histolab <https://github.com/histolab/histolab>`__ to the Pooch-powered
+  projects (`#189 <https://github.com/fatiando/pooch/pull/189>`__)
+
+Maintenance:
+
+* Push documentation to GitHub Pages using Actions (`#198
+  <https://github.com/fatiando/pooch/pull/198>`__)
+* Add GitHub Actions workflow for publishing to PyPI (`#196
+  <https://github.com/fatiando/pooch/pull/196>`__)
+* Set up GitHub Actions for testing and linting (`#194
+  <https://github.com/fatiando/pooch/pull/194>`__)
+* Test FTP downloads using a local test server (`#192
+  <https://github.com/fatiando/pooch/pull/192>`__)
+
+This release contains contributions from:
+
+* Leonardo Uieda
+* Hugo van Kemenade
+* Alessia Marcolini
+* Luke Gregor
+* Mathias Hauser
+
 Version 1.1.1
 -------------
 

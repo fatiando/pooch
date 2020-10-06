@@ -1,5 +1,5 @@
 """
-Download hooks for Pooch.fetch
+The classes that actually handle the downloads.
 """
 import sys
 import ftplib
@@ -58,9 +58,8 @@ def choose_downloader(url):
     parsed_url = parse_url(url)
     if parsed_url["protocol"] not in known_downloaders:
         raise ValueError(
-            "Unrecognized URL protocol '{}' in '{}'. Must be one of {}.".format(
-                parsed_url["protocol"], url, known_downloaders.keys()
-            )
+            f"Unrecognized URL protocol '{parsed_url['protocol']}' in '{url}'. "
+            f"Must be one of {known_downloaders.keys()}."
         )
     downloader = known_downloaders[parsed_url["protocol"]]()
     return downloader
@@ -73,8 +72,9 @@ class HTTPDownloader:  # pylint: disable=too-few-public-methods
     When called, downloads the given file URL into the specified local file.
     Uses the :mod:`requests` library to manage downloads.
 
-    Use with :meth:`pooch.Pooch.fetch` to customize the download of files (for
-    example, to use authentication or print a progress bar).
+    Use with :meth:`pooch.Pooch.fetch` or :func:`pooch.retrieve` to customize
+    the download of files (for example, to use authentication or print a
+    progress bar).
 
     Parameters
     ----------
@@ -119,7 +119,7 @@ class HTTPDownloader:  # pylint: disable=too-few-public-methods
     >>> user = "doggo"
     >>> password = "goodboy"
     >>> # httpbin will ask for the user and password we provide in the URL
-    >>> url = "https://httpbin.org/basic-auth/{}/{}".format(user, password)
+    >>> url = f"https://httpbin.org/basic-auth/{user}/{password}"
     >>> # Trying without the login credentials causes an error
     >>> downloader = HTTPDownloader()
     >>> try:
@@ -216,8 +216,9 @@ class FTPDownloader:  # pylint: disable=too-few-public-methods
     When called, downloads the given file URL into the specified local file.
     Uses the :mod:`ftplib` module to manage downloads.
 
-    Use with :meth:`pooch.Pooch.fetch` to customize the download of files (for
-    example, to use authentication or print a progress bar).
+    Use with :meth:`pooch.Pooch.fetch` or :func:`pooch.retrieve` to customize
+    the download of files (for example, to use authentication or print a
+    progress bar).
 
     Parameters
     ----------
@@ -288,7 +289,7 @@ class FTPDownloader:  # pylint: disable=too-few-public-methods
             output_file = open(output_file, "w+b")
         try:
             ftp.login(user=self.username, passwd=self.password, acct=self.account)
-            command = "RETR {}".format(parsed_url["path"])
+            command = f"RETR {parsed_url['path']}"
             if self.progressbar:
                 # Make sure the file is set to binary mode, otherwise we can't
                 # get the file size. See: https://stackoverflow.com/a/22093848
@@ -327,8 +328,9 @@ class SFTPDownloader:  # pylint: disable=too-few-public-methods
     Requires `paramiko <https://github.com/paramiko/paramiko>`__ to be
     installed.
 
-    Use with :meth:`pooch.Pooch.fetch` to customize the download of files
-    (for example, to use authentication or print a progress bar).
+    Use with :meth:`pooch.Pooch.fetch` or :func:`pooch.retrieve` to customize
+    the download of files (for example, to use authentication or print a
+    progress bar).
 
     Parameters
     ----------

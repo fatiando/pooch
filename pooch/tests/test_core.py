@@ -118,7 +118,7 @@ def test_pooch_custom_url():
             fname = pup.fetch("tiny-data.txt")
             logs = log_file.getvalue()
             assert logs.split()[0] == "Downloading"
-            assert logs.split()[-1] == "'{}'.".format(path)
+            assert logs.split()[-1] == f"'{path}'."
         check_tiny_data(fname)
         # Check that no logging happens when there are no events
         with capture_log() as log_file:
@@ -138,7 +138,7 @@ def test_pooch_download():
             fname = pup.fetch("tiny-data.txt")
             logs = log_file.getvalue()
             assert logs.split()[0] == "Downloading"
-            assert logs.split()[-1] == "'{}'.".format(path)
+            assert logs.split()[-1] == f"'{path}'."
         # Check that the downloaded file has the right content
         assert true_path == fname
         check_tiny_data(fname)
@@ -179,7 +179,7 @@ def test_pooch_update():
             fname = pup.fetch("tiny-data.txt")
             logs = log_file.getvalue()
             assert logs.split()[0] == "Updating"
-            assert logs.split()[-1] == "'{}'.".format(path)
+            assert logs.split()[-1] == f"'{path}'."
         # Check that the updated file has the right content
         assert true_path == fname
         check_tiny_data(fname)
@@ -202,7 +202,7 @@ def test_pooch_corrupted():
             assert "(tiny-data.txt)" in str(error.value)
             logs = log_file.getvalue()
             assert logs.split()[0] == "Downloading"
-            assert logs.split()[-1] == "'{}'.".format(path)
+            assert logs.split()[-1] == f"'{path}'."
     # and the case where the file exists but hash doesn't match
     pup = Pooch(path=DATA_DIR, base_url=BASEURL, registry=REGISTRY_CORRUPTED)
     with capture_log() as log_file:
@@ -211,7 +211,7 @@ def test_pooch_corrupted():
         assert "(tiny-data.txt)" in str(error.value)
         logs = log_file.getvalue()
         assert logs.split()[0] == "Updating"
-        assert logs.split()[-1] == "'{}'.".format(DATA_DIR)
+        assert logs.split()[-1] == f"'{DATA_DIR}'."
 
 
 def test_pooch_file_not_in_registry():
@@ -252,7 +252,7 @@ def test_pooch_load_registry_fileobj():
 
     # Text mode
     pup = Pooch(path="", base_url="")
-    with open(path, "r") as fin:
+    with open(path) as fin:
         pup.load_registry(fin)
     assert pup.registry == REGISTRY
     assert pup.registry_files.sort() == list(REGISTRY).sort()
@@ -356,7 +356,7 @@ def test_alternative_hashing_algorithms():
     for alg in ("sha512", "md5"):
         hasher = hashlib.new(alg)
         hasher.update(data)
-        registry = {"tiny-data.txt": "{}:{}".format(alg, hasher.hexdigest())}
+        registry = {"tiny-data.txt": f"{alg}:{hasher.hexdigest()}"}
         pup = Pooch(path=DATA_DIR, base_url="some bogus URL", registry=registry)
         assert fname == pup.fetch("tiny-data.txt")
         check_tiny_data(fname)

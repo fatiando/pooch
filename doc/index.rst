@@ -12,11 +12,27 @@
 .. toctree::
     :maxdepth: 2
     :hidden:
-    :caption: Documentation
+    :caption: Getting Started
 
     install.rst
-    citing.rst
-    usage.rst
     retrieve.rst
+    citing.rst
+
+.. toctree::
+    :maxdepth: 2
+    :hidden:
+    :caption: Training your Pooch
+
+    beginner.rst
+    intermediate.rst
+    advanced.rst
+    downloaders.rst
+    processors.rst
+
+.. toctree::
+    :maxdepth: 2
+    :hidden:
+    :caption: Reference Documentation
+
     api/index.rst
     changes.rst

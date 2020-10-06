@@ -185,7 +185,7 @@ def test_processor_multiplefiles(proc_cls, ext, msg):
             lines = logs.splitlines()
             assert len(lines) == 2
             assert lines[0].split()[0] == "Downloading"
-            assert lines[-1].startswith("{} contents".format(msg))
+            assert lines[-1].startswith(f"{msg} contents")
             assert len(fnames) == 2
             assert true_paths == set(fnames)
             for fname in fnames:

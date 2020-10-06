@@ -84,13 +84,11 @@ def retrieve(url, known_hash, fname=None, path=None, processor=None, downloader=
     processor : None or callable
         If not None, then a function (or callable object) that will be called
         before returning the full path and after the file has been downloaded
-        (if required). See :meth:`pooch.Pooch.fetch` for details.
+        (if required). See :ref:`processors` for details.
     downloader : None or callable
         If not None, then a function (or callable object) that will be called
-        to download a given URL to a provided local file name. By default,
-        downloads are done through HTTP without authentication using
-        :class:`pooch.HTTPDownloader`. See :meth:`pooch.Pooch.fetch` for
-        details.
+        to download a given URL to a provided local file name. See
+        :ref:`downloaders` for details.
 
     Returns
     -------
@@ -209,7 +207,10 @@ def retrieve(url, known_hash, fname=None, path=None, processor=None, downloader=
 
     if action in ("download", "update"):
         get_logger().info(
-            "%s data from '%s' to file '%s'.", verb, url, str(full_path),
+            "%s data from '%s' to file '%s'.",
+            verb,
+            url,
+            str(full_path),
         )
 
         if downloader is None:
@@ -453,16 +454,16 @@ class Pooch:
         Post-processing actions sometimes need to be taken on downloaded files
         (unzipping, conversion to a more efficient format, etc). If these
         actions are time or memory consuming, it would be best to do this only
-        once when the file is actually downloaded. Use the *processor* argument
-        to specify a function that is executed after the downloaded (if
-        required) to perform these actions. See below.
+        once right after the file is downloaded. Use the *processor* argument
+        to specify a function that is executed after the download to perform
+        these actions. See :ref:`processors` for details.
 
         Custom file downloaders can be provided through the *downloader*
-        argument. By default, files are downloaded over HTTP. If the server for
-        a given file requires authentication (username and password) or if the
-        file is served over FTP, use custom downloaders that support these
-        features. Downloaders can also be used to print custom messages (like a
-        progress bar), etc. See below for details.
+        argument. By default, Pooch will determine the download protocol from
+        the URL in the registry. If the server for a given file requires
+        authentication (username and password), use a downloader that support
+        these features. Downloaders can also be used to print custom messages
+        (like a progress bar), etc. See :ref:`downloaders` for details.
 
         Parameters
         ----------
@@ -472,90 +473,17 @@ class Pooch:
         processor : None or callable
             If not None, then a function (or callable object) that will be
             called before returning the full path and after the file has been
-            downloaded (if required). See below for details.
+            downloaded. See :ref:`processors` for details.
         downloader : None or callable
             If not None, then a function (or callable object) that will be
-            called to download a given URL to a provided local file name. By
-            default, downloads are done through HTTP without authentication
-            using :class:`pooch.HTTPDownloader`. See below for details.
+            called to download a given URL to a provided local file name. See
+            :ref:`downloaders` for details.
 
         Returns
         -------
         full_path : str
             The absolute path (including the file name) of the file in the
             local storage.
-
-        Notes
-        -----
-
-        **Processor** functions should have the following format:
-
-        .. code:: python
-
-            def myprocessor(fname, action, pooch):
-                '''
-                Processes the downloaded file and returns a new file name.
-
-                The function **must** take as arguments (in order):
-
-                fname : str
-                    The full path of the file in the local data storage
-                action : str
-                    Either: "download" (file doesn't exist and will be
-                    downloaded), "update" (file is outdated and will be
-                    downloaded), or "fetch" (file exists and is updated so no
-                    download is necessary).
-                pooch : pooch.Pooch
-                    The instance of the Pooch class that is calling this
-                    function.
-
-                The return value can be anything but is usually a full path to
-                a file (or list of files). This is what will be returned by
-                *fetch* in place of the original file path.
-                '''
-                ...
-                return full_path
-
-        **Downloader** functions should have the following format:
-
-        .. code:: python
-
-            def mydownloader(url, output_file, pooch):
-                '''
-                Download a file from the given URL to the given local file.
-
-                The function **must** take as arguments (in order):
-
-                url : str
-                    The URL to the file you want to download.
-                output_file : str or file-like object
-                    Path (and file name) to which the file will be downloaded.
-                pooch : pooch.Pooch
-                    The instance of the Pooch class that is calling this
-                    function.
-
-                No return value is required.
-                '''
-                ...
-
-        **Authentication** through HTTP can be handled by
-        :class:`pooch.HTTPDownloader`:
-
-        .. code:: python
-
-            authdownload = HTTPDownloader(auth=(username, password))
-            mypooch.fetch("some-data-file.txt", downloader=authdownload)
-
-        **Progress bar** for the download can be printed by
-        :class:`pooch.HTTPDownloader` by passing the argument
-        ``progressbar=True``:
-
-        .. code:: python
-
-            progress_download = HTTPDownloader(progressbar=True)
-            mypooch.fetch("some-data-file.txt", downloader=progress_download)
-            # Will print a progress bar to standard error like:
-            # 100%|█████████████████████████████████████████| 336/336 [...]
 
         """
         self._assert_file_in_registry(fname)
@@ -570,7 +498,11 @@ class Pooch:
 
         if action in ("download", "update"):
             get_logger().info(
-                "%s file '%s' from '%s' to '%s'.", verb, fname, url, str(self.abspath),
+                "%s file '%s' from '%s' to '%s'.",
+                verb,
+                fname,
+                url,
+                str(self.abspath),
             )
 
             if downloader is None:
@@ -589,7 +521,7 @@ class Pooch:
         it's not.
         """
         if fname not in self.registry:
-            raise ValueError("File '{}' is not in the registry.".format(fname))
+            raise ValueError(f"File '{fname}' is not in the registry.")
 
     def get_url(self, fname):
         """
@@ -644,11 +576,9 @@ class Pooch:
                 elements = line.split()
                 if not len(elements) in [0, 2, 3]:
                     raise OSError(
-                        "Invalid entry in Pooch registry file '{}': "
-                        "expected 2 or 3 elements in line {} but got {}. "
-                        "Offending entry: '{}'".format(
-                            fname, linenum + 1, len(elements), line
-                        )
+                        f"Invalid entry in Pooch registry file '{fname}': "
+                        f"expected 2 or 3 elements in line {linenum + 1} but got "
+                        f"{len(elements)}. Offending entry: '{line}'"
                     )
                 if elements:
                     file_name = elements[0]
