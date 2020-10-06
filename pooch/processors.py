@@ -266,7 +266,7 @@ class Decompress:  # pylint: disable=too-few-public-methods
         if self.name is None:
             decompressed = fname + ".decomp"
         else:
-            decompressed = os.path.dirname(fname) + os.path.sep + str(self.name)
+            decompressed = os.path.join(os.path.dirname(fname), self.name)
         if action in ("update", "download") or not os.path.exists(decompressed):
             get_logger().info(
                 "Decompressing '%s' to '%s' using method '%s'.",

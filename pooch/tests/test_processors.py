@@ -18,16 +18,26 @@ BASEURL = pooch_test_url()
 
 
 @pytest.mark.parametrize(
-    "method,ext",
-    [("auto", "xz"), ("lzma", "xz"), ("xz", "xz"), ("bzip2", "bz2"), ("gzip", "gz")],
-    ids=["auto", "lzma", "xz", "bz2", "gz"],
+    "method,ext,name",
+    [
+        ("auto", "xz", None),
+        ("lzma", "xz", None),
+        ("xz", "xz", None),
+        ("bzip2", "bz2", None),
+        ("gzip", "gz", None),
+        ("gzip", "gz", "different-name.txt"),
+    ],
+    ids=["auto", "lzma", "xz", "bz2", "gz", "name"],
 )
-def test_decompress(method, ext):
+def test_decompress(method, ext, name):
     "Check that decompression after download works for all formats"
-    processor = Decompress(method=method)
+    processor = Decompress(method=method, name=name)
     with TemporaryDirectory() as local_store:
         path = Path(local_store)
-        true_path = str(path / ".".join(["tiny-data.txt", ext, "decomp"]))
+        if name is None:
+            true_path = str(path / ".".join(["tiny-data.txt", ext, "decomp"]))
+        else:
+            true_path = str(path / name)
         # Setup a pooch in a temp dir
         pup = Pooch(path=path, base_url=BASEURL, registry=REGISTRY)
         # Check the logs when downloading and from the processor
@@ -44,36 +54,6 @@ def test_decompress(method, ext):
         # Check that processor doesn't execute when not downloading
         with capture_log() as log_file:
             fname = pup.fetch("tiny-data.txt." + ext, processor=processor)
-            assert log_file.getvalue() == ""
-        assert fname == true_path
-        check_tiny_data(fname)
-
-
-def test_decompress_rename():
-    "Check that decompression rename customization works"
-    method = "auto"
-    ext = ".gz"
-    processor = Decompress(method, "tiny-data.txt")
-    with TemporaryDirectory() as local_store:
-        path = Path(local_store)
-        fname = "tiny-data.txt"
-        true_path = str(path / fname)
-        # Setup a pooch in a temp dir
-        pup = Pooch(path=path, base_url=BASEURL, registry=REGISTRY)
-        # Check the logs when downloading and from the processor
-        with capture_log() as log_file:
-            fname = pup.fetch(fname + ext, processor=processor)
-            logs = log_file.getvalue()
-            lines = logs.splitlines()
-            assert len(lines) == 2
-            assert lines[0].split()[0] == "Downloading"
-            assert lines[-1].startswith("Decompressing")
-            assert method in lines[-1]
-        assert fname == true_path
-        check_tiny_data(fname)
-        # Check that processor doesn't execute when not downloading
-        with capture_log() as log_file:
-            fname = pup.fetch(fname + ext, processor=processor)
             assert log_file.getvalue() == ""
         assert fname == true_path
         check_tiny_data(fname)
