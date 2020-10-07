@@ -18,16 +18,26 @@ BASEURL = pooch_test_url()
 
 
 @pytest.mark.parametrize(
-    "method,ext",
-    [("auto", "xz"), ("lzma", "xz"), ("xz", "xz"), ("bzip2", "bz2"), ("gzip", "gz")],
-    ids=["auto", "lzma", "xz", "bz2", "gz"],
+    "method,ext,name",
+    [
+        ("auto", "xz", None),
+        ("lzma", "xz", None),
+        ("xz", "xz", None),
+        ("bzip2", "bz2", None),
+        ("gzip", "gz", None),
+        ("gzip", "gz", "different-name.txt"),
+    ],
+    ids=["auto", "lzma", "xz", "bz2", "gz", "name"],
 )
-def test_decompress(method, ext):
+def test_decompress(method, ext, name):
     "Check that decompression after download works for all formats"
-    processor = Decompress(method=method)
+    processor = Decompress(method=method, name=name)
     with TemporaryDirectory() as local_store:
         path = Path(local_store)
-        true_path = str(path / ".".join(["tiny-data.txt", ext, "decomp"]))
+        if name is None:
+            true_path = str(path / ".".join(["tiny-data.txt", ext, "decomp"]))
+        else:
+            true_path = str(path / name)
         # Setup a pooch in a temp dir
         pup = Pooch(path=path, base_url=BASEURL, registry=REGISTRY)
         # Check the logs when downloading and from the processor
