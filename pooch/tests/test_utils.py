@@ -204,56 +204,40 @@ def test_file_hash_invalid_algorithm():
     assert "'blah'" in str(exc.value)
 
 
-def test_hash_matches():
+@pytest.mark.parametrize("alg", ["sha256", "sha512", "md5"])
+def test_hash_matches(alg):
     "Make sure the hash checking function works"
     fname = os.path.join(DATA_DIR, "tiny-data.txt")
     check_tiny_data(fname)
     with open(fname, "rb") as fin:
         data = fin.read()
     # Check if the check passes
-    hasher = hashlib.new("sha256")
+    hasher = hashlib.new(alg)
     hasher.update(data)
-    known_hash = f"{hasher.hexdigest()}"
+    known_hash = f"{alg}:{hasher.hexdigest()}"
     assert hash_matches(fname, known_hash)
-    for alg in ("sha512", "md5"):
-        hasher = hashlib.new(alg)
-        hasher.update(data)
-        known_hash = f"{alg}:{hasher.hexdigest()}"
-        assert hash_matches(fname, known_hash)
     # And also if it fails
-    known_hash = "p98oh2dl2j2h2p8e9yfho3fi2e9fhd"
+    known_hash = f"{alg}:p98oh2dl2j2h2p8e9yfho3fi2e9fhd"
     assert not hash_matches(fname, known_hash)
-    for alg in ("sha512", "md5"):
-        known_hash = f"{alg}:p98oh2dl2j2h2p8e9yfho3fi2e9fhd"
-        assert not hash_matches(fname, known_hash)
 
 
-def test_hash_matches_strict():
+@pytest.mark.parametrize("alg", ["sha256", "sha512", "md5"])
+def test_hash_matches_strict(alg):
     "Make sure the hash checking function raises an exception if strict"
     fname = os.path.join(DATA_DIR, "tiny-data.txt")
     check_tiny_data(fname)
     with open(fname, "rb") as fin:
         data = fin.read()
     # Check if the check passes
-    hasher = hashlib.new("sha256")
+    hasher = hashlib.new(alg)
     hasher.update(data)
-    known_hash = f"{hasher.hexdigest()}"
+    known_hash = f"{alg}:{hasher.hexdigest()}"
     assert hash_matches(fname, known_hash, strict=True)
-    for alg in ("sha512", "md5"):
-        hasher = hashlib.new(alg)
-        hasher.update(data)
-        known_hash = f"{alg}:{hasher.hexdigest()}"
-        assert hash_matches(fname, known_hash, strict=True)
     # And also if it fails
-    bad_hash = "p98oh2dl2j2h2p8e9yfho3fi2e9fhd"
+    bad_hash = f"{alg}:p98oh2dl2j2h2p8e9yfho3fi2e9fhd"
     with pytest.raises(ValueError) as error:
         hash_matches(fname, bad_hash, strict=True, source="Neverland")
     assert "Neverland" in str(error.value)
-    for alg in ("sha512", "md5"):
-        bad_hash = f"{alg}:p98oh2dl2j2h2p8e9yfho3fi2e9fhd"
-        with pytest.raises(ValueError) as error:
-            hash_matches(fname, bad_hash, strict=True)
-        assert fname in str(error.value)
 
 
 def test_hash_matches_none():
@@ -264,6 +248,24 @@ def test_hash_matches_none():
     assert hash_matches(fname="", known_hash=None)
     # strict should cause an error if this wasn't working
     assert hash_matches(fname, known_hash=None, strict=True)
+
+
+@pytest.mark.parametrize("alg", ["sha256", "sha512", "md5"])
+def test_hash_matches_uppercase(alg):
+    "Hash matching should be independent of upper or lower case"
+    fname = os.path.join(DATA_DIR, "tiny-data.txt")
+    check_tiny_data(fname)
+    with open(fname, "rb") as fin:
+        data = fin.read()
+    # Check if the check passes
+    hasher = hashlib.new(alg)
+    hasher.update(data)
+    known_hash = f"{alg}:{hasher.hexdigest().upper()}"
+    assert hash_matches(fname, known_hash, strict=True)
+    # And also if it fails
+    with pytest.raises(ValueError) as error:
+        hash_matches(fname, known_hash[:-5], strict=True, source="Neverland")
+    assert "Neverland" in str(error.value)
 
 
 def test_temporary_file():
