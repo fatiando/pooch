@@ -14,6 +14,7 @@ import shutil
 import ftplib
 
 import requests
+import requests.exceptions
 from .utils import (
     check_version,
     parse_url,
@@ -247,6 +248,7 @@ def create(
     env=None,
     registry=None,
     urls=None,
+    retry_if_failed=0,
 ):
     """
     Create a :class:`~pooch.Pooch` with sensible defaults to fetch data files.
@@ -305,6 +307,10 @@ def create(
         Not all files in *registry* need an entry in *urls*. If a file has an
         entry in *urls*, the *base_url* will be ignored when downloading it in
         favor of ``urls[fname]``.
+    retry_if_failed : int
+        Retry a file download the specified number of times if it fails because
+        of a bad connection or a hash mismatch. By default, downloads are only
+        attempted once (``retry_if_failed=0``).
 
     Returns
     -------
@@ -392,7 +398,13 @@ def create(
     # to import at the same time (which would try to create the folder several
     # times at once).
     path = cache_location(path, env, version)
-    pup = Pooch(path=path, base_url=base_url, registry=registry, urls=urls)
+    pup = Pooch(
+        path=path,
+        base_url=base_url,
+        registry=registry,
+        urls=urls,
+        retry_if_failed=retry_if_failed,
+    )
     return pup
 
 
@@ -423,10 +435,14 @@ class Pooch:
         Not all files in *registry* need an entry in *urls*. If a file has an
         entry in *urls*, the *base_url* will be ignored when downloading it in
         favor of ``urls[fname]``.
+    retry_if_failed : int
+        Retry a file download the specified number of times if it fails because
+        of a bad connection or a hash mismatch. By default, downloads are only
+        attempted once (``retry_if_failed=0``).
 
     """
 
-    def __init__(self, path, base_url, registry=None, urls=None):
+    def __init__(self, path, base_url, registry=None, urls=None, retry_if_failed=0):
         self.path = path
         self.base_url = base_url
         if registry is None:
@@ -435,6 +451,7 @@ class Pooch:
         if urls is None:
             urls = dict()
         self.urls = dict(urls)
+        self.retry_if_failed = retry_if_failed
 
     @property
     def abspath(self):
@@ -514,7 +531,14 @@ class Pooch:
             if downloader is None:
                 downloader = choose_downloader(url)
 
-            stream_download(url, full_path, known_hash, downloader, pooch=self)
+            stream_download(
+                url,
+                full_path,
+                known_hash,
+                downloader,
+                pooch=self,
+                retry_if_failed=self.retry_if_failed,
+            )
 
         if processor is not None:
             return processor(str(full_path), action, self)
@@ -669,7 +693,7 @@ def download_action(path, known_hash):
     return action, verb
 
 
-def stream_download(url, fname, known_hash, downloader, pooch=None):
+def stream_download(url, fname, known_hash, downloader, pooch=None, retry_if_failed=0):
     """
     Stream the file and check that its hash matches the known one.
 
@@ -677,15 +701,34 @@ def stream_download(url, fname, known_hash, downloader, pooch=None):
     It will be moved to the desired file name only if the hash matches the
     known hash. Otherwise, the temporary file is deleted.
 
+    If the download fails for either a bad connection or a hash mismatch, we
+    will retry the download the specified number of times in case the failure
+    was due to a network error.
     """
     # Ensure the parent directory exists in case the file is in a subdirectory.
     # Otherwise, move will cause an error.
     if not fname.parent.exists():
         os.makedirs(str(fname.parent))
 
-    # Stream the file to a temporary so that we can safely check its hash
-    # before overwriting the original.
-    with temporary_file(path=str(fname.parent)) as tmp:
-        downloader(url, tmp, pooch)
-        hash_matches(tmp, known_hash, strict=True, source=str(fname.name))
-        shutil.move(tmp, str(fname))
+    download_attempts = 1 + retry_if_failed
+
+    for i in range(download_attempts):
+        try:
+            # Stream the file to a temporary so that we can safely check its
+            # hash before overwriting the original.
+            with temporary_file(path=str(fname.parent)) as tmp:
+                downloader(url, tmp, pooch)
+                hash_matches(tmp, known_hash, strict=True, source=str(fname.name))
+                shutil.move(tmp, str(fname))
+            break
+        except (ValueError, requests.exceptions.RequestException):
+            if i == download_attempts - 1:
+                raise
+            retries_left = download_attempts - (i + 1)
+            get_logger().info(
+                "Failed to download '%s'. "
+                "Will attempt the download again %d time%s.",
+                str(fname.name),
+                retries_left,
+                "s" if retries_left > 1 else "",
+            )

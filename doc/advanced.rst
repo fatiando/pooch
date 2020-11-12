@@ -27,6 +27,26 @@ that class's methods to handle logging events in more sophisticated ways if you
 wish.
 
 
+Retry failed downloads
+----------------------
+
+When downloading data repeatedly, like in continuous integration, failures can
+occur due to sporadic network outages or other factors outside of our control.
+In these cases, it can be frustrating to have entire jobs fail because a single
+download was not successful.
+
+Pooch allows you to specify a number of times to retry the download in case of
+failure by setting ``retry_if_failed`` in :func:`pooch.create`. This setting
+will be valid for all downloads attempted with :meth:`pooch.Pooch.fetch`. The
+download can fail because the file hash doesn't match the known hash (due to a
+partial download, for example) or because of network errors coming from
+:mod:`requests`. Other errors (file system permission errors, etc) will still
+result in a failed download.
+
+.. note::
+
+    Requires Pooch >= 1.3.0.
+
 Bypassing the hash check
 ------------------------
 
