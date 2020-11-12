@@ -348,6 +348,9 @@ def hash_matches(fname, known_hash, strict=False, source=None):
 
     If the *known_hash* is None, will always return True.
 
+    Coverts hashes to lowercase before comparison to avoid system specific
+    mismatches between hashes in the registry and computed hashes.
+
     Parameters
     ----------
     fname : str or PathLike
@@ -374,7 +377,7 @@ def hash_matches(fname, known_hash, strict=False, source=None):
         return True
     algorithm = hash_algorithm(known_hash)
     new_hash = file_hash(fname, alg=algorithm)
-    matches = new_hash == known_hash.split(":")[-1]
+    matches = new_hash.lower() == known_hash.split(":")[-1].lower()
     if strict and not matches:
         if source is None:
             source = str(fname)

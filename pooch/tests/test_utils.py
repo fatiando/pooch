@@ -238,6 +238,9 @@ def test_hash_matches_strict(alg):
     with pytest.raises(ValueError) as error:
         hash_matches(fname, bad_hash, strict=True, source="Neverland")
     assert "Neverland" in str(error.value)
+    with pytest.raises(ValueError) as error:
+        hash_matches(fname, bad_hash, strict=True, source=None)
+    assert fname in str(error.value)
 
 
 def test_hash_matches_none():
