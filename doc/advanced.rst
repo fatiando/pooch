@@ -47,6 +47,7 @@ result in a failed download.
 
     Requires Pooch >= 1.3.0.
 
+
 Bypassing the hash check
 ------------------------
 

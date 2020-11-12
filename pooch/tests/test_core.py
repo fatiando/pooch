@@ -180,7 +180,7 @@ def test_pooch_download_retry(monkeypatch):
         monkeypatch.setattr(core, "hash_matches", FakeHashMatches(3).hash_matches)
         # Setup a pooch without download retrying
         path = Path(local_store)
-        pup = core.Pooch(path=path, base_url=BASEURL, registry=REGISTRY)
+        pup = Pooch(path=path, base_url=BASEURL, registry=REGISTRY)
         # Make sure it fails with no retries
         with pytest.raises(ValueError) as error:
             pup.fetch("tiny-data.txt")
@@ -213,9 +213,7 @@ def test_pooch_download_retry(monkeypatch):
         # Setup a pooch with insufficient retry attempts
         path = Path(local_store)
         true_path = str(path / "tiny-data.txt")
-        pup = core.Pooch(
-            path=path, base_url=BASEURL, registry=REGISTRY, retry_if_failed=1
-        )
+        pup = Pooch(path=path, base_url=BASEURL, registry=REGISTRY, retry_if_failed=1)
         # Make sure it fails with no retries
         with pytest.raises(ValueError) as error:
             # Check that the logs say that the download failed n times
