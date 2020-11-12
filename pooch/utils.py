@@ -326,6 +326,8 @@ def hash_algorithm(hash_string):
     md5
     >>> print(hash_algorithm("sha256:qouuwhwd2j192y1lb1iwgowdj2898wd2d9"))
     sha256
+    >>> print(hash_algorithm("SHA256:qouuwhwd2j192y1lb1iwgowdj2898wd2d9"))
+    sha256
     >>> print(hash_algorithm(None))
     sha256
 
@@ -337,7 +339,7 @@ def hash_algorithm(hash_string):
         algorithm = default
     else:
         algorithm = hash_string.split(":")[0]
-    return algorithm
+    return algorithm.lower()
 
 
 def hash_matches(fname, known_hash, strict=False, source=None):
