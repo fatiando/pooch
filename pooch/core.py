@@ -592,7 +592,7 @@ class Pooch:
                     if len(elements) == 3:
                         file_url = elements[2]
                         self.urls[file_name] = file_url
-                    self.registry[file_name] = file_checksum
+                    self.registry[file_name] = file_checksum.lower()
 
     def is_available(self, fname):
         """
