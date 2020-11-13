@@ -87,6 +87,19 @@ jobs:
         with:
           python-version: ${{ matrix.python }}
 
+      - name: Get the pip cache folder
+        id: pip-cache
+        run: |
+          echo "::set-output name=dir::$(pip cache dir)"
+
+      - name: Setup caching for pip packages
+        uses: actions/cache@v2
+        with:
+          path: ${{ steps.pip-cache.outputs.dir }}
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements*.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+
       - name: Install requirements
         run: |
           requirements_file=requirements-full.txt
