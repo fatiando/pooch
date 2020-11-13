@@ -736,4 +736,4 @@ def stream_download(url, fname, known_hash, downloader, pooch=None, retry_if_fai
                 retries_left,
                 "s" if retries_left > 1 else "",
             )
-            time.sleep(i + 1 if i < max_wait else max_wait)
+            time.sleep(min(i + 1, max_wait))
