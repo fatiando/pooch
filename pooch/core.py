@@ -7,8 +7,9 @@
 """
 The main Pooch class and a factory function for it.
 """
-import contextlib
 import os
+import time
+import contextlib
 from pathlib import Path
 import shutil
 import ftplib
@@ -310,7 +311,9 @@ def create(
     retry_if_failed : int
         Retry a file download the specified number of times if it fails because
         of a bad connection or a hash mismatch. By default, downloads are only
-        attempted once (``retry_if_failed=0``).
+        attempted once (``retry_if_failed=0``). Initially, will wait for 1s
+        between retries and then increase the wait time by 1s with each retry
+        until a maximum of 10s.
 
     Returns
     -------
@@ -438,7 +441,9 @@ class Pooch:
     retry_if_failed : int
         Retry a file download the specified number of times if it fails because
         of a bad connection or a hash mismatch. By default, downloads are only
-        attempted once (``retry_if_failed=0``).
+        attempted once (``retry_if_failed=0``). Initially, will wait for 1s
+        between retries and then increase the wait time by 1s with each retry
+        until a maximum of 10s.
 
     """
 
@@ -709,9 +714,8 @@ def stream_download(url, fname, known_hash, downloader, pooch=None, retry_if_fai
     # Otherwise, move will cause an error.
     if not fname.parent.exists():
         os.makedirs(str(fname.parent))
-
     download_attempts = 1 + retry_if_failed
-
+    max_wait = 10
     for i in range(download_attempts):
         try:
             # Stream the file to a temporary so that we can safely check its
@@ -727,8 +731,9 @@ def stream_download(url, fname, known_hash, downloader, pooch=None, retry_if_fai
             retries_left = download_attempts - (i + 1)
             get_logger().info(
                 "Failed to download '%s'. "
-                "Will attempt the download again %d time%s.",
+                "Will attempt the download again %d more time%s.",
                 str(fname.name),
                 retries_left,
                 "s" if retries_left > 1 else "",
             )
+            time.sleep(i + 1 if i < max_wait else max_wait)
