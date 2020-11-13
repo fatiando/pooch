@@ -57,7 +57,7 @@ jobs:
       REQUIREMENTS: requirements.txt
       REQUIREMENTS_DEV: requirements-dev.txt
       REQUIREMENTS_OPTIONAL: requirements-optional.txt
-      INSTALL_EXTRA: setuptools wheel
+      INSTALL_EXTRA:
       DEPENDENCIES: ${{ matrix.dependencies }}
       # Used to tag codecov submissions
       OS: ${{ matrix.os }}
@@ -112,6 +112,9 @@ jobs:
               echo "Collected dependencies:"
               cat $requirements_file
               echo ""
+              # Install wheel before anything else so pip can use wheels for
+              # other packages.
+              python -m pip install setuptools wheel
               python -m pip install --requirement $requirements_file
           else
               echo "No requirements defined."
