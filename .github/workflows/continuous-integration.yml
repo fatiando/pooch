@@ -55,7 +55,7 @@ jobs:
       REQUIREMENTS: requirements.txt
       REQUIREMENTS_DEV: requirements-dev.txt
       REQUIREMENTS_OPTIONAL: requirements-optional.txt
-      INSTALL_EXTRA:
+      INSTALL_EXTRA: setuptools wheel
       DEPENDENCIES: ${{ matrix.dependencies }}
       # Used to tag codecov submissions
       OS: ${{ matrix.os }}
