@@ -5,4 +5,5 @@ include CONTRIBUTING.md
 include AUTHORS.md
 include MAINTENANCE.md
 include versioneer.py
+include requirements.txt
 recursive-include pooch/tests/data **

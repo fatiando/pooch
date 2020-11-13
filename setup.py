@@ -58,7 +58,8 @@ PACKAGE_DATA = {
         os.path.join("data", "store", "subdir", "*"),
     ]
 }
-INSTALL_REQUIRES = ["requests", "packaging", "appdirs"]
+with open("requirements.txt") as f:
+    INSTALL_REQUIRES = f.readlines()
 PYTHON_REQUIRES = ">=3.6"
 
 if __name__ == "__main__":
@@ -67,6 +68,7 @@ if __name__ == "__main__":
         fullname=FULLNAME,
         description=DESCRIPTION,
         long_description=LONG_DESCRIPTION,
+        long_description_content_type="text/x-rst",
         version=VERSION,
         author=AUTHOR,
         author_email=AUTHOR_EMAIL,
