@@ -3,6 +3,7 @@
 *.so
 *.pyd
 .pytest_cache/
+.nox
 build/
 dist/
 .*.swp
