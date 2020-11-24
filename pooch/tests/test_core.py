@@ -15,7 +15,10 @@ from tempfile import TemporaryDirectory
 import pytest
 
 from ..core import Pooch, retrieve, download_action, stream_download
-from ..utils import file_hash, get_logger, temporary_file, os_cache
+from ..utils import file_hash, get_logger, temporary_file, os_cache, hash_matches
+
+# Import the core module so that we can monkeypatch some functions
+from .. import core
 from ..downloaders import HTTPDownloader
 
 from .utils import (
@@ -153,6 +156,105 @@ def test_pooch_download():
         with capture_log() as log_file:
             fname = pup.fetch("tiny-data.txt")
             assert log_file.getvalue() == ""
+
+
+class FakeHashMatches:  # pylint: disable=too-few-public-methods
+    "Create a fake version of hash_matches that fails n times"
+
+    def __init__(self, nfailures):
+        self.nfailures = nfailures
+        self.failed = 0
+
+    def hash_matches(self, *args, **kwargs):
+        "Fail n times before finally passing"
+        if self.failed < self.nfailures:
+            self.failed += 1
+            # Give it an invalid hash to force a failure
+            return hash_matches(args[0], "bla", **kwargs)
+        return hash_matches(*args, **kwargs)
+
+
+def test_pooch_download_retry_off_by_default(monkeypatch):
+    "Check that retrying the download is off by default"
+    with TemporaryDirectory() as local_store:
+        monkeypatch.setattr(core, "hash_matches", FakeHashMatches(3).hash_matches)
+        # Setup a pooch without download retrying
+        path = Path(local_store)
+        pup = Pooch(path=path, base_url=BASEURL, registry=REGISTRY)
+        # Make sure it fails with no retries
+        with pytest.raises(ValueError) as error:
+            with capture_log() as log_file:
+                pup.fetch("tiny-data.txt")
+        assert "does not match the known hash" in str(error)
+        # Check that the log doesn't have the download retry message
+        logs = log_file.getvalue().strip().split("\n")
+        assert len(logs) == 1
+        assert logs[0].startswith("Downloading")
+        assert logs[0].endswith(f"'{path}'.")
+
+
+class FakeSleep:  # pylint: disable=too-few-public-methods
+    "Create a fake version of sleep that logs the specified times"
+
+    def __init__(self):
+        self.times = []
+
+    def sleep(self, secs):
+        "Store the time and doesn't sleep"
+        self.times.append(secs)
+
+
+def test_pooch_download_retry(monkeypatch):
+    "Check that retrying the download works if the hash is different"
+    with TemporaryDirectory() as local_store:
+        monkeypatch.setattr(core, "hash_matches", FakeHashMatches(11).hash_matches)
+        fakesleep = FakeSleep()
+        monkeypatch.setattr(core.time, "sleep", fakesleep.sleep)
+        # Setup a pooch with download retrying
+        path = Path(local_store)
+        true_path = str(path / "tiny-data.txt")
+        retries = 11
+        pup = Pooch(
+            path=path, base_url=BASEURL, registry=REGISTRY, retry_if_failed=retries
+        )
+        # Check that the logs say that the download failed n times
+        with capture_log() as log_file:
+            fname = pup.fetch("tiny-data.txt")
+            logs = log_file.getvalue().strip().split("\n")
+            assert len(logs) == 1 + retries
+            assert logs[0].startswith("Downloading")
+            assert logs[0].endswith(f"'{path}'.")
+            for i, line in zip(range(retries, 0, -1), logs[1:]):
+                assert "Failed to download" in line
+                plural = "s" if i > 1 else ""
+                assert f"download again {i} more time{plural}." in line
+            # Check that the sleep time increases but stops at 10s
+            assert fakesleep.times == [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10]
+        # Check that the downloaded file has the right content
+        assert true_path == fname
+        check_tiny_data(fname)
+        assert file_hash(fname) == REGISTRY["tiny-data.txt"]
+
+
+def test_pooch_download_retry_fails_eventually(monkeypatch):
+    "Check that retrying the download fails after the set amount of retries"
+    with TemporaryDirectory() as local_store:
+        monkeypatch.setattr(core, "hash_matches", FakeHashMatches(3).hash_matches)
+        # Setup a pooch with insufficient retry attempts
+        path = Path(local_store)
+        pup = Pooch(path=path, base_url=BASEURL, registry=REGISTRY, retry_if_failed=1)
+        # Make sure it fails with no retries
+        with pytest.raises(ValueError) as error:
+            # Check that the logs say that the download failed n times
+            with capture_log() as log_file:
+                pup.fetch("tiny-data.txt")
+        logs = log_file.getvalue().strip().split("\n")
+        assert len(logs) == 2
+        assert logs[0].startswith("Downloading")
+        assert logs[0].endswith(f"'{path}'.")
+        assert "Failed to download" in logs[1]
+        assert "download again 1 more time." in logs[1]
+        assert "does not match the known hash" in str(error)
 
 
 def test_pooch_logging_level():
