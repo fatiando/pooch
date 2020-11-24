@@ -143,6 +143,7 @@ For **package developers** including sample data in their projects:
 Projects using Pooch
 --------------------
 
+* `seaborn-image <https://github.com/SarthakJariwala/seaborn-image>`__
 * `scikit-image <https://github.com/scikit-image/scikit-image>`__
 * `MetPy <https://github.com/Unidata/MetPy>`__
 * `Verde <https://github.com/fatiando/verde>`__
