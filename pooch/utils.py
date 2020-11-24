@@ -326,6 +326,8 @@ def hash_algorithm(hash_string):
     md5
     >>> print(hash_algorithm("sha256:qouuwhwd2j192y1lb1iwgowdj2898wd2d9"))
     sha256
+    >>> print(hash_algorithm("SHA256:qouuwhwd2j192y1lb1iwgowdj2898wd2d9"))
+    sha256
     >>> print(hash_algorithm(None))
     sha256
 
@@ -337,7 +339,7 @@ def hash_algorithm(hash_string):
         algorithm = default
     else:
         algorithm = hash_string.split(":")[0]
-    return algorithm
+    return algorithm.lower()
 
 
 def hash_matches(fname, known_hash, strict=False, source=None):
@@ -345,6 +347,9 @@ def hash_matches(fname, known_hash, strict=False, source=None):
     Check if the hash of a file matches a known hash.
 
     If the *known_hash* is None, will always return True.
+
+    Coverts hashes to lowercase before comparison to avoid system specific
+    mismatches between hashes in the registry and computed hashes.
 
     Parameters
     ----------
@@ -372,7 +377,7 @@ def hash_matches(fname, known_hash, strict=False, source=None):
         return True
     algorithm = hash_algorithm(known_hash)
     new_hash = file_hash(fname, alg=algorithm)
-    matches = new_hash == known_hash.split(":")[-1]
+    matches = new_hash.lower() == known_hash.split(":")[-1].lower()
     if strict and not matches:
         if source is None:
             source = str(fname)
