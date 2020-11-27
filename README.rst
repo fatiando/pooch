@@ -143,7 +143,6 @@ For **package developers** including sample data in their projects:
 Projects using Pooch
 --------------------
 
-* `seaborn-image <https://github.com/SarthakJariwala/seaborn-image>`__
 * `scikit-image <https://github.com/scikit-image/scikit-image>`__
 * `MetPy <https://github.com/Unidata/MetPy>`__
 * `Verde <https://github.com/fatiando/verde>`__
@@ -151,6 +150,7 @@ Projects using Pooch
 * `RockHound <https://github.com/fatiando/rockhound>`__
 * `icepack <https://github.com/icepack/icepack>`__
 * `histolab <https://github.com/histolab/histolab>`__
+* `seaborn-image <https://github.com/SarthakJariwala/seaborn-image>`__
 
 *If you're using Pooch, send us a pull request adding your project to the list.*
 
@@ -237,6 +237,7 @@ Documentation for other versions
 * `Development <https://www.fatiando.org/pooch/dev>`__ (reflects the *master* branch on
   Github)
 * `Latest release <https://www.fatiando.org/pooch/latest>`__
+* `v1.3.0 <https://www.fatiando.org/pooch/v1.3.0>`__
 * `v1.2.0 <https://www.fatiando.org/pooch/v1.2.0>`__
 * `v1.1.1 <https://www.fatiando.org/pooch/v1.1.1>`__
 * `v1.1.0 <https://www.fatiando.org/pooch/v1.1.0>`__
