@@ -3,6 +3,60 @@
 Changelog
 =========
 
+Version 1.3.0
+-------------
+
+*Released on: 2020/11/27*
+
+.. image:: https://zenodo.org/badge/DOI/10.5281/zenodo.4293216.svg
+    :alt: Digital Object Identifier for the Zenodo archive
+    :target: https://doi.org/10.5281/zenodo.4293216
+
+Bug fixes:
+
+* Properly handle capitalized hashes. On Windows, users might sometimes get
+  capitalized hashes from the system. To avoid false hash mismatches, convert
+  stored and computed hashes to lowercase before doing comparisons. Convert
+  hashes to lowercase when reading from the registry to make sure stored hashes
+  are always lowercase. (`#214 <https://github.com/fatiando/pooch/pull/214>`__)
+
+New features:
+
+* Add option to retry downloads if they fail. The new ``retry_if_failed``
+  option to ``pooch.create`` and ``pooch.Pooch`` allows retrying the download
+  the specified number of times in case of failures due to hash mismatches
+  (coming from Pooch) or network issues (coming from ``requests``). This is
+  useful for running downloads on CI that tend to fail sporadically. Waits a
+  period of time between consecutive downloads starting with 1s and increasing
+  up to 10s in 1s increments. (`#215
+  <https://github.com/fatiando/pooch/pull/215>`__)
+* Allow user defined decompressed file names. Introduce new ``name`` argument
+  to ``pooch.Decompress`` to allow user defined file names. Defaults to the
+  previous naming convention for backward compatibility. (`#203
+  <https://github.com/fatiando/pooch/pull/203>`__)
+
+Documentation:
+
+* Add seaborn-image to list of packages using Pooch (`#218
+  <https://github.com/fatiando/pooch/pull/218>`__)
+
+Maintenance:
+
+* Drop support for Python 3.5. (`#204
+  <https://github.com/fatiando/pooch/pull/204>`__)
+* Use pip instead of conda to speed up Actions (`#216
+  <https://github.com/fatiando/pooch/pull/216>`__)
+* Add license and copyright notice to every .py file (`#213
+  <https://github.com/fatiando/pooch/pull/213>`__)
+
+This release contains contributions from:
+
+* Leonardo Uieda
+* Danilo Horta
+* Hugo van Kemenade
+* SarthakJariwala
+
+
 Version 1.2.0
 -------------
 
