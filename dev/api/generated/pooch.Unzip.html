@@ -2,8 +2,7 @@
 
 
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<html class="writer-html5" lang="en" >
 <head>
   <meta charset="utf-8">
   
@@ -15,6 +14,11 @@
 
 
   
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/style.css" type="text/css" />
+
+  
   
     <link rel="shortcut icon" href="../../_static/favicon.png"/>
   
@@ -22,23 +26,20 @@
   
 
   
-  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
-        <script type="text/javascript" src="../../_static/jquery.js"></script>
-        <script type="text/javascript" src="../../_static/underscore.js"></script>
-        <script type="text/javascript" src="../../_static/doctools.js"></script>
-        <script type="text/javascript" src="../../_static/language_data.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
     
     <script type="text/javascript" src="../../_static/js/theme.js"></script>
 
     
-
-  
-  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../../_static/style.css" type="text/css" />
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="pooch.Untar" href="pooch.Untar.html" />
@@ -99,6 +100,7 @@
           
         </div>
 
+        
         <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
           
     
@@ -166,6 +168,7 @@
     
 
         </div>
+        
       </div>
     </nav>
 
@@ -205,7 +208,7 @@
 
   <ul class="wy-breadcrumbs">
     
-      <li><a href="../../index.html">Docs</a> &raquo;</li>
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
         
           <li><a href="../index.html">API Reference</a> &raquo;</li>
         
@@ -234,9 +237,9 @@
             
   <div class="section" id="pooch-unzip">
 <h1>pooch.Unzip<a class="headerlink" href="#pooch-unzip" title="Permalink to this headline">¶</a></h1>
-<dl class="class">
+<dl class="py class">
 <dt id="pooch.Unzip">
-<em class="property">class </em><code class="sig-prename descclassname">pooch.</code><code class="sig-name descname">Unzip</code><span class="sig-paren">(</span><em class="sig-param">members=None</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pooch/processors.html#Unzip"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pooch.Unzip" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">pooch.</code><code class="sig-name descname">Unzip</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">members</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pooch/processors.html#Unzip"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pooch.Unzip" title="Permalink to this definition">¶</a></dt>
 <dd><p>Processor that unpacks a zip archive and returns a list of all files.</p>
 <p>Use with <a class="reference internal" href="pooch.Pooch.html#pooch.Pooch.fetch" title="pooch.Pooch.fetch"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pooch.Pooch.fetch</span></code></a> or <a class="reference internal" href="pooch.retrieve.html#pooch.retrieve" title="pooch.retrieve"><code class="xref py py-func docutils literal notranslate"><span class="pre">pooch.retrieve</span></code></a> to unzip a
 downloaded data file into a folder in the local data store. The
@@ -245,7 +248,7 @@ instead of the zip archive.</p>
 <p>The output folder is <code class="docutils literal notranslate"><span class="pre">{fname}.unzip</span></code>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>members</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)"><em>list</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><em>None</em></a>) – If None, will unpack all files in the zip archive. Otherwise, <em>members</em>
+<dd class="field-odd"><p><strong>members</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.9)"><em>None</em></a>) – If None, will unpack all files in the zip archive. Otherwise, <em>members</em>
 must be a list of file names to unpack from the archive. Only these
 files will be unpacked.</p>
 </dd>
@@ -265,15 +268,15 @@ files will be unpacked.</p>
 </dd></dl>
 
 <hr class="docutils" />
-<dl class="method">
+<dl class="py method">
 <dt id="pooch.Unzip.__call__">
-<code class="sig-prename descclassname">Unzip.</code><code class="sig-name descname">__call__</code><span class="sig-paren">(</span><em class="sig-param">fname</em>, <em class="sig-param">action</em>, <em class="sig-param">pooch</em><span class="sig-paren">)</span><a class="headerlink" href="#pooch.Unzip.__call__" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">Unzip.</code><code class="sig-name descname">__call__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">fname</span></em>, <em class="sig-param"><span class="n">action</span></em>, <em class="sig-param"><span class="n">pooch</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pooch.Unzip.__call__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Extract all files from the given archive.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>fname</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – Full path of the zipped file in local storage.</p></li>
-<li><p><strong>action</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – <p>Indicates what action was taken by <a class="reference internal" href="pooch.Pooch.html#pooch.Pooch.fetch" title="pooch.Pooch.fetch"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pooch.Pooch.fetch</span></code></a> or
+<li><p><strong>fname</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – Full path of the zipped file in local storage.</p></li>
+<li><p><strong>action</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – <p>Indicates what action was taken by <a class="reference internal" href="pooch.Pooch.html#pooch.Pooch.fetch" title="pooch.Pooch.fetch"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pooch.Pooch.fetch</span></code></a> or
 <a class="reference internal" href="pooch.retrieve.html#pooch.retrieve" title="pooch.retrieve"><code class="xref py py-func docutils literal notranslate"><span class="pre">pooch.retrieve</span></code></a>:</p>
 <ul>
 <li><p><code class="docutils literal notranslate"><span class="pre">&quot;download&quot;</span></code>: File didn’t exist locally and was downloaded</p></li>
@@ -312,14 +315,22 @@ files will be unpacked.</p>
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2018-2020, The Pooch Developers
+        
+        &copy; Copyright 2018-2020, The Pooch Developers.
       <span class="lastupdated">
-        Last updated on Sep 10, 2020.
+        Last updated on Nov 27, 2020.
       </span>
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -330,7 +341,6 @@ files will be unpacked.</p>
 
   </div>
   
-
 
   <script type="text/javascript">
       jQuery(function () {

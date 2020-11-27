@@ -2,8 +2,7 @@
 
 
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<html class="writer-html5" lang="en" >
 <head>
   <meta charset="utf-8">
   
@@ -15,6 +14,11 @@
 
 
   
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/style.css" type="text/css" />
+
+  
   
     <link rel="shortcut icon" href="../../_static/favicon.png"/>
   
@@ -22,23 +26,20 @@
   
 
   
-  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
-        <script type="text/javascript" src="../../_static/jquery.js"></script>
-        <script type="text/javascript" src="../../_static/underscore.js"></script>
-        <script type="text/javascript" src="../../_static/doctools.js"></script>
-        <script type="text/javascript" src="../../_static/language_data.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
     
     <script type="text/javascript" src="../../_static/js/theme.js"></script>
 
     
-
-  
-  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../../_static/style.css" type="text/css" />
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="pooch.get_logger" href="pooch.get_logger.html" />
@@ -99,6 +100,7 @@
           
         </div>
 
+        
         <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
           
     
@@ -168,6 +170,7 @@
     
 
         </div>
+        
       </div>
     </nav>
 
@@ -207,7 +210,7 @@
 
   <ul class="wy-breadcrumbs">
     
-      <li><a href="../../index.html">Docs</a> &raquo;</li>
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
         
           <li><a href="../index.html">API Reference</a> &raquo;</li>
         
@@ -236,9 +239,9 @@
             
   <div class="section" id="pooch-check-version">
 <h1>pooch.check_version<a class="headerlink" href="#pooch-check-version" title="Permalink to this headline">¶</a></h1>
-<dl class="function">
+<dl class="py function">
 <dt id="pooch.check_version">
-<code class="sig-prename descclassname">pooch.</code><code class="sig-name descname">check_version</code><span class="sig-paren">(</span><em class="sig-param">version</em>, <em class="sig-param">fallback='master'</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pooch/utils.html#check_version"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pooch.check_version" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">pooch.</code><code class="sig-name descname">check_version</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">version</span></em>, <em class="sig-param"><span class="n">fallback</span><span class="o">=</span><span class="default_value">'master'</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pooch/utils.html#check_version"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pooch.check_version" title="Permalink to this definition">¶</a></dt>
 <dd><p>Check if a version is PEP440 compliant and there are no unreleased changes.</p>
 <p>For example, <code class="docutils literal notranslate"><span class="pre">version</span> <span class="pre">=</span> <span class="pre">&quot;0.1&quot;</span></code> will be returned as is but <code class="docutils literal notranslate"><span class="pre">version</span> <span class="pre">=</span>
 <span class="pre">&quot;0.1+10.8dl8dh9&quot;</span></code> will return the fallback. This is the convention used by
@@ -247,8 +250,8 @@ this version is 10 commits ahead of the last release.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>version</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – A version string.</p></li>
-<li><p><strong>fallback</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – What to return if the version string has unreleased changes.</p></li>
+<li><p><strong>version</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – A version string.</p></li>
+<li><p><strong>fallback</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – What to return if the version string has unreleased changes.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -260,7 +263,7 @@ return <em>version</em>. Otherwise, return <em>fallback</em>.</p>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">check_version</span><span class="p">(</span><span class="s2">&quot;0.1&quot;</span><span class="p">)</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">check_version</span><span class="p">(</span><span class="s2">&quot;0.1&quot;</span><span class="p">)</span>
 <span class="go">&#39;0.1&#39;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">check_version</span><span class="p">(</span><span class="s2">&quot;0.1a10&quot;</span><span class="p">)</span>
 <span class="go">&#39;0.1a10&#39;</span>
@@ -294,14 +297,22 @@ return <em>version</em>. Otherwise, return <em>fallback</em>.</p>
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2018-2020, The Pooch Developers
+        
+        &copy; Copyright 2018-2020, The Pooch Developers.
       <span class="lastupdated">
-        Last updated on Sep 10, 2020.
+        Last updated on Nov 27, 2020.
       </span>
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -312,7 +323,6 @@ return <em>version</em>. Otherwise, return <em>fallback</em>.</p>
 
   </div>
   
-
 
   <script type="text/javascript">
       jQuery(function () {

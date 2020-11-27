@@ -2,8 +2,7 @@
 
 
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<html class="writer-html5" lang="en" >
 <head>
   <meta charset="utf-8">
   
@@ -15,6 +14,11 @@
 
 
   
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/style.css" type="text/css" />
+
+  
   
     <link rel="shortcut icon" href="../../_static/favicon.png"/>
   
@@ -22,23 +26,20 @@
   
 
   
-  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
-        <script type="text/javascript" src="../../_static/jquery.js"></script>
-        <script type="text/javascript" src="../../_static/underscore.js"></script>
-        <script type="text/javascript" src="../../_static/doctools.js"></script>
-        <script type="text/javascript" src="../../_static/language_data.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
     
     <script type="text/javascript" src="../../_static/js/theme.js"></script>
 
     
-
-  
-  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../../_static/style.css" type="text/css" />
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <!-- Google Analytics tracking code -->
@@ -97,6 +98,7 @@
           
         </div>
 
+        
         <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
           
     
@@ -152,6 +154,7 @@
     
 
         </div>
+        
       </div>
     </nav>
 
@@ -191,7 +194,7 @@
 
   <ul class="wy-breadcrumbs">
     
-      <li><a href="../../index.html">Docs</a> &raquo;</li>
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
         
           <li><a href="../index.html">Module code</a> &raquo;</li>
         
@@ -214,16 +217,24 @@
            <div itemprop="articleBody">
             
   <h1>Source code for pooch.core</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span></span><span class="c1"># Copyright (c) 2018 The Pooch Developers.</span>
+<span class="c1"># Distributed under the terms of the BSD 3-Clause License.</span>
+<span class="c1"># SPDX-License-Identifier: BSD-3-Clause</span>
+<span class="c1">#</span>
+<span class="c1"># This code is part of the Fatiando a Terra project (https://www.fatiando.org)</span>
+<span class="c1">#</span>
+<span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">The main Pooch class and a factory function for it.</span>
 <span class="sd">&quot;&quot;&quot;</span>
-<span class="kn">import</span> <span class="nn">contextlib</span>
 <span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">contextlib</span>
 <span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
 <span class="kn">import</span> <span class="nn">shutil</span>
 <span class="kn">import</span> <span class="nn">ftplib</span>
 
 <span class="kn">import</span> <span class="nn">requests</span>
+<span class="kn">import</span> <span class="nn">requests.exceptions</span>
 <span class="kn">from</span> <span class="nn">.utils</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">check_version</span><span class="p">,</span>
     <span class="n">parse_url</span><span class="p">,</span>
@@ -457,6 +468,7 @@
     <span class="n">env</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">registry</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">urls</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">retry_if_failed</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
 <span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Create a :class:`~pooch.Pooch` with sensible defaults to fetch data files.</span>
@@ -515,6 +527,12 @@
 <span class="sd">        Not all files in *registry* need an entry in *urls*. If a file has an</span>
 <span class="sd">        entry in *urls*, the *base_url* will be ignored when downloading it in</span>
 <span class="sd">        favor of ``urls[fname]``.</span>
+<span class="sd">    retry_if_failed : int</span>
+<span class="sd">        Retry a file download the specified number of times if it fails because</span>
+<span class="sd">        of a bad connection or a hash mismatch. By default, downloads are only</span>
+<span class="sd">        attempted once (``retry_if_failed=0``). Initially, will wait for 1s</span>
+<span class="sd">        between retries and then increase the wait time by 1s with each retry</span>
+<span class="sd">        until a maximum of 10s.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -602,7 +620,13 @@
     <span class="c1"># to import at the same time (which would try to create the folder several</span>
     <span class="c1"># times at once).</span>
     <span class="n">path</span> <span class="o">=</span> <span class="n">cache_location</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">env</span><span class="p">,</span> <span class="n">version</span><span class="p">)</span>
-    <span class="n">pup</span> <span class="o">=</span> <span class="n">Pooch</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="n">path</span><span class="p">,</span> <span class="n">base_url</span><span class="o">=</span><span class="n">base_url</span><span class="p">,</span> <span class="n">registry</span><span class="o">=</span><span class="n">registry</span><span class="p">,</span> <span class="n">urls</span><span class="o">=</span><span class="n">urls</span><span class="p">)</span>
+    <span class="n">pup</span> <span class="o">=</span> <span class="n">Pooch</span><span class="p">(</span>
+        <span class="n">path</span><span class="o">=</span><span class="n">path</span><span class="p">,</span>
+        <span class="n">base_url</span><span class="o">=</span><span class="n">base_url</span><span class="p">,</span>
+        <span class="n">registry</span><span class="o">=</span><span class="n">registry</span><span class="p">,</span>
+        <span class="n">urls</span><span class="o">=</span><span class="n">urls</span><span class="p">,</span>
+        <span class="n">retry_if_failed</span><span class="o">=</span><span class="n">retry_if_failed</span><span class="p">,</span>
+    <span class="p">)</span>
     <span class="k">return</span> <span class="n">pup</span></div>
 
 
@@ -633,10 +657,16 @@
 <span class="sd">        Not all files in *registry* need an entry in *urls*. If a file has an</span>
 <span class="sd">        entry in *urls*, the *base_url* will be ignored when downloading it in</span>
 <span class="sd">        favor of ``urls[fname]``.</span>
+<span class="sd">    retry_if_failed : int</span>
+<span class="sd">        Retry a file download the specified number of times if it fails because</span>
+<span class="sd">        of a bad connection or a hash mismatch. By default, downloads are only</span>
+<span class="sd">        attempted once (``retry_if_failed=0``). Initially, will wait for 1s</span>
+<span class="sd">        between retries and then increase the wait time by 1s with each retry</span>
+<span class="sd">        until a maximum of 10s.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">base_url</span><span class="p">,</span> <span class="n">registry</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">urls</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">base_url</span><span class="p">,</span> <span class="n">registry</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">urls</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">retry_if_failed</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="n">path</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">base_url</span> <span class="o">=</span> <span class="n">base_url</span>
         <span class="k">if</span> <span class="n">registry</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -645,6 +675,7 @@
         <span class="k">if</span> <span class="n">urls</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">urls</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">urls</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">urls</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">retry_if_failed</span> <span class="o">=</span> <span class="n">retry_if_failed</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">abspath</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -724,7 +755,14 @@
             <span class="k">if</span> <span class="n">downloader</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="n">downloader</span> <span class="o">=</span> <span class="n">choose_downloader</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
 
-            <span class="n">stream_download</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">full_path</span><span class="p">,</span> <span class="n">known_hash</span><span class="p">,</span> <span class="n">downloader</span><span class="p">,</span> <span class="n">pooch</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span>
+            <span class="n">stream_download</span><span class="p">(</span>
+                <span class="n">url</span><span class="p">,</span>
+                <span class="n">full_path</span><span class="p">,</span>
+                <span class="n">known_hash</span><span class="p">,</span>
+                <span class="n">downloader</span><span class="p">,</span>
+                <span class="n">pooch</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span>
+                <span class="n">retry_if_failed</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">retry_if_failed</span><span class="p">,</span>
+            <span class="p">)</span>
 
         <span class="k">if</span> <span class="n">processor</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">processor</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">full_path</span><span class="p">),</span> <span class="n">action</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
@@ -737,7 +775,7 @@
 <span class="sd">        it&#39;s not.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">fname</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">registry</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;File &#39;</span><span class="si">{}</span><span class="s2">&#39; is not in the registry.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">fname</span><span class="p">))</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;File &#39;</span><span class="si">{</span><span class="n">fname</span><span class="si">}</span><span class="s2">&#39; is not in the registry.&quot;</span><span class="p">)</span>
 
 <div class="viewcode-block" id="Pooch.get_url"><a class="viewcode-back" href="../../api/generated/pooch.Pooch.html#pooch.Pooch.get_url">[docs]</a>    <span class="k">def</span> <span class="nf">get_url</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fname</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -792,11 +830,9 @@
                 <span class="n">elements</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
                 <span class="k">if</span> <span class="ow">not</span> <span class="nb">len</span><span class="p">(</span><span class="n">elements</span><span class="p">)</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]:</span>
                     <span class="k">raise</span> <span class="ne">OSError</span><span class="p">(</span>
-                        <span class="s2">&quot;Invalid entry in Pooch registry file &#39;</span><span class="si">{}</span><span class="s2">&#39;: &quot;</span>
-                        <span class="s2">&quot;expected 2 or 3 elements in line </span><span class="si">{}</span><span class="s2"> but got </span><span class="si">{}</span><span class="s2">. &quot;</span>
-                        <span class="s2">&quot;Offending entry: &#39;</span><span class="si">{}</span><span class="s2">&#39;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-                            <span class="n">fname</span><span class="p">,</span> <span class="n">linenum</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">elements</span><span class="p">),</span> <span class="n">line</span>
-                        <span class="p">)</span>
+                        <span class="sa">f</span><span class="s2">&quot;Invalid entry in Pooch registry file &#39;</span><span class="si">{</span><span class="n">fname</span><span class="si">}</span><span class="s2">&#39;: &quot;</span>
+                        <span class="sa">f</span><span class="s2">&quot;expected 2 or 3 elements in line </span><span class="si">{</span><span class="n">linenum</span> <span class="o">+</span> <span class="mi">1</span><span class="si">}</span><span class="s2"> but got &quot;</span>
+                        <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">elements</span><span class="p">)</span><span class="si">}</span><span class="s2">. Offending entry: &#39;</span><span class="si">{</span><span class="n">line</span><span class="si">}</span><span class="s2">&#39;&quot;</span>
                     <span class="p">)</span>
                 <span class="k">if</span> <span class="n">elements</span><span class="p">:</span>
                     <span class="n">file_name</span> <span class="o">=</span> <span class="n">elements</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
@@ -804,7 +840,7 @@
                     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">elements</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
                         <span class="n">file_url</span> <span class="o">=</span> <span class="n">elements</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
                         <span class="bp">self</span><span class="o">.</span><span class="n">urls</span><span class="p">[</span><span class="n">file_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">file_url</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">registry</span><span class="p">[</span><span class="n">file_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">file_checksum</span></div>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">registry</span><span class="p">[</span><span class="n">file_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">file_checksum</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="Pooch.is_available"><a class="viewcode-back" href="../../api/generated/pooch.Pooch.html#pooch.Pooch.is_available">[docs]</a>    <span class="k">def</span> <span class="nf">is_available</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fname</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -881,7 +917,7 @@
     <span class="k">return</span> <span class="n">action</span><span class="p">,</span> <span class="n">verb</span>
 
 
-<span class="k">def</span> <span class="nf">stream_download</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">fname</span><span class="p">,</span> <span class="n">known_hash</span><span class="p">,</span> <span class="n">downloader</span><span class="p">,</span> <span class="n">pooch</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">stream_download</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">fname</span><span class="p">,</span> <span class="n">known_hash</span><span class="p">,</span> <span class="n">downloader</span><span class="p">,</span> <span class="n">pooch</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">retry_if_failed</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Stream the file and check that its hash matches the known one.</span>
 
@@ -889,18 +925,37 @@
 <span class="sd">    It will be moved to the desired file name only if the hash matches the</span>
 <span class="sd">    known hash. Otherwise, the temporary file is deleted.</span>
 
+<span class="sd">    If the download fails for either a bad connection or a hash mismatch, we</span>
+<span class="sd">    will retry the download the specified number of times in case the failure</span>
+<span class="sd">    was due to a network error.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Ensure the parent directory exists in case the file is in a subdirectory.</span>
     <span class="c1"># Otherwise, move will cause an error.</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">fname</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
         <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">fname</span><span class="o">.</span><span class="n">parent</span><span class="p">))</span>
-
-    <span class="c1"># Stream the file to a temporary so that we can safely check its hash</span>
-    <span class="c1"># before overwriting the original.</span>
-    <span class="k">with</span> <span class="n">temporary_file</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">fname</span><span class="o">.</span><span class="n">parent</span><span class="p">))</span> <span class="k">as</span> <span class="n">tmp</span><span class="p">:</span>
-        <span class="n">downloader</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">tmp</span><span class="p">,</span> <span class="n">pooch</span><span class="p">)</span>
-        <span class="n">hash_matches</span><span class="p">(</span><span class="n">tmp</span><span class="p">,</span> <span class="n">known_hash</span><span class="p">,</span> <span class="n">strict</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">fname</span><span class="o">.</span><span class="n">name</span><span class="p">))</span>
-        <span class="n">shutil</span><span class="o">.</span><span class="n">move</span><span class="p">(</span><span class="n">tmp</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">fname</span><span class="p">))</span>
+    <span class="n">download_attempts</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">retry_if_failed</span>
+    <span class="n">max_wait</span> <span class="o">=</span> <span class="mi">10</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">download_attempts</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c1"># Stream the file to a temporary so that we can safely check its</span>
+            <span class="c1"># hash before overwriting the original.</span>
+            <span class="k">with</span> <span class="n">temporary_file</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">fname</span><span class="o">.</span><span class="n">parent</span><span class="p">))</span> <span class="k">as</span> <span class="n">tmp</span><span class="p">:</span>
+                <span class="n">downloader</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">tmp</span><span class="p">,</span> <span class="n">pooch</span><span class="p">)</span>
+                <span class="n">hash_matches</span><span class="p">(</span><span class="n">tmp</span><span class="p">,</span> <span class="n">known_hash</span><span class="p">,</span> <span class="n">strict</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">fname</span><span class="o">.</span><span class="n">name</span><span class="p">))</span>
+                <span class="n">shutil</span><span class="o">.</span><span class="n">move</span><span class="p">(</span><span class="n">tmp</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">fname</span><span class="p">))</span>
+            <span class="k">break</span>
+        <span class="k">except</span> <span class="p">(</span><span class="ne">ValueError</span><span class="p">,</span> <span class="n">requests</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">RequestException</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="n">download_attempts</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="k">raise</span>
+            <span class="n">retries_left</span> <span class="o">=</span> <span class="n">download_attempts</span> <span class="o">-</span> <span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+                <span class="s2">&quot;Failed to download &#39;</span><span class="si">%s</span><span class="s2">&#39;. &quot;</span>
+                <span class="s2">&quot;Will attempt the download again </span><span class="si">%d</span><span class="s2"> more time</span><span class="si">%s</span><span class="s2">.&quot;</span><span class="p">,</span>
+                <span class="nb">str</span><span class="p">(</span><span class="n">fname</span><span class="o">.</span><span class="n">name</span><span class="p">),</span>
+                <span class="n">retries_left</span><span class="p">,</span>
+                <span class="s2">&quot;s&quot;</span> <span class="k">if</span> <span class="n">retries_left</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">max_wait</span><span class="p">))</span>
 </pre></div>
 
            </div>
@@ -913,14 +968,22 @@
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2018-2020, The Pooch Developers
+        
+        &copy; Copyright 2018-2020, The Pooch Developers.
       <span class="lastupdated">
-        Last updated on Sep 10, 2020.
+        Last updated on Nov 27, 2020.
       </span>
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -931,7 +994,6 @@
 
   </div>
   
-
 
   <script type="text/javascript">
       jQuery(function () {

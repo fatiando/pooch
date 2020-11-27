@@ -2,8 +2,7 @@
 
 
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<html class="writer-html5" lang="en" >
 <head>
   <meta charset="utf-8">
   
@@ -15,6 +14,11 @@
 
 
   
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/style.css" type="text/css" />
+
+  
   
     <link rel="shortcut icon" href="../../_static/favicon.png"/>
   
@@ -22,23 +26,20 @@
   
 
   
-  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
-        <script type="text/javascript" src="../../_static/jquery.js"></script>
-        <script type="text/javascript" src="../../_static/underscore.js"></script>
-        <script type="text/javascript" src="../../_static/doctools.js"></script>
-        <script type="text/javascript" src="../../_static/language_data.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
     
     <script type="text/javascript" src="../../_static/js/theme.js"></script>
 
     
-
-  
-  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../../_static/style.css" type="text/css" />
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="pooch.check_version" href="pooch.check_version.html" />
@@ -99,6 +100,7 @@
           
         </div>
 
+        
         <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
           
     
@@ -168,6 +170,7 @@
     
 
         </div>
+        
       </div>
     </nav>
 
@@ -207,7 +210,7 @@
 
   <ul class="wy-breadcrumbs">
     
-      <li><a href="../../index.html">Docs</a> &raquo;</li>
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
         
           <li><a href="../index.html">API Reference</a> &raquo;</li>
         
@@ -236,16 +239,16 @@
             
   <div class="section" id="pooch-file-hash">
 <h1>pooch.file_hash<a class="headerlink" href="#pooch-file-hash" title="Permalink to this headline">¶</a></h1>
-<dl class="function">
+<dl class="py function">
 <dt id="pooch.file_hash">
-<code class="sig-prename descclassname">pooch.</code><code class="sig-name descname">file_hash</code><span class="sig-paren">(</span><em class="sig-param">fname</em>, <em class="sig-param">alg='sha256'</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pooch/utils.html#file_hash"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pooch.file_hash" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">pooch.</code><code class="sig-name descname">file_hash</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">fname</span></em>, <em class="sig-param"><span class="n">alg</span><span class="o">=</span><span class="default_value">'sha256'</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pooch/utils.html#file_hash"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pooch.file_hash" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculate the hash of a given file.</p>
 <p>Useful for checking if a file has changed or been corrupted.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>fname</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – The name of the file.</p></li>
-<li><p><strong>alg</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – The type of the hashing algorithm</p></li>
+<li><p><strong>fname</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – The name of the file.</p></li>
+<li><p><strong>alg</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – The type of the hashing algorithm</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -253,7 +256,7 @@
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">fname</span> <span class="o">=</span> <span class="s2">&quot;test-file-for-hash.txt&quot;</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">fname</span> <span class="o">=</span> <span class="s2">&quot;test-file-for-hash.txt&quot;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
 <span class="gp">... </span>    <span class="n">__</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;content of the file&quot;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">file_hash</span><span class="p">(</span><span class="n">fname</span><span class="p">))</span>
@@ -286,14 +289,22 @@
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2018-2020, The Pooch Developers
+        
+        &copy; Copyright 2018-2020, The Pooch Developers.
       <span class="lastupdated">
-        Last updated on Sep 10, 2020.
+        Last updated on Nov 27, 2020.
       </span>
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -304,7 +315,6 @@
 
   </div>
   
-
 
   <script type="text/javascript">
       jQuery(function () {

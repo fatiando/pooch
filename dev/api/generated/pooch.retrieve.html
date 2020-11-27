@@ -2,8 +2,7 @@
 
 
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<html class="writer-html5" lang="en" >
 <head>
   <meta charset="utf-8">
   
@@ -15,6 +14,11 @@
 
 
   
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/style.css" type="text/css" />
+
+  
   
     <link rel="shortcut icon" href="../../_static/favicon.png"/>
   
@@ -22,23 +26,20 @@
   
 
   
-  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
-        <script type="text/javascript" src="../../_static/jquery.js"></script>
-        <script type="text/javascript" src="../../_static/underscore.js"></script>
-        <script type="text/javascript" src="../../_static/doctools.js"></script>
-        <script type="text/javascript" src="../../_static/language_data.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
     
     <script type="text/javascript" src="../../_static/js/theme.js"></script>
 
     
-
-  
-  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../../_static/style.css" type="text/css" />
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="pooch.os_cache" href="pooch.os_cache.html" />
@@ -99,6 +100,7 @@
           
         </div>
 
+        
         <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
           
     
@@ -166,6 +168,7 @@
     
 
         </div>
+        
       </div>
     </nav>
 
@@ -205,7 +208,7 @@
 
   <ul class="wy-breadcrumbs">
     
-      <li><a href="../../index.html">Docs</a> &raquo;</li>
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
         
           <li><a href="../index.html">API Reference</a> &raquo;</li>
         
@@ -234,9 +237,9 @@
             
   <div class="section" id="pooch-retrieve">
 <h1>pooch.retrieve<a class="headerlink" href="#pooch-retrieve" title="Permalink to this headline">¶</a></h1>
-<dl class="function">
+<dl class="py function">
 <dt id="pooch.retrieve">
-<code class="sig-prename descclassname">pooch.</code><code class="sig-name descname">retrieve</code><span class="sig-paren">(</span><em class="sig-param">url</em>, <em class="sig-param">known_hash</em>, <em class="sig-param">fname=None</em>, <em class="sig-param">path=None</em>, <em class="sig-param">processor=None</em>, <em class="sig-param">downloader=None</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pooch/core.html#retrieve"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pooch.retrieve" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">pooch.</code><code class="sig-name descname">retrieve</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">url</span></em>, <em class="sig-param"><span class="n">known_hash</span></em>, <em class="sig-param"><span class="n">fname</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">path</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">processor</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">downloader</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pooch/core.html#retrieve"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pooch.retrieve" title="Permalink to this definition">¶</a></dt>
 <dd><p>Download and cache a single file locally.</p>
 <p>Uses HTTP or FTP by default, depending on the protocol in the given <em>url</em>.
 Other download methods can be controlled through the <em>downloader</em> argument
@@ -265,29 +268,29 @@ manage the download and caching of several files, with versioning, use
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>url</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – The URL to the file that is to be downloaded. Ideally, the URL should
+<li><p><strong>url</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – The URL to the file that is to be downloaded. Ideally, the URL should
 end in a file name.</p></li>
-<li><p><strong>known_hash</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – A known hash (checksum) of the file. Will be used to verify the
+<li><p><strong>known_hash</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – A known hash (checksum) of the file. Will be used to verify the
 download or check if an existing file needs to be updated. By default,
 will assume it’s a SHA256 hash. To specify a different hashing method,
 prepend the hash with <code class="docutils literal notranslate"><span class="pre">algorithm:</span></code>, for example
 <code class="docutils literal notranslate"><span class="pre">md5:pw9co2iun29juoh</span></code> or <code class="docutils literal notranslate"><span class="pre">sha1:092odwhi2ujdp2du2od2odh2wod2</span></code>. If
 None, will NOT check the hash of the downloaded file or check if an
 existing file needs to be updated.</p></li>
-<li><p><strong>fname</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><em>None</em></a>) – The name that will be used to save the file. Should NOT include the
+<li><p><strong>fname</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.9)"><em>None</em></a>) – The name that will be used to save the file. Should NOT include the
 full the path, just the file name (it will be appended to <em>path</em>). If
 None, will create a unique file name using a combination of the last
 part of the URL (assuming it’s the file name) and the MD5 hash of the
 URL. For example, <code class="docutils literal notranslate"><span class="pre">81whdo2d2e928yd1wi22-data-file.csv</span></code>. This ensures
 that files from different URLs never overwrite each other, even if they
 have the same name.</p></li>
-<li><p><strong>path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a><em> or </em><em>PathLike</em><em> or </em><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><em>None</em></a>) – The location of the cache folder on disk. This is where the file will
+<li><p><strong>path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> or </em><em>PathLike</em><em> or </em><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.9)"><em>None</em></a>) – The location of the cache folder on disk. This is where the file will
 be saved. If None, will save to a <code class="docutils literal notranslate"><span class="pre">pooch</span></code> folder in the default cache
 location for your operating system (see <a class="reference internal" href="pooch.os_cache.html#pooch.os_cache" title="pooch.os_cache"><code class="xref py py-func docutils literal notranslate"><span class="pre">pooch.os_cache</span></code></a>).</p></li>
-<li><p><strong>processor</strong> (<a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><em>None</em></a><em> or </em><em>callable</em>) – If not None, then a function (or callable object) that will be called
+<li><p><strong>processor</strong> (<a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.9)"><em>None</em></a><em> or </em><em>callable</em>) – If not None, then a function (or callable object) that will be called
 before returning the full path and after the file has been downloaded
 (if required). See <a class="reference internal" href="../../processors.html#processors"><span class="std std-ref">Processors</span></a> for details.</p></li>
-<li><p><strong>downloader</strong> (<a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><em>None</em></a><em> or </em><em>callable</em>) – If not None, then a function (or callable object) that will be called
+<li><p><strong>downloader</strong> (<a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.9)"><em>None</em></a><em> or </em><em>callable</em>) – If not None, then a function (or callable object) that will be called
 to download a given URL to a provided local file name. See
 <a class="reference internal" href="../../downloaders.html#downloaders"><span class="std std-ref">Downloaders</span></a> for details.</p></li>
 </ul>
@@ -299,7 +302,7 @@ storage.</p>
 </dl>
 <p class="rubric">Examples</p>
 <p>Download one of the data files from the Pooch repository on GitHub:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">os</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">os</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pooch</span> <span class="kn">import</span> <span class="n">version</span><span class="p">,</span> <span class="n">check_version</span><span class="p">,</span> <span class="n">retrieve</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># Make a URL for the version of pooch we have installed</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;https://github.com/fatiando/pooch/raw/</span><span class="si">{}</span><span class="s2">/data/tiny-data.txt&quot;</span>
@@ -327,7 +330,7 @@ storage.</p>
 </div>
 <p>Files that are compressed with gzip, xz/lzma, or bzip2 can be automatically
 decompressed by passing using the <a class="reference internal" href="pooch.Decompress.html#pooch.Decompress" title="pooch.Decompress"><code class="xref py py-class docutils literal notranslate"><span class="pre">pooch.Decompress</span></code></a> processor:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pooch</span> <span class="kn">import</span> <span class="n">Decompress</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pooch</span> <span class="kn">import</span> <span class="n">Decompress</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># URLs to a gzip compressed version of the data file.</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">url</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;https://github.com/fatiando/pooch/raw/</span><span class="si">{}</span><span class="s2">/&quot;</span>
 <span class="gp">... </span>       <span class="o">+</span> <span class="s2">&quot;pooch/tests/data/tiny-data.txt.gz&quot;</span><span class="p">)</span>
@@ -359,7 +362,7 @@ decompressed by passing using the <a class="reference internal" href="pooch.Deco
 <p>When downloading archives (zip or tar), it can be useful to unpack them
 after download to avoid having to do that yourself. Use the processors
 <a class="reference internal" href="pooch.Unzip.html#pooch.Unzip" title="pooch.Unzip"><code class="xref py py-class docutils literal notranslate"><span class="pre">pooch.Unzip</span></code></a> or <a class="reference internal" href="pooch.Untar.html#pooch.Untar" title="pooch.Untar"><code class="xref py py-class docutils literal notranslate"><span class="pre">pooch.Untar</span></code></a> to do this automatically:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pooch</span> <span class="kn">import</span> <span class="n">Unzip</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pooch</span> <span class="kn">import</span> <span class="n">Unzip</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># URLs to a zip archive with a single data file.</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">url</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;https://github.com/fatiando/pooch/raw/</span><span class="si">{}</span><span class="s2">/&quot;</span>
 <span class="gp">... </span>       <span class="o">+</span> <span class="s2">&quot;pooch/tests/data/tiny-data.zip&quot;</span><span class="p">)</span>
@@ -414,14 +417,22 @@ after download to avoid having to do that yourself. Use the processors
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2018-2020, The Pooch Developers
+        
+        &copy; Copyright 2018-2020, The Pooch Developers.
       <span class="lastupdated">
-        Last updated on Sep 10, 2020.
+        Last updated on Nov 27, 2020.
       </span>
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -432,7 +443,6 @@ after download to avoid having to do that yourself. Use the processors
 
   </div>
   
-
 
   <script type="text/javascript">
       jQuery(function () {

@@ -2,8 +2,7 @@
 
 
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<html class="writer-html5" lang="en" >
 <head>
   <meta charset="utf-8">
   
@@ -15,6 +14,11 @@
 
 
   
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/style.css" type="text/css" />
+
+  
   
     <link rel="shortcut icon" href="../../_static/favicon.png"/>
   
@@ -22,23 +26,20 @@
   
 
   
-  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
-        <script type="text/javascript" src="../../_static/jquery.js"></script>
-        <script type="text/javascript" src="../../_static/underscore.js"></script>
-        <script type="text/javascript" src="../../_static/doctools.js"></script>
-        <script type="text/javascript" src="../../_static/language_data.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
     
     <script type="text/javascript" src="../../_static/js/theme.js"></script>
 
     
-
-  
-  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../../_static/style.css" type="text/css" />
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="pooch.retrieve" href="pooch.retrieve.html" />
@@ -99,6 +100,7 @@
           
         </div>
 
+        
         <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
           
     
@@ -166,6 +168,7 @@
     
 
         </div>
+        
       </div>
     </nav>
 
@@ -205,7 +208,7 @@
 
   <ul class="wy-breadcrumbs">
     
-      <li><a href="../../index.html">Docs</a> &raquo;</li>
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
         
           <li><a href="../index.html">API Reference</a> &raquo;</li>
         
@@ -234,29 +237,34 @@
             
   <div class="section" id="pooch-pooch">
 <h1>pooch.Pooch<a class="headerlink" href="#pooch-pooch" title="Permalink to this headline">¶</a></h1>
-<dl class="class">
+<dl class="py class">
 <dt id="pooch.Pooch">
-<em class="property">class </em><code class="sig-prename descclassname">pooch.</code><code class="sig-name descname">Pooch</code><span class="sig-paren">(</span><em class="sig-param">path</em>, <em class="sig-param">base_url</em>, <em class="sig-param">registry=None</em>, <em class="sig-param">urls=None</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pooch/core.html#Pooch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pooch.Pooch" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">pooch.</code><code class="sig-name descname">Pooch</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">path</span></em>, <em class="sig-param"><span class="n">base_url</span></em>, <em class="sig-param"><span class="n">registry</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">urls</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">retry_if_failed</span><span class="o">=</span><span class="default_value">0</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pooch/core.html#Pooch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pooch.Pooch" title="Permalink to this definition">¶</a></dt>
 <dd><p>Manager for a local data storage that can fetch from a remote source.</p>
 <p>Avoid creating <code class="docutils literal notranslate"><span class="pre">Pooch</span></code> instances directly. Use <a class="reference internal" href="pooch.create.html#pooch.create" title="pooch.create"><code class="xref py py-func docutils literal notranslate"><span class="pre">pooch.create</span></code></a>
 instead.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – The path to the local data storage folder. The path must exist in the
+<li><p><strong>path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – The path to the local data storage folder. The path must exist in the
 file system.</p></li>
-<li><p><strong>base_url</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – Base URL for the remote data source. All requests will be made relative
+<li><p><strong>base_url</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – Base URL for the remote data source. All requests will be made relative
 to this URL.</p></li>
-<li><p><strong>registry</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)"><em>dict</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><em>None</em></a>) – A record of the files that are managed by this good boy. Keys should be
+<li><p><strong>registry</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)"><em>dict</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.9)"><em>None</em></a>) – A record of the files that are managed by this good boy. Keys should be
 the file names and the values should be their hashes. Only files
 in the registry can be fetched from the local storage. Files in
 subdirectories of <em>path</em> <strong>must use Unix-style separators</strong> (<code class="docutils literal notranslate"><span class="pre">'/'</span></code>)
 even on Windows.</p></li>
-<li><p><strong>urls</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)"><em>dict</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><em>None</em></a>) – Custom URLs for downloading individual files in the registry. A
+<li><p><strong>urls</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)"><em>dict</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.9)"><em>None</em></a>) – Custom URLs for downloading individual files in the registry. A
 dictionary with the file names as keys and the custom URLs as values.
 Not all files in <em>registry</em> need an entry in <em>urls</em>. If a file has an
 entry in <em>urls</em>, the <em>base_url</em> will be ignored when downloading it in
 favor of <code class="docutils literal notranslate"><span class="pre">urls[fname]</span></code>.</p></li>
+<li><p><strong>retry_if_failed</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – Retry a file download the specified number of times if it fails because
+of a bad connection or a hash mismatch. By default, downloads are only
+attempted once (<code class="docutils literal notranslate"><span class="pre">retry_if_failed=0</span></code>). Initially, will wait for 1s
+between retries and then increase the wait time by 1s with each retry
+until a maximum of 10s.</p></li>
 </ul>
 </dd>
 </dl>
@@ -284,9 +292,9 @@ favor of <code class="docutils literal notranslate"><span class="pre">urls[fname
 </dd></dl>
 
 <hr class="docutils" />
-<dl class="method">
+<dl class="py method">
 <dt id="pooch.Pooch.fetch">
-<code class="sig-prename descclassname">Pooch.</code><code class="sig-name descname">fetch</code><span class="sig-paren">(</span><em class="sig-param">fname</em>, <em class="sig-param">processor=None</em>, <em class="sig-param">downloader=None</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pooch/core.html#Pooch.fetch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pooch.Pooch.fetch" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">Pooch.</code><code class="sig-name descname">fetch</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">fname</span></em>, <em class="sig-param"><span class="n">processor</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">downloader</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pooch/core.html#Pooch.fetch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pooch.Pooch.fetch" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the absolute path to a file in the local storage.</p>
 <p>If it’s not in the local storage, it will be downloaded. If the hash of
 the file in local storage doesn’t match the one in the registry, will
@@ -309,12 +317,12 @@ these features. Downloaders can also be used to print custom messages
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>fname</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – The file name (relative to the <em>base_url</em> of the remote data
+<li><p><strong>fname</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – The file name (relative to the <em>base_url</em> of the remote data
 storage) to fetch from the local storage.</p></li>
-<li><p><strong>processor</strong> (<a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><em>None</em></a><em> or </em><em>callable</em>) – If not None, then a function (or callable object) that will be
+<li><p><strong>processor</strong> (<a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.9)"><em>None</em></a><em> or </em><em>callable</em>) – If not None, then a function (or callable object) that will be
 called before returning the full path and after the file has been
 downloaded. See <a class="reference internal" href="../../processors.html#processors"><span class="std std-ref">Processors</span></a> for details.</p></li>
-<li><p><strong>downloader</strong> (<a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><em>None</em></a><em> or </em><em>callable</em>) – If not None, then a function (or callable object) that will be
+<li><p><strong>downloader</strong> (<a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.9)"><em>None</em></a><em> or </em><em>callable</em>) – If not None, then a function (or callable object) that will be
 called to download a given URL to a provided local file name. See
 <a class="reference internal" href="../../downloaders.html#downloaders"><span class="std std-ref">Downloaders</span></a> for details.</p></li>
 </ul>
@@ -326,27 +334,27 @@ local storage.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="pooch.Pooch.get_url">
-<code class="sig-prename descclassname">Pooch.</code><code class="sig-name descname">get_url</code><span class="sig-paren">(</span><em class="sig-param">fname</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pooch/core.html#Pooch.get_url"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pooch.Pooch.get_url" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">Pooch.</code><code class="sig-name descname">get_url</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">fname</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pooch/core.html#Pooch.get_url"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pooch.Pooch.get_url" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the full URL to download a file in the registry.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>fname</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – The file name (relative to the <em>base_url</em> of the remote data
+<dd class="field-odd"><p><strong>fname</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – The file name (relative to the <em>base_url</em> of the remote data
 storage) to fetch from the local storage.</p>
 </dd>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="pooch.Pooch.is_available">
-<code class="sig-prename descclassname">Pooch.</code><code class="sig-name descname">is_available</code><span class="sig-paren">(</span><em class="sig-param">fname</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pooch/core.html#Pooch.is_available"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pooch.Pooch.is_available" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">Pooch.</code><code class="sig-name descname">is_available</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">fname</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pooch/core.html#Pooch.is_available"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pooch.Pooch.is_available" title="Permalink to this definition">¶</a></dt>
 <dd><p>Check availability of a remote file without downloading it.</p>
 <p>Use this method when working with large files to check if they are
 available for download.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>fname</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – The file name (relative to the <em>base_url</em> of the remote data
+<dd class="field-odd"><p><strong>fname</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – The file name (relative to the <em>base_url</em> of the remote data
 storage) to fetch from the local storage.</p>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -355,9 +363,9 @@ storage) to fetch from the local storage.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="pooch.Pooch.load_registry">
-<code class="sig-prename descclassname">Pooch.</code><code class="sig-name descname">load_registry</code><span class="sig-paren">(</span><em class="sig-param">fname</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pooch/core.html#Pooch.load_registry"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pooch.Pooch.load_registry" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">Pooch.</code><code class="sig-name descname">load_registry</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">fname</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pooch/core.html#Pooch.load_registry"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pooch.Pooch.load_registry" title="Permalink to this definition">¶</a></dt>
 <dd><p>Load entries from a file and add them to the registry.</p>
 <p>Use this if you are managing many files.</p>
 <p>Each line of the file should have file name and its hash separated by
@@ -395,14 +403,22 @@ can be added and must be prepended with <code class="docutils literal notranslat
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2018-2020, The Pooch Developers
+        
+        &copy; Copyright 2018-2020, The Pooch Developers.
       <span class="lastupdated">
-        Last updated on Sep 10, 2020.
+        Last updated on Nov 27, 2020.
       </span>
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -413,7 +429,6 @@ can be added and must be prepended with <code class="docutils literal notranslat
 
   </div>
   
-
 
   <script type="text/javascript">
       jQuery(function () {

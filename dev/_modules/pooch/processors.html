@@ -2,8 +2,7 @@
 
 
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<html class="writer-html5" lang="en" >
 <head>
   <meta charset="utf-8">
   
@@ -15,6 +14,11 @@
 
 
   
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/style.css" type="text/css" />
+
+  
   
     <link rel="shortcut icon" href="../../_static/favicon.png"/>
   
@@ -22,23 +26,20 @@
   
 
   
-  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
-        <script type="text/javascript" src="../../_static/jquery.js"></script>
-        <script type="text/javascript" src="../../_static/underscore.js"></script>
-        <script type="text/javascript" src="../../_static/doctools.js"></script>
-        <script type="text/javascript" src="../../_static/language_data.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
     
     <script type="text/javascript" src="../../_static/js/theme.js"></script>
 
     
-
-  
-  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../../_static/style.css" type="text/css" />
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <!-- Google Analytics tracking code -->
@@ -97,6 +98,7 @@
           
         </div>
 
+        
         <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
           
     
@@ -152,6 +154,7 @@
     
 
         </div>
+        
       </div>
     </nav>
 
@@ -191,7 +194,7 @@
 
   <ul class="wy-breadcrumbs">
     
-      <li><a href="../../index.html">Docs</a> &raquo;</li>
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
         
           <li><a href="../index.html">Module code</a> &raquo;</li>
         
@@ -214,7 +217,13 @@
            <div itemprop="articleBody">
             
   <h1>Source code for pooch.processors</h1><div class="highlight"><pre>
-<span></span><span class="c1"># pylint: disable=line-too-long</span>
+<span></span><span class="c1"># Copyright (c) 2018 The Pooch Developers.</span>
+<span class="c1"># Distributed under the terms of the BSD 3-Clause License.</span>
+<span class="c1"># SPDX-License-Identifier: BSD-3-Clause</span>
+<span class="c1">#</span>
+<span class="c1"># This code is part of the Fatiando a Terra project (https://www.fatiando.org)</span>
+<span class="c1">#</span>
+<span class="c1"># pylint: disable=line-too-long</span>
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">Post-processing hooks</span>
 <span class="sd">&quot;&quot;&quot;</span>
@@ -410,8 +419,6 @@
 <span class="sd">    files that take a long time to decompress (exchanging disk space for</span>
 <span class="sd">    speed).</span>
 
-<span class="sd">    The output file is ``{fname}.decomp``.</span>
-
 <span class="sd">    Supported decompression methods are LZMA (``.xz``), bzip2 (``.bz2``), and</span>
 <span class="sd">    gzip (``.gz``).</span>
 
@@ -424,25 +431,42 @@
 <span class="sd">        To unpack zip and tar archives with one or more files, use</span>
 <span class="sd">        :class:`pooch.Unzip` and :class:`pooch.Untar` instead.</span>
 
+<span class="sd">    The output file is ``{fname}.decomp`` by default but it can be changed by</span>
+<span class="sd">    setting the ``name`` parameter.</span>
+
+<span class="sd">    .. warning::</span>
+
+<span class="sd">        Passing in ``name`` can cause existing data to be lost! For example, if</span>
+<span class="sd">        a file already exists with the specified name it will be overwritten</span>
+<span class="sd">        with the new decompressed file content. **Use this option with</span>
+<span class="sd">        caution.**</span>
+
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    method : str</span>
 <span class="sd">        Name of the compression method. Can be &quot;auto&quot;, &quot;lzma&quot;, &quot;xz&quot;, &quot;bzip2&quot;,</span>
 <span class="sd">        or &quot;gzip&quot;.</span>
+<span class="sd">    name : None or str</span>
+<span class="sd">        Defines the decompressed file name. The file name will be</span>
+<span class="sd">        ``{fname}.decomp`` if ``None`` (default) or the given name otherwise.</span>
+<span class="sd">        Note that the name should **not** include the full (or relative) path,</span>
+<span class="sd">        it should be just the file name itself.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">modules</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;auto&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;lzma&quot;</span><span class="p">:</span> <span class="n">lzma</span><span class="p">,</span> <span class="s2">&quot;xz&quot;</span><span class="p">:</span> <span class="n">lzma</span><span class="p">,</span> <span class="s2">&quot;gzip&quot;</span><span class="p">:</span> <span class="n">gzip</span><span class="p">,</span> <span class="s2">&quot;bzip2&quot;</span><span class="p">:</span> <span class="n">bz2</span><span class="p">}</span>
     <span class="n">extensions</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;.xz&quot;</span><span class="p">:</span> <span class="s2">&quot;lzma&quot;</span><span class="p">,</span> <span class="s2">&quot;.gz&quot;</span><span class="p">:</span> <span class="s2">&quot;gzip&quot;</span><span class="p">,</span> <span class="s2">&quot;.bz2&quot;</span><span class="p">:</span> <span class="s2">&quot;bzip2&quot;</span><span class="p">}</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;auto&quot;</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;auto&quot;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">method</span> <span class="o">=</span> <span class="n">method</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
 
 <div class="viewcode-block" id="Decompress.__call__"><a class="viewcode-back" href="../../api/generated/pooch.Decompress.html#pooch.Decompress.__call__">[docs]</a>    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fname</span><span class="p">,</span> <span class="n">action</span><span class="p">,</span> <span class="n">pooch</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Decompress the given file.</span>
 
-<span class="sd">        The output file will be ``fname`` with ``.decomp`` appended to it.</span>
+<span class="sd">        The output file will be either ``{fname}.decomp`` or the given *name*</span>
+<span class="sd">        class attribute.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -464,7 +488,10 @@
 <span class="sd">        fname : str</span>
 <span class="sd">            The full path to the decompressed file.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">decompressed</span> <span class="o">=</span> <span class="n">fname</span> <span class="o">+</span> <span class="s2">&quot;.decomp&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">decompressed</span> <span class="o">=</span> <span class="n">fname</span> <span class="o">+</span> <span class="s2">&quot;.decomp&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">decompressed</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">fname</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">action</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;update&quot;</span><span class="p">,</span> <span class="s2">&quot;download&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">decompressed</span><span class="p">):</span>
             <span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
                 <span class="s2">&quot;Decompressing &#39;</span><span class="si">%s</span><span class="s2">&#39; to &#39;</span><span class="si">%s</span><span class="s2">&#39; using method &#39;</span><span class="si">%s</span><span class="s2">&#39;.&quot;</span><span class="p">,</span>
@@ -488,8 +515,9 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">error_archives</span> <span class="o">=</span> <span class="s2">&quot;To unpack zip/tar archives, use pooch.Unzip/Untar instead.&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">method</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">modules</span><span class="p">:</span>
-            <span class="n">message</span> <span class="o">=</span> <span class="s2">&quot;Invalid compression method &#39;</span><span class="si">{}</span><span class="s2">&#39;. Must be one of &#39;</span><span class="si">{}</span><span class="s2">&#39;.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">method</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">modules</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+            <span class="n">message</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Invalid compression method &#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">method</span><span class="si">}</span><span class="s2">&#39;. &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;Must be one of &#39;</span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">modules</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span><span class="si">}</span><span class="s2">&#39;.&quot;</span>
             <span class="p">)</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">method</span> <span class="ow">in</span> <span class="p">{</span><span class="s2">&quot;zip&quot;</span><span class="p">,</span> <span class="s2">&quot;tar&quot;</span><span class="p">}:</span>
                 <span class="n">message</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">message</span><span class="p">,</span> <span class="n">error_archives</span><span class="p">])</span>
@@ -498,9 +526,8 @@
             <span class="n">ext</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">fname</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
             <span class="k">if</span> <span class="n">ext</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">extensions</span><span class="p">:</span>
                 <span class="n">message</span> <span class="o">=</span> <span class="p">(</span>
-                    <span class="s2">&quot;Unrecognized file extension &#39;</span><span class="si">{}</span><span class="s2">&#39;. Must be one of &#39;</span><span class="si">{}</span><span class="s2">&#39;.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-                        <span class="n">ext</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">extensions</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
-                    <span class="p">)</span>
+                    <span class="sa">f</span><span class="s2">&quot;Unrecognized file extension &#39;</span><span class="si">{</span><span class="n">ext</span><span class="si">}</span><span class="s2">&#39;. &quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot;Must be one of &#39;</span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">extensions</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span><span class="si">}</span><span class="s2">&#39;.&quot;</span>
                 <span class="p">)</span>
                 <span class="k">if</span> <span class="n">ext</span> <span class="ow">in</span> <span class="p">{</span><span class="s2">&quot;.zip&quot;</span><span class="p">,</span> <span class="s2">&quot;.tar&quot;</span><span class="p">}:</span>
                     <span class="n">message</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">message</span><span class="p">,</span> <span class="n">error_archives</span><span class="p">])</span>
@@ -519,14 +546,22 @@
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2018-2020, The Pooch Developers
+        
+        &copy; Copyright 2018-2020, The Pooch Developers.
       <span class="lastupdated">
-        Last updated on Sep 10, 2020.
+        Last updated on Nov 27, 2020.
       </span>
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -537,7 +572,6 @@
 
   </div>
   
-
 
   <script type="text/javascript">
       jQuery(function () {

@@ -2,8 +2,7 @@
 
 
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<html class="writer-html5" lang="en" >
 <head>
   <meta charset="utf-8">
   
@@ -15,6 +14,11 @@
 
 
   
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/style.css" type="text/css" />
+
+  
   
     <link rel="shortcut icon" href="../../_static/favicon.png"/>
   
@@ -22,23 +26,20 @@
   
 
   
-  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
-        <script type="text/javascript" src="../../_static/jquery.js"></script>
-        <script type="text/javascript" src="../../_static/underscore.js"></script>
-        <script type="text/javascript" src="../../_static/doctools.js"></script>
-        <script type="text/javascript" src="../../_static/language_data.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
     
     <script type="text/javascript" src="../../_static/js/theme.js"></script>
 
     
-
-  
-  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../../_static/style.css" type="text/css" />
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="pooch.test" href="pooch.test.html" />
@@ -99,6 +100,7 @@
           
         </div>
 
+        
         <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
           
     
@@ -166,6 +168,7 @@
     
 
         </div>
+        
       </div>
     </nav>
 
@@ -205,7 +208,7 @@
 
   <ul class="wy-breadcrumbs">
     
-      <li><a href="../../index.html">Docs</a> &raquo;</li>
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
         
           <li><a href="../index.html">API Reference</a> &raquo;</li>
         
@@ -234,15 +237,14 @@
             
   <div class="section" id="pooch-decompress">
 <h1>pooch.Decompress<a class="headerlink" href="#pooch-decompress" title="Permalink to this headline">¶</a></h1>
-<dl class="class">
+<dl class="py class">
 <dt id="pooch.Decompress">
-<em class="property">class </em><code class="sig-prename descclassname">pooch.</code><code class="sig-name descname">Decompress</code><span class="sig-paren">(</span><em class="sig-param">method='auto'</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pooch/processors.html#Decompress"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pooch.Decompress" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">pooch.</code><code class="sig-name descname">Decompress</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">method</span><span class="o">=</span><span class="default_value">'auto'</span></em>, <em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pooch/processors.html#Decompress"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pooch.Decompress" title="Permalink to this definition">¶</a></dt>
 <dd><p>Processor that decompress a file and returns the decompressed version.</p>
 <p>Use with <a class="reference internal" href="pooch.Pooch.html#pooch.Pooch.fetch" title="pooch.Pooch.fetch"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pooch.Pooch.fetch</span></code></a> or <a class="reference internal" href="pooch.retrieve.html#pooch.retrieve" title="pooch.retrieve"><code class="xref py py-func docutils literal notranslate"><span class="pre">pooch.retrieve</span></code></a> to decompress
 a downloaded data file so that it can be easily opened. Useful for data
 files that take a long time to decompress (exchanging disk space for
 speed).</p>
-<p>The output file is <code class="docutils literal notranslate"><span class="pre">{fname}.decomp</span></code>.</p>
 <p>Supported decompression methods are LZMA (<code class="docutils literal notranslate"><span class="pre">.xz</span></code>), bzip2 (<code class="docutils literal notranslate"><span class="pre">.bz2</span></code>), and
 gzip (<code class="docutils literal notranslate"><span class="pre">.gz</span></code>).</p>
 <p>File names with the standard extensions (see above) can use
@@ -253,10 +255,25 @@ can be overwritten by setting the <em>method</em> argument.</p>
 <p>To unpack zip and tar archives with one or more files, use
 <a class="reference internal" href="pooch.Unzip.html#pooch.Unzip" title="pooch.Unzip"><code class="xref py py-class docutils literal notranslate"><span class="pre">pooch.Unzip</span></code></a> and <a class="reference internal" href="pooch.Untar.html#pooch.Untar" title="pooch.Untar"><code class="xref py py-class docutils literal notranslate"><span class="pre">pooch.Untar</span></code></a> instead.</p>
 </div>
+<p>The output file is <code class="docutils literal notranslate"><span class="pre">{fname}.decomp</span></code> by default but it can be changed by
+setting the <code class="docutils literal notranslate"><span class="pre">name</span></code> parameter.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Passing in <code class="docutils literal notranslate"><span class="pre">name</span></code> can cause existing data to be lost! For example, if
+a file already exists with the specified name it will be overwritten
+with the new decompressed file content. <strong>Use this option with
+caution.</strong></p>
+</div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>method</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – Name of the compression method. Can be “auto”, “lzma”, “xz”, “bzip2”,
-or “gzip”.</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>method</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – Name of the compression method. Can be “auto”, “lzma”, “xz”, “bzip2”,
+or “gzip”.</p></li>
+<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.9)"><em>None</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – Defines the decompressed file name. The file name will be
+<code class="docutils literal notranslate"><span class="pre">{fname}.decomp</span></code> if <code class="docutils literal notranslate"><span class="pre">None</span></code> (default) or the given name otherwise.
+Note that the name should <strong>not</strong> include the full (or relative) path,
+it should be just the file name itself.</p></li>
+</ul>
 </dd>
 </dl>
 <p class="rubric">Methods Summary</p>
@@ -274,16 +291,17 @@ or “gzip”.</p>
 </dd></dl>
 
 <hr class="docutils" />
-<dl class="method">
+<dl class="py method">
 <dt id="pooch.Decompress.__call__">
-<code class="sig-prename descclassname">Decompress.</code><code class="sig-name descname">__call__</code><span class="sig-paren">(</span><em class="sig-param">fname</em>, <em class="sig-param">action</em>, <em class="sig-param">pooch</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pooch/processors.html#Decompress.__call__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pooch.Decompress.__call__" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">Decompress.</code><code class="sig-name descname">__call__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">fname</span></em>, <em class="sig-param"><span class="n">action</span></em>, <em class="sig-param"><span class="n">pooch</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pooch/processors.html#Decompress.__call__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pooch.Decompress.__call__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Decompress the given file.</p>
-<p>The output file will be <code class="docutils literal notranslate"><span class="pre">fname</span></code> with <code class="docutils literal notranslate"><span class="pre">.decomp</span></code> appended to it.</p>
+<p>The output file will be either <code class="docutils literal notranslate"><span class="pre">{fname}.decomp</span></code> or the given <em>name</em>
+class attribute.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>fname</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – Full path of the compressed file in local storage.</p></li>
-<li><p><strong>action</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – <p>Indicates what action was taken by <a class="reference internal" href="pooch.Pooch.html#pooch.Pooch.fetch" title="pooch.Pooch.fetch"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pooch.Pooch.fetch</span></code></a> or
+<li><p><strong>fname</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – Full path of the compressed file in local storage.</p></li>
+<li><p><strong>action</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – <p>Indicates what action was taken by <a class="reference internal" href="pooch.Pooch.html#pooch.Pooch.fetch" title="pooch.Pooch.fetch"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pooch.Pooch.fetch</span></code></a> or
 <a class="reference internal" href="pooch.retrieve.html#pooch.retrieve" title="pooch.retrieve"><code class="xref py py-func docutils literal notranslate"><span class="pre">pooch.retrieve</span></code></a>:</p>
 <ul>
 <li><p><code class="docutils literal notranslate"><span class="pre">&quot;download&quot;</span></code>: File didn’t exist locally and was downloaded</p></li>
@@ -322,14 +340,22 @@ or “gzip”.</p>
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2018-2020, The Pooch Developers
+        
+        &copy; Copyright 2018-2020, The Pooch Developers.
       <span class="lastupdated">
-        Last updated on Sep 10, 2020.
+        Last updated on Nov 27, 2020.
       </span>
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -340,7 +366,6 @@ or “gzip”.</p>
 
   </div>
   
-
 
   <script type="text/javascript">
       jQuery(function () {

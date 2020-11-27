@@ -2,8 +2,7 @@
 
 
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<html class="writer-html5" lang="en" >
 <head>
   <meta charset="utf-8">
   
@@ -15,6 +14,11 @@
 
 
   
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/style.css" type="text/css" />
+
+  
   
     <link rel="shortcut icon" href="../../_static/favicon.png"/>
   
@@ -22,23 +26,20 @@
   
 
   
-  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
-        <script type="text/javascript" src="../../_static/jquery.js"></script>
-        <script type="text/javascript" src="../../_static/underscore.js"></script>
-        <script type="text/javascript" src="../../_static/doctools.js"></script>
-        <script type="text/javascript" src="../../_static/language_data.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
     
     <script type="text/javascript" src="../../_static/js/theme.js"></script>
 
     
-
-  
-  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../../_static/style.css" type="text/css" />
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="pooch.Pooch" href="pooch.Pooch.html" />
@@ -99,6 +100,7 @@
           
         </div>
 
+        
         <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
           
     
@@ -166,6 +168,7 @@
     
 
         </div>
+        
       </div>
     </nav>
 
@@ -205,7 +208,7 @@
 
   <ul class="wy-breadcrumbs">
     
-      <li><a href="../../index.html">Docs</a> &raquo;</li>
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
         
           <li><a href="../index.html">API Reference</a> &raquo;</li>
         
@@ -234,9 +237,9 @@
             
   <div class="section" id="pooch-create">
 <h1>pooch.create<a class="headerlink" href="#pooch-create" title="Permalink to this headline">¶</a></h1>
-<dl class="function">
+<dl class="py function">
 <dt id="pooch.create">
-<code class="sig-prename descclassname">pooch.</code><code class="sig-name descname">create</code><span class="sig-paren">(</span><em class="sig-param">path</em>, <em class="sig-param">base_url</em>, <em class="sig-param">version=None</em>, <em class="sig-param">version_dev='master'</em>, <em class="sig-param">env=None</em>, <em class="sig-param">registry=None</em>, <em class="sig-param">urls=None</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pooch/core.html#create"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pooch.create" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">pooch.</code><code class="sig-name descname">create</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">path</span></em>, <em class="sig-param"><span class="n">base_url</span></em>, <em class="sig-param"><span class="n">version</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">version_dev</span><span class="o">=</span><span class="default_value">'master'</span></em>, <em class="sig-param"><span class="n">env</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">registry</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">urls</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">retry_if_failed</span><span class="o">=</span><span class="default_value">0</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pooch/core.html#create"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pooch.create" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create a <a class="reference internal" href="pooch.Pooch.html#pooch.Pooch" title="pooch.Pooch"><code class="xref py py-class docutils literal notranslate"><span class="pre">Pooch</span></code></a> with sensible defaults to fetch data files.</p>
 <p>If a version string is given, the Pooch will be versioned, meaning that the
 local storage folder and the base URL depend on the project version. This
@@ -256,34 +259,39 @@ module level (so it’s executed on <code class="docutils literal notranslate"><
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a><em>, </em><em>PathLike</em><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)"><em>list</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.8)"><em>tuple</em></a>) – The path to the local data storage folder. If this is a list or tuple,
+<li><p><strong>path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>, </em><em>PathLike</em><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.9)"><em>tuple</em></a>) – The path to the local data storage folder. If this is a list or tuple,
 we’ll join the parts with the appropriate separator. The <em>version</em> will
 be appended to the end of this path. Use <a class="reference internal" href="pooch.os_cache.html#pooch.os_cache" title="pooch.os_cache"><code class="xref py py-func docutils literal notranslate"><span class="pre">pooch.os_cache</span></code></a> for a
 sensible default.</p></li>
-<li><p><strong>base_url</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – Base URL for the remote data source. All requests will be made relative
+<li><p><strong>base_url</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – Base URL for the remote data source. All requests will be made relative
 to this URL. The string should have a <code class="docutils literal notranslate"><span class="pre">{version}</span></code> formatting mark in
 it. We will call <code class="docutils literal notranslate"><span class="pre">.format(version=version)</span></code> on this string. If the
 URL is a directory path, it must end in a <code class="docutils literal notranslate"><span class="pre">'/'</span></code> because we will not
 include it.</p></li>
-<li><p><strong>version</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><em>None</em></a>) – The version string for your project. Should be PEP440 compatible. If
+<li><p><strong>version</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.9)"><em>None</em></a>) – The version string for your project. Should be PEP440 compatible. If
 None is given, will not attempt to format <em>base_url</em> and no subfolder
 will be appended to <em>path</em>.</p></li>
-<li><p><strong>version_dev</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – The name used for the development version of a project. If your data is
+<li><p><strong>version_dev</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – The name used for the development version of a project. If your data is
 hosted on Github (and <em>base_url</em> is a Github raw link), then
 <code class="docutils literal notranslate"><span class="pre">&quot;master&quot;</span></code> is a good choice (default). Ignored if <em>version</em> is None.</p></li>
-<li><p><strong>env</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><em>None</em></a>) – An environment variable that can be used to overwrite <em>path</em>. This
+<li><p><strong>env</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.9)"><em>None</em></a>) – An environment variable that can be used to overwrite <em>path</em>. This
 allows users to control where they want the data to be stored. We’ll
 append <em>version</em> to the end of this value as well.</p></li>
-<li><p><strong>registry</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)"><em>dict</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><em>None</em></a>) – A record of the files that are managed by this Pooch. Keys should be
+<li><p><strong>registry</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)"><em>dict</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.9)"><em>None</em></a>) – A record of the files that are managed by this Pooch. Keys should be
 the file names and the values should be their hashes. Only files
 in the registry can be fetched from the local storage. Files in
 subdirectories of <em>path</em> <strong>must use Unix-style separators</strong> (<code class="docutils literal notranslate"><span class="pre">'/'</span></code>)
 even on Windows.</p></li>
-<li><p><strong>urls</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)"><em>dict</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><em>None</em></a>) – Custom URLs for downloading individual files in the registry. A
+<li><p><strong>urls</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)"><em>dict</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.9)"><em>None</em></a>) – Custom URLs for downloading individual files in the registry. A
 dictionary with the file names as keys and the custom URLs as values.
 Not all files in <em>registry</em> need an entry in <em>urls</em>. If a file has an
 entry in <em>urls</em>, the <em>base_url</em> will be ignored when downloading it in
 favor of <code class="docutils literal notranslate"><span class="pre">urls[fname]</span></code>.</p></li>
+<li><p><strong>retry_if_failed</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – Retry a file download the specified number of times if it fails because
+of a bad connection or a hash mismatch. By default, downloads are only
+attempted once (<code class="docutils literal notranslate"><span class="pre">retry_if_failed=0</span></code>). Initially, will wait for 1s
+between retries and then increase the wait time by 1s with each retry
+until a maximum of 10s.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -292,7 +300,7 @@ favor of <code class="docutils literal notranslate"><span class="pre">urls[fname
 </dl>
 <p class="rubric">Examples</p>
 <p>Create a <a class="reference internal" href="pooch.Pooch.html#pooch.Pooch" title="pooch.Pooch"><code class="xref py py-class docutils literal notranslate"><span class="pre">Pooch</span></code></a> for a release (v0.1):</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">pup</span> <span class="o">=</span> <span class="n">create</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s2">&quot;myproject&quot;</span><span class="p">,</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">pup</span> <span class="o">=</span> <span class="n">create</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s2">&quot;myproject&quot;</span><span class="p">,</span>
 <span class="gp">... </span>             <span class="n">base_url</span><span class="o">=</span><span class="s2">&quot;http://some.link.com/</span><span class="si">{version}</span><span class="s2">/&quot;</span><span class="p">,</span>
 <span class="gp">... </span>             <span class="n">version</span><span class="o">=</span><span class="s2">&quot;v0.1&quot;</span><span class="p">,</span>
 <span class="gp">... </span>             <span class="n">registry</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;data.txt&quot;</span><span class="p">:</span> <span class="s2">&quot;9081wo2eb2gc0u...&quot;</span><span class="p">})</span>
@@ -311,7 +319,7 @@ favor of <code class="docutils literal notranslate"><span class="pre">urls[fname
 </div>
 <p>If this is a development version (12 commits ahead of v0.1), then the
 <code class="docutils literal notranslate"><span class="pre">version_dev</span></code> will be used (defaults to <code class="docutils literal notranslate"><span class="pre">&quot;master&quot;</span></code>):</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">pup</span> <span class="o">=</span> <span class="n">create</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s2">&quot;myproject&quot;</span><span class="p">,</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">pup</span> <span class="o">=</span> <span class="n">create</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s2">&quot;myproject&quot;</span><span class="p">,</span>
 <span class="gp">... </span>             <span class="n">base_url</span><span class="o">=</span><span class="s2">&quot;http://some.link.com/</span><span class="si">{version}</span><span class="s2">/&quot;</span><span class="p">,</span>
 <span class="gp">... </span>             <span class="n">version</span><span class="o">=</span><span class="s2">&quot;v0.1+12.do9iwd&quot;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">pup</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">parts</span><span class="p">)</span>
@@ -321,7 +329,7 @@ favor of <code class="docutils literal notranslate"><span class="pre">urls[fname
 </pre></div>
 </div>
 <p>Versioning is optional (but highly encouraged):</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">pup</span> <span class="o">=</span> <span class="n">create</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s2">&quot;myproject&quot;</span><span class="p">,</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">pup</span> <span class="o">=</span> <span class="n">create</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s2">&quot;myproject&quot;</span><span class="p">,</span>
 <span class="gp">... </span>             <span class="n">base_url</span><span class="o">=</span><span class="s2">&quot;http://some.link.com/&quot;</span><span class="p">,</span>
 <span class="gp">... </span>             <span class="n">registry</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;data.txt&quot;</span><span class="p">:</span> <span class="s2">&quot;9081wo2eb2gc0u...&quot;</span><span class="p">})</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">pup</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">parts</span><span class="p">)</span>  <span class="c1"># The path is a pathlib.Path</span>
@@ -333,7 +341,7 @@ favor of <code class="docutils literal notranslate"><span class="pre">urls[fname
 <p>To place the storage folder at a subdirectory, pass in a list and we’ll
 join the path for you using the appropriate separator for your operating
 system:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">pup</span> <span class="o">=</span> <span class="n">create</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;myproject&quot;</span><span class="p">,</span> <span class="s2">&quot;cache&quot;</span><span class="p">,</span> <span class="s2">&quot;data&quot;</span><span class="p">],</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">pup</span> <span class="o">=</span> <span class="n">create</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;myproject&quot;</span><span class="p">,</span> <span class="s2">&quot;cache&quot;</span><span class="p">,</span> <span class="s2">&quot;data&quot;</span><span class="p">],</span>
 <span class="gp">... </span>             <span class="n">base_url</span><span class="o">=</span><span class="s2">&quot;http://some.link.com/</span><span class="si">{version}</span><span class="s2">/&quot;</span><span class="p">,</span>
 <span class="gp">... </span>             <span class="n">version</span><span class="o">=</span><span class="s2">&quot;v0.1&quot;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">pup</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">parts</span><span class="p">)</span>
@@ -341,7 +349,7 @@ system:</p>
 </pre></div>
 </div>
 <p>The user can overwrite the storage path by setting an environment variable:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># The variable is not set so we&#39;ll use *path*</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># The variable is not set so we&#39;ll use *path*</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pup</span> <span class="o">=</span> <span class="n">create</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;myproject&quot;</span><span class="p">,</span> <span class="s2">&quot;not_from_env&quot;</span><span class="p">],</span>
 <span class="gp">... </span>             <span class="n">base_url</span><span class="o">=</span><span class="s2">&quot;http://some.link.com/</span><span class="si">{version}</span><span class="s2">/&quot;</span><span class="p">,</span>
 <span class="gp">... </span>             <span class="n">version</span><span class="o">=</span><span class="s2">&quot;v0.1&quot;</span><span class="p">,</span>
@@ -383,14 +391,22 @@ system:</p>
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2018-2020, The Pooch Developers
+        
+        &copy; Copyright 2018-2020, The Pooch Developers.
       <span class="lastupdated">
-        Last updated on Sep 10, 2020.
+        Last updated on Nov 27, 2020.
       </span>
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -401,7 +417,6 @@ system:</p>
 
   </div>
   
-
 
   <script type="text/javascript">
       jQuery(function () {
