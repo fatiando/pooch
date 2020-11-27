@@ -42,6 +42,8 @@ Documentation:
 
 Maintenance:
 
+* Add support for Python 3.9. (`#220
+  <https://github.com/fatiando/pooch/pull/220>`__)
 * Drop support for Python 3.5. (`#204
   <https://github.com/fatiando/pooch/pull/204>`__)
 * Use pip instead of conda to speed up Actions (`#216
