@@ -50,7 +50,7 @@ master_doc = "index"
 # General information about the project
 year = datetime.date.today().year
 project = "Pooch"
-copyright = f"2018-{year}, The Pooch Developers"
+copyright = f"2018-{year}, The Pooch Developers."
 if len(full_version.split("+")) > 1 or full_version == "unknown":
     version = "dev"
 else:
