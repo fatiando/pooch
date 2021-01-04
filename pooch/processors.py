@@ -40,8 +40,9 @@ class ExtractorProcessor:  # pylint: disable=too-few-public-methods
     # String appended to unpacked archive. To be implemented in subclass
     suffix = None
 
-    def __init__(self, members=None):
+    def __init__(self, members=None, extract_dir=None):
         self.members = members
+        self.extract_dir = extract_dir
 
     def __call__(self, fname, action, pooch):
         """
@@ -68,21 +69,25 @@ class ExtractorProcessor:  # pylint: disable=too-few-public-methods
             A list of the full path to all files in the extracted archive.
 
         """
-        if self.suffix is None:
+        if self.suffix is None and self.extract_dir is None:
             raise NotImplementedError(
-                "Derived classes must define the 'suffix' attribute."
+                "Derived classes must define either a 'suffix' attribute or "
+                "an 'extract_dir' attribute."
             )
-        extract_dir = fname + self.suffix
-        if action in ("update", "download") or not os.path.exists(extract_dir):
+        if self.extract_dir is None:
+            self.extract_dir = fname + self.suffix
+        elif self.suffix is not None:
+            get_logger().warn("Ignoring 'suffix' because 'extract_dir' was provided.")
+        if action in ("update", "download") or not os.path.exists(self.extract_dir):
             # Make sure that the folder with the extracted files exists
-            if not os.path.exists(extract_dir):
-                os.makedirs(extract_dir)
-            self._extract_file(fname, extract_dir)
+            if not os.path.exists(self.extract_dir):
+                os.makedirs(self.extract_dir)
+            self._extract_file(fname, self.extract_dir)
         # Get a list of all file names (including subdirectories) in our folder
         # of unzipped files.
         fnames = [
             os.path.join(path, fname)
-            for path, _, files in os.walk(extract_dir)
+            for path, _, files in os.walk(self.extract_dir)
             for fname in files
         ]
         return fnames
