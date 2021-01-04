@@ -80,8 +80,7 @@ class ExtractorProcessor:  # pylint: disable=too-few-public-methods
             get_logger().warn("Ignoring 'suffix' because 'extract_dir' was provided.")
         if action in ("update", "download") or not os.path.exists(self.extract_dir):
             # Make sure that the folder with the extracted files exists
-            if not os.path.exists(self.extract_dir):
-                os.makedirs(self.extract_dir)
+            os.makedirs(self.extract_dir, exist_ok=True)
             self._extract_file(fname, self.extract_dir)
         # Get a list of all file names (including subdirectories) in our folder
         # of unzipped files.
@@ -139,6 +138,11 @@ class Unzip(ExtractorProcessor):  # pylint: disable=too-few-public-methods
                     get_logger().info(
                         "Extracting '%s' from '%s' to '%s'", member, fname, extract_dir
                     )
+                    # make sure the target folder exists for nested members
+                    if len(member.split(os.path.sep)) > 1:
+                        member_dir, _ = member.rsplit(os.path.sep, maxsplit=1)
+                        full_dir_path = os.path.join(extract_dir, member_dir)
+                        os.makedirs(full_dir_path, exist_ok=True)
                     # Extract the data file from within the archive
                     with zip_file.open(member) as data_file:
                         # Save it to our desired file name
@@ -185,6 +189,11 @@ class Untar(ExtractorProcessor):  # pylint: disable=too-few-public-methods
                     get_logger().info(
                         "Extracting '%s' from '%s' to '%s'", member, fname, extract_dir
                     )
+                    # make sure the target folder exists for nested members
+                    if len(member.split(os.path.sep)) > 1:
+                        member_dir, _ = member.rsplit(os.path.sep, maxsplit=1)
+                        full_dir_path = os.path.join(extract_dir, member_dir)
+                        os.makedirs(full_dir_path, exist_ok=True)
                     # Extract the data file from within the archive
                     # Python 2.7: extractfile doesn't return a context manager
                     data_file = tar_file.extractfile(member)
