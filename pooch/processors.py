@@ -116,6 +116,13 @@ class Unzip(ExtractorProcessor):  # pylint: disable=too-few-public-methods
         If None, will unpack all files in the zip archive. Otherwise, *members*
         must be a list of file names to unpack from the archive. Only these
         files will be unpacked.
+    extract_dir : str or None
+        If None, files will be unpacked to the default location (a folder in
+        the same location as the downloaded zip file, with the suffix
+        ``.unzip`` added). Otherwise, files will be unpacked to
+        ``extract_dir``, which is interpreted as a *relative path* (relative to
+        the cache location provided by :func:`pooch.retrieve` or
+        :meth:`pooch.Pooch.fetch`).
 
     """
 
@@ -168,6 +175,13 @@ class Untar(ExtractorProcessor):  # pylint: disable=too-few-public-methods
         If None, will unpack all files in the archive. Otherwise, *members*
         must be a list of file names to unpack from the archive. Only these
         files will be unpacked.
+    extract_dir : str or None
+        If None, files will be unpacked to the default location (a folder in
+        the same location as the downloaded tar file, with the suffix
+        ``.untar`` added). Otherwise, files will be unpacked to
+        ``extract_dir``, which is interpreted as a *relative path* (relative to
+        the cache location  provided by :func:`pooch.retrieve` or
+        :meth:`pooch.Pooch.fetch`).
     """
 
     suffix = ".untar"
