@@ -76,8 +76,9 @@ class ExtractorProcessor:  # pylint: disable=too-few-public-methods
             )
         if self.extract_dir is None:
             self.extract_dir = fname + self.suffix
-        elif self.suffix is not None:
-            get_logger().warn("Ignoring 'suffix' because 'extract_dir' was provided.")
+        else:
+            archive_dir = fname.rsplit(os.path.sep, maxsplit=1)[0]
+            self.extract_dir = os.path.join(archive_dir, self.extract_dir)
         if action in ("update", "download") or not os.path.exists(self.extract_dir):
             # Make sure that the folder with the extracted files exists
             os.makedirs(self.extract_dir, exist_ok=True)
