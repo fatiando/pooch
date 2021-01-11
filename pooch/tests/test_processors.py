@@ -110,131 +110,57 @@ def test_extractprocessor_fails():
         assert not exception.value.args
 
 
+@pytest.mark.parametrize("_dir", [None, "foo"], ids=["default_dir", "custom_dir"])
 @pytest.mark.parametrize(
-    "proc_cls,ext,_dir",
-    [
-        (Unzip, ".zip", None),
-        (Untar, ".tar.gz", None),
-        (Unzip, ".zip", "foo"),
-        (Untar, ".tar.gz", "foo"),
-    ],
-    ids=["Unzip", "Untar", "Unzip_to_custom_dir", "Untar_to_custom_dir"],
+    "proc_cls,file_ext,msg",
+    [(Unzip, ".zip", "Unzipping"), (Untar, ".tar.gz", "Untarring")],
+    ids=["Unzip", "Untar"],
 )
-def test_processors(proc_cls, ext, _dir):
+@pytest.mark.parametrize(
+    "archive_basename,members",
+    [
+        ("tiny-data", ["tiny-data.txt"]),  # 1 compressed file
+        ("store", None),  # all files in an archive
+        ("store", ["store/subdir/tiny-data.txt"]),  # 1 file nested in archive
+    ],
+    ids=["onefile", "all_files", "nested"],
+)
+def test_processors(_dir, proc_cls, file_ext, msg, archive_basename, members):
     "Setup a hook and make sure it's only executed when downloading"
-    processor = proc_cls(members=["tiny-data.txt"], extract_dir=_dir)
-    suffix = proc_cls.suffix
-    extract_dir = "tiny-data" + ext + suffix if _dir is None else _dir
+    processor = proc_cls(members=members, extract_dir=_dir)
+    _dir = archive_basename + file_ext + proc_cls.suffix if _dir is None else _dir
     with TemporaryDirectory() as local_store:
         path = Path(local_store)
-        true_path = str(path / extract_dir / "tiny-data.txt")
+        true_paths = [
+            str(path / _dir / "tiny-data.txt"),
+            str(path / _dir / "store" / "tiny-data.txt"),
+            str(path / _dir / "store" / "subdir" / "tiny-data.txt"),
+        ]
+        if archive_basename == "tiny-data":
+            true_paths = set(true_paths[:1])
+            log_line = "Extracting 'tiny-data.txt'"
+        elif members is None:
+            true_paths = set(true_paths[1:])
+            log_line = f"{msg} contents"
+        else:
+            true_paths = set(true_paths[-1:])
+            log_line = "Extracting 'store/subdir/tiny-data.txt'"
         # Setup a pooch in a temp dir
         pup = Pooch(path=path, base_url=BASEURL, registry=REGISTRY)
         # Check the logs when downloading and from the processor
         with capture_log() as log_file:
-            fnames = pup.fetch("tiny-data" + ext, processor=processor)
-            fname = fnames[0]
-            assert len(fnames) == 1
-            logs = log_file.getvalue()
-            lines = logs.splitlines()
+            fnames = pup.fetch(archive_basename + file_ext, processor=processor)
+            assert set(fnames) == true_paths
+            lines = log_file.getvalue().splitlines()
             assert len(lines) == 2
             assert lines[0].split()[0] == "Downloading"
-            assert lines[-1].startswith("Extracting 'tiny-data.txt'")
-
-        assert fname == true_path
-        check_tiny_data(fname)
-        # Check that processor doesn't execute when not downloading
-        with capture_log() as log_file:
-            fnames = pup.fetch("tiny-data" + ext, processor=processor)
-            fname = fnames[0]
-            assert len(fnames) == 1
-            assert log_file.getvalue() == ""
-        assert fname == true_path
-        check_tiny_data(fname)
-
-
-@pytest.mark.parametrize(
-    "proc_cls,ext,_dir,msg",
-    [
-        (Unzip, ".zip", None, "Unzipping"),
-        (Untar, ".tar.gz", None, "Untarring"),
-        (Unzip, ".zip", "foo", "Unzipping"),
-        (Untar, ".tar.gz", "foo", "Untarring"),
-    ],
-    ids=["Unzip", "Untar", "Unzip_to_custom_dir", "Untar_to_custom_dir"],
-)
-def test_processor_multiplefiles(proc_cls, ext, _dir, msg):
-    "Setup a processor to unzip/untar a file and return multiple fnames"
-    processor = proc_cls(extract_dir=_dir)
-    suffix = proc_cls.suffix
-    extract_dir = "store" + ext + suffix if _dir is None else _dir
-    with TemporaryDirectory() as local_store:
-        path = Path(local_store)
-        true_paths = {
-            str(path / extract_dir / "store" / "tiny-data.txt"),
-            str(path / extract_dir / "store" / "subdir" / "tiny-data.txt"),
-        }
-        # Setup a pooch in a temp dir
-        pup = Pooch(path=path, base_url=BASEURL, registry=REGISTRY)
-        # Check the logs when downloading and from the processor
-        with capture_log() as log_file:
-            fnames = pup.fetch("store" + ext, processor=processor)
-            logs = log_file.getvalue()
-            lines = logs.splitlines()
-            assert len(lines) == 2
-            assert lines[0].split()[0] == "Downloading"
-            assert lines[-1].startswith(f"{msg} contents")
-            assert len(fnames) == 2
-            assert true_paths == set(fnames)
-            for fname in fnames:
-                check_tiny_data(fname)
-        # Check that processor doesn't execute when not downloading
-        with capture_log() as log_file:
-            fnames = pup.fetch("store" + ext, processor=processor)
-            assert log_file.getvalue() == ""
-            assert len(fnames) == 2
-            assert true_paths == set(fnames)
-            for fname in fnames:
-                check_tiny_data(fname)
-
-
-@pytest.mark.parametrize(
-    "proc_cls,ext,_dir",
-    [
-        (Unzip, ".zip", None),
-        (Untar, ".tar.gz", None),
-        (Unzip, ".zip", "foo"),
-        (Untar, ".tar.gz", "foo"),
-    ],
-    ids=["Unzip", "Untar", "Unzip_to_custom_dir", "Untar_to_custom_dir"],
-)
-def test_processor_nested_file(proc_cls, ext, _dir):
-    "Setup a processor to unzip/untar a file and return multiple fnames"
-    processor = proc_cls(members=["store/subdir/tiny-data.txt"], extract_dir=_dir)
-    suffix = proc_cls.suffix
-    extract_dir = "store" + ext + suffix if _dir is None else _dir
-    with TemporaryDirectory() as local_store:
-        path = Path(local_store)
-        true_path = str(path / extract_dir / "store" / "subdir" / "tiny-data.txt")
-        # Setup a pooch in a temp dir
-        pup = Pooch(path=path, base_url=BASEURL, registry=REGISTRY)
-        # Check the logs when downloading and from the processor
-        with capture_log() as log_file:
-            fnames = pup.fetch("store" + ext, processor=processor)
-            logs = log_file.getvalue()
-            lines = logs.splitlines()
-            assert len(lines) == 2
-            assert lines[0].split()[0] == "Downloading"
-            assert lines[-1].startswith("Extracting 'store/subdir/tiny-data.txt'")
-            assert len(fnames) == 1
-            fname = fnames[0]
-            assert true_path == fname
+            assert lines[-1].startswith(log_line)
+        for fname in fnames:
             check_tiny_data(fname)
         # Check that processor doesn't execute when not downloading
         with capture_log() as log_file:
-            fnames = pup.fetch("store" + ext, processor=processor)
+            fnames = pup.fetch(archive_basename + file_ext, processor=processor)
+            assert set(fnames) == true_paths
             assert log_file.getvalue() == ""
-            assert len(fnames) == 1
-            fname = fnames[0]
-            assert true_path == fname
+        for fname in fnames:
             check_tiny_data(fname)
