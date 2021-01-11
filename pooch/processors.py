@@ -13,6 +13,7 @@ import bz2
 import gzip
 import lzma
 import shutil
+from pathlib import Path
 from zipfile import ZipFile
 from tarfile import TarFile
 
@@ -147,9 +148,9 @@ class Unzip(ExtractorProcessor):  # pylint: disable=too-few-public-methods
                         "Extracting '%s' from '%s' to '%s'", member, fname, extract_dir
                     )
                     # make sure the target folder exists for nested members
-                    if len(member.split(os.path.sep)) > 1:
-                        member_dir, _ = member.rsplit(os.path.sep, maxsplit=1)
-                        full_dir_path = os.path.join(extract_dir, member_dir)
+                    parts = Path(member).parts
+                    if len(parts) > 1:
+                        full_dir_path = os.path.join(extract_dir, *parts[:-1])
                         os.makedirs(full_dir_path, exist_ok=True)
                     # Extract the data file from within the archive
                     with zip_file.open(member) as data_file:
@@ -205,9 +206,9 @@ class Untar(ExtractorProcessor):  # pylint: disable=too-few-public-methods
                         "Extracting '%s' from '%s' to '%s'", member, fname, extract_dir
                     )
                     # make sure the target folder exists for nested members
-                    if len(member.split(os.path.sep)) > 1:
-                        member_dir, _ = member.rsplit(os.path.sep, maxsplit=1)
-                        full_dir_path = os.path.join(extract_dir, member_dir)
+                    parts = Path(member).parts
+                    if len(parts) > 1:
+                        full_dir_path = os.path.join(extract_dir, *parts[:-1])
                         os.makedirs(full_dir_path, exist_ok=True)
                     # Extract the data file from within the archive
                     # Python 2.7: extractfile doesn't return a context manager
