@@ -11,6 +11,7 @@ order by last name) and are considered "The Pooch Developers":
 * [Kacper Kowalik](https://github.com/Xarthisius) - National Center for Supercomputing Applications, Univeristy of Illinois at Urbana-Champaign, USA (ORCID: [0000-0003-1709-3744](https://www.orcid.org/0000-0003-1709-3744))
 * [John Leeman](https://github.com/jrleeman)
 * [Rémi Rampin](https://github.com/remram44) - New York University, USA (ORCID: [0000-0002-0524-2282](https://www.orcid.org/0000-0002-0524-2282))
+* [Clément Robert](https://github.com/neutrinoceros) - Institut de Planétologie et d'Astrophysique de Grenoble, France (ORCID: [0000-0001-8629-7068](https://orcid.org/0000-0001-8629-7068))
 * [Daniel Shapero](https://github.com/danshapero) - Polar Science Center, University of Washington Applied Physics Lab, USA (ORCID: [0000-0002-3651-0649](https://www.orcid.org/0000-0002-3651-0649))
 * [Santiago Soler](https://github.com/santisoler) - CONICET, Argentina; Instituto Geofísico Sismológico Volponi, Universidad Nacional de San Juan, Argentina (ORCID: [0000-0001-9202-5317](https://www.orcid.org/0000-0001-9202-5317))
 * [Matthew Turk](https://github.com/matthewturk) - University of Illinois at Urbana-Champaign, USA (ORCID: [0000-0002-5294-0198](https://www.orcid.org/0000-0002-5294-0198))
