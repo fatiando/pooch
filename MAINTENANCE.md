@@ -118,8 +118,8 @@ Mendeley, etc).
 
 We try to automate the release process as much as possible.
 Travis handles publishing new releases to PyPI and updating the documentation.
-The version number is set automatically using versioneer based information it gets from
-git.
+The version number is set automatically using setuptools-scm based on information it gets
+from git.
 There are a few steps that still must be done manually, though.
 
 ### Draft a new Zenodo release
