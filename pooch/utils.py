@@ -20,7 +20,7 @@ from packaging.version import Version
 
 
 LOGGER = logging.Logger("pooch")
-LOGGER.addHandler(logging.StreamHandler())
+LOGGER.addHandler(logging.NullHandler())
 
 
 def get_logger():
