@@ -4,7 +4,8 @@
 #
 # This code is part of the Fatiando a Terra project (https://www.fatiando.org)
 #
-# pylint: disable=missing-docstring,import-outside-toplevel
+# pylint: disable=missing-docstring,import-outside-toplevel,import-self
+#
 # Import functions/classes to make the API
 from .core import Pooch, create, retrieve
 from .utils import os_cache, file_hash, make_registry, check_version, get_logger
