@@ -13,7 +13,7 @@ import shutil
 from pathlib import Path
 
 from .. import create, os_cache
-from ..version import full_version
+from .. import __version__ as full_version
 from .utils import check_tiny_data, capture_log
 
 

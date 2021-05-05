@@ -10,6 +10,7 @@ from .core import Pooch, create, retrieve
 from .utils import os_cache, file_hash, make_registry, check_version, get_logger
 from .downloaders import HTTPDownloader, FTPDownloader, SFTPDownloader
 from .processors import Unzip, Untar, Decompress
+
 # This file is generated automatically by setuptools_scm
 from . import _version
 
