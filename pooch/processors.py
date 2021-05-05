@@ -13,6 +13,7 @@ import bz2
 import gzip
 import lzma
 import shutil
+from pathlib import Path
 from zipfile import ZipFile
 from tarfile import TarFile
 
@@ -40,8 +41,9 @@ class ExtractorProcessor:  # pylint: disable=too-few-public-methods
     # String appended to unpacked archive. To be implemented in subclass
     suffix = None
 
-    def __init__(self, members=None):
+    def __init__(self, members=None, extract_dir=None):
         self.members = members
+        self.extract_dir = extract_dir
 
     def __call__(self, fname, action, pooch):
         """
@@ -68,21 +70,25 @@ class ExtractorProcessor:  # pylint: disable=too-few-public-methods
             A list of the full path to all files in the extracted archive.
 
         """
-        if self.suffix is None:
+        if self.suffix is None and self.extract_dir is None:
             raise NotImplementedError(
-                "Derived classes must define the 'suffix' attribute."
+                "Derived classes must define either a 'suffix' attribute or "
+                "an 'extract_dir' attribute."
             )
-        extract_dir = fname + self.suffix
-        if action in ("update", "download") or not os.path.exists(extract_dir):
+        if self.extract_dir is None:
+            self.extract_dir = fname + self.suffix
+        else:
+            archive_dir = fname.rsplit(os.path.sep, maxsplit=1)[0]
+            self.extract_dir = os.path.join(archive_dir, self.extract_dir)
+        if action in ("update", "download") or not os.path.exists(self.extract_dir):
             # Make sure that the folder with the extracted files exists
-            if not os.path.exists(extract_dir):
-                os.makedirs(extract_dir)
-            self._extract_file(fname, extract_dir)
+            os.makedirs(self.extract_dir, exist_ok=True)
+            self._extract_file(fname, self.extract_dir)
         # Get a list of all file names (including subdirectories) in our folder
         # of unzipped files.
         fnames = [
             os.path.join(path, fname)
-            for path, _, files in os.walk(extract_dir)
+            for path, _, files in os.walk(self.extract_dir)
             for fname in files
         ]
         return fnames
@@ -112,6 +118,13 @@ class Unzip(ExtractorProcessor):  # pylint: disable=too-few-public-methods
         If None, will unpack all files in the zip archive. Otherwise, *members*
         must be a list of file names to unpack from the archive. Only these
         files will be unpacked.
+    extract_dir : str or None
+        If None, files will be unpacked to the default location (a folder in
+        the same location as the downloaded zip file, with the suffix
+        ``.unzip`` added). Otherwise, files will be unpacked to
+        ``extract_dir``, which is interpreted as a *relative path* (relative to
+        the cache location provided by :func:`pooch.retrieve` or
+        :meth:`pooch.Pooch.fetch`).
 
     """
 
@@ -134,6 +147,11 @@ class Unzip(ExtractorProcessor):  # pylint: disable=too-few-public-methods
                     get_logger().info(
                         "Extracting '%s' from '%s' to '%s'", member, fname, extract_dir
                     )
+                    # make sure the target folder exists for nested members
+                    parts = Path(member).parts
+                    if len(parts) > 1:
+                        full_dir_path = os.path.join(extract_dir, *parts[:-1])
+                        os.makedirs(full_dir_path, exist_ok=True)
                     # Extract the data file from within the archive
                     with zip_file.open(member) as data_file:
                         # Save it to our desired file name
@@ -159,6 +177,13 @@ class Untar(ExtractorProcessor):  # pylint: disable=too-few-public-methods
         If None, will unpack all files in the archive. Otherwise, *members*
         must be a list of file names to unpack from the archive. Only these
         files will be unpacked.
+    extract_dir : str or None
+        If None, files will be unpacked to the default location (a folder in
+        the same location as the downloaded tar file, with the suffix
+        ``.untar`` added). Otherwise, files will be unpacked to
+        ``extract_dir``, which is interpreted as a *relative path* (relative to
+        the cache location  provided by :func:`pooch.retrieve` or
+        :meth:`pooch.Pooch.fetch`).
     """
 
     suffix = ".untar"
@@ -180,6 +205,11 @@ class Untar(ExtractorProcessor):  # pylint: disable=too-few-public-methods
                     get_logger().info(
                         "Extracting '%s' from '%s' to '%s'", member, fname, extract_dir
                     )
+                    # make sure the target folder exists for nested members
+                    parts = Path(member).parts
+                    if len(parts) > 1:
+                        full_dir_path = os.path.join(extract_dir, *parts[:-1])
+                        os.makedirs(full_dir_path, exist_ok=True)
                     # Extract the data file from within the archive
                     # Python 2.7: extractfile doesn't return a context manager
                     data_file = tar_file.extractfile(member)
