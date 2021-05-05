@@ -1,4 +1,5 @@
 # Development requirements
+setuptools_scm
 pytest
 pytest-cov
 pytest-localftpserver
