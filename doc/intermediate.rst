@@ -284,12 +284,15 @@ like this:
     ``tqdm`` is not installed by default with Pooch. You will have to install
     it separately in order to use this feature.
 
+.. _custom-progressbar:
+
 Alternatively, you can pass an arbitrary object that behaves like a progress
-that implements the ``update``, ``reset`, and ``close`` methods. ``update``
+that implements the ``update``, ``reset``, and ``close`` methods. ``update``
 should accept a single integer positional argument representing the current
 completion (in bytes), while ``reset`` and ``update`` do not take any argument
-beside ``self``. The object must also have a `total` attribute that can be set
+beside ``self``. The object must also have a ``total`` attribute that can be set
 from outside the class.
+In other words, the custom progress bar needs to behave like a ``tqdm`` progress bar.
 Here's a minimal working example of such a custom "progress display" class
 
 .. code:: python
