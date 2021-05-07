@@ -110,10 +110,10 @@ def retrieve(url, known_hash, fname=None, path=None, processor=None, downloader=
     Download one of the data files from the Pooch repository on GitHub:
 
     >>> import os
-    >>> from pooch import version, check_version, retrieve
+    >>> from pooch import __version__, check_version, retrieve
     >>> # Make a URL for the version of pooch we have installed
     >>> url = "https://github.com/fatiando/pooch/raw/{}/data/tiny-data.txt"
-    >>> url = url.format(check_version(version.full_version))
+    >>> url = url.format(check_version(__version__))
     >>> # Download the file and save it locally. Will check the MD5 checksum of
     >>> # the downloaded file against the given value to make sure it's the
     >>> # right file. You can use other hashes by specifying different
@@ -141,7 +141,7 @@ def retrieve(url, known_hash, fname=None, path=None, processor=None, downloader=
     >>> # URLs to a gzip compressed version of the data file.
     >>> url = ("https://github.com/fatiando/pooch/raw/{}/"
     ...        + "pooch/tests/data/tiny-data.txt.gz")
-    >>> url = url.format(check_version(version.full_version))
+    >>> url = url.format(check_version(__version__))
     >>> # By default, you would have to decompress the file yourself
     >>> fname = retrieve(
     ...     url,
@@ -173,7 +173,7 @@ def retrieve(url, known_hash, fname=None, path=None, processor=None, downloader=
     >>> # URLs to a zip archive with a single data file.
     >>> url = ("https://github.com/fatiando/pooch/raw/{}/"
     ...        + "pooch/tests/data/tiny-data.zip")
-    >>> url = url.format(check_version(version.full_version))
+    >>> url = url.format(check_version(__version__))
     >>> # By default, you would get the path to the archive
     >>> fname = retrieve(
     ...     url,
