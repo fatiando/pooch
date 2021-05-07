@@ -319,3 +319,16 @@ Here's a minimal working example of such a custom "progress display" class
 
         def close(self):
             print("", file=sys.stderr)
+
+
+An instance of this class can now be passed to an ``HTTPDownloader`` as
+
+.. code:: python
+
+    pbar = MinimalProgressDisplay(total=None)
+    download = HTTPDownloader(progressbar=pbar)
+
+
+.. note::
+
+    At the moment, this feature is only supported for the ``HTTPDownloader`` class.
