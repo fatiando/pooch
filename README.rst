@@ -27,7 +27,6 @@ Part of the `Fatiando a Terra <https://www.fatiando.org>`__ project
 
 .. placeholder-for-doc-index
 
-🚨 **Pooch v1.2.0 is the last release that is compatible with Python 3.5.** 🚨
 
 About
 -----
