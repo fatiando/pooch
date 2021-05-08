@@ -84,10 +84,11 @@ class HTTPDownloader:  # pylint: disable=too-few-public-methods
 
     Parameters
     ----------
-    progressbar : bool
+    progressbar : bool or an arbitrary progress bar object
         If True, will print a progress bar of the download to standard error
         (stderr). Requires `tqdm <https://github.com/tqdm/tqdm>`__ to be
-        installed.
+        installed. Alternatively, an arbitrary progress bar object can be
+        passed. See :ref:`custom-progressbar` for details.
     chunk_size : int
         Files are streamed *chunk_size* bytes at a time instead of loading
         everything into memory at one. Usually doesn't need to be changed.
@@ -151,7 +152,7 @@ class HTTPDownloader:  # pylint: disable=too-few-public-methods
         self.kwargs = kwargs
         self.progressbar = progressbar
         self.chunk_size = chunk_size
-        if self.progressbar and tqdm is None:
+        if self.progressbar is True and tqdm is None:
             raise ValueError("Missing package 'tqdm' required for progress bars.")
 
     def __call__(self, url, output_file, pooch):
@@ -179,8 +180,8 @@ class HTTPDownloader:  # pylint: disable=too-few-public-methods
             response = requests.get(url, **kwargs)
             response.raise_for_status()
             content = response.iter_content(chunk_size=self.chunk_size)
-            if self.progressbar:
-                total = int(response.headers.get("content-length", 0))
+            total = int(response.headers.get("content-length", 0))
+            if self.progressbar is True:
                 # Need to use ascii characters on Windows because there isn't
                 # always full unicode support
                 # (see https://github.com/tqdm/tqdm/issues/454)
@@ -193,6 +194,9 @@ class HTTPDownloader:  # pylint: disable=too-few-public-methods
                     unit_scale=True,
                     leave=True,
                 )
+            elif self.progressbar:
+                progress = self.progressbar
+                progress.total = total
             for chunk in content:
                 if chunk:
                     output_file.write(chunk)
@@ -245,7 +249,7 @@ class FTPDownloader:  # pylint: disable=too-few-public-methods
     progressbar : bool
         If True, will print a progress bar of the download to standard error
         (stderr). Requires `tqdm <https://github.com/tqdm/tqdm>`__ to be
-        installed.
+        installed. **Custom progress bars are not yet supported.**
     chunk_size : int
         Files are streamed *chunk_size* bytes at a time instead of loading
         everything into memory at one. Usually doesn't need to be changed.
@@ -270,7 +274,7 @@ class FTPDownloader:  # pylint: disable=too-few-public-methods
         self.timeout = timeout
         self.progressbar = progressbar
         self.chunk_size = chunk_size
-        if self.progressbar and tqdm is None:
+        if self.progressbar is True and tqdm is None:
             raise ValueError("Missing package 'tqdm' required for progress bars.")
 
     def __call__(self, url, output_file, pooch):
@@ -352,7 +356,7 @@ class SFTPDownloader:  # pylint: disable=too-few-public-methods
     timeout : int
         Timeout in seconds for sftp socket operations, use None to mean no
         timeout.
-    progressbar : bool
+    progressbar : bool or an arbitrary progress bar object
         If True, will print a progress bar of the download to standard
         error (stderr). Requires `tqdm <https://github.com/tqdm/tqdm>`__ to
         be installed.
@@ -420,6 +424,7 @@ class SFTPDownloader:  # pylint: disable=too-few-public-methods
                     unit_scale=True,
                     leave=True,
                 )
+            if self.progressbar:
                 with progress:
 
                     def callback(current, total):
