@@ -3,8 +3,8 @@ PROJECT=pooch
 TESTDIR=tmp-test-dir-with-unique-name
 PYTEST_ARGS=--cov-config=../.coveragerc --cov-report=term-missing --cov=$(PROJECT) --doctest-modules -v --pyargs
 LINT_FILES=setup.py $(PROJECT)
-BLACK_FILES=setup.py doc/conf.py $(PROJECT)
-FLAKE8_FILES=setup.py doc/conf.py $(PROJECT)
+BLACK_FILES=setup.py doc/conf.py $(PROJECT) license_notice.py
+FLAKE8_FILES=setup.py doc/conf.py $(PROJECT) license_notice.py
 
 help:
 	@echo "Commands:"
@@ -27,13 +27,19 @@ test:
 	cp $(TESTDIR)/.coverage* .
 	rm -r $(TESTDIR)
 
-format:
+format: license
 	black $(BLACK_FILES)
 
-check: black-check flake8
+check: black-check flake8 license-check
 
 black-check:
 	black --check $(BLACK_FILES)
+
+license:
+	python license_notice.py
+
+license-check:
+	python license_notice.py --check
 
 flake8:
 	flake8 $(FLAKE8_FILES)
@@ -44,5 +50,5 @@ lint:
 clean:
 	find . -name "*.pyc" -exec rm -v {} \;
 	find . -name ".coverage.*" -exec rm -v {} \;
-	rm -rvf build dist MANIFEST *.egg-info __pycache__ .coverage .cache .pytest_cache
+	rm -rvf build dist MANIFEST *.egg-info __pycache__ .coverage .cache .pytest_cache $(PROJECT)/_version.py
 	rm -rvf $(TESTDIR) dask-worker-space

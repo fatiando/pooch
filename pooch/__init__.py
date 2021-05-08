@@ -4,16 +4,20 @@
 #
 # This code is part of the Fatiando a Terra project (https://www.fatiando.org)
 #
-# pylint: disable=missing-docstring,import-outside-toplevel
+# pylint: disable=missing-docstring,import-outside-toplevel,import-self
+#
 # Import functions/classes to make the API
-from . import version
 from .core import Pooch, create, retrieve
 from .utils import os_cache, file_hash, make_registry, check_version, get_logger
 from .downloaders import HTTPDownloader, FTPDownloader, SFTPDownloader
 from .processors import Unzip, Untar, Decompress
 
+# This file is generated automatically by setuptools_scm
+from . import _version
 
-__version__ = version.full_version
+
+# Add a "v" to the version number
+__version__ = f"v{_version.version}"
 
 
 def test(doctest=True, verbose=True, coverage=False):

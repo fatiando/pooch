@@ -9,7 +9,7 @@ import os
 import datetime
 import sphinx_rtd_theme
 
-from pooch.version import full_version
+import pooch
 
 extensions = [
     "sphinx.ext.autodoc",
@@ -51,10 +51,10 @@ master_doc = "index"
 year = datetime.date.today().year
 project = "Pooch"
 copyright = f"2018-{year}, The Pooch Developers."
-if len(full_version.split("+")) > 1 or full_version == "unknown":
+if len(pooch.__version__.split("+")) > 1 or pooch.__version__ == "unknown":
     version = "dev"
 else:
-    version = full_version
+    version = pooch.__version__
 
 # These enable substitutions using |variable| in the rst files
 rst_epilog = f"""

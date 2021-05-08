@@ -55,71 +55,31 @@ The main advantages of this are:
 
 ## Continuous Integration
 
-We use TravisCI and Azure Pipelines continuous integration (CI) services to build and
+We use GitHub Actions continuous integration (CI) services to build and
 test the project on Windows, Linux, and Mac.
-The configuration files for these services are `.travis.yml` and `.azure-pipelines.yml`.
-Both rely on the `requirements.txt` file to install the required dependencies using
-conda and the `Makefile` to run the tests and checks.
+The configuration files for this service are in `.github/workflows`.
+They rely on the `requirements.txt`, `requirements-optional.txt`, etc 
+files to install the required dependencies using conda or pip.
 
-Travis also handles all of our deployments automatically:
+The CI jobs include:
 
-* Updating the development documentation by pushing the built HTML pages from the
-  *master* branch onto the `dev` folder of the *gh-pages* branch.
-* Uploading new releases to PyPI (only when the build was triggered by a git tag).
-* Updated the `latest` documentation link to the new release.
+* Running the test suite on multiple combinations of OS, Python version,
+  with and without optional dependencies.
+* Running Black, flake8, and pylint to check the code for style.
+* Building the documentation to make sure it works.
+* Pushing the built documentation HTML to the `gh-pages` branch.
+* Upload source and wheel distributions to TestPyPI (on master) and PyPI
+  (on releases).
 
 This way, most day-to-day maintenance operations are automatic.
-
-The scripts that setup the test environment and run the deployments are loaded from the
-[fatiando/continuous-integration](https://github.com/fatiando/continuous-integration)
-repository to avoid duplicating work across multiple repositories.
-If you find any problems with the test setup and deployment, please create issues and
-submit pull requests to that repository.
-
-
-## Citations
-
-The citation for a package that doesn't have an associated paper will be the
-Zenodo DOI for all versions. This citation will include everyone who has
-contributed to the project and met our [authorship criteria](AUTHORSHIP.md).
-
-Include the following text in the `CITATION.rst` file:
-
-```
-This is research software **made by scientists**. Citations help us justify the
-effort that goes into building and maintaining this project.
-
-If you used this software in your research, please consider
-citing the following source: https://doi.org/10.5281/zenodo.3530749
-
-The link above includes full citation information and export formats (BibTeX,
-Mendeley, etc).
-```
-
-If the project has been publish as an academic paper (for example, on
-[JOSS](https://joss.theoj.org)), **update the `CITATION.rst` to point to the
-paper instead of the Zenodo archive**.
-
-```
-If you used this software in your research, please consider citing the
-following publication:
-
-    <full citation including authors, title, journal, DOI, etc>
-
-This is an open-access publication. The paper and the associated reviews can be
-freely accessed at: https://doi.org/<INSERT-DOI-HERE>
-
-The link above includes full citation information and export formats (BibTeX,
-Mendeley, etc).
-```
 
 
 ## Making a Release
 
 We try to automate the release process as much as possible.
 Travis handles publishing new releases to PyPI and updating the documentation.
-The version number is set automatically using versioneer based information it gets from
-git.
+The version number is set automatically using setuptools-scm based on information it gets
+from git.
 There are a few steps that still must be done manually, though.
 
 ### Draft a new Zenodo release
@@ -147,7 +107,7 @@ The rest of the process is the same as above.
 1. Generate a list of commits between the last release tag and now:
 
     ```bash
-    git log HEAD...v0.1.2 > changes.txt
+    git log HEAD...v0.1.2 > changes.rst
     ```
 
 2. Edit the changes list to remove any trivial changes (updates to the README, typo
@@ -201,10 +161,10 @@ click on "Draft a new release":
 1. Use the version number (including the `v`) as the "Tag version" and "Release
    title".
 2. Fill the release description with a Markdown version of the **latest**
-   changelog entry (including the DOI badge). The `doc/changes.rst` file can be
+   changelog entry (including the DOI badge). The `changes.rst` file can be
    converted to Markdown using `pandoc`:
    ```
-   pandoc -s doc/changes.rst -o changes.md --wrap=none
+   pandoc -s changes.rst -o changes.md --wrap=none
    ```
 3. Publish the release.
 
@@ -215,7 +175,7 @@ reserved DOI.
 
 ### Update the conda package
 
-After Travis is done building the tag and all builds pass, we need to update
+After CI is done building the tag and all builds pass, we need to update
 the conda package.
 Fortunately, the conda-forge bot will submit a PR updating the package for us
 (it may take a couple of hours to do so).
@@ -227,3 +187,39 @@ the conda recipe:
 2. If dropping/adding support for Python versions (or version of other
    packages) make sure the correct version restrictions are applied in
    `meta.yaml`.
+
+## Citations
+
+The citation for a package that doesn't have an associated paper will be the
+Zenodo DOI for all versions. This citation will include everyone who has
+contributed to the project and met our [authorship criteria](AUTHORSHIP.md).
+
+Include the following text in the `CITATION.rst` file:
+
+```
+This is research software **made by scientists**. Citations help us justify the
+effort that goes into building and maintaining this project.
+
+If you used this software in your research, please consider
+citing the following source: https://doi.org/10.5281/zenodo.3530749
+
+The link above includes full citation information and export formats (BibTeX,
+Mendeley, etc).
+```
+
+If the project has been publish as an academic paper (for example, on
+[JOSS](https://joss.theoj.org)), **update the `CITATION.rst` to point to the
+paper instead of the Zenodo archive**.
+
+```
+If you used this software in your research, please consider citing the
+following publication:
+
+    <full citation including authors, title, journal, DOI, etc>
+
+This is an open-access publication. The paper and the associated reviews can be
+freely accessed at: https://doi.org/<INSERT-DOI-HERE>
+
+The link above includes full citation information and export formats (BibTeX,
+Mendeley, etc).
+```

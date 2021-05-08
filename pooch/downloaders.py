@@ -102,9 +102,9 @@ class HTTPDownloader:  # pylint: disable=too-few-public-methods
     Download one of the data files from the Pooch repository:
 
     >>> import os
-    >>> from pooch import version, check_version
+    >>> from pooch import __version__, check_version
     >>> url = "https://github.com/fatiando/pooch/raw/{}/data/tiny-data.txt"
-    >>> url = url.format(check_version(version.full_version))
+    >>> url = url.format(check_version(__version__))
     >>> downloader = HTTPDownloader()
     >>> # Not using with Pooch.fetch so no need to pass an instance of Pooch
     >>> downloader(url=url, output_file="tiny-data.txt", pooch=None)
