@@ -60,8 +60,8 @@ Required:
 
 Optional:
 
-* `tqdm <https://github.com/tqdm/tqdm>`__: print a simple download
-  progress bar (see :class:`pooch.HTTPDownloader`).
+* `tqdm <https://github.com/tqdm/tqdm>`__: Required to print a download
+  progress bar (see :ref:`tqdm-progressbar` or :ref:`custom-progressbar`).
 * `paramiko <https://github.com/paramiko/paramiko>`__: Required for SFTP
   downloads (see :class:`pooch.SFTPDownloader`).
 

@@ -87,10 +87,8 @@ class HTTPDownloader:  # pylint: disable=too-few-public-methods
     progressbar : bool or an arbitrary progress bar object
         If True, will print a progress bar of the download to standard error
         (stderr). Requires `tqdm <https://github.com/tqdm/tqdm>`__ to be
-        installed.
-        Alternatively, an arbitrary progress bar object can be passed.
-        See :ref:`custom-progressbar` for details.
-
+        installed. Alternatively, an arbitrary progress bar object can be
+        passed. See :ref:`custom-progressbar` for details.
     chunk_size : int
         Files are streamed *chunk_size* bytes at a time instead of loading
         everything into memory at one. Usually doesn't need to be changed.
@@ -248,12 +246,10 @@ class FTPDownloader:  # pylint: disable=too-few-public-methods
     timeout : int
         Timeout in seconds for ftp socket operations, use None to mean no
         timeout.
-    progressbar : bool or an arbitrary progress bar object
+    progressbar : bool
         If True, will print a progress bar of the download to standard error
         (stderr). Requires `tqdm <https://github.com/tqdm/tqdm>`__ to be
-        installed.
-        Alternatively, an arbitrary progress bar object can be passed.
-        See :ref:`custom-progressbar` for details.
+        installed. **Custom progress bars are not yet supported.**
     chunk_size : int
         Files are streamed *chunk_size* bytes at a time instead of loading
         everything into memory at one. Usually doesn't need to be changed.

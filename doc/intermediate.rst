@@ -251,8 +251,10 @@ separators** (``'/'``) even on Windows. We will handle the appropriate
 conversions.
 
 
-Printing a download progress bar
---------------------------------
+.. _tqdm-progressbar:
+
+Printing a download progress bar with ``tqdm``
+----------------------------------------------
 
 The :class:`~pooch.HTTPDownloader` can use `tqdm <https://github.com/tqdm/tqdm>`__
 to print a download progress bar. This is turned off by default but can be
@@ -284,7 +286,16 @@ like this:
     ``tqdm`` is not installed by default with Pooch. You will have to install
     it separately in order to use this feature.
 
+
 .. _custom-progressbar:
+
+Using custom progress bars
+--------------------------
+
+.. note::
+
+    At the moment, this feature is only available for
+    :class:`pooch.HTTPDownloader`.
 
 Alternatively, you can pass an arbitrary object that behaves like a progress
 that implements the ``update``, ``reset``, and ``close`` methods. ``update``
@@ -327,8 +338,3 @@ An instance of this class can now be passed to an ``HTTPDownloader`` as
 
     pbar = MinimalProgressDisplay(total=None)
     download = HTTPDownloader(progressbar=pbar)
-
-
-.. note::
-
-    At the moment, this feature is only supported for the ``HTTPDownloader`` class.
