@@ -25,7 +25,7 @@ Part of the `Fatiando a Terra <https://www.fatiando.org>`__ project
     :alt: Digital Object Identifier for the JOSS paper
     :target: https://doi.org/10.21105/joss.01943
 
-.. placeholder-for-doc-index
+.. placeholder-doc-index-start
 
 
 About
@@ -154,6 +154,9 @@ Projects using Pooch
 *If you're using Pooch, send us a pull request adding your project to the list.*
 
 
+.. placeholder-doc-index-end
+
+
 Contacting Us
 -------------
 
@@ -226,31 +229,5 @@ License
 -------
 
 This is free software: you can redistribute it and/or modify it under the terms
-of the **BSD 3-clause License**. A copy of this license is provided in
-`LICENSE.txt <https://github.com/fatiando/pooch/blob/master/LICENSE.txt>`__.
-
-
-Documentation for other versions
---------------------------------
-
-* `Development <https://www.fatiando.org/pooch/dev>`__ (reflects the *master* branch on
-  Github)
-* `Latest release <https://www.fatiando.org/pooch/latest>`__
-* `v1.3.0 <https://www.fatiando.org/pooch/v1.3.0>`__
-* `v1.2.0 <https://www.fatiando.org/pooch/v1.2.0>`__
-* `v1.1.1 <https://www.fatiando.org/pooch/v1.1.1>`__
-* `v1.1.0 <https://www.fatiando.org/pooch/v1.1.0>`__
-* `v1.0.0 <https://www.fatiando.org/pooch/v1.0.0>`__
-* `v0.7.1 <https://www.fatiando.org/pooch/v0.7.1>`__
-* `v0.7.0 <https://www.fatiando.org/pooch/v0.7.0>`__
-* `v0.6.0 <https://www.fatiando.org/pooch/v0.6.0>`__
-* `v0.5.2 <https://www.fatiando.org/pooch/v0.5.2>`__
-* `v0.5.1 <https://www.fatiando.org/pooch/v0.5.1>`__
-* `v0.5.0 <https://www.fatiando.org/pooch/v0.5.0>`__
-* `v0.4.0 <https://www.fatiando.org/pooch/v0.4.0>`__
-* `v0.3.1 <https://www.fatiando.org/pooch/v0.3.1>`__
-* `v0.3.0 <https://www.fatiando.org/pooch/v0.3.0>`__
-* `v0.2.1 <https://www.fatiando.org/pooch/v0.2.1>`__
-* `v0.2.0 <https://www.fatiando.org/pooch/v0.2.0>`__
-* `v0.1.1 <https://www.fatiando.org/pooch/v0.1.1>`__
-* `v0.1   <https://www.fatiando.org/pooch/v0.1>`__
+of the `BSD 3-clause License <https://github.com/fatiando/pooch/blob/master/LICENSE.txt>`__.
+A copy of this license is provided with distributions of the software.

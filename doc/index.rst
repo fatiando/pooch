@@ -14,19 +14,20 @@
     `Fatiando a Terra <https://www.fatiando.org/>`_ project.
 
 .. include:: ../README.rst
-    :start-after: placeholder-for-doc-index
+    :start-after: placeholder-doc-index-start
+    :end-before: placeholder-doc-index-end
 
 .. toctree::
-    :maxdepth: 2
+    :maxdepth: 0
     :hidden:
     :caption: Getting Started
 
     install.rst
-    retrieve.rst
     citing.rst
+    retrieve.rst
 
 .. toctree::
-    :maxdepth: 2
+    :maxdepth: 0
     :hidden:
     :caption: Training your Pooch
 
@@ -37,20 +38,22 @@
     processors.rst
 
 .. toctree::
-    :maxdepth: 2
+    :maxdepth: 0
     :hidden:
-    :caption: Reference Documentation
+    :caption: Reference
 
     api/index.rst
+    versions.rst
     changes.rst
 
 .. toctree::
-    :maxdepth: 2
+    :maxdepth: 0
     :hidden:
     :caption: Getting help and contributing
 
     Join the community <http://contact.fatiando.org>
-    How to contribute <https://github.com/fatiando/harmonica/blob/master/CONTRIBUTING.md>
-    Code of Conduct <https://github.com/fatiando/harmonica/blob/master/CODE_OF_CONDUCT.md>
-    Source code on GitHub <https://github.com/fatiando/harmonica>
+    Code of Conduct <https://github.com/fatiando/pooch/blob/master/CODE_OF_CONDUCT.md>
+    How to contribute <https://github.com/fatiando/pooch/blob/master/CONTRIBUTING.md>
+    Source code on GitHub <https://github.com/fatiando/pooch>
+    Authors <https://github.com/fatiando/pooch/blob/master/AUTHORS.md>
     The Fatiando a Terra project <https://www.fatiando.org>
