@@ -4,3 +4,15 @@ span.project-version {
   font-weight: 600;
   margin-left: 5px;
 }
+
+.table td {
+  padding: 0.5rem;
+}
+
+.table td  p {
+  margin-bottom: 0 !important;
+}
+
+.py-obj {
+  margin-right: 0.15rem;
+}
