@@ -4,5 +4,5 @@ pytest
 pytest-cov
 pytest-localftpserver
 coverage
-sphinx==3.3.*
-sphinx_rtd_theme==0.5.0
+sphinx==3.5.*
+sphinx-book-theme==0.0.41
