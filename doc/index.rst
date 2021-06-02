@@ -39,6 +39,7 @@
     protocols.rst
     downloaders.rst
     processors.rst
+    authentication.rst
     progressbars.rst
     logging.rst
 
