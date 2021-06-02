@@ -64,22 +64,3 @@ Optional:
   progress bar (see :ref:`tqdm-progressbar` or :ref:`custom-progressbar`).
 * `paramiko <https://github.com/paramiko/paramiko>`__: Required for SFTP
   downloads (see :class:`pooch.SFTPDownloader`).
-
-
-Testing your install
---------------------
-
-.. note::
-
-    This step is optional.
-
-We ship a full test suite with the package.
-To run the tests, you'll need to install some extra dependencies first:
-
-* `pytest <https://docs.pytest.org/>`__
-
-After that, you can test your installation by running the following inside a
-Python interpreter or Jupyter notebook::
-
-    import pooch
-    pooch.test()
