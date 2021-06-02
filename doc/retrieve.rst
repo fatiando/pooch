@@ -1,7 +1,7 @@
 .. _retrieve:
 
-Retrieving a data file
-======================
+Retrieving a single data file
+=============================
 
 Basic usage
 -----------
