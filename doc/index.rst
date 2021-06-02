@@ -40,7 +40,7 @@
     downloaders.rst
     processors.rst
     progressbars.rst
-    advanced.rst
+    logging.rst
 
 .. toctree::
     :maxdepth: 0
