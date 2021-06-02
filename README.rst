@@ -154,9 +154,6 @@ Projects using Pooch
 *If you're using Pooch, send us a pull request adding your project to the list.*
 
 
-.. placeholder-doc-index-end
-
-
 Contacting Us
 -------------
 
@@ -166,6 +163,9 @@ Contacting Us
   on any open issue or pull request.
 * We have `chat room on Slack <http://contact.fatiando.org>`__ where you can
   ask questions and leave comments.
+
+
+.. placeholder-doc-index-end
 
 
 Citing Pooch
