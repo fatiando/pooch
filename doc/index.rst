@@ -37,10 +37,10 @@
     registry-files.rst
     multiple-urls.rst
     protocols.rst
-    intermediate.rst
-    advanced.rst
     downloaders.rst
     processors.rst
+    progressbars.rst
+    advanced.rst
 
 .. toctree::
     :maxdepth: 0
