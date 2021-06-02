@@ -33,6 +33,7 @@
     :caption: Training your Pooch
 
     hashes.rst
+    user-defined-cache.rst
     intermediate.rst
     advanced.rst
     downloaders.rst
