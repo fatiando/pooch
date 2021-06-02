@@ -1,7 +1,7 @@
 .. _beginner:
 
-Beginner tricks
-===============
+Manage a package's sample data
+==============================
 
 This section covers the minimal setup required to use Pooch to manage your data
 collection. We highly recommend looking at the :ref:`intermediate` tutorial as

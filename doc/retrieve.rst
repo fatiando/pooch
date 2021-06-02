@@ -4,18 +4,19 @@ Retrieving a data file
 ======================
 
 A common task in data analysis workflows is downloading the data from a
-publicly available source. This could be done manually (which can't be easily
-reproduced) or programmatically using :mod:`urllib` or :mod:`requests` (which
-can require a non-trivial amount of code). Ideally, we should
-be checking that the downloaded file is not corrupted with a known
-`checksum <https://en.wikipedia.org/wiki/Cryptographic_hash_function>`__.
+publicly available source.
+This could be done manually (which can't be easily reproduced) or
+programmatically using :mod:`urllib` or :mod:`requests` (which can require a
+non-trivial amount of code).
+Ideally, we should also be checking that the downloaded file is not corrupted
+with a known `checksum
+<https://en.wikipedia.org/wiki/Cryptographic_hash_function>`__.
+Pooch is designed to simplify these tasks (and more)!
 
+Basic usage
+-----------
 
-Getting started
----------------
-
-Pooch is designed to simplify all of these tasks (and more). If you're only
-looking to download one or two data files only, Pooch offers the
+If you're only looking to download one or two data files only, use the
 :func:`pooch.retrieve` function:
 
 .. code-block:: python
@@ -24,7 +25,7 @@ looking to download one or two data files only, Pooch offers the
 
 
     # Download the file and save it locally.
-    fname = pooch.retrieve(
+    file_path = pooch.retrieve(
         # URL to one of Pooch's test files
         url="https://github.com/fatiando/pooch/raw/v1.0.0/data/tiny-data.txt",
         # Pooch will check the MD5 checksum of the downloaded file against the
@@ -78,7 +79,8 @@ to help make sure the results of your code are reproducible.
 Customizing the download
 ------------------------
 
-Function :func:`pooch.retrieve` has support for all of Pooch's
-:ref:`downloaders <downloaders>` and :ref:`processors <processors>`. You can
-use HTTP, FTP, and SFTP (with or without authentication), decompress files, unpack
-archives, show progress bars, and more with a bit of configuration.
+The :func:`pooch.retrieve` function supports for all of Pooch's
+:ref:`downloaders <downloaders>` and :ref:`processors <processors>`.
+You can use HTTP, FTP, and SFTP (with or without authentication), decompress
+files, unpack archives, show progress bars, and more with a bit of
+configuration.

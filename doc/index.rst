@@ -24,13 +24,13 @@
 
     install.rst
     retrieve.rst
+    sample-data.rst
 
 .. toctree::
     :maxdepth: 0
     :hidden:
     :caption: Training your Pooch
 
-    beginner.rst
     intermediate.rst
     advanced.rst
     downloaders.rst
