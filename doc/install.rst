@@ -83,20 +83,3 @@ Python interpreter or Jupyter notebook::
 
     import pooch
     pooch.test()
-
-
-.. _python-versions:
-
-Python version compatibility
-----------------------------
-
-If you require support for older Python versions, please pin Pooch to the
-following releases to ensure compatibility:
-
-+----------------+-------------------------------+
-| Python version | Last compatible Pooch release |
-+----------------+-------------------------------+
-| 2.7            | 0.6.0                         |
-+----------------+-------------------------------+
-| 3.5            | 1.2.0                         |
-+----------------+-------------------------------+
