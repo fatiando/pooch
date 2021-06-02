@@ -174,4 +174,5 @@ tutorials under "Training your Pooch" for more information.
 
 You can also customize the download itself (adding authentication, progress
 bars, etc) and apply post-download steps (unzipping an archive, decompressing a
-file, etc) through its :ref:`downloaders` and :ref:`processors`.
+file, etc) through its :ref:`downloaders <downloaders>` and
+:ref:`processors <processors>`.

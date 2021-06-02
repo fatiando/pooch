@@ -37,11 +37,13 @@
     registry-files.rst
     multiple-urls.rst
     protocols.rst
+    logging.rst
     downloaders.rst
     processors.rst
     authentication.rst
     progressbars.rst
-    logging.rst
+    unpacking.rst
+    decompressing.rst
 
 .. toctree::
     :maxdepth: 0
