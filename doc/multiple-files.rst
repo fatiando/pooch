@@ -44,6 +44,18 @@ It contains all of the information needed to fetch the data files in our
     hashes (and optionally download URLs).
 
 
+.. attention::
+
+    You can have data files in **subdirectories** of the remote data store
+    (URL).
+    These files will be saved to the same subdirectories in the local storage
+    folder.
+
+    However, the names of these files in the registry **must use Unix-style
+    separators** (``'/'``) **even on Windows**.
+    Pooch will handle the appropriate conversions.
+
+
 Downloading files
 -----------------
 

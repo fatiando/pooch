@@ -8,15 +8,6 @@ are **recommended** for most projects.
 
 
 
-Subdirectories
---------------
-
-You can have data files in subdirectories of the remote data store. These files
-will be saved to the same subdirectories in the local storage folder. Note,
-however, that the names of these files in the registry **must use Unix-style
-separators** (``'/'``) even on Windows. We will handle the appropriate
-conversions.
-
 
 .. _tqdm-progressbar:
 
