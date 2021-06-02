@@ -1,5 +1,3 @@
-.. _intermediate:
-
 Intermediate tricks
 ===================
 

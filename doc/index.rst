@@ -24,6 +24,7 @@
 
     install.rst
     retrieve.rst
+    multiple-files.rst
     sample-data.rst
 
 .. toctree::
