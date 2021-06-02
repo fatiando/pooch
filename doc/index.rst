@@ -35,6 +35,7 @@
     hashes.rst
     user-defined-cache.rst
     registry-files.rst
+    multiple-urls.rst
     intermediate.rst
     advanced.rst
     downloaders.rst
