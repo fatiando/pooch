@@ -32,6 +32,7 @@
     :hidden:
     :caption: Training your Pooch
 
+    hashes.rst
     intermediate.rst
     advanced.rst
     downloaders.rst
