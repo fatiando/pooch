@@ -47,7 +47,7 @@ Creating your own downloaders
 -----------------------------
 
 If your use case is not covered by our downloaders, you can implement your own.
-:meth:`pooch.Pooch.fetch` and :meth:`pooch.retrive` will accept any *callable
+:meth:`pooch.Pooch.fetch` and :func:`pooch.retrieve` will accept any *callable
 obejct* that has the signature specified above. As an example, consider the
 case in which the login credentials need to be provided to a site that is
 redirected from the original download URL:
