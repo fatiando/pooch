@@ -46,7 +46,7 @@ first time they run it.
 .. hint::
 
     You can use **different hashes** by specifying different algorithm names:
-    ``sha256:XXXXXX``, ``sha1:XXXXXX``, etc.
+    ``sha256:XXXXXX``, ``sha1:XXXXXX``, etc. See :ref:`hashes`.
 
 
 Unknown file hash
@@ -71,9 +71,11 @@ Customizing the download
 
 The :func:`pooch.retrieve` function supports for all of Pooch's
 :ref:`downloaders <downloaders>` and :ref:`processors <processors>`.
-You can use HTTP, FTP, and SFTP (with or without authentication), decompress
-files, unpack archives, show progress bars, and more with a bit of
-configuration.
+You can use HTTP, FTP, and SFTP
+(even with :ref:`authentication <authentication>`),
+:ref:`decompress files <decompressing>`,
+:ref:`unpack archives <unpacking>`,
+show :ref:`progress bars <progressbars>`, and more with a bit of configuration.
 
 
 When not to use ``retrieve``
