@@ -48,11 +48,10 @@ For now, let's say that this is the layout of your repository on GitHub:
 
 The sample data are stored in the ``data`` folder of your repository.
 
-.. tip::
+.. seealso::
 
     Pooch can handle different use cases as well, like: FTP/SFTP, authenticated
     HTTP, multiple URLs, decompressing and unpacking archives, etc.
-
     See the tutorials under "Training your Pooch" and the documentation for
     :func:`pooch.create` and :func:`pooch.Pooch` for more options.
 

@@ -38,10 +38,16 @@ The return value (``odie``) is an instance of :class:`pooch.Pooch`.
 It contains all of the information needed to fetch the data files in our
 **registry** and store them in the specified cache folder.
 
-.. hint::
+.. note::
 
     The Pooch **registry** is a mapping of file names and their associated
     hashes (and optionally download URLs).
+
+.. tip::
+
+    If you don't know the hash or are otherwise unable to obtain it, it is
+    possible to bypass the check. This is **not recommended** for general use,
+    only if it can't be avoided. See :ref:`hashes`.
 
 
 .. attention::
@@ -108,6 +114,8 @@ Customizing the download
 
 The :meth:`pooch.Pooch.fetch` method supports for all of Pooch's
 :ref:`downloaders <downloaders>` and :ref:`processors <processors>`.
-You can use HTTP, FTP, and SFTP (with or without authentication), decompress
-files, unpack archives, show progress bars, and more with a bit of
-configuration.
+You can use HTTP, FTP, and SFTP
+(even with :ref:`authentication <authentication>`),
+:ref:`decompress files <decompressing>`,
+:ref:`unpack archives <unpacking>`,
+show :ref:`progress bars <progressbars>`, and more with a bit of configuration.

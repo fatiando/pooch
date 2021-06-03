@@ -43,7 +43,7 @@ downloads.
 Anyone getting a copy of your code should also get the correct data file the
 first time they run it.
 
-.. hint::
+.. seealso::
 
     You can use **different hashes** by specifying different algorithm names:
     ``sha256:XXXXXX``, ``sha1:XXXXXX``, etc. See :ref:`hashes`.
