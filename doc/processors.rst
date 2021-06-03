@@ -55,8 +55,8 @@ Common uses cases for processors include:
 * :ref:`Decompressing <decompressing>` files
 
 
-Custom processors
------------------
+Creating your own processors
+----------------------------
 
 Let's say we want to implement the :class:`pooch.Unzip` processor ourselves to
 extract a single file from the archive. We could do that with the following
