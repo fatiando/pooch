@@ -17,6 +17,11 @@ Python distributions to ensure you have all dependencies installed and the
 Installing Anaconda does not require administrative rights to your computer and
 doesn't interfere with any other Python installations in your system.
 
+.. note::
+
+    The commands below should be executed in a terminal. On Windows, use the
+    "Anaconda Prompt" app or ``cmd.exe`` if you're not using Anaconda.
+
 
 Installing with conda
 ---------------------
