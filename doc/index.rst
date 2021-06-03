@@ -13,6 +13,12 @@
     Pooch is a part of the
     `Fatiando a Terra <https://www.fatiando.org/>`_ project.
 
+.. admonition:: Using Pooch for your research?
+
+    Please consider :ref:`citing it <citing>` in your publications.
+    Citations help us get credit for all the effort we put into this project.
+
+
 .. include:: ../README.rst
     :start-after: placeholder-doc-index-start
     :end-before: placeholder-doc-index-end
