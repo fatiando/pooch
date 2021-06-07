@@ -14,7 +14,7 @@
         Just want to download a file without messing with
         <code>requests</code> and <code>urllib</code>?
         <br>
-        Want to add sample datasets to your Python package?
+        Trying to add sample datasets to your Python package?
         <br>
         <strong>Pooch is here to help!</strong>
     </p>
@@ -22,62 +22,67 @@
 
 .. panels::
     :header: text-center text-large
+    :card: border-1 m-1 text-center
 
-    **New to Pooch?**
-    ^^^^^^^^^^^^^^^^^
+    **Getting started**
+    ^^^^^^^^^^^^^^^^^^^
 
-    Looking to get started using Pooch?
+    New to Pooch?
 
     .. link-button:: about
         :type: ref
         :text: Start here
-        :classes: btn-outline-primary btn-block
+        :classes: btn-outline-primary btn-block stretched-link
 
     ---
 
-    **Experienced user?**
-    ^^^^^^^^^^^^^^^^^^^^^
+    **Reference documentation**
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    A list of our functions and classes
 
     .. link-button:: api
         :type: ref
-        :text: Start here
-        :classes: btn-outline-primary
+        :text: API reference
+        :classes: btn-outline-primary btn-block stretched-link
 
-    .. link-button:: api
+    ---
+
+    **Need help?**
+    ^^^^^^^^^^^^^^
+
+    Ask on our chat room
+
+    .. link-button:: http://contact.fatiando.org
+        :type: url
+        :text: Join our Slack
+        :classes: btn-outline-primary btn-block stretched-link
+
+    ---
+
+    **Using Pooch for research?**
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    Citations help support our work
+
+    .. link-button:: citing
         :type: ref
-        :text: API
-        :classes: btn-outline-primary
+        :text: Cite Pooch
+        :classes: btn-outline-primary btn-block stretched-link
 
-
-
-.. admonition:: Using Pooch for your research?
-
-    Please consider :ref:`citing it <citing>` in your publications.
-    Citations help us get credit for all the effort we put into this project.
 
 .. seealso::
 
     Pooch is a part of the
     `Fatiando a Terra <https://www.fatiando.org/>`_ project.
 
-Contacting Us
--------------
 
-* Most discussion happens `on Github <https://github.com/fatiando/pooch>`__.
-  Feel free to `open an issue
-  <https://github.com/fatiando/pooch/issues/new>`__ or comment
-  on any open issue or pull request.
-* We have `chat room on Slack <http://contact.fatiando.org>`__ where you can
-  ask questions and leave comments.
-
-
-Documentation
--------------
+Table of contents
+-----------------
 
 .. toctree::
-    :maxdepth: 1
     :caption: Getting Started
-    :name: gettingstarted
+    :maxdepth: 1
 
     about.rst
     install.rst
@@ -86,9 +91,8 @@ Documentation
     sample-data.rst
 
 .. toctree::
-    :maxdepth: 1
     :caption: Training your Pooch
-    :name: training
+    :maxdepth: 1
 
     hashes.rst
     user-defined-cache.rst
@@ -104,24 +108,21 @@ Documentation
     decompressing.rst
 
 .. toctree::
-    :maxdepth: 1
     :caption: Reference
-    :name: reference
+    :maxdepth: 1
 
     api/index.rst
-    versions.rst
     compatibility.rst
-    changes.rst
     citing.rst
+    changes.rst
+    versions.rst
 
 .. toctree::
-    :maxdepth: 1
-    :caption: Getting help and contributing
-    :name: community
+    :caption: Community
 
-    Join the Community <http://contact.fatiando.org>
+    Join the community <http://contact.fatiando.org>
     Code of Conduct <https://github.com/fatiando/pooch/blob/master/CODE_OF_CONDUCT.md>
-    How to Contribute <https://github.com/fatiando/pooch/blob/master/CONTRIBUTING.md>
-    Source Code on GitHub <https://github.com/fatiando/pooch>
+    How to contribute <https://github.com/fatiando/pooch/blob/master/CONTRIBUTING.md>
+    Source code on GitHub <https://github.com/fatiando/pooch>
     Authors <https://github.com/fatiando/pooch/blob/master/AUTHORS.md>
     Fatiando a Terra <https://www.fatiando.org>
