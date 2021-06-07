@@ -3,32 +3,43 @@
 Why use Pooch?
 ==============
 
-Pooch has two main uses cases:
+Use cases
+---------
 
-1. Scientists/researchers/developers looking to simply download a file.
-2. Package developers wanting to include sample data for use in tutorials and
-   tests.
 
-Pooch makes it easy to :ref:`download a file <retrieve>` with a single function
-call:
+.. tabbed:: Just download a file
 
-* Download and cache your data files locally (so it's only downloaded once).
-* Make sure everyone running the code has the same version of the data files by
-  verifying cryptographic hashes.
+    **Who**: Scientists/researchers/developers looking to simply download a
+    file.
 
-For :ref:`package developers <intermediate>`, Pooch offers:
+    Pooch makes it easy to download a file (one function call).
+    On top of that, it also comes with some bonus features:
 
-* Pure Python and :ref:`minimal dependencies <dependencies>`.
-* Download a file only if necessary (it's not in the data cache or needs to be
-  updated).
-* Verify download integrity through hashes (also used to check if a file needs
-  to be updated).
-* Designed to be extended: plug in custom download (FTP, scp, etc) and
-  post-processing (unzip, decompress, rename) functions.
-* Includes utilities to unzip/decompress the data upon download to save loading
-  time.
-* Can handle HTTP/FTP/SFT and basic authentication.
-* Easily set up an environment variable to overwrite the data cache location.
+    * Download and cache your data files locally (so it's only downloaded
+      once).
+    * Make sure everyone running the code has the same version of the data
+      files by verifying cryptographic hashes.
+    * Multiple download protocols HTTP/FTP/SFT and basic authentication.
+    * Built-in utilities to unzip/decompress files upon download
+
+    **Start here:** :ref:`retrieve`
+
+.. tabbed:: Use by another library
+
+    **Who**: Package developers wanting to include sample data for use in
+    tutorials and tests.
+
+    Pooch was designed for this! It offers:
+
+    * Pure Python and :ref:`minimal dependencies <dependencies>`.
+    * Download a file only if necessary.
+    * Verification of download integrity through cryptographic hashes.
+    * Extensible design: plug in custom download and post-processing functions.
+    * Built-in utilities to unzip/decompress files upon download
+    * Multiple download protocols HTTP/FTP/SFT and basic authentication.
+    * User control of data cache location through environment variables.
+
+    **Start here:** :ref:`intermediate`
 
 History
 -------
