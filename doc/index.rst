@@ -36,18 +36,6 @@
 
     ---
 
-    **Reference documentation**
-    ^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-    A list of our functions and classes
-
-    .. link-button:: api
-        :type: ref
-        :text: API reference
-        :classes: btn-outline-primary btn-block stretched-link
-
-    ---
-
     **Need help?**
     ^^^^^^^^^^^^^^
 
@@ -56,6 +44,18 @@
     .. link-button:: http://contact.fatiando.org
         :type: url
         :text: Join our Slack
+        :classes: btn-outline-primary btn-block stretched-link
+
+    ---
+
+    **Reference documentation**
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    A list of our functions and classes
+
+    .. link-button:: api
+        :type: ref
+        :text: API reference
         :classes: btn-outline-primary btn-block stretched-link
 
     ---
