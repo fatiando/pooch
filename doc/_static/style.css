@@ -16,3 +16,15 @@ span.project-version {
 .py-obj {
   margin-right: 0.15rem;
 }
+
+.lead {
+  font-size: 1.4rem;
+}
+
+.front-page-callout {
+  margin-bottom: 4rem;
+}
+
+.text-large {
+  font-size: 1.4rem;
+}

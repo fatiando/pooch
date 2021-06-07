@@ -50,6 +50,8 @@ GitHub::
     python -m pip install --upgrade git+https://github.com/fatiando/pooch
 
 
+.. _dependencies:
+
 Dependencies
 ------------
 

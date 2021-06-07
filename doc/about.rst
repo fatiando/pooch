@@ -1,3 +1,5 @@
+.. _about:
+
 Why use Pooch?
 ==============
 
