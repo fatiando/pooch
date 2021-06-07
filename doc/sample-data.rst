@@ -5,9 +5,11 @@ Manage a package's sample data
 
 In this section, we'll use Pooch to manage the download of a Python package's
 sample datasets.
-The setup will be very similar to what we saw in :ref:`beginner` (please read
-that tutorial first).
-This time, we'll also use some other features that make our lives a bit easier.
+
+.. note::
+
+    The setup will be very similar to what we saw in :ref:`beginner`.
+    It may be helpful to read that first.
 
 The problem
 -----------
@@ -163,7 +165,6 @@ result in a failed download.
     Requires Pooch >= 1.3.0.
 
 
-
 Where to go from here
 ---------------------
 
@@ -171,7 +172,8 @@ Pooch has more features for handling different download protocols, handling
 large registries, downloading from multiple sources, and more. Check out the
 tutorials under "Training your Pooch" for more information.
 
-You can also customize the download itself (adding authentication, progress
-bars, etc) and apply post-download steps (unzipping an archive, decompressing a
-file, etc) through its :ref:`downloaders <downloaders>` and
-:ref:`processors <processors>`.
+Most users will also benefit from reading at least:
+
+* :ref:`environmentvariable`
+* :ref:`hashes`
+* :ref:`registryfiles`
