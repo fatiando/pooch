@@ -17,6 +17,11 @@ Python distributions to ensure you have all dependencies installed and the
 Installing Anaconda does not require administrative rights to your computer and
 doesn't interfere with any other Python installations in your system.
 
+.. note::
+
+    The commands below should be executed in a terminal. On Windows, use the
+    "Anaconda Prompt" app or ``cmd.exe`` if you're not using Anaconda.
+
 
 Installing with conda
 ---------------------
@@ -60,43 +65,7 @@ Required:
 
 Optional:
 
-* `tqdm <https://github.com/tqdm/tqdm>`__: Required to print a download
-  progress bar (see :ref:`tqdm-progressbar` or :ref:`custom-progressbar`).
-* `paramiko <https://github.com/paramiko/paramiko>`__: Required for SFTP
-  downloads (see :class:`pooch.SFTPDownloader`).
-
-
-Testing your install
---------------------
-
-.. note::
-
-    This step is optional.
-
-We ship a full test suite with the package.
-To run the tests, you'll need to install some extra dependencies first:
-
-* `pytest <https://docs.pytest.org/>`__
-
-After that, you can test your installation by running the following inside a
-Python interpreter or Jupyter notebook::
-
-    import pooch
-    pooch.test()
-
-
-.. _python-versions:
-
-Python version compatibility
-----------------------------
-
-If you require support for older Python versions, please pin Pooch to the
-following releases to ensure compatibility:
-
-+----------------+-------------------------------+
-| Python version | Last compatible Pooch release |
-+----------------+-------------------------------+
-| 2.7            | 0.6.0                         |
-+----------------+-------------------------------+
-| 3.5            | 1.2.0                         |
-+----------------+-------------------------------+
+* `tqdm <https://github.com/tqdm/tqdm>`__: For printing a download
+  progress bar. See :ref:`progressbars`.
+* `paramiko <https://github.com/paramiko/paramiko>`__: For SFTP downloads. See
+  :class:`pooch.SFTPDownloader`.
