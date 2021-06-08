@@ -1,7 +1,7 @@
 .. _api:
 
-API Reference
-=============
+List of functions and classes (API)
+===================================
 
 .. automodule:: pooch
 
