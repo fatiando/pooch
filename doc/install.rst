@@ -23,32 +23,39 @@ doesn't interfere with any other Python installations in your system.
     "Anaconda Prompt" app or ``cmd.exe`` if you're not using Anaconda.
 
 
-Installing with conda
----------------------
+Installing
+----------
 
-You can install pooch using the `conda package manager <https://conda.io/>`__
-that comes with the Anaconda distribution::
+There are different ways to install Pooch:
 
-    conda install pooch --channel conda-forge
+.. tabbed:: conda
+
+    Using the `conda <https://conda.io/>`__ package manager that comes with the
+    Anaconda/Miniconda distribution:
+
+    .. code:: bash
+
+        conda install pooch --channel conda-forge
+
+.. tabbed:: pip
+
+    Using the `pip <https://pypi.org/project/pip/>`__ package manager:
+
+    .. code:: bash
+
+        python -m pip install pooch
 
 
-Installing with pip
--------------------
+.. tabbed:: Development version
 
-Alternatively, you can also use the `pip package manager
-<https://pypi.org/project/pip/>`__::
+    Using ``pip`` to install the latest **unreleased** version from GitHub:
 
-    python -m pip install pooch
+    .. code:: bash
+
+        python -m pip install --upgrade git+https://github.com/fatiando/pooch
 
 
-Installing the latest development version
------------------------------------------
-
-You can use ``pip`` to install the latest version of the source code from
-GitHub::
-
-    python -m pip install --upgrade git+https://github.com/fatiando/pooch
-
+.. _dependencies:
 
 Dependencies
 ------------

@@ -20,3 +20,4 @@ dependencies:
     - pylint==2.4.*
     - sphinx==3.5.*
     - sphinx-book-theme==0.0.41
+    - sphinx-panels==0.5.*

@@ -25,8 +25,6 @@ Part of the `Fatiando a Terra <https://www.fatiando.org>`__ project
     :alt: Digital Object Identifier for the JOSS paper
     :target: https://doi.org/10.21105/joss.01943
 
-.. placeholder-doc-index-start
-
 
 About
 -----
@@ -163,9 +161,6 @@ Contacting Us
   on any open issue or pull request.
 * We have `chat room on Slack <http://contact.fatiando.org>`__ where you can
   ask questions and leave comments.
-
-
-.. placeholder-doc-index-end
 
 
 Citing Pooch
