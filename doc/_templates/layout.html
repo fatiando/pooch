@@ -21,6 +21,6 @@
     {% if title == '' or title == 'Home' %}
         <title>{{ docstitle|striptags|e }}</title>
     {% else %}
-        <title>{{ title|striptags|e }}{{ titlesuffix }}</title>
+        <title>{{ title|striptags|e }} | {{ docstitle|striptags|e }}</title>
     {% endif %}
 {% endblock %}
