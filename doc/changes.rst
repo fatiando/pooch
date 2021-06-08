@@ -3,6 +3,48 @@
 Changelog
 =========
 
+Version 1.4.0
+-------------
+
+*Released on: 2021/06/08*
+
+doi:`10.5281/zenodo.4914758 <https://doi.org/10.5281/zenodo.4914758>`__
+
+Bug fixes:
+
+* Fix bug in ``Untar`` and ``Unzip`` when the archive contains subfolders
+  (`#224 <https://github.com/fatiando/pooch/pull/224>`__)
+
+Documentation:
+
+* New theme (``sphinx-book-theme``) and layout of the documentation (`#236
+  <https://github.com/fatiando/pooch/pull/236>`__ `#237
+  <https://github.com/fatiando/pooch/pull/237>`__ `#238
+  <https://github.com/fatiando/pooch/pull/238>`__)
+
+Enhancements:
+
+* Add support for non-tqdm progress bars on HTTPDownloader (`#228
+  <https://github.com/fatiando/pooch/pull/228>`__)
+* Allow custom unpack locations in ``Untar`` and ``Unzip`` (`#224
+  <https://github.com/fatiando/pooch/pull/224>`__)
+
+Maintenance:
+
+* Replace versioneer with setuptools-scm (`#235
+  <https://github.com/fatiando/pooch/pull/235>`__)
+* Automatically check license notice on code files (`#231
+  <https://github.com/fatiando/pooch/pull/231>`__)
+* Don't store documentation HTML as CI build artifacts (`#221
+  <https://github.com/fatiando/pooch/pull/221>`__)
+
+This release contains contributions from:
+
+* Leonardo Uieda
+* Agustina Pesce
+* Clément Robert
+* Daniel McCloy
+
 Version 1.3.0
 -------------
 
