@@ -28,3 +28,8 @@ span.project-version {
 .text-large {
   font-size: 1.35rem;
 }
+
+/* Overwrite the main link definition in the book-theme for button links */
+main.bd-content #main-content a.btn:hover {
+  color: white;
+}
