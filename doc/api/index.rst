@@ -38,7 +38,7 @@ Downloaders
    HTTPDownloader
    FTPDownloader
    SFTPDownloader
-   FigshareDownloader
+   DOIDownloader
 
 Processors
 ----------

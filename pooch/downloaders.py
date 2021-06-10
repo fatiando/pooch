@@ -37,8 +37,8 @@ def choose_downloader(url):
     Returns
     -------
     downloader
-        A downloader class (either :class:`pooch.HTTPDownloader`,
-        :class:`pooch.FTPDownloader`, or :class: `pooch.SFTPDownloader`).
+        A downloader class, like :class:`pooch.HTTPDownloader`,
+        :class:`pooch.FTPDownloader`, or :class: `pooch.SFTPDownloader`.
 
     Examples
     --------
@@ -54,7 +54,10 @@ def choose_downloader(url):
     FTPDownloader
     >>> downloader = choose_downloader("figshare://DOI/filename.csv")
     >>> print(downloader.__class__.__name__)
-    FigshareDownloader
+    DOIDownloader
+    >>> downloader = choose_downloader("zenodo://DOI/filename.csv")
+    >>> print(downloader.__class__.__name__)
+    DOIDownloader
 
     """
     known_downloaders = {
@@ -62,7 +65,8 @@ def choose_downloader(url):
         "https": HTTPDownloader,
         "http": HTTPDownloader,
         "sftp": SFTPDownloader,
-        "figshare": FigshareDownloader,
+        "figshare": DOIDownloader,
+        "zenodo": DOIDownloader,
     }
 
     parsed_url = parse_url(url)
@@ -445,24 +449,30 @@ class SFTPDownloader:  # pylint: disable=too-few-public-methods
                 sftp.close()
 
 
-class FigshareDownloader:  # pylint: disable=too-few-public-methods
+class DOIDownloader:  # pylint: disable=too-few-public-methods
     """
-    Download manager for fetching files from figshare.
+    Download manager for fetching files from Digital Object Identifiers (DOIs).
 
-    `figshare <https://www.figshare.com>`__ is an open-access data repository.
-    It issues Digital Object Identifiers (DOIs) for data which provide a stable
-    link and citation point.
+    Open-access data repositories often issue Digital Object Identifiers (DOIs)
+    for data which provide a stable link and citation point. The trick is
+    finding out the download URL for a file given the DOI.
 
-    When called, this downloader uses the figshare public API to download the
-    given file from the specified DOI into the specified local file. Allowing
-    "URL"s  to be specified with the DOI instead of the actual HTTP download
-    link. Uses the :mod:`requests` library to manage downloads and interact
-    with the API.
+    When called, this downloader uses the repository's public API to find out
+    the download URL from the DOI and file name. It then uses
+    :class:`pooch.HTTPDownloader` to download the URL into the specified local
+    file. Allowing "URL"s  to be specified with the DOI instead of the actual
+    HTTP download link. Uses the :mod:`requests` library to manage downloads
+    and interact with the APIs.
 
-    The format of the "URL" is: ``figshare://{DOI}/{file name}``
+    The format of the "URL" is: ``{repository}://{DOI}/{file name}``
+
+    Supported repositories:
+
+    * `figshare <https://www.figshare.com>`__: ``figshare``
+    * `Zenodo <https://www.zenodo.org>`__: ``zenodo``
 
     Use with :meth:`pooch.Pooch.fetch` or :func:`pooch.retrieve` to be able to
-    download files given the figshare DOI instead of an HTTP link.
+    download files given the DOI instead of an HTTP link.
 
     Parameters
     ----------
@@ -485,9 +495,21 @@ class FigshareDownloader:  # pylint: disable=too-few-public-methods
     data:
 
     >>> import os
+    >>> downloader = DOIDownloader()
     >>> url = "figshare://10.6084/m9.figshare.14763051.v1/tiny-data.txt"
-    >>> downloader = FigshareDownloader()
     >>> # Not using with Pooch.fetch so no need to pass an instance of Pooch
+    >>> downloader(url=url, output_file="tiny-data.txt", pooch=None)
+    >>> os.path.exists("tiny-data.txt")
+    True
+    >>> with open("tiny-data.txt") as f:
+    ...     print(f.read().strip())
+    # A tiny data file for test purposes only
+    1  2  3  4  5  6
+    >>> os.remove("tiny-data.txt")
+
+    Same thing but for our Zenodo archive:
+
+    >>> url = "zenodo://10.5281/zenodo.4924875/tiny-data.txt"
     >>> downloader(url=url, output_file="tiny-data.txt", pooch=None)
     >>> os.path.exists("tiny-data.txt")
     True
@@ -506,10 +528,10 @@ class FigshareDownloader:  # pylint: disable=too-few-public-methods
 
     def __call__(self, url, output_file, pooch):
         """
-        Download the given figshare URL over HTTP to the given output file.
+        Download the given DOI URL over HTTP to the given output file.
 
-        Uses the figshare API to determined the actual HTTP download URL from
-        the given DOI.
+        Uses the repository's API to determined the actual HTTP download URL
+        from the given DOI.
 
         Uses :func:`requests.get`.
 
@@ -523,8 +545,17 @@ class FigshareDownloader:  # pylint: disable=too-few-public-methods
             The instance of :class:`~pooch.Pooch` that is calling this method.
 
         """
+        doi_to_url = {
+            "figshare": figshare_download_url,
+        }
         parsed_url = parse_url(url)
-        download_url = figshare_download_url(
+        repository = parsed_url["protocol"]
+        if repository not in doi_to_url:
+            raise ValueError(
+                f"Invalid data repository '{repository}'. Must be one of "
+                f"{list(doi_to_url.keys())}."
+            )
+        download_url = doi_to_url[repository](
             doi=parsed_url["netloc"], file_name=parsed_url["path"].split("/")[-1]
         )
         downloader = HTTPDownloader(

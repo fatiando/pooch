@@ -27,7 +27,7 @@ from ..downloaders import (
     HTTPDownloader,
     FTPDownloader,
     SFTPDownloader,
-    FigshareDownloader,
+    DOIDownloader,
     choose_downloader,
     figshare_download_url,
 )
@@ -52,6 +52,13 @@ def test_unsupported_protocol():
         choose_downloader("httpup://some-invalid-url.com")
 
 
+def test_invalid_doi_repository():
+    "Should fail if data repository is not supported"
+    with pytest.raises(ValueError) as exc:
+        DOIDownloader()(url="notarepository://DOI/file_name", output_file=None, pooch=None)
+    assert "Invalid data repository 'notarepository'" in str(exc.value)
+
+
 def test_figshare_url_doi_not_found():
     "Should fail if the DOI is not found on figshare"
     with pytest.raises(ValueError) as exc:
@@ -72,7 +79,7 @@ def test_figshare_downloader():
     "Test figshare downloader"
     # Use the test data we have on figshare
     with TemporaryDirectory() as local_store:
-        downloader = FigshareDownloader()
+        downloader = DOIDownloader()
         outfile = os.path.join(local_store, "tiny-data.txt")
         downloader(FIGSHAREURL + "tiny-data.txt", outfile, None)
         check_tiny_data(outfile)
@@ -133,7 +140,7 @@ def test_downloader_progressbar_fails(downloader):
 @pytest.mark.skipif(tqdm is None, reason="requires tqdm")
 @pytest.mark.parametrize(
     "url,downloader",
-    [(BASEURL, HTTPDownloader), (FIGSHAREURL, FigshareDownloader)],
+    [(BASEURL, HTTPDownloader), (FIGSHAREURL, DOIDownloader)],
     ids=["http", "figshare"],
 )
 def test_downloader_progressbar(url, downloader, capsys):

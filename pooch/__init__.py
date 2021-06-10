@@ -13,7 +13,7 @@ from .downloaders import (
     HTTPDownloader,
     FTPDownloader,
     SFTPDownloader,
-    FigshareDownloader,
+    DOIDownloader,
 )
 from .processors import Unzip, Untar, Decompress
 

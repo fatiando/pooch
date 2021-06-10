@@ -89,4 +89,4 @@ figshare dataset:
         data = numpy.loadtxt(fname)
         return data
 
-See :class:`pooch.FigshareDownloader` for more details.
+See :class:`pooch.DOIDownloader` for more details.
