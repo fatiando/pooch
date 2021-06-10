@@ -119,7 +119,9 @@ def test_pooch_local():
     check_tiny_data(fname)
 
 
-@pytest.mark.parametrize("url", [BASEURL, FIGSHAREURL, ZENODOURL], ids=["https", "figshare", "zenodo"])
+@pytest.mark.parametrize(
+    "url", [BASEURL, FIGSHAREURL, ZENODOURL], ids=["https", "figshare", "zenodo"]
+)
 def test_pooch_custom_url(url):
     "Have pooch download the file from URL that is not base_url"
     with TemporaryDirectory() as local_store:
@@ -140,7 +142,9 @@ def test_pooch_custom_url(url):
             assert log_file.getvalue() == ""
 
 
-@pytest.mark.parametrize("url", [BASEURL, FIGSHAREURL, ZENODOURL], ids=["https", "figshare", "zenodo"])
+@pytest.mark.parametrize(
+    "url", [BASEURL, FIGSHAREURL, ZENODOURL], ids=["https", "figshare", "zenodo"]
+)
 def test_pooch_download(url):
     "Setup a pooch that has no local data and needs to download"
     with TemporaryDirectory() as local_store:

@@ -58,7 +58,9 @@ def test_unsupported_protocol():
 def test_invalid_doi_repository():
     "Should fail if data repository is not supported"
     with pytest.raises(ValueError) as exc:
-        DOIDownloader()(url="notarepository://DOI/file_name", output_file=None, pooch=None)
+        DOIDownloader()(
+            url="notarepository://DOI/file_name", output_file=None, pooch=None
+        )
     assert "Invalid data repository 'notarepository'" in str(exc.value)
 
 
@@ -76,7 +78,10 @@ def test_doi_url_not_found(doi_to_url):
 
 @pytest.mark.parametrize(
     "doi_to_url,doi",
-    [(figshare_download_url, "10.6084/m9.figshare.14763051.v1"), (zenodo_download_url, "10.5281/zenodo.4924875")],
+    [
+        (figshare_download_url, "10.6084/m9.figshare.14763051.v1"),
+        (zenodo_download_url, "10.5281/zenodo.4924875"),
+    ],
     ids=["figshare", "zenodo"],
 )
 def test_figshare_url_file_not_found(doi_to_url, doi):

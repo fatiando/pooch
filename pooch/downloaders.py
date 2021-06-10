@@ -547,6 +547,7 @@ class DOIDownloader:  # pylint: disable=too-few-public-methods
         """
         doi_to_url = {
             "figshare": figshare_download_url,
+            "zenodo": zenodo_download_url,
         }
         parsed_url = parse_url(url)
         repository = parsed_url["protocol"]
@@ -583,21 +584,25 @@ def zenodo_download_url(doi, file_name):
     """
     # Use doi.org to resolve the DOI to the Zenodo website. The last part of
     # the URL is the record ID that we need.
-    articles = requests.get(f"https://api.figshare.com/v2/articles?doi={doi}").json()
-    if len(articles) != 1:
-        raise ValueError(
-            f"Found {len(articles)} figshare articles with doi:{doi}."
-            " There can be only 1 for download. Is the DOI correct?"
-        )
-    article_id = articles[0]["id"]
+    zenodo_url = requests.get(f"https://doi.org/{doi}").url
+    article_id = zenodo_url.split("/")[-1]
+    # If there was a problem with the DOI lookup, we can still get the ID from
+    # the last part of the DOI. Don't want to rely on this because there is no
+    # guarantee that Zenodo won't change this in the future.
+    if article_id.startswith("zenodo."):
+        article_id = article_id[7:]
     # With the ID, we can get a list of files and their download links
-    response = requests.get(f"https://api.figshare.com/v2/articles/{article_id}/files")
-    files = {item["name"]: item for item in response.json()}
+    article = requests.get(f"https://zenodo.org/api/records/{article_id}").json()
+    if "doi" not in article or article["doi"] != doi:
+        raise ValueError(
+            f"Zenodo article with doi:{doi} not found. Is the DOI correct?"
+        )
+    files = {item["key"]: item for item in article["files"]}
     if file_name not in files:
         raise ValueError(
             f"File '{file_name}' not found in figshare archive with doi:{doi}."
         )
-    download_url = files[file_name]["download_url"]
+    download_url = files[file_name]["links"]["self"]
     return download_url
 
 
