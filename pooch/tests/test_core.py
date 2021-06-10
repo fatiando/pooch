@@ -23,6 +23,7 @@ from ..downloaders import HTTPDownloader
 
 from .utils import (
     pooch_test_url,
+    pooch_test_figshare_url,
     pooch_test_registry,
     check_tiny_data,
     check_large_data,
@@ -34,6 +35,7 @@ ON_TRAVIS = bool(os.environ.get("TRAVIS", None))
 DATA_DIR = str(Path(__file__).parent / "data")
 REGISTRY = pooch_test_registry()
 BASEURL = pooch_test_url()
+FIGSHAREURL = pooch_test_figshare_url()
 REGISTRY_CORRUPTED = {
     # The same data file but I changed the hash manually to a wrong one
     "tiny-data.txt": "098h0894dba14b12085eacb204284b97e362f4f3e5a5807693cc90ef415c1b2d"
@@ -115,11 +117,12 @@ def test_pooch_local():
     check_tiny_data(fname)
 
 
-def test_pooch_custom_url():
+@pytest.mark.parametrize("url", [BASEURL, FIGSHAREURL], ids=["https", "figshare"])
+def test_pooch_custom_url(url):
     "Have pooch download the file from URL that is not base_url"
     with TemporaryDirectory() as local_store:
         path = Path(local_store)
-        urls = {"tiny-data.txt": BASEURL + "tiny-data.txt"}
+        urls = {"tiny-data.txt": url + "tiny-data.txt"}
         # Setup a pooch in a temp dir
         pup = Pooch(path=path, base_url="", registry=REGISTRY, urls=urls)
         # Check that the logs say that the file is being downloaded
@@ -135,13 +138,14 @@ def test_pooch_custom_url():
             assert log_file.getvalue() == ""
 
 
-def test_pooch_download():
+@pytest.mark.parametrize("url", [BASEURL, FIGSHAREURL], ids=["https", "figshare"])
+def test_pooch_download(url):
     "Setup a pooch that has no local data and needs to download"
     with TemporaryDirectory() as local_store:
         path = Path(local_store)
         true_path = str(path / "tiny-data.txt")
         # Setup a pooch in a temp dir
-        pup = Pooch(path=path, base_url=BASEURL, registry=REGISTRY)
+        pup = Pooch(path=path, base_url=url, registry=REGISTRY)
         # Check that the logs say that the file is being downloaded
         with capture_log() as log_file:
             fname = pup.fetch("tiny-data.txt")

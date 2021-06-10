@@ -193,7 +193,11 @@ def test_registry_builder_recursive():
         ),
         (
             "figshare://10.6084/m9.figshare.923450.v1/dike.json",
-            {"protocol": "figshare", "netloc": "10.6084/m9.figshare.923450.v1", "path": "/dike.json"},
+            {
+                "protocol": "figshare",
+                "netloc": "10.6084/m9.figshare.923450.v1",
+                "path": "/dike.json",
+            },
         ),
     ],
     ids=["http", "ftp", "figshare"],

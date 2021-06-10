@@ -27,20 +27,38 @@ from ..downloaders import (
     HTTPDownloader,
     FTPDownloader,
     SFTPDownloader,
+    FigshareDownloader,
     choose_downloader,
 )
-from .utils import pooch_test_url, check_large_data, check_tiny_data, data_over_ftp
+from .utils import (
+    pooch_test_url,
+    check_large_data,
+    check_tiny_data,
+    data_over_ftp,
+    pooch_test_figshare_url,
+)
 
 
 # FTP doesn't work on Travis CI so need to be able to skip tests there
 ON_TRAVIS = bool(os.environ.get("TRAVIS", None))
 BASEURL = pooch_test_url()
+FIGSHAREURL = pooch_test_figshare_url()
 
 
 def test_unsupported_protocol():
     "Should raise ValueError when protocol not in {'https', 'http', 'ftp'}"
     with pytest.raises(ValueError):
         choose_downloader("httpup://some-invalid-url.com")
+
+
+def test_figshare_downloader():
+    "Test figshare downloader"
+    # Use the test data we have on figshare
+    with TemporaryDirectory() as local_store:
+        downloader = FigshareDownloader()
+        outfile = os.path.join(local_store, "tiny-data.txt")
+        downloader(FIGSHAREURL, outfile, None)
+        check_tiny_data(outfile)
 
 
 def test_ftp_downloader(ftpserver):
