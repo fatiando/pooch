@@ -199,8 +199,16 @@ def test_registry_builder_recursive():
                 "path": "/dike.json",
             },
         ),
+        (
+            "zenodo://10.5281/zenodo.4924875/dike.json",
+            {
+                "protocol": "zenodo",
+                "netloc": "10.5281/zenodo.4924875",
+                "path": "/dike.json",
+            },
+        ),
     ],
-    ids=["http", "ftp", "figshare"],
+    ids=["http", "ftp", "figshare", "zenodo"],
 )
 def test_parse_url(url, output):
     "Parse URL into 3 components"
