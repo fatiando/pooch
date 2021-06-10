@@ -29,6 +29,7 @@ from ..downloaders import (
     SFTPDownloader,
     FigshareDownloader,
     choose_downloader,
+    figshare_download_url,
 )
 from .utils import (
     pooch_test_url,
@@ -49,6 +50,22 @@ def test_unsupported_protocol():
     "Should raise ValueError when protocol not in {'https', 'http', 'ftp'}"
     with pytest.raises(ValueError):
         choose_downloader("httpup://some-invalid-url.com")
+
+
+def test_figshare_url_doi_not_found():
+    "Should fail if the DOI is not found on figshare"
+    with pytest.raises(ValueError) as exc:
+        figshare_download_url(doi="NOTAREALDOI", file_name="tiny-data.txt")
+    assert "Is the DOI correct?" in str(exc.value)
+
+
+def test_figshare_url_file_not_found():
+    "Should fail if the DOI is not found on figshare"
+    with pytest.raises(ValueError) as exc:
+        figshare_download_url(
+            doi="10.6084/m9.figshare.14763051.v1", file_name="bla.txt"
+        )
+    assert "File 'bla.txt' not found" in str(exc.value)
 
 
 def test_figshare_downloader():
