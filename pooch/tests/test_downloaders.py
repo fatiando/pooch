@@ -114,13 +114,14 @@ def test_downloader_progressbar_fails(downloader):
 
 
 @pytest.mark.skipif(tqdm is None, reason="requires tqdm")
-def test_downloader_progressbar(capsys):
+@pytest.mark.parametrize("url", [BASEURL, FIGSHAREURL], ids=["http", "figshare"])
+def test_downloader_progressbar(url, capsys):
     "Setup a downloader function that prints a progress bar for fetch"
     download = HTTPDownloader(progressbar=True)
     with TemporaryDirectory() as local_store:
-        fname = "large-data.txt"
-        url = BASEURL + fname
-        outfile = os.path.join(local_store, "large-data.txt")
+        fname = "tiny-data.txt"
+        url = url + fname
+        outfile = os.path.join(local_store, fname)
         download(url, outfile, None)
         # Read stderr and make sure the progress bar is printed only when told
         captured = capsys.readouterr()
@@ -133,7 +134,7 @@ def test_downloader_progressbar(capsys):
         # Bar size is not always the same so can't reliably test the whole bar.
         assert printed[:25] == progress
         # Check that the downloaded file has the right content
-        check_large_data(outfile)
+        check_tiny_data(outfile)
 
 
 @pytest.mark.skipif(tqdm is None, reason="requires tqdm")

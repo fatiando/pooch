@@ -447,14 +447,22 @@ class SFTPDownloader:  # pylint: disable=too-few-public-methods
 
 class FigshareDownloader:  # pylint: disable=too-few-public-methods
     """
-    Download manager for fetching files over HTTP/HTTPS.
+    Download manager for fetching files from figshare.
 
-    When called, downloads the given file URL into the specified local file.
-    Uses the :mod:`requests` library to manage downloads.
+    `figshare <https://www.figshare.com>`__ is an open-access data repository.
+    It issues Digital Object Identifiers (DOIs) for data which provide a stable
+    link and citation point.
 
-    Use with :meth:`pooch.Pooch.fetch` or :func:`pooch.retrieve` to customize
-    the download of files (for example, to use authentication or print a
-    progress bar).
+    When called, this downloader uses the figshare public API to download the
+    given file from the specified DOI into the specified local file. Allowing
+    "URL"s  to be specified with the DOI instead of the actual HTTP download
+    link. Uses the :mod:`requests` library to manage downloads and interact
+    with the API.
+
+    The format of the "URL" is: ``figshare://{DOI}/{file name}``
+
+    Use with :meth:`pooch.Pooch.fetch` or :func:`pooch.retrieve` to be able to
+    download files given the figshare DOI instead of an HTTP link.
 
     Parameters
     ----------
@@ -473,12 +481,12 @@ class FigshareDownloader:  # pylint: disable=too-few-public-methods
     Examples
     --------
 
-    Download one of the data files from the Pooch repository:
+    Download one of the data files from the figshare archive of Pooch test
+    data:
 
     >>> import os
     >>> from pooch import __version__, check_version
-    >>> url = "https://github.com/fatiando/pooch/raw/{}/data/tiny-data.txt"
-    >>> url = url.format(check_version(__version__))
+    >>> url = "figshare://10.6084/m9.figshare.14763051.v1/tiny-data.txt"
     >>> downloader = HTTPDownloader()
     >>> # Not using with Pooch.fetch so no need to pass an instance of Pooch
     >>> downloader(url=url, output_file="tiny-data.txt", pooch=None)
@@ -488,36 +496,6 @@ class FigshareDownloader:  # pylint: disable=too-few-public-methods
     ...     print(f.read().strip())
     # A tiny data file for test purposes only
     1  2  3  4  5  6
-    >>> os.remove("tiny-data.txt")
-
-    Authentication can be handled by passing a user name and password to
-    :func:`requests.get`. All arguments provided when creating an instance of
-    the class are forwarded to :func:`requests.get`. We'll use
-    ``auth=(username, password)`` to use basic HTTPS authentication. The
-    https://httpbin.org website allows us to make a fake a login request using
-    whatever username and password we provide to it:
-
-    >>> user = "doggo"
-    >>> password = "goodboy"
-    >>> # httpbin will ask for the user and password we provide in the URL
-    >>> url = f"https://httpbin.org/basic-auth/{user}/{password}"
-    >>> # Trying without the login credentials causes an error
-    >>> downloader = HTTPDownloader()
-    >>> try:
-    ...     downloader(url=url, output_file="tiny-data.txt", pooch=None)
-    ... except Exception:
-    ...     print("There was an error!")
-    There was an error!
-    >>> # Pass in the credentials to HTTPDownloader
-    >>> downloader = HTTPDownloader(auth=(user, password))
-    >>> downloader(url=url, output_file="tiny-data.txt", pooch=None)
-    >>> with open("tiny-data.txt") as f:
-    ...     for line in f:
-    ...         print(line.rstrip())
-    {
-      "authenticated": true,
-      "user": "doggo"
-    }
     >>> os.remove("tiny-data.txt")
 
     """
@@ -531,7 +509,10 @@ class FigshareDownloader:  # pylint: disable=too-few-public-methods
 
     def __call__(self, url, output_file, pooch):
         """
-        Download the given URL over HTTP to the given output file.
+        Download the given figshare URL over HTTP to the given output file.
+
+        Uses the figshare API to determined the actual HTTP download URL from
+        the given DOI.
 
         Uses :func:`requests.get`.
 
