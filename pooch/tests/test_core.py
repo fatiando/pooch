@@ -24,6 +24,7 @@ from ..downloaders import HTTPDownloader
 from .utils import (
     pooch_test_url,
     pooch_test_figshare_url,
+    pooch_test_zenodo_url,
     pooch_test_registry,
     check_tiny_data,
     check_large_data,
@@ -36,6 +37,7 @@ DATA_DIR = str(Path(__file__).parent / "data")
 REGISTRY = pooch_test_registry()
 BASEURL = pooch_test_url()
 FIGSHAREURL = pooch_test_figshare_url()
+ZENODOURL = pooch_test_zenodo_url()
 REGISTRY_CORRUPTED = {
     # The same data file but I changed the hash manually to a wrong one
     "tiny-data.txt": "098h0894dba14b12085eacb204284b97e362f4f3e5a5807693cc90ef415c1b2d"
@@ -117,7 +119,7 @@ def test_pooch_local():
     check_tiny_data(fname)
 
 
-@pytest.mark.parametrize("url", [BASEURL, FIGSHAREURL], ids=["https", "figshare"])
+@pytest.mark.parametrize("url", [BASEURL, FIGSHAREURL, ZENODOURL], ids=["https", "figshare", "zenodo"])
 def test_pooch_custom_url(url):
     "Have pooch download the file from URL that is not base_url"
     with TemporaryDirectory() as local_store:
@@ -138,7 +140,7 @@ def test_pooch_custom_url(url):
             assert log_file.getvalue() == ""
 
 
-@pytest.mark.parametrize("url", [BASEURL, FIGSHAREURL], ids=["https", "figshare"])
+@pytest.mark.parametrize("url", [BASEURL, FIGSHAREURL, ZENODOURL], ids=["https", "figshare", "zenodo"])
 def test_pooch_download(url):
     "Setup a pooch that has no local data and needs to download"
     with TemporaryDirectory() as local_store:

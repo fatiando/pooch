@@ -30,6 +30,7 @@ from ..downloaders import (
     DOIDownloader,
     choose_downloader,
     figshare_download_url,
+    zenodo_download_url,
 )
 from .utils import (
     pooch_test_url,
@@ -37,6 +38,7 @@ from .utils import (
     check_tiny_data,
     data_over_ftp,
     pooch_test_figshare_url,
+    pooch_test_zenodo_url,
 )
 
 
@@ -44,6 +46,7 @@ from .utils import (
 ON_TRAVIS = bool(os.environ.get("TRAVIS", None))
 BASEURL = pooch_test_url()
 FIGSHAREURL = pooch_test_figshare_url()
+ZENODOURL = pooch_test_zenodo_url()
 
 
 def test_unsupported_protocol():
@@ -59,29 +62,38 @@ def test_invalid_doi_repository():
     assert "Invalid data repository 'notarepository'" in str(exc.value)
 
 
-def test_figshare_url_doi_not_found():
-    "Should fail if the DOI is not found on figshare"
+@pytest.mark.parametrize(
+    "doi_to_url",
+    [figshare_download_url, zenodo_download_url],
+    ids=["figshare", "zenodo"],
+)
+def test_doi_url_not_found(doi_to_url):
+    "Should fail if the DOI is not found on the repository"
     with pytest.raises(ValueError) as exc:
-        figshare_download_url(doi="NOTAREALDOI", file_name="tiny-data.txt")
+        doi_to_url(doi="NOTAREALDOI", file_name="tiny-data.txt")
     assert "Is the DOI correct?" in str(exc.value)
 
 
-def test_figshare_url_file_not_found():
+@pytest.mark.parametrize(
+    "doi_to_url,doi",
+    [(figshare_download_url, "10.6084/m9.figshare.14763051.v1"), (zenodo_download_url, "10.5281/zenodo.4924875")],
+    ids=["figshare", "zenodo"],
+)
+def test_figshare_url_file_not_found(doi_to_url, doi):
     "Should fail if the DOI is not found on figshare"
     with pytest.raises(ValueError) as exc:
-        figshare_download_url(
-            doi="10.6084/m9.figshare.14763051.v1", file_name="bla.txt"
-        )
+        doi_to_url(doi=doi, file_name="bla.txt")
     assert "File 'bla.txt' not found" in str(exc.value)
 
 
-def test_figshare_downloader():
-    "Test figshare downloader"
-    # Use the test data we have on figshare
+@pytest.mark.parametrize("url", [FIGSHAREURL, ZENODOURL], ids=["figshare", "zenodo"])
+def test_doi_downloader(url):
+    "Test the DOI downloader"
+    # Use the test data we have on the repository
     with TemporaryDirectory() as local_store:
         downloader = DOIDownloader()
         outfile = os.path.join(local_store, "tiny-data.txt")
-        downloader(FIGSHAREURL + "tiny-data.txt", outfile, None)
+        downloader(url + "tiny-data.txt", outfile, None)
         check_tiny_data(outfile)
 
 

@@ -564,6 +564,43 @@ class DOIDownloader:  # pylint: disable=too-few-public-methods
         downloader(download_url, output_file, pooch)
 
 
+def zenodo_download_url(doi, file_name):
+    """
+    Use the Zenodo API to get the download URL for a file given the DOI.
+
+    Parameters
+    ----------
+    doi : str
+        The DOI of the Zenodo archive.
+    file_name : str
+        The name of the file in the archive that will be downloaded.
+
+    Returns
+    -------
+    download_url : str
+        The HTTP URL that can be used to download the file.
+
+    """
+    # Use doi.org to resolve the DOI to the Zenodo website. The last part of
+    # the URL is the record ID that we need.
+    articles = requests.get(f"https://api.figshare.com/v2/articles?doi={doi}").json()
+    if len(articles) != 1:
+        raise ValueError(
+            f"Found {len(articles)} figshare articles with doi:{doi}."
+            " There can be only 1 for download. Is the DOI correct?"
+        )
+    article_id = articles[0]["id"]
+    # With the ID, we can get a list of files and their download links
+    response = requests.get(f"https://api.figshare.com/v2/articles/{article_id}/files")
+    files = {item["name"]: item for item in response.json()}
+    if file_name not in files:
+        raise ValueError(
+            f"File '{file_name}' not found in figshare archive with doi:{doi}."
+        )
+    download_url = files[file_name]["download_url"]
+    return download_url
+
+
 def figshare_download_url(doi, file_name):
     """
     Use the figshare API to get the download URL for a file given the DOI.
