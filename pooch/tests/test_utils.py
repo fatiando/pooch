@@ -180,21 +180,27 @@ def test_registry_builder_recursive():
         os.remove(outfile.name)
 
 
-def test_parse_url():
+@pytest.mark.parametrize(
+    "url,output",
+    [
+        (
+            "http://127.0.0.1:8080/test.nc",
+            {"protocol": "http", "netloc": "127.0.0.1:8080", "path": "/test.nc"},
+        ),
+        (
+            "ftp://127.0.0.1:8080/test.nc",
+            {"protocol": "ftp", "netloc": "127.0.0.1:8080", "path": "/test.nc"},
+        ),
+        (
+            "figshare://10.6084/m9.figshare.923450.v1/dike.json",
+            {"protocol": "figshare", "netloc": "10.6084/m9.figshare.923450.v1", "path": "/dike.json"},
+        ),
+    ],
+    ids=["http", "ftp", "figshare"],
+)
+def test_parse_url(url, output):
     "Parse URL into 3 components"
-    url = "http://127.0.0.1:8080/test.nc"
-    assert parse_url(url) == {
-        "protocol": "http",
-        "netloc": "127.0.0.1:8080",
-        "path": "/test.nc",
-    }
-
-    url = "ftp://127.0.0.1:8080/test.nc"
-    assert parse_url(url) == {
-        "protocol": "ftp",
-        "netloc": "127.0.0.1:8080",
-        "path": "/test.nc",
-    }
+    assert parse_url(url) == output
 
 
 def test_file_hash_invalid_algorithm():

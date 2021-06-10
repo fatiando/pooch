@@ -208,18 +208,27 @@ def parse_url(url):
     Parameters
     ----------
     url : str
-        URL (e.g.: http://127.0.0.1:8080/test.nc, ftp://127.0.0.1:8080/test.nc)
+        URL (e.g.: http://127.0.0.1:8080/test.nc, ftp://127.0.0.1:8080/test.nc,
+        fighare://10.6084/m9.figshare.923450.v1/test.nc)
 
     Returns
     -------
     parsed_url : dict
-        Three components of a URL (e.g., {'protocol': 'http', 'netloc':
-        '127.0.0.1:8080', 'path': '/test.nc'})
+        Three components of a URL (e.g.,
+        ``{'protocol':'http', 'netloc':'127.0.0.1:8080','path': '/test.nc'}``).
+        In the case of "figshare" URLs, the netloc is the DOI.
 
     """
     parsed_url = urlsplit(url)
     protocol = parsed_url.scheme or "file"
-    return {"protocol": protocol, "netloc": parsed_url.netloc, "path": parsed_url.path}
+    netloc = parsed_url.netloc
+    path = parsed_url.path
+    # The DOI has a / that gets put into the path when it should be in the
+    # netloc. Need to correct for this to make the DOI easily accessible.
+    if protocol == "figshare":
+        netloc = "/".join([netloc, path.split("/")[1]])
+        path = "/" + "/".join(path.split("/")[2:])
+    return {"protocol": protocol, "netloc": netloc, "path": path}
 
 
 def cache_location(path, env=None, version=None):
