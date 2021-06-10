@@ -45,14 +45,15 @@ first time they run it.
 
 .. seealso::
 
-    You can use **different hashes** by specifying different algorithm names:
-    ``sha256:XXXXXX``, ``sha1:XXXXXX``, etc. See :ref:`hashes`.
+    Pooch can handle multiple download protocols like HTTP, FTP, SFTP, and
+    even download from repositories like `figshare <https://www.figshare.com>`__
+    and `Zenodo <https://www.zenodo.org>`__ by using the DOI instead of a URL.
+    See :ref:`protocols`.
 
 .. seealso::
 
-    Pooch can handle multiple download protocols like HTTP, FTP, SFTP, and
-    even download from a `figshare <https://www.figshare.com>`__ DOI instead
-    of a URL. See :ref:`protocols`.
+    You can use **different hashes** by specifying different algorithm names:
+    ``sha256:XXXXXX``, ``sha1:XXXXXX``, etc. See :ref:`hashes`.
 
 
 Unknown file hash

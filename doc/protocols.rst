@@ -4,9 +4,9 @@ Download protocols
 ==================
 
 Pooch supports the HTTP, FTP, and SFTP protocols by default.
-It also includes a custom protocol for `figshare
-<https://www.figshare.com>`__
-Digital Object Identifiers (DOI; see :ref:`below <doidownloads>`).
+It also includes a custom protocol for Digital Object Identifiers (DOI) providers
+like `figshare <https://www.figshare.com>`__ and
+`Zenodo <https://www.zenodo.org>`__ (see :ref:`below <doidownloads>`).
 It will **automatically detect** the correct protocol from the URL and use the
 appropriate download method.
 
@@ -46,12 +46,13 @@ You can even specify custom functions for the download or login credentials for
 
 .. _doidownloads:
 
-figshare
---------
+Digital Object Identifiers (DOIs)
+---------------------------------
 
-Pooch can download files stored in figshare from the DOI by formatting the URL
-as ``figshare://{DOI}/{file name}``.
-
+Pooch can download files stored in data repositories from the DOI by formatting
+the URL as ``{repository}://{DOI}/{file name}``.
+See :class:`pooch.DOIDownloader` for more details and a list of supported
+repositories.
 
 For example, one of our test files (``"tiny-data.txt"``) is stored in the
 figshare dataset
@@ -88,5 +89,3 @@ figshare dataset:
         fname = POOCH.fetch("tiny-data.txt")
         data = numpy.loadtxt(fname)
         return data
-
-See :class:`pooch.DOIDownloader` for more details.
