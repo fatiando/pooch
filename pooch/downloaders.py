@@ -485,7 +485,6 @@ class FigshareDownloader:  # pylint: disable=too-few-public-methods
     data:
 
     >>> import os
-    >>> from pooch import __version__, check_version
     >>> url = "figshare://10.6084/m9.figshare.14763051.v1/tiny-data.txt"
     >>> downloader = FigshareDownloader()
     >>> # Not using with Pooch.fetch so no need to pass an instance of Pooch

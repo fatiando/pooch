@@ -48,6 +48,12 @@ first time they run it.
     You can use **different hashes** by specifying different algorithm names:
     ``sha256:XXXXXX``, ``sha1:XXXXXX``, etc. See :ref:`hashes`.
 
+.. seealso::
+
+    Pooch can handle multiple download protocols like HTTP, FTP, SFTP, and
+    even download from a `figshare <https://www.figshare.com>`__ DOI instead
+    of a URL. See :ref:`protocols`.
+
 
 Unknown file hash
 -----------------

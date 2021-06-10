@@ -4,6 +4,9 @@ Download protocols
 ==================
 
 Pooch supports the HTTP, FTP, and SFTP protocols by default.
+It also includes a custom protocol for `figshare
+<https://www.figshare.com>`__
+Digital Object Identifiers (DOI; see :ref:`below <doidownloads>`).
 It will **automatically detect** the correct protocol from the URL and use the
 appropriate download method.
 
@@ -40,3 +43,50 @@ following setup:
 
 You can even specify custom functions for the download or login credentials for
 **authentication**. See :ref:`downloaders` for more information.
+
+.. _doidownloads:
+
+figshare
+--------
+
+Pooch can download files stored in figshare from the DOI by formatting the URL
+as ``figshare://{DOI}/{file name}``.
+
+
+For example, one of our test files (``"tiny-data.txt"``) is stored in the
+figshare dataset
+doi:`10.6084/m9.figshare.14763051.v1 <https://doi.org/10.6084/m9.figshare.14763051.v1>`__.
+We can could use :func:`pooch.retrieve` to download it like so:
+
+.. code-block:: python
+
+    file_path = pooch.retrieve(
+        url="figshare://10.6084/m9.figshare.14763051.v1/tiny-data.txt",
+        known_hash="md5:70e2afd3fd7e336ae478b1e740a5f08e",
+    )
+
+We can also make a :class:`pooch.Pooch` with a registry stored entirely on a
+figshare dataset:
+
+.. code-block:: python
+
+    POOCH = pooch.create(
+        path=pooch.os_cache("plumbus"),
+        # Use the figshare DOI
+        base_url="figshare://10.6084/m9.figshare.14763051.v1/",
+        registry={
+            "tiny-data.txt": "md5:70e2afd3fd7e336ae478b1e740a5f08e",
+            "store.zip": "md5:7008231125631739b64720d1526619ae",
+        },
+    )
+
+
+    def fetch_tiny_data():
+        """
+        Load the tiny data as a numpy array.
+        """
+        fname = POOCH.fetch("tiny-data.txt")
+        data = numpy.loadtxt(fname)
+        return data
+
+See :class:`pooch.FigshareDownloader` for more details.
