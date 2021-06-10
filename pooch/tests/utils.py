@@ -76,7 +76,7 @@ def pooch_test_figshare_url():
         The URL for pooch's test data.
 
     """
-    url = "figshare://10.6084/m9.figshare.14763051.v1/tiny-data.txt"
+    url = "figshare://10.6084/m9.figshare.14763051.v1/"
     return url
 
 

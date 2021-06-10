@@ -487,7 +487,7 @@ class FigshareDownloader:  # pylint: disable=too-few-public-methods
     >>> import os
     >>> from pooch import __version__, check_version
     >>> url = "figshare://10.6084/m9.figshare.14763051.v1/tiny-data.txt"
-    >>> downloader = HTTPDownloader()
+    >>> downloader = FigshareDownloader()
     >>> # Not using with Pooch.fetch so no need to pass an instance of Pooch
     >>> downloader(url=url, output_file="tiny-data.txt", pooch=None)
     >>> os.path.exists("tiny-data.txt")
@@ -504,8 +504,6 @@ class FigshareDownloader:  # pylint: disable=too-few-public-methods
         self.kwargs = kwargs
         self.progressbar = progressbar
         self.chunk_size = chunk_size
-        if self.progressbar is True and tqdm is None:
-            raise ValueError("Missing package 'tqdm' required for progress bars.")
 
     def __call__(self, url, output_file, pooch):
         """
@@ -526,49 +524,47 @@ class FigshareDownloader:  # pylint: disable=too-few-public-methods
             The instance of :class:`~pooch.Pooch` that is calling this method.
 
         """
-        kwargs = self.kwargs.copy()
-        kwargs.setdefault("stream", True)
-        ispath = not hasattr(output_file, "write")
-        if ispath:
-            output_file = open(output_file, "w+b")
-        try:
-            response = requests.get(url, **kwargs)
-            response.raise_for_status()
-            content = response.iter_content(chunk_size=self.chunk_size)
-            total = int(response.headers.get("content-length", 0))
-            if self.progressbar is True:
-                # Need to use ascii characters on Windows because there isn't
-                # always full unicode support
-                # (see https://github.com/tqdm/tqdm/issues/454)
-                use_ascii = bool(sys.platform == "win32")
-                progress = tqdm(
-                    total=total,
-                    ncols=79,
-                    ascii=use_ascii,
-                    unit="B",
-                    unit_scale=True,
-                    leave=True,
-                )
-            elif self.progressbar:
-                progress = self.progressbar
-                progress.total = total
-            for chunk in content:
-                if chunk:
-                    output_file.write(chunk)
-                    output_file.flush()
-                    if self.progressbar:
-                        # Use the chunk size here because chunk may be much
-                        # larger if the data are decompressed by requests after
-                        # reading (happens with text files).
-                        progress.update(self.chunk_size)
-            # Make sure the progress bar gets filled even if the actual number
-            # is chunks is smaller than expected. This happens when streaming
-            # text files that are compressed by the server when sending (gzip).
-            # Binary files don't experience this.
-            if self.progressbar:
-                progress.reset()
-                progress.update(total)
-                progress.close()
-        finally:
-            if ispath:
-                output_file.close()
+        parsed_url = parse_url(url)
+        download_url = figshare_download_url(
+            doi=parsed_url["netloc"], file_name=parsed_url["path"].split("/")[-1]
+        )
+        downloader = HTTPDownloader(
+            progressbar=self.progressbar, chunk_size=self.chunk_size, **self.kwargs
+        )
+        downloader(download_url, output_file, pooch)
+
+
+def figshare_download_url(doi, file_name):
+    """
+    Use the figshare API to get the download URL for a file given the DOI.
+
+    Parameters
+    ----------
+    doi : str
+        The DOI of the figshare archive.
+    file_name : str
+        The name of the file in the archive that will be downloaded.
+
+    Returns
+    -------
+    download_url : str
+        The HTTP URL that can be used to download the file.
+
+    """
+    # Use the figshare API to find the article ID from the DOI
+    articles = requests.get(f"https://api.figshare.com/v2/articles?doi={doi}").json()
+    if len(articles) != 1:
+        raise ValueError(
+            f"Found {len(articles)} figshare articles with doi:{doi}."
+            " There can be only 1 for download. Is the DOI correct?"
+        )
+    article_id = articles[0]["id"]
+    # With the ID, we can get a list of files and their download links
+    response = requests.get(f"https://api.figshare.com/v2/articles/{article_id}/files")
+    files = {item["name"]: item for item in response.json()}
+    if file_name not in files:
+        raise ValueError(
+            f"File '{file_name}' not found in figshare archive with doi:{doi}."
+        )
+    download_url = files[file_name]["download_url"]
+    return download_url

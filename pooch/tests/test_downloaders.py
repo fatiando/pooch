@@ -57,7 +57,7 @@ def test_figshare_downloader():
     with TemporaryDirectory() as local_store:
         downloader = FigshareDownloader()
         outfile = os.path.join(local_store, "tiny-data.txt")
-        downloader(FIGSHAREURL, outfile, None)
+        downloader(FIGSHAREURL + "tiny-data.txt", outfile, None)
         check_tiny_data(outfile)
 
 
@@ -114,10 +114,14 @@ def test_downloader_progressbar_fails(downloader):
 
 
 @pytest.mark.skipif(tqdm is None, reason="requires tqdm")
-@pytest.mark.parametrize("url", [BASEURL, FIGSHAREURL], ids=["http", "figshare"])
-def test_downloader_progressbar(url, capsys):
+@pytest.mark.parametrize(
+    "url,downloader",
+    [(BASEURL, HTTPDownloader), (FIGSHAREURL, FigshareDownloader)],
+    ids=["http", "figshare"],
+)
+def test_downloader_progressbar(url, downloader, capsys):
     "Setup a downloader function that prints a progress bar for fetch"
-    download = HTTPDownloader(progressbar=True)
+    download = downloader(progressbar=True)
     with TemporaryDirectory() as local_store:
         fname = "tiny-data.txt"
         url = url + fname
