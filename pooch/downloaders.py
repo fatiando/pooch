@@ -52,10 +52,7 @@ def choose_downloader(url):
     >>> downloader = choose_downloader("ftp://something.com")
     >>> print(downloader.__class__.__name__)
     FTPDownloader
-    >>> downloader = choose_downloader("figshare://DOI/filename.csv")
-    >>> print(downloader.__class__.__name__)
-    DOIDownloader
-    >>> downloader = choose_downloader("zenodo://DOI/filename.csv")
+    >>> downloader = choose_downloader("doi:DOI/filename.csv")
     >>> print(downloader.__class__.__name__)
     DOIDownloader
 
@@ -65,8 +62,7 @@ def choose_downloader(url):
         "https": HTTPDownloader,
         "http": HTTPDownloader,
         "sftp": SFTPDownloader,
-        "figshare": DOIDownloader,
-        "zenodo": DOIDownloader,
+        "doi": DOIDownloader,
     }
 
     parsed_url = parse_url(url)
@@ -505,7 +501,7 @@ class DOIDownloader:  # pylint: disable=too-few-public-methods
 
     >>> import os
     >>> downloader = DOIDownloader()
-    >>> url = "figshare://10.6084/m9.figshare.14763051.v1/tiny-data.txt"
+    >>> url = "doi:10.6084/m9.figshare.14763051.v1/tiny-data.txt"
     >>> # Not using with Pooch.fetch so no need to pass an instance of Pooch
     >>> downloader(url=url, output_file="tiny-data.txt", pooch=None)
     >>> os.path.exists("tiny-data.txt")
@@ -518,7 +514,7 @@ class DOIDownloader:  # pylint: disable=too-few-public-methods
 
     Same thing but for our Zenodo archive:
 
-    >>> url = "zenodo://10.5281/zenodo.4924875/tiny-data.txt"
+    >>> url = "doi:10.5281/zenodo.4924875/tiny-data.txt"
     >>> downloader(url=url, output_file="tiny-data.txt", pooch=None)
     >>> os.path.exists("tiny-data.txt")
     True
@@ -554,19 +550,23 @@ class DOIDownloader:  # pylint: disable=too-few-public-methods
             The instance of :class:`~pooch.Pooch` that is calling this method.
 
         """
-        doi_to_url = {
-            "figshare": figshare_download_url,
-            "zenodo": zenodo_download_url,
+        converters = {
+            "figshare.com": figshare_download_url,
+            "zenodo.org": zenodo_download_url,
         }
         parsed_url = parse_url(url)
-        repository = parsed_url["protocol"]
-        if repository not in doi_to_url:
+        doi = parsed_url["netloc"]
+        archive_url = doi_to_url(doi)
+        repository = parse_url(archive_url)["netloc"]
+        if repository not in converters:
             raise ValueError(
                 f"Invalid data repository '{repository}'. Must be one of "
-                f"{list(doi_to_url.keys())}."
+                f"{list(converters.keys())}."
             )
-        download_url = doi_to_url[repository](
-            doi=parsed_url["netloc"], file_name=parsed_url["path"].split("/")[-1]
+        download_url = converters[repository](
+            archive_url=archive_url,
+            file_name=parsed_url["path"].split("/")[-1],
+            doi=doi,
         )
         downloader = HTTPDownloader(
             progressbar=self.progressbar, chunk_size=self.chunk_size, **self.kwargs
@@ -574,16 +574,50 @@ class DOIDownloader:  # pylint: disable=too-few-public-methods
         downloader(download_url, output_file, pooch)
 
 
-def zenodo_download_url(doi, file_name):
+def doi_to_url(doi):
     """
-    Use the Zenodo API to get the download URL for a file given the DOI.
+    Follow a DOI link to resolve the URL of the archive.
 
     Parameters
     ----------
     doi : str
-        The DOI of the Zenodo archive.
+        The DOI of the archive.
+
+    Returns
+    -------
+    url : str
+        The URL of the archive in the data repository.
+
+    """
+    # Use doi.org to resolve the DOI to the repository website.
+    response = requests.get(f"https://doi.org/{doi}")
+    url = response.url
+
+    # Workaround to get the Zenodo ID. The DOI link for our test data isn't
+    # working at the moment for some reason. Once this gets resolved, this code
+    # should be removed.
+    if url.split("/")[-1].startswith("zenodo."):
+        return f"https://zenodo.org/record/{url.split('/')[-1][7:]}"
+
+    if 400 <= response.status_code < 600:
+        raise ValueError(
+            f"Archive with doi:{doi} not found (see {url}). Is the DOI correct?"
+        )
+    return url
+
+
+def zenodo_download_url(archive_url, file_name, doi):
+    """
+    Use the API to get the download URL for a file given the archive URL.
+
+    Parameters
+    ----------
+    archive_url : str
+        URL of the dataset in the repository.
     file_name : str
         The name of the file in the archive that will be downloaded.
+    doi : str
+        The DOI of the archive.
 
     Returns
     -------
@@ -591,40 +625,30 @@ def zenodo_download_url(doi, file_name):
         The HTTP URL that can be used to download the file.
 
     """
-    # Use doi.org to resolve the DOI to the Zenodo website. The last part of
-    # the URL is the record ID that we need.
-    zenodo_url = requests.get(f"https://doi.org/{doi}").url
-    article_id = zenodo_url.split("/")[-1]
-    # If there was a problem with the DOI lookup, we can still get the ID from
-    # the last part of the DOI. Don't want to rely on this because there is no
-    # guarantee that Zenodo won't change this in the future.
-    if article_id.startswith("zenodo."):
-        article_id = article_id[7:]
+    article_id = archive_url.split("/")[-1]
     # With the ID, we can get a list of files and their download links
     article = requests.get(f"https://zenodo.org/api/records/{article_id}").json()
-    if "doi" not in article or article["doi"] != doi:
-        raise ValueError(
-            f"Zenodo article with doi:{doi} not found. Is the DOI correct?"
-        )
     files = {item["key"]: item for item in article["files"]}
     if file_name not in files:
         raise ValueError(
-            f"File '{file_name}' not found in figshare archive with doi:{doi}."
+            f"File '{file_name}' not found in data archive {archive_url} (doi:{doi})."
         )
     download_url = files[file_name]["links"]["self"]
     return download_url
 
 
-def figshare_download_url(doi, file_name):
+def figshare_download_url(archive_url, file_name, doi):
     """
-    Use the figshare API to get the download URL for a file given the DOI.
+    Use the API to get the download URL for a file given the archive URL.
 
     Parameters
     ----------
-    doi : str
-        The DOI of the figshare archive.
+    archive_url : str
+        URL of the dataset in the repository.
     file_name : str
         The name of the file in the archive that will be downloaded.
+    doi : str
+        The DOI of the archive.
 
     Returns
     -------
@@ -633,19 +657,15 @@ def figshare_download_url(doi, file_name):
 
     """
     # Use the figshare API to find the article ID from the DOI
-    articles = requests.get(f"https://api.figshare.com/v2/articles?doi={doi}").json()
-    if len(articles) != 1:
-        raise ValueError(
-            f"Found {len(articles)} figshare articles with doi:{doi}."
-            " There can be only 1 for download. Is the DOI correct?"
-        )
-    article_id = articles[0]["id"]
+    article = requests.get(f"https://api.figshare.com/v2/articles?doi={doi}").json()[0]
+    article_id = article["id"]
     # With the ID, we can get a list of files and their download links
     response = requests.get(f"https://api.figshare.com/v2/articles/{article_id}/files")
+    response.raise_for_status()
     files = {item["name"]: item for item in response.json()}
     if file_name not in files:
         raise ValueError(
-            f"File '{file_name}' not found in figshare archive with doi:{doi}."
+            f"File '{file_name}' not found in data archive {archive_url} (doi:{doi})."
         )
     download_url = files[file_name]["download_url"]
     return download_url

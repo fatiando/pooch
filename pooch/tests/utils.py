@@ -76,7 +76,7 @@ def pooch_test_figshare_url():
         The URL for pooch's test data.
 
     """
-    url = "figshare://10.6084/m9.figshare.14763051.v1/"
+    url = "doi:10.6084/m9.figshare.14763051.v1/"
     return url
 
 
@@ -93,7 +93,7 @@ def pooch_test_zenodo_url():
         The URL for pooch's test data.
 
     """
-    url = "zenodo://10.5281/zenodo.4924875/"
+    url = "doi:10.5281/zenodo.4924875/"
     return url
 
 

@@ -31,6 +31,7 @@ from ..downloaders import (
     choose_downloader,
     figshare_download_url,
     zenodo_download_url,
+    doi_to_url,
 )
 from .utils import (
     pooch_test_url,
@@ -50,44 +51,44 @@ ZENODOURL = pooch_test_zenodo_url()
 
 
 def test_unsupported_protocol():
-    "Should raise ValueError when protocol not in {'https', 'http', 'ftp'}"
+    "Should raise ValueError when protocol is not supported"
     with pytest.raises(ValueError):
         choose_downloader("httpup://some-invalid-url.com")
+    # Simulate the DOI format
+    with pytest.raises(ValueError):
+        choose_downloader("doii:XXX/XXX/file")
 
 
 def test_invalid_doi_repository():
     "Should fail if data repository is not supported"
     with pytest.raises(ValueError) as exc:
+        # Use the DOI of the Pooch paper in JOSS (not a data repository)
         DOIDownloader()(
-            url="notarepository://DOI/file_name", output_file=None, pooch=None
+            url="doi:10.21105/joss.01943/file_name.txt", output_file=None, pooch=None
         )
-    assert "Invalid data repository 'notarepository'" in str(exc.value)
+    assert "Invalid data repository 'joss.theoj.org'" in str(exc.value)
 
 
-@pytest.mark.parametrize(
-    "doi_to_url",
-    [figshare_download_url, zenodo_download_url],
-    ids=["figshare", "zenodo"],
-)
-def test_doi_url_not_found(doi_to_url):
-    "Should fail if the DOI is not found on the repository"
+def test_doi_url_not_found():
+    "Should fail if the DOI is not found"
     with pytest.raises(ValueError) as exc:
-        doi_to_url(doi="NOTAREALDOI", file_name="tiny-data.txt")
+        doi_to_url(doi="NOTAREALDOI")
     assert "Is the DOI correct?" in str(exc.value)
 
 
 @pytest.mark.parametrize(
-    "doi_to_url,doi",
+    "converter,doi",
     [
         (figshare_download_url, "10.6084/m9.figshare.14763051.v1"),
         (zenodo_download_url, "10.5281/zenodo.4924875"),
     ],
     ids=["figshare", "zenodo"],
 )
-def test_figshare_url_file_not_found(doi_to_url, doi):
-    "Should fail if the DOI is not found on figshare"
+def test_figshare_url_file_not_found(converter, doi):
+    "Should fail if the file is not found in the archive"
     with pytest.raises(ValueError) as exc:
-        doi_to_url(doi=doi, file_name="bla.txt")
+        url = doi_to_url(doi)
+        converter(archive_url=url, file_name="bla.txt", doi=doi)
     assert "File 'bla.txt' not found" in str(exc.value)
 
 
