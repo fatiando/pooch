@@ -207,6 +207,12 @@ def test_parse_url(url, output):
     assert parse_url(url) == output
 
 
+def test_parse_url_invalid_doi():
+    "Should fail if we forget to not include // in the DOI link"
+    with pytest.raises(ValueError):
+        parse_url("doi://XXX/XXX/fname.txt")
+
+
 def test_file_hash_invalid_algorithm():
     "Test an invalid hashing algorithm"
     with pytest.raises(ValueError) as exc:

@@ -226,6 +226,10 @@ def parse_url(url):
         ``{'protocol':'http', 'netloc':'127.0.0.1:8080','path': '/test.nc'}``).
 
     """
+    if url.startswith("doi://"):
+        raise ValueError(
+            f"Invalid DOI link '{url}'. You must not use '//' after 'doi:'."
+        )
     if url.startswith("doi:"):
         protocol = "doi"
         parts = url[4:].split("/")
@@ -236,11 +240,6 @@ def parse_url(url):
         protocol = parsed_url.scheme or "file"
         netloc = parsed_url.netloc
         path = parsed_url.path
-    # The DOI has a / that gets put into the path when it should be in the
-    # netloc. Need to correct for this to make the DOI easily accessible.
-    if protocol in {"figshare", "zenodo"}:
-        netloc = "/".join([netloc, path.split("/")[1]])
-        path = "/" + "/".join(path.split("/")[2:])
     return {"protocol": protocol, "netloc": netloc, "path": path}
 
 
