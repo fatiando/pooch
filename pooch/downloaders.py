@@ -464,15 +464,24 @@ class DOIDownloader:  # pylint: disable=too-few-public-methods
     HTTP download link. Uses the :mod:`requests` library to manage downloads
     and interact with the APIs.
 
-    The format of the "URL" is: ``{repository}://{DOI}/{file name}``
+    The **format of the "URL"** is: ``doi:{DOI}/{file name}``.
 
-    Supported repositories:
-
-    * `figshare <https://www.figshare.com>`__: ``figshare``
-    * `Zenodo <https://www.zenodo.org>`__: ``zenodo``
+    Notice that there are no ``//`` like in HTTP/FTP and you must specify a
+    file name after the DOI (separated by a ``/``).
 
     Use with :meth:`pooch.Pooch.fetch` or :func:`pooch.retrieve` to be able to
     download files given the DOI instead of an HTTP link.
+
+    Supported repositories:
+
+    * `figshare <https://www.figshare.com>`__
+    * `Zenodo <https://www.zenodo.org>`__
+
+    .. attention::
+
+        DOIs from other repositories **will not work** since we need to access
+        their particular APIs to find the download links. We welcome
+        suggestions and contributions adding new repositories.
 
     Parameters
     ----------
