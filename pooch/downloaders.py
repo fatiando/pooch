@@ -561,7 +561,9 @@ class DOIDownloader:  # pylint: disable=too-few-public-methods
         if repository not in converters:
             raise ValueError(
                 f"Invalid data repository '{repository}'. Must be one of "
-                f"{list(converters.keys())}."
+                f"{list(converters.keys())}. "
+                "To request or contribute support for this repository, "
+                "please open an issue at https://github.com/fatiando/pooch/issues"
             )
         download_url = converters[repository](
             archive_url=archive_url,
