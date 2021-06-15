@@ -192,23 +192,15 @@ def test_registry_builder_recursive():
             {"protocol": "ftp", "netloc": "127.0.0.1:8080", "path": "/test.nc"},
         ),
         (
-            "figshare://10.6084/m9.figshare.923450.v1/dike.json",
+            "doi:10.6084/m9.figshare.923450.v1/dike.json",
             {
-                "protocol": "figshare",
+                "protocol": "doi",
                 "netloc": "10.6084/m9.figshare.923450.v1",
                 "path": "/dike.json",
             },
         ),
-        (
-            "zenodo://10.5281/zenodo.4924875/dike.json",
-            {
-                "protocol": "zenodo",
-                "netloc": "10.5281/zenodo.4924875",
-                "path": "/dike.json",
-            },
-        ),
     ],
-    ids=["http", "ftp", "figshare", "zenodo"],
+    ids=["http", "ftp", "doi"],
 )
 def test_parse_url(url, output):
     "Parse URL into 3 components"

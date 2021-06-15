@@ -209,8 +209,10 @@ def parse_url(url):
 
     * http://127.0.0.1:8080/test.nc
     * ftp://127.0.0.1:8080/test.nc
-    * fighare://10.6084/m9.figshare.923450.v1/test.nc
-    * zenodo://10.5281/zenodo.4924875/test.nc
+    * doi:10.6084/m9.figshare.923450.v1/test.nc
+
+    The DOI is a special case. The protocol will be "doi", the netloc will be
+    the DOI, and the path is what comes after the second "/".
 
     Parameters
     ----------
@@ -222,13 +224,18 @@ def parse_url(url):
     parsed_url : dict
         Three components of a URL (e.g.,
         ``{'protocol':'http', 'netloc':'127.0.0.1:8080','path': '/test.nc'}``).
-        In the case of "figshare" or "zenodo" URLs, the netloc is the DOI.
 
     """
-    parsed_url = urlsplit(url)
-    protocol = parsed_url.scheme or "file"
-    netloc = parsed_url.netloc
-    path = parsed_url.path
+    if url.startswith("doi:"):
+        protocol = "doi"
+        parts = url[4:].split("/")
+        netloc = "/".join(parts[:2])
+        path = "/" + "/".join(parts[2:])
+    else:
+        parsed_url = urlsplit(url)
+        protocol = parsed_url.scheme or "file"
+        netloc = parsed_url.netloc
+        path = parsed_url.path
     # The DOI has a / that gets put into the path when it should be in the
     # netloc. Need to correct for this to make the DOI easily accessible.
     if protocol in {"figshare", "zenodo"}:
