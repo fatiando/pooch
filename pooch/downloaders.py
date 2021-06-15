@@ -535,7 +535,7 @@ class DOIDownloader:  # pylint: disable=too-few-public-methods
         """
         Download the given DOI URL over HTTP to the given output file.
 
-        Uses the repository's API to determined the actual HTTP download URL
+        Uses the repository's API to determine the actual HTTP download URL
         from the given DOI.
 
         Uses :func:`requests.get`.
@@ -599,6 +599,7 @@ def doi_to_url(doi):
     # working at the moment for some reason. Once this gets resolved, this code
     # should be removed.
     if url.split("/")[-1].startswith("zenodo."):
+        print("Meh")
         return f"https://zenodo.org/record/{url.split('/')[-1][7:]}"
 
     if 400 <= response.status_code < 600:
