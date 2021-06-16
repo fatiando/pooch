@@ -599,7 +599,6 @@ def doi_to_url(doi):
     # working at the moment for some reason. Once this gets resolved, this code
     # should be removed.
     if url.split("/")[-1].startswith("zenodo."):
-        print("Meh")
         return f"https://zenodo.org/record/{url.split('/')[-1][7:]}"
 
     if 400 <= response.status_code < 600:
