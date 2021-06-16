@@ -37,8 +37,8 @@ def choose_downloader(url):
     Returns
     -------
     downloader
-        A downloader class (either :class:`pooch.HTTPDownloader`,
-        :class:`pooch.FTPDownloader`, or :class: `pooch.SFTPDownloader`).
+        A downloader class, like :class:`pooch.HTTPDownloader`,
+        :class:`pooch.FTPDownloader`, or :class: `pooch.SFTPDownloader`.
 
     Examples
     --------
@@ -52,6 +52,9 @@ def choose_downloader(url):
     >>> downloader = choose_downloader("ftp://something.com")
     >>> print(downloader.__class__.__name__)
     FTPDownloader
+    >>> downloader = choose_downloader("doi:DOI/filename.csv")
+    >>> print(downloader.__class__.__name__)
+    DOIDownloader
 
     """
     known_downloaders = {
@@ -59,6 +62,7 @@ def choose_downloader(url):
         "https": HTTPDownloader,
         "http": HTTPDownloader,
         "sftp": SFTPDownloader,
+        "doi": DOIDownloader,
     }
 
     parsed_url = parse_url(url)
@@ -439,3 +443,224 @@ class SFTPDownloader:  # pylint: disable=too-few-public-methods
             connection.close()
             if sftp is not None:
                 sftp.close()
+
+
+class DOIDownloader:  # pylint: disable=too-few-public-methods
+    """
+    Download manager for fetching files from Digital Object Identifiers (DOIs).
+
+    Open-access data repositories often issue Digital Object Identifiers (DOIs)
+    for data which provide a stable link and citation point. The trick is
+    finding out the download URL for a file given the DOI.
+
+    When called, this downloader uses the repository's public API to find out
+    the download URL from the DOI and file name. It then uses
+    :class:`pooch.HTTPDownloader` to download the URL into the specified local
+    file. Allowing "URL"s  to be specified with the DOI instead of the actual
+    HTTP download link. Uses the :mod:`requests` library to manage downloads
+    and interact with the APIs.
+
+    The **format of the "URL"** is: ``doi:{DOI}/{file name}``.
+
+    Notice that there are no ``//`` like in HTTP/FTP and you must specify a
+    file name after the DOI (separated by a ``/``).
+
+    Use with :meth:`pooch.Pooch.fetch` or :func:`pooch.retrieve` to be able to
+    download files given the DOI instead of an HTTP link.
+
+    Supported repositories:
+
+    * `figshare <https://www.figshare.com>`__
+    * `Zenodo <https://www.zenodo.org>`__
+
+    .. attention::
+
+        DOIs from other repositories **will not work** since we need to access
+        their particular APIs to find the download links. We welcome
+        suggestions and contributions adding new repositories.
+
+    Parameters
+    ----------
+    progressbar : bool or an arbitrary progress bar object
+        If True, will print a progress bar of the download to standard error
+        (stderr). Requires `tqdm <https://github.com/tqdm/tqdm>`__ to be
+        installed. Alternatively, an arbitrary progress bar object can be
+        passed. See :ref:`custom-progressbar` for details.
+    chunk_size : int
+        Files are streamed *chunk_size* bytes at a time instead of loading
+        everything into memory at one. Usually doesn't need to be changed.
+    **kwargs
+        All keyword arguments given when creating an instance of this class
+        will be passed to :func:`requests.get`.
+
+    Examples
+    --------
+
+    Download one of the data files from the figshare archive of Pooch test
+    data:
+
+    >>> import os
+    >>> downloader = DOIDownloader()
+    >>> url = "doi:10.6084/m9.figshare.14763051.v1/tiny-data.txt"
+    >>> # Not using with Pooch.fetch so no need to pass an instance of Pooch
+    >>> downloader(url=url, output_file="tiny-data.txt", pooch=None)
+    >>> os.path.exists("tiny-data.txt")
+    True
+    >>> with open("tiny-data.txt") as f:
+    ...     print(f.read().strip())
+    # A tiny data file for test purposes only
+    1  2  3  4  5  6
+    >>> os.remove("tiny-data.txt")
+
+    Same thing but for our Zenodo archive:
+
+    >>> url = "doi:10.5281/zenodo.4924875/tiny-data.txt"
+    >>> downloader(url=url, output_file="tiny-data.txt", pooch=None)
+    >>> os.path.exists("tiny-data.txt")
+    True
+    >>> with open("tiny-data.txt") as f:
+    ...     print(f.read().strip())
+    # A tiny data file for test purposes only
+    1  2  3  4  5  6
+    >>> os.remove("tiny-data.txt")
+
+    """
+
+    def __init__(self, progressbar=False, chunk_size=1024, **kwargs):
+        self.kwargs = kwargs
+        self.progressbar = progressbar
+        self.chunk_size = chunk_size
+
+    def __call__(self, url, output_file, pooch):
+        """
+        Download the given DOI URL over HTTP to the given output file.
+
+        Uses the repository's API to determine the actual HTTP download URL
+        from the given DOI.
+
+        Uses :func:`requests.get`.
+
+        Parameters
+        ----------
+        url : str
+            The URL to the file you want to download.
+        output_file : str or file-like object
+            Path (and file name) to which the file will be downloaded.
+        pooch : :class:`~pooch.Pooch`
+            The instance of :class:`~pooch.Pooch` that is calling this method.
+
+        """
+        converters = {
+            "figshare.com": figshare_download_url,
+            "zenodo.org": zenodo_download_url,
+        }
+        parsed_url = parse_url(url)
+        doi = parsed_url["netloc"]
+        archive_url = doi_to_url(doi)
+        repository = parse_url(archive_url)["netloc"]
+        if repository not in converters:
+            raise ValueError(
+                f"Invalid data repository '{repository}'. Must be one of "
+                f"{list(converters.keys())}. "
+                "To request or contribute support for this repository, "
+                "please open an issue at https://github.com/fatiando/pooch/issues"
+            )
+        download_url = converters[repository](
+            archive_url=archive_url,
+            file_name=parsed_url["path"].split("/")[-1],
+            doi=doi,
+        )
+        downloader = HTTPDownloader(
+            progressbar=self.progressbar, chunk_size=self.chunk_size, **self.kwargs
+        )
+        downloader(download_url, output_file, pooch)
+
+
+def doi_to_url(doi):
+    """
+    Follow a DOI link to resolve the URL of the archive.
+
+    Parameters
+    ----------
+    doi : str
+        The DOI of the archive.
+
+    Returns
+    -------
+    url : str
+        The URL of the archive in the data repository.
+
+    """
+    # Use doi.org to resolve the DOI to the repository website.
+    response = requests.get(f"https://doi.org/{doi}")
+    url = response.url
+    if 400 <= response.status_code < 600:
+        raise ValueError(
+            f"Archive with doi:{doi} not found (see {url}). Is the DOI correct?"
+        )
+    return url
+
+
+def zenodo_download_url(archive_url, file_name, doi):
+    """
+    Use the API to get the download URL for a file given the archive URL.
+
+    Parameters
+    ----------
+    archive_url : str
+        URL of the dataset in the repository.
+    file_name : str
+        The name of the file in the archive that will be downloaded.
+    doi : str
+        The DOI of the archive.
+
+    Returns
+    -------
+    download_url : str
+        The HTTP URL that can be used to download the file.
+
+    """
+    article_id = archive_url.split("/")[-1]
+    # With the ID, we can get a list of files and their download links
+    article = requests.get(f"https://zenodo.org/api/records/{article_id}").json()
+    files = {item["key"]: item for item in article["files"]}
+    if file_name not in files:
+        raise ValueError(
+            f"File '{file_name}' not found in data archive {archive_url} (doi:{doi})."
+        )
+    download_url = files[file_name]["links"]["self"]
+    return download_url
+
+
+def figshare_download_url(archive_url, file_name, doi):
+    """
+    Use the API to get the download URL for a file given the archive URL.
+
+    Parameters
+    ----------
+    archive_url : str
+        URL of the dataset in the repository.
+    file_name : str
+        The name of the file in the archive that will be downloaded.
+    doi : str
+        The DOI of the archive.
+
+    Returns
+    -------
+    download_url : str
+        The HTTP URL that can be used to download the file.
+
+    """
+    # Use the figshare API to find the article ID from the DOI
+    article = requests.get(f"https://api.figshare.com/v2/articles?doi={doi}").json()[0]
+    article_id = article["id"]
+    # With the ID, we can get a list of files and their download links
+    response = requests.get(f"https://api.figshare.com/v2/articles/{article_id}/files")
+    response.raise_for_status()
+    files = {item["name"]: item for item in response.json()}
+    if file_name not in files:
+        raise ValueError(
+            f"File '{file_name}' not found in data archive {archive_url} (doi:{doi})."
+        )
+    download_url = files[file_name]["download_url"]
+    return download_url

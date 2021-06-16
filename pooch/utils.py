@@ -205,21 +205,42 @@ def parse_url(url):
 
     <protocol>://<netloc>/<path>
 
+    Example URLs:
+
+    * http://127.0.0.1:8080/test.nc
+    * ftp://127.0.0.1:8080/test.nc
+    * doi:10.6084/m9.figshare.923450.v1/test.nc
+
+    The DOI is a special case. The protocol will be "doi", the netloc will be
+    the DOI, and the path is what comes after the second "/".
+
     Parameters
     ----------
     url : str
-        URL (e.g.: http://127.0.0.1:8080/test.nc, ftp://127.0.0.1:8080/test.nc)
+        The URL.
 
     Returns
     -------
     parsed_url : dict
-        Three components of a URL (e.g., {'protocol': 'http', 'netloc':
-        '127.0.0.1:8080', 'path': '/test.nc'})
+        Three components of a URL (e.g.,
+        ``{'protocol':'http', 'netloc':'127.0.0.1:8080','path': '/test.nc'}``).
 
     """
-    parsed_url = urlsplit(url)
-    protocol = parsed_url.scheme or "file"
-    return {"protocol": protocol, "netloc": parsed_url.netloc, "path": parsed_url.path}
+    if url.startswith("doi://"):
+        raise ValueError(
+            f"Invalid DOI link '{url}'. You must not use '//' after 'doi:'."
+        )
+    if url.startswith("doi:"):
+        protocol = "doi"
+        parts = url[4:].split("/")
+        netloc = "/".join(parts[:2])
+        path = "/" + "/".join(parts[2:])
+    else:
+        parsed_url = urlsplit(url)
+        protocol = parsed_url.scheme or "file"
+        netloc = parsed_url.netloc
+        path = parsed_url.path
+    return {"protocol": protocol, "netloc": netloc, "path": path}
 
 
 def cache_location(path, env=None, version=None):

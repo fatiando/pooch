@@ -27,20 +27,80 @@ from ..downloaders import (
     HTTPDownloader,
     FTPDownloader,
     SFTPDownloader,
+    DOIDownloader,
     choose_downloader,
+    figshare_download_url,
+    zenodo_download_url,
+    doi_to_url,
 )
-from .utils import pooch_test_url, check_large_data, check_tiny_data, data_over_ftp
+from .utils import (
+    pooch_test_url,
+    check_large_data,
+    check_tiny_data,
+    data_over_ftp,
+    pooch_test_figshare_url,
+    pooch_test_zenodo_url,
+)
 
 
 # FTP doesn't work on Travis CI so need to be able to skip tests there
 ON_TRAVIS = bool(os.environ.get("TRAVIS", None))
 BASEURL = pooch_test_url()
+FIGSHAREURL = pooch_test_figshare_url()
+ZENODOURL = pooch_test_zenodo_url()
 
 
 def test_unsupported_protocol():
-    "Should raise ValueError when protocol not in {'https', 'http', 'ftp'}"
+    "Should raise ValueError when protocol is not supported"
     with pytest.raises(ValueError):
         choose_downloader("httpup://some-invalid-url.com")
+    # Simulate the DOI format
+    with pytest.raises(ValueError):
+        choose_downloader("doii:XXX/XXX/file")
+
+
+def test_invalid_doi_repository():
+    "Should fail if data repository is not supported"
+    with pytest.raises(ValueError) as exc:
+        # Use the DOI of the Pooch paper in JOSS (not a data repository)
+        DOIDownloader()(
+            url="doi:10.21105/joss.01943/file_name.txt", output_file=None, pooch=None
+        )
+    assert "Invalid data repository 'joss.theoj.org'" in str(exc.value)
+
+
+def test_doi_url_not_found():
+    "Should fail if the DOI is not found"
+    with pytest.raises(ValueError) as exc:
+        doi_to_url(doi="NOTAREALDOI")
+    assert "Is the DOI correct?" in str(exc.value)
+
+
+@pytest.mark.parametrize(
+    "converter,doi",
+    [
+        (figshare_download_url, "10.6084/m9.figshare.14763051.v1"),
+        (zenodo_download_url, "10.5281/zenodo.4924875"),
+    ],
+    ids=["figshare", "zenodo"],
+)
+def test_figshare_url_file_not_found(converter, doi):
+    "Should fail if the file is not found in the archive"
+    with pytest.raises(ValueError) as exc:
+        url = doi_to_url(doi)
+        converter(archive_url=url, file_name="bla.txt", doi=doi)
+    assert "File 'bla.txt' not found" in str(exc.value)
+
+
+@pytest.mark.parametrize("url", [FIGSHAREURL, ZENODOURL], ids=["figshare", "zenodo"])
+def test_doi_downloader(url):
+    "Test the DOI downloader"
+    # Use the test data we have on the repository
+    with TemporaryDirectory() as local_store:
+        downloader = DOIDownloader()
+        outfile = os.path.join(local_store, "tiny-data.txt")
+        downloader(url + "tiny-data.txt", outfile, None)
+        check_tiny_data(outfile)
 
 
 def test_ftp_downloader(ftpserver):
@@ -96,13 +156,18 @@ def test_downloader_progressbar_fails(downloader):
 
 
 @pytest.mark.skipif(tqdm is None, reason="requires tqdm")
-def test_downloader_progressbar(capsys):
+@pytest.mark.parametrize(
+    "url,downloader",
+    [(BASEURL, HTTPDownloader), (FIGSHAREURL, DOIDownloader)],
+    ids=["http", "figshare"],
+)
+def test_downloader_progressbar(url, downloader, capsys):
     "Setup a downloader function that prints a progress bar for fetch"
-    download = HTTPDownloader(progressbar=True)
+    download = downloader(progressbar=True)
     with TemporaryDirectory() as local_store:
-        fname = "large-data.txt"
-        url = BASEURL + fname
-        outfile = os.path.join(local_store, "large-data.txt")
+        fname = "tiny-data.txt"
+        url = url + fname
+        outfile = os.path.join(local_store, fname)
         download(url, outfile, None)
         # Read stderr and make sure the progress bar is printed only when told
         captured = capsys.readouterr()
@@ -115,7 +180,7 @@ def test_downloader_progressbar(capsys):
         # Bar size is not always the same so can't reliably test the whole bar.
         assert printed[:25] == progress
         # Check that the downloaded file has the right content
-        check_large_data(outfile)
+        check_tiny_data(outfile)
 
 
 @pytest.mark.skipif(tqdm is None, reason="requires tqdm")

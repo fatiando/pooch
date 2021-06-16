@@ -63,6 +63,40 @@ def pooch_test_url():
     return url
 
 
+def pooch_test_figshare_url():
+    """
+    Get the base URL for the test data stored in figshare.
+
+    The URL contains the DOI for the figshare dataset using the appropriate
+    version for this version of Pooch.
+
+    Returns
+    -------
+    url
+        The URL for pooch's test data.
+
+    """
+    url = "doi:10.6084/m9.figshare.14763051.v1/"
+    return url
+
+
+def pooch_test_zenodo_url():
+    """
+    Get the base URL for the test data stored in Zenodo.
+
+    The URL contains the DOI for the Zenodo dataset using the appropriate
+    version for this version of Pooch.
+
+    Returns
+    -------
+    url
+        The URL for pooch's test data.
+
+    """
+    url = "doi:10.5281/zenodo.4924875/"
+    return url
+
+
 def pooch_test_registry():
     """
     Get a registry for the test data used in Pooch itself.
