@@ -594,13 +594,6 @@ def doi_to_url(doi):
     # Use doi.org to resolve the DOI to the repository website.
     response = requests.get(f"https://doi.org/{doi}")
     url = response.url
-
-    # Workaround to get the Zenodo ID. The DOI link for our test data isn't
-    # working at the moment for some reason. Once this gets resolved, this code
-    # should be removed.
-    if url.split("/")[-1].startswith("zenodo."):
-        return f"https://zenodo.org/record/{url.split('/')[-1][7:]}"
-
     if 400 <= response.status_code < 600:
         raise ValueError(
             f"Archive with doi:{doi} not found (see {url}). Is the DOI correct?"
