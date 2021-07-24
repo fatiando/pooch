@@ -259,6 +259,21 @@ def test_hash_matches_strict(alg):
     assert fname in str(error.value)
 
 
+@pytest.mark.parametrize("alg", [
+    pytest.param(("xxh128", "0267d220db258fffb0c567c0ecd1b689"), id="xxh128"),
+    pytest.param(("xxh3_128", "0267d220db258fffb0c567c0ecd1b689"), id="xxh3_128"),
+    pytest.param(("xxh64", "f843815fe57948fa"), id="xxh64"),
+    pytest.param(("xxh3_64", "811e3f2a12aec53f"), id="xxh3_64"),
+    pytest.param(("xxh32", "98d6f1a2"), id="xxh32"),
+])
+def test_xxhash_matches_strict(alg):
+    pytest.importorskip("xxhash")
+    alg, expected_hash = alg
+    fname = os.path.join(DATA_DIR, "tiny-data.txt")
+    returned_hash = file_hash(fname, alg)
+    assert returned_hash == expected_hash
+
+
 def test_hash_matches_none():
     "The hash checking function should always returns True if known_hash=None"
     fname = os.path.join(DATA_DIR, "tiny-data.txt")
