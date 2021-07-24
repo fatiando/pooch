@@ -18,6 +18,23 @@ from contextlib import contextmanager
 import appdirs
 from packaging.version import Version
 
+algorithms_available = {}
+for alg in hashlib.algorithms_available:
+    # From the docs: https://docs.python.org/3/library/hashlib.html#hashlib.new
+    #
+    #      The named constructors are much faster than new() and should be preferred.
+    algorithms_available[alg] = getattr(hashlib, alg)
+
+try:
+    import xxhash
+    # https://github.com/ifduyue/python-xxhash/issues/48
+    for alg in ['xxh128', 'xxh64', 'xxh32', 'xxh3_128', 'xxh3_64']:
+        algorithm = getattr(xxhash, alg, None)
+        if alg is not None:
+            algorithms_available[alg] = algorithm
+except ImportError:
+    pass
+
 
 LOGGER = logging.Logger("pooch")
 LOGGER.addHandler(logging.StreamHandler())
@@ -98,11 +115,11 @@ def file_hash(fname, alg="sha256"):
     >>> os.remove(fname)
 
     """
-    if alg not in hashlib.algorithms_available:
+    if alg not in algorithms_available:
         raise ValueError(f"Algorithm '{alg}' not available in hashlib")
     # Calculate the hash in chunks to avoid overloading the memory
     chunksize = 65536
-    hasher = hashlib.new(alg)
+    hasher = algorithms_available[alg]()
     with open(fname, "rb") as fin:
         buff = fin.read(chunksize)
         while buff:
