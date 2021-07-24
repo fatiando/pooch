@@ -14,6 +14,7 @@ from pathlib import Path
 import hashlib
 from urllib.parse import urlsplit
 from contextlib import contextmanager
+import functools
 
 import appdirs
 from packaging.version import Version
@@ -25,7 +26,10 @@ for alg in hashlib.algorithms_available:
     #      The named constructors are much faster than new() and should be
     #      preferred.
 
-    algorithms_available[alg] = getattr(hashlib, alg)
+    try:
+        algorithms_available[alg] = getattr(hashlib, alg)
+    except AttributeError:
+        algorithms_available[alg] = functools.partial(hashlib.new, alg)
 
 try:
     import xxhash
