@@ -22,13 +22,16 @@ algorithms_available = {}
 for alg in hashlib.algorithms_available:
     # From the docs: https://docs.python.org/3/library/hashlib.html#hashlib.new
     #
-    #      The named constructors are much faster than new() and should be preferred.
+    #      The named constructors are much faster than new() and should be
+    #      preferred.
+
     algorithms_available[alg] = getattr(hashlib, alg)
 
 try:
     import xxhash
+
     # https://github.com/ifduyue/python-xxhash/issues/48
-    for alg in ['xxh128', 'xxh64', 'xxh32', 'xxh3_128', 'xxh3_64']:
+    for alg in ["xxh128", "xxh64", "xxh32", "xxh3_128", "xxh3_64"]:
         algorithm = getattr(xxhash, alg, None)
         if alg is not None:
             algorithms_available[alg] = algorithm
