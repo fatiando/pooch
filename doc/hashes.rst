@@ -3,7 +3,7 @@
 Hashes: Calculating and bypassing
 =================================
 
-Pooch uses cryptographic hashes to check if files are up-to-date or possibly
+Pooch uses hashes to check if files are up-to-date or possibly
 corrupted:
 
 * If a file exists in the local folder, Pooch will check that its hash matches
@@ -12,6 +12,8 @@ corrupted:
 * If a file needs to be updated or doesn't exist, Pooch will download it from
   the remote source and check the hash. If the hash doesn't match, an exception
   is raised to warn of possible file corruption.
+* Cryptographic hashes may be used where users wish to ensure the security of
+  their download.
 
 Calculating hashes
 ------------------
@@ -95,3 +97,32 @@ the files once, unless they are deleted from the cache.
 
     If this script is run over a period of time, your cache directory will
     increase in size, as the files are stored in daily subdirectories.
+
+Other supported hashes
+----------------------
+
+Beyond hashing algorithms supported by ``hashlib``, Pooch supports algorithms
+provided by the `xxhash package <https://github.com/ifduyue/python-xxhash>`__.
+If the ``xxhash`` package is available, users may specify to use one of
+the algorithms provided by the package.
+
+.. code:: bash
+
+    $ xxh128sum data/store.zip
+    6a71973c93eac6c8839ce751ce10ae48  data/store.zip
+    $ # ^^^^^^^^^^^^^^^^^^^ The hash  ^^^^^^^^^^^^^^ The filename
+
+.. code:: python
+
+    import datetime
+    import pooch
+
+    # Get the current data to store the files in separate folders
+    CURRENT_DATE = datetime.datetime.now().date()
+
+    GOODBOY = pooch.create(
+        [...],
+        registry={
+            "store.zip": "xxh128:6a71973c93eac6c8839ce751ce10ae48",
+        },
+    )

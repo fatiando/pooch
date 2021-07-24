@@ -1,3 +1,4 @@
 # Optional dependencies
 tqdm
 paramiko
+xxhash
