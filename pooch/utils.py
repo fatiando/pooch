@@ -119,7 +119,10 @@ def file_hash(fname, alg="sha256"):
 
     """
     if alg not in algorithms_available:
-        raise ValueError(f"Algorithm '{alg}' not available in hashlib")
+        raise ValueError(
+            f"Algorithm '{alg}' not available to the pooch library. "
+            "Only the following algorithms are available "
+            f"{[k for k in algorithms_available]}.")
     # Calculate the hash in chunks to avoid overloading the memory
     chunksize = 65536
     hasher = algorithms_available[alg]()
