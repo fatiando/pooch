@@ -220,6 +220,25 @@ def test_file_hash_invalid_algorithm():
     assert "'blah'" in str(exc.value)
 
 
+@pytest.mark.parametrize(
+    "alg",
+    [
+        pytest.param(("xxh128", "0267d220db258fffb0c567c0ecd1b689"), id="xxh128"),
+        pytest.param(("xxh3_128", "0267d220db258fffb0c567c0ecd1b689"), id="xxh3_128"),
+        pytest.param(("xxh64", "f843815fe57948fa"), id="xxh64"),
+        pytest.param(("xxh3_64", "811e3f2a12aec53f"), id="xxh3_64"),
+        pytest.param(("xxh32", "98d6f1a2"), id="xxh32"),
+    ],
+)
+def test_file_hash_xxhash(alg):
+    "Test the hash calculation using xxhash"
+    pytest.importorskip("xxhash")
+    alg, expected_hash = alg
+    fname = os.path.join(DATA_DIR, "tiny-data.txt")
+    returned_hash = file_hash(fname, alg)
+    assert returned_hash == expected_hash
+
+
 @pytest.mark.parametrize("alg", ["sha256", "sha512", "md5"])
 def test_hash_matches(alg):
     "Make sure the hash checking function works"

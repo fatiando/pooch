@@ -14,9 +14,38 @@ from pathlib import Path
 import hashlib
 from urllib.parse import urlsplit
 from contextlib import contextmanager
+import functools
 
 import appdirs
 from packaging.version import Version
+
+# From the docs: https://docs.python.org/3/library/hashlib.html#hashlib.new
+#   The named constructors are much faster than new() and should be
+#   preferred.
+# Need to fallback on new() for some algorithms.
+ALGORITHMS_AVAILABLE = {
+    alg: getattr(hashlib, alg, functools.partial(hashlib.new, alg))
+    for alg in hashlib.algorithms_available
+}
+
+try:
+    import xxhash
+
+    # xxhash doesn't have a list of available algorithms yet.
+    # https://github.com/ifduyue/python-xxhash/issues/48
+    ALGORITHMS_AVAILABLE.update(
+        {
+            alg: getattr(xxhash, alg, None)
+            for alg in ["xxh128", "xxh64", "xxh32", "xxh3_128", "xxh3_64"]
+        }
+    )
+    # The xxh3 algorithms are only available for version>=2.0. Set to None and
+    # remove to ensure backwards compatibility.
+    ALGORITHMS_AVAILABLE = {
+        alg: func for alg, func in ALGORITHMS_AVAILABLE.items() if func is not None
+    }
+except ImportError:
+    pass
 
 
 LOGGER = logging.Logger("pooch")
@@ -98,11 +127,15 @@ def file_hash(fname, alg="sha256"):
     >>> os.remove(fname)
 
     """
-    if alg not in hashlib.algorithms_available:
-        raise ValueError(f"Algorithm '{alg}' not available in hashlib")
+    if alg not in ALGORITHMS_AVAILABLE:
+        raise ValueError(
+            f"Algorithm '{alg}' not available to the pooch library. "
+            "Only the following algorithms are available "
+            f"{list(ALGORITHMS_AVAILABLE.keys())}."
+        )
     # Calculate the hash in chunks to avoid overloading the memory
     chunksize = 65536
-    hasher = hashlib.new(alg)
+    hasher = ALGORITHMS_AVAILABLE[alg]()
     with open(fname, "rb") as fin:
         buff = fin.read(chunksize)
         while buff:
