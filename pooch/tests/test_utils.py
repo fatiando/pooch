@@ -9,34 +9,19 @@ Test the utility functions.
 """
 import os
 import shutil
-import hashlib
 import time
 from pathlib import Path
 import tempfile
-from tempfile import NamedTemporaryFile, TemporaryDirectory
+from tempfile import TemporaryDirectory
 from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor
 
 import pytest
 
-from ..core import Pooch
 from ..utils import (
-    make_registry,
     parse_url,
     make_local_storage,
-    file_hash,
-    hash_matches,
     temporary_file,
     unique_file_name,
-)
-from .utils import check_tiny_data
-
-DATA_DIR = str(Path(__file__).parent / "data" / "store")
-REGISTRY = (
-    "tiny-data.txt baee0894dba14b12085eacb204284b97e362f4f3e5a5807693cc90ef415c1b2d\n"
-)
-REGISTRY_RECURSIVE = (
-    "subdir/tiny-data.txt baee0894dba14b12085eacb204284b97e362f4f3e5a5807693cc90ef415c1b2d\n"
-    "tiny-data.txt baee0894dba14b12085eacb204284b97e362f4f3e5a5807693cc90ef415c1b2d\n"
 )
 
 
@@ -137,49 +122,6 @@ def test_local_storage_newfile_permissionerror(monkeypatch):
             assert "'SOME_VARIABLE'" in str(error)
 
 
-def test_registry_builder():
-    "Check that the registry builder creates the right file names and hashes"
-    outfile = NamedTemporaryFile(delete=False)
-    # Need to close the file before writing to it.
-    outfile.close()
-    try:
-        make_registry(DATA_DIR, outfile.name, recursive=False)
-        with open(outfile.name) as fout:
-            registry = fout.read()
-        assert registry == REGISTRY
-        # Check that the registry can be used.
-        pup = Pooch(path=DATA_DIR, base_url="some bogus URL", registry={})
-        pup.load_registry(outfile.name)
-        true = os.path.join(DATA_DIR, "tiny-data.txt")
-        fname = pup.fetch("tiny-data.txt")
-        assert true == fname
-        check_tiny_data(fname)
-    finally:
-        os.remove(outfile.name)
-
-
-def test_registry_builder_recursive():
-    "Check that the registry builder works in recursive mode"
-    outfile = NamedTemporaryFile(delete=False)
-    # Need to close the file before writing to it.
-    outfile.close()
-    try:
-        make_registry(DATA_DIR, outfile.name, recursive=True)
-        with open(outfile.name) as fout:
-            registry = fout.read()
-        assert registry == REGISTRY_RECURSIVE
-        # Check that the registry can be used.
-        pup = Pooch(path=DATA_DIR, base_url="some bogus URL", registry={})
-        pup.load_registry(outfile.name)
-        assert os.path.join(DATA_DIR, "tiny-data.txt") == pup.fetch("tiny-data.txt")
-        check_tiny_data(pup.fetch("tiny-data.txt"))
-        true = os.path.join(DATA_DIR, "subdir", "tiny-data.txt")
-        assert true == pup.fetch("subdir/tiny-data.txt")
-        check_tiny_data(pup.fetch("subdir/tiny-data.txt"))
-    finally:
-        os.remove(outfile.name)
-
-
 @pytest.mark.parametrize(
     "url,output",
     [
@@ -211,99 +153,6 @@ def test_parse_url_invalid_doi():
     "Should fail if we forget to not include // in the DOI link"
     with pytest.raises(ValueError):
         parse_url("doi://XXX/XXX/fname.txt")
-
-
-def test_file_hash_invalid_algorithm():
-    "Test an invalid hashing algorithm"
-    with pytest.raises(ValueError) as exc:
-        file_hash(fname="something", alg="blah")
-    assert "'blah'" in str(exc.value)
-
-
-@pytest.mark.parametrize(
-    "alg",
-    [
-        pytest.param(("xxh128", "0267d220db258fffb0c567c0ecd1b689"), id="xxh128"),
-        pytest.param(("xxh3_128", "0267d220db258fffb0c567c0ecd1b689"), id="xxh3_128"),
-        pytest.param(("xxh64", "f843815fe57948fa"), id="xxh64"),
-        pytest.param(("xxh3_64", "811e3f2a12aec53f"), id="xxh3_64"),
-        pytest.param(("xxh32", "98d6f1a2"), id="xxh32"),
-    ],
-)
-def test_file_hash_xxhash(alg):
-    "Test the hash calculation using xxhash"
-    pytest.importorskip("xxhash")
-    alg, expected_hash = alg
-    fname = os.path.join(DATA_DIR, "tiny-data.txt")
-    returned_hash = file_hash(fname, alg)
-    assert returned_hash == expected_hash
-
-
-@pytest.mark.parametrize("alg", ["sha256", "sha512", "md5"])
-def test_hash_matches(alg):
-    "Make sure the hash checking function works"
-    fname = os.path.join(DATA_DIR, "tiny-data.txt")
-    check_tiny_data(fname)
-    with open(fname, "rb") as fin:
-        data = fin.read()
-    # Check if the check passes
-    hasher = hashlib.new(alg)
-    hasher.update(data)
-    known_hash = f"{alg}:{hasher.hexdigest()}"
-    assert hash_matches(fname, known_hash)
-    # And also if it fails
-    known_hash = f"{alg}:p98oh2dl2j2h2p8e9yfho3fi2e9fhd"
-    assert not hash_matches(fname, known_hash)
-
-
-@pytest.mark.parametrize("alg", ["sha256", "sha512", "md5"])
-def test_hash_matches_strict(alg):
-    "Make sure the hash checking function raises an exception if strict"
-    fname = os.path.join(DATA_DIR, "tiny-data.txt")
-    check_tiny_data(fname)
-    with open(fname, "rb") as fin:
-        data = fin.read()
-    # Check if the check passes
-    hasher = hashlib.new(alg)
-    hasher.update(data)
-    known_hash = f"{alg}:{hasher.hexdigest()}"
-    assert hash_matches(fname, known_hash, strict=True)
-    # And also if it fails
-    bad_hash = f"{alg}:p98oh2dl2j2h2p8e9yfho3fi2e9fhd"
-    with pytest.raises(ValueError) as error:
-        hash_matches(fname, bad_hash, strict=True, source="Neverland")
-    assert "Neverland" in str(error.value)
-    with pytest.raises(ValueError) as error:
-        hash_matches(fname, bad_hash, strict=True, source=None)
-    assert fname in str(error.value)
-
-
-def test_hash_matches_none():
-    "The hash checking function should always returns True if known_hash=None"
-    fname = os.path.join(DATA_DIR, "tiny-data.txt")
-    assert hash_matches(fname, known_hash=None)
-    # Should work even if the file is invalid
-    assert hash_matches(fname="", known_hash=None)
-    # strict should cause an error if this wasn't working
-    assert hash_matches(fname, known_hash=None, strict=True)
-
-
-@pytest.mark.parametrize("alg", ["sha256", "sha512", "md5"])
-def test_hash_matches_uppercase(alg):
-    "Hash matching should be independent of upper or lower case"
-    fname = os.path.join(DATA_DIR, "tiny-data.txt")
-    check_tiny_data(fname)
-    with open(fname, "rb") as fin:
-        data = fin.read()
-    # Check if the check passes
-    hasher = hashlib.new(alg)
-    hasher.update(data)
-    known_hash = f"{alg}:{hasher.hexdigest().upper()}"
-    assert hash_matches(fname, known_hash, strict=True)
-    # And also if it fails
-    with pytest.raises(ValueError) as error:
-        hash_matches(fname, known_hash[:-5], strict=True, source="Neverland")
-    assert "Neverland" in str(error.value)
 
 
 def test_temporary_file():

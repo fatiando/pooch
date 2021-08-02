@@ -8,7 +8,8 @@
 #
 # Import functions/classes to make the API
 from .core import Pooch, create, retrieve
-from .utils import os_cache, file_hash, make_registry, check_version, get_logger
+from .utils import os_cache, check_version, get_logger
+from .hashes import file_hash, make_registry
 from .downloaders import (
     HTTPDownloader,
     FTPDownloader,

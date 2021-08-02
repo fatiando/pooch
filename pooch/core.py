@@ -16,17 +16,17 @@ import ftplib
 
 import requests
 import requests.exceptions
+
+from .hashes import hash_matches, file_hash
 from .utils import (
     check_version,
     parse_url,
     get_logger,
     make_local_storage,
     cache_location,
-    hash_matches,
     temporary_file,
     os_cache,
     unique_file_name,
-    file_hash,
 )
 from .downloaders import choose_downloader
 
