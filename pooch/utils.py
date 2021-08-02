@@ -19,26 +19,31 @@ import functools
 import appdirs
 from packaging.version import Version
 
-algorithms_available = {}
-for alg in hashlib.algorithms_available:
-    # From the docs: https://docs.python.org/3/library/hashlib.html#hashlib.new
-    #
-    #      The named constructors are much faster than new() and should be
-    #      preferred.
-
-    try:
-        algorithms_available[alg] = getattr(hashlib, alg)
-    except AttributeError:
-        algorithms_available[alg] = functools.partial(hashlib.new, alg)
+# From the docs: https://docs.python.org/3/library/hashlib.html#hashlib.new
+#   The named constructors are much faster than new() and should be
+#   preferred.
+# Need to fallback on new() for some algorithms.
+ALGORITHMS_AVAILABLE = {
+    alg: getattr(hashlib, alg, functools.partial(hashlib.new, alg))
+    for alg in hashlib.algorithms_available
+}
 
 try:
     import xxhash
 
+    # xxhash doesn't have a list of available algorithms yet.
     # https://github.com/ifduyue/python-xxhash/issues/48
-    for alg in ["xxh128", "xxh64", "xxh32", "xxh3_128", "xxh3_64"]:
-        algorithm = getattr(xxhash, alg, None)
-        if alg is not None:
-            algorithms_available[alg] = algorithm
+    ALGORITHMS_AVAILABLE.update(
+        {
+            alg: getattr(xxhash, alg, None)
+            for alg in ["xxh128", "xxh64", "xxh32", "xxh3_128", "xxh3_64"]
+        }
+    )
+    # The xxh3 algorithms are only available for version>=2.0. Set to None and
+    # remove to ensure backwards compatibility.
+    ALGORITHMS_AVAILABLE = {
+        alg: func for alg, func in ALGORITHMS_AVAILABLE.items() if func is not None
+    }
 except ImportError:
     pass
 
@@ -122,14 +127,15 @@ def file_hash(fname, alg="sha256"):
     >>> os.remove(fname)
 
     """
-    if alg not in algorithms_available:
+    if alg not in ALGORITHMS_AVAILABLE:
         raise ValueError(
             f"Algorithm '{alg}' not available to the pooch library. "
             "Only the following algorithms are available "
-            f"{[k for k in algorithms_available]}.")
+            f"{list(ALGORITHMS_AVAILABLE.keys())}."
+        )
     # Calculate the hash in chunks to avoid overloading the memory
     chunksize = 65536
-    hasher = algorithms_available[alg]()
+    hasher = ALGORITHMS_AVAILABLE[alg]()
     with open(fname, "rb") as fin:
         buff = fin.read(chunksize)
         while buff:
