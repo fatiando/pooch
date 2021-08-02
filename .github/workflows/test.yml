@@ -1,4 +1,4 @@
-# Configuration for testing and deploying with GitHub Actions
+# Run tests and upload to Codecov with GitHub Actions
 #
 # NOTE: Pin actions to a specific commit to avoid having the authentication
 # token stolen if the Action is compromised. See the comments and links here:
@@ -21,15 +21,12 @@ on:
 # Use bash by default in all jobs
 defaults:
   run:
-    # Using "-l {0}" is necessary for conda environments to be activated
-    # But this breaks on MacOS if using actions/setup-python:
-    # https://github.com/actions/setup-python/issues/132
     shell: bash
 
 jobs:
 
   #############################################################################
-  # Run tests, build the docs, and deploy if needed
+  # Run tests and upload to codecov
   test:
     name: ${{ matrix.os }} py${{ matrix.python }} ${{ matrix.dependencies }}
     runs-on: ${{ matrix.os }}-latest
@@ -39,20 +36,10 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu, macos, windows]
-        python: [3.6, 3.7, 3.8, 3.9]
+        python: [3.6, 3.9]
         # If "optional", will install non-required dependencies in the build
         # environment. Otherwise, only required dependencies are installed.
-        dependencies: [""]
-        include:
-          - os: ubuntu
-            python: 3.8
-            dependencies: optional
-          - os: macos
-            python: 3.8
-            dependencies: optional
-          - os: windows
-            python: 3.8
-            dependencies: optional
+        dependencies: ["", optional]
     env:
       REQUIREMENTS: requirements.txt
       REQUIREMENTS_DEV: requirements-dev.txt
@@ -64,12 +51,19 @@ jobs:
       PYTHON: ${{ matrix.python }}
 
     steps:
+      # Cancel any previous run of the test job
+      # We pin the commit hash corresponding to v0.5.0, and not pinning the tag
+      # because we are giving full access through the github.token.
+      - name: Cancel Previous Runs
+        uses: styfle/cancel-workflow-action@148d9a848c6acaf90a3ec30bc5062f646f8a4163
+        with:
+          access_token: ${{ github.token }}
 
       # Checks-out your repository under $GITHUB_WORKSPACE
       - name: Checkout
         uses: actions/checkout@v2
         with:
-          # Need to fetch more than the last commit so that versioneer can
+          # Need to fetch more than the last commit so that setuptools-scm can
           # create the correct version string. If the number of commits since
           # the last release is greater than this, the version still be wrong.
           # Increase if necessary.
@@ -78,7 +72,7 @@ jobs:
           # to be able to push to GitHub.
           persist-credentials: false
 
-      # Need the tags so that versioneer can form a valid version number
+      # Need the tags so that setuptools-scm can form a valid version number
       - name: Fetch git tags
         run: git fetch origin 'refs/tags/*:refs/tags/*'
 
@@ -148,9 +142,6 @@ jobs:
 
       - name: Run the tests
         run: make test
-
-      - name: Build the documentation
-        run: make -C doc clean all
 
       - name: Convert coverage report to XML for codecov
         run: coverage xml

@@ -1,0 +1,95 @@
+# Publish archives to PyPI and TestPyPI using GitHub Actions.
+#
+# NOTE: Pin actions to a specific commit to avoid having the authentication
+# token stolen if the Action is compromised. See the comments and links here:
+# https://github.com/pypa/gh-action-pypi-publish/issues/27
+#
+name: pypi
+
+# Only run for pushes to the master branch and releases.
+on:
+  push:
+    branches:
+      - master
+  release:
+    types:
+      - published
+
+# Use bash by default in all jobs
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  #############################################################################
+  # Publish built wheels and source archives to PyPI and test PyPI
+  publish:
+    runs-on: ubuntu-latest
+    # Only publish from the origin repository, not forks
+    if: github.repository_owner == 'fatiando'
+
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          # Need to fetch more than the last commit so that setuptools_scm can
+          # create the correct version string. If the number of commits since
+          # the last release is greater than this, the version will still be
+          # wrong. Increase if necessary.
+          fetch-depth: 100
+          # The GitHub token is preserved by default but this job doesn't need
+          # to be able to push to GitHub.
+          persist-credentials: false
+
+      # Need the tags so that setuptools-scm can form a valid version number
+      - name: Fetch git tags
+        run: git fetch origin 'refs/tags/*:refs/tags/*'
+
+      - name: Setup Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: "3.9"
+
+      - name: Install requirements
+        run: python -m pip install setuptools setuptools_scm twine wheel
+
+      - name: List installed packages
+        run: python -m pip freeze
+
+      - name: Don't use local version numbers for TestPyPI uploads
+        if: github.event_name != 'release'
+        run: |
+          # Change setuptools-scm local_scheme to "no-local-version" so the
+          # local part of the version isn't included, making the version string
+          # compatible with Test PyPI.
+          sed --in-place "s/node-and-date/no-local-version/g" setup.py
+
+      - name: Build source and wheel distributions
+        run: |
+          python setup.py sdist bdist_wheel
+          echo ""
+          echo "Generated files:"
+          ls -lh dist/
+
+      - name: Check the archives
+        run: twine check dist/*
+
+      - name: Publish to Test PyPI
+        if: success()
+        uses: pypa/gh-action-pypi-publish@bce3b74dbf8cc32833ffba9d15f83425c1a736e0
+        with:
+          user: __token__
+          password: ${{ secrets.TEST_PYPI_TOKEN}}
+          repository_url: https://test.pypi.org/legacy/
+          # Allow existing releases on test PyPI without errors.
+          # NOT TO BE USED in PyPI!
+          skip_existing: true
+
+      - name: Publish to PyPI
+        # Only publish to PyPI when a release triggers the build
+        if: success() && github.event_name == 'release'
+        uses: pypa/gh-action-pypi-publish@bce3b74dbf8cc32833ffba9d15f83425c1a736e0
+        with:
+          user: __token__
+          password: ${{ secrets.PYPI_TOKEN}}
