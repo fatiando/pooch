@@ -15,7 +15,8 @@ from tempfile import TemporaryDirectory
 import pytest
 
 from ..core import Pooch, retrieve, download_action, stream_download
-from ..utils import file_hash, get_logger, temporary_file, os_cache, hash_matches
+from ..utils import get_logger, temporary_file, os_cache
+from ..hashes import file_hash, hash_matches
 
 # Import the core module so that we can monkeypatch some functions
 from .. import core
