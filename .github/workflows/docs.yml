@@ -1,14 +1,16 @@
-# Configuration for publishing archives to PyPI and documentation pages to
-# GitHub Pages using GitHub Actions.
+# Build the documentation and deploy to GitHub Pages using GitHub Actions.
 #
 # NOTE: Pin actions to a specific commit to avoid having the authentication
 # token stolen if the Action is compromised. See the comments and links here:
 # https://github.com/pypa/gh-action-pypi-publish/issues/27
 #
-name: deploy
+name: docs
 
-# Only run for pushes to the master branch and releases.
+# Only build PRs, the master branch, and releases. Pushes to branches will only
+# be built when a PR is opened. This avoids duplicated buids in PRs comming
+# from branches in the origin repository (1 for PR and 1 for push).
 on:
+  pull_request:
   push:
     branches:
       - master
@@ -19,109 +21,38 @@ on:
 # Use bash by default in all jobs
 defaults:
   run:
-    # Using "-l {0}" is necessary for conda environments to be activated
+    # The -l {0} is necessary for conda environments to be activated
     # But this breaks on MacOS if using actions/setup-python:
     # https://github.com/actions/setup-python/issues/132
-    shell: bash
+    shell: bash -l {0}
 
 jobs:
-
   #############################################################################
-  # Publish built wheels and source archives to PyPI and test PyPI
-  pypi:
-    name: PyPI
+  # Build the docs
+  build:
     runs-on: ubuntu-latest
-    # Only publish from the origin repository, not forks
-    if: github.repository_owner == 'fatiando'
-
-    steps:
-
-      # Checks-out your repository under $GITHUB_WORKSPACE
-      - name: Checkout
-        uses: actions/checkout@v2
-        with:
-          # Need to fetch more than the last commit so that versioneer can
-          # create the correct version string. If the number of commits since
-          # the last release is greater than this, the version will still be wrong.
-          # Increase if necessary.
-          fetch-depth: 100
-          # The GitHub token is preserved by default but this job doesn't need
-          # to be able to push to GitHub.
-          persist-credentials: false
-
-      # Need the tags so that versioneer can form a valid version number
-      - name: Fetch git tags
-        run: git fetch origin 'refs/tags/*:refs/tags/*'
-
-      - name: Setup Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: '3.8'
-
-      - name: Install requirements
-        run: python -m pip install setuptools setuptools_scm twine wheel
-
-      - name: List installed packages
-        run: python -m pip freeze
-
-      - name: Don't use local version numbers for TestPyPI uploads
-        if: github.event_name != 'release'
-        run: |
-          # Change setuptools-scm local_scheme to "no-local-version" so the
-          # local part of the version isn't included, making the version string
-          # compatible with Test PyPI.
-          sed --in-place "s/node-and-date/no-local-version/g" setup.py
-
-      - name: Build source and wheel distributions
-        run: |
-          python setup.py sdist bdist_wheel
-          echo ""
-          echo "Generated files:"
-          ls -lh dist/
-
-      - name: Check the archives
-        run: twine check dist/*
-
-      - name: Publish to Test PyPI
-        if: success()
-        uses: pypa/gh-action-pypi-publish@bce3b74dbf8cc32833ffba9d15f83425c1a736e0
-        with:
-          user: __token__
-          password: ${{ secrets.TEST_PYPI_TOKEN}}
-          repository_url: https://test.pypi.org/legacy/
-          # Allow existing releases on test PyPI without errors.
-          # NOT TO BE USED in PyPI!
-          skip_existing: true
-
-      - name: Publish to PyPI
-        # Only publish to PyPI when a release triggers the build
-        if: success() && github.event_name == 'release'
-        uses: pypa/gh-action-pypi-publish@bce3b74dbf8cc32833ffba9d15f83425c1a736e0
-        with:
-          user: __token__
-          password: ${{ secrets.PYPI_TOKEN}}
-
-  #############################################################################
-  # Publish the documentation to gh-pages
-  docs:
-    name: docs
-    runs-on: ubuntu-latest
-    # Only publish from the origin repository, not forks
-    if: github.repository == 'fatiando/pooch'
     env:
       REQUIREMENTS: requirements.txt
       REQUIREMENTS_DEV: requirements-dev.txt
       REQUIREMENTS_OPTIONAL: requirements-optional.txt
+      DEPENDENCIES: optional
       INSTALL_EXTRA:
-      DEPENDENCIES:
+      PYTHON: 3.9
 
     steps:
+      # Cancel any previous run of the test job
+      # We pin the commit hash corresponding to v0.5.0, and not pinning the tag
+      # because we are giving full access through the github.token.
+      - name: Cancel Previous Runs
+        uses: styfle/cancel-workflow-action@148d9a848c6acaf90a3ec30bc5062f646f8a4163
+        with:
+          access_token: ${{ github.token }}
 
       # Checks-out your repository under $GITHUB_WORKSPACE
       - name: Checkout
         uses: actions/checkout@v2
         with:
-          # Need to fetch more than the last commit so that versioneer can
+          # Need to fetch more than the last commit so that setuptools-scm can
           # create the correct version string. If the number of commits since
           # the last release is greater than this, the version still be wrong.
           # Increase if necessary.
@@ -130,14 +61,14 @@ jobs:
           # to be able to push to GitHub.
           persist-credentials: false
 
-      # Need the tags so that versioneer can form a valid version number
+      # Need the tags so that setuptools-scm can form a valid version number
       - name: Fetch git tags
         run: git fetch origin 'refs/tags/*:refs/tags/*'
 
       - name: Setup Python
         uses: actions/setup-python@v2
         with:
-          python-version: 3.8
+          python-version: ${{ env.PYTHON }}
 
       - name: Get the pip cache folder
         id: pip-cache
@@ -201,8 +132,33 @@ jobs:
       - name: Build the documentation
         run: make -C doc clean all
 
+      # Store the docs as a build artifact so we can deploy it later
+      - name: Upload HTML documentation as an artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: docs-${{ github.sha }}
+          path: doc/_build/html
+
+  #############################################################################
+  # Publish the documentation to gh-pages
+  publish:
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.event_name == 'release' || github.event_name == 'push'
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      # Fetch the built docs from the "build" job
+      - name: Download HTML documentation artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: docs-${{ github.sha }}
+          path: doc/_build/html
+
       - name: Checkout the gh-pages branch in a separate folder
-        uses: actions/checkout@28c7f3d2b5162b5ddd3dfd9a45aa55eaf396478b
+        uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f
         with:
           ref: gh-pages
           # Checkout to this folder instead of the current one
@@ -220,38 +176,30 @@ jobs:
               version=dev
           fi
           echo "Deploying version: $version"
-
           # Make the new commit message. Needs to happen before cd into deploy
           # to get the right commit hash.
           message="Deploy $version from $(git rev-parse --short HEAD)"
-
           cd deploy
-
           # Need to have this file so that Github doesn't try to run Jekyll
           touch .nojekyll
-
           # Delete all the files and replace with our new  set
           echo -e "\nRemoving old files from previous builds of ${version}:"
           rm -rvf ${version}
           echo -e "\nCopying HTML files to ${version}:"
           cp -Rvf ../doc/_build/html/ ${version}/
-
           # If this is a new release, update the link from /latest to it
           if [[ "${version}" != "dev" ]]; then
               echo -e "\nSetup link from ${version} to 'latest'."
               rm -f latest
               ln -sf ${version} latest
           fi
-
           # Stage the commit
           git add -A .
           echo -e "\nChanges to be applied:"
           git status
-
           # Configure git to be the GitHub Actions account
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git config user.name "github-actions[bot]"
-
           # If this is a dev build and the last commit was from a dev build
           # (detect if "dev" was in the previous commit message), reuse the
           # same commit
@@ -262,10 +210,8 @@ jobs:
               echo -e "\nMaking a new commit:"
               git commit -m "$message"
           fi
-
           # Make the push quiet just in case there is anything that could leak
           # sensitive information.
           echo -e "\nPushing changes to gh-pages."
           git push -fq origin gh-pages 2>&1 >/dev/null
-
           echo -e "\nFinished uploading generated files."
