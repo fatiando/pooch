@@ -19,7 +19,7 @@ from ..hashes import (
     file_hash,
     hash_matches,
 )
-from .utils import check_tiny_data
+from .utils import check_tiny_data, make_tmp_path
 
 DATA_DIR = str(Path(__file__).parent / "data" / "store")
 REGISTRY = (
@@ -45,20 +45,25 @@ TINY_DATA_HASHES = TINY_DATA_HASHES_HASHLIB.copy()
 TINY_DATA_HASHES.update(TINY_DATA_HASHES_XXH)
 
 
-def test_make_registry():
+@pytest.fixture
+def pooch_tmp_path(tmp_path):
+    return make_tmp_path(DATA_DIR, tmp_path)
+
+
+def test_make_registry(pooch_tmp_path):
     "Check that the registry builder creates the right file names and hashes"
     outfile = NamedTemporaryFile(delete=False)
     # Need to close the file before writing to it.
     outfile.close()
     try:
-        make_registry(DATA_DIR, outfile.name, recursive=False)
+        make_registry(pooch_tmp_path, outfile.name, recursive=False)
         with open(outfile.name) as fout:
             registry = fout.read()
         assert registry == REGISTRY
         # Check that the registry can be used.
-        pup = Pooch(path=DATA_DIR, base_url="some bogus URL", registry={})
+        pup = Pooch(path=pooch_tmp_path, base_url="some bogus URL", registry={})
         pup.load_registry(outfile.name)
-        true = os.path.join(DATA_DIR, "tiny-data.txt")
+        true = str(pooch_tmp_path / "tiny-data.txt")
         fname = pup.fetch("tiny-data.txt")
         assert true == fname
         check_tiny_data(fname)
@@ -66,22 +71,22 @@ def test_make_registry():
         os.remove(outfile.name)
 
 
-def test_make_registry_recursive():
+def test_make_registry_recursive(pooch_tmp_path):
     "Check that the registry builder works in recursive mode"
     outfile = NamedTemporaryFile(delete=False)
     # Need to close the file before writing to it.
     outfile.close()
     try:
-        make_registry(DATA_DIR, outfile.name, recursive=True)
+        make_registry(pooch_tmp_path, outfile.name, recursive=True)
         with open(outfile.name) as fout:
             registry = fout.read()
         assert registry == REGISTRY_RECURSIVE
         # Check that the registry can be used.
-        pup = Pooch(path=DATA_DIR, base_url="some bogus URL", registry={})
+        pup = Pooch(path=pooch_tmp_path, base_url="some bogus URL", registry={})
         pup.load_registry(outfile.name)
-        assert os.path.join(DATA_DIR, "tiny-data.txt") == pup.fetch("tiny-data.txt")
+        assert str(pooch_tmp_path / "tiny-data.txt") == pup.fetch("tiny-data.txt")
         check_tiny_data(pup.fetch("tiny-data.txt"))
-        true = os.path.join(DATA_DIR, "subdir", "tiny-data.txt")
+        true = str(pooch_tmp_path / "subdir" / "tiny-data.txt")
         assert true == pup.fetch("subdir/tiny-data.txt")
         check_tiny_data(pup.fetch("subdir/tiny-data.txt"))
     finally:

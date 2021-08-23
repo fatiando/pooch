@@ -11,6 +11,7 @@ import os
 import io
 import logging
 import shutil
+import stat
 from pathlib import Path
 from contextlib import contextmanager
 
@@ -168,3 +169,34 @@ def data_over_ftp(server, fname):
     finally:
         if os.path.exists(server_path):
             os.remove(server_path)
+
+
+def _rchmod(root, mode=stat.S_IWUSR):
+    for item in root.iterdir():
+        if item.is_dir():
+            item.chmod(item.stat().st_mode | mode)
+            _rchmod(item, mode)
+
+
+def make_tmp_path(src, outroot):
+    """
+    Copy contents of the src directory into dst and fix permissions.
+
+    Parameters
+    ----------
+    src : str, pathlib.Path
+        Source data directory.
+    outroot : str, pathlib.Path
+        Output rood directory that will contain the copy of src.
+
+    Returns
+    -------
+    dst
+        The pathlib.Path of the output data directory.
+
+    """
+    root = Path(src)
+    out_path = Path(outroot) / root.name
+    shutil.copytree(root, out_path)
+    _rchmod(outroot)
+    return out_path
