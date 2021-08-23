@@ -257,6 +257,11 @@
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference internal" href="api/generated/pooch.DOIDownloader.html">
+     pooch.DOIDownloader
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="api/generated/pooch.Unzip.html">
      pooch.Unzip
     </a>
@@ -439,6 +444,11 @@
         <nav id="bd-toc-nav">
             <ul class="nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#version-1-5-0">
+   Version 1.5.0
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#version-1-4-0">
    Version 1.4.0
   </a>
@@ -552,6 +562,33 @@
                 
   <div class="section" id="changelog">
 <span id="changes"></span><h1>Changelog<a class="headerlink" href="#changelog" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="version-1-5-0">
+<h2>Version 1.5.0<a class="headerlink" href="#version-1-5-0" title="Permalink to this headline">¶</a></h2>
+<p><em>Released on: 2021/08/23</em></p>
+<p>doi:<a class="reference external" href="https://doi.org/10.5281/zenodo.5235242">10.5281/zenodo.5235242</a></p>
+<p>New features:</p>
+<ul class="simple">
+<li><p>Add support for non-cryptographic hashes from the xxhash package. They aren’t
+as safe (but safe enough) and compute in fractions of the time from SHA or
+MD5. This makes it feasible to use hash checking on large datasets. (<a class="reference external" href="https://github.com/fatiando/pooch/pull/242">#242</a>)</p></li>
+<li><p>Add support for using figshare and Zenodo DOIs as URLs (with the protocol
+<code class="docutils literal notranslate"><span class="pre">doi:{DOI}/{file</span> <span class="pre">name}</span></code>, which works out-of-the-box with <code class="docutils literal notranslate"><span class="pre">Pooch.fetch</span></code>
+and <code class="docutils literal notranslate"><span class="pre">retrieve</span></code>). Can only download 1 file from the archive (not the full
+archive) and the file name must be specified in the URL. (<a class="reference external" href="https://github.com/fatiando/pooch/pull/241">#241</a>)</p></li>
+</ul>
+<p>Maintenance:</p>
+<ul class="simple">
+<li><p>Move hash functions to their own private module. No changes to the public
+API. (<a class="reference external" href="https://github.com/fatiando/pooch/pull/244">#244</a>)</p></li>
+<li><p>Run CI jobs on Python version extremes instead of all supported versions
+(<a class="reference external" href="https://github.com/fatiando/pooch/pull/243">#243</a>)</p></li>
+</ul>
+<p>This release contains contributions from:</p>
+<ul class="simple">
+<li><p>Mark Harfouche</p></li>
+<li><p>Leonardo Uieda</p></li>
+</ul>
+</div>
 <div class="section" id="version-1-4-0">
 <h2>Version 1.4.0<a class="headerlink" href="#version-1-4-0" title="Permalink to this headline">¶</a></h2>
 <p><em>Released on: 2021/06/08</em></p>
@@ -1107,7 +1144,7 @@ data corruption.</p></li>
       <p>
         
             &copy; Copyright 2021, The Pooch Developers.<br/>
-          Last updated on Jun 08, 2021.<br/>
+          Last updated on Aug 23, 2021.<br/>
       </p>
     </div>
   </footer>

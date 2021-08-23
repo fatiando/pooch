@@ -257,6 +257,11 @@
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference internal" href="api/generated/pooch.DOIDownloader.html">
+     pooch.DOIDownloader
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="api/generated/pooch.Unzip.html">
      pooch.Unzip
     </a>
@@ -458,7 +463,7 @@
   <div class="section" id="downloaders-customizing-the-download">
 <span id="downloaders"></span><h1>Downloaders: Customizing the download<a class="headerlink" href="#downloaders-customizing-the-download" title="Permalink to this headline">¶</a></h1>
 <p>By default, <a class="reference internal" href="api/generated/pooch.Pooch.html#pooch.Pooch.fetch" title="pooch.Pooch.fetch"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pooch.Pooch.fetch</span></code></a> and <a class="reference internal" href="api/generated/pooch.retrieve.html#pooch.retrieve" title="pooch.retrieve"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pooch.retrieve</span></code></a> will detect
-the download protocol from the given URL (HTTP, FTP, or SFTP) and use the
+the download protocol from the given URL (HTTP, FTP, SFTP, DOI) and use the
 appropriate download method.
 Sometimes this is not enough: some servers require logins, redirections, or
 other non-standard operations.
@@ -546,7 +551,7 @@ redirected from the original download URL:</p>
       <p>
         
             &copy; Copyright 2021, The Pooch Developers.<br/>
-          Last updated on Jun 08, 2021.<br/>
+          Last updated on Aug 23, 2021.<br/>
       </p>
     </div>
   </footer>

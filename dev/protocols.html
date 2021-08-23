@@ -257,6 +257,11 @@
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference internal" href="api/generated/pooch.DOIDownloader.html">
+     pooch.DOIDownloader
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="api/generated/pooch.Unzip.html">
      pooch.Unzip
     </a>
@@ -432,6 +437,21 @@
         <!-- Table of contents -->
         <div class="d-none d-md-block col-md-2 bd-toc show">
             
+        <div class="tocsection onthispage pt-5 pb-3">
+            <i class="fas fa-list"></i>
+            Contents
+        </div>
+        <nav id="bd-toc-nav">
+            <ul class="nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#digital-object-identifiers-dois">
+   Digital Object Identifiers (DOIs)
+  </a>
+ </li>
+</ul>
+
+        </nav>
+        
         </div>
     </div>
 </div>
@@ -443,6 +463,8 @@
   <div class="section" id="download-protocols">
 <span id="protocols"></span><h1>Download protocols<a class="headerlink" href="#download-protocols" title="Permalink to this headline">¶</a></h1>
 <p>Pooch supports the HTTP, FTP, and SFTP protocols by default.
+It also includes a custom protocol for Digital Object Identifiers (DOI) from
+providers like <a class="reference external" href="https://www.figshare.com">figshare</a> and <a class="reference external" href="https://www.zenodo.org">Zenodo</a> (see <a class="reference internal" href="#doidownloads"><span class="std std-ref">below</span></a>).
 It will <strong>automatically detect</strong> the correct protocol from the URL and use the
 appropriate download method.</p>
 <div class="admonition note">
@@ -476,6 +498,50 @@ following setup:</p>
 </div>
 <p>You can even specify custom functions for the download or login credentials for
 <strong>authentication</strong>. See <a class="reference internal" href="downloaders.html#downloaders"><span class="std std-ref">Downloaders: Customizing the download</span></a> for more information.</p>
+<div class="section" id="digital-object-identifiers-dois">
+<span id="doidownloads"></span><h2>Digital Object Identifiers (DOIs)<a class="headerlink" href="#digital-object-identifiers-dois" title="Permalink to this headline">¶</a></h2>
+<p>Pooch can download files stored in data repositories from the DOI by formatting
+the URL as <code class="docutils literal notranslate"><span class="pre">doi:{DOI}/{file</span> <span class="pre">name}</span></code>.
+Notice that there are no <code class="docutils literal notranslate"><span class="pre">//</span></code> like in HTTP/FTP and you must specify a file
+name after the DOI (separated by a <code class="docutils literal notranslate"><span class="pre">/</span></code>).</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>For a list of supported data repositories, see
+<a class="reference internal" href="api/generated/pooch.DOIDownloader.html#pooch.DOIDownloader" title="pooch.DOIDownloader"><code class="xref py py-class docutils literal notranslate"><span class="pre">pooch.DOIDownloader</span></code></a>.</p>
+</div>
+<p>For example, one of our test files (<code class="docutils literal notranslate"><span class="pre">&quot;tiny-data.txt&quot;</span></code>) is stored in the
+figshare dataset
+doi:<a class="reference external" href="https://doi.org/10.6084/m9.figshare.14763051.v1">10.6084/m9.figshare.14763051.v1</a>.
+We can could use <a class="reference internal" href="api/generated/pooch.retrieve.html#pooch.retrieve" title="pooch.retrieve"><code class="xref py py-func docutils literal notranslate"><span class="pre">pooch.retrieve</span></code></a> to download it like so:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">file_path</span> <span class="o">=</span> <span class="n">pooch</span><span class="o">.</span><span class="n">retrieve</span><span class="p">(</span>
+    <span class="n">url</span><span class="o">=</span><span class="s2">&quot;doi:10.6084/m9.figshare.14763051.v1/tiny-data.txt&quot;</span><span class="p">,</span>
+    <span class="n">known_hash</span><span class="o">=</span><span class="s2">&quot;md5:70e2afd3fd7e336ae478b1e740a5f08e&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>We can also make a <a class="reference internal" href="api/generated/pooch.Pooch.html#pooch.Pooch" title="pooch.Pooch"><code class="xref py py-class docutils literal notranslate"><span class="pre">pooch.Pooch</span></code></a> with a registry stored entirely on a
+figshare dataset:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">POOCH</span> <span class="o">=</span> <span class="n">pooch</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+    <span class="n">path</span><span class="o">=</span><span class="n">pooch</span><span class="o">.</span><span class="n">os_cache</span><span class="p">(</span><span class="s2">&quot;plumbus&quot;</span><span class="p">),</span>
+    <span class="c1"># Use the figshare DOI</span>
+    <span class="n">base_url</span><span class="o">=</span><span class="s2">&quot;doi:10.6084/m9.figshare.14763051.v1/&quot;</span><span class="p">,</span>
+    <span class="n">registry</span><span class="o">=</span><span class="p">{</span>
+        <span class="s2">&quot;tiny-data.txt&quot;</span><span class="p">:</span> <span class="s2">&quot;md5:70e2afd3fd7e336ae478b1e740a5f08e&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;store.zip&quot;</span><span class="p">:</span> <span class="s2">&quot;md5:7008231125631739b64720d1526619ae&quot;</span><span class="p">,</span>
+    <span class="p">},</span>
+<span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">fetch_tiny_data</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Load the tiny data as a numpy array.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">fname</span> <span class="o">=</span> <span class="n">POOCH</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="s2">&quot;tiny-data.txt&quot;</span><span class="p">)</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">data</span>
+</pre></div>
+</div>
+</div>
 </div>
 
 
@@ -496,7 +562,7 @@ following setup:</p>
       <p>
         
             &copy; Copyright 2021, The Pooch Developers.<br/>
-          Last updated on Jun 08, 2021.<br/>
+          Last updated on Aug 23, 2021.<br/>
       </p>
     </div>
   </footer>

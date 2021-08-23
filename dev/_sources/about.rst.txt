@@ -20,6 +20,8 @@ Use cases
     * Make sure everyone running the code has the same version of the data
       files by verifying cryptographic hashes.
     * Multiple download protocols HTTP/FTP/SFT and basic authentication.
+    * Download from Digital Object Identifiers (DOIs) issued by repositories
+      like figshare and Zenodo.
     * Built-in utilities to unzip/decompress files upon download
 
     **Start here:** :ref:`retrieve`

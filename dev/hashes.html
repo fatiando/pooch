@@ -257,6 +257,11 @@
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference internal" href="api/generated/pooch.DOIDownloader.html">
+     pooch.DOIDownloader
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="api/generated/pooch.Unzip.html">
      pooch.Unzip
     </a>
@@ -453,6 +458,11 @@
    Bypassing the hash check
   </a>
  </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#other-supported-hashes">
+   Other supported hashes
+  </a>
+ </li>
 </ul>
 
         </nav>
@@ -467,7 +477,7 @@
                 
   <div class="section" id="hashes-calculating-and-bypassing">
 <span id="hashes"></span><h1>Hashes: Calculating and bypassing<a class="headerlink" href="#hashes-calculating-and-bypassing" title="Permalink to this headline">¶</a></h1>
-<p>Pooch uses cryptographic hashes to check if files are up-to-date or possibly
+<p>Pooch uses hashes to check if files are up-to-date or possibly
 corrupted:</p>
 <ul class="simple">
 <li><p>If a file exists in the local folder, Pooch will check that its hash matches
@@ -476,6 +486,8 @@ updated.</p></li>
 <li><p>If a file needs to be updated or doesn’t exist, Pooch will download it from
 the remote source and check the hash. If the hash doesn’t match, an exception
 is raised to warn of possible file corruption.</p></li>
+<li><p>Cryptographic hashes may be used where users wish to ensure the security of
+their download.</p></li>
 </ul>
 <div class="section" id="calculating-hashes">
 <h2>Calculating hashes<a class="headerlink" href="#calculating-hashes" title="Permalink to this headline">¶</a></h2>
@@ -547,6 +559,32 @@ the files once, unless they are deleted from the cache.</p>
 increase in size, as the files are stored in daily subdirectories.</p>
 </div>
 </div>
+<div class="section" id="other-supported-hashes">
+<h2>Other supported hashes<a class="headerlink" href="#other-supported-hashes" title="Permalink to this headline">¶</a></h2>
+<p>Beyond hashing algorithms supported by <code class="docutils literal notranslate"><span class="pre">hashlib</span></code>, Pooch supports algorithms
+provided by the <a class="reference external" href="https://github.com/ifduyue/python-xxhash">xxhash package</a>.
+If the <code class="docutils literal notranslate"><span class="pre">xxhash</span></code> package is available, users may specify to use one of
+the algorithms provided by the package.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ xxh128sum data/store.zip
+6a71973c93eac6c8839ce751ce10ae48  data/store.zip
+$ <span class="c1"># ^^^^^^^^^^^^^^^^^^^ The hash  ^^^^^^^^^^^^^^ The filename</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">datetime</span>
+<span class="kn">import</span> <span class="nn">pooch</span>
+
+<span class="c1"># Get the current data to store the files in separate folders</span>
+<span class="n">CURRENT_DATE</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">date</span><span class="p">()</span>
+
+<span class="n">GOODBOY</span> <span class="o">=</span> <span class="n">pooch</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+    <span class="p">[</span><span class="o">...</span><span class="p">],</span>
+    <span class="n">registry</span><span class="o">=</span><span class="p">{</span>
+        <span class="s2">&quot;store.zip&quot;</span><span class="p">:</span> <span class="s2">&quot;xxh128:6a71973c93eac6c8839ce751ce10ae48&quot;</span><span class="p">,</span>
+    <span class="p">},</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
 </div>
 
 
@@ -567,7 +605,7 @@ increase in size, as the files are stored in daily subdirectories.</p>
       <p>
         
             &copy; Copyright 2021, The Pooch Developers.<br/>
-          Last updated on Jun 08, 2021.<br/>
+          Last updated on Aug 23, 2021.<br/>
       </p>
     </div>
   </footer>

@@ -255,6 +255,11 @@
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference internal" href="../../api/generated/pooch.DOIDownloader.html">
+     pooch.DOIDownloader
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="../../api/generated/pooch.Unzip.html">
      pooch.Unzip
     </a>
@@ -438,17 +443,17 @@
 
 <span class="kn">import</span> <span class="nn">requests</span>
 <span class="kn">import</span> <span class="nn">requests.exceptions</span>
+
+<span class="kn">from</span> <span class="nn">.hashes</span> <span class="kn">import</span> <span class="n">hash_matches</span><span class="p">,</span> <span class="n">file_hash</span>
 <span class="kn">from</span> <span class="nn">.utils</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">check_version</span><span class="p">,</span>
     <span class="n">parse_url</span><span class="p">,</span>
     <span class="n">get_logger</span><span class="p">,</span>
     <span class="n">make_local_storage</span><span class="p">,</span>
     <span class="n">cache_location</span><span class="p">,</span>
-    <span class="n">hash_matches</span><span class="p">,</span>
     <span class="n">temporary_file</span><span class="p">,</span>
     <span class="n">os_cache</span><span class="p">,</span>
     <span class="n">unique_file_name</span><span class="p">,</span>
-    <span class="n">file_hash</span><span class="p">,</span>
 <span class="p">)</span>
 <span class="kn">from</span> <span class="nn">.downloaders</span> <span class="kn">import</span> <span class="n">choose_downloader</span>
 
@@ -1176,7 +1181,7 @@
       <p>
         
             &copy; Copyright 2021, The Pooch Developers.<br/>
-          Last updated on Jun 08, 2021.<br/>
+          Last updated on Aug 23, 2021.<br/>
       </p>
     </div>
   </footer>
