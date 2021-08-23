@@ -21,7 +21,7 @@ from packaging.version import Version
 # Backward compatibility for those that used
 # >>> from pooch.util import file_hash
 # in pooch < 1.5.0
-from .hashes import file_hash
+from .hashes import file_hash  # [noqa]
 
 
 LOGGER = logging.Logger("pooch")
