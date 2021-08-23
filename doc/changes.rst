@@ -3,6 +3,37 @@
 Changelog
 =========
 
+Version 1.5.0
+-------------
+
+*Released on: 2021/08/23*
+
+doi:`10.5281/zenodo.5235242 <https://doi.org/10.5281/zenodo.5235242>`__
+
+New features:
+
+* Add support for non-cryptographic hashes from the xxhash package. They aren't
+  as safe (but safe enough) and compute in fractions of the time from SHA or
+  MD5. This makes it feasible to use hash checking on large datasets. (`#242
+  <https://github.com/fatiando/pooch/pull/242>`__)
+* Add support for using figshare and Zenodo DOIs as URLs (with the protocol
+  ``doi:{DOI}/{file name}``, which works out-of-the-box with ``Pooch.fetch``
+  and ``retrieve``). Can only download 1 file from the archive (not the full
+  archive) and the file name must be specified in the URL. (`#241
+  <https://github.com/fatiando/pooch/pull/241>`__)
+
+Maintenance:
+
+* Move hash functions to their own private module. No changes to the public
+  API. (`#244 <https://github.com/fatiando/pooch/pull/244>`__)
+* Run CI jobs on Python version extremes instead of all supported versions
+  (`#243 <https://github.com/fatiando/pooch/pull/243>`__)
+
+This release contains contributions from:
+
+* Mark Harfouche
+* Leonardo Uieda
+
 Version 1.4.0
 -------------
 
