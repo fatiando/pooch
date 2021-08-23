@@ -18,6 +18,11 @@ from contextlib import contextmanager
 import appdirs
 from packaging.version import Version
 
+# Backward compatibility for those that used
+# >>> from pooch.util import file_hash
+# in pooch < 1.5.0
+from .hashes import file_hash
+
 
 LOGGER = logging.Logger("pooch")
 LOGGER.addHandler(logging.StreamHandler())
