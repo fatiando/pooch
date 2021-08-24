@@ -3,6 +3,37 @@
 Changelog
 =========
 
+Version 1.5.1
+-------------
+
+*Released on: 2021/08/24*
+
+doi:`10.5281/zenodo.5242882 <https://doi.org/10.5281/zenodo.5242882>`__
+
+.. warning::
+
+    **Please use** ``from pooch import file_hash`` **instead of** ``from
+    pooch.utils import file_hash``. This is backwards compatible with all
+    previous versions of Pooch. We recommend importing all functions and
+    classes from the top-level namespace.
+
+Bug fixes:
+
+* Make ``file_hash`` accessible from the ``pooch.utils`` module again. Moving
+  this function to ``pooch.hashes`` caused crashes downstream. To prevent these
+  crashes, add a wrapper back to utils that issues a warning that users should
+  import from the top-level namespace instead.
+  (`#257 <https://github.com/fatiando/pooch/pull/257>`__)
+* Use a mirror of the test data directory in tests that write to it.
+  (`#255 <https://github.com/fatiando/pooch/pull/255>`__)
+* Add a pytest mark for tests accessing the network so that they can easily
+  excluded when testing offline. (`#254 <https://github.com/fatiando/pooch/pull/254>`__)
+
+This release contains contributions from:
+
+* Antonio Valentino
+* Leonardo Uieda
+
 Version 1.5.0
 -------------
 
