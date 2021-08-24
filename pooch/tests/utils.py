@@ -11,6 +11,7 @@ import os
 import io
 import logging
 import shutil
+import stat
 from pathlib import Path
 from contextlib import contextmanager
 
@@ -168,3 +169,39 @@ def data_over_ftp(server, fname):
     finally:
         if os.path.exists(server_path):
             os.remove(server_path)
+
+
+def _recursive_chmod_directories(root, mode):
+    """
+    Recursively change the permissions on the child directories using a bitwise
+    OR operation.
+    """
+    for item in root.iterdir():
+        if item.is_dir():
+            item.chmod(item.stat().st_mode | mode)
+            _recursive_chmod_directories(item, mode)
+
+
+def mirror_directory(source, destination):
+    """
+    Copy contents of the source directory into destination and fix permissions.
+
+    Parameters
+    ----------
+    source : str, :class:`pathlib.Path`
+        Source data directory.
+    destination : str, :class:`pathlib.Path`
+        Destination directory that will contain the copy of source. The actual
+        source directory (not just it's contents) is copied.
+
+    Returns
+    -------
+    mirror : :class:`pathlib.Path`
+        The path of the mirrored output directory.
+
+    """
+    source = Path(source)
+    mirror = Path(destination) / source.name
+    shutil.copytree(source, mirror)
+    _recursive_chmod_directories(mirror, mode=stat.S_IWUSR)
+    return mirror
