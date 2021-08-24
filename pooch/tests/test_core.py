@@ -48,6 +48,10 @@ REGISTRY_CORRUPTED = {
 
 @pytest.fixture
 def pooch_tmp_path(tmp_path):
+    """
+    Mirror the test data folder on a temporary directory. Needed to avoid
+    permission errors when pooch is installed on a non-writable path.
+    """
     return make_tmp_path(DATA_DIR, tmp_path)
 
 
