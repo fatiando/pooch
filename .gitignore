@@ -15,4 +15,3 @@ doc/api/generated
 MANIFEST
 .coverage.*
 pooch/_version.py
-.idea
