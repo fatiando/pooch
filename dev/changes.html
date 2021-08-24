@@ -444,6 +444,11 @@
         <nav id="bd-toc-nav">
             <ul class="nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#version-1-5-1">
+   Version 1.5.1
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#version-1-5-0">
    Version 1.5.0
   </a>
@@ -562,6 +567,35 @@
                 
   <div class="section" id="changelog">
 <span id="changes"></span><h1>Changelog<a class="headerlink" href="#changelog" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="version-1-5-1">
+<h2>Version 1.5.1<a class="headerlink" href="#version-1-5-1" title="Permalink to this headline">¶</a></h2>
+<p><em>Released on: 2021/08/24</em></p>
+<p>doi:<a class="reference external" href="https://doi.org/10.5281/zenodo.5242882">10.5281/zenodo.5242882</a></p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p><strong>Please use</strong> <code class="docutils literal notranslate"><span class="pre">from</span> <span class="pre">pooch</span> <span class="pre">import</span> <span class="pre">file_hash</span></code> <strong>instead of</strong> <code class="docutils literal notranslate"><span class="pre">from</span>
+<span class="pre">pooch.utils</span> <span class="pre">import</span> <span class="pre">file_hash</span></code>. This is backwards compatible with all
+previous versions of Pooch. We recommend importing all functions and
+classes from the top-level namespace.</p>
+</div>
+<p>Bug fixes:</p>
+<ul class="simple">
+<li><p>Make <code class="docutils literal notranslate"><span class="pre">file_hash</span></code> accessible from the <code class="docutils literal notranslate"><span class="pre">pooch.utils</span></code> module again. Moving
+this function to <code class="docutils literal notranslate"><span class="pre">pooch.hashes</span></code> caused crashes downstream. To prevent these
+crashes, add a wrapper back to utils that issues a warning that users should
+import from the top-level namespace instead.
+(<a class="reference external" href="https://github.com/fatiando/pooch/pull/257">#257</a>)</p></li>
+<li><p>Use a mirror of the test data directory in tests that write to it.
+(<a class="reference external" href="https://github.com/fatiando/pooch/pull/255">#255</a>)</p></li>
+<li><p>Add a pytest mark for tests accessing the network so that they can easily
+excluded when testing offline. (<a class="reference external" href="https://github.com/fatiando/pooch/pull/254">#254</a>)</p></li>
+</ul>
+<p>This release contains contributions from:</p>
+<ul class="simple">
+<li><p>Antonio Valentino</p></li>
+<li><p>Leonardo Uieda</p></li>
+</ul>
+</div>
 <div class="section" id="version-1-5-0">
 <h2>Version 1.5.0<a class="headerlink" href="#version-1-5-0" title="Permalink to this headline">¶</a></h2>
 <p><em>Released on: 2021/08/23</em></p>
@@ -1144,7 +1178,7 @@ data corruption.</p></li>
       <p>
         
             &copy; Copyright 2021, The Pooch Developers.<br/>
-          Last updated on Aug 23, 2021.<br/>
+          Last updated on Aug 24, 2021.<br/>
       </p>
     </div>
   </footer>
