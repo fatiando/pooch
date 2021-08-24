@@ -50,7 +50,7 @@ def file_hash(*args, **kwargs):
     top-level namespace (`from pooch import file_hash`) instead, which is fully
     backwards compatible with pooch >= 0.1.
     """
-    warnings.warn(message, DeprecationWarning)
+    warnings.warn(message, DeprecationWarning, stacklevel=2)
     return new_file_hash(*args, **kwargs)
 
 
