@@ -3,6 +3,23 @@
 Changelog
 =========
 
+Version 1.5.1
+-------------
+
+*Released on: 2021/08/24*
+
+doi:`10.5281/zenodo.5242882 <https://doi.org/10.5281/zenodo.5242882>`__
+
+
+.. warning::
+
+    **Please use ``from pooch import file_hash`` instead of ``from pooch.utils
+    import file_hash``.** This is backwards compatible with all previous
+    versions of Pooch. We recommend importing all functions and classes from
+    the top-level namespace.
+
+
+
 Version 1.5.0
 -------------
 
