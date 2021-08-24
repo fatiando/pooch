@@ -23,6 +23,7 @@ REGISTRY = pooch_test_registry()
 BASEURL = pooch_test_url()
 
 
+@pytest.mark.network
 @pytest.mark.parametrize(
     "method,ext,name",
     [
@@ -65,6 +66,7 @@ def test_decompress(method, ext, name):
         check_tiny_data(fname)
 
 
+@pytest.mark.network
 def test_decompress_fails():
     "Should fail if method='auto' and no extension is given in the file name"
     with TemporaryDirectory() as local_store:
@@ -95,6 +97,7 @@ def test_decompress_fails():
         assert "pooch.Unzip/Untar" in exception.value.args[0]
 
 
+@pytest.mark.network
 def test_extractprocessor_fails():
     "The base class should be used and should fail when passed to fecth"
     with TemporaryDirectory() as local_store:
@@ -110,6 +113,7 @@ def test_extractprocessor_fails():
         assert not exception.value.args
 
 
+@pytest.mark.network
 @pytest.mark.parametrize("_dir", [None, "foo"], ids=["default_dir", "custom_dir"])
 @pytest.mark.parametrize(
     "proc_cls,file_ext,msg",
