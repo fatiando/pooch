@@ -55,6 +55,7 @@ def pooch_tmp_path(tmp_path):
     return make_tmp_path(DATA_DIR, tmp_path)
 
 
+@pytest.mark.network
 def test_retrieve():
     "Try downloading some data with retrieve"
     with TemporaryDirectory() as local_store:
@@ -80,6 +81,7 @@ def test_retrieve():
             assert log_file.getvalue() == ""
 
 
+@pytest.mark.network
 def test_retrieve_fname():
     "Try downloading some data with retrieve and setting the file name"
     with TemporaryDirectory() as local_store:
@@ -98,6 +100,7 @@ def test_retrieve_fname():
         assert file_hash(fname) == REGISTRY[data_file]
 
 
+@pytest.mark.network
 def test_retrieve_default_path():
     "Try downloading some data with retrieve to the default cache location"
     data_file = "tiny-data.txt"
@@ -130,6 +133,7 @@ def test_pooch_local(pooch_tmp_path):
     check_tiny_data(fname)
 
 
+@pytest.mark.network
 @pytest.mark.parametrize(
     "url", [BASEURL, FIGSHAREURL, ZENODOURL], ids=["https", "figshare", "zenodo"]
 )
@@ -153,6 +157,7 @@ def test_pooch_custom_url(url):
             assert log_file.getvalue() == ""
 
 
+@pytest.mark.network
 @pytest.mark.parametrize(
     "url", [BASEURL, FIGSHAREURL, ZENODOURL], ids=["https", "figshare", "zenodo"]
 )
@@ -195,6 +200,7 @@ class FakeHashMatches:  # pylint: disable=too-few-public-methods
         return hash_matches(*args, **kwargs)
 
 
+@pytest.mark.network
 def test_pooch_download_retry_off_by_default(monkeypatch):
     "Check that retrying the download is off by default"
     with TemporaryDirectory() as local_store:
@@ -225,6 +231,7 @@ class FakeSleep:  # pylint: disable=too-few-public-methods
         self.times.append(secs)
 
 
+@pytest.mark.network
 def test_pooch_download_retry(monkeypatch):
     "Check that retrying the download works if the hash is different"
     with TemporaryDirectory() as local_store:
@@ -257,6 +264,7 @@ def test_pooch_download_retry(monkeypatch):
         assert file_hash(fname) == REGISTRY["tiny-data.txt"]
 
 
+@pytest.mark.network
 def test_pooch_download_retry_fails_eventually(monkeypatch):
     "Check that retrying the download fails after the set amount of retries"
     with TemporaryDirectory() as local_store:
@@ -278,6 +286,7 @@ def test_pooch_download_retry_fails_eventually(monkeypatch):
         assert "does not match the known hash" in str(error)
 
 
+@pytest.mark.network
 def test_pooch_logging_level():
     "Setup a pooch and check that no logging happens when the level is raised"
     with TemporaryDirectory() as local_store:
@@ -292,6 +301,7 @@ def test_pooch_logging_level():
         check_tiny_data(fname)
 
 
+@pytest.mark.network
 def test_pooch_update():
     "Setup a pooch that already has the local data but the file is outdated"
     with TemporaryDirectory() as local_store:
@@ -319,6 +329,7 @@ def test_pooch_update():
             assert log_file.getvalue() == ""
 
 
+@pytest.mark.network
 def test_pooch_corrupted(pooch_tmp_path):
     "Raise an exception if the file hash doesn't match the registry"
     # Test the case where the file wasn't in the directory
@@ -402,6 +413,7 @@ def test_pooch_load_registry_invalid_line():
         pup.load_registry(os.path.join(DATA_DIR, "registry-invalid.txt"))
 
 
+@pytest.mark.network
 def test_check_availability():
     "Should correctly check availability of existing and non existing files"
     # Check available remote file
@@ -418,6 +430,7 @@ def test_check_availability():
 
 
 # https://blog.travis-ci.com/2018-07-23-the-tale-of-ftp-at-travis-ci
+@pytest.mark.network
 @pytest.mark.skipif(ON_TRAVIS, reason="FTP is not allowed on Travis CI")
 def test_check_availability_on_ftp():
     "Should correctly check availability of existing and non existing files"
@@ -435,6 +448,7 @@ def test_check_availability_on_ftp():
     assert not pup.is_available("doesnot_exist.zip")
 
 
+@pytest.mark.network
 def test_fetch_with_downloader(capsys):
     "Setup a downloader function for fetch"
 
@@ -512,6 +526,7 @@ def test_download_action():
     assert verb == "Fetching"
 
 
+@pytest.mark.network
 @pytest.mark.parametrize("fname", ["tiny-data.txt", "subdir/tiny-data.txt"])
 def test_stream_download(fname):
     "Check that downloading a file over HTTP works as expected"

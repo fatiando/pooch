@@ -103,6 +103,7 @@ def test_doi_downloader(url):
         check_tiny_data(outfile)
 
 
+@pytest.mark.network
 def test_ftp_downloader(ftpserver):
     "Test ftp downloader"
     with data_over_ftp(ftpserver, "tiny-data.txt") as url:
@@ -113,6 +114,7 @@ def test_ftp_downloader(ftpserver):
             check_tiny_data(outfile)
 
 
+@pytest.mark.network
 @pytest.mark.skipif(paramiko is None, reason="requires paramiko to run SFTP")
 @pytest.mark.skipif(ON_TRAVIS, reason="SFTP is not allowed on Travis CI")
 def test_sftp_downloader():
@@ -125,6 +127,7 @@ def test_sftp_downloader():
         assert os.path.exists(outfile)
 
 
+@pytest.mark.network
 @pytest.mark.skipif(paramiko is None, reason="requires paramiko to run SFTP")
 @pytest.mark.skipif(ON_TRAVIS, reason="SFTP is not allowed on Travis CI")
 def test_sftp_downloader_fail_if_file_object():
@@ -155,6 +158,7 @@ def test_downloader_progressbar_fails(downloader):
     assert "'tqdm'" in str(exc.value)
 
 
+@pytest.mark.network
 @pytest.mark.skipif(tqdm is None, reason="requires tqdm")
 @pytest.mark.parametrize(
     "url,downloader",
@@ -183,6 +187,7 @@ def test_downloader_progressbar(url, downloader, capsys):
         check_tiny_data(outfile)
 
 
+@pytest.mark.network
 @pytest.mark.skipif(tqdm is None, reason="requires tqdm")
 def test_downloader_progressbar_ftp(capsys, ftpserver):
     "Setup an FTP downloader function that prints a progress bar for fetch"
@@ -207,6 +212,7 @@ def test_downloader_progressbar_ftp(capsys, ftpserver):
             check_tiny_data(outfile)
 
 
+@pytest.mark.network
 @pytest.mark.skipif(tqdm is None, reason="requires tqdm")
 @pytest.mark.skipif(paramiko is None, reason="requires paramiko")
 @pytest.mark.skipif(ON_TRAVIS, reason="SFTP is not allowed on Travis CI")
@@ -231,6 +237,7 @@ def test_downloader_progressbar_sftp(capsys):
         assert os.path.exists(outfile)
 
 
+@pytest.mark.network
 def test_downloader_arbitrary_progressbar(capsys):
     "Setup a downloader function with an arbitrary progress bar class."
 
