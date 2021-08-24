@@ -14,6 +14,7 @@ import hashlib
 from pathlib import Path
 from urllib.parse import urlsplit
 from contextlib import contextmanager
+import warnings
 
 import appdirs
 from packaging.version import Version
@@ -21,6 +22,36 @@ from packaging.version import Version
 
 LOGGER = logging.Logger("pooch")
 LOGGER.addHandler(logging.StreamHandler())
+
+
+def file_hash(*args, **kwargs):
+    """
+    WARNING: Importing this function from pooch.utils is DEPRECATED.
+    Please import from the top-level namespace (`from pooch import file_hash`)
+    instead, which is fully backwards compatible with pooch >= 0.1.
+
+    Examples
+    --------
+
+    >>> fname = "test-file-for-hash.txt"
+    >>> with open(fname, "w") as f:
+    ...     __ = f.write("content of the file")
+    >>> print(file_hash(fname))
+    0fc74468e6a9a829f103d069aeb2bb4f8646bad58bf146bb0e3379b759ec4a00
+    >>> import os
+    >>> os.remove(fname)
+
+    """
+    # pylint: disable=import-outside-toplevel
+    from .hashes import file_hash as new_file_hash
+
+    message = """
+    Importing file_hash from pooch.utils is DEPRECATED. Please import from the
+    top-level namespace (`from pooch import file_hash`) instead, which is fully
+    backwards compatible with pooch >= 0.1.
+    """
+    warnings.warn(message, FutureWarning)
+    return new_file_hash(*args, **kwargs)
 
 
 def get_logger():
