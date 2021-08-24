@@ -4,6 +4,7 @@
 #
 # This code is part of the Fatiando a Terra project (https://www.fatiando.org)
 #
+# pylint: disable=redefined-outer-name
 """
 Test the hash calculation and checking functions.
 """
@@ -19,7 +20,7 @@ from ..hashes import (
     file_hash,
     hash_matches,
 )
-from .utils import check_tiny_data, make_tmp_path
+from .utils import check_tiny_data, mirror_directory
 
 DATA_DIR = str(Path(__file__).parent / "data" / "store")
 REGISTRY = (
@@ -46,28 +47,28 @@ TINY_DATA_HASHES.update(TINY_DATA_HASHES_XXH)
 
 
 @pytest.fixture
-def pooch_tmp_path(tmp_path):
+def data_dir_mirror(tmp_path):
     """
     Mirror the test data folder on a temporary directory. Needed to avoid
     permission errors when pooch is installed on a non-writable path.
     """
-    return make_tmp_path(DATA_DIR, tmp_path)
+    return mirror_directory(DATA_DIR, tmp_path)
 
 
-def test_make_registry(pooch_tmp_path):
+def test_make_registry(data_dir_mirror):
     "Check that the registry builder creates the right file names and hashes"
     outfile = NamedTemporaryFile(delete=False)
     # Need to close the file before writing to it.
     outfile.close()
     try:
-        make_registry(pooch_tmp_path, outfile.name, recursive=False)
+        make_registry(data_dir_mirror, outfile.name, recursive=False)
         with open(outfile.name) as fout:
             registry = fout.read()
         assert registry == REGISTRY
         # Check that the registry can be used.
-        pup = Pooch(path=pooch_tmp_path, base_url="some bogus URL", registry={})
+        pup = Pooch(path=data_dir_mirror, base_url="some bogus URL", registry={})
         pup.load_registry(outfile.name)
-        true = str(pooch_tmp_path / "tiny-data.txt")
+        true = str(data_dir_mirror / "tiny-data.txt")
         fname = pup.fetch("tiny-data.txt")
         assert true == fname
         check_tiny_data(fname)
@@ -75,22 +76,22 @@ def test_make_registry(pooch_tmp_path):
         os.remove(outfile.name)
 
 
-def test_make_registry_recursive(pooch_tmp_path):
+def test_make_registry_recursive(data_dir_mirror):
     "Check that the registry builder works in recursive mode"
     outfile = NamedTemporaryFile(delete=False)
     # Need to close the file before writing to it.
     outfile.close()
     try:
-        make_registry(pooch_tmp_path, outfile.name, recursive=True)
+        make_registry(data_dir_mirror, outfile.name, recursive=True)
         with open(outfile.name) as fout:
             registry = fout.read()
         assert registry == REGISTRY_RECURSIVE
         # Check that the registry can be used.
-        pup = Pooch(path=pooch_tmp_path, base_url="some bogus URL", registry={})
+        pup = Pooch(path=data_dir_mirror, base_url="some bogus URL", registry={})
         pup.load_registry(outfile.name)
-        assert str(pooch_tmp_path / "tiny-data.txt") == pup.fetch("tiny-data.txt")
+        assert str(data_dir_mirror / "tiny-data.txt") == pup.fetch("tiny-data.txt")
         check_tiny_data(pup.fetch("tiny-data.txt"))
-        true = str(pooch_tmp_path / "subdir" / "tiny-data.txt")
+        true = str(data_dir_mirror / "subdir" / "tiny-data.txt")
         assert true == pup.fetch("subdir/tiny-data.txt")
         check_tiny_data(pup.fetch("subdir/tiny-data.txt"))
     finally:

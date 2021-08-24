@@ -171,32 +171,37 @@ def data_over_ftp(server, fname):
             os.remove(server_path)
 
 
-def _rchmod(root, mode=stat.S_IWUSR):
+def _recursive_chmod_directories(root, mode):
+    """
+    Recursively change the permissions on the child directories using a bitwise
+    OR operation.
+    """
     for item in root.iterdir():
         if item.is_dir():
             item.chmod(item.stat().st_mode | mode)
-            _rchmod(item, mode)
+            _recursive_chmod_directories(item, mode)
 
 
-def make_tmp_path(src, outroot):
+def mirror_directory(source, destination):
     """
-    Copy contents of the src directory into dst and fix permissions.
+    Copy contents of the source directory into destination and fix permissions.
 
     Parameters
     ----------
-    src : str, pathlib.Path
+    source : str, :class:`pathlib.Path`
         Source data directory.
-    outroot : str, pathlib.Path
-        Output rood directory that will contain the copy of src.
+    destination : str, :class:`pathlib.Path`
+        Destination directory that will contain the copy of source. The actual
+        source directory (not just it's contents) is copied.
 
     Returns
     -------
-    dst
-        The pathlib.Path of the output data directory.
+    mirror : :class:`pathlib.Path`
+        The path of the mirrored output directory.
 
     """
-    root = Path(src)
-    out_path = Path(outroot) / root.name
-    shutil.copytree(root, out_path)
-    _rchmod(outroot)
-    return out_path
+    source = Path(source)
+    mirror = Path(destination) / source.name
+    shutil.copytree(source, mirror)
+    _recursive_chmod_directories(mirror, mode=stat.S_IWUSR)
+    return mirror

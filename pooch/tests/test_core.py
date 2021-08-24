@@ -4,6 +4,7 @@
 #
 # This code is part of the Fatiando a Terra project (https://www.fatiando.org)
 #
+# pylint: disable=redefined-outer-name
 """
 Test the core class and factory function.
 """
@@ -30,7 +31,7 @@ from .utils import (
     check_tiny_data,
     check_large_data,
     capture_log,
-    make_tmp_path,
+    mirror_directory,
 )
 
 # FTP doesn't work on Travis CI so need to be able to skip tests there
@@ -47,12 +48,12 @@ REGISTRY_CORRUPTED = {
 
 
 @pytest.fixture
-def pooch_tmp_path(tmp_path):
+def data_dir_mirror(tmp_path):
     """
     Mirror the test data folder on a temporary directory. Needed to avoid
     permission errors when pooch is installed on a non-writable path.
     """
-    return make_tmp_path(DATA_DIR, tmp_path)
+    return mirror_directory(DATA_DIR, tmp_path)
 
 
 @pytest.mark.network
@@ -124,10 +125,10 @@ def test_retrieve_default_path():
             os.remove(str(expected_location))
 
 
-def test_pooch_local(pooch_tmp_path):
+def test_pooch_local(data_dir_mirror):
     "Setup a pooch that already has the local data and test the fetch."
-    pup = Pooch(path=pooch_tmp_path, base_url="some bogus URL", registry=REGISTRY)
-    true = str(pooch_tmp_path / "tiny-data.txt")
+    pup = Pooch(path=data_dir_mirror, base_url="some bogus URL", registry=REGISTRY)
+    true = str(data_dir_mirror / "tiny-data.txt")
     fname = pup.fetch("tiny-data.txt")
     assert true == fname
     check_tiny_data(fname)
@@ -330,7 +331,7 @@ def test_pooch_update():
 
 
 @pytest.mark.network
-def test_pooch_corrupted(pooch_tmp_path):
+def test_pooch_corrupted(data_dir_mirror):
     "Raise an exception if the file hash doesn't match the registry"
     # Test the case where the file wasn't in the directory
     with TemporaryDirectory() as local_store:
@@ -344,14 +345,14 @@ def test_pooch_corrupted(pooch_tmp_path):
             assert logs.split()[0] == "Downloading"
             assert logs.split()[-1] == f"'{path}'."
     # and the case where the file exists but hash doesn't match
-    pup = Pooch(path=pooch_tmp_path, base_url=BASEURL, registry=REGISTRY_CORRUPTED)
+    pup = Pooch(path=data_dir_mirror, base_url=BASEURL, registry=REGISTRY_CORRUPTED)
     with capture_log() as log_file:
         with pytest.raises(ValueError) as error:
             pup.fetch("tiny-data.txt")
         assert "(tiny-data.txt)" in str(error.value)
         logs = log_file.getvalue()
         assert logs.split()[0] == "Updating"
-        assert logs.split()[-1] == f"'{pooch_tmp_path}'."
+        assert logs.split()[-1] == f"'{data_dir_mirror}'."
 
 
 def test_pooch_file_not_in_registry():
@@ -479,10 +480,10 @@ def test_fetch_with_downloader(capsys):
             assert log_file.getvalue() == ""
 
 
-def test_invalid_hash_alg(pooch_tmp_path):
+def test_invalid_hash_alg(data_dir_mirror):
     "Test an invalid hashing algorithm"
     pup = Pooch(
-        path=pooch_tmp_path, base_url=BASEURL, registry={"tiny-data.txt": "blah:1234"}
+        path=data_dir_mirror, base_url=BASEURL, registry={"tiny-data.txt": "blah:1234"}
     )
     with pytest.raises(ValueError) as exc:
         pup.fetch("tiny-data.txt")
@@ -490,9 +491,9 @@ def test_invalid_hash_alg(pooch_tmp_path):
     assert "'blah'" in str(exc.value)
 
 
-def test_alternative_hashing_algorithms(pooch_tmp_path):
+def test_alternative_hashing_algorithms(data_dir_mirror):
     "Test different hashing algorithms using local data"
-    fname = str(pooch_tmp_path / "tiny-data.txt")
+    fname = str(data_dir_mirror / "tiny-data.txt")
     check_tiny_data(fname)
     with open(fname, "rb") as fin:
         data = fin.read()
@@ -500,7 +501,7 @@ def test_alternative_hashing_algorithms(pooch_tmp_path):
         hasher = hashlib.new(alg)
         hasher.update(data)
         registry = {"tiny-data.txt": f"{alg}:{hasher.hexdigest()}"}
-        pup = Pooch(path=pooch_tmp_path, base_url="some bogus URL", registry=registry)
+        pup = Pooch(path=data_dir_mirror, base_url="some bogus URL", registry=registry)
         assert fname == pup.fetch("tiny-data.txt")
         check_tiny_data(fname)
 
