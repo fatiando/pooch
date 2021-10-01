@@ -120,12 +120,21 @@ def test_extractprocessor_fails():
 @pytest.mark.parametrize(
     "archive,members",
     [
-        ("store", None),  # all files in an archive
-        ("tiny-data", ["tiny-data.txt"]),  # 1 compressed file
-        ("store", ["store/subdir/tiny-data.txt"]),  # 1 file in a subdir
-        ("store", ["store/subdir"]),  # whole subdir
+        ("store", None),
+        ("tiny-data", ["tiny-data.txt"]),
+        ("store", ["store/tiny-data.txt"]),
+        ("store", ["store/subdir/tiny-data.txt"]),
+        ("store", ["store/subdir"]),
+        ("store", ["store/tiny-data.txt", "store/subdir"]),
     ],
-    ids=["all_files", "single_file", "subdir_file", "subdir_whole"],
+    ids=[
+        "single_file",
+        "archive_all",
+        "archive_file",
+        "archive_subdir_file",
+        "archive_subdir",
+        "archive_multiple",
+    ],
 )
 @pytest.mark.parametrize(
     "processor_class,extension",
@@ -143,19 +152,23 @@ def test_unpacking(processor_class, extension, target_path, archive, members):
         # the parameters for the test
         if archive == "tiny-data":
             true_paths = {str(path / target_path / "tiny-data.txt")}
-            log_line = "Extracting 'tiny-data.txt'"
+            log_lines = ["Extracting 'tiny-data.txt'"]
         elif archive == "store" and members is None:
             true_paths = {
                 str(path / target_path / "store" / "tiny-data.txt"),
                 str(path / target_path / "store" / "subdir" / "tiny-data.txt"),
             }
             name = processor_class.__name__
-            log_line = f"{name}{name[-1]}ing contents"
+            log_lines = [f"{name}{name[-1]}ing contents"]
         elif archive == "store" and members is not None:
-            true_paths = {
-                str(path / target_path / Path(*members[0].split("/"))),
-            }
-            log_line = f"Extracting '{members[0]}'"
+            true_paths = []
+            for member in members:
+                true_path = path / target_path / Path(*member.split("/"))
+                if not str(true_path).endswith("tiny-data.txt"):
+                    true_path = true_path / "tiny-data.txt"
+                true_paths.append(str(true_path))
+            true_paths = set(true_paths)
+            log_lines = [f"Extracting '{member}'" for member in members]
         # Setup a pooch in a temp dir
         pup = Pooch(path=path, base_url=BASEURL, registry=REGISTRY)
         # Capture logs and check for the right processor message
@@ -163,9 +176,10 @@ def test_unpacking(processor_class, extension, target_path, archive, members):
             fnames = pup.fetch(archive + extension, processor=processor)
             assert set(fnames) == true_paths
             lines = log_file.getvalue().splitlines()
-            assert len(lines) == 2
+            assert len(lines) == len(log_lines) + 1
             assert lines[0].split()[0] == "Downloading"
-            assert lines[-1].startswith(log_line)
+            for i, log_line in enumerate(log_lines):
+                assert lines[i + 1].startswith(log_line)
         for fname in fnames:
             check_tiny_data(fname)
         # Check that processor doesn't execute when not downloading
