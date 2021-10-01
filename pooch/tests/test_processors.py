@@ -114,7 +114,9 @@ def test_extractprocessor_fails():
 
 
 @pytest.mark.network
-@pytest.mark.parametrize("target_path", [None, "foo"], ids=["default_path", "custom_path"])
+@pytest.mark.parametrize(
+    "target_path", [None, "some_custom_path"], ids=["default_path", "custom_path"]
+)
 @pytest.mark.parametrize(
     "archive,members",
     [
