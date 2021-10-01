@@ -13,7 +13,6 @@ import bz2
 import gzip
 import lzma
 import shutil
-from pathlib import Path
 from zipfile import ZipFile
 from tarfile import TarFile
 
