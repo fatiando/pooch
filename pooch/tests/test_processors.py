@@ -120,9 +120,10 @@ def test_extractprocessor_fails():
     [
         ("store", None),  # all files in an archive
         ("tiny-data", ["tiny-data.txt"]),  # 1 compressed file
-        ("store", ["store/subdir/tiny-data.txt"]),  # 1 file nested in archive
+        ("store", ["store/subdir/tiny-data.txt"]),  # 1 file in a subdir
+        ("store", ["store/subdir"]),  # whole subdir
     ],
-    ids=["all_files", "single_file", "subdir_file"],
+    ids=["all_files", "single_file", "subdir_file", "subdir_whole"],
 )
 @pytest.mark.parametrize(
     "processor_class,extension",
@@ -136,6 +137,8 @@ def test_unpacking(processor_class, extension, target_path, archive, members):
         target_path = archive + extension + processor.suffix
     with TemporaryDirectory() as local_store:
         path = Path(local_store)
+        # Generate the appropriate expected paths and log message depending on
+        # the parameters for the test
         if archive == "tiny-data":
             true_paths = {str(path / target_path / "tiny-data.txt")}
             log_line = "Extracting 'tiny-data.txt'"
