@@ -43,8 +43,6 @@ from .utils import (
 )
 
 
-# FTP doesn't work on Travis CI so need to be able to skip tests there
-ON_TRAVIS = bool(os.environ.get("TRAVIS", None))
 BASEURL = pooch_test_url()
 FIGSHAREURL = pooch_test_figshare_url()
 ZENODOURL = pooch_test_zenodo_url()
@@ -116,7 +114,6 @@ def test_ftp_downloader(ftpserver):
 
 @pytest.mark.network
 @pytest.mark.skipif(paramiko is None, reason="requires paramiko to run SFTP")
-@pytest.mark.skipif(ON_TRAVIS, reason="SFTP is not allowed on Travis CI")
 def test_sftp_downloader():
     "Test sftp downloader"
     with TemporaryDirectory() as local_store:
@@ -129,7 +126,6 @@ def test_sftp_downloader():
 
 @pytest.mark.network
 @pytest.mark.skipif(paramiko is None, reason="requires paramiko to run SFTP")
-@pytest.mark.skipif(ON_TRAVIS, reason="SFTP is not allowed on Travis CI")
 def test_sftp_downloader_fail_if_file_object():
     "Downloader should fail when a file object rather than string is passed"
     with TemporaryDirectory() as local_store:
@@ -215,7 +211,6 @@ def test_downloader_progressbar_ftp(capsys, ftpserver):
 @pytest.mark.network
 @pytest.mark.skipif(tqdm is None, reason="requires tqdm")
 @pytest.mark.skipif(paramiko is None, reason="requires paramiko")
-@pytest.mark.skipif(ON_TRAVIS, reason="SFTP is not allowed on Travis CI")
 def test_downloader_progressbar_sftp(capsys):
     "Setup an SFTP downloader function that prints a progress bar for fetch"
     downloader = SFTPDownloader(progressbar=True, username="demo", password="password")

@@ -34,8 +34,6 @@ from .utils import (
     mirror_directory,
 )
 
-# FTP doesn't work on Travis CI so need to be able to skip tests there
-ON_TRAVIS = bool(os.environ.get("TRAVIS", None))
 DATA_DIR = str(Path(__file__).parent / "data")
 REGISTRY = pooch_test_registry()
 BASEURL = pooch_test_url()
@@ -430,9 +428,7 @@ def test_check_availability():
     assert not pup.is_available("not-a-real-data-file.txt")
 
 
-# https://blog.travis-ci.com/2018-07-23-the-tale-of-ftp-at-travis-ci
 @pytest.mark.network
-@pytest.mark.skipif(ON_TRAVIS, reason="FTP is not allowed on Travis CI")
 def test_check_availability_on_ftp():
     "Should correctly check availability of existing and non existing files"
     # Check available remote file on FTP server
