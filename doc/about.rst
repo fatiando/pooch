@@ -19,7 +19,7 @@ Use cases
       once).
     * Make sure everyone running the code has the same version of the data
       files by verifying cryptographic hashes.
-    * Multiple download protocols HTTP/FTP/SFT and basic authentication.
+    * Multiple download protocols HTTP/FTP/SFTP and basic authentication.
     * Download from Digital Object Identifiers (DOIs) issued by repositories
       like figshare and Zenodo.
     * Built-in utilities to unzip/decompress files upon download
@@ -38,7 +38,7 @@ Use cases
     * Verification of download integrity through cryptographic hashes.
     * Extensible design: plug in custom download and post-processing functions.
     * Built-in utilities to unzip/decompress files upon download
-    * Multiple download protocols HTTP/FTP/SFT and basic authentication.
+    * Multiple download protocols HTTP/FTP/SFTP and basic authentication.
     * User control of data cache location through environment variables.
 
     **Start here:** :ref:`intermediate`
