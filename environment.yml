@@ -3,7 +3,7 @@ channels:
     - conda-forge
     - defaults
 dependencies:
-    - python==3.8
+    - python==3.9
     - pip
     - requests
     - packaging
@@ -17,7 +17,8 @@ dependencies:
     - coverage
     - black>=20.8b1
     - flake8
-    - pylint==2.4.*
     - sphinx==3.5.*
     - sphinx-book-theme==0.0.41
     - sphinx-panels==0.5.*
+    - pip:
+      - pylint==2.4.*
