@@ -440,7 +440,6 @@
 <span class="kn">import</span> <span class="nn">gzip</span>
 <span class="kn">import</span> <span class="nn">lzma</span>
 <span class="kn">import</span> <span class="nn">shutil</span>
-<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
 <span class="kn">from</span> <span class="nn">zipfile</span> <span class="kn">import</span> <span class="n">ZipFile</span>
 <span class="kn">from</span> <span class="nn">tarfile</span> <span class="kn">import</span> <span class="n">TarFile</span>
 
@@ -574,16 +573,17 @@
                     <span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
                         <span class="s2">&quot;Extracting &#39;</span><span class="si">%s</span><span class="s2">&#39; from &#39;</span><span class="si">%s</span><span class="s2">&#39; to &#39;</span><span class="si">%s</span><span class="s2">&#39;&quot;</span><span class="p">,</span> <span class="n">member</span><span class="p">,</span> <span class="n">fname</span><span class="p">,</span> <span class="n">extract_dir</span>
                     <span class="p">)</span>
-                    <span class="c1"># make sure the target folder exists for nested members</span>
-                    <span class="n">parts</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">member</span><span class="p">)</span><span class="o">.</span><span class="n">parts</span>
-                    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">parts</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
-                        <span class="n">full_dir_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">extract_dir</span><span class="p">,</span> <span class="o">*</span><span class="n">parts</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
-                        <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">full_dir_path</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                    <span class="c1"># If the member is a dir, we need to get the names of the</span>
+                    <span class="c1"># elements it contains for extraction (ZipFile does not</span>
+                    <span class="c1"># support dirs on .extract). If it&#39;s not a dir, this will</span>
+                    <span class="c1"># only include the member itself.</span>
+                    <span class="c1"># Based on:</span>
+                    <span class="c1"># https://stackoverflow.com/questions/8008829/extract-only-a-single-directory-from-tar</span>
+                    <span class="n">subdir_members</span> <span class="o">=</span> <span class="p">[</span>
+                        <span class="n">name</span> <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">zip_file</span><span class="o">.</span><span class="n">namelist</span><span class="p">()</span> <span class="k">if</span> <span class="n">name</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">member</span><span class="p">)</span>
+                    <span class="p">]</span>
                     <span class="c1"># Extract the data file from within the archive</span>
-                    <span class="k">with</span> <span class="n">zip_file</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">member</span><span class="p">)</span> <span class="k">as</span> <span class="n">data_file</span><span class="p">:</span>
-                        <span class="c1"># Save it to our desired file name</span>
-                        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">extract_dir</span><span class="p">,</span> <span class="n">member</span><span class="p">),</span> <span class="s2">&quot;wb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">output</span><span class="p">:</span>
-                            <span class="n">output</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">data_file</span><span class="o">.</span><span class="n">read</span><span class="p">())</span></div>
+                    <span class="n">zip_file</span><span class="o">.</span><span class="n">extractall</span><span class="p">(</span><span class="n">members</span><span class="o">=</span><span class="n">subdir_members</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="n">extract_dir</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="Untar"><a class="viewcode-back" href="../../api/generated/pooch.Untar.html#pooch.Untar">[docs]</a><span class="k">class</span> <span class="nc">Untar</span><span class="p">(</span><span class="n">ExtractorProcessor</span><span class="p">):</span>  <span class="c1"># pylint: disable=too-few-public-methods</span>
@@ -632,20 +632,21 @@
                     <span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
                         <span class="s2">&quot;Extracting &#39;</span><span class="si">%s</span><span class="s2">&#39; from &#39;</span><span class="si">%s</span><span class="s2">&#39; to &#39;</span><span class="si">%s</span><span class="s2">&#39;&quot;</span><span class="p">,</span> <span class="n">member</span><span class="p">,</span> <span class="n">fname</span><span class="p">,</span> <span class="n">extract_dir</span>
                     <span class="p">)</span>
-                    <span class="c1"># make sure the target folder exists for nested members</span>
-                    <span class="n">parts</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">member</span><span class="p">)</span><span class="o">.</span><span class="n">parts</span>
-                    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">parts</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
-                        <span class="n">full_dir_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">extract_dir</span><span class="p">,</span> <span class="o">*</span><span class="n">parts</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
-                        <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">full_dir_path</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                    <span class="c1"># If the member is a dir, we need to get the names of the</span>
+                    <span class="c1"># elements it contains for extraction (TarFile does not</span>
+                    <span class="c1"># support dirs on .extract). If it&#39;s not a dir, this will</span>
+                    <span class="c1"># only include the member itself.</span>
+                    <span class="c1"># Based on:</span>
+                    <span class="c1"># https://stackoverflow.com/questions/8008829/extract-only-a-single-directory-from-tar</span>
+                    <span class="c1"># Can&#39;t use .getnames because extractall expects TarInfo</span>
+                    <span class="c1"># objects.</span>
+                    <span class="n">subdir_members</span> <span class="o">=</span> <span class="p">[</span>
+                        <span class="n">info</span>
+                        <span class="k">for</span> <span class="n">info</span> <span class="ow">in</span> <span class="n">tar_file</span><span class="o">.</span><span class="n">getmembers</span><span class="p">()</span>
+                        <span class="k">if</span> <span class="n">info</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">member</span><span class="p">)</span>
+                    <span class="p">]</span>
                     <span class="c1"># Extract the data file from within the archive</span>
-                    <span class="c1"># Python 2.7: extractfile doesn&#39;t return a context manager</span>
-                    <span class="n">data_file</span> <span class="o">=</span> <span class="n">tar_file</span><span class="o">.</span><span class="n">extractfile</span><span class="p">(</span><span class="n">member</span><span class="p">)</span>
-                    <span class="k">try</span><span class="p">:</span>
-                        <span class="c1"># Save it to our desired file name</span>
-                        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">extract_dir</span><span class="p">,</span> <span class="n">member</span><span class="p">),</span> <span class="s2">&quot;wb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">output</span><span class="p">:</span>
-                            <span class="n">output</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">data_file</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
-                    <span class="k">finally</span><span class="p">:</span>
-                        <span class="n">data_file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
+                    <span class="n">tar_file</span><span class="o">.</span><span class="n">extractall</span><span class="p">(</span><span class="n">members</span><span class="o">=</span><span class="n">subdir_members</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="n">extract_dir</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="Decompress"><a class="viewcode-back" href="../../api/generated/pooch.Decompress.html#pooch.Decompress">[docs]</a><span class="k">class</span> <span class="nc">Decompress</span><span class="p">:</span>  <span class="c1"># pylint: disable=too-few-public-methods</span>
@@ -789,7 +790,7 @@
       <p>
         
             &copy; Copyright 2021, The Pooch Developers.<br/>
-          Last updated on Aug 24, 2021.<br/>
+          Last updated on Oct 11, 2021.<br/>
       </p>
     </div>
   </footer>

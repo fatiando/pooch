@@ -456,21 +456,21 @@ instead.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – The path to the local data storage folder. The path must exist in the
+<li><p><strong>path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – The path to the local data storage folder. The path must exist in the
 file system.</p></li>
-<li><p><strong>base_url</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – Base URL for the remote data source. All requests will be made relative
+<li><p><strong>base_url</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – Base URL for the remote data source. All requests will be made relative
 to this URL.</p></li>
-<li><p><strong>registry</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)"><em>dict</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.9)"><em>None</em></a>) – A record of the files that are managed by this good boy. Keys should be
+<li><p><strong>registry</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)"><em>dict</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.10)"><em>None</em></a>) – A record of the files that are managed by this good boy. Keys should be
 the file names and the values should be their hashes. Only files
 in the registry can be fetched from the local storage. Files in
 subdirectories of <em>path</em> <strong>must use Unix-style separators</strong> (<code class="docutils literal notranslate"><span class="pre">'/'</span></code>)
 even on Windows.</p></li>
-<li><p><strong>urls</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)"><em>dict</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.9)"><em>None</em></a>) – Custom URLs for downloading individual files in the registry. A
+<li><p><strong>urls</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)"><em>dict</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.10)"><em>None</em></a>) – Custom URLs for downloading individual files in the registry. A
 dictionary with the file names as keys and the custom URLs as values.
 Not all files in <em>registry</em> need an entry in <em>urls</em>. If a file has an
 entry in <em>urls</em>, the <em>base_url</em> will be ignored when downloading it in
 favor of <code class="docutils literal notranslate"><span class="pre">urls[fname]</span></code>.</p></li>
-<li><p><strong>retry_if_failed</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – Retry a file download the specified number of times if it fails because
+<li><p><strong>retry_if_failed</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – Retry a file download the specified number of times if it fails because
 of a bad connection or a hash mismatch. By default, downloads are only
 attempted once (<code class="docutils literal notranslate"><span class="pre">retry_if_failed=0</span></code>). Initially, will wait for 1s
 between retries and then increase the wait time by 1s with each retry
@@ -527,12 +527,12 @@ these features. Downloaders can also be used to print custom messages
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>fname</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – The file name (relative to the <em>base_url</em> of the remote data
+<li><p><strong>fname</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – The file name (relative to the <em>base_url</em> of the remote data
 storage) to fetch from the local storage.</p></li>
-<li><p><strong>processor</strong> (<a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.9)"><em>None</em></a><em> or </em><em>callable</em>) – If not None, then a function (or callable object) that will be
+<li><p><strong>processor</strong> (<a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.10)"><em>None</em></a><em> or </em><em>callable</em>) – If not None, then a function (or callable object) that will be
 called before returning the full path and after the file has been
 downloaded. See <a class="reference internal" href="../../processors.html#processors"><span class="std std-ref">Processors: Post-download actions</span></a> for details.</p></li>
-<li><p><strong>downloader</strong> (<a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.9)"><em>None</em></a><em> or </em><em>callable</em>) – If not None, then a function (or callable object) that will be
+<li><p><strong>downloader</strong> (<a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.10)"><em>None</em></a><em> or </em><em>callable</em>) – If not None, then a function (or callable object) that will be
 called to download a given URL to a provided local file name. See
 <a class="reference internal" href="../../downloaders.html#downloaders"><span class="std std-ref">Downloaders: Customizing the download</span></a> for details.</p></li>
 </ul>
@@ -550,7 +550,7 @@ local storage.</p>
 <dd><p>Get the full URL to download a file in the registry.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>fname</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – The file name (relative to the <em>base_url</em> of the remote data
+<dd class="field-odd"><p><strong>fname</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – The file name (relative to the <em>base_url</em> of the remote data
 storage) to fetch from the local storage.</p>
 </dd>
 </dl>
@@ -564,7 +564,7 @@ storage) to fetch from the local storage.</p>
 available for download.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>fname</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – The file name (relative to the <em>base_url</em> of the remote data
+<dd class="field-odd"><p><strong>fname</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – The file name (relative to the <em>base_url</em> of the remote data
 storage) to fetch from the local storage.</p>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -611,7 +611,7 @@ can be added and must be prepended with <code class="docutils literal notranslat
       <p>
         
             &copy; Copyright 2021, The Pooch Developers.<br/>
-          Last updated on Aug 24, 2021.<br/>
+          Last updated on Oct 11, 2021.<br/>
       </p>
     </div>
   </footer>

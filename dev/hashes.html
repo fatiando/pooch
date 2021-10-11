@@ -497,7 +497,7 @@ SHA256<span class="o">(</span>data/c137.csv<span class="o">)=</span> baee0894dba
 </pre></div>
 </div>
 <p>Or using the <a class="reference internal" href="api/generated/pooch.file_hash.html#pooch.file_hash" title="pooch.file_hash"><code class="xref py py-func docutils literal notranslate"><span class="pre">pooch.file_hash</span></code></a> function (which is a convenient way of
-calling Python’s <a class="reference external" href="https://docs.python.org/3/library/hashlib.html#module-hashlib" title="(in Python v3.9)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">hashlib</span></code></a>):</p>
+calling Python’s <a class="reference external" href="https://docs.python.org/3/library/hashlib.html#module-hashlib" title="(in Python v3.10)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">hashlib</span></code></a>):</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pooch</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">pooch</span><span class="o">.</span><span class="n">file_hash</span><span class="p">(</span><span class="s2">&quot;data/c137.csv&quot;</span><span class="p">))</span>
 </pre></div>
@@ -507,7 +507,7 @@ calling Python’s <a class="reference external" href="https://docs.python.org/3
 <h2>Specifying the hash algorithm<a class="headerlink" href="#specifying-the-hash-algorithm" title="Permalink to this headline">¶</a></h2>
 <p>By default, Pooch uses <a class="reference external" href="https://en.wikipedia.org/wiki/SHA-2">SHA256</a>
 hashes.
-Other hash methods that are available in <a class="reference external" href="https://docs.python.org/3/library/hashlib.html#module-hashlib" title="(in Python v3.9)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">hashlib</span></code></a> can also be used:</p>
+Other hash methods that are available in <a class="reference external" href="https://docs.python.org/3/library/hashlib.html#module-hashlib" title="(in Python v3.10)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">hashlib</span></code></a> can also be used:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pooch</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">pooch</span><span class="o">.</span><span class="n">file_hash</span><span class="p">(</span><span class="s2">&quot;data/c137.csv&quot;</span><span class="p">,</span> <span class="n">alg</span><span class="o">=</span><span class="s2">&quot;sha512&quot;</span><span class="p">))</span>
 </pre></div>
@@ -605,7 +605,7 @@ $ <span class="c1"># ^^^^^^^^^^^^^^^^^^^ The hash  ^^^^^^^^^^^^^^ The filename</
       <p>
         
             &copy; Copyright 2021, The Pooch Developers.<br/>
-          Last updated on Aug 24, 2021.<br/>
+          Last updated on Oct 11, 2021.<br/>
       </p>
     </div>
   </footer>

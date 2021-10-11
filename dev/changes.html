@@ -444,6 +444,11 @@
         <nav id="bd-toc-nav">
             <ul class="nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#version-1-5-2">
+   Version 1.5.2
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#version-1-5-1">
    Version 1.5.1
   </a>
@@ -567,6 +572,36 @@
                 
   <div class="section" id="changelog">
 <span id="changes"></span><h1>Changelog<a class="headerlink" href="#changelog" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="version-1-5-2">
+<h2>Version 1.5.2<a class="headerlink" href="#version-1-5-2" title="Permalink to this headline">¶</a></h2>
+<p><em>Released on: 2021/10/11</em></p>
+<p>doi:<a class="reference external" href="https://doi.org/10.5281/zenodo.5560923">10.5281/zenodo.5560923</a></p>
+<p>Bug fixes:</p>
+<ul class="simple">
+<li><p>Fix bug when unpacking an entire subfolder from an archive. Now both unpacking processors (<code class="docutils literal notranslate"><span class="pre">Untar</span></code> and <code class="docutils literal notranslate"><span class="pre">Unzip</span></code>) handle <code class="docutils literal notranslate"><span class="pre">members</span></code> that are folders (not files) correctly. (<a class="reference external" href="https://github.com/fatiando/pooch/pull/266">#266</a>)</p></li>
+</ul>
+<p>Enhancements:</p>
+<ul class="simple">
+<li><p>Add support for Python 3.10 (<a class="reference external" href="https://github.com/fatiando/pooch/pull/260">#260</a>)</p></li>
+<li><p>Point to the user’s code for the file_hash warning instead of our internal code (which isn’t very useful) (<a class="reference external" href="https://github.com/fatiando/pooch/pull/259">#259</a>)</p></li>
+</ul>
+<p>Documentation:</p>
+<ul class="simple">
+<li><p>Fix typo in a variable name of the examples in the documentation (<a class="reference external" href="https://github.com/fatiando/pooch/pull/268">#268</a>)</p></li>
+<li><p>Fix typo when specifying the SFTP protocol in the about page (<a class="reference external" href="https://github.com/fatiando/pooch/pull/267">#267</a>)</p></li>
+</ul>
+<p>Maintenance:</p>
+<ul class="simple">
+<li><p>Remove old testing checks if running on TravisCI (<a class="reference external" href="https://github.com/fatiando/pooch/pull/265">#265</a>)</p></li>
+</ul>
+<p>This release contains contributions from:</p>
+<ul class="simple">
+<li><p>Santiago Soler</p></li>
+<li><p>Hugo van Kemenade</p></li>
+<li><p>Mark Harfouche</p></li>
+<li><p>Leonardo Uieda</p></li>
+</ul>
+</div>
 <div class="section" id="version-1-5-1">
 <h2>Version 1.5.1<a class="headerlink" href="#version-1-5-1" title="Permalink to this headline">¶</a></h2>
 <p><em>Released on: 2021/08/24</em></p>
@@ -1178,7 +1213,7 @@ data corruption.</p></li>
       <p>
         
             &copy; Copyright 2021, The Pooch Developers.<br/>
-          Last updated on Aug 24, 2021.<br/>
+          Last updated on Oct 11, 2021.<br/>
       </p>
     </div>
   </footer>
