@@ -3,6 +3,38 @@
 Changelog
 =========
 
+Version 1.5.2
+-------------
+
+*Released on: 2021/10/11*
+
+doi:`10.5281/zenodo.5560923 <https://doi.org/10.5281/zenodo.5560923>`__
+
+Bug fixes:
+
+* Fix bug when unpacking an entire subfolder from an archive. Now both unpacking processors (``Untar`` and ``Unzip``) handle ``members`` that are folders (not files) correctly. (`#266 <https://github.com/fatiando/pooch/pull/266>`__)
+
+Enhancements:
+
+* Add support for Python 3.10 (`#260 <https://github.com/fatiando/pooch/pull/260>`__)
+* Point to the user's code for the file_hash warning instead of our internal code (which isn't very useful) (`#259 <https://github.com/fatiando/pooch/pull/259>`__)
+
+Documentation:
+
+* Fix typo in a variable name of the examples in the documentation (`#268 <https://github.com/fatiando/pooch/pull/268>`__)
+* Fix typo when specifying the SFTP protocol in the about page (`#267 <https://github.com/fatiando/pooch/pull/267>`__)
+
+Maintenance:
+
+* Remove old testing checks if running on TravisCI (`#265 <https://github.com/fatiando/pooch/pull/265>`__)
+
+This release contains contributions from:
+
+* Santiago Soler
+* Hugo van Kemenade
+* Mark Harfouche
+* Leonardo Uieda
+
 Version 1.5.1
 -------------
 
