@@ -73,7 +73,7 @@ To download one our data files and load it with `xarray
     import xarray as xr
 
 
-    file_path = odei.fetch("gravity-disturbance.nc")
+    file_path = odie.fetch("gravity-disturbance.nc")
     # Standard use of xarray to load a netCDF file (.nc)
     data = xr.open_dataset(file_path)
 
