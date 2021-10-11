@@ -13,7 +13,6 @@ import bz2
 import gzip
 import lzma
 import shutil
-from pathlib import Path
 from zipfile import ZipFile
 from tarfile import TarFile
 
@@ -147,16 +146,17 @@ class Unzip(ExtractorProcessor):  # pylint: disable=too-few-public-methods
                     get_logger().info(
                         "Extracting '%s' from '%s' to '%s'", member, fname, extract_dir
                     )
-                    # make sure the target folder exists for nested members
-                    parts = Path(member).parts
-                    if len(parts) > 1:
-                        full_dir_path = os.path.join(extract_dir, *parts[:-1])
-                        os.makedirs(full_dir_path, exist_ok=True)
+                    # If the member is a dir, we need to get the names of the
+                    # elements it contains for extraction (ZipFile does not
+                    # support dirs on .extract). If it's not a dir, this will
+                    # only include the member itself.
+                    # Based on:
+                    # https://stackoverflow.com/questions/8008829/extract-only-a-single-directory-from-tar
+                    subdir_members = [
+                        name for name in zip_file.namelist() if name.startswith(member)
+                    ]
                     # Extract the data file from within the archive
-                    with zip_file.open(member) as data_file:
-                        # Save it to our desired file name
-                        with open(os.path.join(extract_dir, member), "wb") as output:
-                            output.write(data_file.read())
+                    zip_file.extractall(members=subdir_members, path=extract_dir)
 
 
 class Untar(ExtractorProcessor):  # pylint: disable=too-few-public-methods
@@ -205,20 +205,21 @@ class Untar(ExtractorProcessor):  # pylint: disable=too-few-public-methods
                     get_logger().info(
                         "Extracting '%s' from '%s' to '%s'", member, fname, extract_dir
                     )
-                    # make sure the target folder exists for nested members
-                    parts = Path(member).parts
-                    if len(parts) > 1:
-                        full_dir_path = os.path.join(extract_dir, *parts[:-1])
-                        os.makedirs(full_dir_path, exist_ok=True)
+                    # If the member is a dir, we need to get the names of the
+                    # elements it contains for extraction (TarFile does not
+                    # support dirs on .extract). If it's not a dir, this will
+                    # only include the member itself.
+                    # Based on:
+                    # https://stackoverflow.com/questions/8008829/extract-only-a-single-directory-from-tar
+                    # Can't use .getnames because extractall expects TarInfo
+                    # objects.
+                    subdir_members = [
+                        info
+                        for info in tar_file.getmembers()
+                        if info.name.startswith(member)
+                    ]
                     # Extract the data file from within the archive
-                    # Python 2.7: extractfile doesn't return a context manager
-                    data_file = tar_file.extractfile(member)
-                    try:
-                        # Save it to our desired file name
-                        with open(os.path.join(extract_dir, member), "wb") as output:
-                            output.write(data_file.read())
-                    finally:
-                        data_file.close()
+                    tar_file.extractall(members=subdir_members, path=extract_dir)
 
 
 class Decompress:  # pylint: disable=too-few-public-methods

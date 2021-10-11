@@ -114,57 +114,93 @@ def test_extractprocessor_fails():
 
 
 @pytest.mark.network
-@pytest.mark.parametrize("_dir", [None, "foo"], ids=["default_dir", "custom_dir"])
 @pytest.mark.parametrize(
-    "proc_cls,file_ext,msg",
-    [(Unzip, ".zip", "Unzipping"), (Untar, ".tar.gz", "Untarring")],
+    "target_path", [None, "some_custom_path"], ids=["default_path", "custom_path"]
+)
+@pytest.mark.parametrize(
+    "archive,members",
+    [
+        ("tiny-data", ["tiny-data.txt"]),
+        ("store", None),
+        ("store", ["store/tiny-data.txt"]),
+        ("store", ["store/subdir/tiny-data.txt"]),
+        ("store", ["store/subdir"]),
+        ("store", ["store/tiny-data.txt", "store/subdir"]),
+    ],
+    ids=[
+        "single_file",
+        "archive_all",
+        "archive_file",
+        "archive_subdir_file",
+        "archive_subdir",
+        "archive_multiple",
+    ],
+)
+@pytest.mark.parametrize(
+    "processor_class,extension",
+    [(Unzip, ".zip"), (Untar, ".tar.gz")],
     ids=["Unzip", "Untar"],
 )
-@pytest.mark.parametrize(
-    "archive_basename,members",
-    [
-        ("tiny-data", ["tiny-data.txt"]),  # 1 compressed file
-        ("store", None),  # all files in an archive
-        ("store", ["store/subdir/tiny-data.txt"]),  # 1 file nested in archive
-    ],
-    ids=["onefile", "all_files", "nested"],
-)
-def test_processors(_dir, proc_cls, file_ext, msg, archive_basename, members):
-    "Setup a hook and make sure it's only executed when downloading"
-    processor = proc_cls(members=members, extract_dir=_dir)
-    _dir = archive_basename + file_ext + proc_cls.suffix if _dir is None else _dir
-    with TemporaryDirectory() as local_store:
-        path = Path(local_store)
-        true_paths = [
-            str(path / _dir / "tiny-data.txt"),
-            str(path / _dir / "store" / "tiny-data.txt"),
-            str(path / _dir / "store" / "subdir" / "tiny-data.txt"),
-        ]
-        if archive_basename == "tiny-data":
-            true_paths = set(true_paths[:1])
-            log_line = "Extracting 'tiny-data.txt'"
-        elif members is None:
-            true_paths = set(true_paths[1:])
-            log_line = f"{msg} contents"
-        else:
-            true_paths = set(true_paths[-1:])
-            log_line = "Extracting 'store/subdir/tiny-data.txt'"
+def test_unpacking(processor_class, extension, target_path, archive, members):
+    "Tests the behaviour of processors for unpacking archives (Untar, Unzip)"
+    processor = processor_class(members=members, extract_dir=target_path)
+    if target_path is None:
+        target_path = archive + extension + processor.suffix
+    with TemporaryDirectory() as path:
+        path = Path(path)
+        true_paths, expected_log = _unpacking_expected_paths_and_logs(
+            archive, members, path / target_path, processor_class.__name__
+        )
         # Setup a pooch in a temp dir
         pup = Pooch(path=path, base_url=BASEURL, registry=REGISTRY)
-        # Check the logs when downloading and from the processor
+        # Capture logs and check for the right processor message
         with capture_log() as log_file:
-            fnames = pup.fetch(archive_basename + file_ext, processor=processor)
+            fnames = pup.fetch(archive + extension, processor=processor)
             assert set(fnames) == true_paths
-            lines = log_file.getvalue().splitlines()
-            assert len(lines) == 2
-            assert lines[0].split()[0] == "Downloading"
-            assert lines[-1].startswith(log_line)
+            _check_logs(log_file, expected_log)
         for fname in fnames:
             check_tiny_data(fname)
         # Check that processor doesn't execute when not downloading
         with capture_log() as log_file:
-            fnames = pup.fetch(archive_basename + file_ext, processor=processor)
+            fnames = pup.fetch(archive + extension, processor=processor)
             assert set(fnames) == true_paths
-            assert log_file.getvalue() == ""
+            _check_logs(log_file, [])
         for fname in fnames:
             check_tiny_data(fname)
+
+
+def _check_logs(log_file, expected_lines):
+    """
+    Assert that the lines in the log match the expected ones.
+    """
+    lines = log_file.getvalue().splitlines()
+    assert len(lines) == len(expected_lines)
+    for line, expected_line in zip(lines, expected_lines):
+        assert line.startswith(expected_line)
+
+
+def _unpacking_expected_paths_and_logs(archive, members, path, name):
+    """
+    Generate the appropriate expected paths and log message depending on the
+    parameters for the test.
+    """
+    log_lines = ["Downloading"]
+    if archive == "tiny-data":
+        true_paths = {str(path / "tiny-data.txt")}
+        log_lines.append("Extracting 'tiny-data.txt'")
+    elif archive == "store" and members is None:
+        true_paths = {
+            str(path / "store" / "tiny-data.txt"),
+            str(path / "store" / "subdir" / "tiny-data.txt"),
+        }
+        log_lines.append(f"{name}{name[-1]}ing contents")
+    elif archive == "store" and members is not None:
+        true_paths = []
+        for member in members:
+            true_path = path / Path(*member.split("/"))
+            if not str(true_path).endswith("tiny-data.txt"):
+                true_path = true_path / "tiny-data.txt"
+            true_paths.append(str(true_path))
+            log_lines.append(f"Extracting '{member}'")
+        true_paths = set(true_paths)
+    return true_paths, log_lines
