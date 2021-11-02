@@ -94,10 +94,12 @@ figshare dataset:
         fname = POOCH.fetch("tiny-data.txt")
         data = numpy.loadtxt(fname)
         return data
-        
-        
+
+
 .. warning::
 
-    A Figshare DOI must point to a Figshare *dataset*, not a Figshare *collection*.
-    Collection DOIs have a `.c.` in them, e.g. `doi:10.6084/m9.figshare.c.4362224.v1/`.
-    Attempting to download files from a Figshare collection will raise an `IndexError`.
+    A figshare DOI must point to a figshare *dataset*, not a figshare
+    *collection*. Collection DOIs have a ``.c.`` in them, e.g.
+    ``doi:10.6084/m9.figshare.c.4362224.v1``. Attempting to download files
+    from a figshare collection will raise an error.
+    See `issue #274 <https://github.com/fatiando/pooch/issues/274>`__ details.
