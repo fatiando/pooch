@@ -31,7 +31,7 @@ from .utils import (
 from .downloaders import choose_downloader
 
 
-def retrieve(url, known_hash, fname=None, path=None, processor=None, downloader=None):
+def retrieve(url, known_hash, fname=None, path=None, processor=None, downloader=None, progressbar=False):
     """
     Download and cache a single file locally.
 
@@ -97,6 +97,9 @@ def retrieve(url, known_hash, fname=None, path=None, processor=None, downloader=
         If not None, then a function (or callable object) that will be called
         to download a given URL to a provided local file name. See
         :ref:`downloaders` for details.
+    progressbar : False, optional
+        If True, pooch will display a progress bar tracking the data download.
+        The progress bar will be printed to the standard error stream (STDERR).
 
     Returns
     -------
@@ -222,7 +225,7 @@ def retrieve(url, known_hash, fname=None, path=None, processor=None, downloader=
         )
 
         if downloader is None:
-            downloader = choose_downloader(url)
+            downloader = choose_downloader(url, progressbar=progressbar)
 
         stream_download(url, full_path, known_hash, downloader, pooch=None)
 

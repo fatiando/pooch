@@ -25,7 +25,7 @@ except ImportError:
     paramiko = None
 
 
-def choose_downloader(url):
+def choose_downloader(url, progressbar=False):
     """
     Choose the appropriate downloader for the given URL based on the protocol.
 
@@ -33,6 +33,9 @@ def choose_downloader(url):
     ----------
     url : str
         A URL (including protocol).
+    progressbar : False, optional
+        If True, pooch will display a progress bar tracking the data download.
+        The progress bar will be printed to the standard error stream (STDERR).
 
     Returns
     -------
@@ -71,7 +74,7 @@ def choose_downloader(url):
             f"Unrecognized URL protocol '{parsed_url['protocol']}' in '{url}'. "
             f"Must be one of {known_downloaders.keys()}."
         )
-    downloader = known_downloaders[parsed_url["protocol"]]()
+    downloader = known_downloaders[parsed_url["protocol"]](progressbar=progressbar)
     return downloader
 
 
