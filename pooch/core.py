@@ -471,7 +471,7 @@ class Pooch:
         "List of file names on the registry"
         return list(self.registry)
 
-    def fetch(self, fname, processor=None, downloader=None):
+    def fetch(self, fname, processor=None, downloader=None, progressbar=False):
         """
         Get the absolute path to a file in the local storage.
 
@@ -509,6 +509,9 @@ class Pooch:
             If not None, then a function (or callable object) that will be
             called to download a given URL to a provided local file name. See
             :ref:`downloaders` for details.
+        progressbar : False, optional
+            If True and the downloader keyword argument is None, a progress bar is displayed.
+            The progress bar will be printed to the standard error stream (STDERR).
 
         Returns
         -------
@@ -537,7 +540,7 @@ class Pooch:
             )
 
             if downloader is None:
-                downloader = choose_downloader(url)
+                downloader = choose_downloader(url, progressbar=progressbar)
 
             stream_download(
                 url,
