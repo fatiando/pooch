@@ -48,6 +48,16 @@ FIGSHAREURL = pooch_test_figshare_url()
 ZENODOURL = pooch_test_zenodo_url()
 
 
+@pytest.mark.parametrize("url", [
+    BASEURL + "tiny-data.txt",  # HTTPDownloader
+    FIGSHAREURL,  # DOIDownloader
+    "sftp://test.rebex.net/pub/example/pocketftp.png",  # SFTPDownloader
+])
+def test_progressbar_kwarg_passed(url):
+    d = choose_downloader(url, progressbar=True)
+    assert d.progressbar is True
+
+
 def test_unsupported_protocol():
     "Should raise ValueError when protocol is not supported"
     with pytest.raises(ValueError):
