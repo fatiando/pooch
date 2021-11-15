@@ -54,6 +54,7 @@ ZENODOURL = pooch_test_zenodo_url()
     "sftp://test.rebex.net/pub/example/pocketftp.png",  # SFTPDownloader
 ])
 def test_progressbar_kwarg_passed(url):
+    """The progressbar keyword argument must pass through choose_downloader"""
     d = choose_downloader(url, progressbar=True)
     assert d.progressbar is True
 
