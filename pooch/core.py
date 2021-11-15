@@ -31,7 +31,15 @@ from .utils import (
 from .downloaders import choose_downloader
 
 
-def retrieve(url, known_hash, fname=None, path=None, processor=None, downloader=None, progressbar=False):
+def retrieve(
+    url,
+    known_hash,
+    fname=None,
+    path=None,
+    processor=None,
+    downloader=None,
+    progressbar=False,
+):
     """
     Download and cache a single file locally.
 
@@ -510,8 +518,9 @@ class Pooch:
             called to download a given URL to a provided local file name. See
             :ref:`downloaders` for details.
         progressbar : False, optional
-            If True and the downloader keyword argument is None, a progress bar is displayed.
-            The progress bar will be printed to the standard error stream (STDERR).
+            If True and the downloader keyword argument is None, then
+            a progress bar is displayed.
+            The progress bar will be printed to the standard error stream.
 
         Returns
         -------
