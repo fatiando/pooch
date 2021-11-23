@@ -33,9 +33,11 @@ def choose_downloader(url, progressbar=False):
     ----------
     url : str
         A URL (including protocol).
-    progressbar : False, optional
-        If True, pooch will display a progress bar tracking the data download.
-        The progress bar will be printed to the standard error stream (STDERR).
+    progressbar : bool or an arbitrary progress bar object
+        If True, will print a progress bar of the download to standard error
+        (stderr). Requires `tqdm <https://github.com/tqdm/tqdm>`__ to be
+        installed. Alternatively, an arbitrary progress bar object can be
+        passed. See :ref:`custom-progressbar` for details.
 
     Returns
     -------

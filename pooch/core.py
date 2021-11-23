@@ -105,9 +105,11 @@ def retrieve(
         If not None, then a function (or callable object) that will be called
         to download a given URL to a provided local file name. See
         :ref:`downloaders` for details.
-    progressbar : False, optional
-        If True, pooch will display a progress bar tracking the data download.
-        The progress bar will be printed to the standard error stream (STDERR).
+    progressbar : bool or an arbitrary progress bar object
+        If True, will print a progress bar of the download to standard error
+        (stderr). Requires `tqdm <https://github.com/tqdm/tqdm>`__ to be
+        installed. Alternatively, an arbitrary progress bar object can be
+        passed. See :ref:`custom-progressbar` for details.
 
     Returns
     -------
@@ -517,10 +519,11 @@ class Pooch:
             If not None, then a function (or callable object) that will be
             called to download a given URL to a provided local file name. See
             :ref:`downloaders` for details.
-        progressbar : False, optional
-            If True and the downloader keyword argument is None, then
-            a progress bar is displayed.
-            The progress bar will be printed to the standard error stream.
+        progressbar : bool or an arbitrary progress bar object
+            If True, will print a progress bar of the download to standard
+            error (stderr). Requires `tqdm <https://github.com/tqdm/tqdm>`__ to
+            be installed. Alternatively, an arbitrary progress bar object can
+            be passed. See :ref:`custom-progressbar` for details.
 
         Returns
         -------

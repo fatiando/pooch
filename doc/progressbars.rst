@@ -8,13 +8,12 @@ Printing progress bars
 Using ``tqdm`` progress bars
 ----------------------------
 
-Pooch uses
-`tqdm <https://github.com/tqdm/tqdm>`__ to print a download progress bar.
-This is turned off by default but can be enabled using ``progressbar=True``.
+Pooch uses `tqdm <https://github.com/tqdm/tqdm>`__ to print a download progress
+bar. This is turned off by default but can be enabled using
+``progressbar=True`` in :func:`pooch.retrieve`:
 
 .. code:: python
 
-    # Assuming you want to use the pooch retrieve function
     fname = retrieve(
         url="https://some-data-server.org/a-data-file.nc",
         known_hash="md5:70e2afd3fd7e336ae478b1e740a5f08e",
@@ -30,12 +29,10 @@ The resulting progress bar will be printed to the standard error stream
     100%|█████████████████████████████████████████| 336/336 [...]
 
 
-Alternatively, assuming you have a ``pooch.Pooch`` instance setup,
-you can turn on progress bars like this:
+You can also do the same with :meth:`pooch.Pooch.fetch`:
 
 .. code:: python
 
-    # Assuming you have a pooch.Pooch instance setup
     POOCH = pooch.create(
         ...
     )
@@ -45,9 +42,21 @@ you can turn on progress bars like this:
         progressbar=True,
     )
 
-    # Or, you can pass `progressbar` directly into the downloader
+Alternatively, you can pass ``progressbar=True`` directly into one of our
+:ref:`downloaders <downloaders>`:
+
+.. code:: python
+
+    # Using fetch
     fname = POOCH.fetch(
         "large-data-file.h5",
+        downloader=pooch.HTTPDownloader(progressbar=True),
+    )
+
+    # Using retrieve
+    fname = retrieve(
+        url="https://some-data-server.org/a-data-file.nc",
+        known_hash="md5:70e2afd3fd7e336ae478b1e740a5f08e",
         downloader=pooch.HTTPDownloader(progressbar=True),
     )
 
