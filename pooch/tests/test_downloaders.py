@@ -48,6 +48,7 @@ FIGSHAREURL = pooch_test_figshare_url()
 ZENODOURL = pooch_test_zenodo_url()
 
 
+@pytest.mark.skipif(tqdm is None, reason="requires tqdm")
 @pytest.mark.parametrize(
     "url",
     [
