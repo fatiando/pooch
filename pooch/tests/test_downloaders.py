@@ -59,8 +59,8 @@ ZENODOURL = pooch_test_zenodo_url()
 )
 def test_progressbar_kwarg_passed(url):
     """The progressbar keyword argument must pass through choose_downloader"""
-    d = choose_downloader(url, progressbar=True)
-    assert d.progressbar is True
+    downloader = choose_downloader(url, progressbar=True)
+    assert downloader.progressbar is True
 
 
 def test_unsupported_protocol():
