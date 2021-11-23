@@ -6,13 +6,13 @@
 #
 name: code-style
 
-# Only build PRs and the master branch. Pushes to branches will only be built
+# Only build PRs and the main branch. Pushes to branches will only be built
 # when a PR is opened.
 on:
   pull_request:
   push:
     branches:
-      - master
+      - main
 
 ###############################################################################
 jobs:

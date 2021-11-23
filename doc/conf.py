@@ -90,7 +90,7 @@ html_show_copyright = True
 html_theme = "sphinx_book_theme"
 html_theme_options = {
     "repository_url": f"https://github.com/fatiando/{project.lower()}",
-    "repository_branch": "master",
+    "repository_branch": "main",
     "path_to_docs": "doc",
     "launch_buttons": {
         "binderhub_url": "https://mybinder.org",

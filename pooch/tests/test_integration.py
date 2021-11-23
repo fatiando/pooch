@@ -29,7 +29,7 @@ def test_create_and_fetch():
         path=path,
         base_url="https://github.com/fatiando/pooch/raw/{version}/data/",
         version=full_version,
-        version_dev="master",
+        version_dev="main",
         env="POOCH_DATA_DIR",
     )
     # Make sure the storage isn't created until a download is required

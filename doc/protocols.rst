@@ -25,7 +25,7 @@ following setup:
         # Use an FTP server instead of HTTP. The rest is all the same.
         base_url="ftp://garage-basement.org/{version}/",
         version=version,
-        version_dev="master",
+        version_dev="main",
         registry={
             "c137.csv": "19uheidhlkjdwhoiwuhc0uhcwljchw9ochwochw89dcgw9dcgwc",
             "cronen.csv": "1upodh2ioduhw9celdjhlfvhksgdwikdgcowjhcwoduchowjg8w",
