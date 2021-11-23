@@ -25,7 +25,7 @@ except ImportError:
     paramiko = None
 
 
-def choose_downloader(url):
+def choose_downloader(url, progressbar=False):
     """
     Choose the appropriate downloader for the given URL based on the protocol.
 
@@ -33,6 +33,11 @@ def choose_downloader(url):
     ----------
     url : str
         A URL (including protocol).
+    progressbar : bool or an arbitrary progress bar object
+        If True, will print a progress bar of the download to standard error
+        (stderr). Requires `tqdm <https://github.com/tqdm/tqdm>`__ to be
+        installed. Alternatively, an arbitrary progress bar object can be
+        passed. See :ref:`custom-progressbar` for details.
 
     Returns
     -------
@@ -71,7 +76,7 @@ def choose_downloader(url):
             f"Unrecognized URL protocol '{parsed_url['protocol']}' in '{url}'. "
             f"Must be one of {known_downloaders.keys()}."
         )
-    downloader = known_downloaders[parsed_url["protocol"]]()
+    downloader = known_downloaders[parsed_url["protocol"]](progressbar=progressbar)
     return downloader
 
 

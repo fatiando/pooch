@@ -31,7 +31,15 @@ from .utils import (
 from .downloaders import choose_downloader
 
 
-def retrieve(url, known_hash, fname=None, path=None, processor=None, downloader=None):
+def retrieve(
+    url,
+    known_hash,
+    fname=None,
+    path=None,
+    processor=None,
+    downloader=None,
+    progressbar=False,
+):
     """
     Download and cache a single file locally.
 
@@ -97,6 +105,11 @@ def retrieve(url, known_hash, fname=None, path=None, processor=None, downloader=
         If not None, then a function (or callable object) that will be called
         to download a given URL to a provided local file name. See
         :ref:`downloaders` for details.
+    progressbar : bool or an arbitrary progress bar object
+        If True, will print a progress bar of the download to standard error
+        (stderr). Requires `tqdm <https://github.com/tqdm/tqdm>`__ to be
+        installed. Alternatively, an arbitrary progress bar object can be
+        passed. See :ref:`custom-progressbar` for details.
 
     Returns
     -------
@@ -222,7 +235,7 @@ def retrieve(url, known_hash, fname=None, path=None, processor=None, downloader=
         )
 
         if downloader is None:
-            downloader = choose_downloader(url)
+            downloader = choose_downloader(url, progressbar=progressbar)
 
         stream_download(url, full_path, known_hash, downloader, pooch=None)
 
@@ -468,7 +481,7 @@ class Pooch:
         "List of file names on the registry"
         return list(self.registry)
 
-    def fetch(self, fname, processor=None, downloader=None):
+    def fetch(self, fname, processor=None, downloader=None, progressbar=False):
         """
         Get the absolute path to a file in the local storage.
 
@@ -506,6 +519,11 @@ class Pooch:
             If not None, then a function (or callable object) that will be
             called to download a given URL to a provided local file name. See
             :ref:`downloaders` for details.
+        progressbar : bool or an arbitrary progress bar object
+            If True, will print a progress bar of the download to standard
+            error (stderr). Requires `tqdm <https://github.com/tqdm/tqdm>`__ to
+            be installed. Alternatively, an arbitrary progress bar object can
+            be passed. See :ref:`custom-progressbar` for details.
 
         Returns
         -------
@@ -534,7 +552,7 @@ class Pooch:
             )
 
             if downloader is None:
-                downloader = choose_downloader(url)
+                downloader = choose_downloader(url, progressbar=progressbar)
 
             stream_download(
                 url,
