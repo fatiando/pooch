@@ -4,7 +4,7 @@ The following people have made contributions to the project (in alphabetical
 order by last name) and are considered "The Pooch Developers":
 
 * [Anderson Banihirwe](https://github.com/andersy005) - The US National Center for Atmospheric Research, USA (ORCID: [0000-0001-6583-571X](https://orcid.org/0000-0001-6583-571X))
-* [Genevieve Buckley](https://github.com/GenevieveBuckley/) - Monash University, Australia - (ORCID: [0000-0003-2763-492X](https://orcid.org/0000-0003-2763-492X))
+* [Genevieve Buckley](https://github.com/GenevieveBuckley) - Monash University, Australia - (ORCID: [0000-0003-2763-492X](https://orcid.org/0000-0003-2763-492X))
 * [Luke Gregor](https://github.com/luke-gregor) - Environmental Physics, ETH Zurich, Zurich, Switzerland (ORCID: [0000-0001-6071-1857](https://orcid.org/0000-0001-6071-1857))
 * [Mathias Hauser](https://github.com/mathause) - Institute for Atmospheric and Climate Science, ETH Zurich, Zurich, Switzerland (ORCID: [0000-0002-0057-4878](https://orcid.org/0000-0002-0057-4878))
 * [Mark Harfouche](https://github.com/hmaarrfk) - Ramona Optics Inc. - [0000-0002-4657-4603](https://orcid.org/0000-0002-4657-4603)
