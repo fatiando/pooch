@@ -24,9 +24,9 @@ If you want to make a contribution to the project, see the
 
 ## Branches
 
-* *master*: Always tested and ready to become a new version. Don't push directly to this
+* *main*: Always tested and ready to become a new version. Don't push directly to this
   branch. Make a new branch and submit a pull request instead.
-* *gh-pages*: Holds the HTML documentation and is served by Github. Pages for the master
+* *gh-pages*: Holds the HTML documentation and is served by Github. Pages for the main
   branch are in the `dev` folder. Pages for each release are in their own folders.
   **Automatically updated by TravisCI** so you shouldn't have to make commits here.
 
@@ -48,7 +48,7 @@ This means that all commits will be collapsed into one.
 The main advantages of this are:
 
 * Eliminates experimental commits or commits to undo previous changes.
-* Makes sure every commit on master passes the tests and has a defined purpose.
+* Makes sure every commit on main passes the tests and has a defined purpose.
 * The maintainer writes the final commit message, so we can make sure it's good and
   descriptive.
 
@@ -58,7 +58,7 @@ The main advantages of this are:
 We use GitHub Actions continuous integration (CI) services to build and
 test the project on Windows, Linux, and Mac.
 The configuration files for this service are in `.github/workflows`.
-They rely on the `requirements.txt`, `requirements-optional.txt`, etc 
+They rely on the `requirements.txt`, `requirements-optional.txt`, etc
 files to install the required dependencies using conda or pip.
 
 The CI jobs include:
@@ -68,7 +68,7 @@ The CI jobs include:
 * Running Black, flake8, and pylint to check the code for style.
 * Building the documentation to make sure it works.
 * Pushing the built documentation HTML to the `gh-pages` branch.
-* Upload source and wheel distributions to TestPyPI (on master) and PyPI
+* Upload source and wheel distributions to TestPyPI (on main) and PyPI
   (on releases).
 
 This way, most day-to-day maintenance operations are automatic.
