@@ -18,7 +18,7 @@ This is turned off by default but can be enabled using ``progressbar=True``.
     fname = retrieve(
         url="https://some-data-server.org/a-data-file.nc",
         known_hash="md5:70e2afd3fd7e336ae478b1e740a5f08e",
-        progressbar=True
+        progressbar=True,
     )
 
 
@@ -42,7 +42,7 @@ you can turn on progress bars like this:
 
     fname = POOCH.fetch(
         "large-data-file.h5",
-        progressbar=True
+        progressbar=True,
     )
 
     # Or, you can pass `progressbar` directly into the downloader

@@ -48,11 +48,14 @@ FIGSHAREURL = pooch_test_figshare_url()
 ZENODOURL = pooch_test_zenodo_url()
 
 
-@pytest.mark.parametrize("url", [
-    BASEURL + "tiny-data.txt",  # HTTPDownloader
-    FIGSHAREURL,  # DOIDownloader
-    "sftp://test.rebex.net/pub/example/pocketftp.png",  # SFTPDownloader
-])
+@pytest.mark.parametrize(
+    "url",
+    [
+        BASEURL + "tiny-data.txt",  # HTTPDownloader
+        FIGSHAREURL,  # DOIDownloader
+        "sftp://test.rebex.net/pub/example/pocketftp.png",  # SFTPDownloader
+    ],
+)
 def test_progressbar_kwarg_passed(url):
     """The progressbar keyword argument must pass through choose_downloader"""
     d = choose_downloader(url, progressbar=True)
