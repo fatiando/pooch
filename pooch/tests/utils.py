@@ -48,8 +48,8 @@ def pooch_test_url():
     """
     Get the base URL for the test data used in Pooch itself.
 
-    The URL is a github raw link to the ``pooch/tests/data`` directory from the
-    `Github repository <https://github.com/fatiando/pooch>`__. It matches the
+    The URL is a GitHub raw link to the ``pooch/tests/data`` directory from the
+    `GitHub repository <https://github.com/fatiando/pooch>`__. It matches the
     pooch version specified in ``pooch.version.full_version``.
 
     Returns
@@ -59,7 +59,7 @@ def pooch_test_url():
 
     """
     url = "https://github.com/fatiando/pooch/raw/{version}/pooch/tests/data/".format(
-        version=check_version(full_version)
+        version=check_version(full_version, fallback="main")
     )
     return url
 
