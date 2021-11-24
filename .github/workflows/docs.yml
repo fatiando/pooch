@@ -6,14 +6,14 @@
 #
 name: docs
 
-# Only build PRs, the master branch, and releases. Pushes to branches will only
+# Only build PRs, the main branch, and releases. Pushes to branches will only
 # be built when a PR is opened. This avoids duplicated buids in PRs comming
 # from branches in the origin repository (1 for PR and 1 for push).
 on:
   pull_request:
   push:
     branches:
-      - master
+      - main
   release:
     types:
       - published
@@ -168,7 +168,7 @@ jobs:
 
       - name: Push the built HTML to gh-pages
         run: |
-          # Detect if this is a release or from the master branch
+          # Detect if this is a release or from the main branch
           if [[ "${{ github.event_name }}" == "release" ]]; then
               # Get the tag name without the "refs/tags/" part
               version="${GITHUB_REF#refs/*/}"

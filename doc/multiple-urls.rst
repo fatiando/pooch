@@ -18,7 +18,7 @@ For example, say we have a ``citadel.csv`` file that we want to download from
         path=pooch.os_cache("plumbus"),
         base_url="https://github.com/rick/plumbus/raw/{version}/data/",
         version=version,
-        version_dev="master",
+        version_dev="main",
         registry={
             "c137.csv": "19uheidhlkjdwhoiwuhc0uhcwljchw9ochwochw89dcgw9dcgwc",
             "cronen.csv": "1upodh2ioduhw9celdjhlfvhksgdwikdgcowjhcwoduchowjg8w",
@@ -73,7 +73,7 @@ In fact, the module code doesn't change at all:
         path=pooch.os_cache("plumbus"),
         base_url="https://github.com/rick/plumbus/raw/{version}/data/",
         version=version,
-        version_dev="master",
+        version_dev="main",
         registry=None,
     )
     # If custom URLs are present in the registry file, they will be set

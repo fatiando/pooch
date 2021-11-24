@@ -120,9 +120,9 @@ Table of contents
 .. toctree::
     :caption: Community
 
-    Join the community <http://contact.fatiando.org>
-    Code of Conduct <https://github.com/fatiando/pooch/blob/master/CODE_OF_CONDUCT.md>
-    How to contribute <https://github.com/fatiando/pooch/blob/master/CONTRIBUTING.md>
+    Join the community <https://www.fatiando.org/contact/>
+    Code of Conduct <https://github.com/fatiando/community/blob/main/CODE_OF_CONDUCT.md>
+    How to contribute <https://github.com/fatiando/pooch/blob/main/CONTRIBUTING.md>
     Source code on GitHub <https://github.com/fatiando/pooch>
-    Authors <https://github.com/fatiando/pooch/blob/master/AUTHORS.md>
+    Authors <https://github.com/fatiando/pooch/blob/main/AUTHORS.md>
     Fatiando a Terra <https://www.fatiando.org>

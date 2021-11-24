@@ -113,7 +113,7 @@ class HTTPDownloader:  # pylint: disable=too-few-public-methods
     >>> import os
     >>> from pooch import __version__, check_version
     >>> url = "https://github.com/fatiando/pooch/raw/{}/data/tiny-data.txt"
-    >>> url = url.format(check_version(__version__))
+    >>> url = url.format(check_version(__version__, fallback="main"))
     >>> downloader = HTTPDownloader()
     >>> # Not using with Pooch.fetch so no need to pass an instance of Pooch
     >>> downloader(url=url, output_file="tiny-data.txt", pooch=None)

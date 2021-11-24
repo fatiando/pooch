@@ -1,4 +1,4 @@
-.. image:: https://github.com/fatiando/pooch/raw/master/doc/_static/readme-banner.png
+.. image:: https://github.com/fatiando/pooch/raw/main/doc/_static/readme-banner.png
     :alt: Pooch
 
 `Documentation <https://www.fatiando.org/pooch>`__ |
@@ -12,10 +12,10 @@ Part of the `Fatiando a Terra <https://www.fatiando.org>`__ project
 .. image:: https://img.shields.io/conda/vn/conda-forge/pooch.svg?style=flat-square
     :alt: Latest version on conda-forge
     :target: https://github.com/conda-forge/pooch-feedstock
-.. image:: https://img.shields.io/endpoint.svg?url=https%3A%2F%2Factions-badge.atrox.dev%2Ffatiando%2Fpooch%2Fbadge%3Fref%3Dmaster&style=flat-square&logo=none
+.. image:: https://img.shields.io/endpoint.svg?url=https%3A%2F%2Factions-badge.atrox.dev%2Ffatiando%2Fpooch%2Fbadge%3Fref%3Dmain&style=flat-square&logo=none
     :alt: GitHub Actions workflow status
     :target: https://github.com/fatiando/pooch/actions
-.. image:: https://img.shields.io/codecov/c/github/fatiando/pooch/master.svg?style=flat-square
+.. image:: https://img.shields.io/codecov/c/github/fatiando/pooch/main.svg?style=flat-square
     :alt: Test coverage status
     :target: https://codecov.io/gh/fatiando/pooch
 .. image:: https://img.shields.io/pypi/pyversions/pooch.svg?style=flat-square
@@ -106,7 +106,7 @@ For **package developers** including sample data in their projects:
         version=version,
         # If a version as a "+XX.XXXXX" suffix, we'll assume that this is a dev
         # version and replace the version with this string.
-        version_dev="master",
+        version_dev="main",
         # An environment variable that overwrites the path.
         env="MYPACKAGE_DATA_DIR",
         # The cache file registry. A dictionary with all files managed by this
@@ -167,11 +167,11 @@ Citing Pooch
 ------------
 
 This is research software **made by scientists** (see
-`AUTHORS.md <https://github.com/fatiando/pooch/blob/master/AUTHORS.md>`__). Citations
+`AUTHORS.md <https://github.com/fatiando/pooch/blob/main/AUTHORS.md>`__). Citations
 help us justify the effort that goes into building and maintaining this project. If you
 used Pooch for your research, please consider citing us.
 
-See our `CITATION.rst file <https://github.com/fatiando/pooch/blob/master/CITATION.rst>`__
+See our `CITATION.rst file <https://github.com/fatiando/pooch/blob/main/CITATION.rst>`__
 to find out more.
 
 
@@ -182,14 +182,14 @@ Code of conduct
 +++++++++++++++
 
 Please note that this project is released with a
-`Contributor Code of Conduct <https://github.com/fatiando/pooch/blob/master/CODE_OF_CONDUCT.md>`__.
+`Code of Conduct <https://github.com/fatiando/community/blob/main/CODE_OF_CONDUCT.md>`__.
 By participating in this project you agree to abide by its terms.
 
 Contributing Guidelines
 +++++++++++++++++++++++
 
 Please read our
-`Contributing Guide <https://github.com/fatiando/pooch/blob/master/CONTRIBUTING.md>`__
+`Contributing Guide <https://github.com/fatiando/pooch/blob/main/CONTRIBUTING.md>`__
 to see how you can help and give feedback.
 
 Imposter syndrome disclaimer
@@ -224,5 +224,5 @@ License
 -------
 
 This is free software: you can redistribute it and/or modify it under the terms
-of the `BSD 3-clause License <https://github.com/fatiando/pooch/blob/master/LICENSE.txt>`__.
+of the `BSD 3-clause License <https://github.com/fatiando/pooch/blob/main/LICENSE.txt>`__.
 A copy of this license is provided with distributions of the software.
