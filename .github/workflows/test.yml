@@ -91,7 +91,7 @@ jobs:
               for requirement in env/requirements-optional.txt setup.py
               do
                 echo "  $requirement"
-                sed --in-place "s/\([a-zA-Z0-9]\+\)>=/\1==/g" $requirement
+                sed -i "s/\([a-zA-Z0-9]\+\)>=/\1==/g" $requirement
               done
           fi
           if [ "$DEPENDENCIES" == "optional" ]; then
