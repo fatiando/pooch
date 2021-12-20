@@ -41,12 +41,13 @@ jobs:
           - windows
         python:
           - "3.6"
-          - "3.9"
+          - "3.10"
         dependencies:
           - latest
           - optional
+          - minimal
     env:
-      REQUIREMENTS: requirements.txt env/requirements-test.txt env/requirements-build.txt
+      REQUIREMENTS: env/requirements-test.txt
       DEPENDENCIES: ${{ matrix.dependencies }}
       # Used to tag codecov submissions
       OS: ${{ matrix.os }}
@@ -85,6 +86,14 @@ jobs:
 
       - name: Collect requirements
         run: |
+          if [ "$DEPENDENCIES" == "minimal" ]; then
+              echo "Setting the minimum dependency versions in:"
+              for requirement in env/requirements-optional.txt setup.py
+              do
+                echo "  $requirement"
+                sed --in-place "s/\([a-zA-Z0-9]\+\)>=/\1==/g" $requirement
+              done
+          fi
           if [ "$DEPENDENCIES" == "optional" ]; then
               export $REQUIREMENTS=$REQUIREMENTS env/requirements-optional.txt
           fi
