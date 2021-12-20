@@ -63,17 +63,20 @@ jobs:
         with:
           python-version: ${{ env.PYTHON }}
 
-      - name: Collect requirements
+      - name: Collect requirements - run-time
+        run: python tools/export_requirements.py > requirements-full.txt
+
+      - name: Collect requirements - other
         run: |
-          if [ ! -z "$REQUIREMENTS" ]; then
-              echo "Capturing dependencies from:"
-              for requirement in $REQUIREMENTS
-              do
-                echo "  $requirement"
-                cat $requirement >> requirements-full.txt
-              done
-          fi
-          echo ""
+          echo "Capturing dependencies from:"
+          for requirement in $REQUIREMENTS
+          do
+            echo "  $requirement"
+            cat $requirement >> requirements-full.txt
+          done
+
+      - name: List requirements
+        run: |
           echo "Collected dependencies:"
           cat requirements-full.txt
 
@@ -109,7 +112,7 @@ jobs:
         run: python -m pip install dist/*.whl
 
       - name: Build the documentation
-        run: make -C doc all
+        run: make -C doc clean all
 
       # Store the docs as a build artifact so we can deploy it later
       - name: Upload HTML documentation as an artifact
