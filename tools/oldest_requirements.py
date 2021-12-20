@@ -13,8 +13,15 @@ import sys
 
 requirements_file = sys.argv[1]
 
+
+def to_oldest(package):
+    "Convert the specification to pin to the oldest version"
+    oldest = package.split(",")[0].replace(">=", "==")
+    return f"{oldest.strip()}\n"
+
+
 with open(requirements_file) as input_file:
-    requirements = [line.replace(">=", "==") for line in input_file]
+    requirements = [to_oldest(line) for line in input_file]
 
 with open(requirements_file, "wt") as output_file:
     output_file.writelines(requirements)
