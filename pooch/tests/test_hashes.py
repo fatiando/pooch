@@ -37,7 +37,6 @@ TINY_DATA_HASHES_HASHLIB = {
 }
 TINY_DATA_HASHES_XXH = {
     "xxh64": "f843815fe57948fa",
-    "xxh3_64": "811e3f2a12aec53f",
     "xxh32": "98d6f1a2",
 }
 TINY_DATA_HASHES = TINY_DATA_HASHES_HASHLIB.copy()
