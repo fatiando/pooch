@@ -39,11 +39,11 @@
     **Need help?**
     ^^^^^^^^^^^^^^
 
-    Ask on our chat room
+    Ask on our community channels
 
-    .. link-button:: http://contact.fatiando.org
+    .. link-button:: https://www.fatiando.org/contact
         :type: url
-        :text: Join our Slack
+        :text: Join the conversation
         :classes: btn-outline-primary btn-block stretched-link
 
     ---
