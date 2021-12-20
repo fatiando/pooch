@@ -91,7 +91,9 @@ jobs:
               for requirement in env/requirements-optional.txt setup.py
               do
                 echo "  $requirement"
-                sed "s/\([a-zA-Z0-9]\+\)>=/\1==/g" $requirement -i ''
+                # Using --in-place on Mac is not supported
+                sed "s/\([a-zA-Z0-9]\+\)>=/\1==/g" $requirement > tmp.txt
+                mv tmp.txt $requirement
               done
           fi
           if [ "$DEPENDENCIES" == "optional" ]; then
