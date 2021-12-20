@@ -36,8 +36,6 @@ TINY_DATA_HASHES_HASHLIB = {
     "md5": "70e2afd3fd7e336ae478b1e740a5f08e",
 }
 TINY_DATA_HASHES_XXH = {
-    "xxh128": "0267d220db258fffb0c567c0ecd1b689",
-    "xxh3_128": "0267d220db258fffb0c567c0ecd1b689",
     "xxh64": "f843815fe57948fa",
     "xxh3_64": "811e3f2a12aec53f",
     "xxh32": "98d6f1a2",
