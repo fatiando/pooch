@@ -95,7 +95,7 @@ jobs:
               done
           fi
           if [ "$DEPENDENCIES" == "optional" ]; then
-              export $REQUIREMENTS="$REQUIREMENTS env/requirements-optional.txt"
+              export REQUIREMENTS="$REQUIREMENTS env/requirements-optional.txt"
           fi
           if [ ! -z "$REQUIREMENTS" ]; then
               echo "Capturing dependencies from:"
