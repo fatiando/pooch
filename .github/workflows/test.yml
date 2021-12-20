@@ -51,6 +51,7 @@ jobs:
       # Used to tag codecov submissions
       OS: ${{ matrix.os }}
       PYTHON: ${{ matrix.python }}
+      DEPENDENCIES: ${{ matrix.dependencies }}
 
     steps:
       # Cancel any previous run of the test job
@@ -87,11 +88,11 @@ jobs:
         run: python tools/export_requirements.py > requirements-full.txt
 
       - name: Collect requirements - optional
-        if: matrix.dependencies == "latest" || matrix.dependencies == "oldest"
+        if: matrix.dependencies == 'optional' || matrix.dependencies == 'oldest'
         run: cat env/requirements-optional.txt >> requirements-full.txt
 
       - name: Collect requirements - convert to oldest supported
-        if: matrix.dependencies == "oldest"
+        if: matrix.dependencies == 'oldest'
         run: python tools/oldest_requirements.py requirements-full.txt
 
       - name: Collect requirements - other
