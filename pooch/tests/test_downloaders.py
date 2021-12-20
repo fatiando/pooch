@@ -54,11 +54,18 @@ ZENODOURL = pooch_test_zenodo_url()
     [
         BASEURL + "tiny-data.txt",  # HTTPDownloader
         FIGSHAREURL,  # DOIDownloader
-        "sftp://test.rebex.net/pub/example/pocketftp.png",  # SFTPDownloader
     ],
 )
 def test_progressbar_kwarg_passed(url):
     """The progressbar keyword argument must pass through choose_downloader"""
+    downloader = choose_downloader(url, progressbar=True)
+    assert downloader.progressbar is True
+
+
+@pytest.mark.skipif(paramiko is None, reason="requires paramiko")
+def test_progressbar_kwarg_passed_sftp():
+    """The progressbar keyword argument must pass through choose_downloader"""
+    url = "sftp://test.rebex.net/pub/example/pocketftp.png"
     downloader = choose_downloader(url, progressbar=True)
     assert downloader.progressbar is True
 
