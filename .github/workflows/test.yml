@@ -83,14 +83,14 @@ jobs:
         with:
           python-version: ${{ matrix.python }}
 
-      - name: Collect requirements: run-time
+      - name: Collect requirements - run-time
         run: python tools/export_requirements.py ${{ matrix.dependencies }} > requirements-full.txt
 
-      - name: Collect requirements: optional
+      - name: Collect requirements - optional
         if: ${{ matrix.dependencies }} == "optional"
         run: cat env/requirements-optional.txt >> requirements-full.txt
 
-      - name: Collect requirements: other
+      - name: Collect requirements - other
         run: |
           echo "Capturing dependencies from:"
           for requirement in $REQUIREMENTS
