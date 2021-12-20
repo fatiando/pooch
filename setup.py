@@ -56,7 +56,7 @@ PACKAGE_DATA = {
         os.path.join("data", "store", "subdir", "*"),
     ]
 }
-INSTALL_REQUIRES = ["requests", "packaging", "appdirs"]
+INSTALL_REQUIRES = ["requests>=2.22.0", "packaging>=19.2", "appdirs>=1.3.0"]
 PYTHON_REQUIRES = ">=3.6"
 SETUP_REQUIRES = ["setuptools_scm"]
 # Configuration for setuptools-scm
