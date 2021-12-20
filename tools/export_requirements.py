@@ -6,22 +6,14 @@
 #
 """
 Export the run-time requirements from setup.cfg to a requirement.txt format.
-Prints to STDOUT. If the "minimal" argument is passed, will replace >= with ==
-to force dependencies to the minimal supported version.
-
 Modified from https://github.com/Unidata/MetPy
 """
-import sys
 import configparser
 
 # Read the setup.cfg
 config = configparser.ConfigParser()
 config.read("setup.cfg")
 
-minimal = "minimal" in sys.argv
-
 print("# Run-time dependencies")
 for package in config["options"]["install_requires"].strip().split("\n"):
-    if minimal:
-        package = package.replace(">=", "==")
-    print(package)
+    print(package.strip())
