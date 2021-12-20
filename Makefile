@@ -3,7 +3,7 @@ PROJECT=pooch
 TESTDIR=tmp-test-dir-with-unique-name
 PYTEST_ARGS=--cov-config=../.coveragerc --cov-report=term-missing --cov=$(PROJECT) --doctest-modules -v --pyargs
 LINT_FILES=setup.py $(PROJECT)
-CHECK_STYLE=setup.py doc/conf.py $(PROJECT) license_notice.py
+CHECK_STYLE=setup.py doc/conf.py $(PROJECT) tools
 
 help:
 	@echo "Commands:"
@@ -37,10 +37,10 @@ black-check:
 	black --check $(CHECK_STYLE)
 
 license:
-	python license_notice.py
+	python tools/license_notice.py
 
 license-check:
-	python license_notice.py --check
+	python tools/license_notice.py --check
 
 flake8:
 	flake8 $(CHECK_STYLE)

@@ -3,11 +3,12 @@
 prune .github
 prune data
 prune doc
+prune env
 prune paper
 exclude .*.yml
 exclude .*rc
-exclude requirements*.txt
 exclude Makefile
 exclude .gitignore
 exclude .gitattributes
 exclude environment.yml
+exclude license_notice.py

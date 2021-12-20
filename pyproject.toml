@@ -1,0 +1,15 @@
+# Specify that we use setuptools and setuptools_scm (to generate the version
+# string). Actual configuration is in setup.py and setup.cfg.
+[build-system]
+requires = ["setuptools>=45", "wheel", "setuptools_scm[toml]>=6.2"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools_scm]
+version_scheme =  "post-release"
+local_scheme =  "node-and-date"
+write_to =  "pooch/_version.py"
+
+[tool.pytest.ini_options]
+markers = [
+    "network: test requires network access",
+]
