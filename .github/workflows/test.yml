@@ -45,7 +45,7 @@ jobs:
         dependencies:
           - latest
           - optional
-          - minimal
+          - oldest
     env:
       REQUIREMENTS: env/requirements-test.txt
       # Used to tag codecov submissions
@@ -87,12 +87,12 @@ jobs:
         run: python tools/export_requirements.py > requirements-full.txt
 
       - name: Collect requirements - optional
-        if: ${{ matrix.dependencies }} == "optional"
+        if: matrix.dependencies == "latest" || matrix.dependencies == "oldest"
         run: cat env/requirements-optional.txt >> requirements-full.txt
 
-      - name: Collect requirements - convert to minimal
-        if: ${{ matrix.dependencies }} == "minimal"
-        run: python tools/minimal_requirements.py requirements-full.txt
+      - name: Collect requirements - convert to oldest supported
+        if: matrix.dependencies == "oldest"
+        run: python tools/oldest_requirements.py requirements-full.txt
 
       - name: Collect requirements - other
         run: |

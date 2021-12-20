@@ -5,7 +5,7 @@
 # This code is part of the Fatiando a Terra project (https://www.fatiando.org)
 #
 """
-Convert the requirements in the given file to their minimal version by
+Convert the requirements in the given file to their oldest version by
 replacing >= with == in place.
 """
 import sys
