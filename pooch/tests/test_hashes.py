@@ -14,6 +14,14 @@ from tempfile import NamedTemporaryFile
 
 import pytest
 
+try:
+    import xxhash
+
+    XXHASH_MAJOR_VERSION = int(xxhash.VERSION.split(".")[0])
+except ImportError:
+    xxhash = None
+    XXHASH_MAJOR_VERSION = 0
+
 from ..core import Pooch
 from ..hashes import (
     make_registry,
@@ -38,6 +46,10 @@ TINY_DATA_HASHES_HASHLIB = {
 TINY_DATA_HASHES_XXH = {
     "xxh64": "f843815fe57948fa",
     "xxh32": "98d6f1a2",
+    # Require xxHash > 2.0
+    "xxh128": "0267d220db258fffb0c567c0ecd1b689",
+    "xxh3_128": "0267d220db258fffb0c567c0ecd1b689",
+    "xxh3_64": "811e3f2a12aec53f",
 }
 TINY_DATA_HASHES = TINY_DATA_HASHES_HASHLIB.copy()
 TINY_DATA_HASHES.update(TINY_DATA_HASHES_XXH)
@@ -110,7 +122,10 @@ def test_file_hash_invalid_algorithm():
 def test_file_hash(alg, expected_hash):
     "Test the hash calculation using hashlib and xxhash"
     if alg.startswith("xxh"):
-        pytest.importorskip("xxhash")
+        if xxhash is None:
+            pytest.skip("requires xxhash")
+        if alg not in ["xxh64", "xxh32"] and XXHASH_MAJOR_VERSION < 2:
+            pytest.skip("requires xxhash > 2.0")
     fname = os.path.join(DATA_DIR, "tiny-data.txt")
     check_tiny_data(fname)
     returned_hash = file_hash(fname, alg)
@@ -125,7 +140,10 @@ def test_file_hash(alg, expected_hash):
 def test_hash_matches(alg, expected_hash):
     "Make sure the hash checking function works"
     if alg.startswith("xxh"):
-        pytest.importorskip("xxhash")
+        if xxhash is None:
+            pytest.skip("requires xxhash")
+        if alg not in ["xxh64", "xxh32"] and XXHASH_MAJOR_VERSION < 2:
+            pytest.skip("requires xxhash > 2.0")
     fname = os.path.join(DATA_DIR, "tiny-data.txt")
     check_tiny_data(fname)
     # Check if the check passes
