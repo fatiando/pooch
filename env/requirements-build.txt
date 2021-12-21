@@ -1,0 +1,4 @@
+# Requirements for building
+setuptools_scm>=6.2
+setuptools>=45
+wheel

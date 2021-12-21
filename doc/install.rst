@@ -3,30 +3,15 @@
 Installing
 ==========
 
-Which Python?
--------------
-
-You'll need **Python >= 3.6** (see :ref:`python-versions` if you
-require support for older versions).
-
-We recommend using the
-`Anaconda <https://www.anaconda.com/download>`__
-or `Miniconda <https://docs.conda.io/en/latest/miniconda.html>`__
-Python distributions to ensure you have all dependencies installed and the
-``conda`` package manager available.
-Installing Anaconda does not require administrative rights to your computer and
-doesn't interfere with any other Python installations in your system.
-
-.. note::
-
-    The commands below should be executed in a terminal. On Windows, use the
-    "Anaconda Prompt" app or ``cmd.exe`` if you're not using Anaconda.
-
-
-Installing
-----------
-
 There are different ways to install Pooch:
+
+.. tabbed:: pip
+
+    Using the `pip <https://pypi.org/project/pip/>`__ package manager:
+
+    .. code:: bash
+
+        python -m pip install pooch
 
 .. tabbed:: conda
 
@@ -37,23 +22,25 @@ There are different ways to install Pooch:
 
         conda install pooch --channel conda-forge
 
-.. tabbed:: pip
-
-    Using the `pip <https://pypi.org/project/pip/>`__ package manager:
-
-    .. code:: bash
-
-        python -m pip install pooch
-
-
 .. tabbed:: Development version
 
-    Using ``pip`` to install the latest **unreleased** version from GitHub:
+    Using ``pip`` to install the latest **unreleased** version from GitHub
+    (**not recommended** in most situations):
 
     .. code:: bash
 
         python -m pip install --upgrade git+https://github.com/fatiando/pooch
 
+.. note::
+
+    The commands above should be executed in a terminal. On Windows, use the
+    ``cmd.exe`` or the "Anaconda Prompt" app if you're using Anaconda.
+
+Which Python?
+-------------
+
+You'll need **Python >= 3.6**. See :ref:`python-versions` if you
+require support for older versions.
 
 .. _dependencies:
 
@@ -66,9 +53,9 @@ manually.
 
 Required:
 
-* `requests <http://docs.python-requests.org/>`__
-* `packaging <https://github.com/pypa/packaging>`__
 * `appdirs <https://github.com/ActiveState/appdirs>`__
+* `packaging <https://github.com/pypa/packaging>`__
+* `requests <https://docs.python-requests.org/>`__
 
 Optional:
 
@@ -76,3 +63,5 @@ Optional:
   progress bar. See :ref:`progressbars`.
 * `paramiko <https://github.com/paramiko/paramiko>`__: For SFTP downloads. See
   :class:`pooch.SFTPDownloader`.
+* `xxhash <https://github.com/ifduyue/python-xxhash>`__: For the faster xxHash
+  algorithms. See :ref:`hashes-other`.

@@ -28,27 +28,30 @@ jobs:
   #############################################################################
   # Run tests and upload to codecov
   test:
-    name: ${{ matrix.os }} py${{ matrix.python }} ${{ matrix.dependencies }}
+    name: ${{ matrix.os }} python=${{ matrix.python }} dependencies=${{ matrix.dependencies }}
     runs-on: ${{ matrix.os }}-latest
     strategy:
       # Otherwise, the workflow would stop if a single job fails. We want to
       # run all of them to catch failures in different combinations.
       fail-fast: false
       matrix:
-        os: [ubuntu, macos, windows]
-        python: ["3.6", "3.10"]
-        # If "optional", will install non-required dependencies in the build
-        # environment. Otherwise, only required dependencies are installed.
-        dependencies: ["", optional]
+        os:
+          - ubuntu
+          - macos
+          - windows
+        python:
+          - "3.6"
+          - "3.10"
+        dependencies:
+          - latest
+          - optional
+          - oldest
     env:
-      REQUIREMENTS: requirements.txt
-      REQUIREMENTS_DEV: requirements-dev.txt
-      REQUIREMENTS_OPTIONAL: requirements-optional.txt
-      INSTALL_EXTRA:
-      DEPENDENCIES: ${{ matrix.dependencies }}
+      REQUIREMENTS: env/requirements-test.txt
       # Used to tag codecov submissions
       OS: ${{ matrix.os }}
       PYTHON: ${{ matrix.python }}
+      DEPENDENCIES: ${{ matrix.dependencies }}
 
     steps:
       # Cancel any previous run of the test job
@@ -81,6 +84,31 @@ jobs:
         with:
           python-version: ${{ matrix.python }}
 
+      - name: Collect requirements - run-time
+        run: python tools/export_requirements.py > requirements-full.txt
+
+      - name: Collect requirements - optional
+        if: matrix.dependencies == 'optional' || matrix.dependencies == 'oldest'
+        run: cat env/requirements-optional.txt >> requirements-full.txt
+
+      - name: Collect requirements - convert to oldest supported
+        if: matrix.dependencies == 'oldest'
+        run: python tools/oldest_requirements.py requirements-full.txt
+
+      - name: Collect requirements - other
+        run: |
+          echo "Capturing dependencies from:"
+          for requirement in $REQUIREMENTS
+          do
+            echo "  $requirement"
+            cat $requirement >> requirements-full.txt
+          done
+
+      - name: List requirements
+        run: |
+          echo "Collected dependencies:"
+          cat requirements-full.txt
+
       - name: Get the pip cache folder
         id: pip-cache
         run: |
@@ -90,45 +118,14 @@ jobs:
         uses: actions/cache@v2
         with:
           path: ${{ steps.pip-cache.outputs.dir }}
-          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements*.txt') }}
-          restore-keys: |
-            ${{ runner.os }}-pip-
+          key: ${{ runner.os }}-pip-${{ hashFiles('requirements-full.txt') }}
 
       - name: Install requirements
         run: |
-          requirements_file=requirements-full.txt
-          if [ ! -z "$REQUIREMENTS" ]; then
-              echo "Capturing dependencies from $REQUIREMENTS"
-              cat $REQUIREMENTS >> $requirements_file
-          fi
-          if [ ! -z "$REQUIREMENTS_DEV" ]; then
-              echo "Capturing dependencies from $REQUIREMENTS_DEV"
-              cat $REQUIREMENTS_DEV >> $requirements_file
-          fi
-          if [ "$DEPENDENCIES" == "optional" ]; then
-              echo "Capturing optional dependencies from $REQUIREMENTS_OPTIONAL"
-              cat $REQUIREMENTS_OPTIONAL >> $requirements_file
-          fi
-          if [ ! -z "$INSTALL_EXTRA" ]; then
-              echo "Capturing extra dependencies: $INSTALL_EXTRA"
-              echo "# Extra" >> $requirements_file
-              # Use xargs to print one argument per line
-              echo $INSTALL_EXTRA | xargs -n 1 >> $requirements_file
-          fi
-          if [ -f $requirements_file ]; then
-              echo "Collected dependencies:"
-              cat $requirements_file
-              echo ""
-              # Install wheel before anything else so pip can use wheels for
-              # other packages.
-              python -m pip install setuptools wheel
-              python -m pip install --requirement $requirements_file
-          else
-              echo "No requirements defined."
-          fi
-
-      - name: List installed packages
-        run: pip freeze
+          # Install the build requirements before anything else so pip can use
+          # wheels for other packages.
+          python -m pip install --requirement env/requirements-build.txt
+          python -m pip install --requirement requirements-full.txt
 
       - name: Build source and wheel distributions
         run: |
@@ -138,7 +135,10 @@ jobs:
           ls -lh dist/
 
       - name: Install the package
-        run: pip install --no-deps dist/*.whl
+        run: python -m pip install --no-deps dist/*.whl
+
+      - name: List installed packages
+        run: python -m pip freeze
 
       - name: Run the tests
         run: make test
