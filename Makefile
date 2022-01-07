@@ -2,8 +2,8 @@
 PROJECT=pooch
 TESTDIR=tmp-test-dir-with-unique-name
 PYTEST_ARGS=--cov-config=../.coveragerc --cov-report=term-missing --cov=$(PROJECT) --doctest-modules -v --pyargs
-LINT_FILES=setup.py $(PROJECT)
-CHECK_STYLE=setup.py doc/conf.py $(PROJECT) tools
+LINT_FILES=$(PROJECT)
+CHECK_STYLE=doc/conf.py $(PROJECT) tools
 
 help:
 	@echo "Commands:"
@@ -13,11 +13,15 @@ help:
 	@echo "  format    automatically format the code"
 	@echo "  check     run code style and quality checks"
 	@echo "  lint      run pylint for a deeper (and slower) quality check"
+	@echo "  build     build source and wheel distributions"
 	@echo "  clean     clean up build and generated files"
 	@echo ""
 
+build:
+	python -m build .
+
 install:
-	pip install --no-deps -e .
+	python -m pip install --no-deps -e .
 
 test:
 	# Run a tmp folder to make sure the tests are run on the installed version

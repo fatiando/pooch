@@ -1,5 +1,5 @@
 # Specify that we use setuptools and setuptools_scm (to generate the version
-# string). Actual configuration is in setup.py and setup.cfg.
+# string). Actual configuration is in setup.cfg.
 [build-system]
 requires = ["setuptools>=45", "wheel", "setuptools_scm[toml]>=6.2"]
 build-backend = "setuptools.build_meta"

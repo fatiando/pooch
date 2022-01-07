@@ -51,7 +51,7 @@ jobs:
           - optional
           - oldest
     env:
-      REQUIREMENTS: env/requirements-test.txt
+      REQUIREMENTS: env/requirements-build.txt env/requirements-test.txt
       # Used to tag codecov submissions
       OS: ${{ matrix.os }}
       PYTHON: ${{ matrix.python }}
@@ -126,14 +126,11 @@ jobs:
 
       - name: Install requirements
         run: |
-          # Install the build requirements before anything else so pip can use
-          # wheels for other packages.
-          python -m pip install --requirement env/requirements-build.txt
           python -m pip install --requirement requirements-full.txt
 
       - name: Build source and wheel distributions
         run: |
-          python setup.py sdist bdist_wheel
+          make build
           echo ""
           echo "Generated files:"
           ls -lh dist/
