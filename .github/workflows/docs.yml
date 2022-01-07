@@ -29,7 +29,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
-      REQUIREMENTS: env/requirements-docs.txt
+      REQUIREMENTS: env/requirements-build.txt env/requirements-docs.txt
       PYTHON: 3.9
 
     steps:
@@ -93,9 +93,6 @@ jobs:
 
       - name: Install requirements
         run: |
-          # Install the build requirements before anything else so pip can use
-          # wheels for other packages.
-          python -m pip install --requirement env/requirements-build.txt
           python -m pip install --requirement requirements-full.txt
 
       - name: List installed packages
@@ -103,7 +100,7 @@ jobs:
 
       - name: Build source and wheel distributions
         run: |
-          python setup.py sdist bdist_wheel
+          make build
           echo ""
           echo "Generated files:"
           ls -lh dist/
