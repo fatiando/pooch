@@ -17,6 +17,10 @@ on:
   release:
     types:
       - published
+  schedule:
+    # Run every Monday at 12:00 UTC
+    # * is a special character in YAML so you have to quote this string
+    - cron:  '00 12 * * 1'
 
 # Use bash by default in all jobs
 defaults:
