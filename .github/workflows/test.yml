@@ -91,7 +91,7 @@ jobs:
       - name: Collect requirements
         run: |
           echo "Install Dependente to capture dependencies:"
-          python -m pip install dependente==0.1.0
+          python -m pip install dependente==0.2.0
           echo ""
           dependente_args="--source install"
           if [[ "${{ matrix.dependencies }}" == "oldest" ]]; then

@@ -66,7 +66,7 @@ jobs:
       - name: Collect requirements
         run: |
           echo "Install Dependente to capture dependencies:"
-          python -m pip install dependente==0.1.0
+          python -m pip install dependente==0.2.0
           echo ""
           echo "Capturing run-time dependencies:"
           dependente --source install,extras > requirements-full.txt
