@@ -93,12 +93,12 @@ jobs:
           echo "Install Dependente to capture dependencies:"
           python -m pip install dependente==0.1.0
           echo ""
-          dependente_args = "--source install"
+          dependente_args="--source install"
           if [[ "${{ matrix.dependencies }}" == "oldest" ]]; then
-            dependente_args = "--oldest --source install,extras"
+            dependente_args="--oldest --source install,extras"
           fi
           if [[ "${{ matrix.dependencies }}" == "optional" ]]; then
-            dependente_args = "--source install,extras"
+            dependente_args="--source install,extras"
           fi
           echo "Capturing run-time dependencies:"
           dependente $dependente_args > requirements-full.txt
