@@ -88,28 +88,28 @@ jobs:
         with:
           python-version: ${{ matrix.python }}
 
-      - name: Collect requirements - run-time
-        run: python tools/export_requirements.py > requirements-full.txt
-
-      - name: Collect requirements - optional
-        if: matrix.dependencies == 'optional' || matrix.dependencies == 'oldest'
-        run: cat env/requirements-optional.txt >> requirements-full.txt
-
-      - name: Collect requirements - convert to oldest supported
-        if: matrix.dependencies == 'oldest'
-        run: python tools/oldest_requirements.py requirements-full.txt
-
-      - name: Collect requirements - other
+      - name: Collect requirements
         run: |
+          echo "Install Dependente to capture dependencies:"
+          python -m pip install dependente==0.1.0
+          echo ""
+          dependente_args = "--source install"
+          if [[ "${{ matrix.dependencies }}" == "oldest" ]]; then
+            dependente_args = "--oldest --source install,extras"
+          fi
+          if [[ "${{ matrix.dependencies }}" == "optional" ]]; then
+            dependente_args = "--source install,extras"
+          fi
+          echo "Capturing run-time dependencies:"
+          dependente $dependente_args > requirements-full.txt
+          echo ""
           echo "Capturing dependencies from:"
           for requirement in $REQUIREMENTS
           do
             echo "  $requirement"
             cat $requirement >> requirements-full.txt
           done
-
-      - name: List requirements
-        run: |
+          echo ""
           echo "Collected dependencies:"
           cat requirements-full.txt
 

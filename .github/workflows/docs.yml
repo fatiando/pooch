@@ -63,20 +63,21 @@ jobs:
         with:
           python-version: ${{ env.PYTHON }}
 
-      - name: Collect requirements - run-time
-        run: python tools/export_requirements.py > requirements-full.txt
-
-      - name: Collect requirements - other
+      - name: Collect requirements
         run: |
+          echo "Install Dependente to capture dependencies:"
+          python -m pip install dependente==0.1.0
+          echo ""
+          echo "Capturing run-time dependencies:"
+          dependente --source install,extras > requirements-full.txt
+          echo ""
           echo "Capturing dependencies from:"
           for requirement in $REQUIREMENTS
           do
             echo "  $requirement"
             cat $requirement >> requirements-full.txt
           done
-
-      - name: List requirements
-        run: |
+          echo ""
           echo "Collected dependencies:"
           cat requirements-full.txt
 
