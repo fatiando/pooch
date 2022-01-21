@@ -328,6 +328,26 @@ def test_pooch_update():
             assert log_file.getvalue() == ""
 
 
+def test_pooch_update_disallowed():
+    "Test that disallowing updates works."
+    with TemporaryDirectory() as local_store:
+        path = Path(local_store)
+        # Create a dummy version of tiny-data.txt that is different from the
+        # one in the remote storage
+        true_path = str(path / "tiny-data.txt")
+        with open(true_path, "w") as fin:
+            fin.write("different data")
+        # Setup a pooch in a temp dir
+        pup = Pooch(
+            path=path,
+            base_url=BASEURL,
+            registry=REGISTRY,
+            allow_updates=False,
+        )
+        with pytest.raises(ValueError):
+            pup.fetch("tiny-data.txt")
+
+
 @pytest.mark.network
 def test_pooch_corrupted(data_dir_mirror):
     "Raise an exception if the file hash doesn't match the registry"

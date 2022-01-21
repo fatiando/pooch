@@ -263,6 +263,7 @@ def create(
     registry=None,
     urls=None,
     retry_if_failed=0,
+    allow_updates=True,
 ):
     """
     Create a :class:`~pooch.Pooch` with sensible defaults to fetch data files.
@@ -327,6 +328,11 @@ def create(
         attempted once (``retry_if_failed=0``). Initially, will wait for 1s
         between retries and then increase the wait time by 1s with each retry
         until a maximum of 10s.
+    allow_updates : bool or str
+        Whether existing files in local storage that have a hash mismatch with
+        the registry are allowed to update from the remote URL. If a string,
+        this is the name of an environment variable that should be checked
+        for the value. Defaults to ``True``.
 
     Returns
     -------
@@ -414,6 +420,8 @@ def create(
     # to import at the same time (which would try to create the folder several
     # times at once).
     path = cache_location(path, env, version)
+    if isinstance(allow_updates, str):
+        allow_updates = os.environ.get(allow_updates, "true") != "false"
     pup = Pooch(
         path=path,
         base_url=base_url,
@@ -457,10 +465,22 @@ class Pooch:
         attempted once (``retry_if_failed=0``). Initially, will wait for 1s
         between retries and then increase the wait time by 1s with each retry
         until a maximum of 10s.
+    allow_updates : bool
+        Whether existing files in local storage that have a hash mismatch with
+        the registry are allowed to update from the remote URL. Defaults to
+        ``True``.
 
     """
 
-    def __init__(self, path, base_url, registry=None, urls=None, retry_if_failed=0):
+    def __init__(
+        self,
+        path,
+        base_url,
+        registry=None,
+        urls=None,
+        retry_if_failed=0,
+        allow_updates=True,
+    ):
         self.path = path
         self.base_url = base_url
         if registry is None:
@@ -470,6 +490,7 @@ class Pooch:
             urls = dict()
         self.urls = dict(urls)
         self.retry_if_failed = retry_if_failed
+        self.allow_updates = allow_updates
 
     @property
     def abspath(self):
@@ -541,6 +562,11 @@ class Pooch:
         full_path = self.abspath / fname
         known_hash = self.registry[fname]
         action, verb = download_action(full_path, known_hash)
+
+        if action == "update" and not self.allow_updates:
+            raise ValueError(
+                f"{fname} needs to update {full_path} but updates are disallowed."
+            )
 
         if action in ("download", "update"):
             get_logger().info(
