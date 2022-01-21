@@ -48,18 +48,8 @@
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Hashes: Calculating and bypassing" href="hashes.html" />
     <link rel="prev" title="Fetching files from a registry" href="multiple-files.html" />
-    <!-- Google Analytics tracking code -->
-    <script>
-      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new
-            Date();a=s.createElement(o),
-          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-                })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-
-      ga('create', 'UA-38125837-1', 'auto', {'storage': 'none'});
-      ga('set', 'anonymizeIp', true);
-      ga('send', 'pageview');
-    </script>
+    <!-- Plausible analytics for anonymous usage statistics -->
+    <script defer data-domain="fatiando.org" src="https://plausible.io/js/plausible.js"></script>
 
   </head>
   <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
@@ -287,7 +277,7 @@
  </li>
  <li class="toctree-l1">
   <a class="reference internal" href="compatibility.html">
-   Compatibility notes
+   Version compatibility
   </a>
  </li>
  <li class="toctree-l1">
@@ -313,21 +303,21 @@
 </p>
 <ul class="nav sidenav_l1">
  <li class="toctree-l1">
-  <a class="reference external" href="http://contact.fatiando.org">
+  <a class="reference external" href="https://www.fatiando.org/contact/">
    Join the community
    <i class="fas fa-external-link-alt">
    </i>
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference external" href="https://github.com/fatiando/pooch/blob/master/CODE_OF_CONDUCT.md">
+  <a class="reference external" href="https://github.com/fatiando/community/blob/main/CODE_OF_CONDUCT.md">
    Code of Conduct
    <i class="fas fa-external-link-alt">
    </i>
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference external" href="https://github.com/fatiando/pooch/blob/master/CONTRIBUTING.md">
+  <a class="reference external" href="https://github.com/fatiando/pooch/blob/main/CONTRIBUTING.md">
    How to contribute
    <i class="fas fa-external-link-alt">
    </i>
@@ -341,7 +331,7 @@
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference external" href="https://github.com/fatiando/pooch/blob/master/AUTHORS.md">
+  <a class="reference external" href="https://github.com/fatiando/pooch/blob/main/AUTHORS.md">
    Authors
    <i class="fas fa-external-link-alt">
    </i>
@@ -417,7 +407,7 @@
             href="https://github.com/fatiando/pooch/issues/new?title=Issue%20on%20page%20%2Fsample-data.html&body=Your%20issue%20content%20here."><button
                 type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
                 title="Open an issue"><i class="fas fa-lightbulb"></i>open issue</button></a>
-        <a class="edit-button" href="https://github.com/fatiando/pooch/edit/master/doc/sample-data.rst"><button
+        <a class="edit-button" href="https://github.com/fatiando/pooch/edit/main/doc/sample-data.rst"><button
                 type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
                 title="Edit this page"><i class="fas fa-pencil-alt"></i>suggest edit</button></a>
     </div>
@@ -464,6 +454,11 @@
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#disable-file-updates-for-testing">
+   Disable file updates for testing
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#where-to-go-from-here">
    Where to go from here
   </a>
@@ -499,7 +494,7 @@ interdimensional portals.</p></li>
 library by copying and pasting from the documentation.</p></li>
 <li><p>You want to have a <code class="docutils literal notranslate"><span class="pre">plumbus.datasets</span></code> module that defines functions like
 <code class="docutils literal notranslate"><span class="pre">fetch_c137()</span></code> that will return the data loaded as a
-<a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v1.3.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">pandas.DataFrame</span></code></a> for convenient access.</p></li>
+<a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v1.3.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">pandas.DataFrame</span></code></a> for convenient access.</p></li>
 <li><p>Your sample data are in a folder of your GitHub repository but you don’t want
 to include the data files with your source and wheel distributions because of
 their size.</p></li>
@@ -627,6 +622,36 @@ result in a failed download.</p>
 <p>Requires Pooch &gt;= 1.3.0.</p>
 </div>
 </div>
+<div class="section" id="disable-file-updates-for-testing">
+<h2>Disable file updates for testing<a class="headerlink" href="#disable-file-updates-for-testing" title="Permalink to this headline">¶</a></h2>
+<p>Sometimes we can forget to update the hash of a file in the registry when we
+change one of the existing data files.
+If this happens in a pull request or any branch that is not the default, Pooch
+will detect that there is a mismatch and will update the local file by
+re-downloading (usually from the default development branch).
+If your tests don’t check the file contents exactly (which is usually not
+practical), you can have tests that pass on development or continuous
+integration and then fail once a pull request is merged.</p>
+<p>In these cases, it is better to temporarily disallow file updates so that Pooch
+raises an error when the hash doesn’t match (indicating that you forgot to
+update it).
+To do so, use the <code class="docutils literal notranslate"><span class="pre">allow_updates</span></code> argument in <a class="reference internal" href="api/generated/pooch.create.html#pooch.create" title="pooch.create"><code class="xref py py-func docutils literal notranslate"><span class="pre">pooch.create</span></code></a>.
+Setting this to <code class="docutils literal notranslate"><span class="pre">False</span></code> will mean that a hash mismatch between local file and
+the registry always results in an error.</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>We <strong>do not recommend setting this permanenetly to</strong> <code class="docutils literal notranslate"><span class="pre">False</span></code>. Instead,
+set it to the name of an environment variable that activates this
+behaviour, like <code class="docutils literal notranslate"><span class="pre">pooch.create(...,</span>
+<span class="pre">allow_updates=&quot;MYPROJECT_ALLOW_UPDATES&quot;)</span></code>.
+Then you can set <code class="docutils literal notranslate"><span class="pre">MYPROJECT_ALLOW_UPDATES=false</span></code> on continuous
+integration or when running your tests locally.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Requires Pooch &gt;= 1.6.0.</p>
+</div>
+</div>
 <div class="section" id="where-to-go-from-here">
 <h2>Where to go from here<a class="headerlink" href="#where-to-go-from-here" title="Permalink to this headline">¶</a></h2>
 <p>Pooch has more features for handling different download protocols, handling
@@ -658,8 +683,8 @@ tutorials under “Training your Pooch” for more information.</p>
     <div class="container">
       <p>
         
-            &copy; Copyright 2021, The Pooch Developers.<br/>
-          Last updated on Oct 11, 2021.<br/>
+            &copy; Copyright 2022, The Pooch Developers.<br/>
+          Last updated on Jan 21, 2022.<br/>
       </p>
     </div>
   </footer>

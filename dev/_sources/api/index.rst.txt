@@ -3,57 +3,64 @@
 List of functions and classes (API)
 ===================================
 
-.. automodule:: pooch
+.. note::
 
-.. currentmodule:: pooch
+    **All functions and classes should be accessed from the** :mod:`pooch`
+    **top-level namespace.**
+
+    Modules inside of the :mod:`pooch` package are meant mostly for internal
+    organization. Please **avoid importing** directly from submodules since
+    functions/classes may be moved around.
+
+.. automodule:: pooch
 
 Core
 ----
 
 .. autosummary::
-   :toctree: generated/
+    :toctree: generated/
 
-    create
-    Pooch
-    retrieve
+    pooch.create
+    pooch.Pooch
+    pooch.retrieve
 
 Utilities
 ---------
 
 .. autosummary::
-   :toctree: generated/
+    :toctree: generated/
 
-    os_cache
-    make_registry
-    file_hash
-    check_version
-    get_logger
+    pooch.os_cache
+    pooch.make_registry
+    pooch.file_hash
+    pooch.check_version
+    pooch.get_logger
 
 Downloaders
 -----------
 
 .. autosummary::
-   :toctree: generated/
+    :toctree: generated/
 
-   HTTPDownloader
-   FTPDownloader
-   SFTPDownloader
-   DOIDownloader
+    pooch.HTTPDownloader
+    pooch.FTPDownloader
+    pooch.SFTPDownloader
+    pooch.DOIDownloader
 
 Processors
 ----------
 
 .. autosummary::
-   :toctree: generated/
+    :toctree: generated/
 
-   Unzip
-   Untar
-   Decompress
+    pooch.Unzip
+    pooch.Untar
+    pooch.Decompress
 
 Miscellaneous
 -------------
 
 .. autosummary::
-   :toctree: generated/
+    :toctree: generated/
 
-    test
+    pooch.test

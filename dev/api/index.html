@@ -48,18 +48,8 @@
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="pooch.create" href="generated/pooch.create.html" />
     <link rel="prev" title="Decompressing" href="../decompressing.html" />
-    <!-- Google Analytics tracking code -->
-    <script>
-      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new
-            Date();a=s.createElement(o),
-          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-                })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-
-      ga('create', 'UA-38125837-1', 'auto', {'storage': 'none'});
-      ga('set', 'anonymizeIp', true);
-      ga('send', 'pageview');
-    </script>
+    <!-- Plausible analytics for anonymous usage statistics -->
+    <script defer data-domain="fatiando.org" src="https://plausible.io/js/plausible.js"></script>
 
   </head>
   <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
@@ -287,7 +277,7 @@
  </li>
  <li class="toctree-l1">
   <a class="reference internal" href="../compatibility.html">
-   Compatibility notes
+   Version compatibility
   </a>
  </li>
  <li class="toctree-l1">
@@ -313,21 +303,21 @@
 </p>
 <ul class="nav sidenav_l1">
  <li class="toctree-l1">
-  <a class="reference external" href="http://contact.fatiando.org">
+  <a class="reference external" href="https://www.fatiando.org/contact/">
    Join the community
    <i class="fas fa-external-link-alt">
    </i>
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference external" href="https://github.com/fatiando/pooch/blob/master/CODE_OF_CONDUCT.md">
+  <a class="reference external" href="https://github.com/fatiando/community/blob/main/CODE_OF_CONDUCT.md">
    Code of Conduct
    <i class="fas fa-external-link-alt">
    </i>
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference external" href="https://github.com/fatiando/pooch/blob/master/CONTRIBUTING.md">
+  <a class="reference external" href="https://github.com/fatiando/pooch/blob/main/CONTRIBUTING.md">
    How to contribute
    <i class="fas fa-external-link-alt">
    </i>
@@ -341,7 +331,7 @@
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference external" href="https://github.com/fatiando/pooch/blob/master/AUTHORS.md">
+  <a class="reference external" href="https://github.com/fatiando/pooch/blob/main/AUTHORS.md">
    Authors
    <i class="fas fa-external-link-alt">
    </i>
@@ -417,7 +407,7 @@
             href="https://github.com/fatiando/pooch/issues/new?title=Issue%20on%20page%20%2Fapi/index.html&body=Your%20issue%20content%20here."><button
                 type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
                 title="Open an issue"><i class="fas fa-lightbulb"></i>open issue</button></a>
-        <a class="edit-button" href="https://github.com/fatiando/pooch/edit/master/doc/api/index.rst"><button
+        <a class="edit-button" href="https://github.com/fatiando/pooch/edit/main/doc/api/index.rst"><button
                 type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
                 title="Edit this page"><i class="fas fa-pencil-alt"></i>suggest edit</button></a>
     </div>
@@ -480,9 +470,17 @@
         
               <div>
                 
-  <div class="section" id="module-pooch">
-<span id="list-of-functions-and-classes-api"></span><span id="api"></span><h1>List of functions and classes (API)<a class="headerlink" href="#module-pooch" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="core">
+  <div class="section" id="list-of-functions-and-classes-api">
+<span id="api"></span><h1>List of functions and classes (API)<a class="headerlink" href="#list-of-functions-and-classes-api" title="Permalink to this headline">¶</a></h1>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><strong>All functions and classes should be accessed from the</strong> <a class="reference internal" href="#module-pooch" title="pooch"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pooch</span></code></a>
+<strong>top-level namespace.</strong></p>
+<p>Modules inside of the <a class="reference internal" href="#module-pooch" title="pooch"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pooch</span></code></a> package are meant mostly for internal
+organization. Please <strong>avoid importing</strong> directly from submodules since
+functions/classes may be moved around.</p>
+</div>
+<span class="target" id="module-pooch"></span><div class="section" id="core">
 <h2>Core<a class="headerlink" href="#core" title="Permalink to this headline">¶</a></h2>
 <table class="longtable table autosummary">
 <colgroup>
@@ -490,13 +488,13 @@
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="generated/pooch.create.html#pooch.create" title="pooch.create"><code class="xref py py-obj docutils literal notranslate"><span class="pre">create</span></code></a>(path, base_url[, version, …])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/pooch.create.html#pooch.create" title="pooch.create"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pooch.create</span></code></a>(path, base_url[, version, …])</p></td>
 <td><p>Create a <a class="reference internal" href="generated/pooch.Pooch.html#pooch.Pooch" title="pooch.Pooch"><code class="xref py py-class docutils literal notranslate"><span class="pre">Pooch</span></code></a> with sensible defaults to fetch data files.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="generated/pooch.Pooch.html#pooch.Pooch" title="pooch.Pooch"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Pooch</span></code></a>(path, base_url[, registry, urls, …])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/pooch.Pooch.html#pooch.Pooch" title="pooch.Pooch"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pooch.Pooch</span></code></a>(path, base_url[, registry, …])</p></td>
 <td><p>Manager for a local data storage that can fetch from a remote source.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="generated/pooch.retrieve.html#pooch.retrieve" title="pooch.retrieve"><code class="xref py py-obj docutils literal notranslate"><span class="pre">retrieve</span></code></a>(url, known_hash[, fname, path, …])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/pooch.retrieve.html#pooch.retrieve" title="pooch.retrieve"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pooch.retrieve</span></code></a>(url, known_hash[, fname, …])</p></td>
 <td><p>Download and cache a single file locally.</p></td>
 </tr>
 </tbody>
@@ -510,19 +508,19 @@
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="generated/pooch.os_cache.html#pooch.os_cache" title="pooch.os_cache"><code class="xref py py-obj docutils literal notranslate"><span class="pre">os_cache</span></code></a>(project)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/pooch.os_cache.html#pooch.os_cache" title="pooch.os_cache"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pooch.os_cache</span></code></a>(project)</p></td>
 <td><p>Default cache location based on the operating system.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="generated/pooch.make_registry.html#pooch.make_registry" title="pooch.make_registry"><code class="xref py py-obj docutils literal notranslate"><span class="pre">make_registry</span></code></a>(directory, output[, recursive])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/pooch.make_registry.html#pooch.make_registry" title="pooch.make_registry"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pooch.make_registry</span></code></a>(directory, output[, …])</p></td>
 <td><p>Make a registry of files and hashes for the given directory.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="generated/pooch.file_hash.html#pooch.file_hash" title="pooch.file_hash"><code class="xref py py-obj docutils literal notranslate"><span class="pre">file_hash</span></code></a>(fname[, alg])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/pooch.file_hash.html#pooch.file_hash" title="pooch.file_hash"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pooch.file_hash</span></code></a>(fname[, alg])</p></td>
 <td><p>Calculate the hash of a given file.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="generated/pooch.check_version.html#pooch.check_version" title="pooch.check_version"><code class="xref py py-obj docutils literal notranslate"><span class="pre">check_version</span></code></a>(version[, fallback])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/pooch.check_version.html#pooch.check_version" title="pooch.check_version"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pooch.check_version</span></code></a>(version[, fallback])</p></td>
 <td><p>Check if a version is PEP440 compliant and there are no unreleased changes.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="generated/pooch.get_logger.html#pooch.get_logger" title="pooch.get_logger"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_logger</span></code></a>()</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/pooch.get_logger.html#pooch.get_logger" title="pooch.get_logger"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pooch.get_logger</span></code></a>()</p></td>
 <td><p>Get the default event logger.</p></td>
 </tr>
 </tbody>
@@ -536,16 +534,16 @@
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="generated/pooch.HTTPDownloader.html#pooch.HTTPDownloader" title="pooch.HTTPDownloader"><code class="xref py py-obj docutils literal notranslate"><span class="pre">HTTPDownloader</span></code></a>([progressbar, chunk_size])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/pooch.HTTPDownloader.html#pooch.HTTPDownloader" title="pooch.HTTPDownloader"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pooch.HTTPDownloader</span></code></a>([progressbar, chunk_size])</p></td>
 <td><p>Download manager for fetching files over HTTP/HTTPS.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="generated/pooch.FTPDownloader.html#pooch.FTPDownloader" title="pooch.FTPDownloader"><code class="xref py py-obj docutils literal notranslate"><span class="pre">FTPDownloader</span></code></a>([port, username, password, …])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/pooch.FTPDownloader.html#pooch.FTPDownloader" title="pooch.FTPDownloader"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pooch.FTPDownloader</span></code></a>([port, username, …])</p></td>
 <td><p>Download manager for fetching files over FTP.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="generated/pooch.SFTPDownloader.html#pooch.SFTPDownloader" title="pooch.SFTPDownloader"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SFTPDownloader</span></code></a>([port, username, password, …])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/pooch.SFTPDownloader.html#pooch.SFTPDownloader" title="pooch.SFTPDownloader"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pooch.SFTPDownloader</span></code></a>([port, username, …])</p></td>
 <td><p>Download manager for fetching files over SFTP.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="generated/pooch.DOIDownloader.html#pooch.DOIDownloader" title="pooch.DOIDownloader"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DOIDownloader</span></code></a>([progressbar, chunk_size])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/pooch.DOIDownloader.html#pooch.DOIDownloader" title="pooch.DOIDownloader"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pooch.DOIDownloader</span></code></a>([progressbar, chunk_size])</p></td>
 <td><p>Download manager for fetching files from Digital Object Identifiers (DOIs).</p></td>
 </tr>
 </tbody>
@@ -559,13 +557,13 @@
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="generated/pooch.Unzip.html#pooch.Unzip" title="pooch.Unzip"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Unzip</span></code></a>([members, extract_dir])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/pooch.Unzip.html#pooch.Unzip" title="pooch.Unzip"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pooch.Unzip</span></code></a>([members, extract_dir])</p></td>
 <td><p>Processor that unpacks a zip archive and returns a list of all files.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="generated/pooch.Untar.html#pooch.Untar" title="pooch.Untar"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Untar</span></code></a>([members, extract_dir])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/pooch.Untar.html#pooch.Untar" title="pooch.Untar"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pooch.Untar</span></code></a>([members, extract_dir])</p></td>
 <td><p>Processor that unpacks a tar archive and returns a list of all files.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="generated/pooch.Decompress.html#pooch.Decompress" title="pooch.Decompress"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Decompress</span></code></a>([method, name])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/pooch.Decompress.html#pooch.Decompress" title="pooch.Decompress"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pooch.Decompress</span></code></a>([method, name])</p></td>
 <td><p>Processor that decompress a file and returns the decompressed version.</p></td>
 </tr>
 </tbody>
@@ -579,7 +577,7 @@
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="generated/pooch.test.html#pooch.test" title="pooch.test"><code class="xref py py-obj docutils literal notranslate"><span class="pre">test</span></code></a>([doctest, verbose, coverage])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/pooch.test.html#pooch.test" title="pooch.test"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pooch.test</span></code></a>([doctest, verbose, coverage])</p></td>
 <td><p>Run the test suite.</p></td>
 </tr>
 </tbody>
@@ -604,8 +602,8 @@
     <div class="container">
       <p>
         
-            &copy; Copyright 2021, The Pooch Developers.<br/>
-          Last updated on Oct 11, 2021.<br/>
+            &copy; Copyright 2022, The Pooch Developers.<br/>
+          Last updated on Jan 21, 2022.<br/>
       </p>
     </div>
   </footer>

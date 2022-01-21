@@ -17,7 +17,7 @@ using an environment variable:
         path=pooch.os_cache("plumbus"),
         base_url="https://github.com/rick/plumbus/raw/{version}/data/",
         version=version,
-        version_dev="master",
+        version_dev="main",
         registry={
             "c137.csv": "19uheidhlkjdwhoiwuhc0uhcwljchw9ochwochw89dcgw9dcgwc",
             "cronen.csv": "1upodh2ioduhw9celdjhlfvhksgdwikdgcowjhcwoduchowjg8w",

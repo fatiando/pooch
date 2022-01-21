@@ -7,7 +7,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     
-        <title>Compatibility notes | Pooch dev</title>
+        <title>Version compatibility | Pooch dev</title>
     
 
     
@@ -48,18 +48,8 @@
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Citing Pooch" href="citing.html" />
     <link rel="prev" title="pooch.test" href="api/generated/pooch.test.html" />
-    <!-- Google Analytics tracking code -->
-    <script>
-      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new
-            Date();a=s.createElement(o),
-          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-                })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-
-      ga('create', 'UA-38125837-1', 'auto', {'storage': 'none'});
-      ga('set', 'anonymizeIp', true);
-      ga('send', 'pageview');
-    </script>
+    <!-- Plausible analytics for anonymous usage statistics -->
+    <script defer data-domain="fatiando.org" src="https://plausible.io/js/plausible.js"></script>
 
   </head>
   <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
@@ -287,7 +277,7 @@
  </li>
  <li class="toctree-l1 current active">
   <a class="current reference internal" href="#">
-   Compatibility notes
+   Version compatibility
   </a>
  </li>
  <li class="toctree-l1">
@@ -313,21 +303,21 @@
 </p>
 <ul class="nav sidenav_l1">
  <li class="toctree-l1">
-  <a class="reference external" href="http://contact.fatiando.org">
+  <a class="reference external" href="https://www.fatiando.org/contact/">
    Join the community
    <i class="fas fa-external-link-alt">
    </i>
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference external" href="https://github.com/fatiando/pooch/blob/master/CODE_OF_CONDUCT.md">
+  <a class="reference external" href="https://github.com/fatiando/community/blob/main/CODE_OF_CONDUCT.md">
    Code of Conduct
    <i class="fas fa-external-link-alt">
    </i>
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference external" href="https://github.com/fatiando/pooch/blob/master/CONTRIBUTING.md">
+  <a class="reference external" href="https://github.com/fatiando/pooch/blob/main/CONTRIBUTING.md">
    How to contribute
    <i class="fas fa-external-link-alt">
    </i>
@@ -341,7 +331,7 @@
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference external" href="https://github.com/fatiando/pooch/blob/master/AUTHORS.md">
+  <a class="reference external" href="https://github.com/fatiando/pooch/blob/main/AUTHORS.md">
    Authors
    <i class="fas fa-external-link-alt">
    </i>
@@ -417,7 +407,7 @@
             href="https://github.com/fatiando/pooch/issues/new?title=Issue%20on%20page%20%2Fcompatibility.html&body=Your%20issue%20content%20here."><button
                 type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
                 title="Open an issue"><i class="fas fa-lightbulb"></i>open issue</button></a>
-        <a class="edit-button" href="https://github.com/fatiando/pooch/edit/master/doc/compatibility.rst"><button
+        <a class="edit-button" href="https://github.com/fatiando/pooch/edit/main/doc/compatibility.rst"><button
                 type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
                 title="Edit this page"><i class="fas fa-pencil-alt"></i>suggest edit</button></a>
     </div>
@@ -444,13 +434,18 @@
         <nav id="bd-toc-nav">
             <ul class="nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#pooch-version-compatibility">
-   Pooch version compatibility
+  <a class="reference internal nav-link" href="#pooch-backwards-incompatible-changes">
+   Pooch backwards incompatible changes
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#python-version-compatibility">
-   Python version compatibility
+  <a class="reference internal nav-link" href="#supported-dependency-versions">
+   Supported dependency versions
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#supported-python-versions">
+   Supported Python versions
   </a>
  </li>
 </ul>
@@ -465,10 +460,10 @@
         
               <div>
                 
-  <div class="section" id="compatibility-notes">
-<span id="compatibility"></span><h1>Compatibility notes<a class="headerlink" href="#compatibility-notes" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="pooch-version-compatibility">
-<h2>Pooch version compatibility<a class="headerlink" href="#pooch-version-compatibility" title="Permalink to this headline">¶</a></h2>
+  <div class="section" id="version-compatibility">
+<span id="compatibility"></span><h1>Version compatibility<a class="headerlink" href="#version-compatibility" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="pooch-backwards-incompatible-changes">
+<h2>Pooch backwards incompatible changes<a class="headerlink" href="#pooch-backwards-incompatible-changes" title="Permalink to this headline">¶</a></h2>
 <p>We try to retain backwards compatibility whenever possible. Major breaking
 changes to the Pooch API will be marked by a major release and deprecation
 warnings will be issued in previous releases to give developers ample time to
@@ -497,8 +492,24 @@ unaffected.</p></td>
 </tbody>
 </table>
 </div>
-<div class="section" id="python-version-compatibility">
-<span id="python-versions"></span><h2>Python version compatibility<a class="headerlink" href="#python-version-compatibility" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="supported-dependency-versions">
+<span id="dependency-versions"></span><h2>Supported dependency versions<a class="headerlink" href="#supported-dependency-versions" title="Permalink to this headline">¶</a></h2>
+<p>Pooch follows the recommendations in
+<a class="reference external" href="https://numpy.org/neps/nep-0029-deprecation_policy.html">NEP29</a> for setting
+the minimum required version of our dependencies.
+In short, we support <strong>all minor releases of our dependencies from the previous
+24 months</strong> before a Pooch release with a minimum of 2 minor releases.</p>
+<p>We follow this guidance conservatively and won’t require newer versions if the
+older ones are still working without causing problems.
+Whenever support for a version is dropped, we will include a note in the
+<a class="reference internal" href="changes.html#changes"><span class="std std-ref">Changelog</span></a>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This was introduced in Pooch v1.6.0.</p>
+</div>
+</div>
+<div class="section" id="supported-python-versions">
+<span id="python-versions"></span><h2>Supported Python versions<a class="headerlink" href="#supported-python-versions" title="Permalink to this headline">¶</a></h2>
 <p>If you require support for older Python versions, please pin Pooch to the
 following releases to ensure compatibility:</p>
 <table class="colwidths-given table">
@@ -538,8 +549,8 @@ following releases to ensure compatibility:</p>
     <div class="container">
       <p>
         
-            &copy; Copyright 2021, The Pooch Developers.<br/>
-          Last updated on Oct 11, 2021.<br/>
+            &copy; Copyright 2022, The Pooch Developers.<br/>
+          Last updated on Jan 21, 2022.<br/>
       </p>
     </div>
   </footer>

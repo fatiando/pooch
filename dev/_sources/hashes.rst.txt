@@ -98,6 +98,9 @@ the files once, unless they are deleted from the cache.
     If this script is run over a period of time, your cache directory will
     increase in size, as the files are stored in daily subdirectories.
 
+
+.. _hashes-other:
+
 Other supported hashes
 ----------------------
 
