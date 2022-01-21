@@ -165,6 +165,39 @@ result in a failed download.
     Requires Pooch >= 1.3.0.
 
 
+Disable file updates for testing
+--------------------------------
+
+Sometimes we can forget to update the hash of a file in the registry when we
+change one of the existing data files.
+If this happens in a pull request or any branch that is not the default, Pooch
+will detect that there is a mismatch and will update the local file by
+re-downloading (usually from the default development branch).
+If your tests don't check the file contents exactly (which is usually not
+practical), you can have tests that pass on development or continuous
+integration and then fail once a pull request is merged.
+
+In these cases, it is better to temporarily disallow file updates so that Pooch
+raises an error when the hash doesn't match (indicating that you forgot to
+update it).
+To do so, use the ``allow_updates`` argument in :func:`pooch.create`.
+Setting this to ``False`` will mean that a hash mismatch between local file and
+the registry always results in an error.
+
+.. tip::
+
+    We **do not recommend setting this permanenetly to** ``False``. Instead,
+    set it to the name of an environment variable that activates this
+    behaviour, like ``pooch.create(...,
+    allow_updates="MYPROJECT_ALLOW_UPDATES")``.
+    Then you can set ``MYPROJECT_ALLOW_UPDATES=false`` on continuous
+    integration or when running your tests locally.
+
+.. note::
+
+    Requires Pooch >= 1.6.0.
+
+
 Where to go from here
 ---------------------
 

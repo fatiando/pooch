@@ -330,9 +330,11 @@ def create(
         until a maximum of 10s.
     allow_updates : bool or str
         Whether existing files in local storage that have a hash mismatch with
-        the registry are allowed to update from the remote URL. If a string,
-        this is the name of an environment variable that should be checked
-        for the value. Defaults to ``True``.
+        the registry are allowed to update from the remote URL. If a string is
+        passed, we will assume it's the name of an environment variable that
+        will be checked for the true/false value. If ``False``, any mismatch
+        with hashes in the registry will result in an error. Defaults to
+        ``True``.
 
     Returns
     -------
@@ -421,13 +423,14 @@ def create(
     # times at once).
     path = cache_location(path, env, version)
     if isinstance(allow_updates, str):
-        allow_updates = os.environ.get(allow_updates, "true") != "false"
+        allow_updates = os.environ.get(allow_updates, "true").lower() != "false"
     pup = Pooch(
         path=path,
         base_url=base_url,
         registry=registry,
         urls=urls,
         retry_if_failed=retry_if_failed,
+        allow_updates=allow_updates,
     )
     return pup
 
@@ -467,8 +470,9 @@ class Pooch:
         until a maximum of 10s.
     allow_updates : bool
         Whether existing files in local storage that have a hash mismatch with
-        the registry are allowed to update from the remote URL. Defaults to
-        ``True``.
+        the registry are allowed to update from the remote URL. If ``False``,
+        any mismatch with hashes in the registry will result in an error.
+        Defaults to ``True``.
 
     """
 
