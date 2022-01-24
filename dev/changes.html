@@ -434,6 +434,11 @@
         <nav id="bd-toc-nav">
             <ul class="nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#version-1-6-0">
+   Version 1.6.0
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#version-1-5-2">
    Version 1.5.2
   </a>
@@ -562,6 +567,50 @@
                 
   <div class="section" id="changelog">
 <span id="changes"></span><h1>Changelog<a class="headerlink" href="#changelog" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="version-1-6-0">
+<h2>Version 1.6.0<a class="headerlink" href="#version-1-6-0" title="Permalink to this headline">¶</a></h2>
+<p><em>Released on: 2022/01/24</em></p>
+<p>doi:<a class="reference external" href="https://doi.org/10.5281/zenodo.5793074">10.5281/zenodo.5793074</a></p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p><strong>Pooch v1.6.0 is the last release that is compatible with Python 3.6.</strong></p>
+</div>
+<p>Important notes:</p>
+<ul class="simple">
+<li><p>Pooch now specifies version bounds for our required dependencies and a plan for dropping support for older versions. Please revise it if you depend on Pooch.</p></li>
+</ul>
+<p>Enhancements:</p>
+<ul class="simple">
+<li><p>Add option to disable updates on hash mismatch (<a class="reference external" href="https://github.com/fatiando/pooch/pull/291">#291</a> and <a class="reference external" href="https://github.com/fatiando/pooch/pull/292">#292</a>)</p></li>
+<li><p>Allow enabling progress bars with an argument in <code class="docutils literal notranslate"><span class="pre">Pooch.fetch</span></code> and <code class="docutils literal notranslate"><span class="pre">retrieve</span></code> (<a class="reference external" href="https://github.com/fatiando/pooch/pull/277">#277</a>)</p></li>
+</ul>
+<p>Documentation:</p>
+<ul class="simple">
+<li><p>Use real data URLs in the README example code (<a class="reference external" href="https://github.com/fatiando/pooch/pull/295">#295</a>)</p></li>
+<li><p>Tell users to import from the top-level namespace (<a class="reference external" href="https://github.com/fatiando/pooch/pull/288">#288</a>)</p></li>
+<li><p>Update the contact link to <a class="reference external" href="https://www.fatiando.org/contact/">fatiando.org/contact</a> (<a class="reference external" href="https://github.com/fatiando/pooch/pull/282">#282</a>)</p></li>
+<li><p>Refer the community guides to <a class="reference external" href="https://github.com/fatiando/community">fatiando/community</a> (<a class="reference external" href="https://github.com/fatiando/pooch/pull/281">#281</a>)</p></li>
+<li><p>Mention in docs that figshare collections aren’t supported (<a class="reference external" href="https://github.com/fatiando/pooch/pull/275">#275</a>)</p></li>
+</ul>
+<p>Maintenance:</p>
+<ul class="simple">
+<li><p>Replace Google Analytics for <a class="reference external" href="https://plausible.io">Plausible</a> to make our docs more privacy-friendly (<a class="reference external" href="https://github.com/fatiando/pooch/pull/293">#293</a>)</p></li>
+<li><p>Use <a class="reference external" href="https://github.com/fatiando/dependente">Dependente</a> to capture dependencies on CI (<a class="reference external" href="https://github.com/fatiando/pooch/pull/289">#289</a>)</p></li>
+<li><p>Use <code class="docutils literal notranslate"><span class="pre">build</span></code> instead of setup.py (<a class="reference external" href="https://github.com/fatiando/pooch/pull/287">#287</a>)</p></li>
+<li><p>Run the tests weekly on GitHub Actions (<a class="reference external" href="https://github.com/fatiando/pooch/pull/286">#286</a>)</p></li>
+<li><p>Set minimum required version of dependencies (<a class="reference external" href="https://github.com/fatiando/pooch/pull/280">#280</a>)</p></li>
+<li><p>Rename “master” to “main” throughout the project (<a class="reference external" href="https://github.com/fatiando/pooch/pull/278">#278</a>)</p></li>
+<li><p>Remove trailing slash from GitHub handle in <code class="docutils literal notranslate"><span class="pre">AUTHORS.md</span></code> (<a class="reference external" href="https://github.com/fatiando/pooch/pull/279">#279</a>)</p></li>
+</ul>
+<p>This release contains contributions from:</p>
+<ul class="simple">
+<li><p>Santiago Soler</p></li>
+<li><p>Genevieve Buckley</p></li>
+<li><p>Ryan Abernathey</p></li>
+<li><p>Ryan May</p></li>
+<li><p>Leonardo Uieda</p></li>
+</ul>
+</div>
 <div class="section" id="version-1-5-2">
 <h2>Version 1.5.2<a class="headerlink" href="#version-1-5-2" title="Permalink to this headline">¶</a></h2>
 <p><em>Released on: 2021/10/11</em></p>
@@ -1203,7 +1252,7 @@ data corruption.</p></li>
       <p>
         
             &copy; Copyright 2022, The Pooch Developers.<br/>
-          Last updated on Jan 21, 2022.<br/>
+          Last updated on Jan 24, 2022.<br/>
       </p>
     </div>
   </footer>

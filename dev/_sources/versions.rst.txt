@@ -7,6 +7,7 @@ Use the links below to access documentation for specific versions
 * `Latest release <https://www.fatiando.org/pooch/latest>`__
 * `Development <https://www.fatiando.org/pooch/dev>`__
   (reflects the current development branch on GitHub)
+* `v1.6.0 <https://www.fatiando.org/pooch/v1.6.0>`__
 * `v1.5.2 <https://www.fatiando.org/pooch/v1.5.2>`__
 * `v1.5.1 <https://www.fatiando.org/pooch/v1.5.1>`__
 * `v1.5.0 <https://www.fatiando.org/pooch/v1.5.0>`__
