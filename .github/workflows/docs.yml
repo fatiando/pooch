@@ -30,7 +30,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       REQUIREMENTS: env/requirements-build.txt env/requirements-docs.txt
-      PYTHON: 3.9
+      PYTHON: 3.10
 
     steps:
       # Cancel any previous run of the test job
