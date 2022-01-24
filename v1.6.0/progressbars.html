@@ -1,0 +1,610 @@
+
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+        <title>Printing progress bars | Pooch v1.6.0</title>
+    
+
+    
+  <link rel="stylesheet" href="_static/css/index.f658d18f9b420779cfdf24aa0a7e2d77.css">
+
+    
+  <link rel="stylesheet"
+    href="_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+  <link rel="stylesheet"
+    href="_static/vendor/open-sans_all/1.44.1/index.css">
+  <link rel="stylesheet"
+    href="_static/vendor/lato_latin-ext/1.44.1/index.css">
+
+    
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/sphinx-book-theme.c441f2ba0852f4cabcb80105e3a46ae6.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
+    <link rel="stylesheet" type="text/css" href="_static/panels-variables.87249bd3f7b54630a2508c1b61607c7f.css" />
+    <link rel="stylesheet" type="text/css" href="_static/style.css" />
+    
+  <link rel="preload" as="script" href="_static/js/index.d3f166471bb80abb5163.js">
+
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx-book-theme.7d483ff0a819d6edff12ce0b1ead3928.js"></script>
+    <link rel="shortcut icon" href="_static/favicon.png"/>
+    <link rel="author" title="About these documents" href="about.html" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Unpacking archives" href="unpacking.html" />
+    <link rel="prev" title="Authentication" href="authentication.html" />
+    <!-- Plausible analytics for anonymous usage statistics -->
+    <script defer data-domain="fatiando.org" src="https://plausible.io/js/plausible.js"></script>
+
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
+    
+        <div class="navbar-brand-box">
+<a class="navbar-brand text-wrap" href="index.html">
+  
+  <img src="_static/pooch-logo.png" class="logo" alt="logo">
+  
+  
+  <h1 class="site-logo" id="site-title">Pooch <span class="project-version">v1.6.0</span></h1>
+  
+</a>
+</div><form class="bd-search d-flex align-items-center" action="search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form>
+<nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+    <ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="index.html">
+   Pooch Documentation
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Getting Started
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="about.html">
+   Why use Pooch?
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="install.html">
+   Installing
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="retrieve.html">
+   Retrieving a single data file
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="multiple-files.html">
+   Fetching files from a registry
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="sample-data.html">
+   Manage a package’s sample data
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Training your Pooch
+ </span>
+</p>
+<ul class="current nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="hashes.html">
+   Hashes: Calculating and bypassing
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="user-defined-cache.html">
+   User-defined cache location
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="registry-files.html">
+   Registry files
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="multiple-urls.html">
+   Multiple download URLs
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="protocols.html">
+   Download protocols
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="logging.html">
+   Logging and verbosity
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="downloaders.html">
+   Downloaders: Customizing the download
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="processors.html">
+   Processors: Post-download actions
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="authentication.html">
+   Authentication
+  </a>
+ </li>
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   Printing progress bars
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="unpacking.html">
+   Unpacking archives
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="decompressing.html">
+   Decompressing
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Reference
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1 collapsible-parent">
+  <a class="reference internal" href="api/index.html">
+   List of functions and classes (API)
+  </a>
+  <ul class="collapse-ul">
+   <li class="toctree-l2">
+    <a class="reference internal" href="api/generated/pooch.create.html">
+     pooch.create
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="api/generated/pooch.Pooch.html">
+     pooch.Pooch
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="api/generated/pooch.retrieve.html">
+     pooch.retrieve
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="api/generated/pooch.os_cache.html">
+     pooch.os_cache
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="api/generated/pooch.make_registry.html">
+     pooch.make_registry
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="api/generated/pooch.file_hash.html">
+     pooch.file_hash
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="api/generated/pooch.check_version.html">
+     pooch.check_version
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="api/generated/pooch.get_logger.html">
+     pooch.get_logger
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="api/generated/pooch.HTTPDownloader.html">
+     pooch.HTTPDownloader
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="api/generated/pooch.FTPDownloader.html">
+     pooch.FTPDownloader
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="api/generated/pooch.SFTPDownloader.html">
+     pooch.SFTPDownloader
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="api/generated/pooch.DOIDownloader.html">
+     pooch.DOIDownloader
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="api/generated/pooch.Unzip.html">
+     pooch.Unzip
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="api/generated/pooch.Untar.html">
+     pooch.Untar
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="api/generated/pooch.Decompress.html">
+     pooch.Decompress
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="api/generated/pooch.test.html">
+     pooch.test
+    </a>
+   </li>
+  </ul>
+  <i class="fas fa-chevron-down">
+  </i>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="compatibility.html">
+   Version compatibility
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="citing.html">
+   Citing Pooch
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="changes.html">
+   Changelog
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="versions.html">
+   Documentation for other versions
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Community
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference external" href="https://www.fatiando.org/contact/">
+   Join the community
+   <i class="fas fa-external-link-alt">
+   </i>
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference external" href="https://github.com/fatiando/community/blob/main/CODE_OF_CONDUCT.md">
+   Code of Conduct
+   <i class="fas fa-external-link-alt">
+   </i>
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference external" href="https://github.com/fatiando/pooch/blob/main/CONTRIBUTING.md">
+   How to contribute
+   <i class="fas fa-external-link-alt">
+   </i>
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference external" href="https://github.com/fatiando/pooch">
+   Source code on GitHub
+   <i class="fas fa-external-link-alt">
+   </i>
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference external" href="https://github.com/fatiando/pooch/blob/main/AUTHORS.md">
+   Authors
+   <i class="fas fa-external-link-alt">
+   </i>
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference external" href="https://www.fatiando.org">
+   Fatiando a Terra
+   <i class="fas fa-external-link-alt">
+   </i>
+  </a>
+ </li>
+</ul>
+
+</nav> <!-- To handle the deprecated key -->
+
+<div class="navbar_extra_footer">
+  Theme by the <a href="https://ebp.jupyterbook.org">Executable Book Project</a>
+</div>
+
+</div>
+
+
+          
+
+
+          
+<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
+    
+    <div class="topbar container-xl fixed-top">
+    <div class="topbar-contents row">
+        <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show"></div>
+        <div class="col pl-md-4 topbar-main">
+            
+            <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
+                data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
+                aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
+                title="Toggle navigation" data-toggle="tooltip" data-placement="left">
+                <i class="fas fa-bars"></i>
+                <i class="fas fa-arrow-left"></i>
+                <i class="fas fa-arrow-up"></i>
+            </button>
+            
+            
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
+            class="fas fa-download"></i></button>
+
+    <div class="dropdown-buttons">
+        <!-- ipynb file if we had a myst markdown file -->
+        
+        <!-- Download raw file -->
+        <a class="dropdown-buttons" href="_sources/progressbars.rst.txt"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
+                data-placement="left">.rst</button></a>
+        <!-- Download PDF via print -->
+        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
+            onClick="window.print()" data-toggle="tooltip" data-placement="left">.pdf</button>
+    </div>
+</div>
+
+            <!-- Source interaction buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Connect with source repository"><i class="fab fa-github"></i></button>
+    <div class="dropdown-buttons sourcebuttons">
+        <a class="repository-button"
+            href="https://github.com/fatiando/pooch"><button type="button" class="btn btn-secondary topbarbtn"
+                data-toggle="tooltip" data-placement="left" title="Source repository"><i
+                    class="fab fa-github"></i>repository</button></a>
+        <a class="issues-button"
+            href="https://github.com/fatiando/pooch/issues/new?title=Issue%20on%20page%20%2Fprogressbars.html&body=Your%20issue%20content%20here."><button
+                type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
+                title="Open an issue"><i class="fas fa-lightbulb"></i>open issue</button></a>
+        <a class="edit-button" href="https://github.com/fatiando/pooch/edit/main/doc/progressbars.rst"><button
+                type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
+                title="Edit this page"><i class="fas fa-pencil-alt"></i>suggest edit</button></a>
+    </div>
+</div>
+
+
+            <!-- Full screen (wrap in <a> to have style consistency -->
+            <a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+                    data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
+                    title="Fullscreen mode"><i
+                        class="fas fa-expand"></i></button></a>
+
+            <!-- Launch buttons -->
+
+        </div>
+
+        <!-- Table of contents -->
+        <div class="d-none d-md-block col-md-2 bd-toc show">
+            
+        <div class="tocsection onthispage pt-5 pb-3">
+            <i class="fas fa-list"></i>
+            Contents
+        </div>
+        <nav id="bd-toc-nav">
+            <ul class="nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#using-tqdm-progress-bars">
+   Using
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     tqdm
+    </span>
+   </code>
+   progress bars
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#using-custom-progress-bars">
+   Using custom progress bars
+  </a>
+ </li>
+</ul>
+
+        </nav>
+        
+        </div>
+    </div>
+</div>
+    <div id="main-content" class="row">
+        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+        
+              <div>
+                
+  <div class="section" id="printing-progress-bars">
+<span id="progressbars"></span><h1>Printing progress bars<a class="headerlink" href="#printing-progress-bars" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="using-tqdm-progress-bars">
+<span id="tqdm-progressbar"></span><h2>Using <code class="docutils literal notranslate"><span class="pre">tqdm</span></code> progress bars<a class="headerlink" href="#using-tqdm-progress-bars" title="Permalink to this headline">¶</a></h2>
+<p>Pooch uses <a class="reference external" href="https://github.com/tqdm/tqdm">tqdm</a> to print a download progress
+bar. This is turned off by default but can be enabled using
+<code class="docutils literal notranslate"><span class="pre">progressbar=True</span></code> in <a class="reference internal" href="api/generated/pooch.retrieve.html#pooch.retrieve" title="pooch.retrieve"><code class="xref py py-func docutils literal notranslate"><span class="pre">pooch.retrieve</span></code></a>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">fname</span> <span class="o">=</span> <span class="n">retrieve</span><span class="p">(</span>
+    <span class="n">url</span><span class="o">=</span><span class="s2">&quot;https://some-data-server.org/a-data-file.nc&quot;</span><span class="p">,</span>
+    <span class="n">known_hash</span><span class="o">=</span><span class="s2">&quot;md5:70e2afd3fd7e336ae478b1e740a5f08e&quot;</span><span class="p">,</span>
+    <span class="n">progressbar</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>The resulting progress bar will be printed to the standard error stream
+(STDERR) and should look something like this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>100%|█████████████████████████████████████████| 336/336 [...]
+</pre></div>
+</div>
+<p>You can also do the same with <a class="reference internal" href="api/generated/pooch.Pooch.html#pooch.Pooch.fetch" title="pooch.Pooch.fetch"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pooch.Pooch.fetch</span></code></a>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">POOCH</span> <span class="o">=</span> <span class="n">pooch</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+    <span class="o">...</span>
+<span class="p">)</span>
+
+<span class="n">fname</span> <span class="o">=</span> <span class="n">POOCH</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span>
+    <span class="s2">&quot;large-data-file.h5&quot;</span><span class="p">,</span>
+    <span class="n">progressbar</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>Alternatively, you can pass <code class="docutils literal notranslate"><span class="pre">progressbar=True</span></code> directly into one of our
+<a class="reference internal" href="downloaders.html#downloaders"><span class="std std-ref">downloaders</span></a>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Using fetch</span>
+<span class="n">fname</span> <span class="o">=</span> <span class="n">POOCH</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span>
+    <span class="s2">&quot;large-data-file.h5&quot;</span><span class="p">,</span>
+    <span class="n">downloader</span><span class="o">=</span><span class="n">pooch</span><span class="o">.</span><span class="n">HTTPDownloader</span><span class="p">(</span><span class="n">progressbar</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
+<span class="p">)</span>
+
+<span class="c1"># Using retrieve</span>
+<span class="n">fname</span> <span class="o">=</span> <span class="n">retrieve</span><span class="p">(</span>
+    <span class="n">url</span><span class="o">=</span><span class="s2">&quot;https://some-data-server.org/a-data-file.nc&quot;</span><span class="p">,</span>
+    <span class="n">known_hash</span><span class="o">=</span><span class="s2">&quot;md5:70e2afd3fd7e336ae478b1e740a5f08e&quot;</span><span class="p">,</span>
+    <span class="n">downloader</span><span class="o">=</span><span class="n">pooch</span><span class="o">.</span><span class="n">HTTPDownloader</span><span class="p">(</span><span class="n">progressbar</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><code class="docutils literal notranslate"><span class="pre">tqdm</span></code> is not installed by default with Pooch. You will have to install
+it separately in order to use this feature.</p>
+</div>
+</div>
+<div class="section" id="using-custom-progress-bars">
+<span id="custom-progressbar"></span><h2>Using custom progress bars<a class="headerlink" href="#using-custom-progress-bars" title="Permalink to this headline">¶</a></h2>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>At the moment, this feature is only available for
+<a class="reference internal" href="api/generated/pooch.HTTPDownloader.html#pooch.HTTPDownloader" title="pooch.HTTPDownloader"><code class="xref py py-class docutils literal notranslate"><span class="pre">pooch.HTTPDownloader</span></code></a>.</p>
+</div>
+<p>Alternatively, you can pass an arbitrary object that behaves like a progress
+that implements the <code class="docutils literal notranslate"><span class="pre">update</span></code>, <code class="docutils literal notranslate"><span class="pre">reset</span></code>, and <code class="docutils literal notranslate"><span class="pre">close</span></code> methods:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">update</span></code> should accept a single integer positional argument representing
+the current completion (in bytes).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">reset</span></code> and <code class="docutils literal notranslate"><span class="pre">close</span></code> do not take any argument beside <code class="docutils literal notranslate"><span class="pre">self</span></code>.</p></li>
+</ul>
+<p>The object must also have a <code class="docutils literal notranslate"><span class="pre">total</span></code> attribute that can be set from outside
+the class.
+In other words, the custom progress bar needs to behave like a <code class="docutils literal notranslate"><span class="pre">tqdm</span></code>
+progress bar.</p>
+<p>Here’s a minimal working example of such a custom “progress display” class:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
+
+<span class="k">class</span> <span class="nc">MinimalProgressDisplay</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">total</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">total</span> <span class="o">=</span> <span class="n">total</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">count</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">total</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\r</span><span class="si">{</span><span class="bp">self</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">i</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">count</span> <span class="o">=</span> <span class="n">i</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">render</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="k">def</span> <span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>An instance of this class can now be passed to an <code class="docutils literal notranslate"><span class="pre">HTTPDownloader</span></code> as:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Assuming you have a pooch.Pooch instance setup</span>
+<span class="n">POOCH</span> <span class="o">=</span> <span class="n">pooch</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+    <span class="o">...</span>
+<span class="p">)</span>
+
+<span class="n">minimal_progress</span> <span class="o">=</span> <span class="n">MinimalProgressDisplay</span><span class="p">(</span><span class="n">total</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+
+<span class="n">fname</span> <span class="o">=</span> <span class="n">POOCH</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span>
+    <span class="s2">&quot;large-data-file.h5&quot;</span><span class="p">,</span>
+    <span class="n">downloader</span><span class="o">=</span><span class="n">pooch</span><span class="o">.</span><span class="n">HTTPDownloader</span><span class="p">(</span><span class="n">progressbar</span><span class="o">=</span><span class="n">minimal_progress</span><span class="p">),</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+              </div>
+              
+        
+        <div class='prev-next-bottom'>
+            
+    <a class='left-prev' id="prev-link" href="authentication.html" title="previous page">Authentication</a>
+    <a class='right-next' id="next-link" href="unpacking.html" title="next page">Unpacking archives</a>
+
+        </div>
+        
+        </div>
+    </div>
+    <footer class="footer mt-5 mt-md-0">
+    <div class="container">
+      <p>
+        
+            &copy; Copyright 2022, The Pooch Developers.<br/>
+          Last updated on Jan 24, 2022.<br/>
+      </p>
+    </div>
+  </footer>
+</main>
+
+
+      </div>
+    </div>
+
+    
+  <script src="_static/js/index.d3f166471bb80abb5163.js"></script>
+
+
+    
+  </body>
+</html>

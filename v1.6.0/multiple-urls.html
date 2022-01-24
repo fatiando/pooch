@@ -1,0 +1,559 @@
+
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+        <title>Multiple download URLs | Pooch v1.6.0</title>
+    
+
+    
+  <link rel="stylesheet" href="_static/css/index.f658d18f9b420779cfdf24aa0a7e2d77.css">
+
+    
+  <link rel="stylesheet"
+    href="_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+  <link rel="stylesheet"
+    href="_static/vendor/open-sans_all/1.44.1/index.css">
+  <link rel="stylesheet"
+    href="_static/vendor/lato_latin-ext/1.44.1/index.css">
+
+    
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/sphinx-book-theme.c441f2ba0852f4cabcb80105e3a46ae6.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
+    <link rel="stylesheet" type="text/css" href="_static/panels-variables.87249bd3f7b54630a2508c1b61607c7f.css" />
+    <link rel="stylesheet" type="text/css" href="_static/style.css" />
+    
+  <link rel="preload" as="script" href="_static/js/index.d3f166471bb80abb5163.js">
+
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx-book-theme.7d483ff0a819d6edff12ce0b1ead3928.js"></script>
+    <link rel="shortcut icon" href="_static/favicon.png"/>
+    <link rel="author" title="About these documents" href="about.html" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Download protocols" href="protocols.html" />
+    <link rel="prev" title="Registry files" href="registry-files.html" />
+    <!-- Plausible analytics for anonymous usage statistics -->
+    <script defer data-domain="fatiando.org" src="https://plausible.io/js/plausible.js"></script>
+
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
+    
+        <div class="navbar-brand-box">
+<a class="navbar-brand text-wrap" href="index.html">
+  
+  <img src="_static/pooch-logo.png" class="logo" alt="logo">
+  
+  
+  <h1 class="site-logo" id="site-title">Pooch <span class="project-version">v1.6.0</span></h1>
+  
+</a>
+</div><form class="bd-search d-flex align-items-center" action="search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form>
+<nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+    <ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="index.html">
+   Pooch Documentation
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Getting Started
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="about.html">
+   Why use Pooch?
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="install.html">
+   Installing
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="retrieve.html">
+   Retrieving a single data file
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="multiple-files.html">
+   Fetching files from a registry
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="sample-data.html">
+   Manage a package’s sample data
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Training your Pooch
+ </span>
+</p>
+<ul class="current nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="hashes.html">
+   Hashes: Calculating and bypassing
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="user-defined-cache.html">
+   User-defined cache location
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="registry-files.html">
+   Registry files
+  </a>
+ </li>
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   Multiple download URLs
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="protocols.html">
+   Download protocols
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="logging.html">
+   Logging and verbosity
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="downloaders.html">
+   Downloaders: Customizing the download
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="processors.html">
+   Processors: Post-download actions
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="authentication.html">
+   Authentication
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="progressbars.html">
+   Printing progress bars
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="unpacking.html">
+   Unpacking archives
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="decompressing.html">
+   Decompressing
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Reference
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1 collapsible-parent">
+  <a class="reference internal" href="api/index.html">
+   List of functions and classes (API)
+  </a>
+  <ul class="collapse-ul">
+   <li class="toctree-l2">
+    <a class="reference internal" href="api/generated/pooch.create.html">
+     pooch.create
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="api/generated/pooch.Pooch.html">
+     pooch.Pooch
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="api/generated/pooch.retrieve.html">
+     pooch.retrieve
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="api/generated/pooch.os_cache.html">
+     pooch.os_cache
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="api/generated/pooch.make_registry.html">
+     pooch.make_registry
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="api/generated/pooch.file_hash.html">
+     pooch.file_hash
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="api/generated/pooch.check_version.html">
+     pooch.check_version
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="api/generated/pooch.get_logger.html">
+     pooch.get_logger
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="api/generated/pooch.HTTPDownloader.html">
+     pooch.HTTPDownloader
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="api/generated/pooch.FTPDownloader.html">
+     pooch.FTPDownloader
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="api/generated/pooch.SFTPDownloader.html">
+     pooch.SFTPDownloader
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="api/generated/pooch.DOIDownloader.html">
+     pooch.DOIDownloader
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="api/generated/pooch.Unzip.html">
+     pooch.Unzip
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="api/generated/pooch.Untar.html">
+     pooch.Untar
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="api/generated/pooch.Decompress.html">
+     pooch.Decompress
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="api/generated/pooch.test.html">
+     pooch.test
+    </a>
+   </li>
+  </ul>
+  <i class="fas fa-chevron-down">
+  </i>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="compatibility.html">
+   Version compatibility
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="citing.html">
+   Citing Pooch
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="changes.html">
+   Changelog
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="versions.html">
+   Documentation for other versions
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Community
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference external" href="https://www.fatiando.org/contact/">
+   Join the community
+   <i class="fas fa-external-link-alt">
+   </i>
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference external" href="https://github.com/fatiando/community/blob/main/CODE_OF_CONDUCT.md">
+   Code of Conduct
+   <i class="fas fa-external-link-alt">
+   </i>
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference external" href="https://github.com/fatiando/pooch/blob/main/CONTRIBUTING.md">
+   How to contribute
+   <i class="fas fa-external-link-alt">
+   </i>
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference external" href="https://github.com/fatiando/pooch">
+   Source code on GitHub
+   <i class="fas fa-external-link-alt">
+   </i>
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference external" href="https://github.com/fatiando/pooch/blob/main/AUTHORS.md">
+   Authors
+   <i class="fas fa-external-link-alt">
+   </i>
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference external" href="https://www.fatiando.org">
+   Fatiando a Terra
+   <i class="fas fa-external-link-alt">
+   </i>
+  </a>
+ </li>
+</ul>
+
+</nav> <!-- To handle the deprecated key -->
+
+<div class="navbar_extra_footer">
+  Theme by the <a href="https://ebp.jupyterbook.org">Executable Book Project</a>
+</div>
+
+</div>
+
+
+          
+
+
+          
+<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
+    
+    <div class="topbar container-xl fixed-top">
+    <div class="topbar-contents row">
+        <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show"></div>
+        <div class="col pl-md-4 topbar-main">
+            
+            <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
+                data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
+                aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
+                title="Toggle navigation" data-toggle="tooltip" data-placement="left">
+                <i class="fas fa-bars"></i>
+                <i class="fas fa-arrow-left"></i>
+                <i class="fas fa-arrow-up"></i>
+            </button>
+            
+            
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
+            class="fas fa-download"></i></button>
+
+    <div class="dropdown-buttons">
+        <!-- ipynb file if we had a myst markdown file -->
+        
+        <!-- Download raw file -->
+        <a class="dropdown-buttons" href="_sources/multiple-urls.rst.txt"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
+                data-placement="left">.rst</button></a>
+        <!-- Download PDF via print -->
+        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
+            onClick="window.print()" data-toggle="tooltip" data-placement="left">.pdf</button>
+    </div>
+</div>
+
+            <!-- Source interaction buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Connect with source repository"><i class="fab fa-github"></i></button>
+    <div class="dropdown-buttons sourcebuttons">
+        <a class="repository-button"
+            href="https://github.com/fatiando/pooch"><button type="button" class="btn btn-secondary topbarbtn"
+                data-toggle="tooltip" data-placement="left" title="Source repository"><i
+                    class="fab fa-github"></i>repository</button></a>
+        <a class="issues-button"
+            href="https://github.com/fatiando/pooch/issues/new?title=Issue%20on%20page%20%2Fmultiple-urls.html&body=Your%20issue%20content%20here."><button
+                type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
+                title="Open an issue"><i class="fas fa-lightbulb"></i>open issue</button></a>
+        <a class="edit-button" href="https://github.com/fatiando/pooch/edit/main/doc/multiple-urls.rst"><button
+                type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
+                title="Edit this page"><i class="fas fa-pencil-alt"></i>suggest edit</button></a>
+    </div>
+</div>
+
+
+            <!-- Full screen (wrap in <a> to have style consistency -->
+            <a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+                    data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
+                    title="Fullscreen mode"><i
+                        class="fas fa-expand"></i></button></a>
+
+            <!-- Launch buttons -->
+
+        </div>
+
+        <!-- Table of contents -->
+        <div class="d-none d-md-block col-md-2 bd-toc show">
+            
+        <div class="tocsection onthispage pt-5 pb-3">
+            <i class="fas fa-list"></i>
+            Contents
+        </div>
+        <nav id="bd-toc-nav">
+            <ul class="nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#usage-with-registry-files">
+   Usage with registry files
+  </a>
+ </li>
+</ul>
+
+        </nav>
+        
+        </div>
+    </div>
+</div>
+    <div id="main-content" class="row">
+        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+        
+              <div>
+                
+  <div class="section" id="multiple-download-urls">
+<span id="multipleurls"></span><h1>Multiple download URLs<a class="headerlink" href="#multiple-download-urls" title="Permalink to this headline">¶</a></h1>
+<p>You can set different download URLs for individual files with the <code class="docutils literal notranslate"><span class="pre">urls</span></code>
+argument of <a class="reference internal" href="api/generated/pooch.create.html#pooch.create" title="pooch.create"><code class="xref py py-func docutils literal notranslate"><span class="pre">pooch.create</span></code></a>.
+It should be a dictionary with the file names as keys and the URLs for
+downloading the files as values.</p>
+<p>For example, say we have a <code class="docutils literal notranslate"><span class="pre">citadel.csv</span></code> file that we want to download from
+<code class="docutils literal notranslate"><span class="pre">https://www.some-data-hosting-site.com</span></code> instead:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># The basic setup is the same</span>
+<span class="n">POOCH</span> <span class="o">=</span> <span class="n">pooch</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+    <span class="n">path</span><span class="o">=</span><span class="n">pooch</span><span class="o">.</span><span class="n">os_cache</span><span class="p">(</span><span class="s2">&quot;plumbus&quot;</span><span class="p">),</span>
+    <span class="n">base_url</span><span class="o">=</span><span class="s2">&quot;https://github.com/rick/plumbus/raw/</span><span class="si">{version}</span><span class="s2">/data/&quot;</span><span class="p">,</span>
+    <span class="n">version</span><span class="o">=</span><span class="n">version</span><span class="p">,</span>
+    <span class="n">version_dev</span><span class="o">=</span><span class="s2">&quot;main&quot;</span><span class="p">,</span>
+    <span class="n">registry</span><span class="o">=</span><span class="p">{</span>
+        <span class="s2">&quot;c137.csv&quot;</span><span class="p">:</span> <span class="s2">&quot;19uheidhlkjdwhoiwuhc0uhcwljchw9ochwochw89dcgw9dcgwc&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;cronen.csv&quot;</span><span class="p">:</span> <span class="s2">&quot;1upodh2ioduhw9celdjhlfvhksgdwikdgcowjhcwoduchowjg8w&quot;</span><span class="p">,</span>
+        <span class="c1"># Still include the file in the registry</span>
+        <span class="s2">&quot;citadel.csv&quot;</span><span class="p">:</span> <span class="s2">&quot;893yprofwjndcwhx9c0ehp3ue9gcwoscjwdfgh923e0hwhcwiyc&quot;</span><span class="p">,</span>
+    <span class="p">},</span>
+    <span class="c1"># Now specify custom URLs for some of the files in the registry.</span>
+    <span class="n">urls</span><span class="o">=</span><span class="p">{</span>
+        <span class="s2">&quot;citadel.csv&quot;</span><span class="p">:</span> <span class="s2">&quot;https://www.some-data-hosting-site.com/files/citadel.csv&quot;</span><span class="p">,</span>
+    <span class="p">},</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>When <code class="docutils literal notranslate"><span class="pre">POOCH.fetch(&quot;citadel.csv&quot;)</span></code> is called, the download will by from the
+specified URL instead of the <code class="docutils literal notranslate"><span class="pre">base_url</span></code>.
+The file name will not be appended automatically to the URL in case you want to
+change the file name in local storage.</p>
+<div class="admonition attention">
+<p class="admonition-title">Attention</p>
+<p><strong>Versioning of custom URLs is not supported</strong> since they are assumed to be
+data files independent of your project.
+The file will <strong>still be placed in a versioned cache folder</strong>.</p>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>Custom URLs can be used along side <code class="docutils literal notranslate"><span class="pre">base_url</span></code> or you can omit
+<code class="docutils literal notranslate"><span class="pre">base_url</span></code> entirely by setting it to an empty string (<code class="docutils literal notranslate"><span class="pre">base_url=&quot;&quot;</span></code>).
+<strong>Doing so requires setting a custom URL for every file in the registry</strong>.</p>
+</div>
+<div class="section" id="usage-with-registry-files">
+<h2>Usage with registry files<a class="headerlink" href="#usage-with-registry-files" title="Permalink to this headline">¶</a></h2>
+<p>You can also include custom URLs in a <a class="reference internal" href="registry-files.html#registryfiles"><span class="std std-ref">registry file</span></a> by
+adding the URL for a file to end of the line (separated by a space):</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>c137.csv 19uheidhlkjdwhoiwuhc0uhcwljchw9ochwochw89dcgw9dcgwc
+cronen.csv 1upodh2ioduhw9celdjhlfvhksgdwikdgcowjhcwoduchowjg8w
+citadel.csv 893yprofwjndcwhx9c0ehp3ue9gcwoscjwdfgh923e0hwhcwiyc https://www.some-data-hosting-site.com/files/citadel.csv
+</pre></div>
+</div>
+<p><a class="reference internal" href="api/generated/pooch.Pooch.html#pooch.Pooch.load_registry" title="pooch.Pooch.load_registry"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pooch.Pooch.load_registry</span></code></a> will automatically populate the <code class="docutils literal notranslate"><span class="pre">urls</span></code>
+attribute.
+This way, custom URLs don’t need to be set in the code.
+In fact, the module code doesn’t change at all:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define the Pooch exactly the same (urls is None by default)</span>
+<span class="n">POOCH</span> <span class="o">=</span> <span class="n">pooch</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+    <span class="n">path</span><span class="o">=</span><span class="n">pooch</span><span class="o">.</span><span class="n">os_cache</span><span class="p">(</span><span class="s2">&quot;plumbus&quot;</span><span class="p">),</span>
+    <span class="n">base_url</span><span class="o">=</span><span class="s2">&quot;https://github.com/rick/plumbus/raw/</span><span class="si">{version}</span><span class="s2">/data/&quot;</span><span class="p">,</span>
+    <span class="n">version</span><span class="o">=</span><span class="n">version</span><span class="p">,</span>
+    <span class="n">version_dev</span><span class="o">=</span><span class="s2">&quot;main&quot;</span><span class="p">,</span>
+    <span class="n">registry</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="c1"># If custom URLs are present in the registry file, they will be set</span>
+<span class="c1"># automatically.</span>
+<span class="n">POOCH</span><span class="o">.</span><span class="n">load_registry</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="vm">__file__</span><span class="p">),</span> <span class="s2">&quot;registry.txt&quot;</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+              </div>
+              
+        
+        <div class='prev-next-bottom'>
+            
+    <a class='left-prev' id="prev-link" href="registry-files.html" title="previous page">Registry files</a>
+    <a class='right-next' id="next-link" href="protocols.html" title="next page">Download protocols</a>
+
+        </div>
+        
+        </div>
+    </div>
+    <footer class="footer mt-5 mt-md-0">
+    <div class="container">
+      <p>
+        
+            &copy; Copyright 2022, The Pooch Developers.<br/>
+          Last updated on Jan 24, 2022.<br/>
+      </p>
+    </div>
+  </footer>
+</main>
+
+
+      </div>
+    </div>
+
+    
+  <script src="_static/js/index.d3f166471bb80abb5163.js"></script>
+
+
+    
+  </body>
+</html>

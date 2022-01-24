@@ -1,0 +1,520 @@
+
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+        <title>pooch | Pooch v1.6.0</title>
+    
+
+    
+  <link rel="stylesheet" href="../_static/css/index.f658d18f9b420779cfdf24aa0a7e2d77.css">
+
+    
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+  <link rel="stylesheet"
+    href="../_static/vendor/open-sans_all/1.44.1/index.css">
+  <link rel="stylesheet"
+    href="../_static/vendor/lato_latin-ext/1.44.1/index.css">
+
+    
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/sphinx-book-theme.c441f2ba0852f4cabcb80105e3a46ae6.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/panels-variables.87249bd3f7b54630a2508c1b61607c7f.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/style.css" />
+    
+  <link rel="preload" as="script" href="../_static/js/index.d3f166471bb80abb5163.js">
+
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx-book-theme.7d483ff0a819d6edff12ce0b1ead3928.js"></script>
+    <link rel="shortcut icon" href="../_static/favicon.png"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <!-- Plausible analytics for anonymous usage statistics -->
+    <script defer data-domain="fatiando.org" src="https://plausible.io/js/plausible.js"></script>
+
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
+    
+        <div class="navbar-brand-box">
+<a class="navbar-brand text-wrap" href="../index.html">
+  
+  <img src="../_static/pooch-logo.png" class="logo" alt="logo">
+  
+  
+  <h1 class="site-logo" id="site-title">Pooch <span class="project-version">v1.6.0</span></h1>
+  
+</a>
+</div><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form>
+<nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+    <ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../index.html">
+   Pooch Documentation
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Getting Started
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../about.html">
+   Why use Pooch?
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../install.html">
+   Installing
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../retrieve.html">
+   Retrieving a single data file
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../multiple-files.html">
+   Fetching files from a registry
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../sample-data.html">
+   Manage a package’s sample data
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Training your Pooch
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../hashes.html">
+   Hashes: Calculating and bypassing
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../user-defined-cache.html">
+   User-defined cache location
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../registry-files.html">
+   Registry files
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../multiple-urls.html">
+   Multiple download URLs
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../protocols.html">
+   Download protocols
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../logging.html">
+   Logging and verbosity
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../downloaders.html">
+   Downloaders: Customizing the download
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../processors.html">
+   Processors: Post-download actions
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../authentication.html">
+   Authentication
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../progressbars.html">
+   Printing progress bars
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../unpacking.html">
+   Unpacking archives
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../decompressing.html">
+   Decompressing
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Reference
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1 collapsible-parent">
+  <a class="reference internal" href="../api/index.html">
+   List of functions and classes (API)
+  </a>
+  <ul class="collapse-ul">
+   <li class="toctree-l2">
+    <a class="reference internal" href="../api/generated/pooch.create.html">
+     pooch.create
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../api/generated/pooch.Pooch.html">
+     pooch.Pooch
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../api/generated/pooch.retrieve.html">
+     pooch.retrieve
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../api/generated/pooch.os_cache.html">
+     pooch.os_cache
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../api/generated/pooch.make_registry.html">
+     pooch.make_registry
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../api/generated/pooch.file_hash.html">
+     pooch.file_hash
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../api/generated/pooch.check_version.html">
+     pooch.check_version
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../api/generated/pooch.get_logger.html">
+     pooch.get_logger
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../api/generated/pooch.HTTPDownloader.html">
+     pooch.HTTPDownloader
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../api/generated/pooch.FTPDownloader.html">
+     pooch.FTPDownloader
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../api/generated/pooch.SFTPDownloader.html">
+     pooch.SFTPDownloader
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../api/generated/pooch.DOIDownloader.html">
+     pooch.DOIDownloader
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../api/generated/pooch.Unzip.html">
+     pooch.Unzip
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../api/generated/pooch.Untar.html">
+     pooch.Untar
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../api/generated/pooch.Decompress.html">
+     pooch.Decompress
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../api/generated/pooch.test.html">
+     pooch.test
+    </a>
+   </li>
+  </ul>
+  <i class="fas fa-chevron-down">
+  </i>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../compatibility.html">
+   Version compatibility
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../citing.html">
+   Citing Pooch
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../changes.html">
+   Changelog
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../versions.html">
+   Documentation for other versions
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Community
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference external" href="https://www.fatiando.org/contact/">
+   Join the community
+   <i class="fas fa-external-link-alt">
+   </i>
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference external" href="https://github.com/fatiando/community/blob/main/CODE_OF_CONDUCT.md">
+   Code of Conduct
+   <i class="fas fa-external-link-alt">
+   </i>
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference external" href="https://github.com/fatiando/pooch/blob/main/CONTRIBUTING.md">
+   How to contribute
+   <i class="fas fa-external-link-alt">
+   </i>
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference external" href="https://github.com/fatiando/pooch">
+   Source code on GitHub
+   <i class="fas fa-external-link-alt">
+   </i>
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference external" href="https://github.com/fatiando/pooch/blob/main/AUTHORS.md">
+   Authors
+   <i class="fas fa-external-link-alt">
+   </i>
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference external" href="https://www.fatiando.org">
+   Fatiando a Terra
+   <i class="fas fa-external-link-alt">
+   </i>
+  </a>
+ </li>
+</ul>
+
+</nav> <!-- To handle the deprecated key -->
+
+<div class="navbar_extra_footer">
+  Theme by the <a href="https://ebp.jupyterbook.org">Executable Book Project</a>
+</div>
+
+</div>
+
+
+          
+
+
+          
+<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
+    
+    <div class="topbar container-xl fixed-top">
+    <div class="topbar-contents row">
+        <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show"></div>
+        <div class="col pl-md-4 topbar-main">
+            
+            <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
+                data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
+                aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
+                title="Toggle navigation" data-toggle="tooltip" data-placement="left">
+                <i class="fas fa-bars"></i>
+                <i class="fas fa-arrow-left"></i>
+                <i class="fas fa-arrow-up"></i>
+            </button>
+            
+            
+            <!-- Source interaction buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Connect with source repository"><i class="fab fa-github"></i></button>
+    <div class="dropdown-buttons sourcebuttons">
+        <a class="repository-button"
+            href="https://github.com/fatiando/pooch"><button type="button" class="btn btn-secondary topbarbtn"
+                data-toggle="tooltip" data-placement="left" title="Source repository"><i
+                    class="fab fa-github"></i>repository</button></a>
+        <a class="issues-button"
+            href="https://github.com/fatiando/pooch/issues/new?title=Issue%20on%20page%20%2F_modules/pooch.html&body=Your%20issue%20content%20here."><button
+                type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
+                title="Open an issue"><i class="fas fa-lightbulb"></i>open issue</button></a>
+        
+    </div>
+</div>
+
+
+            <!-- Full screen (wrap in <a> to have style consistency -->
+            <a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+                    data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
+                    title="Fullscreen mode"><i
+                        class="fas fa-expand"></i></button></a>
+
+            <!-- Launch buttons -->
+
+        </div>
+
+        <!-- Table of contents -->
+        <div class="d-none d-md-block col-md-2 bd-toc show">
+            
+        </div>
+    </div>
+</div>
+    <div id="main-content" class="row">
+        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+        
+              <div>
+                
+  <h1>Source code for pooch</h1><div class="highlight"><pre>
+<span></span><span class="c1"># Copyright (c) 2018 The Pooch Developers.</span>
+<span class="c1"># Distributed under the terms of the BSD 3-Clause License.</span>
+<span class="c1"># SPDX-License-Identifier: BSD-3-Clause</span>
+<span class="c1">#</span>
+<span class="c1"># This code is part of the Fatiando a Terra project (https://www.fatiando.org)</span>
+<span class="c1">#</span>
+<span class="c1"># pylint: disable=missing-docstring,import-outside-toplevel,import-self</span>
+<span class="c1">#</span>
+<span class="c1"># Import functions/classes to make the API</span>
+<span class="kn">from</span> <span class="nn">.core</span> <span class="kn">import</span> <span class="n">Pooch</span><span class="p">,</span> <span class="n">create</span><span class="p">,</span> <span class="n">retrieve</span>
+<span class="kn">from</span> <span class="nn">.utils</span> <span class="kn">import</span> <span class="n">os_cache</span><span class="p">,</span> <span class="n">check_version</span><span class="p">,</span> <span class="n">get_logger</span>
+<span class="kn">from</span> <span class="nn">.hashes</span> <span class="kn">import</span> <span class="n">file_hash</span><span class="p">,</span> <span class="n">make_registry</span>
+<span class="kn">from</span> <span class="nn">.downloaders</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">HTTPDownloader</span><span class="p">,</span>
+    <span class="n">FTPDownloader</span><span class="p">,</span>
+    <span class="n">SFTPDownloader</span><span class="p">,</span>
+    <span class="n">DOIDownloader</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">.processors</span> <span class="kn">import</span> <span class="n">Unzip</span><span class="p">,</span> <span class="n">Untar</span><span class="p">,</span> <span class="n">Decompress</span>
+
+<span class="c1"># This file is generated automatically by setuptools_scm</span>
+<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">_version</span>
+
+
+<span class="c1"># Add a &quot;v&quot; to the version number</span>
+<span class="n">__version__</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;v</span><span class="si">{</span><span class="n">_version</span><span class="o">.</span><span class="n">version</span><span class="si">}</span><span class="s2">&quot;</span>
+
+
+<div class="viewcode-block" id="test"><a class="viewcode-back" href="../api/generated/pooch.test.html#pooch.test">[docs]</a><span class="k">def</span> <span class="nf">test</span><span class="p">(</span><span class="n">doctest</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">coverage</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Run the test suite.</span>
+
+<span class="sd">    Uses `py.test &lt;http://pytest.org/&gt;`__ to discover and run the tests.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+
+<span class="sd">    doctest : bool</span>
+<span class="sd">        If ``True``, will run the doctests as well (code examples that start</span>
+<span class="sd">        with a ``&gt;&gt;&gt;`` in the docs).</span>
+<span class="sd">    verbose : bool</span>
+<span class="sd">        If ``True``, will print extra information during the test run.</span>
+<span class="sd">    coverage : bool</span>
+<span class="sd">        If ``True``, will run test coverage analysis on the code as well.</span>
+<span class="sd">        Requires ``pytest-cov``.</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+
+<span class="sd">    AssertionError</span>
+<span class="sd">        If pytest returns a non-zero error code indicating that some tests have</span>
+<span class="sd">        failed.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">import</span> <span class="nn">pytest</span>
+
+    <span class="n">package</span> <span class="o">=</span> <span class="vm">__name__</span>
+    <span class="n">args</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+        <span class="n">args</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;-vv&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">coverage</span><span class="p">:</span>
+        <span class="n">args</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;--cov=</span><span class="si">{</span><span class="n">package</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">args</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;--cov-report=term-missing&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">doctest</span><span class="p">:</span>
+        <span class="n">args</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;--doctest-modules&quot;</span><span class="p">)</span>
+    <span class="n">args</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;--pyargs&quot;</span><span class="p">)</span>
+    <span class="n">args</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">package</span><span class="p">)</span>
+    <span class="n">status</span> <span class="o">=</span> <span class="n">pytest</span><span class="o">.</span><span class="n">main</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">status</span> <span class="o">==</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Some tests have failed.&quot;</span></div>
+</pre></div>
+
+              </div>
+              
+        
+        <div class='prev-next-bottom'>
+            
+
+        </div>
+        
+        </div>
+    </div>
+    <footer class="footer mt-5 mt-md-0">
+    <div class="container">
+      <p>
+        
+            &copy; Copyright 2022, The Pooch Developers.<br/>
+          Last updated on Jan 24, 2022.<br/>
+      </p>
+    </div>
+  </footer>
+</main>
+
+
+      </div>
+    </div>
+
+    
+  <script src="../_static/js/index.d3f166471bb80abb5163.js"></script>
+
+
+    
+  </body>
+</html>
