@@ -11,9 +11,6 @@ Part of the `Fatiando a Terra <https://www.fatiando.org>`__ project
 .. image:: https://img.shields.io/conda/vn/conda-forge/pooch.svg?style=flat-square
     :alt: Latest version on conda-forge
     :target: https://github.com/conda-forge/pooch-feedstock
-.. image:: https://img.shields.io/endpoint.svg?url=https%3A%2F%2Factions-badge.atrox.dev%2Ffatiando%2Fpooch%2Fbadge%3Fref%3Dmain&style=flat-square&logo=none
-    :alt: GitHub Actions workflow status
-    :target: https://github.com/fatiando/pooch/actions
 .. image:: https://img.shields.io/codecov/c/github/fatiando/pooch/main.svg?style=flat-square
     :alt: Test coverage status
     :target: https://codecov.io/gh/fatiando/pooch
@@ -63,17 +60,29 @@ For a **scientist downloading a data file** for analysis:
 
 .. code:: python
 
-    from pooch import retrieve
+    import pooch
+    import pandas as pd
 
 
-    # Download the file and save it locally. Running this again will not cause
-    # a download. Pooch will check the hash (checksum) of the downloaded file
-    # against the given value to make sure it's the right file (not corrupted
-    # or outdated).
-    fname = retrieve(
-        url="https://some-data-server.org/a-data-file.nc",
-        known_hash="md5:70e2afd3fd7e336ae478b1e740a5f08e",
+    # Download a file and save it locally, returning the path to it.
+    # Running this again will not cause a download. Pooch will check the hash
+    # (checksum) of the downloaded file against the given value to make sure
+    # it's the right file (not corrupted or outdated).
+    fname_bathymetry = pooch.retrieve(
+        url="https://github.com/fatiando-data/caribbean-bathymetry/releases/download/v1/caribbean-bathymetry.csv.xz",
+        known_hash="md5:a7332aa6e69c77d49d7fb54b764caa82",
     )
+
+    # Pooch can also download based on a DOI from certain providers.
+    fname_gravity = pooch.retrieve(
+        url="doi:10.5281/zenodo.5882430/southern-africa-gravity.csv.xz",
+        known_hash="md5:1dee324a14e647855366d6eb01a1ef35",
+    )
+
+    # Load the data with Pandas
+    data_bathymetry = pd.read_csv(fname_bathymetry)
+    data_gravity = pd.read_csv(fname_gravity)
+
 
 
 For **package developers** including sample data in their projects:
