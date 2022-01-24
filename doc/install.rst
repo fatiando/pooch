@@ -39,7 +39,7 @@ There are different ways to install Pooch:
 Which Python?
 -------------
 
-You'll need **Python >= 3.6**. See :ref:`python-versions` if you
+You'll need **Python >= 3.7**. See :ref:`python-versions` if you
 require support for older versions.
 
 .. _dependencies:
