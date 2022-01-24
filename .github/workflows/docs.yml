@@ -30,7 +30,6 @@ jobs:
     runs-on: ubuntu-latest
     env:
       REQUIREMENTS: env/requirements-build.txt env/requirements-docs.txt
-      PYTHON: 3.10
 
     steps:
       # Cancel any previous run of the test job
@@ -61,7 +60,7 @@ jobs:
       - name: Setup Python
         uses: actions/setup-python@v2
         with:
-          python-version: ${{ env.PYTHON }}
+          python-version: "3.10"
 
       - name: Collect requirements
         run: |
