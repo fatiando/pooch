@@ -208,11 +208,9 @@ def make_registry(directory, output, recursive=True):
         pattern = "*"
 
     files = sorted(
-        [
-            str(path.relative_to(directory))
-            for path in directory.glob(pattern)
-            if path.is_file()
-        ]
+        str(path.relative_to(directory))
+        for path in directory.glob(pattern)
+        if path.is_file()
     )
 
     hashes = [file_hash(str(directory / fname)) for fname in files]
