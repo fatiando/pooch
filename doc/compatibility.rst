@@ -66,4 +66,6 @@ following releases to ensure compatibility:
       - 0.6.0
     * - 3.5
       - 1.2.0
+    * - 3.6
+      - 1.6.0
 

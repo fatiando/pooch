@@ -3,6 +3,52 @@
 Changelog
 =========
 
+Version 1.6.0
+-------------
+
+*Released on: 2022/01/24*
+
+doi:`10.5281/zenodo.5793074 <https://doi.org/10.5281/zenodo.5793074>`__
+
+.. warning::
+
+    **Pooch v1.6.0 is the last release that is compatible with Python 3.6.**
+
+Important notes:
+
+* Pooch now specifies version bounds for our required dependencies and a plan for dropping support for older versions. Please revise it if you depend on Pooch.
+
+Enhancements:
+
+* Add option to disable updates on hash mismatch (`#291 <https://github.com/fatiando/pooch/pull/291>`__ and `#292 <https://github.com/fatiando/pooch/pull/292>`__)
+* Allow enabling progress bars with an argument in ``Pooch.fetch`` and ``retrieve`` (`#277 <https://github.com/fatiando/pooch/pull/277>`__)
+
+Documentation:
+
+* Use real data URLs in the README example code (`#295 <https://github.com/fatiando/pooch/pull/295>`__)
+* Tell users to import from the top-level namespace (`#288 <https://github.com/fatiando/pooch/pull/288>`__)
+* Update the contact link to `fatiando.org/contact <https://www.fatiando.org/contact/>`__ (`#282 <https://github.com/fatiando/pooch/pull/282>`__)
+* Refer the community guides to `fatiando/community <https://github.com/fatiando/community>`__ (`#281 <https://github.com/fatiando/pooch/pull/281>`__)
+* Mention in docs that figshare collections aren't supported (`#275 <https://github.com/fatiando/pooch/pull/275>`__)
+
+Maintenance:
+
+* Replace Google Analytics for `Plausible <https://plausible.io>`__ to make our docs more privacy-friendly (`#293 <https://github.com/fatiando/pooch/pull/293>`__)
+* Use `Dependente <https://github.com/fatiando/dependente>`__ to capture dependencies on CI (`#289 <https://github.com/fatiando/pooch/pull/289>`__)
+* Use ``build`` instead of setup.py (`#287 <https://github.com/fatiando/pooch/pull/287>`__)
+* Run the tests weekly on GitHub Actions (`#286 <https://github.com/fatiando/pooch/pull/286>`__)
+* Set minimum required version of dependencies (`#280 <https://github.com/fatiando/pooch/pull/280>`__)
+* Rename "master" to "main" throughout the project (`#278 <https://github.com/fatiando/pooch/pull/278>`__)
+* Remove trailing slash from GitHub handle in ``AUTHORS.md`` (`#279 <https://github.com/fatiando/pooch/pull/279>`__)
+
+This release contains contributions from:
+
+* Santiago Soler
+* Genevieve Buckley
+* Ryan Abernathey
+* Ryan May
+* Leonardo Uieda
+
 Version 1.5.2
 -------------
 
