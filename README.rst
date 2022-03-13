@@ -154,6 +154,7 @@ Projects using Pooch
 * `histolab <https://github.com/histolab/histolab>`__
 * `seaborn-image <https://github.com/SarthakJariwala/seaborn-image>`__
 * `Ensaio <https://github.com/fatiando/ensaio>`__
+* `Open AR-Sandbox <https://github.com/cgre-aachen/open_AR_Sandbox>`__
 
 *If you're using Pooch, send us a pull request adding your project to the list.*
 
