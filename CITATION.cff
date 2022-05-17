@@ -1,0 +1,63 @@
+cff-version: 1.2.0
+title: 'Pooch: A friend to fetch your data files'
+message: >-
+  If you use this software, please cite it using the
+  metadata from this file.
+type: software
+authors:
+  - given-names: Leonardo
+    family-names: Uieda
+    affiliation: University of Liverpool
+    orcid: 'https://orcid.org/0000-0001-6123-9515'
+  - given-names: Santiago
+    family-names: Rubén Soler
+    affiliation: Universidad Nacional de San Juan
+    orcid: 'https://orcid.org/0000-0001-9202-5317'
+  - given-names: Rémi
+    family-names: Rampin
+    affiliation: New York University
+    orcid: 'https://orcid.org/0000-0002-0524-2282'
+  - given-names: Hugo
+    name-particle: van
+    family-names: Kemenade
+    orcid: 'https://orcid.org/0000-0001-5715-8632'
+  - given-names: Matthew
+    family-names: Turk
+    affiliation: School of Information Sciences
+    orcid: 'https://orcid.org/0000-0002-5294-0198'
+  - given-names: Daniel
+    family-names: Shapero
+    affiliation: University of Washington
+    orcid: 'https://orcid.org/0000-0002-3651-0649'
+  - given-names: Anderson
+    family-names: Banihirwe
+    affiliation: National Center for Atmospheric Research
+    orcid: 'https://orcid.org/0000-0001-6583-571X'
+  - given-names: John
+    family-names: Leeman
+    affiliation: Leeman Geophysical
+    orcid: 'https://orcid.org/0000-0002-3624-1821'
+identifiers:
+  - type: doi
+    value: 10.21105/joss.01943
+    description: The Journal of Open Source Software
+date-released: 2020-01-17
+repository-code: 'https://github.com/fatiando/pooch'
+url: 'https://www.fatiando.org/pooch/'
+repository-artifact: 'https://pypi.org/project/pooch/'
+abstract: >-
+  Does your Python package include sample datasets?
+  Are you shipping them with the code? Are they
+  getting too big?
+
+  Pooch is here to help! It will manage a data
+  registry by downloading your data files from a
+  server only when needed and storing them locally in
+  a data cache (a folder on your computer).
+keywords:
+  - http
+  - python
+  - data
+  - ftp
+  - download-manager
+license: BSD-3-Clause
