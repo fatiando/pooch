@@ -145,6 +145,7 @@ def fetch_gravity_data():
 * [seaborn-image](https://github.com/SarthakJariwala/seaborn-image)
 * [Ensaio](https://github.com/fatiando/ensaio)
 * [Open AR-Sandbox](https://github.com/cgre-aachen/open_AR_Sandbox)
+* [climlab](https://github.com/climlab/climlab)
 
 *If you're using Pooch, send us a pull request adding your project to the list.*
 
