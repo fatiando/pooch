@@ -104,7 +104,9 @@ class ExtractorProcessor:  # pylint: disable=too-few-public-methods
         fnames = []
         for path, _, files in os.walk(self.extract_dir):
             for filename in files:
-                relpath = os.path.join(os.path.relpath(path, self.extract_dir), filename)
+                relpath = os.path.join(
+                    os.path.relpath(path, self.extract_dir), filename
+                )
                 relpath = os.path.relpath(relpath, ".")
                 if self.members is None or any(
                     relpath.startswith(m) for m in self.members
