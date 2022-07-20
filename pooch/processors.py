@@ -44,7 +44,9 @@ class ExtractorProcessor:  # pylint: disable=too-few-public-methods
         if members is None:
             self.members = None
         else:
-            self.members = [os.path.relpath(m, ".") for m in members]
+            # We normalize the given member paths to use only non-redundant
+            # OS-native path separators. Required for later comparison against paths.
+            self.members = [os.path.normpath(m) for m in members]
         self.extract_dir = extract_dir
 
     def __call__(self, fname, action, pooch):
@@ -104,10 +106,9 @@ class ExtractorProcessor:  # pylint: disable=too-few-public-methods
         fnames = []
         for path, _, files in os.walk(self.extract_dir):
             for filename in files:
-                relpath = os.path.join(
-                    os.path.relpath(path, self.extract_dir), filename
+                relpath = os.path.normpath(
+                    os.path.join(os.path.relpath(path, self.extract_dir), filename)
                 )
-                relpath = os.path.relpath(relpath, ".")
                 if self.members is None or any(
                     relpath.startswith(m) for m in self.members
                 ):
