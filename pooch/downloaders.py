@@ -555,26 +555,36 @@ class DOIDownloader:  # pylint: disable=too-few-public-methods
             The instance of :class:`~pooch.Pooch` that is calling this method.
 
         """
-        converters = {
-            "figshare.com": figshare_download_url,
-            "zenodo.org": zenodo_download_url,
-        }
+
+        converters = [
+            figshare_download_url,
+            zenodo_download_url,
+        ]
+
+        # Extract the DOI and the repository information
         parsed_url = parse_url(url)
         doi = parsed_url["netloc"]
         archive_url = doi_to_url(doi)
-        repository = parse_url(archive_url)["netloc"]
-        if repository not in converters:
+        file_name = parsed_url["path"].split("/")[-1]
+
+        # Try the converters one by one until one of them returned a URL
+        download_url = None
+        for converter in converters:
+            if download_url is None:
+                download_url = converter(
+                    archive_url=archive_url,
+                    file_name=file_name,
+                    doi=doi,
+                )
+
+        if download_url is None:
+            repository = parse_url(archive_url)["netloc"]
             raise ValueError(
-                f"Invalid data repository '{repository}'. Must be one of "
-                f"{list(converters.keys())}. "
+                f"Invalid data repository '{repository}'. "
                 "To request or contribute support for this repository, "
                 "please open an issue at https://github.com/fatiando/pooch/issues"
             )
-        download_url = converters[repository](
-            archive_url=archive_url,
-            file_name=parsed_url["path"].split("/")[-1],
-            doi=doi,
-        )
+
         downloader = HTTPDownloader(
             progressbar=self.progressbar, chunk_size=self.chunk_size, **self.kwargs
         )
@@ -625,6 +635,11 @@ def zenodo_download_url(archive_url, file_name, doi):
         The HTTP URL that can be used to download the file.
 
     """
+    # Check whether this is a Zenodo URL
+    parsed_archive_url = parse_url(archive_url)
+    if parsed_archive_url["netloc"] != "zenodo.org":
+        return None
+
     article_id = archive_url.split("/")[-1]
     # With the ID, we can get a list of files and their download links
     article = requests.get(f"https://zenodo.org/api/records/{article_id}").json()
@@ -656,6 +671,11 @@ def figshare_download_url(archive_url, file_name, doi):
         The HTTP URL that can be used to download the file.
 
     """
+    # Check whether this is a Figshare URL
+    parsed_archive_url = parse_url(archive_url)
+    if parsed_archive_url["netloc"] != "figshare.com":
+        return None
+
     # Use the figshare API to find the article ID from the DOI
     article = requests.get(f"https://api.figshare.com/v2/articles?doi={doi}").json()[0]
     article_id = article["id"]
