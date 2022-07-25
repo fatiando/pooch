@@ -98,6 +98,19 @@ def pooch_test_zenodo_url():
     return url
 
 
+def pooch_test_dataverse_url():
+    """
+    Get the base URL for the test data stored on a DataVerse instance.
+
+    Returns
+    -------
+    url
+        The URL for pooch's test data.
+    """
+    url = "doi:10.11588/data/TKCFEF/"
+    return url
+
+
 def pooch_test_registry():
     """
     Get a registry for the test data used in Pooch itself.

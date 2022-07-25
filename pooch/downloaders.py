@@ -477,6 +477,7 @@ class DOIDownloader:  # pylint: disable=too-few-public-methods
 
     * `figshare <https://www.figshare.com>`__
     * `Zenodo <https://www.zenodo.org>`__
+    * `DataVerse <https://dataverse.org/>`__ instances
 
     .. attention::
 
@@ -559,6 +560,7 @@ class DOIDownloader:  # pylint: disable=too-few-public-methods
         converters = [
             figshare_download_url,
             zenodo_download_url,
+            dataverse_download_url,
         ]
 
         # Extract the DOI and the repository information
@@ -689,3 +691,47 @@ def figshare_download_url(archive_url, file_name, doi):
         )
     download_url = files[file_name]["download_url"]
     return download_url
+
+
+def dataverse_download_url(archive_url, file_name, doi):
+    """
+    Use the DataVerse API to get the download URL given the archive URL.
+
+    Parameters
+    ----------
+    archive_url : str
+        URL of the dataset in the repository.
+    file_name : str
+        The name of the file in the archive that will be downloaded.
+    doi : str
+        The DOI of the archive.
+
+    Returns
+    -------
+    download_url : str
+        The HTTP URL that can be used to download the file.
+
+    """
+
+    # Access the DOI as if this was a DataVerse instance
+    parsed = parse_url(archive_url)
+    response = requests.get(
+        f"{parsed['protocol']}://{parsed['netloc']}/api/datasets/"
+        f":persistentId?persistentId=doi:{doi}"
+    )
+
+    # If we failed, this is probably not a DataVerse instance
+    if 400 <= response.status_code < 600:
+        return None
+
+    # Iterate over the given files until we find one of the requested name
+    for filedata in response.json()["data"]["latestVersion"]["files"]:
+        if file_name == filedata["dataFile"]["filename"]:
+            return (
+                f"{parsed['protocol']}://{parsed['netloc']}/api/access/datafile/"
+                f":persistentId?persistentId={filedata['dataFile']['persistentId']}"
+            )
+
+    raise ValueError(
+        f"File '{file_name}' not found in data archive {archive_url} (doi:{doi})."
+    )
