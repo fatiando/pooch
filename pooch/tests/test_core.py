@@ -457,6 +457,14 @@ def test_pooch_load_registry_invalid_line():
         pup.load_registry(os.path.join(DATA_DIR, "registry-invalid.txt"))
 
 
+def test_pooch_load_registry_with_spaces():
+    "Should check that spaces in filenames are allowed in registry files"
+    pup = Pooch(path="", base_url="")
+    pup.load_registry(os.path.join(DATA_DIR, "registry-spaces.txt"))
+    assert "file with spaces.txt" in pup.registry
+    assert "other with spaces.txt" in pup.registry
+
+
 @pytest.mark.network
 def test_check_availability():
     "Should correctly check availability of existing and non existing files"

@@ -10,6 +10,7 @@ order by last name) and are considered "The Pooch Developers":
 * [Mark Harfouche](https://github.com/hmaarrfk) - Ramona Optics Inc. - [0000-0002-4657-4603](https://orcid.org/0000-0002-4657-4603)
 * [Danilo Horta](https://github.com/horta) - EMBL-EBI, UK
 * [Hugo van Kemenade](https://github.com/hugovk) - Independent (Non-affiliated) (ORCID: [0000-0001-5715-8632](https://www.orcid.org/0000-0001-5715-8632))
+* [Dominic Kempf](https://github.com/dokempf) - Scientific Software Center, Heidelberg University, Germany (ORCID: [0000-0002-6140-2332](https://www.orcid.org/0000-0002-6140-2332))
 * [Kacper Kowalik](https://github.com/Xarthisius) - National Center for Supercomputing Applications, University of Illinois at Urbana-Champaign, USA (ORCID: [0000-0003-1709-3744](https://www.orcid.org/0000-0003-1709-3744))
 * [John Leeman](https://github.com/jrleeman)
 * [Daniel McCloy](https://github.com/drammock) - University of Washington, USA (ORCID: [0000-0002-7572-3241](https://orcid.org/0000-0002-7572-3241))

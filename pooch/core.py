@@ -11,6 +11,7 @@ import os
 import time
 import contextlib
 from pathlib import Path
+import shlex
 import shutil
 import ftplib
 
@@ -656,7 +657,7 @@ class Pooch:
                 if line.startswith("#"):
                     continue
 
-                elements = line.split()
+                elements = shlex.split(line)
                 if not len(elements) in [0, 2, 3]:
                     raise OSError(
                         f"Invalid entry in Pooch registry file '{fname}': "
