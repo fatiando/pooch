@@ -79,17 +79,36 @@ class ExtractorProcessor:  # pylint: disable=too-few-public-methods
         else:
             archive_dir = fname.rsplit(os.path.sep, maxsplit=1)[0]
             self.extract_dir = os.path.join(archive_dir, self.extract_dir)
-        if action in ("update", "download") or not os.path.exists(self.extract_dir):
+        if (
+            (action in ("update", "download"))
+            or (not os.path.exists(self.extract_dir))
+            or (
+                (self.members is not None)
+                and (
+                    not all(
+                        os.path.exists(os.path.join(self.extract_dir, m))
+                        for m in self.members
+                    )
+                )
+            )
+        ):
             # Make sure that the folder with the extracted files exists
             os.makedirs(self.extract_dir, exist_ok=True)
             self._extract_file(fname, self.extract_dir)
+
         # Get a list of all file names (including subdirectories) in our folder
-        # of unzipped files.
-        fnames = [
-            os.path.join(path, fname)
-            for path, _, files in os.walk(self.extract_dir)
-            for fname in files
-        ]
+        # of unzipped files, filtered by the given members list
+        fnames = []
+        for path, _, files in os.walk(self.extract_dir):
+            for filename in files:
+                relpath = os.path.normpath(
+                    os.path.join(os.path.relpath(path, self.extract_dir), filename)
+                )
+                if self.members is None or any(
+                    relpath.startswith(os.path.normpath(m)) for m in self.members
+                ):
+                    fnames.append(os.path.join(path, filename))
+
         return fnames
 
     def _extract_file(self, fname, extract_dir):
@@ -153,7 +172,9 @@ class Unzip(ExtractorProcessor):  # pylint: disable=too-few-public-methods
                     # Based on:
                     # https://stackoverflow.com/questions/8008829/extract-only-a-single-directory-from-tar
                     subdir_members = [
-                        name for name in zip_file.namelist() if name.startswith(member)
+                        name
+                        for name in zip_file.namelist()
+                        if os.path.normpath(name).startswith(os.path.normpath(member))
                     ]
                     # Extract the data file from within the archive
                     zip_file.extractall(members=subdir_members, path=extract_dir)
@@ -216,7 +237,9 @@ class Untar(ExtractorProcessor):  # pylint: disable=too-few-public-methods
                     subdir_members = [
                         info
                         for info in tar_file.getmembers()
-                        if info.name.startswith(member)
+                        if os.path.normpath(info.name).startswith(
+                            os.path.normpath(member)
+                        )
                     ]
                     # Extract the data file from within the archive
                     tar_file.extractall(members=subdir_members, path=extract_dir)
