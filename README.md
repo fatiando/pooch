@@ -138,6 +138,7 @@ def fetch_gravity_data():
 
 ## Projects using Pooch
 
+* [SciPy](https://github.com/scipy/scipy)
 * [scikit-image](https://github.com/scikit-image/scikit-image)
 * [MetPy](https://github.com/Unidata/MetPy)
 * [icepack](https://github.com/icepack/icepack)
