@@ -147,6 +147,7 @@ def fetch_gravity_data():
 * [Ensaio](https://github.com/fatiando/ensaio)
 * [Open AR-Sandbox](https://github.com/cgre-aachen/open_AR_Sandbox)
 * [climlab](https://github.com/climlab/climlab)
+* [napari](https://github.com/napari/napari)
 
 *If you're using Pooch, send us a pull request adding your project to the list.*
 
