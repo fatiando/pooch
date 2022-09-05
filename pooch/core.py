@@ -672,7 +672,7 @@ class Pooch:
                         self.urls[file_name] = file_url
                     self.registry[file_name] = file_checksum.lower()
 
-    def is_available(self, fname):
+    def is_available(self, fname, downloader=None):
         """
         Check availability of a remote file without downloading it.
 
@@ -683,7 +683,11 @@ class Pooch:
         ----------
         fname : str
             The file name (relative to the *base_url* of the remote data
-            storage) to fetch from the local storage.
+            storage).
+        downloader : None or callable
+            If not None, then a function (or callable object) that will be
+            called to check the availability of the file on the server. See
+            :ref:`downloaders` for details.
 
         Returns
         -------
@@ -692,20 +696,16 @@ class Pooch:
 
         """
         self._assert_file_in_registry(fname)
-        source = self.get_url(fname)
-        parsed_url = parse_url(source)
-        if parsed_url["protocol"] == "ftp":
-            directory, file_name = os.path.split(parsed_url["path"])
-            ftp = ftplib.FTP()
-            ftp.connect(host=parsed_url["netloc"])
-            try:
-                ftp.login()
-                available = file_name in ftp.nlst(directory)
-            finally:
-                ftp.close()
-        else:
-            response = requests.head(source, allow_redirects=True)
-            available = bool(response.status_code == 200)
+        url = self.get_url(fname)
+        if downloader is None:
+            downloader = choose_downloader(url)
+        try:
+            available = downloader(url, None, self, check_only=True)
+        except TypeError as error:
+            error_msg = (
+                f"Downloader '{str(downloader)}' does not support availability checks."
+            )
+            raise NotImplementedError(error_msg) from error
         return available
 
 
