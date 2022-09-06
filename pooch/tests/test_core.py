@@ -503,7 +503,7 @@ def test_check_availability_on_ftp(ftpserver):
 def test_check_availability_invalid_downloader():
     "Should raise an exception if the downloader doesn't support this"
 
-    def downloader(url, output, pooch):
+    def downloader(url, output, pooch):  # pylint: disable=unused-argument
         "A downloader that doesn't support check_only"
         return None
 
