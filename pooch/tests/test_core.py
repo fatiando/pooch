@@ -482,7 +482,6 @@ def test_check_availability():
     assert not pup.is_available("not-a-real-data-file.txt")
 
 
-@pytest.mark.network
 def test_check_availability_on_ftp(ftpserver):
     "Should correctly check availability of existing and non existing files"
     with data_over_ftp(ftpserver, "tiny-data.txt") as url:
@@ -499,6 +498,22 @@ def test_check_availability_on_ftp(ftpserver):
         assert pup.is_available("tiny-data.txt", downloader=downloader)
         # Check non available remote file
         assert not pup.is_available("doesnot_exist.zip", downloader=downloader)
+
+
+def test_check_availability_invalid_downloader():
+    "Should raise an exception if the downloader doesn't support this"
+
+    def downloader(url, output, pooch):
+        "A downloader that doesn't support check_only"
+        return None
+
+    pup = Pooch(path=DATA_DIR, base_url=BASEURL, registry=REGISTRY)
+    # First check that everything works without the custom downloader
+    assert pup.is_available("tiny-data.txt")
+    # Now use the bad one
+    with pytest.raises(NotImplementedError) as error:
+        pup.is_available("tiny-data.txt", downloader=downloader)
+        assert "does not support availability checks" in str(error)
 
 
 @pytest.mark.network
