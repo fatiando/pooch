@@ -242,6 +242,7 @@ class HTTPDownloader:  # pylint: disable=too-few-public-methods
         finally:
             if ispath:
                 output_file.close()
+        return None
 
 
 class FTPDownloader:  # pylint: disable=too-few-public-methods
@@ -349,10 +350,9 @@ class FTPDownloader:  # pylint: disable=too-few-public-methods
                 # Make sure the file is set to binary mode, otherwise we can't
                 # get the file size. See: https://stackoverflow.com/a/22093848
                 ftp.voidcmd("TYPE I")
-                size = int(ftp.size(parsed_url["path"]))
                 use_ascii = bool(sys.platform == "win32")
                 progress = tqdm(
-                    total=size,
+                    total=int(ftp.size(parsed_url["path"])),
                     ncols=79,
                     ascii=use_ascii,
                     unit="B",
@@ -373,6 +373,7 @@ class FTPDownloader:  # pylint: disable=too-few-public-methods
             ftp.quit()
             if ispath:
                 output_file.close()
+        return None
 
 
 class SFTPDownloader:  # pylint: disable=too-few-public-methods
