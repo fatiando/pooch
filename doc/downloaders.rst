@@ -20,8 +20,10 @@ Downloaders are Python *callable objects*  (like functions or classes with a
         '''
         Download a file from the given URL to the given local file.
 
-        The function **must** take as arguments (in order):
+        The function **must** take the following arguments (in order).
 
+        Parameters
+        ----------
         url : str
             The URL to the file you want to download.
         output_file : str or file-like object
@@ -78,3 +80,47 @@ redirected from the original download URL:
         fname = GOODBOY.fetch("some-data.csv", downloader=redirect_downloader)
         data = pandas.read_csv(fname)
         return data
+
+
+Availability checks
+-------------------
+
+**Optionally**, downloaders can take a ``check_only`` keyword argument (default
+to ``False``) that makes them only check if a given file is available for
+download **without** downloading the file.
+This makes a downloader compatible with :meth:`pooch.Pooch.is_available`.
+
+In this case, the downloader should return a boolean:
+
+.. code:: python
+
+    def mydownloader(url, output_file, pooch, check_only=False):
+        '''
+        Download a file from the given URL to the given local file.
+
+        The function **must** take the following arguments (in order).
+
+        Parameters
+        ----------
+        url : str
+            The URL to the file you want to download.
+        output_file : str or file-like object
+            Path (and file name) to which the file will be downloaded.
+        pooch : pooch.Pooch
+            The instance of the Pooch class that is calling this function.
+        check_only : bool
+            If True, will only check if a file exists on the server and
+            **without downloading the file**. Will return ``True`` if the file
+            exists and ``False`` otherwise.
+
+        Returns
+        -------
+        None or availability
+            If ``check_only==True``, returns a boolean indicating if the file
+            is available on the server. Otherwise, returns ``None``.
+        '''
+        ...
+
+If a downloader does not implement an availability check (i.e., doesn't take
+``check_only`` as a keyword argument), then :meth:`pooch.Pooch.is_available`
+will raise a ``NotImplementedError``.

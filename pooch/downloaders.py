@@ -7,6 +7,7 @@
 """
 The classes that actually handle the downloads.
 """
+import os
 import sys
 import ftplib
 
@@ -164,7 +165,7 @@ class HTTPDownloader:  # pylint: disable=too-few-public-methods
         if self.progressbar is True and tqdm is None:
             raise ValueError("Missing package 'tqdm' required for progress bars.")
 
-    def __call__(self, url, output_file, pooch):
+    def __call__(self, url, output_file, pooch, check_only=False):
         """
         Download the given URL over HTTP to the given output file.
 
@@ -178,8 +179,23 @@ class HTTPDownloader:  # pylint: disable=too-few-public-methods
             Path (and file name) to which the file will be downloaded.
         pooch : :class:`~pooch.Pooch`
             The instance of :class:`~pooch.Pooch` that is calling this method.
+        check_only : bool
+            If True, will only check if a file exists on the server and
+            **without downloading the file**. Will return ``True`` if the file
+            exists and ``False`` otherwise.
+
+        Returns
+        -------
+        availability : bool or None
+            If ``check_only==True``, returns a boolean indicating if the file
+            is available on the server. Otherwise, returns ``None``.
 
         """
+        if check_only:
+            response = requests.head(url, allow_redirects=True)
+            available = bool(response.status_code == 200)
+            return available
+
         kwargs = self.kwargs.copy()
         kwargs.setdefault("stream", True)
         ispath = not hasattr(output_file, "write")
@@ -226,6 +242,7 @@ class HTTPDownloader:  # pylint: disable=too-few-public-methods
         finally:
             if ispath:
                 output_file.close()
+        return None
 
 
 class FTPDownloader:  # pylint: disable=too-few-public-methods
@@ -286,7 +303,7 @@ class FTPDownloader:  # pylint: disable=too-few-public-methods
         if self.progressbar is True and tqdm is None:
             raise ValueError("Missing package 'tqdm' required for progress bars.")
 
-    def __call__(self, url, output_file, pooch):
+    def __call__(self, url, output_file, pooch, check_only=False):
         """
         Download the given URL over FTP to the given output file.
 
@@ -298,11 +315,31 @@ class FTPDownloader:  # pylint: disable=too-few-public-methods
             Path (and file name) to which the file will be downloaded.
         pooch : :class:`~pooch.Pooch`
             The instance of :class:`~pooch.Pooch` that is calling this method.
-        """
+        check_only : bool
+            If True, will only check if a file exists on the server and
+            **without downloading the file**. Will return ``True`` if the file
+            exists and ``False`` otherwise.
 
+        Returns
+        -------
+        availability : bool or None
+            If ``check_only==True``, returns a boolean indicating if the file
+            is available on the server. Otherwise, returns ``None``.
+
+        """
         parsed_url = parse_url(url)
         ftp = ftplib.FTP(timeout=self.timeout)
         ftp.connect(host=parsed_url["netloc"], port=self.port)
+
+        if check_only:
+            directory, file_name = os.path.split(parsed_url["path"])
+            try:
+                ftp.login(user=self.username, passwd=self.password, acct=self.account)
+                available = file_name in ftp.nlst(directory)
+            finally:
+                ftp.close()
+            return available
+
         ispath = not hasattr(output_file, "write")
         if ispath:
             output_file = open(output_file, "w+b")
@@ -313,10 +350,9 @@ class FTPDownloader:  # pylint: disable=too-few-public-methods
                 # Make sure the file is set to binary mode, otherwise we can't
                 # get the file size. See: https://stackoverflow.com/a/22093848
                 ftp.voidcmd("TYPE I")
-                size = int(ftp.size(parsed_url["path"]))
                 use_ascii = bool(sys.platform == "win32")
                 progress = tqdm(
-                    total=size,
+                    total=int(ftp.size(parsed_url["path"])),
                     ncols=79,
                     ascii=use_ascii,
                     unit="B",
@@ -337,6 +373,7 @@ class FTPDownloader:  # pylint: disable=too-few-public-methods
             ftp.quit()
             if ispath:
                 output_file.close()
+        return None
 
 
 class SFTPDownloader:  # pylint: disable=too-few-public-methods
