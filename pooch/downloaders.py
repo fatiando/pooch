@@ -678,7 +678,7 @@ class DataRepository:  # pylint: disable=too-few-public-methods, missing-class-d
             The resolved URL for the DOI
         """
 
-        return None
+        return None  # pragma: no cover
 
     def download_url(self, file_name):
         """
@@ -696,7 +696,7 @@ class DataRepository:  # pylint: disable=too-few-public-methods, missing-class-d
             The HTTP URL that can be used to download the file.
         """
 
-        raise NotImplementedError
+        raise NotImplementedError  # pragma: no cover
 
 
 class ZenodoRepository(DataRepository):  # pylint: disable=missing-class-docstring
