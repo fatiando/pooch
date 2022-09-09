@@ -148,6 +148,7 @@ def fetch_gravity_data():
 * [Open AR-Sandbox](https://github.com/cgre-aachen/open_AR_Sandbox)
 * [climlab](https://github.com/climlab/climlab)
 * [napari](https://github.com/napari/napari)
+* [mne-python](https://github.com/mne-tools/mne-python)
 
 *If you're using Pooch, send us a pull request adding your project to the list.*
 
