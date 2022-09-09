@@ -169,6 +169,57 @@ def test_unpacking(processor_class, extension, target_path, archive, members):
             check_tiny_data(fname)
 
 
+@pytest.mark.network
+@pytest.mark.parametrize(
+    "processor_class,extension",
+    [(Unzip, ".zip"), (Untar, ".tar.gz")],
+)
+def test_multiple_unpacking(processor_class, extension):
+    "Test that multiple subsequent calls to a processor yield correct results"
+
+    with TemporaryDirectory() as local_store:
+        pup = Pooch(path=Path(local_store), base_url=BASEURL, registry=REGISTRY)
+
+        # Do a first fetch with the one member only
+        processor1 = processor_class(members=["store/tiny-data.txt"])
+        filenames1 = pup.fetch("store" + extension, processor=processor1)
+        assert len(filenames1) == 1
+        check_tiny_data(filenames1[0])
+
+        # Do a second fetch with the other member
+        processor2 = processor_class(
+            members=["store/tiny-data.txt", "store/subdir/tiny-data.txt"]
+        )
+        filenames2 = pup.fetch("store" + extension, processor=processor2)
+        assert len(filenames2) == 2
+        check_tiny_data(filenames2[0])
+        check_tiny_data(filenames2[1])
+
+        # Do a third fetch, again with one member and assert
+        # that only this member was returned
+        filenames3 = pup.fetch("store" + extension, processor=processor1)
+        assert len(filenames3) == 1
+        check_tiny_data(filenames3[0])
+
+
+@pytest.mark.network
+@pytest.mark.parametrize(
+    "processor_class,extension",
+    [(Unzip, ".zip"), (Untar, ".tar.gz")],
+)
+def test_unpack_members_with_leading_dot(processor_class, extension):
+    "Test that unpack members can also be specifed both with a leading ./"
+
+    with TemporaryDirectory() as local_store:
+        pup = Pooch(path=Path(local_store), base_url=BASEURL, registry=REGISTRY)
+
+        # Do a first fetch with the one member only
+        processor1 = processor_class(members=["./store/tiny-data.txt"])
+        filenames1 = pup.fetch("store" + extension, processor=processor1)
+        assert len(filenames1) == 1
+        check_tiny_data(filenames1[0])
+
+
 def _check_logs(log_file, expected_lines):
     """
     Assert that the lines in the log match the expected ones.

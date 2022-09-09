@@ -138,6 +138,7 @@ def fetch_gravity_data():
 
 ## Projects using Pooch
 
+* [SciPy](https://github.com/scipy/scipy)
 * [scikit-image](https://github.com/scikit-image/scikit-image)
 * [MetPy](https://github.com/Unidata/MetPy)
 * [icepack](https://github.com/icepack/icepack)
@@ -146,6 +147,8 @@ def fetch_gravity_data():
 * [Ensaio](https://github.com/fatiando/ensaio)
 * [Open AR-Sandbox](https://github.com/cgre-aachen/open_AR_Sandbox)
 * [climlab](https://github.com/climlab/climlab)
+* [napari](https://github.com/napari/napari)
+* [mne-python](https://github.com/mne-tools/mne-python)
 
 *If you're using Pooch, send us a pull request adding your project to the list.*
 

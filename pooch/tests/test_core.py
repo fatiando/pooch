@@ -21,10 +21,11 @@ from ..hashes import file_hash, hash_matches
 
 # Import the core module so that we can monkeypatch some functions
 from .. import core
-from ..downloaders import HTTPDownloader
+from ..downloaders import HTTPDownloader, FTPDownloader
 
 from .utils import (
     pooch_test_url,
+    data_over_ftp,
     pooch_test_figshare_url,
     pooch_test_zenodo_url,
     pooch_test_registry,
@@ -481,21 +482,38 @@ def test_check_availability():
     assert not pup.is_available("not-a-real-data-file.txt")
 
 
-@pytest.mark.network
-def test_check_availability_on_ftp():
+def test_check_availability_on_ftp(ftpserver):
     "Should correctly check availability of existing and non existing files"
-    # Check available remote file on FTP server
-    pup = Pooch(
-        path=DATA_DIR,
-        base_url="ftp://data-out.unavco.org/pub/products/velocity/rel_201712/",
-        registry={
-            "pbo.final_igs08.20171202.vel": "md5:0b75d4049dedd0e179615f4b5e956156",
-            "doesnot_exist.zip": "jdjdjdjdflld",
-        },
-    )
-    assert pup.is_available("pbo.final_igs08.20171202.vel")
-    # Check non available remote file
-    assert not pup.is_available("doesnot_exist.zip")
+    with data_over_ftp(ftpserver, "tiny-data.txt") as url:
+        # Check available remote file on FTP server
+        pup = Pooch(
+            path=DATA_DIR,
+            base_url=url.replace("tiny-data.txt", ""),
+            registry={
+                "tiny-data.txt": "baee0894dba14b12085eacb204284b97e362f4f3e5a5807693cc90ef415c1b2d",
+                "doesnot_exist.zip": "jdjdjdjdflld",
+            },
+        )
+        downloader = FTPDownloader(port=ftpserver.server_port)
+        assert pup.is_available("tiny-data.txt", downloader=downloader)
+        # Check non available remote file
+        assert not pup.is_available("doesnot_exist.zip", downloader=downloader)
+
+
+def test_check_availability_invalid_downloader():
+    "Should raise an exception if the downloader doesn't support this"
+
+    def downloader(url, output, pooch):  # pylint: disable=unused-argument
+        "A downloader that doesn't support check_only"
+        return None
+
+    pup = Pooch(path=DATA_DIR, base_url=BASEURL, registry=REGISTRY)
+    # First check that everything works without the custom downloader
+    assert pup.is_available("tiny-data.txt")
+    # Now use the bad one
+    with pytest.raises(NotImplementedError) as error:
+        pup.is_available("tiny-data.txt", downloader=downloader)
+        assert "does not support availability checks" in str(error)
 
 
 @pytest.mark.network
