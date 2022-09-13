@@ -158,7 +158,7 @@ def parse_url(url):
     * doi:10.6084/m9.figshare.923450.v1/test.nc
 
     The DOI is a special case. The protocol will be "doi", the netloc will be
-    the DOI, and the path is what comes after the second "/".
+    the DOI, and the path is what comes after the last "/".
 
     Parameters
     ----------
@@ -179,8 +179,8 @@ def parse_url(url):
     if url.startswith("doi:"):
         protocol = "doi"
         parts = url[4:].split("/")
-        netloc = "/".join(parts[:2])
-        path = "/" + "/".join(parts[2:])
+        netloc = "/".join(parts[:-1])
+        path = "/" + parts[-1]
     else:
         parsed_url = urlsplit(url)
         protocol = parsed_url.scheme or "file"

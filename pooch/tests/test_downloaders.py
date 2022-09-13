@@ -29,8 +29,9 @@ from ..downloaders import (
     SFTPDownloader,
     DOIDownloader,
     choose_downloader,
-    figshare_download_url,
-    zenodo_download_url,
+    FigshareRepository,
+    ZenodoRepository,
+    DataverseRepository,
     doi_to_url,
 )
 from .utils import (
@@ -40,12 +41,14 @@ from .utils import (
     data_over_ftp,
     pooch_test_figshare_url,
     pooch_test_zenodo_url,
+    pooch_test_dataverse_url,
 )
 
 
 BASEURL = pooch_test_url()
 FIGSHAREURL = pooch_test_figshare_url()
 ZENODOURL = pooch_test_zenodo_url()
+DATAVERSEURL = pooch_test_dataverse_url()
 
 
 @pytest.mark.skipif(tqdm is None, reason="requires tqdm")
@@ -97,22 +100,28 @@ def test_doi_url_not_found():
 
 
 @pytest.mark.parametrize(
-    "converter,doi",
+    "repository,doi",
     [
-        (figshare_download_url, "10.6084/m9.figshare.14763051.v1"),
-        (zenodo_download_url, "10.5281/zenodo.4924875"),
+        (FigshareRepository, "10.6084/m9.figshare.14763051.v1"),
+        (ZenodoRepository, "10.5281/zenodo.4924875"),
+        (DataverseRepository, "10.11588/data/TKCFEF"),
     ],
-    ids=["figshare", "zenodo"],
+    ids=["figshare", "zenodo", "dataverse"],
 )
-def test_figshare_url_file_not_found(converter, doi):
+def test_figshare_url_file_not_found(repository, doi):
     "Should fail if the file is not found in the archive"
     with pytest.raises(ValueError) as exc:
         url = doi_to_url(doi)
-        converter(archive_url=url, file_name="bla.txt", doi=doi)
+        repo = repository.initialize(doi, url)
+        repo.download_url(file_name="bla.txt")
     assert "File 'bla.txt' not found" in str(exc.value)
 
 
-@pytest.mark.parametrize("url", [FIGSHAREURL, ZENODOURL], ids=["figshare", "zenodo"])
+@pytest.mark.parametrize(
+    "url",
+    [FIGSHAREURL, ZENODOURL, DATAVERSEURL],
+    ids=["figshare", "zenodo", "dataverse"],
+)
 def test_doi_downloader(url):
     "Test the DOI downloader"
     # Use the test data we have on the repository

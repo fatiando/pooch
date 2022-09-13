@@ -514,6 +514,7 @@ class DOIDownloader:  # pylint: disable=too-few-public-methods
 
     * `figshare <https://www.figshare.com>`__
     * `Zenodo <https://www.zenodo.org>`__
+    * `DataVerse <https://dataverse.org/>`__ instances
 
     .. attention::
 
@@ -592,26 +593,40 @@ class DOIDownloader:  # pylint: disable=too-few-public-methods
             The instance of :class:`~pooch.Pooch` that is calling this method.
 
         """
-        converters = {
-            "figshare.com": figshare_download_url,
-            "zenodo.org": zenodo_download_url,
-        }
+
+        repositories = [
+            FigshareRepository,
+            ZenodoRepository,
+            DataverseRepository,
+        ]
+
+        # Extract the DOI and the repository information
         parsed_url = parse_url(url)
         doi = parsed_url["netloc"]
         archive_url = doi_to_url(doi)
-        repository = parse_url(archive_url)["netloc"]
-        if repository not in converters:
+
+        # Try the converters one by one until one of them returned a URL
+        data_repository = None
+        for repo in repositories:
+            if data_repository is None:
+                data_repository = repo.initialize(
+                    archive_url=archive_url,
+                    doi=doi,
+                )
+
+        if data_repository is None:
+            repository = parse_url(archive_url)["netloc"]
             raise ValueError(
-                f"Invalid data repository '{repository}'. Must be one of "
-                f"{list(converters.keys())}. "
+                f"Invalid data repository '{repository}'. "
                 "To request or contribute support for this repository, "
                 "please open an issue at https://github.com/fatiando/pooch/issues"
             )
-        download_url = converters[repository](
-            archive_url=archive_url,
-            file_name=parsed_url["path"].split("/")[-1],
-            doi=doi,
-        )
+
+        # Resolve the URL
+        file_name = parsed_url["path"].split("/")[-1]
+        download_url = data_repository.download_url(file_name)
+
+        # Instantiate the downloader object
         downloader = HTTPDownloader(
             progressbar=self.progressbar, chunk_size=self.chunk_size, **self.kwargs
         )
@@ -643,66 +658,239 @@ def doi_to_url(doi):
     return url
 
 
-def zenodo_download_url(archive_url, file_name, doi):
-    """
-    Use the API to get the download URL for a file given the archive URL.
+class DataRepository:  # pylint: disable=too-few-public-methods, missing-class-docstring
+    @classmethod
+    def initialize(cls, doi, archive_url):  # pylint: disable=unused-argument
+        """
+        Initialize the data repository if the given URL points to a
+        corresponding repository.
 
-    Parameters
-    ----------
-    archive_url : str
-        URL of the dataset in the repository.
-    file_name : str
-        The name of the file in the archive that will be downloaded.
-    doi : str
-        The DOI of the archive.
+        Initializes a data repository object. This is done as part of
+        a chain of responsibility. If the class cannot handle the given
+        repository URL, it returns `None`. Otherwise a `DataRepository`
+        instance is returned.
 
-    Returns
-    -------
-    download_url : str
-        The HTTP URL that can be used to download the file.
+        Parameters
+        ----------
+        doi : str
+            The DOI that identifies the repository
+        archive_url : str
+            The resolved URL for the DOI
+        """
 
-    """
-    article_id = archive_url.split("/")[-1]
-    # With the ID, we can get a list of files and their download links
-    article = requests.get(f"https://zenodo.org/api/records/{article_id}").json()
-    files = {item["key"]: item for item in article["files"]}
-    if file_name not in files:
-        raise ValueError(
-            f"File '{file_name}' not found in data archive {archive_url} (doi:{doi})."
+        return None  # pragma: no cover
+
+    def download_url(self, file_name):
+        """
+        Use the repository API to get the download URL for a file given
+        the archive URL.
+
+        Parameters
+        ----------
+        file_name : str
+            The name of the file in the archive that will be downloaded.
+
+        Returns
+        -------
+        download_url : str
+            The HTTP URL that can be used to download the file.
+        """
+
+        raise NotImplementedError  # pragma: no cover
+
+
+class ZenodoRepository(DataRepository):  # pylint: disable=missing-class-docstring
+    def __init__(self, doi, archive_url):
+        self.archive_url = archive_url
+        self.doi = doi
+
+    @classmethod
+    def initialize(cls, doi, archive_url):
+        """
+        Initialize the data repository if the given URL points to a
+        corresponding repository.
+
+        Initializes a data repository object. This is done as part of
+        a chain of responsibility. If the class cannot handle the given
+        repository URL, it returns `None`. Otherwise a `DataRepository`
+        instance is returned.
+
+        Parameters
+        ----------
+        doi : str
+            The DOI that identifies the repository
+        archive_url : str
+            The resolved URL for the DOI
+        """
+
+        # Check whether this is a Zenodo URL
+        parsed_archive_url = parse_url(archive_url)
+        if parsed_archive_url["netloc"] != "zenodo.org":
+            return None
+
+        return cls(doi, archive_url)
+
+    def download_url(self, file_name):
+        """
+        Use the repository API to get the download URL for a file given
+        the archive URL.
+
+        Parameters
+        ----------
+        file_name : str
+            The name of the file in the archive that will be downloaded.
+
+        Returns
+        -------
+        download_url : str
+            The HTTP URL that can be used to download the file.
+        """
+        article_id = self.archive_url.split("/")[-1]
+        # With the ID, we can get a list of files and their download links
+        article = requests.get(f"https://zenodo.org/api/records/{article_id}").json()
+        files = {item["key"]: item for item in article["files"]}
+        if file_name not in files:
+            raise ValueError(
+                f"File '{file_name}' not found in data archive {self.archive_url} (doi:{self.doi})."
+            )
+        download_url = files[file_name]["links"]["self"]
+        return download_url
+
+
+class FigshareRepository(DataRepository):  # pylint: disable=missing-class-docstring
+    def __init__(self, doi, archive_url):
+        self.archive_url = archive_url
+        self.doi = doi
+
+    @classmethod
+    def initialize(cls, doi, archive_url):
+        """
+        Initialize the data repository if the given URL points to a
+        corresponding repository.
+
+        Initializes a data repository object. This is done as part of
+        a chain of responsibility. If the class cannot handle the given
+        repository URL, it returns `None`. Otherwise a `DataRepository`
+        instance is returned.
+
+        Parameters
+        ----------
+        doi : str
+            The DOI that identifies the repository
+        archive_url : str
+            The resolved URL for the DOI
+        """
+
+        # Check whether this is a Figshare URL
+        parsed_archive_url = parse_url(archive_url)
+        if parsed_archive_url["netloc"] != "figshare.com":
+            return None
+
+        return cls(doi, archive_url)
+
+    def download_url(self, file_name):
+        """
+        Use the repository API to get the download URL for a file given
+        the archive URL.
+
+        Parameters
+        ----------
+        file_name : str
+            The name of the file in the archive that will be downloaded.
+
+        Returns
+        -------
+        download_url : str
+            The HTTP URL that can be used to download the file.
+        """
+
+        # Use the figshare API to find the article ID from the DOI
+        article = requests.get(
+            f"https://api.figshare.com/v2/articles?doi={self.doi}"
+        ).json()[0]
+        article_id = article["id"]
+        # With the ID, we can get a list of files and their download links
+        response = requests.get(
+            f"https://api.figshare.com/v2/articles/{article_id}/files"
         )
-    download_url = files[file_name]["links"]["self"]
-    return download_url
+        response.raise_for_status()
+        files = {item["name"]: item for item in response.json()}
+        if file_name not in files:
+            raise ValueError(
+                f"File '{file_name}' not found in data archive {self.archive_url} (doi:{self.doi})."
+            )
+        download_url = files[file_name]["download_url"]
+        return download_url
 
 
-def figshare_download_url(archive_url, file_name, doi):
-    """
-    Use the API to get the download URL for a file given the archive URL.
+class DataverseRepository(DataRepository):  # pylint: disable=missing-class-docstring
+    def __init__(self, doi, archive_url):
+        self.archive_url = archive_url
+        self.doi = doi
 
-    Parameters
-    ----------
-    archive_url : str
-        URL of the dataset in the repository.
-    file_name : str
-        The name of the file in the archive that will be downloaded.
-    doi : str
-        The DOI of the archive.
+    @classmethod
+    def initialize(cls, doi, archive_url):
+        """
+        Initialize the data repository if the given URL points to a
+        corresponding repository.
 
-    Returns
-    -------
-    download_url : str
-        The HTTP URL that can be used to download the file.
+        Initializes a data repository object. This is done as part of
+        a chain of responsibility. If the class cannot handle the given
+        repository URL, it returns `None`. Otherwise a `DataRepository`
+        instance is returned.
 
-    """
-    # Use the figshare API to find the article ID from the DOI
-    article = requests.get(f"https://api.figshare.com/v2/articles?doi={doi}").json()[0]
-    article_id = article["id"]
-    # With the ID, we can get a list of files and their download links
-    response = requests.get(f"https://api.figshare.com/v2/articles/{article_id}/files")
-    response.raise_for_status()
-    files = {item["name"]: item for item in response.json()}
-    if file_name not in files:
-        raise ValueError(
-            f"File '{file_name}' not found in data archive {archive_url} (doi:{doi})."
+        Parameters
+        ----------
+        doi : str
+            The DOI that identifies the repository
+        archive_url : str
+            The resolved URL for the DOI
+        """
+
+        # Access the DOI as if this was a DataVerse instance
+        parsed = parse_url(archive_url)
+        response = requests.get(
+            f"{parsed['protocol']}://{parsed['netloc']}/api/datasets/"
+            f":persistentId?persistentId=doi:{doi}"
         )
-    download_url = files[file_name]["download_url"]
-    return download_url
+
+        # If we failed, this is probably not a DataVerse instance
+        if 400 <= response.status_code < 600:
+            return None
+
+        return cls(doi, archive_url)
+
+    def download_url(self, file_name):
+        """
+        Use the repository API to get the download URL for a file given
+        the archive URL.
+
+        Parameters
+        ----------
+        file_name : str
+            The name of the file in the archive that will be downloaded.
+
+        Returns
+        -------
+        download_url : str
+            The HTTP URL that can be used to download the file.
+        """
+
+        # Access the DOI as if this was a DataVerse instance
+        parsed = parse_url(self.archive_url)
+        response = requests.get(
+            f"{parsed['protocol']}://{parsed['netloc']}/api/datasets/"
+            f":persistentId?persistentId=doi:{self.doi}"
+        )
+
+        # Iterate over the given files until we find one of the requested name
+        for filedata in response.json()["data"]["latestVersion"]["files"]:
+            if file_name == filedata["dataFile"]["filename"]:
+                return (
+                    f"{parsed['protocol']}://{parsed['netloc']}/api/access/datafile/"
+                    f":persistentId?persistentId={filedata['dataFile']['persistentId']}"
+                )
+
+        raise ValueError(
+            f"File '{file_name}' not found in data archive {self.archive_url} (doi:{self.doi})."
+        )
