@@ -594,33 +594,8 @@ class DOIDownloader:  # pylint: disable=too-few-public-methods
 
         """
 
-        repositories = [
-            FigshareRepository,
-            ZenodoRepository,
-            DataverseRepository,
-        ]
-
-        # Extract the DOI and the repository information
         parsed_url = parse_url(url)
-        doi = parsed_url["netloc"]
-        archive_url = doi_to_url(doi)
-
-        # Try the converters one by one until one of them returned a URL
-        data_repository = None
-        for repo in repositories:
-            if data_repository is None:
-                data_repository = repo.initialize(
-                    archive_url=archive_url,
-                    doi=doi,
-                )
-
-        if data_repository is None:
-            repository = parse_url(archive_url)["netloc"]
-            raise ValueError(
-                f"Invalid data repository '{repository}'. "
-                "To request or contribute support for this repository, "
-                "please open an issue at https://github.com/fatiando/pooch/issues"
-            )
+        data_repository = doi_to_repository(parsed_url["netloc"])
 
         # Resolve the URL
         file_name = parsed_url["path"].split("/")[-1]
@@ -656,6 +631,59 @@ def doi_to_url(doi):
             f"Archive with doi:{doi} not found (see {url}). Is the DOI correct?"
         )
     return url
+
+
+def doi_to_repository(doi):
+    """
+    Instantiate a data repository instance from a given DOI.
+
+    This function implements the chain of responsibility dispatch
+    to the correct data repository class.
+
+    Parameters
+    ----------
+    doi : str
+        The DOI of the archive.
+
+    Returns
+    -------
+    data_repository : DataRepository
+        The data repository object
+    """
+
+    # This should go away in a separate issue: DOI handling should
+    # not rely on the (non-)existence of trailing slashes. The issue
+    # is documented in https://github.com/fatiando/pooch/issues/324
+    if doi[-1] == "/":
+        doi = doi[:-1]
+
+    repositories = [
+        FigshareRepository,
+        ZenodoRepository,
+        DataverseRepository,
+    ]
+
+    # Extract the DOI and the repository information
+    archive_url = doi_to_url(doi)
+
+    # Try the converters one by one until one of them returned a URL
+    data_repository = None
+    for repo in repositories:
+        if data_repository is None:
+            data_repository = repo.initialize(
+                archive_url=archive_url,
+                doi=doi,
+            )
+
+    if data_repository is None:
+        repository = parse_url(archive_url)["netloc"]
+        raise ValueError(
+            f"Invalid data repository '{repository}'. "
+            "To request or contribute support for this repository, "
+            "please open an issue at https://github.com/fatiando/pooch/issues"
+        )
+
+    return data_repository
 
 
 class DataRepository:  # pylint: disable=too-few-public-methods, missing-class-docstring
@@ -698,11 +726,24 @@ class DataRepository:  # pylint: disable=too-few-public-methods, missing-class-d
 
         raise NotImplementedError  # pragma: no cover
 
+    def populate_registry(self, pooch):
+        """
+        Populate the registry using the data repository's API
+
+        Parameters
+        ----------
+        pooch : Pooch
+            The pooch instance that the registry will be added to.
+        """
+
+        raise NotImplementedError  # pragma: no cover
+
 
 class ZenodoRepository(DataRepository):  # pylint: disable=missing-class-docstring
     def __init__(self, doi, archive_url):
         self.archive_url = archive_url
         self.doi = doi
+        self._api_response = None
 
     @classmethod
     def initialize(cls, doi, archive_url):
@@ -730,6 +771,18 @@ class ZenodoRepository(DataRepository):  # pylint: disable=missing-class-docstri
 
         return cls(doi, archive_url)
 
+    @property
+    def api_response(self):
+        """Cached API response from Zenodo"""
+
+        if self._api_response is None:
+            article_id = self.archive_url.split("/")[-1]
+            self._api_response = requests.get(
+                f"https://zenodo.org/api/records/{article_id}"
+            ).json()
+
+        return self._api_response
+
     def download_url(self, file_name):
         """
         Use the repository API to get the download URL for a file given
@@ -745,10 +798,8 @@ class ZenodoRepository(DataRepository):  # pylint: disable=missing-class-docstri
         download_url : str
             The HTTP URL that can be used to download the file.
         """
-        article_id = self.archive_url.split("/")[-1]
-        # With the ID, we can get a list of files and their download links
-        article = requests.get(f"https://zenodo.org/api/records/{article_id}").json()
-        files = {item["key"]: item for item in article["files"]}
+
+        files = {item["key"]: item for item in self.api_response["files"]}
         if file_name not in files:
             raise ValueError(
                 f"File '{file_name}' not found in data archive {self.archive_url} (doi:{self.doi})."
@@ -756,11 +807,25 @@ class ZenodoRepository(DataRepository):  # pylint: disable=missing-class-docstri
         download_url = files[file_name]["links"]["self"]
         return download_url
 
+    def populate_registry(self, pooch):
+        """
+        Populate the registry using the data repository's API
+
+        Parameters
+        ----------
+        pooch : Pooch
+            The pooch instance that the registry will be added to.
+        """
+
+        for filedata in self.api_response["files"]:
+            pooch.registry[filedata["key"]] = filedata["checksum"]
+
 
 class FigshareRepository(DataRepository):  # pylint: disable=missing-class-docstring
     def __init__(self, doi, archive_url):
         self.archive_url = archive_url
         self.doi = doi
+        self._api_response = None
 
     @classmethod
     def initialize(cls, doi, archive_url):
@@ -788,6 +853,25 @@ class FigshareRepository(DataRepository):  # pylint: disable=missing-class-docst
 
         return cls(doi, archive_url)
 
+    @property
+    def api_response(self):
+        """Cached API response from Figshare"""
+
+        if self._api_response is None:
+            # Use the figshare API to find the article ID from the DOI
+            article = requests.get(
+                f"https://api.figshare.com/v2/articles?doi={self.doi}"
+            ).json()[0]
+            article_id = article["id"]
+            # With the ID, we can get a list of files and their download links
+            response = requests.get(
+                f"https://api.figshare.com/v2/articles/{article_id}/files"
+            )
+            response.raise_for_status()
+            self._api_response = response.json()
+
+        return self._api_response
+
     def download_url(self, file_name):
         """
         Use the repository API to get the download URL for a file given
@@ -804,17 +888,7 @@ class FigshareRepository(DataRepository):  # pylint: disable=missing-class-docst
             The HTTP URL that can be used to download the file.
         """
 
-        # Use the figshare API to find the article ID from the DOI
-        article = requests.get(
-            f"https://api.figshare.com/v2/articles?doi={self.doi}"
-        ).json()[0]
-        article_id = article["id"]
-        # With the ID, we can get a list of files and their download links
-        response = requests.get(
-            f"https://api.figshare.com/v2/articles/{article_id}/files"
-        )
-        response.raise_for_status()
-        files = {item["name"]: item for item in response.json()}
+        files = {item["name"]: item for item in self.api_response}
         if file_name not in files:
             raise ValueError(
                 f"File '{file_name}' not found in data archive {self.archive_url} (doi:{self.doi})."
@@ -822,11 +896,25 @@ class FigshareRepository(DataRepository):  # pylint: disable=missing-class-docst
         download_url = files[file_name]["download_url"]
         return download_url
 
+    def populate_registry(self, pooch):
+        """
+        Populate the registry using the data repository's API
+
+        Parameters
+        ----------
+        pooch : Pooch
+            The pooch instance that the registry will be added to.
+        """
+
+        for filedata in self.api_response:
+            pooch.registry[filedata["name"]] = f"md5:{filedata['computed_md5']}"
+
 
 class DataverseRepository(DataRepository):  # pylint: disable=missing-class-docstring
-    def __init__(self, doi, archive_url):
+    def __init__(self, doi, archive_url, response):
         self.archive_url = archive_url
         self.doi = doi
+        self._api_response = response
 
     @classmethod
     def initialize(cls, doi, archive_url):
@@ -858,7 +946,7 @@ class DataverseRepository(DataRepository):  # pylint: disable=missing-class-docs
         if 400 <= response.status_code < 600:
             return None
 
-        return cls(doi, archive_url)
+        return cls(doi, archive_url, response)
 
     def download_url(self, file_name):
         """
@@ -876,15 +964,10 @@ class DataverseRepository(DataRepository):  # pylint: disable=missing-class-docs
             The HTTP URL that can be used to download the file.
         """
 
-        # Access the DOI as if this was a DataVerse instance
         parsed = parse_url(self.archive_url)
-        response = requests.get(
-            f"{parsed['protocol']}://{parsed['netloc']}/api/datasets/"
-            f":persistentId?persistentId=doi:{self.doi}"
-        )
 
         # Iterate over the given files until we find one of the requested name
-        for filedata in response.json()["data"]["latestVersion"]["files"]:
+        for filedata in self._api_response.json()["data"]["latestVersion"]["files"]:
             if file_name == filedata["dataFile"]["filename"]:
                 return (
                     f"{parsed['protocol']}://{parsed['netloc']}/api/access/datafile/"
@@ -894,3 +977,18 @@ class DataverseRepository(DataRepository):  # pylint: disable=missing-class-docs
         raise ValueError(
             f"File '{file_name}' not found in data archive {self.archive_url} (doi:{self.doi})."
         )
+
+    def populate_registry(self, pooch):
+        """
+        Populate the registry using the data repository's API
+
+        Parameters
+        ----------
+        pooch : Pooch
+            The pooch instance that the registry will be added to.
+        """
+
+        for filedata in self._api_response.json()["data"]["latestVersion"]["files"]:
+            pooch.registry[
+                filedata["dataFile"]["filename"]
+            ] = f"md5:{filedata['dataFile']['md5']}"

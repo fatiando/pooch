@@ -27,7 +27,7 @@ from .utils import (
     os_cache,
     unique_file_name,
 )
-from .downloaders import choose_downloader
+from .downloaders import DOIDownloader, choose_downloader, doi_to_repository
 
 
 def retrieve(
@@ -669,6 +669,27 @@ class Pooch:
                         file_url = elements[2]
                         self.urls[file_name] = file_url
                     self.registry[file_name] = file_checksum.lower()
+
+    def load_registry_from_doi(self):
+        """
+        Populate the registry using the data repository's API
+
+        This is the preferred way of populating the API when using DOIs.
+        """
+
+        # Ensure that this is indeed a DOI-based pooch
+        downloader = choose_downloader(self.base_url)
+        if not isinstance(downloader, DOIDownloader):
+            raise ValueError(
+                "Pooch.load_registry_from_doi is only implemented for DOIs"
+            )
+
+        # Create a repository instance
+        doi = self.base_url.replace("doi:", "")
+        repository = doi_to_repository(doi)
+
+        # Call registry population for this repository
+        return repository.populate_registry(self)
 
     def is_available(self, fname, downloader=None):
         """
