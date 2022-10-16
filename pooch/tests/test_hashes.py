@@ -17,7 +17,7 @@ import pytest
 try:
     import xxhash
 
-    XXHASH_MAJOR_VERSION = int(xxhash.VERSION.split(".")[0])
+    XXHASH_MAJOR_VERSION = int(xxhash.VERSION.split(".", maxsplit=1)[0])
 except ImportError:
     xxhash = None
     XXHASH_MAJOR_VERSION = 0
