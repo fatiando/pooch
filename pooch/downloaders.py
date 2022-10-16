@@ -11,8 +11,6 @@ import os
 import sys
 import ftplib
 
-import requests
-
 from .utils import parse_url
 
 try:
@@ -191,6 +189,9 @@ class HTTPDownloader:  # pylint: disable=too-few-public-methods
             is available on the server. Otherwise, returns ``None``.
 
         """
+        # Lazy import requests to speed up import time
+        import requests
+
         if check_only:
             response = requests.head(url, allow_redirects=True)
             available = bool(response.status_code == 200)
@@ -648,6 +649,9 @@ def doi_to_url(doi):
         The URL of the archive in the data repository.
 
     """
+    # Lazy import requests to speed up import time
+    import requests
+
     # Use doi.org to resolve the DOI to the repository website.
     response = requests.get(f"https://doi.org/{doi}")
     url = response.url
@@ -745,6 +749,9 @@ class ZenodoRepository(DataRepository):  # pylint: disable=missing-class-docstri
         download_url : str
             The HTTP URL that can be used to download the file.
         """
+        # Lazy import requests to speed up import time
+        import requests
+
         article_id = self.archive_url.split("/")[-1]
         # With the ID, we can get a list of files and their download links
         article = requests.get(f"https://zenodo.org/api/records/{article_id}").json()
@@ -803,6 +810,8 @@ class FigshareRepository(DataRepository):  # pylint: disable=missing-class-docst
         download_url : str
             The HTTP URL that can be used to download the file.
         """
+        # Lazy import requests to speed up import time
+        import requests
 
         # Use the figshare API to find the article ID from the DOI
         article = requests.get(
@@ -846,6 +855,8 @@ class DataverseRepository(DataRepository):  # pylint: disable=missing-class-docs
         archive_url : str
             The resolved URL for the DOI
         """
+        # Lazy import requests to speed up import time
+        import requests
 
         # Access the DOI as if this was a DataVerse instance
         parsed = parse_url(archive_url)
@@ -875,6 +886,8 @@ class DataverseRepository(DataRepository):  # pylint: disable=missing-class-docs
         download_url : str
             The HTTP URL that can be used to download the file.
         """
+        # Lazy import requests to speed up import time
+        import requests
 
         # Access the DOI as if this was a DataVerse instance
         parsed = parse_url(self.archive_url)
