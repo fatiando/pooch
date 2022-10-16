@@ -193,17 +193,19 @@ class HTTPDownloader:  # pylint: disable=too-few-public-methods
 
         """
         if check_only:
-            response = requests.head(url, allow_redirects=True)
+            timeout = self.kwargs.get("timeout", 5)
+            response = requests.head(url, timeout=timeout, allow_redirects=True)
             available = bool(response.status_code == 200)
             return available
 
         kwargs = self.kwargs.copy()
+        timeout = kwargs.pop("timeout", 5)
         kwargs.setdefault("stream", True)
         ispath = not hasattr(output_file, "write")
         if ispath:
             output_file = open(output_file, "w+b")
         try:
-            response = requests.get(url, **kwargs)
+            response = requests.get(url, timeout=timeout, **kwargs)
             response.raise_for_status()
             content = response.iter_content(chunk_size=self.chunk_size)
             total = int(response.headers.get("content-length", 0))
@@ -627,7 +629,7 @@ def doi_to_url(doi):
 
     """
     # Use doi.org to resolve the DOI to the repository website.
-    response = requests.get(f"https://doi.org/{doi}")
+    response = requests.get(f"https://doi.org/{doi}", timeout=5)
     url = response.url
     if 400 <= response.status_code < 600:
         raise ValueError(
@@ -781,7 +783,8 @@ class ZenodoRepository(DataRepository):  # pylint: disable=missing-class-docstri
         if self._api_response is None:
             article_id = self.archive_url.split("/")[-1]
             self._api_response = requests.get(
-                f"https://zenodo.org/api/records/{article_id}"
+                f"https://zenodo.org/api/records/{article_id}",
+                timeout=5,
             ).json()
 
         return self._api_response
@@ -801,7 +804,6 @@ class ZenodoRepository(DataRepository):  # pylint: disable=missing-class-docstri
         download_url : str
             The HTTP URL that can be used to download the file.
         """
-
         files = {item["key"]: item for item in self.api_response["files"]}
         if file_name not in files:
             raise ValueError(
@@ -879,7 +881,8 @@ class FigshareRepository(DataRepository):  # pylint: disable=missing-class-docst
         if self._api_response is None:
             # Use the figshare API to find the article ID from the DOI
             article = requests.get(
-                f"https://api.figshare.com/v2/articles?doi={self.doi}"
+                f"https://api.figshare.com/v2/articles?doi={self.doi}",
+                timeout=5,
             ).json()[0]
             article_id = article["id"]
             # Parse desired version from the doi
@@ -906,7 +909,7 @@ class FigshareRepository(DataRepository):  # pylint: disable=missing-class-docst
                     f"{article_id}/versions/{version}"
                 )
             # Make the request and return the files in the figshare repository
-            response = requests.get(api_url)
+            response = requests.get(api_url, timeout=5)
             response.raise_for_status()
             self._api_response = response.json()["files"]
 
@@ -977,7 +980,6 @@ class DataverseRepository(DataRepository):  # pylint: disable=missing-class-docs
 
         # Access the DOI as if this was a DataVerse instance
         response = cls._get_api_response(doi, archive_url)
-
         # If we failed, this is probably not a DataVerse instance
         if 400 <= response.status_code < 600:
             return None
@@ -998,7 +1000,8 @@ class DataverseRepository(DataRepository):  # pylint: disable=missing-class-docs
         parsed = parse_url(archive_url)
         response = requests.get(
             f"{parsed['protocol']}://{parsed['netloc']}/api/datasets/"
-            f":persistentId?persistentId=doi:{doi}"
+            f":persistentId?persistentId=doi:{doi}",
+            timeout=5,
         )
         return response
 
@@ -1036,7 +1039,6 @@ class DataverseRepository(DataRepository):  # pylint: disable=missing-class-docs
         """
 
         parsed = parse_url(self.archive_url)
-
         # Iterate over the given files until we find one of the requested name
         for filedata in self.api_response.json()["data"]["latestVersion"]["files"]:
             if file_name == filedata["dataFile"]["filename"]:
