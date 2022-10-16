@@ -58,9 +58,8 @@ def pooch_test_url():
         The versioned URL for pooch's test data.
 
     """
-    url = "https://github.com/fatiando/pooch/raw/{version}/pooch/tests/data/".format(
-        version=check_version(full_version, fallback="main")
-    )
+    version = check_version(full_version, fallback="main")
+    url = f"https://github.com/fatiando/pooch/raw/{version}/pooch/tests/data/"
     return url
 
 
