@@ -489,10 +489,10 @@ class Pooch:
         self.path = path
         self.base_url = base_url
         if registry is None:
-            registry = dict()
+            registry = {}
         self.registry = registry
         if urls is None:
-            urls = dict()
+            urls = {}
         self.urls = dict(urls)
         self.retry_if_failed = retry_if_failed
         self.allow_updates = allow_updates
