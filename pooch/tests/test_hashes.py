@@ -66,7 +66,7 @@ def data_dir_mirror(tmp_path):
 
 def test_make_registry(data_dir_mirror):
     "Check that the registry builder creates the right file names and hashes"
-    outfile = NamedTemporaryFile(delete=False)
+    outfile = NamedTemporaryFile(delete=False)  # pylint: disable=consider-using-with
     # Need to close the file before writing to it.
     outfile.close()
     try:
@@ -87,7 +87,7 @@ def test_make_registry(data_dir_mirror):
 
 def test_make_registry_recursive(data_dir_mirror):
     "Check that the registry builder works in recursive mode"
-    outfile = NamedTemporaryFile(delete=False)
+    outfile = NamedTemporaryFile(delete=False)  # pylint: disable=consider-using-with
     # Need to close the file before writing to it.
     outfile.close()
     try:
