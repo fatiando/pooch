@@ -203,7 +203,9 @@ class HTTPDownloader:  # pylint: disable=too-few-public-methods
         kwargs.setdefault("stream", True)
         ispath = not hasattr(output_file, "write")
         if ispath:
+            # pylint: disable=consider-using-with
             output_file = open(output_file, "w+b")
+            # pylint: enable=consider-using-with
         try:
             response = requests.get(url, timeout=timeout, **kwargs)
             response.raise_for_status()
@@ -344,7 +346,9 @@ class FTPDownloader:  # pylint: disable=too-few-public-methods
 
         ispath = not hasattr(output_file, "write")
         if ispath:
+            # pylint: disable=consider-using-with
             output_file = open(output_file, "w+b")
+            # pylint: enable=consider-using-with
         try:
             ftp.login(user=self.username, passwd=self.password, acct=self.account)
             command = f"RETR {parsed_url['path']}"

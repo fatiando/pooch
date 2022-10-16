@@ -646,7 +646,7 @@ class Pooch:
                 fin = fname
             else:
                 # It's a file path
-                fin = stack.enter_context(open(fname))
+                fin = stack.enter_context(open(fname, encoding="utf-8"))
 
             for linenum, line in enumerate(fin):
                 if isinstance(line, bytes):

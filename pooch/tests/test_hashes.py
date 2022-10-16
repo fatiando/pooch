@@ -71,7 +71,7 @@ def test_make_registry(data_dir_mirror):
     outfile.close()
     try:
         make_registry(data_dir_mirror, outfile.name, recursive=False)
-        with open(outfile.name) as fout:
+        with open(outfile.name, encoding="utf-8") as fout:
             registry = fout.read()
         assert registry == REGISTRY
         # Check that the registry can be used.
@@ -92,7 +92,7 @@ def test_make_registry_recursive(data_dir_mirror):
     outfile.close()
     try:
         make_registry(data_dir_mirror, outfile.name, recursive=True)
-        with open(outfile.name) as fout:
+        with open(outfile.name, encoding="utf-8") as fout:
             registry = fout.read()
         assert registry == REGISTRY_RECURSIVE
         # Check that the registry can be used.

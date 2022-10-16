@@ -24,7 +24,7 @@ def check_tiny_data(fname):
     Load the tiny-data.txt file and check that the contents are correct.
     """
     assert os.path.exists(fname)
-    with open(fname) as tinydata:
+    with open(fname, encoding="utf-8") as tinydata:
         content = tinydata.read()
     true_content = "\n".join(
         ["# A tiny data file for test purposes only", "1  2  3  4  5  6"]
@@ -37,7 +37,7 @@ def check_large_data(fname):
     Load the large-data.txt file and check that the contents are correct.
     """
     assert os.path.exists(fname)
-    with open(fname) as data:
+    with open(fname, encoding="utf-8") as data:
         content = data.read()
     true_content = ["# A larer data file for test purposes only"]
     true_content.extend(["1  2  3  4  5  6"] * 6002)
