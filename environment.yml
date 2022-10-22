@@ -1,7 +1,6 @@
 name: pooch
 channels:
     - conda-forge
-    - defaults
 dependencies:
     - python==3.11
     - pip
@@ -17,12 +16,11 @@ dependencies:
     - pytest-localftpserver
     - coverage
     # Documentation
-    - sphinx==4.4.*
-    - sphinx-book-theme==0.2.*
-    - sphinx-panels==0.6.*
+    - sphinx ==4.4.*
+    - sphinx-book-theme ==0.2.*
+    - sphinx-panels ==0.6.*
     # Style
     - pathspec
-    - black>=20.8b1
+    - black >=20.8b1
     - flake8
-    - pip:
-      - pylint==2.4.*
+    - pylint >=2.4
