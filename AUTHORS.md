@@ -21,3 +21,4 @@ order by last name) and are considered "The Pooch Developers":
 * [Matthew Turk](https://github.com/matthewturk) - University of Illinois at Urbana-Champaign, USA (ORCID: [0000-0002-5294-0198](https://www.orcid.org/0000-0002-5294-0198))
 * [Leonardo Uieda](https://github.com/leouieda) - University of Liverpool, UK (ORCID: [0000-0001-6123-9515](https://www.orcid.org/0000-0001-6123-9515))
 * [Antonio Valentino](https://github.com/avalentino)
+* [Björn Ludwig](https://github.com/BjoernLudwigPTB) - Physikalisch-Technische Bundesanstalt, Germany (ORCID: [0000-0002-5910-9137](https://www.orcid.org/0000-0002-5910-9137))
