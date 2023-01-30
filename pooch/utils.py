@@ -146,7 +146,7 @@ def check_version(version, fallback="master"):
 
 
 def parse_url(url):
-    """
+    r"""
     Parse a URL into 3 components:
 
     <protocol>://<netloc>/<path>
@@ -159,6 +159,8 @@ def parse_url(url):
 
     The DOI is a special case. The protocol will be "doi", the netloc will be
     the DOI, and the path is what comes after the last "/".
+    Some DOI can store files with a forward slash "/" in their name, in those
+    cases we expect them to be lead by a backslash "\".
 
     Parameters
     ----------
@@ -178,9 +180,17 @@ def parse_url(url):
         )
     if url.startswith("doi:"):
         protocol = "doi"
-        parts = url[4:].split("/")
-        netloc = "/".join(parts[:-1])
-        path = "/" + parts[-1]
+        if r"\/" in url:
+            # Consider the special case in which the path has a forward slash
+            url = url[4:]
+            backslask_index = url.find(r"\/")
+            parts = url[:backslask_index].split("/")
+            netloc = "/".join(parts[:-1])
+            path = "/" + parts[-1] + url[backslask_index:].replace(r"\/", "/")
+        else:
+            parts = url[4:].split("/")
+            netloc = "/".join(parts[:-1])
+            path = "/" + parts[-1]
     else:
         parsed_url = urlsplit(url)
         protocol = parsed_url.scheme or "file"

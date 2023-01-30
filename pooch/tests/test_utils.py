@@ -141,8 +141,16 @@ def test_local_storage_newfile_permissionerror(monkeypatch):
                 "path": "/dike.json",
             },
         ),
+        (
+            r"doi:10.5281/zenodo.7347607/Wild-Minds\/GreatApeDictionary-v1.1.zip",
+            {
+                "protocol": "doi",
+                "netloc": "doi:10.5281/zenodo.7347607",
+                "path": "/Wild-Minds/GreatApeDictionary-v1.1.zip",
+            },
+        ),
     ],
-    ids=["http", "ftp", "doi"],
+    ids=["http", "ftp", "doi", "doi_slash-in-path"],
 )
 def test_parse_url(url, output):
     "Parse URL into 3 components"

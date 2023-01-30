@@ -623,7 +623,7 @@ class DOIDownloader:  # pylint: disable=too-few-public-methods
             )
 
         # Resolve the URL
-        file_name = parsed_url["path"].split("/")[-1]
+        file_name = parsed_url["path"][1:]  # remove the leading slash in the path
         download_url = data_repository.download_url(file_name)
 
         # Instantiate the downloader object
