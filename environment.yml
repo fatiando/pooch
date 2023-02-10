@@ -8,7 +8,7 @@ dependencies:
     # Run
     - requests
     - packaging
-    - appdirs
+    - platformdirs
     # Build
     - build
     # Test
