@@ -292,7 +292,6 @@ class FTPDownloader:  # pylint: disable=too-few-public-methods
         progressbar=False,
         chunk_size=1024,
     ):
-
         self.port = port
         self.username = username
         self.password = password
