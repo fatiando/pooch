@@ -34,6 +34,7 @@ from ..downloaders import (
     DataverseRepository,
     doi_to_url,
 )
+from ..processors import Unzip
 from .utils import (
     pooch_test_url,
     check_large_data,
@@ -130,6 +131,26 @@ def test_doi_downloader(url):
         outfile = os.path.join(local_store, "tiny-data.txt")
         downloader(url + "tiny-data.txt", outfile, None)
         check_tiny_data(outfile)
+
+
+@pytest.mark.network
+def test_zenodo_downloader_with_slash_in_fname():
+    """
+    Test the Zenodo downloader when the fname contains a forward slash
+
+    Related to issue #336
+    """
+    # Use the test data we have on the repository
+    url = r"doi:10.5281/zenodo.7632643/santisoler\/pooch-test-data-v1.zip"
+    with TemporaryDirectory() as local_store:
+        downloader = DOIDownloader()
+        outfile = os.path.join(local_store, "test-data.zip")
+        downloader(url, outfile, None)
+        # unpack the downloaded zip file so we can check the integrity of
+        # tiny-data.txt
+        fnames = Unzip()(outfile, action="download", pooch=None)
+        (fname,) = [f for f in fnames if "tiny-data.txt" in f]
+        check_tiny_data(fname)
 
 
 @pytest.mark.network
