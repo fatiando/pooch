@@ -141,8 +141,16 @@ def test_local_storage_newfile_permissionerror(monkeypatch):
                 "path": "/dike.json",
             },
         ),
+        (
+            r"doi:10.5281/zenodo.7632643/santisoler/pooch-test-data-v1.zip",
+            {
+                "protocol": "doi",
+                "netloc": "10.5281/zenodo.7632643",
+                "path": "/santisoler/pooch-test-data-v1.zip",
+            },
+        ),
     ],
-    ids=["http", "ftp", "doi"],
+    ids=["http", "ftp", "doi", "zenodo-doi-with-slash"],
 )
 def test_parse_url(url, output):
     "Parse URL into 3 components"
