@@ -53,7 +53,7 @@ manually.
 
 Required:
 
-* `appdirs <https://github.com/ActiveState/appdirs>`__
+* `platformdirs <https://github.com/platformdirs/platformdirs>`__
 * `packaging <https://github.com/pypa/packaging>`__
 * `requests <https://docs.python-requests.org/>`__
 
