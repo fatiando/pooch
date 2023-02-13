@@ -292,7 +292,6 @@ class FTPDownloader:  # pylint: disable=too-few-public-methods
         progressbar=False,
         chunk_size=1024,
     ):
-
         self.port = port
         self.username = username
         self.password = password
@@ -911,10 +910,10 @@ class FigshareRepository(DataRepository):  # pylint: disable=missing-class-docst
 
 
 class DataverseRepository(DataRepository):  # pylint: disable=missing-class-docstring
-    def __init__(self, doi, archive_url, response):
+    def __init__(self, doi, archive_url):
         self.archive_url = archive_url
         self.doi = doi
-        self._api_response = response
+        self._api_response = None
 
     @classmethod
     def initialize(cls, doi, archive_url):
@@ -936,17 +935,42 @@ class DataverseRepository(DataRepository):  # pylint: disable=missing-class-docs
         """
 
         # Access the DOI as if this was a DataVerse instance
-        parsed = parse_url(archive_url)
-        response = requests.get(
-            f"{parsed['protocol']}://{parsed['netloc']}/api/datasets/"
-            f":persistentId?persistentId=doi:{doi}"
-        )
+        response = cls._get_api_response(doi, archive_url)
 
         # If we failed, this is probably not a DataVerse instance
         if 400 <= response.status_code < 600:
             return None
 
-        return cls(doi, archive_url, response)
+        repository = cls(doi, archive_url)
+        repository.api_response = response
+
+        return repository
+
+    @classmethod
+    def _get_api_response(cls, doi, archive_url):
+        # Perform the actual API request. Separated into a separate
+        # classmethod, as it can both be used prior to initialization
+        # and after initialization
+        parsed = parse_url(archive_url)
+        return requests.get(
+            f"{parsed['protocol']}://{parsed['netloc']}/api/datasets/"
+            f":persistentId?persistentId=doi:{doi}"
+        )
+
+    @property
+    def api_response(self):
+        """Cached API response from a DataVerse instance"""
+
+        if self._api_response is None:
+            self._api_response = self._get_api_response()  # pragma: no cover
+
+        return self._api_response
+
+    @api_response.setter
+    def api_response(self, response):
+        """Update the cached API response"""
+
+        self._api_response = response
 
     def download_url(self, file_name):
         """
@@ -967,7 +991,7 @@ class DataverseRepository(DataRepository):  # pylint: disable=missing-class-docs
         parsed = parse_url(self.archive_url)
 
         # Iterate over the given files until we find one of the requested name
-        for filedata in self._api_response.json()["data"]["latestVersion"]["files"]:
+        for filedata in self.api_response.json()["data"]["latestVersion"]["files"]:
             if file_name == filedata["dataFile"]["filename"]:
                 return (
                     f"{parsed['protocol']}://{parsed['netloc']}/api/access/datafile/"
@@ -988,7 +1012,7 @@ class DataverseRepository(DataRepository):  # pylint: disable=missing-class-docs
             The pooch instance that the registry will be added to.
         """
 
-        for filedata in self._api_response.json()["data"]["latestVersion"]["files"]:
+        for filedata in self.api_response.json()["data"]["latestVersion"]["files"]:
             pooch.registry[
                 filedata["dataFile"]["filename"]
             ] = f"md5:{filedata['dataFile']['md5']}"
