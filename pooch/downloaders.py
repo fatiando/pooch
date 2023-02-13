@@ -941,21 +941,25 @@ class DataverseRepository(DataRepository):  # pylint: disable=missing-class-docs
         if 400 <= response.status_code < 600:
             return None
 
+        # Initialize the repository and overwrite the api response
         repository = cls(doi, archive_url)
         repository.api_response = response
-
         return repository
 
     @classmethod
     def _get_api_response(cls, doi, archive_url):
-        # Perform the actual API request. Separated into a separate
-        # classmethod, as it can both be used prior to initialization
-        # and after initialization
+        """
+        Perform the actual API request
+
+        This has been separated into a separate ``classmethod``, as it can be
+        used prior and after the initialization.
+        """
         parsed = parse_url(archive_url)
-        return requests.get(
+        response = requests.get(
             f"{parsed['protocol']}://{parsed['netloc']}/api/datasets/"
             f":persistentId?persistentId=doi:{doi}"
         )
+        return response
 
     @property
     def api_response(self):
