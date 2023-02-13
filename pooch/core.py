@@ -76,7 +76,7 @@ def retrieve(
     url : str
         The URL to the file that is to be downloaded. Ideally, the URL should
         end in a file name.
-    known_hash : str
+    known_hash : str or None
         A known hash (checksum) of the file. Will be used to verify the
         download or check if an existing file needs to be updated. By default,
         will assume it's a SHA256 hash. To specify a different hashing method,

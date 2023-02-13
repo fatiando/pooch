@@ -962,7 +962,9 @@ class DataverseRepository(DataRepository):  # pylint: disable=missing-class-docs
         """Cached API response from a DataVerse instance"""
 
         if self._api_response is None:
-            self._api_response = self._get_api_response()  # pragma: no cover
+            self._api_response = self._get_api_response(
+                self.doi, self.archive_url
+            )  # pragma: no cover
 
         return self._api_response
 
