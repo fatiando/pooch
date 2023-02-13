@@ -681,7 +681,8 @@ class Pooch:
         downloader = choose_downloader(self.base_url)
         if not isinstance(downloader, DOIDownloader):
             raise ValueError(
-                "Pooch.load_registry_from_doi is only implemented for DOIs"
+                f"Invalid base_url '{self.base_url}': "
+                + "Pooch.load_registry_from_doi is only implemented for DOIs"
             )
 
         # Create a repository instance
