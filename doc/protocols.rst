@@ -104,9 +104,9 @@ figshare dataset:
     from a figshare collection will raise an error.
     See `issue #274 <https://github.com/fatiando/pooch/issues/274>`__ details.
 
-Since these type of repositories already store information about the files
-contained in them, we can avoid having to manually type the registry with the
-file names and their hashes.
+Since this type of repositories store information about the files contained in
+them, we can avoid having to manually type the registry with the file names and
+their hashes.
 Instead, we can use the :meth:`pooch.Pooch.load_registry_from_doi` to
 automatically populate the registry:
 
