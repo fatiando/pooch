@@ -672,9 +672,17 @@ class Pooch:
 
     def load_registry_from_doi(self):
         """
-        Populate the registry using the data repository's API
+        Populate the registry using the data repository API
 
-        This is the preferred way of populating the API when using DOIs.
+        Fill the registry with all the files available in the data repository,
+        along with their hashes. It will make a request to the data repository
+        API to retrieve this information. No file is downloaded during this
+        process.
+
+        .. important::
+
+            This method is intended to be used only when the ``base_url`` is
+            a DOI.
         """
 
         # Ensure that this is indeed a DOI-based pooch
