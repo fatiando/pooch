@@ -597,7 +597,10 @@ class DOIDownloader:  # pylint: disable=too-few-public-methods
         data_repository = doi_to_repository(parsed_url["netloc"])
 
         # Resolve the URL
-        file_name = parsed_url["path"].split("/")[-1]
+        file_name = parsed_url["path"]
+        # remove the leading slash in the path
+        if file_name[0] == "/":
+            file_name = file_name[1:]
         download_url = data_repository.download_url(file_name)
 
         # Instantiate the downloader object
