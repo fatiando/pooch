@@ -42,6 +42,7 @@ from .utils import (
     data_over_ftp,
     pooch_test_figshare_url,
     pooch_test_zenodo_url,
+    pooch_test_zenodo_with_slash_url,
     pooch_test_dataverse_url,
 )
 
@@ -49,6 +50,7 @@ from .utils import (
 BASEURL = pooch_test_url()
 FIGSHAREURL = pooch_test_figshare_url()
 ZENODOURL = pooch_test_zenodo_url()
+ZENODOURL_W_SLASH = pooch_test_zenodo_with_slash_url()
 DATAVERSEURL = pooch_test_dataverse_url()
 
 
@@ -141,11 +143,11 @@ def test_zenodo_downloader_with_slash_in_fname():
     Related to issue #336
     """
     # Use the test data we have on the repository
-    url = r"doi:10.5281/zenodo.7632643/santisoler/pooch-test-data-v1.zip"
     with TemporaryDirectory() as local_store:
+        base_url = ZENODOURL_W_SLASH + "santisoler/pooch-test-data-v1.zip"
         downloader = DOIDownloader()
         outfile = os.path.join(local_store, "test-data.zip")
-        downloader(url, outfile, None)
+        downloader(base_url, outfile, None)
         # unpack the downloaded zip file so we can check the integrity of
         # tiny-data.txt
         fnames = Unzip()(outfile, action="download", pooch=None)
