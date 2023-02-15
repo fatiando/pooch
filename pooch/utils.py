@@ -162,7 +162,8 @@ def parse_url(url):
     The only exception are Zenodo dois: the protocol will be "doi", the netloc
     will be composed by the "prefix/suffix" and the path is what comes after
     the second "/". This allows to support special cases of Zenodo dois where
-    the path contains forward slashes "/".
+    the path contains forward slashes "/", created by the GitHub-Zenodo
+    integration service.
 
     Parameters
     ----------
