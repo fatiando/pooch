@@ -156,6 +156,55 @@ def test_zenodo_downloader_with_slash_in_fname():
 
 
 @pytest.mark.network
+def test_figshare_unspecified_version():
+    """
+    Test if passing a Figshare url without a version warns about it, but still
+    downloads it.
+    """
+    url = FIGSHAREURL
+    # Remove the last bits of the doi, where the version is specified and
+    url = url[: url.rindex(".")] + "/"
+    # Create expected warning message
+    doi = url[4:-1]
+    warning_msg = f"The Figshare DOI '{doi}' doesn't specify which version of "
+    with TemporaryDirectory() as local_store:
+        downloader = DOIDownloader()
+        outfile = os.path.join(local_store, "tiny-data.txt")
+        with pytest.warns(UserWarning, match=warning_msg):
+            downloader(url + "tiny-data.txt", outfile, None)
+
+
+@pytest.mark.network
+@pytest.mark.parametrize(
+    "version, missing, present",
+    [
+        (
+            1,
+            "LC08_L2SP_218074_20190114_20200829_02_T1-cropped.tar.gz",
+            "cropped-before.tar.gz",
+        ),
+        (
+            2,
+            "cropped-before.tar.gz",
+            "LC08_L2SP_218074_20190114_20200829_02_T1-cropped.tar.gz",
+        ),
+    ],
+)
+def test_figshare_data_repository_versions(version, missing, present):
+    """
+    Test if setting the version in Figshare DOI works as expected
+    """
+    # Use a Figshare repo as example (we won't download files from it since
+    # they are too big)
+    doi = f"10.6084/m9.figshare.21665630.v{version}"
+    url = f"https://doi.org/{doi}/"
+    figshare = FigshareRepository(doi, url)
+    filenames = [item["name"] for item in figshare.api_response]
+    assert present in filenames
+    assert missing not in filenames
+
+
+@pytest.mark.network
 def test_ftp_downloader(ftpserver):
     "Test ftp downloader"
     with data_over_ftp(ftpserver, "tiny-data.txt") as url:

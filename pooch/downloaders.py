@@ -11,6 +11,7 @@ import os
 import sys
 import ftplib
 
+import warnings
 import requests
 
 from .utils import parse_url
@@ -855,6 +856,22 @@ class FigshareRepository(DataRepository):  # pylint: disable=missing-class-docst
 
         return cls(doi, archive_url)
 
+    def _parse_version(self):
+        """
+        Parse version from the doi
+
+        Return None if version is not available in the doi.
+        """
+        # Get suffix of the doi
+        _, suffix = self.doi.split("/")
+        # Split the suffix by dots and keep the last part
+        last_part = suffix.split(".")[-1]
+        # Parse the version from the last part
+        if last_part[0] != "v":
+            return None
+        version = int(last_part[1:])
+        return version
+
     @property
     def api_response(self):
         """Cached API response from Figshare"""
@@ -865,12 +882,32 @@ class FigshareRepository(DataRepository):  # pylint: disable=missing-class-docst
                 f"https://api.figshare.com/v2/articles?doi={self.doi}"
             ).json()[0]
             article_id = article["id"]
-            # With the ID, we can get a list of files and their download links
-            response = requests.get(
-                f"https://api.figshare.com/v2/articles/{article_id}/files"
-            )
+            # Parse desired version from the doi
+            version = self._parse_version()
+            # With the ID and version, we can get a list of files and their
+            # download links
+            if version is None:
+                # Figshare returns the latest version available when no version
+                # is specified through the DOI.
+                warnings.warn(
+                    f"The Figshare DOI '{self.doi}' doesn't specify which version of "
+                    "the repository should be used. "
+                    "Figshare will point to the latest version available.",
+                    UserWarning,
+                )
+                # Get list of files using only the article id (figshare
+                # resolves the latest version)
+                response = requests.get(
+                    f"https://api.figshare.com/v2/articles/{article_id}"
+                )
+            else:
+                # Get list of files using article id and the version
+                response = requests.get(
+                    "https://api.figshare.com/v2/articles/"
+                    f"{article_id}/versions/{version}"
+                )
             response.raise_for_status()
-            self._api_response = response.json()
+            self._api_response = response.json()["files"]
 
         return self._api_response
 
