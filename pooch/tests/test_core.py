@@ -28,6 +28,7 @@ from .utils import (
     data_over_ftp,
     pooch_test_figshare_url,
     pooch_test_zenodo_url,
+    pooch_test_zenodo_with_slash_url,
     pooch_test_dataverse_url,
     pooch_test_registry,
     check_tiny_data,
@@ -41,6 +42,7 @@ REGISTRY = pooch_test_registry()
 BASEURL = pooch_test_url()
 FIGSHAREURL = pooch_test_figshare_url()
 ZENODOURL = pooch_test_zenodo_url()
+ZENODOURL_W_SLASH = pooch_test_zenodo_with_slash_url()
 DATAVERSEURL = pooch_test_dataverse_url()
 REGISTRY_CORRUPTED = {
     # The same data file but I changed the hash manually to a wrong one
@@ -632,6 +634,26 @@ def test_load_registry_from_doi(url):
         assert len(pup.registry) == 2
         assert "tiny-data.txt" in pup.registry
         assert "store.zip" in pup.registry
+
+        # Ensure that all files have correct checksums by fetching them
+        for filename in pup.registry:
+            pup.fetch(filename)
+
+
+def test_load_registry_from_doi_zenodo_with_slash():
+    """
+    Check that the registry is correctly populated from the Zenodo API when
+    the filename contains a slash
+    """
+    url = ZENODOURL_W_SLASH
+    with TemporaryDirectory() as local_store:
+        path = os.path.abspath(local_store)
+        pup = Pooch(path=path, base_url=url)
+        pup.load_registry_from_doi()
+
+        # Check the existence of all files in the registry
+        assert len(pup.registry) == 1
+        assert "santisoler/pooch-test-data-v1.zip" in pup.registry
 
         # Ensure that all files have correct checksums by fetching them
         for filename in pup.registry:
