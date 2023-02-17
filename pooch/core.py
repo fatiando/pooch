@@ -26,6 +26,7 @@ from .utils import (
     temporary_file,
     os_cache,
     unique_file_name,
+    join_url,
 )
 from .downloaders import DOIDownloader, choose_downloader, doi_to_repository
 
@@ -617,7 +618,7 @@ class Pooch:
 
         """
         self._assert_file_in_registry(fname)
-        return self.urls.get(fname, "".join([self.base_url, fname]))
+        return self.urls.get(fname, join_url(self.base_url, fname))
 
     def load_registry(self, fname):
         """
