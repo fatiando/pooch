@@ -145,10 +145,6 @@ def check_version(version, fallback="master"):
     return version
 
 
-def join_url(base_url, fname):
-    return base_url.rstrip("/") + "/" + fname
-
-
 def parse_url(url):
     """
     Parse a URL into 3 components:
