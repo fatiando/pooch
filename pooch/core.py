@@ -295,8 +295,8 @@ def create(
         Base URL for the remote data source. All requests will be made relative
         to this URL. The string should have a ``{version}`` formatting mark in
         it. We will call ``.format(version=version)`` on this string. If the
-        URL is a directory path, it must end in a ``'/'`` because we will not
-        include it.
+        URL does not end in a ``'/'``, a trailing ``'/'`` will be added
+        automatically.
     version : str or None
         The version string for your project. Should be PEP440 compatible. If
         None is given, will not attempt to format *base_url* and no subfolder
@@ -423,6 +423,8 @@ def create(
     path = cache_location(path, env, version)
     if isinstance(allow_updates, str):
         allow_updates = os.environ.get(allow_updates, "true").lower() != "false"
+    # add trailing "/"
+    base_url = base_url.rstrip("/") + "/"
     pup = Pooch(
         path=path,
         base_url=base_url,

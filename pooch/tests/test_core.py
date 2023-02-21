@@ -382,6 +382,15 @@ def test_pooch_update_disallowed_environment():
         os.environ.pop(variable_name)
 
 
+def test_pooch_create_base_url_no_trailing_slash():
+    """
+    Test if pooch.create appends a trailing slash to the base url if missing
+    """
+    base_url = "https://mybase.url"
+    pup = create(base_url=base_url, registry=None, path=DATA_DIR)
+    assert pup.base_url == base_url + "/"
+
+
 @pytest.mark.network
 def test_pooch_corrupted(data_dir_mirror):
     "Raise an exception if the file hash doesn't match the registry"
