@@ -856,7 +856,7 @@ class FigshareRepository(DataRepository):  # pylint: disable=missing-class-docst
 
         return cls(doi, archive_url)
 
-    def _parse_version(self):
+    def _parse_version_from_doi(self):
         """
         Parse version from the doi
 
@@ -883,7 +883,7 @@ class FigshareRepository(DataRepository):  # pylint: disable=missing-class-docst
             ).json()[0]
             article_id = article["id"]
             # Parse desired version from the doi
-            version = self._parse_version()
+            version = self._parse_version_from_doi()
             # With the ID and version, we can get a list of files and their
             # download links
             if version is None:
@@ -895,17 +895,18 @@ class FigshareRepository(DataRepository):  # pylint: disable=missing-class-docst
                     "Figshare will point to the latest version available.",
                     UserWarning,
                 )
-                # Get list of files using only the article id (figshare
-                # resolves the latest version)
-                response = requests.get(
-                    f"https://api.figshare.com/v2/articles/{article_id}"
-                )
+                # Define API url using only the article id
+                # (figshare will resolve the latest version)
+                api_url = f"https://api.figshare.com/v2/articles/{article_id}"
             else:
+                # Define API url using article id and the desired version
                 # Get list of files using article id and the version
-                response = requests.get(
+                api_url = (
                     "https://api.figshare.com/v2/articles/"
                     f"{article_id}/versions/{version}"
                 )
+            # Make the request and return the files in the figshare repository
+            response = requests.get(api_url)
             response.raise_for_status()
             self._api_response = response.json()["files"]
 
