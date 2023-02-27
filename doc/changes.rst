@@ -3,6 +3,64 @@
 Changelog
 =========
 
+Version 1.7.0
+-------------
+
+*Released on: 2023/02/27*
+
+doi:`10.5281/zenodo.7678844 <https://doi.org/10.5281/zenodo.7678844>`__
+
+Bug fixes:
+
+* Make archive extraction always take members into account (`#316 <https://github.com/fatiando/pooch/pull/316>`__)
+* Figshare downloaders fetch the correct version, instead of always the latest one. (`#343 <https://github.com/fatiando/pooch/pull/343>`__)
+
+New features:
+
+* Allow spaces in filenames in registry files (`#315 <https://github.com/fatiando/pooch/pull/315>`__)
+* Refactor ``Pooch.is_available`` to use downloaders (`#322 <https://github.com/fatiando/pooch/pull/322>`__)
+* Add support for downloading files from Dataverse DOIs (`#318 <https://github.com/fatiando/pooch/pull/318>`__)
+* Add a new ``Pooch.load_registry_from_doi`` method that populates the Pooch registry using DOI-based data repositories (`#325 <https://github.com/fatiando/pooch/pull/325>`__)
+* Support urls for Zenodo repositories created through the GitHub integration service, which include slashes in the filename of the main zip files (`#340 <https://github.com/fatiando/pooch/pull/340>`__)
+* Automatically add a trailing slash to ``base_url`` on ``pooch.create`` (`#344 <https://github.com/fatiando/pooch/pull/344>`__)
+
+Maintenance:
+
+* Drop support for Python 3.6 (`#299 <https://github.com/fatiando/pooch/pull/299>`__)
+* Port from deprecated ``appdirs`` to ``platformdirs`` (`#339 <https://github.com/fatiando/pooch/pull/339>`__)
+* Update version of Codecov's Action to v3 (`#345 <https://github.com/fatiando/pooch/pull/345>`__)
+
+Documentation:
+
+* Update sphinx, theme, and sphinx-panels (`#300 <https://github.com/fatiando/pooch/pull/300>`__)
+* Add CITATION.cff for the JOSS article (`#308 <https://github.com/fatiando/pooch/pull/308>`__)
+* Use Markdown for the README (`#311 <https://github.com/fatiando/pooch/pull/311>`__)
+* Improve docstring of `known_hash` in `retrieve` function (`#333 <https://github.com/fatiando/pooch/pull/333>`__)
+* Replace link to Pooch's citation with a BibTeX code snippet (`#335 <https://github.com/fatiando/pooch/pull/335>`__)
+
+Projects that started using Pooch:
+
+* Open AR-Sandbox (`#305 <https://github.com/fatiando/pooch/pull/305>`__)
+* ``climlab`` (`#312 <https://github.com/fatiando/pooch/pull/312>`__)
+* SciPy (`#320 <https://github.com/fatiando/pooch/pull/320>`__)
+* ``napari`` (`#321 <https://github.com/fatiando/pooch/pull/321>`__)
+* ``mne-python`` (`#323 <https://github.com/fatiando/pooch/pull/323>`__)
+
+This release contains contributions from:
+
+* Alex Fikl
+* Anirudh Dagar
+* Björn Ludwig
+* Brian Rose
+* Dominic Kempf
+* Florian Wellmann
+* Gabriel Fu
+* Kyle I S Harrington
+* Leonardo Uieda
+* myd7349
+* Rowan Cockett
+* Santiago Soler
+
 Version 1.6.0
 -------------
 
