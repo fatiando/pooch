@@ -6,7 +6,7 @@ Changelog
 Version 1.7.0
 -------------
 
-*Released on: 2023/02/24*
+*Released on: 2023/02/27*
 
 doi:`10.5281/zenodo.7678844 <https://doi.org/10.5281/zenodo.7678844>`__
 
