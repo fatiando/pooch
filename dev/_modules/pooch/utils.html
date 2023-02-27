@@ -11,7 +11,8 @@
     
 
     
-  <link rel="stylesheet" href="../../_static/css/index.f658d18f9b420779cfdf24aa0a7e2d77.css">
+  <link href="../../_static/css/theme.css" rel="stylesheet">
+  <link href="../../_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
 
     
   <link rel="stylesheet"
@@ -23,25 +24,21 @@
 
     
       
-  <link rel="stylesheet"
-    href="../../_static/vendor/open-sans_all/1.44.1/index.css">
-  <link rel="stylesheet"
-    href="../../_static/vendor/lato_latin-ext/1.44.1/index.css">
 
     
-    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/sphinx-book-theme.c441f2ba0852f4cabcb80105e3a46ae6.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-book-theme.css?digest=84ace793992934648b4de8eed757e5a2" />
     <link rel="stylesheet" type="text/css" href="../../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/panels-variables.87249bd3f7b54630a2508c1b61607c7f.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/style.css" />
     
-  <link rel="preload" as="script" href="../../_static/js/index.d3f166471bb80abb5163.js">
+  <link rel="preload" as="script" href="../../_static/js/index.be7d3bbb2ef33a8344ce.js">
 
-    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
     <script src="../../_static/doctools.js"></script>
-    <script src="../../_static/sphinx-book-theme.7d483ff0a819d6edff12ce0b1ead3928.js"></script>
+    <script src="../../_static/sphinx-book-theme.9d8b4a8b9bb19db25eeaddc40d639ba2.js"></script>
     <link rel="shortcut icon" href="../../_static/favicon.png"/>
     <link rel="author" title="About these documents" href="../../about.html" />
     <link rel="index" title="Index" href="../../genindex.html" />
@@ -52,39 +49,51 @@
   </head>
   <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
     
+    <div class="container-fluid" id="banner"></div>
+
+    
 
     <div class="container-xl">
       <div class="row">
           
-<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<div class="col-12 col-md-3 bd-sidebar site-navigation " id="site-navigation">
     
         <div class="navbar-brand-box">
-<a class="navbar-brand text-wrap" href="../../index.html">
-  
-  <img src="../../_static/pooch-logo.png" class="logo" alt="logo">
-  
-  
-  <h1 class="site-logo" id="site-title">Pooch <span class="project-version">dev</span></h1>
-  
-</a>
+    <a class="navbar-brand text-wrap" href="../../index.html">
+      
+        <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
+        
+      
+      
+      <img src="../../_static/pooch-logo.png" class="logo" alt="logo">
+      
+      
+      <h1 class="site-logo" id="site-title">Pooch <span class="project-version">dev</span></h1>
+      
+    </a>
 </div><form class="bd-search d-flex align-items-center" action="../../search.html" method="get">
   <i class="icon fas fa-search"></i>
   <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
-</form>
-<nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
-    <ul class="nav sidenav_l1">
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        <ul class="nav bd-sidenav">
  <li class="toctree-l1">
   <a class="reference internal" href="../../index.html">
    Pooch Documentation
   </a>
  </li>
 </ul>
-<p class="caption collapsible-parent">
+<p aria-level="2" class="caption" role="heading">
  <span class="caption-text">
   Getting Started
  </span>
 </p>
-<ul class="nav sidenav_l1">
+<ul class="nav bd-sidenav">
  <li class="toctree-l1">
   <a class="reference internal" href="../../about.html">
    Why use Pooch?
@@ -111,12 +120,12 @@
   </a>
  </li>
 </ul>
-<p class="caption collapsible-parent">
+<p aria-level="2" class="caption" role="heading">
  <span class="caption-text">
   Training your Pooch
  </span>
 </p>
-<ul class="nav sidenav_l1">
+<ul class="nav bd-sidenav">
  <li class="toctree-l1">
   <a class="reference internal" href="../../hashes.html">
    Hashes: Calculating and bypassing
@@ -178,17 +187,22 @@
   </a>
  </li>
 </ul>
-<p class="caption collapsible-parent">
+<p aria-level="2" class="caption" role="heading">
  <span class="caption-text">
   Reference
  </span>
 </p>
-<ul class="nav sidenav_l1">
- <li class="toctree-l1 collapsible-parent">
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1 has-children">
   <a class="reference internal" href="../../api/index.html">
    List of functions and classes (API)
   </a>
-  <ul class="collapse-ul">
+  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
    <li class="toctree-l2">
     <a class="reference internal" href="../../api/generated/pooch.create.html">
      pooch.create
@@ -270,8 +284,6 @@
     </a>
    </li>
   </ul>
-  <i class="fas fa-chevron-down">
-  </i>
  </li>
  <li class="toctree-l1">
   <a class="reference internal" href="../../compatibility.html">
@@ -294,56 +306,45 @@
   </a>
  </li>
 </ul>
-<p class="caption collapsible-parent">
+<p aria-level="2" class="caption" role="heading">
  <span class="caption-text">
   Community
  </span>
 </p>
-<ul class="nav sidenav_l1">
+<ul class="nav bd-sidenav">
  <li class="toctree-l1">
   <a class="reference external" href="https://www.fatiando.org/contact/">
    Join the community
-   <i class="fas fa-external-link-alt">
-   </i>
   </a>
  </li>
  <li class="toctree-l1">
   <a class="reference external" href="https://github.com/fatiando/community/blob/main/CODE_OF_CONDUCT.md">
    Code of Conduct
-   <i class="fas fa-external-link-alt">
-   </i>
   </a>
  </li>
  <li class="toctree-l1">
   <a class="reference external" href="https://github.com/fatiando/pooch/blob/main/CONTRIBUTING.md">
    How to contribute
-   <i class="fas fa-external-link-alt">
-   </i>
   </a>
  </li>
  <li class="toctree-l1">
   <a class="reference external" href="https://github.com/fatiando/pooch">
    Source code on GitHub
-   <i class="fas fa-external-link-alt">
-   </i>
   </a>
  </li>
  <li class="toctree-l1">
   <a class="reference external" href="https://github.com/fatiando/pooch/blob/main/AUTHORS.md">
    Authors
-   <i class="fas fa-external-link-alt">
-   </i>
   </a>
  </li>
  <li class="toctree-l1">
   <a class="reference external" href="https://www.fatiando.org">
    Fatiando a Terra
-   <i class="fas fa-external-link-alt">
-   </i>
   </a>
  </li>
 </ul>
 
+    </div>
 </nav> <!-- To handle the deprecated key -->
 
 <div class="navbar_extra_footer">
@@ -357,22 +358,22 @@
 
 
           
+<!-- This is an invisible pixel that we watch to see if we've scrolled. -->
+<div class="sbt-scroll-pixel-helper"></div>
 <main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
     
     <div class="topbar container-xl fixed-top">
     <div class="topbar-contents row">
         <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show"></div>
         <div class="col pl-md-4 topbar-main">
-            
-            <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
-                data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
-                aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
-                title="Toggle navigation" data-toggle="tooltip" data-placement="left">
-                <i class="fas fa-bars"></i>
-                <i class="fas fa-arrow-left"></i>
-                <i class="fas fa-arrow-up"></i>
-            </button>
-            
+            <div class="topbar-left">
+                
+                <label class="nav-toggle-button" for="__navigation">
+                    <div class="visually-hidden">Toggle navigation</div>
+                    <i class="fas fa-bars"></i>
+                </label>
+                
+            </div>
             
             <!-- Source interaction buttons -->
 
@@ -392,26 +393,36 @@
     </div>
 </div>
 
-
             <!-- Full screen (wrap in <a> to have style consistency -->
-            <a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
-                    data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
-                    title="Fullscreen mode"><i
-                        class="fas fa-expand"></i></button></a>
+
+<a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+        data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
+        title="Fullscreen mode"><i
+            class="fas fa-expand"></i></button></a>
 
             <!-- Launch buttons -->
 
         </div>
 
         <!-- Table of contents -->
-        <div class="d-none d-md-block col-md-2 bd-toc show">
+        <div class="d-none d-md-block col-md-2 bd-toc show noprint">
             
         </div>
     </div>
 </div>
     <div id="main-content" class="row">
         <div class="col-12 col-md-9 pl-md-3 pr-md-0">
-        
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1></h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                    </div>
+                </div>
+            </div>
+            
               <div>
                 
   <h1>Source code for pooch.utils</h1><div class="highlight"><pre>
@@ -433,7 +444,7 @@
 <span class="kn">from</span> <span class="nn">contextlib</span> <span class="kn">import</span> <span class="n">contextmanager</span>
 <span class="kn">import</span> <span class="nn">warnings</span>
 
-<span class="kn">import</span> <span class="nn">appdirs</span>
+<span class="kn">import</span> <span class="nn">platformdirs</span>
 <span class="kn">from</span> <span class="nn">packaging.version</span> <span class="kn">import</span> <span class="n">Version</span>
 
 
@@ -442,7 +453,7 @@
 
 
 <span class="k">def</span> <span class="nf">file_hash</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    WARNING: Importing this function from pooch.utils is DEPRECATED.</span>
 <span class="sd">    Please import from the top-level namespace (`from pooch import file_hash`)</span>
 <span class="sd">    instead, which is fully backwards compatible with pooch &gt;= 0.1.</span>
@@ -472,7 +483,7 @@
 
 
 <div class="viewcode-block" id="get_logger"><a class="viewcode-back" href="../../api/generated/pooch.get_logger.html#pooch.get_logger">[docs]</a><span class="k">def</span> <span class="nf">get_logger</span><span class="p">():</span>
-    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Get the default event logger.</span>
 
 <span class="sd">    The logger records events like downloading files, unzipping archives, etc.</span>
@@ -488,13 +499,13 @@
 
 
 <div class="viewcode-block" id="os_cache"><a class="viewcode-back" href="../../api/generated/pooch.os_cache.html#pooch.os_cache">[docs]</a><span class="k">def</span> <span class="nf">os_cache</span><span class="p">(</span><span class="n">project</span><span class="p">):</span>
-    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Default cache location based on the operating system.</span>
 
-<span class="sd">    The folder locations are defined by the ``appdirs``  package</span>
+<span class="sd">    The folder locations are defined by the ``platformdirs``  package</span>
 <span class="sd">    using the ``user_cache_dir`` function.</span>
 <span class="sd">    Usually, the locations will be following (see the</span>
-<span class="sd">    `appdirs documentation &lt;https://github.com/ActiveState/appdirs&gt;`__):</span>
+<span class="sd">    `platformdirs documentation &lt;https://platformdirs.readthedocs.io&gt;`__):</span>
 
 <span class="sd">    * Mac: ``~/Library/Caches/&lt;AppName&gt;``</span>
 <span class="sd">    * Unix: ``~/.cache/&lt;AppName&gt;`` or the value of the ``XDG_CACHE_HOME``</span>
@@ -513,11 +524,11 @@
 <span class="sd">        not expanded.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">Path</span><span class="p">(</span><span class="n">appdirs</span><span class="o">.</span><span class="n">user_cache_dir</span><span class="p">(</span><span class="n">project</span><span class="p">))</span></div>
+    <span class="k">return</span> <span class="n">Path</span><span class="p">(</span><span class="n">platformdirs</span><span class="o">.</span><span class="n">user_cache_dir</span><span class="p">(</span><span class="n">project</span><span class="p">))</span></div>
 
 
 <div class="viewcode-block" id="check_version"><a class="viewcode-back" href="../../api/generated/pooch.check_version.html#pooch.check_version">[docs]</a><span class="k">def</span> <span class="nf">check_version</span><span class="p">(</span><span class="n">version</span><span class="p">,</span> <span class="n">fallback</span><span class="o">=</span><span class="s2">&quot;master&quot;</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Check if a version is PEP440 compliant and there are no unreleased changes.</span>
 
 <span class="sd">    For example, ``version = &quot;0.1&quot;`` will be returned as is but ``version =</span>
@@ -563,7 +574,7 @@
 
 
 <span class="k">def</span> <span class="nf">parse_url</span><span class="p">(</span><span class="n">url</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Parse a URL into 3 components:</span>
 
 <span class="sd">    &lt;protocol&gt;://&lt;netloc&gt;/&lt;path&gt;</span>
@@ -575,7 +586,12 @@
 <span class="sd">    * doi:10.6084/m9.figshare.923450.v1/test.nc</span>
 
 <span class="sd">    The DOI is a special case. The protocol will be &quot;doi&quot;, the netloc will be</span>
-<span class="sd">    the DOI, and the path is what comes after the second &quot;/&quot;.</span>
+<span class="sd">    the DOI, and the path is what comes after the last &quot;/&quot;.</span>
+<span class="sd">    The only exception are Zenodo dois: the protocol will be &quot;doi&quot;, the netloc</span>
+<span class="sd">    will be composed by the &quot;prefix/suffix&quot; and the path is what comes after</span>
+<span class="sd">    the second &quot;/&quot;. This allows to support special cases of Zenodo dois where</span>
+<span class="sd">    the path contains forward slashes &quot;/&quot;, created by the GitHub-Zenodo</span>
+<span class="sd">    integration service.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -596,8 +612,12 @@
     <span class="k">if</span> <span class="n">url</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;doi:&quot;</span><span class="p">):</span>
         <span class="n">protocol</span> <span class="o">=</span> <span class="s2">&quot;doi&quot;</span>
         <span class="n">parts</span> <span class="o">=</span> <span class="n">url</span><span class="p">[</span><span class="mi">4</span><span class="p">:]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
-        <span class="n">netloc</span> <span class="o">=</span> <span class="s2">&quot;/&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">parts</span><span class="p">[:</span><span class="mi">2</span><span class="p">])</span>
-        <span class="n">path</span> <span class="o">=</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">parts</span><span class="p">[</span><span class="mi">2</span><span class="p">:])</span>
+        <span class="k">if</span> <span class="s2">&quot;zenodo&quot;</span> <span class="ow">in</span> <span class="n">parts</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">():</span>
+            <span class="n">netloc</span> <span class="o">=</span> <span class="s2">&quot;/&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">parts</span><span class="p">[:</span><span class="mi">2</span><span class="p">])</span>
+            <span class="n">path</span> <span class="o">=</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">parts</span><span class="p">[</span><span class="mi">2</span><span class="p">:])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">netloc</span> <span class="o">=</span> <span class="s2">&quot;/&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">parts</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+            <span class="n">path</span> <span class="o">=</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="n">parts</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">parsed_url</span> <span class="o">=</span> <span class="n">urlsplit</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
         <span class="n">protocol</span> <span class="o">=</span> <span class="n">parsed_url</span><span class="o">.</span><span class="n">scheme</span> <span class="ow">or</span> <span class="s2">&quot;file&quot;</span>
@@ -607,7 +627,7 @@
 
 
 <span class="k">def</span> <span class="nf">cache_location</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">env</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Location of the cache given a base path and optional configuration.</span>
 
 <span class="sd">    Checks for the environment variable to overwrite the path of the local</span>
@@ -644,7 +664,7 @@
 
 
 <span class="k">def</span> <span class="nf">make_local_storage</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">env</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Create the local cache directory and make sure it&#39;s writable.</span>
 
 <span class="sd">    Parameters</span>
@@ -683,7 +703,7 @@
 
 <span class="nd">@contextmanager</span>
 <span class="k">def</span> <span class="nf">temporary_file</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Create a closed and named temporary file and make sure it&#39;s cleaned up.</span>
 
 <span class="sd">    Using :class:`tempfile.NamedTemporaryFile` will fail on Windows if trying</span>
@@ -713,7 +733,7 @@
 
 
 <span class="k">def</span> <span class="nf">unique_file_name</span><span class="p">(</span><span class="n">url</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Create a unique file name based on the given URL.</span>
 
 <span class="sd">    The file name will be unique to the URL by prepending the name with the MD5</span>
@@ -757,33 +777,27 @@
 
               </div>
               
-        
-        <div class='prev-next-bottom'>
             
-
-        </div>
-        
+                <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+</div>
+            
         </div>
     </div>
-    <footer class="footer mt-5 mt-md-0">
-    <div class="container">
-      <p>
-        
-            &copy; Copyright 2022, The Pooch Developers.<br/>
-          Last updated on Jan 24, 2022.<br/>
-      </p>
-    </div>
-  </footer>
+    <footer class="footer">
+  <p>
+    
+        &copy; Copyright 2023, The Pooch Developers.<br/>
+      Last updated on Feb 27, 2023.<br/>
+  </p>
+</footer>
 </main>
 
 
       </div>
     </div>
+  
+  <script src="../../_static/js/index.be7d3bbb2ef33a8344ce.js"></script>
 
-    
-  <script src="../../_static/js/index.d3f166471bb80abb5163.js"></script>
-
-
-    
   </body>
 </html>

@@ -79,6 +79,8 @@ pooch.Pooch
     
     
     
+    
+    
         Pooch.fetch
     
     
@@ -94,8 +96,14 @@ pooch.Pooch
         Pooch.load_registry
     
     
+    
+        Pooch.load_registry_from_doi
+    
+    
 
 ----
+
+
 
 
 
@@ -182,6 +190,10 @@ pooch.Pooch
 
 
 .. automethod:: Pooch.load_registry
+
+
+
+.. automethod:: Pooch.load_registry_from_doi
 
 
 

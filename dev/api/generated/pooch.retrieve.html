@@ -11,7 +11,8 @@
     
 
     
-  <link rel="stylesheet" href="../../_static/css/index.f658d18f9b420779cfdf24aa0a7e2d77.css">
+  <link href="../../_static/css/theme.css" rel="stylesheet">
+  <link href="../../_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
 
     
   <link rel="stylesheet"
@@ -23,25 +24,21 @@
 
     
       
-  <link rel="stylesheet"
-    href="../../_static/vendor/open-sans_all/1.44.1/index.css">
-  <link rel="stylesheet"
-    href="../../_static/vendor/lato_latin-ext/1.44.1/index.css">
 
     
-    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/sphinx-book-theme.c441f2ba0852f4cabcb80105e3a46ae6.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-book-theme.css?digest=84ace793992934648b4de8eed757e5a2" />
     <link rel="stylesheet" type="text/css" href="../../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/panels-variables.87249bd3f7b54630a2508c1b61607c7f.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/style.css" />
     
-  <link rel="preload" as="script" href="../../_static/js/index.d3f166471bb80abb5163.js">
+  <link rel="preload" as="script" href="../../_static/js/index.be7d3bbb2ef33a8344ce.js">
 
-    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
     <script src="../../_static/doctools.js"></script>
-    <script src="../../_static/sphinx-book-theme.7d483ff0a819d6edff12ce0b1ead3928.js"></script>
+    <script src="../../_static/sphinx-book-theme.9d8b4a8b9bb19db25eeaddc40d639ba2.js"></script>
     <link rel="shortcut icon" href="../../_static/favicon.png"/>
     <link rel="author" title="About these documents" href="../../about.html" />
     <link rel="index" title="Index" href="../../genindex.html" />
@@ -54,39 +51,51 @@
   </head>
   <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
     
+    <div class="container-fluid" id="banner"></div>
+
+    
 
     <div class="container-xl">
       <div class="row">
           
-<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<div class="col-12 col-md-3 bd-sidebar site-navigation " id="site-navigation">
     
         <div class="navbar-brand-box">
-<a class="navbar-brand text-wrap" href="../../index.html">
-  
-  <img src="../../_static/pooch-logo.png" class="logo" alt="logo">
-  
-  
-  <h1 class="site-logo" id="site-title">Pooch <span class="project-version">dev</span></h1>
-  
-</a>
+    <a class="navbar-brand text-wrap" href="../../index.html">
+      
+        <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
+        
+      
+      
+      <img src="../../_static/pooch-logo.png" class="logo" alt="logo">
+      
+      
+      <h1 class="site-logo" id="site-title">Pooch <span class="project-version">dev</span></h1>
+      
+    </a>
 </div><form class="bd-search d-flex align-items-center" action="../../search.html" method="get">
   <i class="icon fas fa-search"></i>
   <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
-</form>
-<nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
-    <ul class="nav sidenav_l1">
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        <ul class="nav bd-sidenav">
  <li class="toctree-l1">
   <a class="reference internal" href="../../index.html">
    Pooch Documentation
   </a>
  </li>
 </ul>
-<p class="caption collapsible-parent">
+<p aria-level="2" class="caption" role="heading">
  <span class="caption-text">
   Getting Started
  </span>
 </p>
-<ul class="nav sidenav_l1">
+<ul class="nav bd-sidenav">
  <li class="toctree-l1">
   <a class="reference internal" href="../../about.html">
    Why use Pooch?
@@ -113,12 +122,12 @@
   </a>
  </li>
 </ul>
-<p class="caption collapsible-parent">
+<p aria-level="2" class="caption" role="heading">
  <span class="caption-text">
   Training your Pooch
  </span>
 </p>
-<ul class="nav sidenav_l1">
+<ul class="nav bd-sidenav">
  <li class="toctree-l1">
   <a class="reference internal" href="../../hashes.html">
    Hashes: Calculating and bypassing
@@ -180,17 +189,22 @@
   </a>
  </li>
 </ul>
-<p class="caption collapsible-parent">
+<p aria-level="2" class="caption" role="heading">
  <span class="caption-text">
   Reference
  </span>
 </p>
-<ul class="current nav sidenav_l1">
- <li class="toctree-l1 current active collapsible-parent">
+<ul class="current nav bd-sidenav">
+ <li class="toctree-l1 current active has-children">
   <a class="reference internal" href="../index.html">
    List of functions and classes (API)
   </a>
-  <ul class="current collapse-ul">
+  <input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul class="current">
    <li class="toctree-l2">
     <a class="reference internal" href="pooch.create.html">
      pooch.create
@@ -272,8 +286,6 @@
     </a>
    </li>
   </ul>
-  <i class="fas fa-chevron-down">
-  </i>
  </li>
  <li class="toctree-l1">
   <a class="reference internal" href="../../compatibility.html">
@@ -296,56 +308,45 @@
   </a>
  </li>
 </ul>
-<p class="caption collapsible-parent">
+<p aria-level="2" class="caption" role="heading">
  <span class="caption-text">
   Community
  </span>
 </p>
-<ul class="nav sidenav_l1">
+<ul class="nav bd-sidenav">
  <li class="toctree-l1">
   <a class="reference external" href="https://www.fatiando.org/contact/">
    Join the community
-   <i class="fas fa-external-link-alt">
-   </i>
   </a>
  </li>
  <li class="toctree-l1">
   <a class="reference external" href="https://github.com/fatiando/community/blob/main/CODE_OF_CONDUCT.md">
    Code of Conduct
-   <i class="fas fa-external-link-alt">
-   </i>
   </a>
  </li>
  <li class="toctree-l1">
   <a class="reference external" href="https://github.com/fatiando/pooch/blob/main/CONTRIBUTING.md">
    How to contribute
-   <i class="fas fa-external-link-alt">
-   </i>
   </a>
  </li>
  <li class="toctree-l1">
   <a class="reference external" href="https://github.com/fatiando/pooch">
    Source code on GitHub
-   <i class="fas fa-external-link-alt">
-   </i>
   </a>
  </li>
  <li class="toctree-l1">
   <a class="reference external" href="https://github.com/fatiando/pooch/blob/main/AUTHORS.md">
    Authors
-   <i class="fas fa-external-link-alt">
-   </i>
   </a>
  </li>
  <li class="toctree-l1">
   <a class="reference external" href="https://www.fatiando.org">
    Fatiando a Terra
-   <i class="fas fa-external-link-alt">
-   </i>
   </a>
  </li>
 </ul>
 
+    </div>
 </nav> <!-- To handle the deprecated key -->
 
 <div class="navbar_extra_footer">
@@ -359,22 +360,22 @@
 
 
           
+<!-- This is an invisible pixel that we watch to see if we've scrolled. -->
+<div class="sbt-scroll-pixel-helper"></div>
 <main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
     
     <div class="topbar container-xl fixed-top">
     <div class="topbar-contents row">
         <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show"></div>
         <div class="col pl-md-4 topbar-main">
-            
-            <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
-                data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
-                aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
-                title="Toggle navigation" data-toggle="tooltip" data-placement="left">
-                <i class="fas fa-bars"></i>
-                <i class="fas fa-arrow-left"></i>
-                <i class="fas fa-arrow-up"></i>
-            </button>
-            
+            <div class="topbar-left">
+                
+                <label class="nav-toggle-button" for="__navigation">
+                    <div class="visually-hidden">Toggle navigation</div>
+                    <i class="fas fa-bars"></i>
+                </label>
+                
+            </div>
             
 <div class="dropdown-buttons-trigger">
     <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
@@ -389,7 +390,7 @@
                 data-placement="left">.rst</button></a>
         <!-- Download PDF via print -->
         <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
-            onClick="window.print()" data-toggle="tooltip" data-placement="left">.pdf</button>
+                onclick="printPdf(this)" data-toggle="tooltip" data-placement="left">.pdf</button>
     </div>
 </div>
 
@@ -413,33 +414,43 @@
     </div>
 </div>
 
-
             <!-- Full screen (wrap in <a> to have style consistency -->
-            <a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
-                    data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
-                    title="Fullscreen mode"><i
-                        class="fas fa-expand"></i></button></a>
+
+<a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+        data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
+        title="Fullscreen mode"><i
+            class="fas fa-expand"></i></button></a>
 
             <!-- Launch buttons -->
 
         </div>
 
         <!-- Table of contents -->
-        <div class="d-none d-md-block col-md-2 bd-toc show">
+        <div class="d-none d-md-block col-md-2 bd-toc show noprint">
             
         </div>
     </div>
 </div>
     <div id="main-content" class="row">
         <div class="col-12 col-md-9 pl-md-3 pr-md-0">
-        
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1>pooch.retrieve</h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                    </div>
+                </div>
+            </div>
+            
               <div>
                 
   <div class="section" id="pooch-retrieve">
 <h1>pooch.retrieve<a class="headerlink" href="#pooch-retrieve" title="Permalink to this headline">¶</a></h1>
 <dl class="py function">
-<dt id="pooch.retrieve">
-<code class="sig-prename descclassname"><span class="pre">pooch.</span></code><code class="sig-name descname"><span class="pre">retrieve</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">known_hash</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">processor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">downloader</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">progressbar</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pooch/core.html#retrieve"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pooch.retrieve" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pooch.retrieve">
+<span class="sig-prename descclassname"><span class="pre">pooch.</span></span><span class="sig-name descname"><span class="pre">retrieve</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">known_hash</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">processor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">downloader</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">progressbar</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pooch/core.html#retrieve"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pooch.retrieve" title="Permalink to this definition">¶</a></dt>
 <dd><p>Download and cache a single file locally.</p>
 <p>Uses HTTP or FTP by default, depending on the protocol in the given <em>url</em>.
 Other download methods can be controlled through the <em>downloader</em> argument
@@ -468,32 +479,32 @@ manage the download and caching of several files, with versioning, use
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>url</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – The URL to the file that is to be downloaded. Ideally, the URL should
+<li><p><strong>url</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – The URL to the file that is to be downloaded. Ideally, the URL should
 end in a file name.</p></li>
-<li><p><strong>known_hash</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – A known hash (checksum) of the file. Will be used to verify the
+<li><p><strong>known_hash</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em> or </em><em>None</em>) – A known hash (checksum) of the file. Will be used to verify the
 download or check if an existing file needs to be updated. By default,
 will assume it’s a SHA256 hash. To specify a different hashing method,
 prepend the hash with <code class="docutils literal notranslate"><span class="pre">algorithm:</span></code>, for example
 <code class="docutils literal notranslate"><span class="pre">md5:pw9co2iun29juoh</span></code> or <code class="docutils literal notranslate"><span class="pre">sha1:092odwhi2ujdp2du2od2odh2wod2</span></code>. If
 None, will NOT check the hash of the downloaded file or check if an
 existing file needs to be updated.</p></li>
-<li><p><strong>fname</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.10)"><em>None</em></a>) – The name that will be used to save the file. Should NOT include the
+<li><p><strong>fname</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em> or </em><em>None</em>) – The name that will be used to save the file. Should NOT include the
 full the path, just the file name (it will be appended to <em>path</em>). If
 None, will create a unique file name using a combination of the last
 part of the URL (assuming it’s the file name) and the MD5 hash of the
 URL. For example, <code class="docutils literal notranslate"><span class="pre">81whdo2d2e928yd1wi22-data-file.csv</span></code>. This ensures
 that files from different URLs never overwrite each other, even if they
 have the same name.</p></li>
-<li><p><strong>path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em> or </em><em>PathLike</em><em> or </em><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.10)"><em>None</em></a>) – The location of the cache folder on disk. This is where the file will
+<li><p><strong>path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em> or </em><em>PathLike</em><em> or </em><em>None</em>) – The location of the cache folder on disk. This is where the file will
 be saved. If None, will save to a <code class="docutils literal notranslate"><span class="pre">pooch</span></code> folder in the default cache
 location for your operating system (see <a class="reference internal" href="pooch.os_cache.html#pooch.os_cache" title="pooch.os_cache"><code class="xref py py-func docutils literal notranslate"><span class="pre">pooch.os_cache</span></code></a>).</p></li>
-<li><p><strong>processor</strong> (<a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.10)"><em>None</em></a><em> or </em><em>callable</em>) – If not None, then a function (or callable object) that will be called
+<li><p><strong>processor</strong> (<em>None</em><em> or </em><em>callable</em>) – If not None, then a function (or callable object) that will be called
 before returning the full path and after the file has been downloaded
 (if required). See <a class="reference internal" href="../../processors.html#processors"><span class="std std-ref">Processors: Post-download actions</span></a> for details.</p></li>
-<li><p><strong>downloader</strong> (<a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.10)"><em>None</em></a><em> or </em><em>callable</em>) – If not None, then a function (or callable object) that will be called
+<li><p><strong>downloader</strong> (<em>None</em><em> or </em><em>callable</em>) – If not None, then a function (or callable object) that will be called
 to download a given URL to a provided local file name. See
 <a class="reference internal" href="../../downloaders.html#downloaders"><span class="std std-ref">Downloaders: Customizing the download</span></a> for details.</p></li>
-<li><p><strong>progressbar</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a><em> or </em><em>an arbitrary progress bar object</em>) – If True, will print a progress bar of the download to standard error
+<li><p><strong>progressbar</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a><em> or </em><em>an arbitrary progress bar object</em>) – If True, will print a progress bar of the download to standard error
 (stderr). Requires <a class="reference external" href="https://github.com/tqdm/tqdm">tqdm</a> to be
 installed. Alternatively, an arbitrary progress bar object can be
 passed. See <a class="reference internal" href="../../progressbars.html#custom-progressbar"><span class="std std-ref">Using custom progress bars</span></a> for details.</p></li>
@@ -604,35 +615,41 @@ after download to avoid having to do that yourself. Use the processors
 
               </div>
               
-        
-        <div class='prev-next-bottom'>
             
-    <a class='left-prev' id="prev-link" href="pooch.Pooch.html" title="previous page">pooch.Pooch</a>
-    <a class='right-next' id="next-link" href="pooch.os_cache.html" title="next page">pooch.os_cache</a>
-
+                <!-- Previous / next buttons -->
+<div class='prev-next-area'> 
+    <a class='left-prev' id="prev-link" href="pooch.Pooch.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title">pooch.Pooch</p>
         </div>
-        
+    </a>
+    <a class='right-next' id="next-link" href="pooch.os_cache.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">pooch.os_cache</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
+    </a>
+</div>
+            
         </div>
     </div>
-    <footer class="footer mt-5 mt-md-0">
-    <div class="container">
-      <p>
-        
-            &copy; Copyright 2022, The Pooch Developers.<br/>
-          Last updated on Jan 24, 2022.<br/>
-      </p>
-    </div>
-  </footer>
+    <footer class="footer">
+  <p>
+    
+        &copy; Copyright 2023, The Pooch Developers.<br/>
+      Last updated on Feb 27, 2023.<br/>
+  </p>
+</footer>
 </main>
 
 
       </div>
     </div>
+  
+  <script src="../../_static/js/index.be7d3bbb2ef33a8344ce.js"></script>
 
-    
-  <script src="../../_static/js/index.d3f166471bb80abb5163.js"></script>
-
-
-    
   </body>
 </html>
