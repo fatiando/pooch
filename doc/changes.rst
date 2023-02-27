@@ -8,7 +8,7 @@ Version 1.7.0
 
 *Released on: 2023/02/24*
 
-doi: ADD DOI
+doi:`10.5281/zenodo.7678844 <https://doi.org/10.5281/zenodo.7678844>`__
 
 Bug fixes:
 
