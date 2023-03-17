@@ -1,0 +1,6 @@
+foo'.txt baee0894dba14b12085eacb204284b97e362f4f3e5a5807693cc90ef415c1b2d
+bar'baz quux'.txt baee0894dba14b12085eacb204284b97e362f4f3e5a5807693cc90ef415c1b2d
+"foo bar.txt" baee0894dba14b12085eacb204284b97e362f4f3e5a5807693cc90ef415c1b2d
+"foo bar2.txt" baee0894dba14b12085eacb204284b97e362f4f3e5a5807693cc90ef415c1b2d http://myurl.com
+"foobar3.txt" baee0894dba14b12085eacb204284b97e362f4f3e5a5807693cc90ef415c1b2d http://myurl.com
+foo'2.txt baee0894dba14b12085eacb204284b97e362f4f3e5a5807693cc90ef415c1b2d http://myurl.com
