@@ -10,8 +10,8 @@ The main Pooch class and a factory function for it.
 import os
 import time
 import contextlib
+import re
 from pathlib import Path
-import shlex
 import shutil
 
 import requests
@@ -654,23 +654,39 @@ class Pooch:
 
                 line = line.strip()
                 # skip line comments
-                if line.startswith("#"):
+                if line.startswith("#") or len(line) == 0:
                     continue
 
-                elements = shlex.split(line)
-                if not len(elements) in [0, 2, 3]:
+                try:
+                    # First try to split off the last token
+                    prefix, suffix = line.rsplit(maxsplit=1)
+                except ValueError as exc:
                     raise OSError(
                         f"Invalid entry in Pooch registry file '{fname}': "
-                        f"expected 2 or 3 elements in line {linenum + 1} but got "
-                        f"{len(elements)}. Offending entry: '{line}'"
-                    )
-                if elements:
-                    file_name = elements[0]
-                    file_checksum = elements[1]
-                    if len(elements) == 3:
-                        file_url = elements[2]
-                        self.urls[file_name] = file_url
-                    self.registry[file_name] = file_checksum.lower()
+                        f"expected at least 2 elements in line {linenum + 1}. "
+                        f"Offending entry: '{line}'"
+                    ) from exc
+
+                # Is suffix a url?
+                if re.match('^(https?|s?ftp|doi):', suffix):
+                    file_url = suffix
+                    try:
+                        file_name, file_checksum = prefix.rsplit(maxsplit=1)
+                    except ValueError as exc:
+                        raise OSError(
+                            f"Invalid entry in Pooch registry file '{fname}': "
+                            f"expected at least 3 elements in line {linenum + 1}. "
+                            f"Offending entry: '{line}'"
+                        ) from exc
+                else:
+                    # Not a url, we only have hash and filename
+                    file_name = prefix
+                    file_checksum = suffix
+                    file_url = None
+
+                if file_url is not None:
+                    self.urls[file_name] = file_url
+                self.registry[file_name] = file_checksum.lower()
 
     def load_registry_from_doi(self):
         """

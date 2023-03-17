@@ -483,6 +483,19 @@ def test_pooch_load_registry_with_spaces():
     assert "other with spaces.txt" in pup.registry
 
 
+def test_pooch_load_registry_with_quotes():
+    "Verify that files with quotes in the name work"
+    pup = Pooch(path="", base_url="")
+    pup.load_registry(os.path.join(DATA_DIR, "registry-quotes.txt"))
+    assert "foo'.txt" in pup.registry  # vanilla single quote, no space
+    assert "bar'baz quux'.txt" in pup.registry  # quotes and spaces
+    assert '"foo bar.txt"' in pup.registry  # spaces, double quotes
+    assert '"foo bar2.txt"' in pup.registry  # double quotes, spaces, url
+    assert '"foobar3.txt"' in pup.registry  # double quotes, no spaces, url
+    assert "foo'2.txt" in pup.registry  # single quote, no space, url
+
+
+
 @pytest.mark.network
 def test_check_availability():
     "Should correctly check availability of existing and non existing files"
