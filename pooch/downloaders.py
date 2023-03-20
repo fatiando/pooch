@@ -1046,8 +1046,8 @@ class DataverseRepository(DataRepository):  # pylint: disable=missing-class-docs
                 f"{self.archive_url} (doi:{self.doi})."
             )
         # Generate download_url using persistentId or file id
-        persistent_id = files[file_name]["persistentId"]
-        if persistent_id:
+        persistent_id = files[file_name].get("persistentId")
+        if persistent_id is not None and persistent_id:
             download_url = (
                 f"{parsed['protocol']}://{parsed['netloc']}/api/access/datafile/"
                 f":persistentId?persistentId={persistent_id}"
