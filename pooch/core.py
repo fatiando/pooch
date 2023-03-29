@@ -86,7 +86,7 @@ def retrieve(
         existing file needs to be updated.
     fname : str or None
         The name that will be used to save the file. Should NOT include the
-        full the path, just the file name (it will be appended to *path*). If
+        full path, just the file name (it will be appended to *path*). If
         None, will create a unique file name using a combination of the last
         part of the URL (assuming it's the file name) and the MD5 hash of the
         URL. For example, ``81whdo2d2e928yd1wi22-data-file.csv``. This ensures
