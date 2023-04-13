@@ -514,7 +514,7 @@ class DOIDownloader:  # pylint: disable=too-few-public-methods
 
     * `figshare <https://www.figshare.com>`__
     * `Zenodo <https://www.zenodo.org>`__
-    * `DataVerse <https://dataverse.org/>`__ instances
+    * `Dataverse <https://dataverse.org/>`__ instances
 
     .. attention::
 

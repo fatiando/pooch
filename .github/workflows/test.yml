@@ -44,7 +44,7 @@ jobs:
           - windows
         python:
           - "3.7"
-          - "3.10"
+          - "3.11"
         dependencies:
           - latest
           - optional
@@ -67,7 +67,7 @@ jobs:
 
       # Checks-out your repository under $GITHUB_WORKSPACE
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           # Need to fetch more than the last commit so that setuptools-scm can
           # create the correct version string. If the number of commits since
@@ -83,7 +83,7 @@ jobs:
         run: git fetch origin 'refs/tags/*:refs/tags/*'
 
       - name: Setup Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python }}
 
@@ -118,7 +118,7 @@ jobs:
           echo "::set-output name=dir::$(pip cache dir)"
 
       - name: Setup caching for pip packages
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: ${{ steps.pip-cache.outputs.dir }}
           key: ${{ runner.os }}-pip-${{ hashFiles('requirements-full.txt') }}

@@ -29,7 +29,7 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           # Need to fetch more than the last commit so that setuptools_scm can
           # create the correct version string. If the number of commits since
@@ -45,9 +45,9 @@ jobs:
         run: git fetch origin 'refs/tags/*:refs/tags/*'
 
       - name: Setup Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v4
         with:
-          python-version: "3.10"
+          python-version: "3.x"
 
       - name: Install requirements
         run: |
@@ -79,7 +79,7 @@ jobs:
       - name: Upload archives as artifacts
         # Only if not a pull request
         if: success() && github.event_name != 'pull_request'
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: pypi-${{ github.sha }}
           path: dist
@@ -94,7 +94,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           # The GitHub token is preserved by default but this job doesn't need
           # to be able to push to GitHub.
@@ -102,7 +102,7 @@ jobs:
 
       # Fetch the built archives from the "build" job
       - name: Download built archives artifact
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: pypi-${{ github.sha }}
           path: dist
