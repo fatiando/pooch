@@ -44,6 +44,13 @@ class ExtractorProcessor:  # pylint: disable=too-few-public-methods
         self.members = members
         self.extract_dir = extract_dir
 
+    def _all_members(self, fname):
+        """Return all the members in the archive.
+
+        In the base class, this returns None.
+        """
+        return None
+
     def __call__(self, fname, action, pooch):
         """
         Extract all files from the given archive.
@@ -79,17 +86,14 @@ class ExtractorProcessor:  # pylint: disable=too-few-public-methods
         else:
             archive_dir = fname.rsplit(os.path.sep, maxsplit=1)[0]
             self.extract_dir = os.path.join(archive_dir, self.extract_dir)
+        if self.members is None:
+            self.members = self._all_members(fname)
         if (
             (action in ("update", "download"))
             or (not os.path.exists(self.extract_dir))
-            or (
-                (self.members is not None)
-                and (
-                    not all(
-                        os.path.exists(os.path.join(self.extract_dir, m))
-                        for m in self.members
-                    )
-                )
+            or not all(
+                os.path.exists(os.path.join(self.extract_dir, m))
+                for m in self.members
             )
         ):
             # Make sure that the folder with the extracted files exists
@@ -147,6 +151,11 @@ class Unzip(ExtractorProcessor):  # pylint: disable=too-few-public-methods
     """
 
     suffix = ".unzip"
+
+    def _all_members(self, fname):
+        """Return all members from a given archive."""
+        with ZipFile(fname, "r") as zip_file:
+            return zip_file.namelist()
 
     def _extract_file(self, fname, extract_dir):
         """
@@ -208,6 +217,11 @@ class Untar(ExtractorProcessor):  # pylint: disable=too-few-public-methods
     """
 
     suffix = ".untar"
+
+    def _all_members(self, fname):
+        """Return all members from a given archive."""
+        with TarFile.open(fname, "r") as tar_file:
+            return [info.name for info in tar_file.getmembers()]
 
     def _extract_file(self, fname, extract_dir):
         """
