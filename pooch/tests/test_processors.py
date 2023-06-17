@@ -255,3 +255,28 @@ def _unpacking_expected_paths_and_logs(archive, members, path, name):
             log_lines.append(f"Extracting '{member}'")
         true_paths = set(true_paths)
     return true_paths, log_lines
+
+
+@pytest.mark.network
+@pytest.mark.parametrize(
+    "processor_class,extension",
+    [(Unzip, ".zip"), (Untar, ".tar.gz")],
+)
+def test_unpacking_members_then_no_members(processor_class, extension):
+    """Test that calling with members then without them works.
+
+    https://github.com/fatiando/pooch/issues/364
+    """
+
+    with TemporaryDirectory() as local_store:
+        pup = Pooch(path=Path(local_store), base_url=BASEURL, registry=REGISTRY)
+
+        # Do a first fetch with incorrect member
+        processor1 = processor_class(members=["i don't exist"])
+        filenames1 = pup.fetch("store" + extension, processor=processor1)
+        assert len(filenames1) == 0
+
+        # Do a second fetch with no members
+        processor2 = processor_class()
+        filenames2 = pup.fetch("store" + extension, processor=processor2)
+        assert len(filenames2) > 0
