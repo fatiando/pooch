@@ -34,6 +34,7 @@ from ..downloaders import (
     DataverseRepository,
     doi_to_url,
 )
+from ..processors import Unzip
 from .utils import (
     pooch_test_url,
     check_large_data,
@@ -41,6 +42,7 @@ from .utils import (
     data_over_ftp,
     pooch_test_figshare_url,
     pooch_test_zenodo_url,
+    pooch_test_zenodo_with_slash_url,
     pooch_test_dataverse_url,
 )
 
@@ -48,6 +50,7 @@ from .utils import (
 BASEURL = pooch_test_url()
 FIGSHAREURL = pooch_test_figshare_url()
 ZENODOURL = pooch_test_zenodo_url()
+ZENODOURL_W_SLASH = pooch_test_zenodo_with_slash_url()
 DATAVERSEURL = pooch_test_dataverse_url()
 
 
@@ -130,6 +133,75 @@ def test_doi_downloader(url):
         outfile = os.path.join(local_store, "tiny-data.txt")
         downloader(url + "tiny-data.txt", outfile, None)
         check_tiny_data(outfile)
+
+
+@pytest.mark.network
+def test_zenodo_downloader_with_slash_in_fname():
+    """
+    Test the Zenodo downloader when the path contains a forward slash
+
+    Related to issue #336
+    """
+    # Use the test data we have on the repository
+    with TemporaryDirectory() as local_store:
+        base_url = ZENODOURL_W_SLASH + "santisoler/pooch-test-data-v1.zip"
+        downloader = DOIDownloader()
+        outfile = os.path.join(local_store, "test-data.zip")
+        downloader(base_url, outfile, None)
+        # unpack the downloaded zip file so we can check the integrity of
+        # tiny-data.txt
+        fnames = Unzip()(outfile, action="download", pooch=None)
+        (fname,) = [f for f in fnames if "tiny-data.txt" in f]
+        check_tiny_data(fname)
+
+
+@pytest.mark.network
+def test_figshare_unspecified_version():
+    """
+    Test if passing a Figshare url without a version warns about it, but still
+    downloads it.
+    """
+    url = FIGSHAREURL
+    # Remove the last bits of the doi, where the version is specified and
+    url = url[: url.rindex(".")] + "/"
+    # Create expected warning message
+    doi = url[4:-1]
+    warning_msg = f"The Figshare DOI '{doi}' doesn't specify which version of "
+    with TemporaryDirectory() as local_store:
+        downloader = DOIDownloader()
+        outfile = os.path.join(local_store, "tiny-data.txt")
+        with pytest.warns(UserWarning, match=warning_msg):
+            downloader(url + "tiny-data.txt", outfile, None)
+
+
+@pytest.mark.network
+@pytest.mark.parametrize(
+    "version, missing, present",
+    [
+        (
+            1,
+            "LC08_L2SP_218074_20190114_20200829_02_T1-cropped.tar.gz",
+            "cropped-before.tar.gz",
+        ),
+        (
+            2,
+            "cropped-before.tar.gz",
+            "LC08_L2SP_218074_20190114_20200829_02_T1-cropped.tar.gz",
+        ),
+    ],
+)
+def test_figshare_data_repository_versions(version, missing, present):
+    """
+    Test if setting the version in Figshare DOI works as expected
+    """
+    # Use a Figshare repo as example (we won't download files from it since
+    # they are too big)
+    doi = f"10.6084/m9.figshare.21665630.v{version}"
+    url = f"https://doi.org/{doi}/"
+    figshare = FigshareRepository(doi, url)
+    filenames = [item["name"] for item in figshare.api_response]
+    assert present in filenames
+    assert missing not in filenames
 
 
 @pytest.mark.network

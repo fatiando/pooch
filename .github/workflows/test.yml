@@ -20,7 +20,7 @@ on:
   schedule:
     # Run every Monday at 12:00 UTC
     # * is a special character in YAML so you have to quote this string
-    - cron:  '00 12 * * 1'
+    - cron: "00 12 * * 1"
 
 # Use bash by default in all jobs
 defaults:
@@ -28,7 +28,6 @@ defaults:
     shell: bash
 
 jobs:
-
   #############################################################################
   # Run tests and upload to codecov
   test:
@@ -45,7 +44,7 @@ jobs:
           - windows
         python:
           - "3.7"
-          - "3.10"
+          - "3.11"
         dependencies:
           - latest
           - optional
@@ -68,7 +67,7 @@ jobs:
 
       # Checks-out your repository under $GITHUB_WORKSPACE
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           # Need to fetch more than the last commit so that setuptools-scm can
           # create the correct version string. If the number of commits since
@@ -84,7 +83,7 @@ jobs:
         run: git fetch origin 'refs/tags/*:refs/tags/*'
 
       - name: Setup Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python }}
 
@@ -119,7 +118,7 @@ jobs:
           echo "::set-output name=dir::$(pip cache dir)"
 
       - name: Setup caching for pip packages
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: ${{ steps.pip-cache.outputs.dir }}
           key: ${{ runner.os }}-pip-${{ hashFiles('requirements-full.txt') }}
@@ -148,9 +147,9 @@ jobs:
         run: coverage xml
 
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v1
+        uses: codecov/codecov-action@v3
         with:
-          file: ./coverage.xml
+          files: ./coverage.xml
           env_vars: OS,PYTHON,DEPENDENCIES
           # Don't mark the job as failed if the upload fails for some reason.
           # It does sometimes but shouldn't be the reason for running

@@ -98,6 +98,24 @@ def pooch_test_zenodo_url():
     return url
 
 
+def pooch_test_zenodo_with_slash_url():
+    """
+    Get base URL for test data in Zenodo, where the file name contains a slash
+
+    The URL contains the DOI for the Zenodo dataset that has a slash in the
+    filename (created with the GitHub-Zenodo integration service), using the
+    appropriate version for this version of Pooch.
+
+    Returns
+    -------
+    url
+        The URL for pooch's test data.
+
+    """
+    url = "doi:10.5281/zenodo.7632643/"
+    return url
+
+
 def pooch_test_dataverse_url():
     """
     Get the base URL for the test data stored on a DataVerse instance.

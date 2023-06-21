@@ -13,6 +13,7 @@ order by last name) and are considered "The Pooch Developers":
 * [Dominic Kempf](https://github.com/dokempf) - Scientific Software Center, Heidelberg University, Germany (ORCID: [0000-0002-6140-2332](https://www.orcid.org/0000-0002-6140-2332))
 * [Kacper Kowalik](https://github.com/Xarthisius) - National Center for Supercomputing Applications, University of Illinois at Urbana-Champaign, USA (ORCID: [0000-0003-1709-3744](https://www.orcid.org/0000-0003-1709-3744))
 * [John Leeman](https://github.com/jrleeman)
+* [Björn Ludwig](https://github.com/BjoernLudwigPTB) - Physikalisch-Technische Bundesanstalt, Germany (ORCID: [0000-0002-5910-9137](https://www.orcid.org/0000-0002-5910-9137))
 * [Daniel McCloy](https://github.com/drammock) - University of Washington, USA (ORCID: [0000-0002-7572-3241](https://orcid.org/0000-0002-7572-3241))
 * [Rémi Rampin](https://github.com/remram44) - New York University, USA (ORCID: [0000-0002-0524-2282](https://www.orcid.org/0000-0002-0524-2282))
 * [Clément Robert](https://github.com/neutrinoceros) - Institut de Planétologie et d'Astrophysique de Grenoble, France (ORCID: [0000-0001-8629-7068](https://orcid.org/0000-0001-8629-7068))

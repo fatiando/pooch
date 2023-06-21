@@ -149,6 +149,7 @@ def fetch_gravity_data():
 * [climlab](https://github.com/climlab/climlab)
 * [napari](https://github.com/napari/napari)
 * [mne-python](https://github.com/mne-tools/mne-python)
+* [GemGIS](https://github.com/cgre-aachen/gemgis)
 
 *If you're using Pooch, send us a pull request adding your project to the list.*
 

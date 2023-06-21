@@ -3,12 +3,12 @@ channels:
     - conda-forge
     - defaults
 dependencies:
-    - python==3.10
+    - python==3.11
     - pip
     # Run
     - requests
     - packaging
-    - appdirs
+    - platformdirs
     # Build
     - build
     # Test

@@ -103,3 +103,24 @@ figshare dataset:
     ``doi:10.6084/m9.figshare.c.4362224.v1``. Attempting to download files
     from a figshare collection will raise an error.
     See `issue #274 <https://github.com/fatiando/pooch/issues/274>`__ details.
+
+Since this type of repositories store information about the files contained in
+them, we can avoid having to manually type the registry with the file names and
+their hashes.
+Instead, we can use the :meth:`pooch.Pooch.load_registry_from_doi` to
+automatically populate the registry:
+
+.. code-block:: python
+
+    POOCH = pooch.create(
+        path=pooch.os_cache("plumbus"),
+        # Use the figshare DOI
+        base_url="doi:10.6084/m9.figshare.14763051.v1/",
+        registry=None,
+    )
+
+    # Automatically populate the registry
+    POOCH.load_registry_from_doi()
+
+    # Fetch one of the files in the repository
+    fname = POOCH.fetch("tiny-data.txt")

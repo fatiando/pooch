@@ -25,7 +25,7 @@ from .utils import (
     os_cache,
     unique_file_name,
 )
-from .downloaders import choose_downloader
+from .downloaders import DOIDownloader, choose_downloader, doi_to_repository
 
 
 def retrieve(
@@ -74,7 +74,7 @@ def retrieve(
     url : str
         The URL to the file that is to be downloaded. Ideally, the URL should
         end in a file name.
-    known_hash : str
+    known_hash : str or None
         A known hash (checksum) of the file. Will be used to verify the
         download or check if an existing file needs to be updated. By default,
         will assume it's a SHA256 hash. To specify a different hashing method,
@@ -84,7 +84,7 @@ def retrieve(
         existing file needs to be updated.
     fname : str or None
         The name that will be used to save the file. Should NOT include the
-        full the path, just the file name (it will be appended to *path*). If
+        full path, just the file name (it will be appended to *path*). If
         None, will create a unique file name using a combination of the last
         part of the URL (assuming it's the file name) and the MD5 hash of the
         URL. For example, ``81whdo2d2e928yd1wi22-data-file.csv``. This ensures
@@ -293,8 +293,8 @@ def create(
         Base URL for the remote data source. All requests will be made relative
         to this URL. The string should have a ``{version}`` formatting mark in
         it. We will call ``.format(version=version)`` on this string. If the
-        URL is a directory path, it must end in a ``'/'`` because we will not
-        include it.
+        URL does not end in a ``'/'``, a trailing ``'/'`` will be added
+        automatically.
     version : str or None
         The version string for your project. Should be PEP440 compatible. If
         None is given, will not attempt to format *base_url* and no subfolder
@@ -421,6 +421,8 @@ def create(
     path = cache_location(path, env, version)
     if isinstance(allow_updates, str):
         allow_updates = os.environ.get(allow_updates, "true").lower() != "false"
+    # add trailing "/"
+    base_url = base_url.rstrip("/") + "/"
     pup = Pooch(
         path=path,
         base_url=base_url,
@@ -667,6 +669,36 @@ class Pooch:
                         file_url = elements[2]
                         self.urls[file_name] = file_url
                     self.registry[file_name] = file_checksum.lower()
+
+    def load_registry_from_doi(self):
+        """
+        Populate the registry using the data repository API
+
+        Fill the registry with all the files available in the data repository,
+        along with their hashes. It will make a request to the data repository
+        API to retrieve this information. No file is downloaded during this
+        process.
+
+        .. important::
+
+            This method is intended to be used only when the ``base_url`` is
+            a DOI.
+        """
+
+        # Ensure that this is indeed a DOI-based pooch
+        downloader = choose_downloader(self.base_url)
+        if not isinstance(downloader, DOIDownloader):
+            raise ValueError(
+                f"Invalid base_url '{self.base_url}': "
+                + "Pooch.load_registry_from_doi is only implemented for DOIs"
+            )
+
+        # Create a repository instance
+        doi = self.base_url.replace("doi:", "")
+        repository = doi_to_repository(doi)
+
+        # Call registry population for this repository
+        return repository.populate_registry(self)
 
     def is_available(self, fname, downloader=None):
         """

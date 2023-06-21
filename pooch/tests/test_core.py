@@ -28,6 +28,8 @@ from .utils import (
     data_over_ftp,
     pooch_test_figshare_url,
     pooch_test_zenodo_url,
+    pooch_test_zenodo_with_slash_url,
+    pooch_test_dataverse_url,
     pooch_test_registry,
     check_tiny_data,
     check_large_data,
@@ -40,6 +42,8 @@ REGISTRY = pooch_test_registry()
 BASEURL = pooch_test_url()
 FIGSHAREURL = pooch_test_figshare_url()
 ZENODOURL = pooch_test_zenodo_url()
+ZENODOURL_W_SLASH = pooch_test_zenodo_with_slash_url()
+DATAVERSEURL = pooch_test_dataverse_url()
 REGISTRY_CORRUPTED = {
     # The same data file but I changed the hash manually to a wrong one
     "tiny-data.txt": "098h0894dba14b12085eacb204284b97e362f4f3e5a5807693cc90ef415c1b2d"
@@ -135,7 +139,9 @@ def test_pooch_local(data_dir_mirror):
 
 @pytest.mark.network
 @pytest.mark.parametrize(
-    "url", [BASEURL, FIGSHAREURL, ZENODOURL], ids=["https", "figshare", "zenodo"]
+    "url",
+    [BASEURL, FIGSHAREURL, ZENODOURL, DATAVERSEURL],
+    ids=["https", "figshare", "zenodo", "dataverse"],
 )
 def test_pooch_custom_url(url):
     "Have pooch download the file from URL that is not base_url"
@@ -159,7 +165,9 @@ def test_pooch_custom_url(url):
 
 @pytest.mark.network
 @pytest.mark.parametrize(
-    "url", [BASEURL, FIGSHAREURL, ZENODOURL], ids=["https", "figshare", "zenodo"]
+    "url",
+    [BASEURL, FIGSHAREURL, ZENODOURL, DATAVERSEURL],
+    ids=["https", "figshare", "zenodo", "dataverse"],
 )
 def test_pooch_download(url):
     "Setup a pooch that has no local data and needs to download"
@@ -372,6 +380,15 @@ def test_pooch_update_disallowed_environment():
                 pup.fetch("tiny-data.txt")
     finally:
         os.environ.pop(variable_name)
+
+
+def test_pooch_create_base_url_no_trailing_slash():
+    """
+    Test if pooch.create appends a trailing slash to the base url if missing
+    """
+    base_url = "https://mybase.url"
+    pup = create(base_url=base_url, registry=None, path=DATA_DIR)
+    assert pup.base_url == base_url + "/"
 
 
 @pytest.mark.network
@@ -608,3 +625,56 @@ def test_stream_download(fname):
         stream_download(url, destination, known_hash, downloader, pooch=None)
         assert destination.exists()
         check_tiny_data(str(destination))
+
+
+@pytest.mark.parametrize(
+    "url",
+    [FIGSHAREURL, ZENODOURL, DATAVERSEURL],
+    ids=["figshare", "zenodo", "dataverse"],
+)
+def test_load_registry_from_doi(url):
+    """Check that the registry is correctly populated from the API"""
+    with TemporaryDirectory() as local_store:
+        path = os.path.abspath(local_store)
+        pup = Pooch(path=path, base_url=url)
+        pup.load_registry_from_doi()
+
+        # Check the existence of all files in the registry
+        assert len(pup.registry) == 2
+        assert "tiny-data.txt" in pup.registry
+        assert "store.zip" in pup.registry
+
+        # Ensure that all files have correct checksums by fetching them
+        for filename in pup.registry:
+            pup.fetch(filename)
+
+
+def test_load_registry_from_doi_zenodo_with_slash():
+    """
+    Check that the registry is correctly populated from the Zenodo API when
+    the filename contains a slash
+    """
+    url = ZENODOURL_W_SLASH
+    with TemporaryDirectory() as local_store:
+        path = os.path.abspath(local_store)
+        pup = Pooch(path=path, base_url=url)
+        pup.load_registry_from_doi()
+
+        # Check the existence of all files in the registry
+        assert len(pup.registry) == 1
+        assert "santisoler/pooch-test-data-v1.zip" in pup.registry
+
+        # Ensure that all files have correct checksums by fetching them
+        for filename in pup.registry:
+            pup.fetch(filename)
+
+
+def test_wrong_load_registry_from_doi():
+    """Check that non-DOI URLs produce an error"""
+
+    pup = Pooch(path="", base_url=BASEURL)
+
+    with pytest.raises(ValueError) as exc:
+        pup.load_registry_from_doi()
+
+    assert "only implemented for DOIs" in str(exc.value)

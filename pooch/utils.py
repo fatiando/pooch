@@ -16,7 +16,7 @@ from urllib.parse import urlsplit
 from contextlib import contextmanager
 import warnings
 
-import appdirs
+import platformdirs
 from packaging.version import Version
 
 
@@ -74,10 +74,10 @@ def os_cache(project):
     r"""
     Default cache location based on the operating system.
 
-    The folder locations are defined by the ``appdirs``  package
+    The folder locations are defined by the ``platformdirs``  package
     using the ``user_cache_dir`` function.
     Usually, the locations will be following (see the
-    `appdirs documentation <https://github.com/ActiveState/appdirs>`__):
+    `platformdirs documentation <https://platformdirs.readthedocs.io>`__):
 
     * Mac: ``~/Library/Caches/<AppName>``
     * Unix: ``~/.cache/<AppName>`` or the value of the ``XDG_CACHE_HOME``
@@ -96,7 +96,7 @@ def os_cache(project):
         not expanded.
 
     """
-    return Path(appdirs.user_cache_dir(project))
+    return Path(platformdirs.user_cache_dir(project))
 
 
 def check_version(version, fallback="master"):
@@ -159,6 +159,11 @@ def parse_url(url):
 
     The DOI is a special case. The protocol will be "doi", the netloc will be
     the DOI, and the path is what comes after the last "/".
+    The only exception are Zenodo dois: the protocol will be "doi", the netloc
+    will be composed by the "prefix/suffix" and the path is what comes after
+    the second "/". This allows to support special cases of Zenodo dois where
+    the path contains forward slashes "/", created by the GitHub-Zenodo
+    integration service.
 
     Parameters
     ----------
@@ -179,8 +184,12 @@ def parse_url(url):
     if url.startswith("doi:"):
         protocol = "doi"
         parts = url[4:].split("/")
-        netloc = "/".join(parts[:-1])
-        path = "/" + parts[-1]
+        if "zenodo" in parts[1].lower():
+            netloc = "/".join(parts[:2])
+            path = "/" + "/".join(parts[2:])
+        else:
+            netloc = "/".join(parts[:-1])
+            path = "/" + parts[-1]
     else:
         parsed_url = urlsplit(url)
         protocol = parsed_url.scheme or "file"
