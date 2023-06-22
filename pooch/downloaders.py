@@ -455,12 +455,12 @@ class SFTPDownloader:  # pylint: disable=too-few-public-methods
             The instance of :class:`~pooch.Pooch` that is calling this method.
         """
         parsed_url = parse_url(url)
-        connection = paramiko.SSHClient()
-        connection.load_system_host_keys()
+        client = paramiko.SSHClient()
+        client.load_system_host_keys()
         sftp = None
         try:
-            connection.connect(hostname=parsed_url["netloc"], port=self.port, username=self.username, password=self.password, allow_agent=self.allow_agent)
-            sftp = connection.open_sftp()
+            client.connect(hostname=parsed_url["netloc"], port=self.port, username=self.username, password=self.password, allow_agent=self.allow_agent)
+            sftp = client.open_sftp()
             sftp.get_channel().settimeout = self.timeout
             if self.progressbar:
                 size = int(sftp.stat(parsed_url["path"]).st_size)
@@ -485,7 +485,7 @@ class SFTPDownloader:  # pylint: disable=too-few-public-methods
             else:
                 sftp.get(parsed_url["path"], output_file)
         finally:
-            connection.close()
+            client.close()
             if sftp is not None:
                 sftp.close()
 
