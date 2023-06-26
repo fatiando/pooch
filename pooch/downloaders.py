@@ -459,7 +459,13 @@ class SFTPDownloader:  # pylint: disable=too-few-public-methods
         client.load_system_host_keys()
         sftp = None
         try:
-            client.connect(hostname=parsed_url["netloc"], port=self.port, username=self.username, password=self.password, allow_agent=self.allow_agent)
+            client.connect(
+                hostname=parsed_url["netloc"],
+                port=self.port,
+                username=self.username,
+                password=self.password,
+                allow_agent=self.allow_agent,
+            )
             sftp = client.open_sftp()
             sftp.get_channel().settimeout = self.timeout
             if self.progressbar:
