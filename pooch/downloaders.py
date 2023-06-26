@@ -417,7 +417,6 @@ class SFTPDownloader:  # pylint: disable=too-few-public-methods
         account="",
         timeout=None,
         progressbar=False,
-        allow_agent=False,
     ):
         self.port = port
         self.username = username
@@ -425,7 +424,6 @@ class SFTPDownloader:  # pylint: disable=too-few-public-methods
         self.account = account
         self.timeout = timeout
         self.progressbar = progressbar
-        self.allow_agent = allow_agent
         # Collect errors and raise only once so that both missing packages are
         # captured. Otherwise, the user is only warned of one of them at a
         # time (and we can't test properly when they are both missing).
@@ -464,7 +462,6 @@ class SFTPDownloader:  # pylint: disable=too-few-public-methods
                 port=self.port,
                 username=self.username,
                 password=self.password,
-                allow_agent=self.allow_agent,
             )
             sftp = client.open_sftp()
             sftp.get_channel().settimeout = self.timeout
