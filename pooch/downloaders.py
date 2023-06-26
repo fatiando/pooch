@@ -456,9 +456,9 @@ class SFTPDownloader:  # pylint: disable=too-few-public-methods
         """
         parsed_url = parse_url(url)
         client = paramiko.SSHClient()
-        client.load_system_host_keys()
         sftp = None
         try:
+            client.load_system_host_keys()
             client.connect(
                 hostname=parsed_url["netloc"],
                 port=self.port,
