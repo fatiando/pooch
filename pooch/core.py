@@ -14,8 +14,6 @@ from pathlib import Path
 import shlex
 import shutil
 
-import requests
-import requests.exceptions
 
 from .hashes import hash_matches, file_hash
 from .utils import (
@@ -792,6 +790,9 @@ def stream_download(url, fname, known_hash, downloader, pooch=None, retry_if_fai
     will retry the download the specified number of times in case the failure
     was due to a network error.
     """
+    # Lazy import requests to speed up import time
+    import requests.exceptions  # pylint: disable=C0415
+
     # Ensure the parent directory exists in case the file is in a subdirectory.
     # Otherwise, move will cause an error.
     if not fname.parent.exists():
