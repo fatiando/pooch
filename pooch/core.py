@@ -215,15 +215,17 @@ def retrieve(
         path = os_cache("pooch")
     if fname is None:
         fname = unique_file_name(url)
-    # Create the local data directory if it doesn't already exist and make the
-    # path absolute.
+    # Make the path absolute.
     path = cache_location(path, env=None, version=None)
-    make_local_storage(path)
 
     full_path = path.resolve() / fname
     action, verb = download_action(full_path, known_hash)
 
     if action in ("download", "update"):
+        # We need to write data, so create the local data directory if it
+        # doesn't already exist.
+        make_local_storage(path)
+
         get_logger().info(
             "%s data from '%s' to file '%s'.",
             verb,
@@ -558,9 +560,6 @@ class Pooch:
         """
         self._assert_file_in_registry(fname)
 
-        # Create the local data directory if it doesn't already exist
-        make_local_storage(str(self.abspath))
-
         url = self.get_url(fname)
         full_path = self.abspath / fname
         known_hash = self.registry[fname]
@@ -572,6 +571,10 @@ class Pooch:
             )
 
         if action in ("download", "update"):
+            # We need to write data, so create the local data directory if it
+            # doesn't already exist.
+            make_local_storage(str(self.abspath))
+
             get_logger().info(
                 "%s file '%s' from '%s' to '%s'.",
                 verb,
