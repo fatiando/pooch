@@ -12,7 +12,6 @@ import sys
 import ftplib
 
 import warnings
-import requests
 
 from .utils import parse_url
 
@@ -192,6 +191,9 @@ class HTTPDownloader:  # pylint: disable=too-few-public-methods
             is available on the server. Otherwise, returns ``None``.
 
         """
+        # Lazy import requests to speed up import time
+        import requests  # pylint: disable=C0415
+
         if check_only:
             timeout = self.kwargs.get("timeout", 5)
             response = requests.head(url, timeout=timeout, allow_redirects=True)
@@ -632,6 +634,9 @@ def doi_to_url(doi):
         The URL of the archive in the data repository.
 
     """
+    # Lazy import requests to speed up import time
+    import requests  # pylint: disable=C0415
+
     # Use doi.org to resolve the DOI to the repository website.
     response = requests.get(f"https://doi.org/{doi}", timeout=5)
     url = response.url
@@ -783,8 +788,10 @@ class ZenodoRepository(DataRepository):  # pylint: disable=missing-class-docstri
     @property
     def api_response(self):
         """Cached API response from Zenodo"""
-
         if self._api_response is None:
+            # Lazy import requests to speed up import time
+            import requests  # pylint: disable=C0415
+
             article_id = self.archive_url.split("/")[-1]
             self._api_response = requests.get(
                 f"https://zenodo.org/api/records/{article_id}",
@@ -881,8 +888,10 @@ class FigshareRepository(DataRepository):  # pylint: disable=missing-class-docst
     @property
     def api_response(self):
         """Cached API response from Figshare"""
-
         if self._api_response is None:
+            # Lazy import requests to speed up import time
+            import requests  # pylint: disable=C0415
+
             # Use the figshare API to find the article ID from the DOI
             article = requests.get(
                 f"https://api.figshare.com/v2/articles?doi={self.doi}",
@@ -934,7 +943,6 @@ class FigshareRepository(DataRepository):  # pylint: disable=missing-class-docst
         download_url : str
             The HTTP URL that can be used to download the file.
         """
-
         files = {item["name"]: item for item in self.api_response}
         if file_name not in files:
             raise ValueError(
@@ -981,7 +989,6 @@ class DataverseRepository(DataRepository):  # pylint: disable=missing-class-docs
         archive_url : str
             The resolved URL for the DOI
         """
-
         # Access the DOI as if this was a DataVerse instance
         response = cls._get_api_response(doi, archive_url)
         # If we failed, this is probably not a DataVerse instance
@@ -1001,6 +1008,9 @@ class DataverseRepository(DataRepository):  # pylint: disable=missing-class-docs
         This has been separated into a separate ``classmethod``, as it can be
         used prior and after the initialization.
         """
+        # Lazy import requests to speed up import time
+        import requests  # pylint: disable=C0415
+
         parsed = parse_url(archive_url)
         response = requests.get(
             f"{parsed['protocol']}://{parsed['netloc']}/api/datasets/"
@@ -1041,7 +1051,6 @@ class DataverseRepository(DataRepository):  # pylint: disable=missing-class-docs
         download_url : str
             The HTTP URL that can be used to download the file.
         """
-
         parsed = parse_url(self.archive_url)
         # Iterate over the given files until we find one of the requested name
         for filedata in self.api_response.json()["data"]["latestVersion"]["files"]:
