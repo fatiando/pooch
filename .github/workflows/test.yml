@@ -32,6 +32,7 @@ jobs:
   # Run tests and upload to codecov
   test:
     name: ${{ matrix.os }} python=${{ matrix.python }} dependencies=${{ matrix.dependencies }}
+    if: ${{ github.repository_owner == 'fatiando' || github.event_name != 'schedule' }}
     runs-on: ${{ matrix.os }}-latest
     strategy:
       # Otherwise, the workflow would stop if a single job fails. We want to
