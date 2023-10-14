@@ -808,7 +808,7 @@ class ZenodoRepository(DataRepository):  # pylint: disable=missing-class-docstri
         download_url : str
             The HTTP URL that can be used to download the file.
         """
-        files = {item["key"]: item for item in self.api_response["files"]}
+        files = {item["filename"]: item for item in self.api_response["files"]}
         if file_name not in files:
             raise ValueError(
                 f"File '{file_name}' not found in data archive {self.archive_url} (doi:{self.doi})."
