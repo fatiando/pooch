@@ -845,7 +845,7 @@ class ZenodoRepository(DataRepository):  # pylint: disable=missing-class-docstri
         """
 
         for filedata in self.api_response["files"]:
-            pooch.registry[filedata["filename"]] = "md5:" + filedata["checksum"]
+            pooch.registry[filedata["filename"]] = f"md5:{filedata['checksum']}"
 
 
 class FigshareRepository(DataRepository):  # pylint: disable=missing-class-docstring
