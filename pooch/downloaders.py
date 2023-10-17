@@ -807,13 +807,25 @@ class ZenodoRepository(DataRepository):  # pylint: disable=missing-class-docstri
         -------
         download_url : str
             The HTTP URL that can be used to download the file.
+
+        Notes
+        -----
+        After Zenodo migrated to InvenioRDM on Oct 2023, their API changed. The
+        link to the desired files that appears in the API response leads to 404
+        errors (by 2023-10-17). The files are available in the following url:
+        ``https://zenodo.org/records/{article_id}/files/{file_name}?download=1``.
         """
-        files = {item["key"]: item for item in self.api_response["files"]}
-        if file_name not in files:
+        # Check if file exists in the repository
+        filenames = [item["filename"] for item in self.api_response["files"]]
+        if file_name not in filenames:
             raise ValueError(
                 f"File '{file_name}' not found in data archive {self.archive_url} (doi:{self.doi})."
             )
-        download_url = files[file_name]["links"]["self"]
+        # Build download url
+        article_id = self.api_response["id"]
+        download_url = (
+            f"https://zenodo.org/records/{article_id}/files/{file_name}?download=1"
+        )
         return download_url
 
     def populate_registry(self, pooch):
@@ -824,10 +836,15 @@ class ZenodoRepository(DataRepository):  # pylint: disable=missing-class-docstri
         ----------
         pooch : Pooch
             The pooch instance that the registry will be added to.
+
+        Notes
+        -----
+        After Zenodo migrated to InvenioRDM on Oct 2023, their API changed. The
+        checksums for each file listed in the API reference is now an md5 sum.
         """
 
         for filedata in self.api_response["files"]:
-            pooch.registry[filedata["key"]] = filedata["checksum"]
+            pooch.registry[filedata["filename"]] = "md5:" + filedata["checksum"]
 
 
 class FigshareRepository(DataRepository):  # pylint: disable=missing-class-docstring
@@ -938,7 +955,8 @@ class FigshareRepository(DataRepository):  # pylint: disable=missing-class-docst
         files = {item["name"]: item for item in self.api_response}
         if file_name not in files:
             raise ValueError(
-                f"File '{file_name}' not found in data archive {self.archive_url} (doi:{self.doi})."
+                f"File '{file_name}' not found in data archive "
+                f"{self.archive_url} (doi:{self.doi})."
             )
         download_url = files[file_name]["download_url"]
         return download_url
