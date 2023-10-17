@@ -956,8 +956,7 @@ class FigshareRepository(DataRepository):  # pylint: disable=missing-class-docst
         files = {item["name"]: item for item in self.api_response}
         if file_name not in files:
             raise ValueError(
-                f"File '{file_name}' not found in data archive "
-                f"{self.archive_url} (doi:{self.doi})."
+                f"File '{file_name}' not found in data archive {self.archive_url} (doi:{self.doi})."
             )
         download_url = files[file_name]["download_url"]
         return download_url
