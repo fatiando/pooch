@@ -819,7 +819,8 @@ class ZenodoRepository(DataRepository):  # pylint: disable=missing-class-docstri
         filenames = [item["filename"] for item in self.api_response["files"]]
         if file_name not in filenames:
             raise ValueError(
-                f"File '{file_name}' not found in data archive {self.archive_url} (doi:{self.doi})."
+                f"File '{file_name}' not found in data archive "
+                f"{self.archive_url} (doi:{self.doi})."
             )
         # Build download url
         article_id = self.api_response["id"]
