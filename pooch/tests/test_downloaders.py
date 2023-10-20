@@ -489,7 +489,7 @@ class TestZenodoAPISupport:
         else:
             msg = "Couldn't determine the version of the Zenodo API"
             with pytest.raises(ValueError, match=msg):
-                downloader.api_version
+                api_version = downloader.api_version
 
     @pytest.mark.parametrize(
         "api_version, api_response",
@@ -519,10 +519,10 @@ class TestZenodoAPISupport:
             assert download_url == expected_url
 
     @pytest.mark.parametrize(
-        "api_version, api_response",
-        [("legacy", legacy_api_response), ("new", new_api_response)],
+        "api_response",
+        [legacy_api_response, new_api_response],
     )
-    def test_populate_registry(self, httpserver, tmp_path, api_version, api_response):
+    def test_populate_registry(self, httpserver, tmp_path, api_response):
         """
         Test if population of registry is correctly done for each API version.
         """
