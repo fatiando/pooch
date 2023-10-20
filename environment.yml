@@ -15,6 +15,7 @@ dependencies:
     - pytest
     - pytest-cov
     - pytest-localftpserver
+    - pytest-httpserver
     - coverage
     # Documentation
     - sphinx==4.4.*

@@ -748,6 +748,9 @@ class DataRepository:  # pylint: disable=too-few-public-methods, missing-class-d
 
 
 class ZenodoRepository(DataRepository):  # pylint: disable=missing-class-docstring
+
+    base_api_url = "https://zenodo.org/api/records"
+
     def __init__(self, doi, archive_url):
         self.archive_url = archive_url
         self.doi = doi
@@ -789,7 +792,7 @@ class ZenodoRepository(DataRepository):  # pylint: disable=missing-class-docstri
 
             article_id = self.archive_url.split("/")[-1]
             self._api_response = requests.get(
-                f"https://zenodo.org/api/records/{article_id}"
+                f"{self.base_api_url}/{article_id}"
             ).json()
 
         return self._api_response
