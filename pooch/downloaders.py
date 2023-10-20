@@ -165,7 +165,9 @@ class HTTPDownloader:  # pylint: disable=too-few-public-methods
         if self.progressbar is True and tqdm is None:
             raise ValueError("Missing package 'tqdm' required for progress bars.")
 
-    def __call__(self, url, output_file, pooch, check_only=False):
+    def __call__(
+        self, url, output_file, pooch, check_only=False
+    ):  # pylint: disable=R0914
         """
         Download the given URL over HTTP to the given output file.
 
