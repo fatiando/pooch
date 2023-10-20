@@ -748,7 +748,6 @@ class DataRepository:  # pylint: disable=too-few-public-methods, missing-class-d
 
 
 class ZenodoRepository(DataRepository):  # pylint: disable=missing-class-docstring
-
     base_api_url = "https://zenodo.org/api/records"
 
     def __init__(self, doi, archive_url):
