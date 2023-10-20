@@ -752,6 +752,7 @@ class ZenodoRepository(DataRepository):  # pylint: disable=missing-class-docstri
         self.archive_url = archive_url
         self.doi = doi
         self._api_response = None
+        self._api_version = None
 
     @classmethod
     def initialize(cls, doi, archive_url):
@@ -793,6 +794,38 @@ class ZenodoRepository(DataRepository):  # pylint: disable=missing-class-docstri
 
         return self._api_response
 
+    @property
+    def api_version(self):
+        """
+        Version of the Zenodo API we are interacting with
+
+        The versions can either be :
+
+        - ``"legacy"``: corresponds to the Zenodo API that was supported until
+          2023-10-12 (before the migration to InvenioRDM).
+        - ``"new"``: corresponds to the new API that went online on 2023-10-13
+          after the migration to InvenioRDM.
+
+        The ``"new"`` API breaks backward compatibility with the ``"legacy"``
+        one and could probably be replaced by an updated version that restores
+        the behaviour of the ``"legacy"`` one.
+
+        Returns
+        -------
+        str
+        """
+        if self._api_version is None:
+            if all(["key" in file for file in self.api_response["files"]]):
+                self._api_version = "legacy"
+            elif all(["filename" in file for file in self.api_response["files"]]):
+                self._api_version = "new"
+            else:
+                raise ValueError(
+                    "Couldn't determine the version of the Zenodo API for "
+                    f"{self.archive_url} (doi:{self.doi})."
+                )
+        return self._api_version
+
     def download_url(self, file_name):
         """
         Use the repository API to get the download URL for a file given
@@ -814,19 +847,28 @@ class ZenodoRepository(DataRepository):  # pylint: disable=missing-class-docstri
         link to the desired files that appears in the API response leads to 404
         errors (by 2023-10-17). The files are available in the following url:
         ``https://zenodo.org/records/{article_id}/files/{file_name}?download=1``.
+
+        This method supports both the legacy and the new API.
         """
+        # Create list of files in the repository
+        if self.api_version == "legacy":
+            files = {item["key"]: item for item in self.api_response["files"]}
+        else:
+            files = [item["filename"] for item in self.api_response["files"]]
         # Check if file exists in the repository
-        filenames = [item["filename"] for item in self.api_response["files"]]
-        if file_name not in filenames:
+        if file_name not in files:
             raise ValueError(
                 f"File '{file_name}' not found in data archive "
                 f"{self.archive_url} (doi:{self.doi})."
             )
         # Build download url
-        article_id = self.api_response["id"]
-        download_url = (
-            f"https://zenodo.org/records/{article_id}/files/{file_name}?download=1"
-        )
+        if self.api_version == "legacy":
+            download_url = files[file_name]["links"]["self"]
+        else:
+            article_id = self.api_response["id"]
+            download_url = (
+                f"https://zenodo.org/records/{article_id}/files/{file_name}?download=1"
+            )
         return download_url
 
     def populate_registry(self, pooch):
@@ -842,10 +884,17 @@ class ZenodoRepository(DataRepository):  # pylint: disable=missing-class-docstri
         -----
         After Zenodo migrated to InvenioRDM on Oct 2023, their API changed. The
         checksums for each file listed in the API reference is now an md5 sum.
-        """
 
+        This method supports both the legacy and the new API.
+        """
         for filedata in self.api_response["files"]:
-            pooch.registry[filedata["filename"]] = f"md5:{filedata['checksum']}"
+            checksum = filedata["checksum"]
+            if self.api_version == "legacy":
+                key = "key"
+            else:
+                key = "filename"
+                checksum = f"md5:{checksum}"
+            pooch.registry[filedata[key]] = checksum
 
 
 class FigshareRepository(DataRepository):  # pylint: disable=missing-class-docstring
