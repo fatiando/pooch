@@ -459,7 +459,7 @@ finding out the download URL for a file given the DOI.</p>
 the download URL from the DOI and file name. It then uses
 <a class="reference internal" href="pooch.HTTPDownloader.html#pooch.HTTPDownloader" title="pooch.HTTPDownloader"><code class="xref py py-class docutils literal notranslate"><span class="pre">pooch.HTTPDownloader</span></code></a> to download the URL into the specified local
 file. Allowing “URL”s  to be specified with the DOI instead of the actual
-HTTP download link. Uses the <a class="reference external" href="https://requests.readthedocs.io/en/latest/api/#module-requests" title="(in Requests v2.28.2)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">requests</span></code></a> library to manage downloads
+HTTP download link. Uses the <a class="reference external" href="https://requests.readthedocs.io/en/latest/api/#module-requests" title="(in Requests v2.31.0)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">requests</span></code></a> library to manage downloads
 and interact with the APIs.</p>
 <p>The <strong>format of the “URL”</strong> is: <code class="docutils literal notranslate"><span class="pre">doi:{DOI}/{file</span> <span class="pre">name}</span></code>.</p>
 <p>Notice that there are no <code class="docutils literal notranslate"><span class="pre">//</span></code> like in HTTP/FTP and you must specify a
@@ -470,7 +470,7 @@ download files given the DOI instead of an HTTP link.</p>
 <ul class="simple">
 <li><p><a class="reference external" href="https://www.figshare.com">figshare</a></p></li>
 <li><p><a class="reference external" href="https://www.zenodo.org">Zenodo</a></p></li>
-<li><p><a class="reference external" href="https://dataverse.org/">DataVerse</a> instances</p></li>
+<li><p><a class="reference external" href="https://dataverse.org/">Dataverse</a> instances</p></li>
 </ul>
 <div class="admonition attention">
 <p class="admonition-title">Attention</p>
@@ -481,14 +481,14 @@ suggestions and contributions adding new repositories.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>progressbar</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a><em> or </em><em>an arbitrary progress bar object</em>) – If True, will print a progress bar of the download to standard error
+<li><p><strong>progressbar</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a><em> or </em><em>an arbitrary progress bar object</em>) – If True, will print a progress bar of the download to standard error
 (stderr). Requires <a class="reference external" href="https://github.com/tqdm/tqdm">tqdm</a> to be
 installed. Alternatively, an arbitrary progress bar object can be
 passed. See <a class="reference internal" href="../../progressbars.html#custom-progressbar"><span class="std std-ref">Using custom progress bars</span></a> for details.</p></li>
-<li><p><strong>chunk_size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – Files are streamed <em>chunk_size</em> bytes at a time instead of loading
+<li><p><strong>chunk_size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – Files are streamed <em>chunk_size</em> bytes at a time instead of loading
 everything into memory at one. Usually doesn’t need to be changed.</p></li>
 <li><p><strong>**kwargs</strong> – All keyword arguments given when creating an instance of this class
-will be passed to <a class="reference external" href="https://requests.readthedocs.io/en/latest/api/#requests.get" title="(in Requests v2.28.2)"><code class="xref py py-func docutils literal notranslate"><span class="pre">requests.get</span></code></a>.</p></li>
+will be passed to <a class="reference external" href="https://requests.readthedocs.io/en/latest/api/#requests.get" title="(in Requests v2.31.0)"><code class="xref py py-func docutils literal notranslate"><span class="pre">requests.get</span></code></a>.</p></li>
 </ul>
 </dd>
 </dl>
@@ -542,12 +542,12 @@ data:</p>
 <dd><p>Download the given DOI URL over HTTP to the given output file.</p>
 <p>Uses the repository’s API to determine the actual HTTP download URL
 from the given DOI.</p>
-<p>Uses <a class="reference external" href="https://requests.readthedocs.io/en/latest/api/#requests.get" title="(in Requests v2.28.2)"><code class="xref py py-func docutils literal notranslate"><span class="pre">requests.get</span></code></a>.</p>
+<p>Uses <a class="reference external" href="https://requests.readthedocs.io/en/latest/api/#requests.get" title="(in Requests v2.31.0)"><code class="xref py py-func docutils literal notranslate"><span class="pre">requests.get</span></code></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>url</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – The URL to the file you want to download.</p></li>
-<li><p><strong>output_file</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em> or </em><em>file-like object</em>) – Path (and file name) to which the file will be downloaded.</p></li>
+<li><p><strong>url</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – The URL to the file you want to download.</p></li>
+<li><p><strong>output_file</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em> or </em><em>file-like object</em>) – Path (and file name) to which the file will be downloaded.</p></li>
 <li><p><strong>pooch</strong> (<a class="reference internal" href="pooch.Pooch.html#pooch.Pooch" title="pooch.Pooch"><code class="xref py py-class docutils literal notranslate"><span class="pre">Pooch</span></code></a>) – The instance of <a class="reference internal" href="pooch.Pooch.html#pooch.Pooch" title="pooch.Pooch"><code class="xref py py-class docutils literal notranslate"><span class="pre">Pooch</span></code></a> that is calling this method.</p></li>
 </ul>
 </dd>
@@ -584,7 +584,7 @@ from the given DOI.</p>
   <p>
     
         &copy; Copyright 2023, The Pooch Developers.<br/>
-      Last updated on Feb 27, 2023.<br/>
+      Last updated on Oct 24, 2023.<br/>
   </p>
 </footer>
 </main>

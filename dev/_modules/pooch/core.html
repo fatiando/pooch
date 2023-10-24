@@ -442,8 +442,6 @@
 <span class="kn">import</span> <span class="nn">shlex</span>
 <span class="kn">import</span> <span class="nn">shutil</span>
 
-<span class="kn">import</span> <span class="nn">requests</span>
-<span class="kn">import</span> <span class="nn">requests.exceptions</span>
 
 <span class="kn">from</span> <span class="nn">.hashes</span> <span class="kn">import</span> <span class="n">hash_matches</span><span class="p">,</span> <span class="n">file_hash</span>
 <span class="kn">from</span> <span class="nn">.utils</span> <span class="kn">import</span> <span class="p">(</span>
@@ -514,7 +512,7 @@
 <span class="sd">        existing file needs to be updated.</span>
 <span class="sd">    fname : str or None</span>
 <span class="sd">        The name that will be used to save the file. Should NOT include the</span>
-<span class="sd">        full the path, just the file name (it will be appended to *path*). If</span>
+<span class="sd">        full path, just the file name (it will be appended to *path*). If</span>
 <span class="sd">        None, will create a unique file name using a combination of the last</span>
 <span class="sd">        part of the URL (assuming it&#39;s the file name) and the MD5 hash of the</span>
 <span class="sd">        URL. For example, ``81whdo2d2e928yd1wi22-data-file.csv``. This ensures</span>
@@ -645,15 +643,17 @@
         <span class="n">path</span> <span class="o">=</span> <span class="n">os_cache</span><span class="p">(</span><span class="s2">&quot;pooch&quot;</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">fname</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">fname</span> <span class="o">=</span> <span class="n">unique_file_name</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
-    <span class="c1"># Create the local data directory if it doesn&#39;t already exist and make the</span>
-    <span class="c1"># path absolute.</span>
+    <span class="c1"># Make the path absolute.</span>
     <span class="n">path</span> <span class="o">=</span> <span class="n">cache_location</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">env</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
-    <span class="n">make_local_storage</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
 
     <span class="n">full_path</span> <span class="o">=</span> <span class="n">path</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span> <span class="o">/</span> <span class="n">fname</span>
     <span class="n">action</span><span class="p">,</span> <span class="n">verb</span> <span class="o">=</span> <span class="n">download_action</span><span class="p">(</span><span class="n">full_path</span><span class="p">,</span> <span class="n">known_hash</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">action</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;download&quot;</span><span class="p">,</span> <span class="s2">&quot;update&quot;</span><span class="p">):</span>
+        <span class="c1"># We need to write data, so create the local data directory if it</span>
+        <span class="c1"># doesn&#39;t already exist.</span>
+        <span class="n">make_local_storage</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+
         <span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
             <span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> data from &#39;</span><span class="si">%s</span><span class="s2">&#39; to file &#39;</span><span class="si">%s</span><span class="s2">&#39;.&quot;</span><span class="p">,</span>
             <span class="n">verb</span><span class="p">,</span>
@@ -988,9 +988,6 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_assert_file_in_registry</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
 
-        <span class="c1"># Create the local data directory if it doesn&#39;t already exist</span>
-        <span class="n">make_local_storage</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">abspath</span><span class="p">))</span>
-
         <span class="n">url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_url</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
         <span class="n">full_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">abspath</span> <span class="o">/</span> <span class="n">fname</span>
         <span class="n">known_hash</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">registry</span><span class="p">[</span><span class="n">fname</span><span class="p">]</span>
@@ -1002,6 +999,10 @@
             <span class="p">)</span>
 
         <span class="k">if</span> <span class="n">action</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;download&quot;</span><span class="p">,</span> <span class="s2">&quot;update&quot;</span><span class="p">):</span>
+            <span class="c1"># We need to write data, so create the local data directory if it</span>
+            <span class="c1"># doesn&#39;t already exist.</span>
+            <span class="n">make_local_storage</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">abspath</span><span class="p">))</span>
+
             <span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
                 <span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> file &#39;</span><span class="si">%s</span><span class="s2">&#39; from &#39;</span><span class="si">%s</span><span class="s2">&#39; to &#39;</span><span class="si">%s</span><span class="s2">&#39;.&quot;</span><span class="p">,</span>
                 <span class="n">verb</span><span class="p">,</span>
@@ -1217,6 +1218,9 @@
 <span class="sd">    will retry the download the specified number of times in case the failure</span>
 <span class="sd">    was due to a network error.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Lazy import requests to speed up import time</span>
+    <span class="kn">import</span> <span class="nn">requests.exceptions</span>  <span class="c1"># pylint: disable=C0415</span>
+
     <span class="c1"># Ensure the parent directory exists in case the file is in a subdirectory.</span>
     <span class="c1"># Otherwise, move will cause an error.</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">fname</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
@@ -1259,7 +1263,7 @@
   <p>
     
         &copy; Copyright 2023, The Pooch Developers.<br/>
-      Last updated on Feb 27, 2023.<br/>
+      Last updated on Oct 24, 2023.<br/>
   </p>
 </footer>
 </main>

@@ -457,26 +457,26 @@ instead.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – The path to the local data storage folder. The path must exist in the
+<li><p><strong>path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – The path to the local data storage folder. The path must exist in the
 file system.</p></li>
-<li><p><strong>base_url</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – Base URL for the remote data source. All requests will be made relative
+<li><p><strong>base_url</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – Base URL for the remote data source. All requests will be made relative
 to this URL.</p></li>
-<li><p><strong>registry</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><em>dict</em></a><em> or </em><em>None</em>) – A record of the files that are managed by this good boy. Keys should be
+<li><p><strong>registry</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><em>dict</em></a><em> or </em><em>None</em>) – A record of the files that are managed by this good boy. Keys should be
 the file names and the values should be their hashes. Only files
 in the registry can be fetched from the local storage. Files in
 subdirectories of <em>path</em> <strong>must use Unix-style separators</strong> (<code class="docutils literal notranslate"><span class="pre">'/'</span></code>)
 even on Windows.</p></li>
-<li><p><strong>urls</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><em>dict</em></a><em> or </em><em>None</em>) – Custom URLs for downloading individual files in the registry. A
+<li><p><strong>urls</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><em>dict</em></a><em> or </em><em>None</em>) – Custom URLs for downloading individual files in the registry. A
 dictionary with the file names as keys and the custom URLs as values.
 Not all files in <em>registry</em> need an entry in <em>urls</em>. If a file has an
 entry in <em>urls</em>, the <em>base_url</em> will be ignored when downloading it in
 favor of <code class="docutils literal notranslate"><span class="pre">urls[fname]</span></code>.</p></li>
-<li><p><strong>retry_if_failed</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – Retry a file download the specified number of times if it fails because
+<li><p><strong>retry_if_failed</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – Retry a file download the specified number of times if it fails because
 of a bad connection or a hash mismatch. By default, downloads are only
 attempted once (<code class="docutils literal notranslate"><span class="pre">retry_if_failed=0</span></code>). Initially, will wait for 1s
 between retries and then increase the wait time by 1s with each retry
 until a maximum of 10s.</p></li>
-<li><p><strong>allow_updates</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – Whether existing files in local storage that have a hash mismatch with
+<li><p><strong>allow_updates</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a>) – Whether existing files in local storage that have a hash mismatch with
 the registry are allowed to update from the remote URL. If <code class="docutils literal notranslate"><span class="pre">False</span></code>,
 any mismatch with hashes in the registry will result in an error.
 Defaults to <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p></li>
@@ -535,7 +535,7 @@ these features. Downloaders can also be used to print custom messages
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>fname</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – The file name (relative to the <em>base_url</em> of the remote data
+<li><p><strong>fname</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – The file name (relative to the <em>base_url</em> of the remote data
 storage) to fetch from the local storage.</p></li>
 <li><p><strong>processor</strong> (<em>None</em><em> or </em><em>callable</em>) – If not None, then a function (or callable object) that will be
 called before returning the full path and after the file has been
@@ -543,7 +543,7 @@ downloaded. See <a class="reference internal" href="../../processors.html#proces
 <li><p><strong>downloader</strong> (<em>None</em><em> or </em><em>callable</em>) – If not None, then a function (or callable object) that will be
 called to download a given URL to a provided local file name. See
 <a class="reference internal" href="../../downloaders.html#downloaders"><span class="std std-ref">Downloaders: Customizing the download</span></a> for details.</p></li>
-<li><p><strong>progressbar</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a><em> or </em><em>an arbitrary progress bar object</em>) – If True, will print a progress bar of the download to standard
+<li><p><strong>progressbar</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a><em> or </em><em>an arbitrary progress bar object</em>) – If True, will print a progress bar of the download to standard
 error (stderr). Requires <a class="reference external" href="https://github.com/tqdm/tqdm">tqdm</a> to
 be installed. Alternatively, an arbitrary progress bar object can
 be passed. See <a class="reference internal" href="../../progressbars.html#custom-progressbar"><span class="std std-ref">Using custom progress bars</span></a> for details.</p></li>
@@ -562,7 +562,7 @@ local storage.</p>
 <dd><p>Get the full URL to download a file in the registry.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>fname</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – The file name (relative to the <em>base_url</em> of the remote data
+<dd class="field-odd"><p><strong>fname</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – The file name (relative to the <em>base_url</em> of the remote data
 storage) to fetch from the local storage.</p>
 </dd>
 </dl>
@@ -577,7 +577,7 @@ available for download.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>fname</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – The file name (relative to the <em>base_url</em> of the remote data
+<li><p><strong>fname</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – The file name (relative to the <em>base_url</em> of the remote data
 storage).</p></li>
 <li><p><strong>downloader</strong> (<em>None</em><em> or </em><em>callable</em>) – If not None, then a function (or callable object) that will be
 called to check the availability of the file on the server. See
@@ -603,7 +603,7 @@ files can be specified as a third element on the line. Line comments
 can be added and must be prepended with <code class="docutils literal notranslate"><span class="pre">#</span></code>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>fname</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em> | </em><em>fileobj</em>) – Path (or open file object) to the registry file.</p>
+<dd class="field-odd"><p><strong>fname</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em> | </em><em>fileobj</em>) – Path (or open file object) to the registry file.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -653,7 +653,7 @@ a DOI.</p>
   <p>
     
         &copy; Copyright 2023, The Pooch Developers.<br/>
-      Last updated on Feb 27, 2023.<br/>
+      Last updated on Oct 24, 2023.<br/>
   </p>
 </footer>
 </main>

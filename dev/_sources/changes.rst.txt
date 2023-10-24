@@ -3,6 +3,45 @@
 Changelog
 =========
 
+Version 1.8.0
+-------------
+
+*Released on: 2023/10/24*
+
+doi:`10.5281/zenodo.10037888 <https://doi.org/10.5281/zenodo.10037888>`__
+
+Bug fixes:
+
+* Fix bug: add support for old and new Zenodo APIs (`#375 <https://github.com/fatiando/pooch/pull/375>`__)
+
+New features:
+
+* Only create local data directories if necessary (`#370 <https://github.com/fatiando/pooch/pull/370>`__)
+* Speed up import time by lazy loading requests (`#328 <https://github.com/fatiando/pooch/pull/328>`__)
+
+Maintenance:
+
+* Add support for Python 3.11 (`#348 <https://github.com/fatiando/pooch/pull/348>`__)
+* Only run CI cron job for the upstream repository (`#361 <https://github.com/fatiando/pooch/pull/361>`__)
+
+Documentation:
+
+* Add GemGIS to list of projects using Pooch (`#349 <https://github.com/fatiando/pooch/pull/349>`__)
+* Fix spelling of Dataverse (`#353 <https://github.com/fatiando/pooch/pull/353>`__)
+* Fix grammar on retrieve documentation (`#359 <https://github.com/fatiando/pooch/pull/359>`__)
+
+
+This release contains contributions from:
+
+* Hugo van Kemenade
+* AlexanderJuestel
+* Mark Harfouche
+* Philip Durbin
+* Rob Luke
+* Santiago Soler
+* Stephan Hoyer
+
+
 Version 1.7.0
 -------------
 

@@ -440,7 +440,6 @@
 <span class="kn">import</span> <span class="nn">ftplib</span>
 
 <span class="kn">import</span> <span class="nn">warnings</span>
-<span class="kn">import</span> <span class="nn">requests</span>
 
 <span class="kn">from</span> <span class="nn">.utils</span> <span class="kn">import</span> <span class="n">parse_url</span>
 
@@ -620,6 +619,9 @@
 <span class="sd">            is available on the server. Otherwise, returns ``None``.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Lazy import requests to speed up import time</span>
+        <span class="kn">import</span> <span class="nn">requests</span>  <span class="c1"># pylint: disable=C0415</span>
+
         <span class="k">if</span> <span class="n">check_only</span><span class="p">:</span>
             <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">allow_redirects</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
             <span class="n">available</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">200</span><span class="p">)</span>
@@ -942,7 +944,7 @@
 
 <span class="sd">    * `figshare &lt;https://www.figshare.com&gt;`__</span>
 <span class="sd">    * `Zenodo &lt;https://www.zenodo.org&gt;`__</span>
-<span class="sd">    * `DataVerse &lt;https://dataverse.org/&gt;`__ instances</span>
+<span class="sd">    * `Dataverse &lt;https://dataverse.org/&gt;`__ instances</span>
 
 <span class="sd">    .. attention::</span>
 
@@ -1054,6 +1056,9 @@
 <span class="sd">        The URL of the archive in the data repository.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Lazy import requests to speed up import time</span>
+    <span class="kn">import</span> <span class="nn">requests</span>  <span class="c1"># pylint: disable=C0415</span>
+
     <span class="c1"># Use doi.org to resolve the DOI to the repository website.</span>
     <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;https://doi.org/</span><span class="si">{</span><span class="n">doi</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
     <span class="n">url</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">url</span>
@@ -1171,10 +1176,13 @@
 
 
 <span class="k">class</span> <span class="nc">ZenodoRepository</span><span class="p">(</span><span class="n">DataRepository</span><span class="p">):</span>  <span class="c1"># pylint: disable=missing-class-docstring</span>
+    <span class="n">base_api_url</span> <span class="o">=</span> <span class="s2">&quot;https://zenodo.org/api/records&quot;</span>
+
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">doi</span><span class="p">,</span> <span class="n">archive_url</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">archive_url</span> <span class="o">=</span> <span class="n">archive_url</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">doi</span> <span class="o">=</span> <span class="n">doi</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_api_response</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_api_version</span> <span class="o">=</span> <span class="kc">None</span>
 
     <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">doi</span><span class="p">,</span> <span class="n">archive_url</span><span class="p">):</span>
@@ -1205,14 +1213,48 @@
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">api_response</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Cached API response from Zenodo&quot;&quot;&quot;</span>
-
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_api_response</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># Lazy import requests to speed up import time</span>
+            <span class="kn">import</span> <span class="nn">requests</span>  <span class="c1"># pylint: disable=C0415</span>
+
             <span class="n">article_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">archive_url</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_api_response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;https://zenodo.org/api/records/</span><span class="si">{</span><span class="n">article_id</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">base_api_url</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">article_id</span><span class="si">}</span><span class="s2">&quot;</span>
             <span class="p">)</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
 
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_api_response</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">api_version</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Version of the Zenodo API we are interacting with</span>
+
+<span class="sd">        The versions can either be :</span>
+
+<span class="sd">        - ``&quot;legacy&quot;``: corresponds to the Zenodo API that was supported until</span>
+<span class="sd">          2023-10-12 (before the migration to InvenioRDM).</span>
+<span class="sd">        - ``&quot;new&quot;``: corresponds to the new API that went online on 2023-10-13</span>
+<span class="sd">          after the migration to InvenioRDM.</span>
+
+<span class="sd">        The ``&quot;new&quot;`` API breaks backward compatibility with the ``&quot;legacy&quot;``</span>
+<span class="sd">        one and could probably be replaced by an updated version that restores</span>
+<span class="sd">        the behaviour of the ``&quot;legacy&quot;`` one.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_api_version</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">all</span><span class="p">([</span><span class="s2">&quot;key&quot;</span> <span class="ow">in</span> <span class="n">file</span> <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">api_response</span><span class="p">[</span><span class="s2">&quot;files&quot;</span><span class="p">]]):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_api_version</span> <span class="o">=</span> <span class="s2">&quot;legacy&quot;</span>
+            <span class="k">elif</span> <span class="nb">all</span><span class="p">([</span><span class="s2">&quot;filename&quot;</span> <span class="ow">in</span> <span class="n">file</span> <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">api_response</span><span class="p">[</span><span class="s2">&quot;files&quot;</span><span class="p">]]):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_api_version</span> <span class="o">=</span> <span class="s2">&quot;new&quot;</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="s2">&quot;Couldn&#39;t determine the version of the Zenodo API for &quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">archive_url</span><span class="si">}</span><span class="s2"> (doi:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">doi</span><span class="si">}</span><span class="s2">).&quot;</span>
+                <span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_api_version</span>
 
     <span class="k">def</span> <span class="nf">download_url</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_name</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
@@ -1228,14 +1270,35 @@
 <span class="sd">        -------</span>
 <span class="sd">        download_url : str</span>
 <span class="sd">            The HTTP URL that can be used to download the file.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="n">files</span> <span class="o">=</span> <span class="p">{</span><span class="n">item</span><span class="p">[</span><span class="s2">&quot;key&quot;</span><span class="p">]:</span> <span class="n">item</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">api_response</span><span class="p">[</span><span class="s2">&quot;files&quot;</span><span class="p">]}</span>
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        After Zenodo migrated to InvenioRDM on Oct 2023, their API changed. The</span>
+<span class="sd">        link to the desired files that appears in the API response leads to 404</span>
+<span class="sd">        errors (by 2023-10-17). The files are available in the following url:</span>
+<span class="sd">        ``https://zenodo.org/records/{article_id}/files/{file_name}?download=1``.</span>
+
+<span class="sd">        This method supports both the legacy and the new API.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Create list of files in the repository</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">api_version</span> <span class="o">==</span> <span class="s2">&quot;legacy&quot;</span><span class="p">:</span>
+            <span class="n">files</span> <span class="o">=</span> <span class="p">{</span><span class="n">item</span><span class="p">[</span><span class="s2">&quot;key&quot;</span><span class="p">]:</span> <span class="n">item</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">api_response</span><span class="p">[</span><span class="s2">&quot;files&quot;</span><span class="p">]}</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">files</span> <span class="o">=</span> <span class="p">[</span><span class="n">item</span><span class="p">[</span><span class="s2">&quot;filename&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">api_response</span><span class="p">[</span><span class="s2">&quot;files&quot;</span><span class="p">]]</span>
+        <span class="c1"># Check if file exists in the repository</span>
         <span class="k">if</span> <span class="n">file_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">files</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;File &#39;</span><span class="si">{</span><span class="n">file_name</span><span class="si">}</span><span class="s2">&#39; not found in data archive </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">archive_url</span><span class="si">}</span><span class="s2"> (doi:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">doi</span><span class="si">}</span><span class="s2">).&quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;File &#39;</span><span class="si">{</span><span class="n">file_name</span><span class="si">}</span><span class="s2">&#39; not found in data archive &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">archive_url</span><span class="si">}</span><span class="s2"> (doi:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">doi</span><span class="si">}</span><span class="s2">).&quot;</span>
             <span class="p">)</span>
-        <span class="n">download_url</span> <span class="o">=</span> <span class="n">files</span><span class="p">[</span><span class="n">file_name</span><span class="p">][</span><span class="s2">&quot;links&quot;</span><span class="p">][</span><span class="s2">&quot;self&quot;</span><span class="p">]</span>
+        <span class="c1"># Build download url</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">api_version</span> <span class="o">==</span> <span class="s2">&quot;legacy&quot;</span><span class="p">:</span>
+            <span class="n">download_url</span> <span class="o">=</span> <span class="n">files</span><span class="p">[</span><span class="n">file_name</span><span class="p">][</span><span class="s2">&quot;links&quot;</span><span class="p">][</span><span class="s2">&quot;self&quot;</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">article_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">api_response</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">]</span>
+            <span class="n">download_url</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;https://zenodo.org/records/</span><span class="si">{</span><span class="n">article_id</span><span class="si">}</span><span class="s2">/files/</span><span class="si">{</span><span class="n">file_name</span><span class="si">}</span><span class="s2">?download=1&quot;</span>
+            <span class="p">)</span>
         <span class="k">return</span> <span class="n">download_url</span>
 
     <span class="k">def</span> <span class="nf">populate_registry</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pooch</span><span class="p">):</span>
@@ -1246,10 +1309,22 @@
 <span class="sd">        ----------</span>
 <span class="sd">        pooch : Pooch</span>
 <span class="sd">            The pooch instance that the registry will be added to.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
 
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        After Zenodo migrated to InvenioRDM on Oct 2023, their API changed. The</span>
+<span class="sd">        checksums for each file listed in the API reference is now an md5 sum.</span>
+
+<span class="sd">        This method supports both the legacy and the new API.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">filedata</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">api_response</span><span class="p">[</span><span class="s2">&quot;files&quot;</span><span class="p">]:</span>
-            <span class="n">pooch</span><span class="o">.</span><span class="n">registry</span><span class="p">[</span><span class="n">filedata</span><span class="p">[</span><span class="s2">&quot;key&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="n">filedata</span><span class="p">[</span><span class="s2">&quot;checksum&quot;</span><span class="p">]</span>
+            <span class="n">checksum</span> <span class="o">=</span> <span class="n">filedata</span><span class="p">[</span><span class="s2">&quot;checksum&quot;</span><span class="p">]</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">api_version</span> <span class="o">==</span> <span class="s2">&quot;legacy&quot;</span><span class="p">:</span>
+                <span class="n">key</span> <span class="o">=</span> <span class="s2">&quot;key&quot;</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">key</span> <span class="o">=</span> <span class="s2">&quot;filename&quot;</span>
+                <span class="n">checksum</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;md5:</span><span class="si">{</span><span class="n">checksum</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="n">pooch</span><span class="o">.</span><span class="n">registry</span><span class="p">[</span><span class="n">filedata</span><span class="p">[</span><span class="n">key</span><span class="p">]]</span> <span class="o">=</span> <span class="n">checksum</span>
 
 
 <span class="k">class</span> <span class="nc">FigshareRepository</span><span class="p">(</span><span class="n">DataRepository</span><span class="p">):</span>  <span class="c1"># pylint: disable=missing-class-docstring</span>
@@ -1303,8 +1378,10 @@
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">api_response</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Cached API response from Figshare&quot;&quot;&quot;</span>
-
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_api_response</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># Lazy import requests to speed up import time</span>
+            <span class="kn">import</span> <span class="nn">requests</span>  <span class="c1"># pylint: disable=C0415</span>
+
             <span class="c1"># Use the figshare API to find the article ID from the DOI</span>
             <span class="n">article</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
                 <span class="sa">f</span><span class="s2">&quot;https://api.figshare.com/v2/articles?doi=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">doi</span><span class="si">}</span><span class="s2">&quot;</span>
@@ -1355,7 +1432,6 @@
 <span class="sd">        download_url : str</span>
 <span class="sd">            The HTTP URL that can be used to download the file.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-
         <span class="n">files</span> <span class="o">=</span> <span class="p">{</span><span class="n">item</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]:</span> <span class="n">item</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">api_response</span><span class="p">}</span>
         <span class="k">if</span> <span class="n">file_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">files</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
@@ -1402,7 +1478,6 @@
 <span class="sd">        archive_url : str</span>
 <span class="sd">            The resolved URL for the DOI</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-
         <span class="c1"># Access the DOI as if this was a DataVerse instance</span>
         <span class="n">response</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_get_api_response</span><span class="p">(</span><span class="n">doi</span><span class="p">,</span> <span class="n">archive_url</span><span class="p">)</span>
 
@@ -1423,6 +1498,9 @@
 <span class="sd">        This has been separated into a separate ``classmethod``, as it can be</span>
 <span class="sd">        used prior and after the initialization.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Lazy import requests to speed up import time</span>
+        <span class="kn">import</span> <span class="nn">requests</span>  <span class="c1"># pylint: disable=C0415</span>
+
         <span class="n">parsed</span> <span class="o">=</span> <span class="n">parse_url</span><span class="p">(</span><span class="n">archive_url</span><span class="p">)</span>
         <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
             <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">parsed</span><span class="p">[</span><span class="s1">&#39;protocol&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">://</span><span class="si">{</span><span class="n">parsed</span><span class="p">[</span><span class="s1">&#39;netloc&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">/api/datasets/&quot;</span>
@@ -1462,7 +1540,6 @@
 <span class="sd">        download_url : str</span>
 <span class="sd">            The HTTP URL that can be used to download the file.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-
         <span class="n">parsed</span> <span class="o">=</span> <span class="n">parse_url</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">archive_url</span><span class="p">)</span>
 
         <span class="c1"># Iterate over the given files until we find one of the requested name</span>
@@ -1506,7 +1583,7 @@
   <p>
     
         &copy; Copyright 2023, The Pooch Developers.<br/>
-      Last updated on Feb 27, 2023.<br/>
+      Last updated on Oct 24, 2023.<br/>
   </p>
 </footer>
 </main>

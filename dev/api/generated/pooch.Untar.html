@@ -460,10 +460,10 @@ instead of the archive.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>members</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a><em> or </em><em>None</em>) – If None, will unpack all files in the archive. Otherwise, <em>members</em>
+<li><p><strong>members</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a><em> or </em><em>None</em>) – If None, will unpack all files in the archive. Otherwise, <em>members</em>
 must be a list of file names to unpack from the archive. Only these
 files will be unpacked.</p></li>
-<li><p><strong>extract_dir</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em> or </em><em>None</em>) – If None, files will be unpacked to the default location (a folder in
+<li><p><strong>extract_dir</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em> or </em><em>None</em>) – If None, files will be unpacked to the default location (a folder in
 the same location as the downloaded tar file, with the suffix
 <code class="docutils literal notranslate"><span class="pre">.untar</span></code> added). Otherwise, files will be unpacked to
 <code class="docutils literal notranslate"><span class="pre">extract_dir</span></code>, which is interpreted as a <em>relative path</em> (relative to
@@ -494,8 +494,8 @@ the cache location  provided by <a class="reference internal" href="pooch.retrie
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>fname</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – Full path of the zipped file in local storage.</p></li>
-<li><p><strong>action</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – <p>Indicates what action was taken by <a class="reference internal" href="pooch.Pooch.html#pooch.Pooch.fetch" title="pooch.Pooch.fetch"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pooch.Pooch.fetch</span></code></a> or
+<li><p><strong>fname</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – Full path of the zipped file in local storage.</p></li>
+<li><p><strong>action</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – <p>Indicates what action was taken by <a class="reference internal" href="pooch.Pooch.html#pooch.Pooch.fetch" title="pooch.Pooch.fetch"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pooch.Pooch.fetch</span></code></a> or
 <a class="reference internal" href="pooch.retrieve.html#pooch.retrieve" title="pooch.retrieve"><code class="xref py py-func docutils literal notranslate"><span class="pre">pooch.retrieve</span></code></a>:</p>
 <ul>
 <li><p><code class="docutils literal notranslate"><span class="pre">&quot;download&quot;</span></code>: File didn’t exist locally and was downloaded</p></li>
@@ -542,7 +542,7 @@ the cache location  provided by <a class="reference internal" href="pooch.retrie
   <p>
     
         &copy; Copyright 2023, The Pooch Developers.<br/>
-      Last updated on Feb 27, 2023.<br/>
+      Last updated on Oct 24, 2023.<br/>
   </p>
 </footer>
 </main>

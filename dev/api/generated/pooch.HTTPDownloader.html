@@ -453,21 +453,21 @@
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pooch.</span></span><span class="sig-name descname"><span class="pre">HTTPDownloader</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">progressbar</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chunk_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1024</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pooch/downloaders.html#HTTPDownloader"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pooch.HTTPDownloader" title="Permalink to this definition">¶</a></dt>
 <dd><p>Download manager for fetching files over HTTP/HTTPS.</p>
 <p>When called, downloads the given file URL into the specified local file.
-Uses the <a class="reference external" href="https://requests.readthedocs.io/en/latest/api/#module-requests" title="(in Requests v2.28.2)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">requests</span></code></a> library to manage downloads.</p>
+Uses the <a class="reference external" href="https://requests.readthedocs.io/en/latest/api/#module-requests" title="(in Requests v2.31.0)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">requests</span></code></a> library to manage downloads.</p>
 <p>Use with <a class="reference internal" href="pooch.Pooch.html#pooch.Pooch.fetch" title="pooch.Pooch.fetch"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pooch.Pooch.fetch</span></code></a> or <a class="reference internal" href="pooch.retrieve.html#pooch.retrieve" title="pooch.retrieve"><code class="xref py py-func docutils literal notranslate"><span class="pre">pooch.retrieve</span></code></a> to customize
 the download of files (for example, to use authentication or print a
 progress bar).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>progressbar</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a><em> or </em><em>an arbitrary progress bar object</em>) – If True, will print a progress bar of the download to standard error
+<li><p><strong>progressbar</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a><em> or </em><em>an arbitrary progress bar object</em>) – If True, will print a progress bar of the download to standard error
 (stderr). Requires <a class="reference external" href="https://github.com/tqdm/tqdm">tqdm</a> to be
 installed. Alternatively, an arbitrary progress bar object can be
 passed. See <a class="reference internal" href="../../progressbars.html#custom-progressbar"><span class="std std-ref">Using custom progress bars</span></a> for details.</p></li>
-<li><p><strong>chunk_size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – Files are streamed <em>chunk_size</em> bytes at a time instead of loading
+<li><p><strong>chunk_size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – Files are streamed <em>chunk_size</em> bytes at a time instead of loading
 everything into memory at one. Usually doesn’t need to be changed.</p></li>
 <li><p><strong>**kwargs</strong> – All keyword arguments given when creating an instance of this class
-will be passed to <a class="reference external" href="https://requests.readthedocs.io/en/latest/api/#requests.get" title="(in Requests v2.28.2)"><code class="xref py py-func docutils literal notranslate"><span class="pre">requests.get</span></code></a>.</p></li>
+will be passed to <a class="reference external" href="https://requests.readthedocs.io/en/latest/api/#requests.get" title="(in Requests v2.31.0)"><code class="xref py py-func docutils literal notranslate"><span class="pre">requests.get</span></code></a>.</p></li>
 </ul>
 </dd>
 </dl>
@@ -490,8 +490,8 @@ will be passed to <a class="reference external" href="https://requests.readthedo
 </pre></div>
 </div>
 <p>Authentication can be handled by passing a user name and password to
-<a class="reference external" href="https://requests.readthedocs.io/en/latest/api/#requests.get" title="(in Requests v2.28.2)"><code class="xref py py-func docutils literal notranslate"><span class="pre">requests.get</span></code></a>. All arguments provided when creating an instance of
-the class are forwarded to <a class="reference external" href="https://requests.readthedocs.io/en/latest/api/#requests.get" title="(in Requests v2.28.2)"><code class="xref py py-func docutils literal notranslate"><span class="pre">requests.get</span></code></a>. We’ll use
+<a class="reference external" href="https://requests.readthedocs.io/en/latest/api/#requests.get" title="(in Requests v2.31.0)"><code class="xref py py-func docutils literal notranslate"><span class="pre">requests.get</span></code></a>. All arguments provided when creating an instance of
+the class are forwarded to <a class="reference external" href="https://requests.readthedocs.io/en/latest/api/#requests.get" title="(in Requests v2.31.0)"><code class="xref py py-func docutils literal notranslate"><span class="pre">requests.get</span></code></a>. We’ll use
 <code class="docutils literal notranslate"><span class="pre">auth=(username,</span> <span class="pre">password)</span></code> to use basic HTTPS authentication. The
 <a class="reference external" href="https://httpbin.org">https://httpbin.org</a> website allows us to make a fake a login request using
 whatever username and password we provide to it:</p>
@@ -538,14 +538,14 @@ whatever username and password we provide to it:</p>
 <dt class="sig sig-object py" id="pooch.HTTPDownloader.__call__">
 <span class="sig-prename descclassname"><span class="pre">HTTPDownloader.</span></span><span class="sig-name descname"><span class="pre">__call__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pooch</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_only</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pooch/downloaders.html#HTTPDownloader.__call__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pooch.HTTPDownloader.__call__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Download the given URL over HTTP to the given output file.</p>
-<p>Uses <a class="reference external" href="https://requests.readthedocs.io/en/latest/api/#requests.get" title="(in Requests v2.28.2)"><code class="xref py py-func docutils literal notranslate"><span class="pre">requests.get</span></code></a>.</p>
+<p>Uses <a class="reference external" href="https://requests.readthedocs.io/en/latest/api/#requests.get" title="(in Requests v2.31.0)"><code class="xref py py-func docutils literal notranslate"><span class="pre">requests.get</span></code></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>url</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – The URL to the file you want to download.</p></li>
-<li><p><strong>output_file</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em> or </em><em>file-like object</em>) – Path (and file name) to which the file will be downloaded.</p></li>
+<li><p><strong>url</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – The URL to the file you want to download.</p></li>
+<li><p><strong>output_file</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em> or </em><em>file-like object</em>) – Path (and file name) to which the file will be downloaded.</p></li>
 <li><p><strong>pooch</strong> (<a class="reference internal" href="pooch.Pooch.html#pooch.Pooch" title="pooch.Pooch"><code class="xref py py-class docutils literal notranslate"><span class="pre">Pooch</span></code></a>) – The instance of <a class="reference internal" href="pooch.Pooch.html#pooch.Pooch" title="pooch.Pooch"><code class="xref py py-class docutils literal notranslate"><span class="pre">Pooch</span></code></a> that is calling this method.</p></li>
-<li><p><strong>check_only</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – If True, will only check if a file exists on the server and
+<li><p><strong>check_only</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a>) – If True, will only check if a file exists on the server and
 <strong>without downloading the file</strong>. Will return <code class="docutils literal notranslate"><span class="pre">True</span></code> if the file
 exists and <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise.</p></li>
 </ul>
@@ -587,7 +587,7 @@ is available on the server. Otherwise, returns <code class="docutils literal not
   <p>
     
         &copy; Copyright 2023, The Pooch Developers.<br/>
-      Last updated on Feb 27, 2023.<br/>
+      Last updated on Oct 24, 2023.<br/>
   </p>
 </footer>
 </main>

@@ -434,6 +434,11 @@
             <nav id="bd-toc-nav" aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#version-1-8-0">
+   Version 1.8.0
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#version-1-7-0">
    Version 1.7.0
   </a>
@@ -579,6 +584,11 @@
                         <nav aria-label="Page">
                             <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#version-1-8-0">
+   Version 1.8.0
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#version-1-7-0">
    Version 1.7.0
   </a>
@@ -714,6 +724,41 @@
                 
   <div class="section" id="changelog">
 <span id="changes"></span><h1>Changelog<a class="headerlink" href="#changelog" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="version-1-8-0">
+<h2>Version 1.8.0<a class="headerlink" href="#version-1-8-0" title="Permalink to this headline">¶</a></h2>
+<p><em>Released on: 2023/10/24</em></p>
+<p>doi:<a class="reference external" href="https://doi.org/10.5281/zenodo.10037888">10.5281/zenodo.10037888</a></p>
+<p>Bug fixes:</p>
+<ul class="simple">
+<li><p>Fix bug: add support for old and new Zenodo APIs (<a class="reference external" href="https://github.com/fatiando/pooch/pull/375">#375</a>)</p></li>
+</ul>
+<p>New features:</p>
+<ul class="simple">
+<li><p>Only create local data directories if necessary (<a class="reference external" href="https://github.com/fatiando/pooch/pull/370">#370</a>)</p></li>
+<li><p>Speed up import time by lazy loading requests (<a class="reference external" href="https://github.com/fatiando/pooch/pull/328">#328</a>)</p></li>
+</ul>
+<p>Maintenance:</p>
+<ul class="simple">
+<li><p>Add support for Python 3.11 (<a class="reference external" href="https://github.com/fatiando/pooch/pull/348">#348</a>)</p></li>
+<li><p>Only run CI cron job for the upstream repository (<a class="reference external" href="https://github.com/fatiando/pooch/pull/361">#361</a>)</p></li>
+</ul>
+<p>Documentation:</p>
+<ul class="simple">
+<li><p>Add GemGIS to list of projects using Pooch (<a class="reference external" href="https://github.com/fatiando/pooch/pull/349">#349</a>)</p></li>
+<li><p>Fix spelling of Dataverse (<a class="reference external" href="https://github.com/fatiando/pooch/pull/353">#353</a>)</p></li>
+<li><p>Fix grammar on retrieve documentation (<a class="reference external" href="https://github.com/fatiando/pooch/pull/359">#359</a>)</p></li>
+</ul>
+<p>This release contains contributions from:</p>
+<ul class="simple">
+<li><p>Hugo van Kemenade</p></li>
+<li><p>AlexanderJuestel</p></li>
+<li><p>Mark Harfouche</p></li>
+<li><p>Philip Durbin</p></li>
+<li><p>Rob Luke</p></li>
+<li><p>Santiago Soler</p></li>
+<li><p>Stephan Hoyer</p></li>
+</ul>
+</div>
 <div class="section" id="version-1-7-0">
 <h2>Version 1.7.0<a class="headerlink" href="#version-1-7-0" title="Permalink to this headline">¶</a></h2>
 <p><em>Released on: 2023/02/27</em></p>
@@ -1465,7 +1510,7 @@ data corruption.</p></li>
   <p>
     
         &copy; Copyright 2023, The Pooch Developers.<br/>
-      Last updated on Feb 27, 2023.<br/>
+      Last updated on Oct 24, 2023.<br/>
   </p>
 </footer>
 </main>
