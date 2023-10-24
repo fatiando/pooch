@@ -1,0 +1,756 @@
+
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+        <title>Manage a package’s sample data | Pooch v1.8.0</title>
+    
+
+    
+  <link href="_static/css/theme.css" rel="stylesheet">
+  <link href="_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+
+    
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-book-theme.css?digest=84ace793992934648b4de8eed757e5a2" />
+    <link rel="stylesheet" type="text/css" href="_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
+    <link rel="stylesheet" type="text/css" href="_static/panels-variables.87249bd3f7b54630a2508c1b61607c7f.css" />
+    <link rel="stylesheet" type="text/css" href="_static/style.css" />
+    
+  <link rel="preload" as="script" href="_static/js/index.be7d3bbb2ef33a8344ce.js">
+
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx-book-theme.9d8b4a8b9bb19db25eeaddc40d639ba2.js"></script>
+    <link rel="shortcut icon" href="_static/favicon.png"/>
+    <link rel="author" title="About these documents" href="about.html" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Hashes: Calculating and bypassing" href="hashes.html" />
+    <link rel="prev" title="Fetching files from a registry" href="multiple-files.html" />
+    <!-- Plausible analytics for anonymous usage statistics -->
+    <script defer data-domain="fatiando.org" src="https://plausible.io/js/plausible.js"></script>
+
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<div class="col-12 col-md-3 bd-sidebar site-navigation " id="site-navigation">
+    
+        <div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="index.html">
+      
+        <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
+        
+      
+      
+      <img src="_static/pooch-logo.png" class="logo" alt="logo">
+      
+      
+      <h1 class="site-logo" id="site-title">Pooch <span class="project-version">v1.8.0</span></h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        <ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="index.html">
+   Pooch Documentation
+  </a>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Getting Started
+ </span>
+</p>
+<ul class="current nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="about.html">
+   Why use Pooch?
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="install.html">
+   Installing
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="retrieve.html">
+   Retrieving a single data file
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="multiple-files.html">
+   Fetching files from a registry
+  </a>
+ </li>
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   Manage a package’s sample data
+  </a>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Training your Pooch
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="hashes.html">
+   Hashes: Calculating and bypassing
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="user-defined-cache.html">
+   User-defined cache location
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="registry-files.html">
+   Registry files
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="multiple-urls.html">
+   Multiple download URLs
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="protocols.html">
+   Download protocols
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="logging.html">
+   Logging and verbosity
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="downloaders.html">
+   Downloaders: Customizing the download
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="processors.html">
+   Processors: Post-download actions
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="authentication.html">
+   Authentication
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="progressbars.html">
+   Printing progress bars
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="unpacking.html">
+   Unpacking archives
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="decompressing.html">
+   Decompressing
+  </a>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Reference
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="api/index.html">
+   List of functions and classes (API)
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="api/generated/pooch.create.html">
+     pooch.create
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="api/generated/pooch.Pooch.html">
+     pooch.Pooch
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="api/generated/pooch.retrieve.html">
+     pooch.retrieve
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="api/generated/pooch.os_cache.html">
+     pooch.os_cache
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="api/generated/pooch.make_registry.html">
+     pooch.make_registry
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="api/generated/pooch.file_hash.html">
+     pooch.file_hash
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="api/generated/pooch.check_version.html">
+     pooch.check_version
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="api/generated/pooch.get_logger.html">
+     pooch.get_logger
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="api/generated/pooch.HTTPDownloader.html">
+     pooch.HTTPDownloader
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="api/generated/pooch.FTPDownloader.html">
+     pooch.FTPDownloader
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="api/generated/pooch.SFTPDownloader.html">
+     pooch.SFTPDownloader
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="api/generated/pooch.DOIDownloader.html">
+     pooch.DOIDownloader
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="api/generated/pooch.Unzip.html">
+     pooch.Unzip
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="api/generated/pooch.Untar.html">
+     pooch.Untar
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="api/generated/pooch.Decompress.html">
+     pooch.Decompress
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="api/generated/pooch.test.html">
+     pooch.test
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="compatibility.html">
+   Version compatibility
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="citing.html">
+   Citing Pooch
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="changes.html">
+   Changelog
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="versions.html">
+   Documentation for other versions
+  </a>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Community
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference external" href="https://www.fatiando.org/contact/">
+   Join the community
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference external" href="https://github.com/fatiando/community/blob/main/CODE_OF_CONDUCT.md">
+   Code of Conduct
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference external" href="https://github.com/fatiando/pooch/blob/main/CONTRIBUTING.md">
+   How to contribute
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference external" href="https://github.com/fatiando/pooch">
+   Source code on GitHub
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference external" href="https://github.com/fatiando/pooch/blob/main/AUTHORS.md">
+   Authors
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference external" href="https://www.fatiando.org">
+   Fatiando a Terra
+  </a>
+ </li>
+</ul>
+
+    </div>
+</nav> <!-- To handle the deprecated key -->
+
+<div class="navbar_extra_footer">
+  Theme by the <a href="https://ebp.jupyterbook.org">Executable Book Project</a>
+</div>
+
+</div>
+
+
+          
+
+
+          
+<!-- This is an invisible pixel that we watch to see if we've scrolled. -->
+<div class="sbt-scroll-pixel-helper"></div>
+<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
+    
+    <div class="topbar container-xl fixed-top">
+    <div class="topbar-contents row">
+        <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show"></div>
+        <div class="col pl-md-4 topbar-main">
+            <div class="topbar-left">
+                
+                <label class="nav-toggle-button" for="__navigation">
+                    <div class="visually-hidden">Toggle navigation</div>
+                    <i class="fas fa-bars"></i>
+                </label>
+                
+            </div>
+            
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
+            class="fas fa-download"></i></button>
+
+    <div class="dropdown-buttons">
+        <!-- ipynb file if we had a myst markdown file -->
+        
+        <!-- Download raw file -->
+        <a class="dropdown-buttons" href="_sources/sample-data.rst.txt"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
+                data-placement="left">.rst</button></a>
+        <!-- Download PDF via print -->
+        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
+                onclick="printPdf(this)" data-toggle="tooltip" data-placement="left">.pdf</button>
+    </div>
+</div>
+
+            <!-- Source interaction buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Connect with source repository"><i class="fab fa-github"></i></button>
+    <div class="dropdown-buttons sourcebuttons">
+        <a class="repository-button"
+            href="https://github.com/fatiando/pooch"><button type="button" class="btn btn-secondary topbarbtn"
+                data-toggle="tooltip" data-placement="left" title="Source repository"><i
+                    class="fab fa-github"></i>repository</button></a>
+        <a class="issues-button"
+            href="https://github.com/fatiando/pooch/issues/new?title=Issue%20on%20page%20%2Fsample-data.html&body=Your%20issue%20content%20here."><button
+                type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
+                title="Open an issue"><i class="fas fa-lightbulb"></i>open issue</button></a>
+        <a class="edit-button" href="https://github.com/fatiando/pooch/edit/main/doc/sample-data.rst"><button
+                type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
+                title="Edit this page"><i class="fas fa-pencil-alt"></i>suggest edit</button></a>
+    </div>
+</div>
+
+            <!-- Full screen (wrap in <a> to have style consistency -->
+
+<a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+        data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
+        title="Fullscreen mode"><i
+            class="fas fa-expand"></i></button></a>
+
+            <!-- Launch buttons -->
+
+        </div>
+
+        <!-- Table of contents -->
+        <div class="d-none d-md-block col-md-2 bd-toc show noprint">
+            
+            <div class="tocsection onthispage pt-5 pb-3">
+                <i class="fas fa-list"></i> Contents
+            </div>
+            <nav id="bd-toc-nav" aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#the-problem">
+   The problem
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#basic-setup">
+   Basic setup
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#versioning">
+   Versioning
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#retry-failed-downloads">
+   Retry failed downloads
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#disable-file-updates-for-testing">
+   Disable file updates for testing
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#where-to-go-from-here">
+   Where to go from here
+  </a>
+ </li>
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+    <div id="main-content" class="row">
+        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1>Manage a package’s sample data</h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#the-problem">
+   The problem
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#basic-setup">
+   Basic setup
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#versioning">
+   Versioning
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#retry-failed-downloads">
+   Retry failed downloads
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#disable-file-updates-for-testing">
+   Disable file updates for testing
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#where-to-go-from-here">
+   Where to go from here
+  </a>
+ </li>
+</ul>
+
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            
+              <div>
+                
+  <div class="section" id="manage-a-package-s-sample-data">
+<span id="intermediate"></span><h1>Manage a package’s sample data<a class="headerlink" href="#manage-a-package-s-sample-data" title="Permalink to this headline">¶</a></h1>
+<p>In this section, we’ll use Pooch to manage the download of a Python package’s
+sample datasets.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The setup will be very similar to what we saw in <a class="reference internal" href="multiple-files.html#beginner"><span class="std std-ref">Fetching files from a registry</span></a>.
+It may be helpful to read that first.</p>
+</div>
+<div class="section" id="the-problem">
+<h2>The problem<a class="headerlink" href="#the-problem" title="Permalink to this headline">¶</a></h2>
+<p>In this example, we’ll work with the follow assumptions:</p>
+<ul class="simple">
+<li><p>You develop a Python library called <code class="docutils literal notranslate"><span class="pre">plumbus</span></code> for analysing data emitted by
+interdimensional portals.</p></li>
+<li><p>You want to distribute sample data so that your users can easily try out the
+library by copying and pasting from the documentation.</p></li>
+<li><p>You want to have a <code class="docutils literal notranslate"><span class="pre">plumbus.datasets</span></code> module that defines functions like
+<code class="docutils literal notranslate"><span class="pre">fetch_c137()</span></code> that will return the data loaded as a
+<a class="reference external" href="http://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v2.1.1)"><code class="xref py py-class docutils literal notranslate"><span class="pre">pandas.DataFrame</span></code></a> for convenient access.</p></li>
+<li><p>Your sample data are in a folder of your GitHub repository but you don’t want
+to include the data files with your source and wheel distributions because of
+their size.</p></li>
+<li><p>You use git tags to mark releases of your project.</p></li>
+<li><p>Your project has a variable that defines the version string.</p></li>
+<li><p>The version string contains an indicator that the current commit is not a
+release (like <code class="docutils literal notranslate"><span class="pre">'v1.2.3+12.d908jdl'</span></code> or <code class="docutils literal notranslate"><span class="pre">'v0.1+dev'</span></code>).</p></li>
+</ul>
+<p>For now, let’s say that this is the layout of your repository on GitHub:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>doc/
+    ...
+data/
+    README.md
+    c137.csv
+    cronen.csv
+plumbus/
+    __init__.py
+    ...
+    datasets.py
+setup.py
+...
+</pre></div>
+</div>
+<p>The sample data are stored in the <code class="docutils literal notranslate"><span class="pre">data</span></code> folder of your repository.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>Pooch can handle different use cases as well, like: FTP/SFTP, authenticated
+HTTP, multiple URLs, decompressing and unpacking archives, etc.
+See the tutorials under “Training your Pooch” and the documentation for
+<a class="reference internal" href="api/generated/pooch.create.html#pooch.create" title="pooch.create"><code class="xref py py-func docutils literal notranslate"><span class="pre">pooch.create</span></code></a> and <a class="reference internal" href="api/generated/pooch.Pooch.html#pooch.Pooch" title="pooch.Pooch"><code class="xref py py-func docutils literal notranslate"><span class="pre">pooch.Pooch</span></code></a> for more options.</p>
+</div>
+</div>
+<div class="section" id="basic-setup">
+<h2>Basic setup<a class="headerlink" href="#basic-setup" title="Permalink to this headline">¶</a></h2>
+<p>This is what the <code class="docutils literal notranslate"><span class="pre">plumbus/datasets.py</span></code> file would look like:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Load sample data.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">pandas</span>
+<span class="kn">import</span> <span class="nn">pooch</span>
+
+<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">version</span>  <span class="c1"># The version string of your project</span>
+
+
+<span class="n">BRIAN</span> <span class="o">=</span> <span class="n">pooch</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+    <span class="c1"># Use the default cache folder for the operating system</span>
+    <span class="n">path</span><span class="o">=</span><span class="n">pooch</span><span class="o">.</span><span class="n">os_cache</span><span class="p">(</span><span class="s2">&quot;plumbus&quot;</span><span class="p">),</span>
+    <span class="c1"># The remote data is on Github</span>
+    <span class="n">base_url</span><span class="o">=</span><span class="s2">&quot;https://github.com/rick/plumbus/raw/</span><span class="si">{version}</span><span class="s2">/data/&quot;</span><span class="p">,</span>
+    <span class="n">version</span><span class="o">=</span><span class="n">version</span><span class="p">,</span>
+    <span class="c1"># If this is a development version, get the data from the &quot;main&quot; branch</span>
+    <span class="n">version_dev</span><span class="o">=</span><span class="s2">&quot;main&quot;</span><span class="p">,</span>
+    <span class="n">registry</span><span class="o">=</span><span class="p">{</span>
+        <span class="s2">&quot;c137.csv&quot;</span><span class="p">:</span> <span class="s2">&quot;sha256:19uheidhlkjdwhoiwuhc0uhcwljchw9ochwochw89dcgw9dcgwc&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;cronen.csv&quot;</span><span class="p">:</span> <span class="s2">&quot;sha256:1upodh2ioduhw9celdjhlfvhksgdwikdgcowjhcwoduchowjg8w&quot;</span><span class="p">,</span>
+    <span class="p">},</span>
+<span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">fetch_c137</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Load the C-137 sample data as a pandas.DataFrame.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># The file will be downloaded automatically the first time this is run</span>
+    <span class="c1"># returns the file path to the downloaded file. Afterwards, Pooch finds</span>
+    <span class="c1"># it in the local cache and doesn&#39;t repeat the download.</span>
+    <span class="n">fname</span> <span class="o">=</span> <span class="n">BRIAN</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="s2">&quot;c137.csv&quot;</span><span class="p">)</span>
+    <span class="c1"># The &quot;fetch&quot; method returns the full path to the downloaded data file.</span>
+    <span class="c1"># All we need to do now is load it with our standard Python tools.</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">pandas</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">data</span>
+
+
+<span class="k">def</span> <span class="nf">fetch_cronen</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Load the Cronenberg sample data as a pandas.DataFrame.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">fname</span> <span class="o">=</span> <span class="n">BRIAN</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="s2">&quot;cronen.csv&quot;</span><span class="p">)</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">pandas</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">data</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">BRIAN</span></code> variable captures the value returned by <a class="reference internal" href="api/generated/pooch.create.html#pooch.create" title="pooch.create"><code class="xref py py-func docutils literal notranslate"><span class="pre">pooch.create</span></code></a>,
+which is an instance of the <a class="reference internal" href="api/generated/pooch.Pooch.html#pooch.Pooch" title="pooch.Pooch"><code class="xref py py-class docutils literal notranslate"><span class="pre">Pooch</span></code></a> class. The class contains the
+data registry (files, URLs, hashes, etc) and handles downloading files from the
+registry using the <a class="reference internal" href="api/generated/pooch.Pooch.html#pooch.Pooch.fetch" title="pooch.Pooch.fetch"><code class="xref py py-meth docutils literal notranslate"><span class="pre">fetch</span></code></a> method.
+When the user calls <code class="docutils literal notranslate"><span class="pre">plumbus.datasets.fetch_c137()</span></code> for the first time, the
+data file will be downloaded and stored in the local storage.</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>We’re using <a class="reference internal" href="api/generated/pooch.os_cache.html#pooch.os_cache" title="pooch.os_cache"><code class="xref py py-func docutils literal notranslate"><span class="pre">pooch.os_cache</span></code></a> to set the local folder to the default
+cache location for the user’s operating system. You could also provide any
+other path if you prefer.</p>
+</div>
+</div>
+<div class="section" id="versioning">
+<h2>Versioning<a class="headerlink" href="#versioning" title="Permalink to this headline">¶</a></h2>
+<p>The files from different version of your project will be kept in separate
+folders to make sure they don’t conflict with each other. This way, you can
+safely update data files while maintaining backward compatibility. For example,
+if <code class="docutils literal notranslate"><span class="pre">path=&quot;.plumbus&quot;</span></code> and <code class="docutils literal notranslate"><span class="pre">version=&quot;v0.1&quot;</span></code>, the data folder will be
+<code class="docutils literal notranslate"><span class="pre">.plumbus/v0.1</span></code>.</p>
+<p>When your project updates, Pooch will automatically setup a separate folder for
+the new data files based on the given version string. The remote URL will also
+be updated. Notice that there is a format specifier <code class="docutils literal notranslate"><span class="pre">{version}</span></code> in the URL
+that Pooch substitutes for you.</p>
+<p><strong>Versioning is optional</strong> and can be ignored by omitting the <code class="docutils literal notranslate"><span class="pre">version</span></code> and
+<code class="docutils literal notranslate"><span class="pre">version_dev</span></code> arguments or setting them to <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p>
+</div>
+<div class="section" id="retry-failed-downloads">
+<h2>Retry failed downloads<a class="headerlink" href="#retry-failed-downloads" title="Permalink to this headline">¶</a></h2>
+<p>When downloading data repeatedly, like in continuous integration, failures can
+occur due to sporadic network outages or other factors outside of our control.
+In these cases, it can be frustrating to have entire jobs fail because a single
+download was not successful.</p>
+<p>Pooch allows you to specify a number of times to retry the download in case of
+failure by setting <code class="docutils literal notranslate"><span class="pre">retry_if_failed</span></code> in <a class="reference internal" href="api/generated/pooch.create.html#pooch.create" title="pooch.create"><code class="xref py py-func docutils literal notranslate"><span class="pre">pooch.create</span></code></a>. This setting
+will be valid for all downloads attempted with <a class="reference internal" href="api/generated/pooch.Pooch.html#pooch.Pooch.fetch" title="pooch.Pooch.fetch"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pooch.Pooch.fetch</span></code></a>. The
+download can fail because the file hash doesn’t match the known hash (due to a
+partial download, for example) or because of network errors coming from
+<a class="reference external" href="https://requests.readthedocs.io/en/latest/api/#module-requests" title="(in Requests v2.31.0)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">requests</span></code></a>. Other errors (file system permission errors, etc) will still
+result in a failed download.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Requires Pooch &gt;= 1.3.0.</p>
+</div>
+</div>
+<div class="section" id="disable-file-updates-for-testing">
+<h2>Disable file updates for testing<a class="headerlink" href="#disable-file-updates-for-testing" title="Permalink to this headline">¶</a></h2>
+<p>Sometimes we can forget to update the hash of a file in the registry when we
+change one of the existing data files.
+If this happens in a pull request or any branch that is not the default, Pooch
+will detect that there is a mismatch and will update the local file by
+re-downloading (usually from the default development branch).
+If your tests don’t check the file contents exactly (which is usually not
+practical), you can have tests that pass on development or continuous
+integration and then fail once a pull request is merged.</p>
+<p>In these cases, it is better to temporarily disallow file updates so that Pooch
+raises an error when the hash doesn’t match (indicating that you forgot to
+update it).
+To do so, use the <code class="docutils literal notranslate"><span class="pre">allow_updates</span></code> argument in <a class="reference internal" href="api/generated/pooch.create.html#pooch.create" title="pooch.create"><code class="xref py py-func docutils literal notranslate"><span class="pre">pooch.create</span></code></a>.
+Setting this to <code class="docutils literal notranslate"><span class="pre">False</span></code> will mean that a hash mismatch between local file and
+the registry always results in an error.</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>We <strong>do not recommend setting this permanenetly to</strong> <code class="docutils literal notranslate"><span class="pre">False</span></code>. Instead,
+set it to the name of an environment variable that activates this
+behaviour, like <code class="docutils literal notranslate"><span class="pre">pooch.create(...,</span>
+<span class="pre">allow_updates=&quot;MYPROJECT_ALLOW_UPDATES&quot;)</span></code>.
+Then you can set <code class="docutils literal notranslate"><span class="pre">MYPROJECT_ALLOW_UPDATES=false</span></code> on continuous
+integration or when running your tests locally.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Requires Pooch &gt;= 1.6.0.</p>
+</div>
+</div>
+<div class="section" id="where-to-go-from-here">
+<h2>Where to go from here<a class="headerlink" href="#where-to-go-from-here" title="Permalink to this headline">¶</a></h2>
+<p>Pooch has more features for handling different download protocols, handling
+large registries, downloading from multiple sources, and more. Check out the
+tutorials under “Training your Pooch” for more information.</p>
+<p>Most users will also benefit from reading at least:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="user-defined-cache.html#environmentvariable"><span class="std std-ref">User-defined cache location</span></a></p></li>
+<li><p><a class="reference internal" href="hashes.html#hashes"><span class="std std-ref">Hashes: Calculating and bypassing</span></a></p></li>
+<li><p><a class="reference internal" href="registry-files.html#registryfiles"><span class="std std-ref">Registry files</span></a></p></li>
+</ul>
+</div>
+</div>
+
+
+              </div>
+              
+            
+                <!-- Previous / next buttons -->
+<div class='prev-next-area'> 
+    <a class='left-prev' id="prev-link" href="multiple-files.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title">Fetching files from a registry</p>
+        </div>
+    </a>
+    <a class='right-next' id="next-link" href="hashes.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Hashes: Calculating and bypassing</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
+    </a>
+</div>
+            
+        </div>
+    </div>
+    <footer class="footer">
+  <p>
+    
+        &copy; Copyright 2023, The Pooch Developers.<br/>
+      Last updated on Oct 24, 2023.<br/>
+  </p>
+</footer>
+</main>
+
+
+      </div>
+    </div>
+  
+  <script src="_static/js/index.be7d3bbb2ef33a8344ce.js"></script>
+
+  </body>
+</html>
