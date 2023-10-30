@@ -86,14 +86,13 @@ class ExtractorProcessor:  # pylint: disable=too-few-public-methods
         else:
             archive_dir = fname.rsplit(os.path.sep, maxsplit=1)[0]
             self.extract_dir = os.path.join(archive_dir, self.extract_dir)
-        if self.members is None:
-            self.members = self._all_members(fname)
+        members = self.members or self._all_members(fname)
         if (
             (action in ("update", "download"))
             or (not os.path.exists(self.extract_dir))
             or not all(
                 os.path.exists(os.path.join(self.extract_dir, m))
-                for m in self.members
+                for m in members
             )
         ):
             # Make sure that the folder with the extracted files exists
