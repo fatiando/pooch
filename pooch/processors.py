@@ -91,8 +91,7 @@ class ExtractorProcessor:  # pylint: disable=too-few-public-methods
             (action in ("update", "download"))
             or (not os.path.exists(self.extract_dir))
             or not all(
-                os.path.exists(os.path.join(self.extract_dir, m))
-                for m in members
+                os.path.exists(os.path.join(self.extract_dir, m)) for m in members
             )
         ):
             # Make sure that the folder with the extracted files exists
