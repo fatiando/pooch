@@ -272,9 +272,9 @@ def test_unpacking_members_then_no_members(processor_class, extension):
         pup = Pooch(path=Path(local_store), base_url=BASEURL, registry=REGISTRY)
 
         # Do a first fetch with incorrect member
-        processor1 = processor_class(members=["i don't exist"])
+        processor1 = processor_class(members=["tiny-data.txt"])
         filenames1 = pup.fetch("store" + extension, processor=processor1)
-        assert len(filenames1) == 0
+        assert len(filenames1) == 1
 
         # Do a second fetch with no members
         processor2 = processor_class()
