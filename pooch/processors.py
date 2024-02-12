@@ -45,7 +45,8 @@ class ExtractorProcessor:  # pylint: disable=too-few-public-methods
         self.extract_dir = extract_dir
 
     def _all_members(self, fname):
-        """Return all the members in the archive.
+        """
+        Return all the members in the archive.
 
         In the base class, this returns None.
         """
