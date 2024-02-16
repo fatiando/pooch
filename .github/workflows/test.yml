@@ -17,10 +17,6 @@ on:
   release:
     types:
       - published
-  schedule:
-    # Run every Monday at 12:00 UTC
-    # * is a special character in YAML so you have to quote this string
-    - cron: "00 12 * * 1"
 
 # Use bash by default in all jobs
 defaults:
@@ -43,13 +39,17 @@ jobs:
           - ubuntu
           - macos
           - windows
-        python:
-          - "3.7"
-          - "3.11"
         dependencies:
+          - oldest
           - latest
           - optional
-          - oldest
+        include:
+          - dependencies: oldest
+            python: "3.7"
+          - dependencies: latest
+            python: "3.11"
+          - dependencies: optional
+            python: "3.11"
     env:
       REQUIREMENTS: env/requirements-build.txt env/requirements-test.txt
       # Used to tag codecov submissions
