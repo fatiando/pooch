@@ -40,6 +40,23 @@ Are you a **scientist** or researcher? Pooch can help you too!
 * Automatically download data using code instead of telling colleagues to do it themselves.
 * Make sure everyone running the code has the same version of the data files.
 
+## Projects using Pooch
+
+[SciPy](https://github.com/scipy/scipy), 
+[scikit-image](https://github.com/scikit-image/scikit-image),
+[Ensaio](https://github.com/fatiando/ensaio),
+[MetPy](https://github.com/Unidata/MetPy),
+[napari](https://github.com/napari/napari),
+[icepack](https://github.com/icepack/icepack),
+[histolab](https://github.com/histolab/histolab),
+[seaborn-image](https://github.com/SarthakJariwala/seaborn-image),
+[Open AR-Sandbox](https://github.com/cgre-aachen/open_AR_Sandbox),
+[climlab](https://github.com/climlab/climlab),
+[mne-python](https://github.com/mne-tools/mne-python),
+[GemGIS](https://github.com/cgre-aachen/gemgis)
+
+> If you're using Pooch, **send us a pull request** adding your project to the list.
+
 ## Example
 
 For a **scientist downloading a data file** for analysis:
@@ -124,23 +141,6 @@ def fetch_gravity_data():
     data = pandas.read_csv(fname)
     return data
 ```
-
-## Projects using Pooch
-
-* [SciPy](https://github.com/scipy/scipy)
-* [scikit-image](https://github.com/scikit-image/scikit-image)
-* [MetPy](https://github.com/Unidata/MetPy)
-* [icepack](https://github.com/icepack/icepack)
-* [histolab](https://github.com/histolab/histolab)
-* [seaborn-image](https://github.com/SarthakJariwala/seaborn-image)
-* [Ensaio](https://github.com/fatiando/ensaio)
-* [Open AR-Sandbox](https://github.com/cgre-aachen/open_AR_Sandbox)
-* [climlab](https://github.com/climlab/climlab)
-* [napari](https://github.com/napari/napari)
-* [mne-python](https://github.com/mne-tools/mne-python)
-* [GemGIS](https://github.com/cgre-aachen/gemgis)
-
-*If you're using Pooch, send us a pull request adding your project to the list.*
 
 ## Getting involved
 
