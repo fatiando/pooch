@@ -1,87 +1,114 @@
 .. title:: Home
 
-========
-|banner|
-========
+.. raw:: html
 
-.. |banner| image:: _static/readme-banner.png
-    :alt: Pooch Documentation
-    :align: middle
+    <div class="text-center">
+    <img src="_static/pooch-logo.svg" class="mx-auto my-4 dark-light" style="width: 100%; max-width: 200px;">
+    <h1 class="display-1">Pooch</h1>
+    <p class="fs-4">
+    <strong>
+    A friend to fetch your data files
+    </strong>
+    </p>
+    </div>
+
 
 .. raw:: html
 
-    <p class="lead centered front-page-callout">
+    <p class="fs-5">
         Just want to download a file without messing with
         <code>requests</code> and <code>urllib</code>?
-        <br>
         Trying to add sample datasets to your Python package?
-        <br>
         <strong>Pooch is here to help!</strong>
     </p>
 
+*Pooch* is a **Python library** that can manage data by **downloading files**
+from a server (only when needed) and storing them locally in a data **cache**
+(a folder on your computer).
 
-.. panels::
-    :header: text-center text-large
-    :card: border-1 m-1 text-center
+* Pure Python and minimal dependencies.
+* Download files over HTTP, FTP, and from data repositories like Zenodo and figshare.
+* Built-in post-processors to unzip/decompress the data after download.
+* Designed to be extended: create custom downloaders and post-processors.
 
-    **Getting started**
-    ^^^^^^^^^^^^^^^^^^^
+Are you a **scientist** or researcher? Pooch can help you too!
 
-    New to Pooch?
+* Host your data on a repository and download using the DOI.
+* Automatically download data using code instead of telling colleagues to do it themselves.
+* Make sure everyone running the code has the same version of the data files.
 
-    .. link-button:: about
-        :type: ref
-        :text: Start here
-        :classes: btn-outline-primary btn-block stretched-link
+----
 
-    ---
+.. grid:: 1 2 1 2
+    :margin: 5 5 0 0
+    :padding: 0 0 0 0
+    :gutter: 4
 
-    **Need help?**
-    ^^^^^^^^^^^^^^
+    .. grid-item-card:: :octicon:`info` Getting started
+        :text-align: center
+        :class-title: sd-fs-5
+        :class-card: sd-p-3
 
-    Ask on our community channels
+        New to Pooch? Start here!
 
-    .. link-button:: https://www.fatiando.org/contact
-        :type: url
-        :text: Join the conversation
-        :classes: btn-outline-primary btn-block stretched-link
+        .. button-ref:: about
+            :ref-type: ref
+            :click-parent:
+            :color: primary
+            :outline:
+            :expand:
 
-    ---
+    .. grid-item-card:: :octicon:`comment-discussion` Need help?
+        :text-align: center
+        :class-title: sd-fs-5
+        :class-card: sd-p-3
 
-    **Reference documentation**
-    ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        Ask on our community channels.
 
-    A list of our functions and classes
+        .. button-link:: https://www.fatiando.org/contact
+            :click-parent:
+            :color: primary
+            :outline:
+            :expand:
 
-    .. link-button:: api
-        :type: ref
-        :text: API reference
-        :classes: btn-outline-primary btn-block stretched-link
+            Join the conversation :octicon:`link-external`
 
-    ---
+    .. grid-item-card:: :octicon:`file-badge` Reference documentation
+        :text-align: center
+        :class-title: sd-fs-5
+        :class-card: sd-p-3
 
-    **Using Pooch for research?**
-    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        A list of modules and functions.
 
-    Citations help support our work
+        .. button-ref:: api
+            :ref-type: ref
+            :color: primary
+            :outline:
+            :expand:
 
-    .. link-button:: citing
-        :type: ref
-        :text: Cite Pooch
-        :classes: btn-outline-primary btn-block stretched-link
+    .. grid-item-card:: :octicon:`bookmark` Using Pooch for research?
+        :text-align: center
+        :class-title: sd-fs-5
+        :class-card: sd-p-3
 
+        Citations help support our work!
+
+        .. button-ref:: citing
+            :ref-type: ref
+            :color: primary
+            :outline:
+            :expand:
+
+----
 
 .. seealso::
 
     Pooch is a part of the
     `Fatiando a Terra <https://www.fatiando.org/>`_ project.
 
-
-Table of contents
------------------
-
 .. toctree::
     :caption: Getting Started
+    :hidden:
     :maxdepth: 1
 
     about.rst
@@ -92,6 +119,7 @@ Table of contents
 
 .. toctree::
     :caption: Training your Pooch
+    :hidden:
     :maxdepth: 1
 
     hashes.rst
@@ -109,6 +137,7 @@ Table of contents
 
 .. toctree::
     :caption: Reference
+    :hidden:
     :maxdepth: 1
 
     api/index.rst
@@ -119,6 +148,7 @@ Table of contents
 
 .. toctree::
     :caption: Community
+    :hidden:
 
     Join the community <https://www.fatiando.org/contact/>
     Code of Conduct <https://github.com/fatiando/community/blob/main/CODE_OF_CONDUCT.md>
