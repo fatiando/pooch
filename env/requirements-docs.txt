@@ -1,4 +1,4 @@
 # Documentation requirements
-sphinx==4.4.*
-sphinx-book-theme==0.2.*
-sphinx-panels==0.6.*
+sphinx==7.2.*
+sphinx-book-theme==1.1.*
+sphinx-design==0.5.*
