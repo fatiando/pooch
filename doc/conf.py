@@ -32,15 +32,8 @@ extensions = [
     "sphinx.ext.extlinks",
     "sphinx.ext.intersphinx",
     "sphinx.ext.napoleon",
-    "sphinx_panels",
+    "sphinx_design",
 ]
-
-# Disable including boostrap CSS for sphinx_panels since it's already included
-# with sphinx-book-theme
-panels_add_bootstrap_css = False
-panels_css_variables = {
-    "tabs-color-label-inactive": "hsla(231, 99%, 66%, 0.5)",
-}
 
 # Configuration to include links to other project docs when referencing
 # functions/classes
@@ -75,7 +68,9 @@ add_function_parentheses = False
 # -----------------------------------------------------------------------------
 html_title = f'{project} <span class="project-version">{version}</span>'
 html_short_title = project
-html_logo = "_static/pooch-logo.png"
+# Don't use the logo since it gets in the way of the project name and is
+# repeated in the front page.
+# html_logo = "_static/pooch-logo.png"
 html_favicon = "_static/favicon.png"
 html_last_updated_fmt = "%b %d, %Y"
 html_copy_source = True

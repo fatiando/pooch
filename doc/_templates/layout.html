@@ -8,7 +8,7 @@
 
 
 {% block htmltitle %}
-    {% if title == '' or title == 'Home' %}
+    {% if title == '' or 'no title' in title or title == 'Home' %}
         <title>{{ docstitle|striptags|e }}</title>
     {% else %}
         <title>{{ title|striptags|e }} | {{ docstitle|striptags|e }}</title>

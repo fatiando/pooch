@@ -21,35 +21,41 @@ Part of the <a href="https://www.fatiando.org"><strong>Fatiando a Terra</strong>
 
 ## About
 
-*Does your Python package include sample datasets?
-Are you shipping them with the code?
-Are they getting too big?*
+> Just want to download a file without messing with `requests` and `urllib`?
+> Trying to add sample datasets to your Python package?
+> **Pooch is here to help!**
 
-**Pooch** is here to help! It will manage a data *registry* by downloading your
-data files from a server only when needed and storing them locally in a data
-*cache* (a folder on your computer).
-
-Here are Pooch's main features:
+*Pooch* is a **Python library** that can manage data by **downloading files**
+from a server (only when needed) and storing them locally in a data **cache**
+(a folder on your computer).
 
 * Pure Python and minimal dependencies.
-* Download a file only if necessary (it's not in the data cache or needs to be
-  updated).
-* Verify download integrity through SHA256 hashes (also used to check if a file
-  needs to be updated).
-* Designed to be extended: plug in custom download (FTP, scp, etc) and
-  post-processing (unzip, decompress, rename) functions.
-* Includes utilities to unzip/decompress the data upon download to save loading
-  time.
-* Can handle basic HTTP authentication (for servers that require a login) and
-  printing download progress bars.
-* Easily set up an environment variable to overwrite the data cache location.
+* Download files over HTTP, FTP, and from data repositories like Zenodo and figshare.
+* Built-in post-processors to unzip/decompress the data after download.
+* Designed to be extended: create custom downloaders and post-processors.
 
-*Are you a scientist or researcher? Pooch can help you too!*
+Are you a **scientist** or researcher? Pooch can help you too!
 
-* Automatically download your data files so you don't have to keep them in your
-  GitHub repository.
-* Make sure everyone running the code has the same version of the data files
-  (enforced through the SHA256 hashes).
+* Host your data on a repository and download using the DOI.
+* Automatically download data using code instead of telling colleagues to do it themselves.
+* Make sure everyone running the code has the same version of the data files.
+
+## Projects using Pooch
+
+[SciPy](https://github.com/scipy/scipy), 
+[scikit-image](https://github.com/scikit-image/scikit-image),
+[Ensaio](https://github.com/fatiando/ensaio),
+[MetPy](https://github.com/Unidata/MetPy),
+[napari](https://github.com/napari/napari),
+[icepack](https://github.com/icepack/icepack),
+[histolab](https://github.com/histolab/histolab),
+[seaborn-image](https://github.com/SarthakJariwala/seaborn-image),
+[Open AR-Sandbox](https://github.com/cgre-aachen/open_AR_Sandbox),
+[climlab](https://github.com/climlab/climlab),
+[mne-python](https://github.com/mne-tools/mne-python),
+[GemGIS](https://github.com/cgre-aachen/gemgis)
+
+> If you're using Pooch, **send us a pull request** adding your project to the list.
 
 ## Example
 
@@ -135,23 +141,6 @@ def fetch_gravity_data():
     data = pandas.read_csv(fname)
     return data
 ```
-
-## Projects using Pooch
-
-* [SciPy](https://github.com/scipy/scipy)
-* [scikit-image](https://github.com/scikit-image/scikit-image)
-* [MetPy](https://github.com/Unidata/MetPy)
-* [icepack](https://github.com/icepack/icepack)
-* [histolab](https://github.com/histolab/histolab)
-* [seaborn-image](https://github.com/SarthakJariwala/seaborn-image)
-* [Ensaio](https://github.com/fatiando/ensaio)
-* [Open AR-Sandbox](https://github.com/cgre-aachen/open_AR_Sandbox)
-* [climlab](https://github.com/climlab/climlab)
-* [napari](https://github.com/napari/napari)
-* [mne-python](https://github.com/mne-tools/mne-python)
-* [GemGIS](https://github.com/cgre-aachen/gemgis)
-
-*If you're using Pooch, send us a pull request adding your project to the list.*
 
 ## Getting involved
 

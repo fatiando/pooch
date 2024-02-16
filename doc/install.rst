@@ -5,31 +5,39 @@ Installing
 
 There are different ways to install Pooch:
 
-.. tabbed:: pip
+.. tab-set::
 
-    Using the `pip <https://pypi.org/project/pip/>`__ package manager:
+    .. tab-item:: pip
 
-    .. code:: bash
+        Using the `pip <https://pypi.org/project/pip/>`__ package manager:
 
-        python -m pip install pooch
+        .. code:: bash
 
-.. tabbed:: conda
+            python -m pip install pooch
 
-    Using the `conda <https://conda.io/>`__ package manager that comes with the
-    Anaconda/Miniconda distribution:
+    .. tab-item:: conda/mamba
 
-    .. code:: bash
+        Using the `conda <https://conda.io/>`__ or mamba package manager that
+        comes with the Anaconda/Miniconda/Miniforge distributions:
 
-        conda install pooch --channel conda-forge
+        .. code:: bash
 
-.. tabbed:: Development version
+            conda install pooch --channel conda-forge
 
-    Using ``pip`` to install the latest **unreleased** version from GitHub
-    (**not recommended** in most situations):
+        or
 
-    .. code:: bash
+        .. code:: bash
 
-        python -m pip install --upgrade git+https://github.com/fatiando/pooch
+            mamba install pooch --channel conda-forge
+
+    .. tab-item:: Development version
+
+        Using ``pip`` to install the latest **unreleased** version from GitHub
+        (**not recommended** in most situations):
+
+        .. code:: bash
+
+            python -m pip install --upgrade git+https://github.com/fatiando/pooch
 
 .. note::
 
