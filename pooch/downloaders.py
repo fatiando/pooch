@@ -1137,6 +1137,6 @@ class DataverseRepository(DataRepository):  # pylint: disable=missing-class-docs
         """
 
         for filedata in self.api_response.json()["data"]["latestVersion"]["files"]:
-            pooch.registry[
-                filedata["dataFile"]["filename"]
-            ] = f"md5:{filedata['dataFile']['md5']}"
+            pooch.registry[filedata["dataFile"]["filename"]] = (
+                f"md5:{filedata['dataFile']['md5']}"
+            )
