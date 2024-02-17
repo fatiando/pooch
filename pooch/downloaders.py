@@ -756,10 +756,13 @@ class DataRepository:  # pylint: disable=too-few-public-methods, missing-class-d
 
 
 class ZenodoRepository(DataRepository):  # pylint: disable=missing-class-docstring
+    base_api_url = "https://zenodo.org/api/records"
+
     def __init__(self, doi, archive_url):
         self.archive_url = archive_url
         self.doi = doi
         self._api_response = None
+        self._api_version = None
 
     @classmethod
     def initialize(cls, doi, archive_url):
@@ -796,11 +799,43 @@ class ZenodoRepository(DataRepository):  # pylint: disable=missing-class-docstri
 
             article_id = self.archive_url.split("/")[-1]
             self._api_response = requests.get(
-                f"https://zenodo.org/api/records/{article_id}",
+                f"{self.base_api_url}/{article_id}",
                 timeout=5,
             ).json()
 
         return self._api_response
+
+    @property
+    def api_version(self):
+        """
+        Version of the Zenodo API we are interacting with
+
+        The versions can either be :
+
+        - ``"legacy"``: corresponds to the Zenodo API that was supported until
+          2023-10-12 (before the migration to InvenioRDM).
+        - ``"new"``: corresponds to the new API that went online on 2023-10-13
+          after the migration to InvenioRDM.
+
+        The ``"new"`` API breaks backward compatibility with the ``"legacy"``
+        one and could probably be replaced by an updated version that restores
+        the behaviour of the ``"legacy"`` one.
+
+        Returns
+        -------
+        str
+        """
+        if self._api_version is None:
+            if all(["key" in file for file in self.api_response["files"]]):
+                self._api_version = "legacy"
+            elif all(["filename" in file for file in self.api_response["files"]]):
+                self._api_version = "new"
+            else:
+                raise ValueError(
+                    "Couldn't determine the version of the Zenodo API for "
+                    f"{self.archive_url} (doi:{self.doi})."
+                )
+        return self._api_version
 
     def download_url(self, file_name):
         """
@@ -816,13 +851,35 @@ class ZenodoRepository(DataRepository):  # pylint: disable=missing-class-docstri
         -------
         download_url : str
             The HTTP URL that can be used to download the file.
+
+        Notes
+        -----
+        After Zenodo migrated to InvenioRDM on Oct 2023, their API changed. The
+        link to the desired files that appears in the API response leads to 404
+        errors (by 2023-10-17). The files are available in the following url:
+        ``https://zenodo.org/records/{article_id}/files/{file_name}?download=1``.
+
+        This method supports both the legacy and the new API.
         """
-        files = {item["key"]: item for item in self.api_response["files"]}
+        # Create list of files in the repository
+        if self.api_version == "legacy":
+            files = {item["key"]: item for item in self.api_response["files"]}
+        else:
+            files = [item["filename"] for item in self.api_response["files"]]
+        # Check if file exists in the repository
         if file_name not in files:
             raise ValueError(
-                f"File '{file_name}' not found in data archive {self.archive_url} (doi:{self.doi})."
+                f"File '{file_name}' not found in data archive "
+                f"{self.archive_url} (doi:{self.doi})."
             )
-        download_url = files[file_name]["links"]["self"]
+        # Build download url
+        if self.api_version == "legacy":
+            download_url = files[file_name]["links"]["self"]
+        else:
+            article_id = self.api_response["id"]
+            download_url = (
+                f"https://zenodo.org/records/{article_id}/files/{file_name}?download=1"
+            )
         return download_url
 
     def populate_registry(self, pooch):
@@ -833,10 +890,22 @@ class ZenodoRepository(DataRepository):  # pylint: disable=missing-class-docstri
         ----------
         pooch : Pooch
             The pooch instance that the registry will be added to.
-        """
 
+        Notes
+        -----
+        After Zenodo migrated to InvenioRDM on Oct 2023, their API changed. The
+        checksums for each file listed in the API reference is now an md5 sum.
+
+        This method supports both the legacy and the new API.
+        """
         for filedata in self.api_response["files"]:
-            pooch.registry[filedata["key"]] = filedata["checksum"]
+            checksum = filedata["checksum"]
+            if self.api_version == "legacy":
+                key = "key"
+            else:
+                key = "filename"
+                checksum = f"md5:{checksum}"
+            pooch.registry[filedata[key]] = checksum
 
 
 class FigshareRepository(DataRepository):  # pylint: disable=missing-class-docstring
@@ -993,6 +1062,7 @@ class DataverseRepository(DataRepository):  # pylint: disable=missing-class-docs
         """
         # Access the DOI as if this was a DataVerse instance
         response = cls._get_api_response(doi, archive_url)
+
         # If we failed, this is probably not a DataVerse instance
         if 400 <= response.status_code < 600:
             return None
@@ -1054,6 +1124,7 @@ class DataverseRepository(DataRepository):  # pylint: disable=missing-class-docs
             The HTTP URL that can be used to download the file.
         """
         parsed = parse_url(self.archive_url)
+
         # Iterate over the given files until we find one of the requested name
         for filedata in self.api_response.json()["data"]["latestVersion"]["files"]:
             if file_name == filedata["dataFile"]["filename"]:
@@ -1077,6 +1148,6 @@ class DataverseRepository(DataRepository):  # pylint: disable=missing-class-docs
         """
 
         for filedata in self.api_response.json()["data"]["latestVersion"]["files"]:
-            pooch.registry[
-                filedata["dataFile"]["filename"]
-            ] = f"md5:{filedata['dataFile']['md5']}"
+            pooch.registry[filedata["dataFile"]["filename"]] = (
+                f"md5:{filedata['dataFile']['md5']}"
+            )
