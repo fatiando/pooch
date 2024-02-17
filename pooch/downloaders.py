@@ -826,9 +826,9 @@ class ZenodoRepository(DataRepository):  # pylint: disable=missing-class-docstri
         str
         """
         if self._api_version is None:
-            if all(["key" in file for file in self.api_response["files"]]):
+            if all("key" in file for file in self.api_response["files"]):
                 self._api_version = "legacy"
-            elif all(["filename" in file for file in self.api_response["files"]]):
+            elif all("filename" in file for file in self.api_response["files"]):
                 self._api_version = "new"
             else:
                 raise ValueError(
