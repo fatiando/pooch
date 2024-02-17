@@ -148,7 +148,7 @@ jobs:
         run: coverage xml
 
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v3
+        uses: codecov/codecov-action@v4
         with:
           files: ./coverage.xml
           env_vars: OS,PYTHON,DEPENDENCIES
@@ -156,3 +156,5 @@ jobs:
           # It does sometimes but shouldn't be the reason for running
           # everything again unless something else is broken.
           fail_ci_if_error: false
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
