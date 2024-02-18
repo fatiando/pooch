@@ -25,5 +25,4 @@ dependencies:
     - pathspec
     - black>=20.8b1
     - flake8
-    - pip:
-      - pylint==2.4.*
+    - pylint>=2.4

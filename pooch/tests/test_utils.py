@@ -167,9 +167,9 @@ def test_temporary_file():
     "Make sure the file is writable and cleaned up in the end"
     with temporary_file() as tmp:
         assert Path(tmp).exists()
-        with open(tmp, "w") as outfile:
+        with open(tmp, "w", encoding="utf-8") as outfile:
             outfile.write("Meh")
-        with open(tmp) as infile:
+        with open(tmp, encoding="utf-8") as infile:
             assert infile.read().strip() == "Meh"
     assert not Path(tmp).exists()
 
@@ -180,9 +180,9 @@ def test_temporary_file_path():
         with temporary_file(path) as tmp:
             assert Path(tmp).exists()
             assert path in tmp
-            with open(tmp, "w") as outfile:
+            with open(tmp, "w", encoding="utf-8") as outfile:
                 outfile.write("Meh")
-            with open(tmp) as infile:
+            with open(tmp, encoding="utf-8") as infile:
                 assert infile.read().strip() == "Meh"
         assert not Path(tmp).exists()
 

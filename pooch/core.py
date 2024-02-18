@@ -489,10 +489,10 @@ class Pooch:
         self.path = path
         self.base_url = base_url
         if registry is None:
-            registry = dict()
+            registry = {}
         self.registry = registry
         if urls is None:
-            urls = dict()
+            urls = {}
         self.urls = dict(urls)
         self.retry_if_failed = retry_if_failed
         self.allow_updates = allow_updates
@@ -647,7 +647,7 @@ class Pooch:
                 fin = fname
             else:
                 # It's a file path
-                fin = stack.enter_context(open(fname))
+                fin = stack.enter_context(open(fname, encoding="utf-8"))
 
             for linenum, line in enumerate(fin):
                 if isinstance(line, bytes):

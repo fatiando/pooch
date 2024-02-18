@@ -17,7 +17,7 @@ import pytest
 try:
     import xxhash
 
-    XXHASH_MAJOR_VERSION = int(xxhash.VERSION.split(".")[0])
+    XXHASH_MAJOR_VERSION = int(xxhash.VERSION.split(".", maxsplit=1)[0])
 except ImportError:
     xxhash = None
     XXHASH_MAJOR_VERSION = 0
@@ -66,12 +66,12 @@ def data_dir_mirror(tmp_path):
 
 def test_make_registry(data_dir_mirror):
     "Check that the registry builder creates the right file names and hashes"
-    outfile = NamedTemporaryFile(delete=False)
+    outfile = NamedTemporaryFile(delete=False)  # pylint: disable=consider-using-with
     # Need to close the file before writing to it.
     outfile.close()
     try:
         make_registry(data_dir_mirror, outfile.name, recursive=False)
-        with open(outfile.name) as fout:
+        with open(outfile.name, encoding="utf-8") as fout:
             registry = fout.read()
         assert registry == REGISTRY
         # Check that the registry can be used.
@@ -87,12 +87,12 @@ def test_make_registry(data_dir_mirror):
 
 def test_make_registry_recursive(data_dir_mirror):
     "Check that the registry builder works in recursive mode"
-    outfile = NamedTemporaryFile(delete=False)
+    outfile = NamedTemporaryFile(delete=False)  # pylint: disable=consider-using-with
     # Need to close the file before writing to it.
     outfile.close()
     try:
         make_registry(data_dir_mirror, outfile.name, recursive=True)
-        with open(outfile.name) as fout:
+        with open(outfile.name, encoding="utf-8") as fout:
             registry = fout.read()
         assert registry == REGISTRY_RECURSIVE
         # Check that the registry can be used.

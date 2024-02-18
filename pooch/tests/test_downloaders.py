@@ -401,13 +401,13 @@ class TestZenodoAPISupport:
     )
     file_checksum = "2942bfabb3d05332b66eb128e0842cff"
 
-    legacy_api_response = dict(
-        created="2021-20-19T08:00:00.000000+00:00",
-        modified="2021-20-19T08:00:00.000000+00:00",
-        id=article_id,
-        doi=doi,
-        doi_url=doi_url,
-        files=[
+    legacy_api_response = {
+        "created": "2021-20-19T08:00:00.000000+00:00",
+        "modified": "2021-20-19T08:00:00.000000+00:00",
+        "id": article_id,
+        "doi": doi,
+        "doi_url": doi_url,
+        "files": [
             {
                 "id": "513d7033-93a2-4eeb-821c-2fb0bbab0012",
                 "key": file_name,
@@ -417,15 +417,15 @@ class TestZenodoAPISupport:
                 },
             }
         ],
-    )
+    }
 
-    new_api_response = dict(
-        created="2021-20-19T08:00:00.000000+00:00",
-        modified="2021-20-19T08:00:00.000000+00:00",
-        id=article_id,
-        doi=doi,
-        doi_url=doi_url,
-        files=[
+    new_api_response = {
+        "created": "2021-20-19T08:00:00.000000+00:00",
+        "modified": "2021-20-19T08:00:00.000000+00:00",
+        "id": article_id,
+        "doi": doi,
+        "doi_url": doi_url,
+        "files": [
             {
                 "id": "513d7033-93a2-4eeb-821c-2fb0bbab0012",
                 "filename": file_name,
@@ -435,15 +435,15 @@ class TestZenodoAPISupport:
                 },
             }
         ],
-    )
+    }
 
-    invalid_api_response = dict(
-        created="2021-20-19T08:00:00.000000+00:00",
-        modified="2021-20-19T08:00:00.000000+00:00",
-        id=article_id,
-        doi=doi,
-        doi_url=doi_url,
-        files=[
+    invalid_api_response = {
+        "created": "2021-20-19T08:00:00.000000+00:00",
+        "modified": "2021-20-19T08:00:00.000000+00:00",
+        "id": article_id,
+        "doi": doi,
+        "doi_url": doi_url,
+        "files": [
             {
                 "id": "513d7033-93a2-4eeb-821c-2fb0bbab0012",
                 "filename": file_name,
@@ -461,7 +461,7 @@ class TestZenodoAPISupport:
                 },
             },
         ],
-    )
+    }
 
     @pytest.mark.parametrize(
         "api_version, api_response",
