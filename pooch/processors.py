@@ -95,7 +95,13 @@ class ExtractorProcessor(abc.ABC):  # pylint: disable=too-few-public-methods
         else:
             archive_dir = fname.rsplit(os.path.sep, maxsplit=1)[0]
             self.extract_dir = os.path.join(archive_dir, self.extract_dir)
-        members = self.members or self._all_members(fname)
+        # Get a list of everyone who is supposed to be in the unpacked folder
+        # so we can check if they are all there or if we need to extract new
+        # files.
+        if self.members is None or not self.members:
+            members = self._all_members(fname)
+        else:
+            members = self.members
         if (
             (action in ("update", "download"))
             or (not os.path.exists(self.extract_dir))
