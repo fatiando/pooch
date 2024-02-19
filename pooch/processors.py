@@ -8,6 +8,7 @@
 """
 Post-processing hooks
 """
+import abc
 import os
 import bz2
 import gzip
@@ -19,9 +20,9 @@ from tarfile import TarFile
 from .utils import get_logger
 
 
-class ExtractorProcessor:  # pylint: disable=too-few-public-methods
+class ExtractorProcessor(abc.ABC):  # pylint: disable=too-few-public-methods
     """
-    Base class for extractions from compressed archives.
+    Abstract base class for extractions from compressed archives.
 
     Subclasses can be used with :meth:`pooch.Pooch.fetch` and
     :func:`pooch.retrieve` to unzip a downloaded data file into a folder in the
@@ -34,15 +35,42 @@ class ExtractorProcessor:  # pylint: disable=too-few-public-methods
         If None, will unpack all files in the archive. Otherwise, *members*
         must be a list of file names to unpack from the archive. Only these
         files will be unpacked.
+    extract_dir : str or None
+        If None, files will be unpacked to the default location (a folder in
+        the same location as the downloaded zip file, with a suffix added).
+        Otherwise, files will be unpacked to ``extract_dir``, which is
+        interpreted as a *relative path* (relative to the cache location
+        provided by :func:`pooch.retrieve` or :meth:`pooch.Pooch.fetch`).
 
     """
-
-    # String appended to unpacked archive. To be implemented in subclass
-    suffix = None
 
     def __init__(self, members=None, extract_dir=None):
         self.members = members
         self.extract_dir = extract_dir
+
+    @property
+    @abc.abstractmethod
+    def suffix(self):
+        """
+        String appended to unpacked archive folder name.
+        Only used if extract_dir is None.
+        MUST BE IMPLEMENTED BY CHILD CLASSES.
+        """
+
+    @abc.abstractmethod
+    def _all_members(self, fname):
+        """
+        Return all the members in the archive.
+        MUST BE IMPLEMENTED BY CHILD CLASSES.
+        """
+
+    @abc.abstractmethod
+    def _extract_file(self, fname, extract_dir):
+        """
+        This method receives an argument for the archive to extract and the
+        destination path.
+        MUST BE IMPLEMENTED BY CHILD CLASSES.
+        """
 
     def __call__(self, fname, action, pooch):
         """
@@ -69,27 +97,23 @@ class ExtractorProcessor:  # pylint: disable=too-few-public-methods
             A list of the full path to all files in the extracted archive.
 
         """
-        if self.suffix is None and self.extract_dir is None:
-            raise NotImplementedError(
-                "Derived classes must define either a 'suffix' attribute or "
-                "an 'extract_dir' attribute."
-            )
         if self.extract_dir is None:
             self.extract_dir = fname + self.suffix
         else:
             archive_dir = fname.rsplit(os.path.sep, maxsplit=1)[0]
             self.extract_dir = os.path.join(archive_dir, self.extract_dir)
+        # Get a list of everyone who is supposed to be in the unpacked folder
+        # so we can check if they are all there or if we need to extract new
+        # files.
+        if self.members is None or not self.members:
+            members = self._all_members(fname)
+        else:
+            members = self.members
         if (
             (action in ("update", "download"))
             or (not os.path.exists(self.extract_dir))
-            or (
-                (self.members is not None)
-                and (
-                    not all(
-                        os.path.exists(os.path.join(self.extract_dir, m))
-                        for m in self.members
-                    )
-                )
+            or not all(
+                os.path.exists(os.path.join(self.extract_dir, m)) for m in members
             )
         ):
             # Make sure that the folder with the extracted files exists
@@ -110,13 +134,6 @@ class ExtractorProcessor:  # pylint: disable=too-few-public-methods
                     fnames.append(os.path.join(path, filename))
 
         return fnames
-
-    def _extract_file(self, fname, extract_dir):
-        """
-        This method receives an argument for the archive to extract and the
-        destination path. MUST BE IMPLEMENTED BY CHILD CLASSES.
-        """
-        raise NotImplementedError
 
 
 class Unzip(ExtractorProcessor):  # pylint: disable=too-few-public-methods
@@ -146,7 +163,18 @@ class Unzip(ExtractorProcessor):  # pylint: disable=too-few-public-methods
 
     """
 
-    suffix = ".unzip"
+    @property
+    def suffix(self):
+        """
+        String appended to unpacked archive folder name.
+        Only used if extract_dir is None.
+        """
+        return ".unzip"
+
+    def _all_members(self, fname):
+        """Return all members from a given archive."""
+        with ZipFile(fname, "r") as zip_file:
+            return zip_file.namelist()
 
     def _extract_file(self, fname, extract_dir):
         """
@@ -207,7 +235,18 @@ class Untar(ExtractorProcessor):  # pylint: disable=too-few-public-methods
         :meth:`pooch.Pooch.fetch`).
     """
 
-    suffix = ".untar"
+    @property
+    def suffix(self):
+        """
+        String appended to unpacked archive folder name.
+        Only used if extract_dir is None.
+        """
+        return ".untar"
+
+    def _all_members(self, fname):
+        """Return all members from a given archive."""
+        with TarFile.open(fname, "r") as tar_file:
+            return [info.name for info in tar_file.getmembers()]
 
     def _extract_file(self, fname, extract_dir):
         """

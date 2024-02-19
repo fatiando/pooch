@@ -317,7 +317,7 @@ def test_pooch_update():
         # Create a dummy version of tiny-data.txt that is different from the
         # one in the remote storage
         true_path = str(path / "tiny-data.txt")
-        with open(true_path, "w") as fin:
+        with open(true_path, "w", encoding="utf-8") as fin:
             fin.write("different data")
         # Setup a pooch in a temp dir
         pup = Pooch(path=path, base_url=BASEURL, registry=REGISTRY)
@@ -344,7 +344,7 @@ def test_pooch_update_disallowed():
         # Create a dummy version of tiny-data.txt that is different from the
         # one in the remote storage
         true_path = str(path / "tiny-data.txt")
-        with open(true_path, "w") as fin:
+        with open(true_path, "w", encoding="utf-8") as fin:
             fin.write("different data")
         # Setup a pooch in a temp dir
         pup = Pooch(
@@ -367,7 +367,7 @@ def test_pooch_update_disallowed_environment():
             # Create a dummy version of tiny-data.txt that is different from
             # the one in the remote storage
             true_path = str(path / "tiny-data.txt")
-            with open(true_path, "w") as fin:
+            with open(true_path, "w", encoding="utf-8") as fin:
                 fin.write("different data")
             # Setup a pooch in a temp dir
             pup = create(
@@ -454,7 +454,7 @@ def test_pooch_load_registry_fileobj():
 
     # Text mode
     pup = Pooch(path="", base_url="")
-    with open(path) as fin:
+    with open(path, "r", encoding="utf-8") as fin:
         pup.load_registry(fin)
     assert pup.registry == REGISTRY
     assert pup.registry_files.sort() == list(REGISTRY).sort()
@@ -604,7 +604,7 @@ def test_download_action():
     assert verb == "Updating"
 
     with temporary_file() as tmp:
-        with open(tmp, "w") as output:
+        with open(tmp, "w", encoding="utf-8") as output:
             output.write("some data")
         action, verb = download_action(Path(tmp), known_hash=file_hash(tmp))
     assert action == "fetch"

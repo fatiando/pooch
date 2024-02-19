@@ -17,10 +17,6 @@ on:
   release:
     types:
       - published
-  schedule:
-    # Run every Monday at 12:00 UTC
-    # * is a special character in YAML so you have to quote this string
-    - cron: "00 12 * * 1"
 
 # Use bash by default in all jobs
 defaults:
@@ -32,6 +28,7 @@ jobs:
   # Run tests and upload to codecov
   test:
     name: ${{ matrix.os }} python=${{ matrix.python }} dependencies=${{ matrix.dependencies }}
+    if: ${{ github.repository_owner == 'fatiando' || github.event_name != 'schedule' }}
     runs-on: ${{ matrix.os }}-latest
     strategy:
       # Otherwise, the workflow would stop if a single job fails. We want to
@@ -42,13 +39,17 @@ jobs:
           - ubuntu
           - macos
           - windows
-        python:
-          - "3.7"
-          - "3.11"
         dependencies:
+          - oldest
           - latest
           - optional
-          - oldest
+        include:
+          - dependencies: oldest
+            python: "3.7"
+          - dependencies: latest
+            python: "3.11"
+          - dependencies: optional
+            python: "3.11"
     env:
       REQUIREMENTS: env/requirements-build.txt env/requirements-test.txt
       # Used to tag codecov submissions
@@ -61,13 +62,13 @@ jobs:
       # We pin the commit hash corresponding to v0.5.0, and not pinning the tag
       # because we are giving full access through the github.token.
       - name: Cancel Previous Runs
-        uses: styfle/cancel-workflow-action@148d9a848c6acaf90a3ec30bc5062f646f8a4163
+        uses: styfle/cancel-workflow-action@0.12.1
         with:
           access_token: ${{ github.token }}
 
       # Checks-out your repository under $GITHUB_WORKSPACE
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           # Need to fetch more than the last commit so that setuptools-scm can
           # create the correct version string. If the number of commits since
@@ -118,7 +119,7 @@ jobs:
           echo "::set-output name=dir::$(pip cache dir)"
 
       - name: Setup caching for pip packages
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: ${{ steps.pip-cache.outputs.dir }}
           key: ${{ runner.os }}-pip-${{ hashFiles('requirements-full.txt') }}
@@ -147,7 +148,7 @@ jobs:
         run: coverage xml
 
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v3
+        uses: codecov/codecov-action@v4
         with:
           files: ./coverage.xml
           env_vars: OS,PYTHON,DEPENDENCIES
@@ -155,3 +156,5 @@ jobs:
           # It does sometimes but shouldn't be the reason for running
           # everything again unless something else is broken.
           fail_ci_if_error: false
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}

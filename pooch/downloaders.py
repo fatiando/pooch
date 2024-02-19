@@ -12,7 +12,6 @@ import sys
 import ftplib
 
 import warnings
-import requests
 
 from .utils import parse_url
 
@@ -166,7 +165,9 @@ class HTTPDownloader:  # pylint: disable=too-few-public-methods
         if self.progressbar is True and tqdm is None:
             raise ValueError("Missing package 'tqdm' required for progress bars.")
 
-    def __call__(self, url, output_file, pooch, check_only=False):
+    def __call__(
+        self, url, output_file, pooch, check_only=False
+    ):  # pylint: disable=R0914
         """
         Download the given URL over HTTP to the given output file.
 
@@ -192,18 +193,25 @@ class HTTPDownloader:  # pylint: disable=too-few-public-methods
             is available on the server. Otherwise, returns ``None``.
 
         """
+        # Lazy import requests to speed up import time
+        import requests  # pylint: disable=C0415
+
         if check_only:
-            response = requests.head(url, allow_redirects=True)
+            timeout = self.kwargs.get("timeout", 5)
+            response = requests.head(url, timeout=timeout, allow_redirects=True)
             available = bool(response.status_code == 200)
             return available
 
         kwargs = self.kwargs.copy()
+        timeout = kwargs.pop("timeout", 5)
         kwargs.setdefault("stream", True)
         ispath = not hasattr(output_file, "write")
         if ispath:
+            # pylint: disable=consider-using-with
             output_file = open(output_file, "w+b")
+            # pylint: enable=consider-using-with
         try:
-            response = requests.get(url, **kwargs)
+            response = requests.get(url, timeout=timeout, **kwargs)
             response.raise_for_status()
             content = response.iter_content(chunk_size=self.chunk_size)
             total = int(response.headers.get("content-length", 0))
@@ -342,7 +350,9 @@ class FTPDownloader:  # pylint: disable=too-few-public-methods
 
         ispath = not hasattr(output_file, "write")
         if ispath:
+            # pylint: disable=consider-using-with
             output_file = open(output_file, "w+b")
+            # pylint: enable=consider-using-with
         try:
             ftp.login(user=self.username, passwd=self.password, acct=self.account)
             command = f"RETR {parsed_url['path']}"
@@ -626,8 +636,11 @@ def doi_to_url(doi):
         The URL of the archive in the data repository.
 
     """
+    # Lazy import requests to speed up import time
+    import requests  # pylint: disable=C0415
+
     # Use doi.org to resolve the DOI to the repository website.
-    response = requests.get(f"https://doi.org/{doi}")
+    response = requests.get(f"https://doi.org/{doi}", timeout=5)
     url = response.url
     if 400 <= response.status_code < 600:
         raise ValueError(
@@ -743,10 +756,13 @@ class DataRepository:  # pylint: disable=too-few-public-methods, missing-class-d
 
 
 class ZenodoRepository(DataRepository):  # pylint: disable=missing-class-docstring
+    base_api_url = "https://zenodo.org/api/records"
+
     def __init__(self, doi, archive_url):
         self.archive_url = archive_url
         self.doi = doi
         self._api_response = None
+        self._api_version = None
 
     @classmethod
     def initialize(cls, doi, archive_url):
@@ -777,14 +793,49 @@ class ZenodoRepository(DataRepository):  # pylint: disable=missing-class-docstri
     @property
     def api_response(self):
         """Cached API response from Zenodo"""
-
         if self._api_response is None:
+            # Lazy import requests to speed up import time
+            import requests  # pylint: disable=C0415
+
             article_id = self.archive_url.split("/")[-1]
             self._api_response = requests.get(
-                f"https://zenodo.org/api/records/{article_id}"
+                f"{self.base_api_url}/{article_id}",
+                timeout=5,
             ).json()
 
         return self._api_response
+
+    @property
+    def api_version(self):
+        """
+        Version of the Zenodo API we are interacting with
+
+        The versions can either be :
+
+        - ``"legacy"``: corresponds to the Zenodo API that was supported until
+          2023-10-12 (before the migration to InvenioRDM).
+        - ``"new"``: corresponds to the new API that went online on 2023-10-13
+          after the migration to InvenioRDM.
+
+        The ``"new"`` API breaks backward compatibility with the ``"legacy"``
+        one and could probably be replaced by an updated version that restores
+        the behaviour of the ``"legacy"`` one.
+
+        Returns
+        -------
+        str
+        """
+        if self._api_version is None:
+            if all("key" in file for file in self.api_response["files"]):
+                self._api_version = "legacy"
+            elif all("filename" in file for file in self.api_response["files"]):
+                self._api_version = "new"
+            else:
+                raise ValueError(
+                    "Couldn't determine the version of the Zenodo API for "
+                    f"{self.archive_url} (doi:{self.doi})."
+                )
+        return self._api_version
 
     def download_url(self, file_name):
         """
@@ -800,14 +851,35 @@ class ZenodoRepository(DataRepository):  # pylint: disable=missing-class-docstri
         -------
         download_url : str
             The HTTP URL that can be used to download the file.
-        """
 
-        files = {item["key"]: item for item in self.api_response["files"]}
+        Notes
+        -----
+        After Zenodo migrated to InvenioRDM on Oct 2023, their API changed. The
+        link to the desired files that appears in the API response leads to 404
+        errors (by 2023-10-17). The files are available in the following url:
+        ``https://zenodo.org/records/{article_id}/files/{file_name}?download=1``.
+
+        This method supports both the legacy and the new API.
+        """
+        # Create list of files in the repository
+        if self.api_version == "legacy":
+            files = {item["key"]: item for item in self.api_response["files"]}
+        else:
+            files = [item["filename"] for item in self.api_response["files"]]
+        # Check if file exists in the repository
         if file_name not in files:
             raise ValueError(
-                f"File '{file_name}' not found in data archive {self.archive_url} (doi:{self.doi})."
+                f"File '{file_name}' not found in data archive "
+                f"{self.archive_url} (doi:{self.doi})."
             )
-        download_url = files[file_name]["links"]["self"]
+        # Build download url
+        if self.api_version == "legacy":
+            download_url = files[file_name]["links"]["self"]
+        else:
+            article_id = self.api_response["id"]
+            download_url = (
+                f"https://zenodo.org/records/{article_id}/files/{file_name}?download=1"
+            )
         return download_url
 
     def populate_registry(self, pooch):
@@ -818,10 +890,22 @@ class ZenodoRepository(DataRepository):  # pylint: disable=missing-class-docstri
         ----------
         pooch : Pooch
             The pooch instance that the registry will be added to.
-        """
 
+        Notes
+        -----
+        After Zenodo migrated to InvenioRDM on Oct 2023, their API changed. The
+        checksums for each file listed in the API reference is now an md5 sum.
+
+        This method supports both the legacy and the new API.
+        """
         for filedata in self.api_response["files"]:
-            pooch.registry[filedata["key"]] = filedata["checksum"]
+            checksum = filedata["checksum"]
+            if self.api_version == "legacy":
+                key = "key"
+            else:
+                key = "filename"
+                checksum = f"md5:{checksum}"
+            pooch.registry[filedata[key]] = checksum
 
 
 class FigshareRepository(DataRepository):  # pylint: disable=missing-class-docstring
@@ -875,11 +959,14 @@ class FigshareRepository(DataRepository):  # pylint: disable=missing-class-docst
     @property
     def api_response(self):
         """Cached API response from Figshare"""
-
         if self._api_response is None:
+            # Lazy import requests to speed up import time
+            import requests  # pylint: disable=C0415
+
             # Use the figshare API to find the article ID from the DOI
             article = requests.get(
-                f"https://api.figshare.com/v2/articles?doi={self.doi}"
+                f"https://api.figshare.com/v2/articles?doi={self.doi}",
+                timeout=5,
             ).json()[0]
             article_id = article["id"]
             # Parse desired version from the doi
@@ -906,7 +993,7 @@ class FigshareRepository(DataRepository):  # pylint: disable=missing-class-docst
                     f"{article_id}/versions/{version}"
                 )
             # Make the request and return the files in the figshare repository
-            response = requests.get(api_url)
+            response = requests.get(api_url, timeout=5)
             response.raise_for_status()
             self._api_response = response.json()["files"]
 
@@ -927,7 +1014,6 @@ class FigshareRepository(DataRepository):  # pylint: disable=missing-class-docst
         download_url : str
             The HTTP URL that can be used to download the file.
         """
-
         files = {item["name"]: item for item in self.api_response}
         if file_name not in files:
             raise ValueError(
@@ -974,7 +1060,6 @@ class DataverseRepository(DataRepository):  # pylint: disable=missing-class-docs
         archive_url : str
             The resolved URL for the DOI
         """
-
         # Access the DOI as if this was a DataVerse instance
         response = cls._get_api_response(doi, archive_url)
 
@@ -995,10 +1080,14 @@ class DataverseRepository(DataRepository):  # pylint: disable=missing-class-docs
         This has been separated into a separate ``classmethod``, as it can be
         used prior and after the initialization.
         """
+        # Lazy import requests to speed up import time
+        import requests  # pylint: disable=C0415
+
         parsed = parse_url(archive_url)
         response = requests.get(
             f"{parsed['protocol']}://{parsed['netloc']}/api/datasets/"
-            f":persistentId?persistentId=doi:{doi}"
+            f":persistentId?persistentId=doi:{doi}",
+            timeout=5,
         )
         return response
 
@@ -1071,6 +1160,6 @@ class DataverseRepository(DataRepository):  # pylint: disable=missing-class-docs
         """
 
         for filedata in self.api_response.json()["data"]["latestVersion"]["files"]:
-            pooch.registry[
-                filedata["dataFile"]["filename"]
-            ] = f"md5:{filedata['dataFile']['md5']}"
+            pooch.registry[filedata["dataFile"]["filename"]] = (
+                f"md5:{filedata['dataFile']['md5']}"
+            )
