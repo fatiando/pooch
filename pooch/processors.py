@@ -8,6 +8,7 @@
 """
 Post-processing hooks
 """
+import abc
 import os
 import bz2
 import gzip
@@ -19,7 +20,7 @@ from tarfile import TarFile
 from .utils import get_logger
 
 
-class ExtractorProcessor:  # pylint: disable=too-few-public-methods
+class ExtractorProcessor(abc.ABC):  # pylint: disable=too-few-public-methods
     """
     Base class for extractions from compressed archives.
 
@@ -44,13 +45,20 @@ class ExtractorProcessor:  # pylint: disable=too-few-public-methods
         self.members = members
         self.extract_dir = extract_dir
 
+    @abc.abstractmethod
     def _all_members(self, fname):
         """
         Return all the members in the archive.
-
-        In the base class, this returns None.
+        MUST BE IMPLEMENTED BY CHILD CLASSES.
         """
-        return None
+
+    @abc.abstractmethod
+    def _extract_file(self, fname, extract_dir):
+        """
+        This method receives an argument for the archive to extract and the
+        destination path.
+        MUST BE IMPLEMENTED BY CHILD CLASSES.
+        """
 
     def __call__(self, fname, action, pooch):
         """
@@ -113,13 +121,6 @@ class ExtractorProcessor:  # pylint: disable=too-few-public-methods
                     fnames.append(os.path.join(path, filename))
 
         return fnames
-
-    def _extract_file(self, fname, extract_dir):
-        """
-        This method receives an argument for the archive to extract and the
-        destination path. MUST BE IMPLEMENTED BY CHILD CLASSES.
-        """
-        raise NotImplementedError
 
 
 class Unzip(ExtractorProcessor):  # pylint: disable=too-few-public-methods

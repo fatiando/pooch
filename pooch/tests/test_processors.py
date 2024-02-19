@@ -14,7 +14,7 @@ import warnings
 import pytest
 
 from .. import Pooch
-from ..processors import Unzip, Untar, ExtractorProcessor, Decompress
+from ..processors import Unzip, Untar, Decompress
 
 from .utils import pooch_test_url, pooch_test_registry, check_tiny_data, capture_log
 
@@ -95,22 +95,6 @@ def test_decompress_fails():
                 pup.fetch("store.zip", processor=Decompress(method="auto"))
         assert exception.value.args[0].startswith("Unrecognized file extension '.zip'")
         assert "pooch.Unzip/Untar" in exception.value.args[0]
-
-
-@pytest.mark.network
-def test_extractprocessor_fails():
-    "The base class should be used and should fail when passed to fecth"
-    with TemporaryDirectory() as local_store:
-        # Setup a pooch in a temp dir
-        pup = Pooch(path=Path(local_store), base_url=BASEURL, registry=REGISTRY)
-        processor = ExtractorProcessor()
-        with pytest.raises(NotImplementedError) as exception:
-            pup.fetch("tiny-data.tar.gz", processor=processor)
-        assert "'suffix'" in exception.value.args[0]
-        processor.suffix = "tar.gz"
-        with pytest.raises(NotImplementedError) as exception:
-            pup.fetch("tiny-data.tar.gz", processor=processor)
-        assert not exception.value.args
 
 
 @pytest.mark.network
