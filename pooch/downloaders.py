@@ -1124,18 +1124,22 @@ class DataverseRepository(DataRepository):  # pylint: disable=missing-class-docs
             The HTTP URL that can be used to download the file.
         """
         parsed = parse_url(self.archive_url)
-
-        # Iterate over the given files until we find one of the requested name
-        for filedata in self.api_response.json()["data"]["latestVersion"]["files"]:
-            if file_name == filedata["dataFile"]["filename"]:
-                return (
-                    f"{parsed['protocol']}://{parsed['netloc']}/api/access/datafile/"
-                    f":persistentId?persistentId={filedata['dataFile']['persistentId']}"
-                )
-
-        raise ValueError(
-            f"File '{file_name}' not found in data archive {self.archive_url} (doi:{self.doi})."
+        response = self.api_response.json()
+        files = {
+            file["dataFile"]["filename"]: file["dataFile"]
+            for file in response["data"]["latestVersion"]["files"]
+        }
+        if file_name not in files:
+            raise ValueError(
+                f"File '{file_name}' not found in data archive "
+                f"{self.archive_url} (doi:{self.doi})."
+            )
+        # Generate download_url using the file id
+        download_url = (
+            f"{parsed['protocol']}://{parsed['netloc']}/api/access/datafile/"
+            f"{files[file_name]['id']}"
         )
+        return download_url
 
     def populate_registry(self, pooch):
         """
