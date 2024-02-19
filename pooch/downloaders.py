@@ -1134,19 +1134,11 @@ class DataverseRepository(DataRepository):  # pylint: disable=missing-class-docs
                 f"File '{file_name}' not found in data archive "
                 f"{self.archive_url} (doi:{self.doi})."
             )
-        # Generate download_url using persistentId or file id
-        persistent_id = files[file_name].get("persistentId")
-        if persistent_id:
-            download_url = (
-                f"{parsed['protocol']}://{parsed['netloc']}/api/access/datafile/"
-                f":persistentId?persistentId={persistent_id}"
-            )
-        else:
-            file_id = files[file_name]["id"]
-            download_url = (
-                f"{parsed['protocol']}://{parsed['netloc']}/api/access/datafile/"
-                f"{file_id}"
-            )
+        # Generate download_url using the file id
+        download_url = (
+            f"{parsed['protocol']}://{parsed['netloc']}/api/access/datafile/"
+            f"{files[file_name]['id']}"
+        )
         return download_url
 
     def populate_registry(self, pooch):
