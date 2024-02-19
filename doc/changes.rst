@@ -3,12 +3,43 @@
 Changelog
 =========
 
+Version 1.8.1
+-------------
+
+Released on: 2024/02/19
+
+DOI: https://doi.org/10.5281/zenodo.10680982
+
+Bug fixes:
+
+* Use the ID instead of persistentID for Dataverse downloads since some repositories don't issue persistentIDs but all issue normal IDs (`#355 <https://github.com/fatiando/pooch/pull/355>`__)
+* Ensure all archive members are unpacked in subsequent uses of ``Untar``/``Unzip`` if the first call only asked for a few members (`#365 <https://github.com/fatiando/pooch/pull/365>`__)
+
+Documentation:
+
+* Move "Projects using Pooch" further up the README (`#386 <https://github.com/fatiando/pooch/pull/386>`__)
+* Update the versions of sphinx and its plugins (`#385 <https://github.com/fatiando/pooch/pull/385>`__)
+
+Maintenance:
+
+* Remove many deprecated pylint options (`#329 <https://github.com/fatiando/pooch/pull/329>`__)
+* Use Dependabot to manage GitHub Actions (`#387 <https://github.com/fatiando/pooch/pull/387>`__)
+* Simplify the test GitHub Actions workflow (`#384 <https://github.com/fatiando/pooch/pull/384>`__)
+* Update format for Black 24.1.1 (`#383 <https://github.com/fatiando/pooch/pull/383>`__)
+
+This release contains contributions from:
+
+* Mark Harfouche
+* Juan Nunez-Iglesias
+* Santiago Soler
+* Leonardo Uieda
+
 Version 1.8.0
 -------------
 
-*Released on: 2023/10/24*
+Released on: 2023/10/24
 
-doi:`10.5281/zenodo.10037888 <https://doi.org/10.5281/zenodo.10037888>`__
+DOI: https://doi.org/10.5281/zenodo.10037888
 
 Bug fixes:
 
@@ -30,7 +61,6 @@ Documentation:
 * Fix spelling of Dataverse (`#353 <https://github.com/fatiando/pooch/pull/353>`__)
 * Fix grammar on retrieve documentation (`#359 <https://github.com/fatiando/pooch/pull/359>`__)
 
-
 This release contains contributions from:
 
 * Hugo van Kemenade
@@ -45,9 +75,9 @@ This release contains contributions from:
 Version 1.7.0
 -------------
 
-*Released on: 2023/02/27*
+Released on: 2023/02/27
 
-doi:`10.5281/zenodo.7678844 <https://doi.org/10.5281/zenodo.7678844>`__
+DOI: https://doi.org/10.5281/zenodo.7678844
 
 Bug fixes:
 
@@ -103,9 +133,9 @@ This release contains contributions from:
 Version 1.6.0
 -------------
 
-*Released on: 2022/01/24*
+Released on: 2022/01/24
 
-doi:`10.5281/zenodo.5793074 <https://doi.org/10.5281/zenodo.5793074>`__
+DOI: https://doi.org/10.5281/zenodo.5793074
 
 .. warning::
 
@@ -149,9 +179,9 @@ This release contains contributions from:
 Version 1.5.2
 -------------
 
-*Released on: 2021/10/11*
+Released on: 2021/10/11
 
-doi:`10.5281/zenodo.5560923 <https://doi.org/10.5281/zenodo.5560923>`__
+DOI: https://doi.org/10.5281/zenodo.5560923
 
 Bug fixes:
 
@@ -181,9 +211,9 @@ This release contains contributions from:
 Version 1.5.1
 -------------
 
-*Released on: 2021/08/24*
+Released on: 2021/08/24
 
-doi:`10.5281/zenodo.5242882 <https://doi.org/10.5281/zenodo.5242882>`__
+DOI: https://doi.org/10.5281/zenodo.5242882
 
 .. warning::
 
@@ -212,9 +242,9 @@ This release contains contributions from:
 Version 1.5.0
 -------------
 
-*Released on: 2021/08/23*
+Released on: 2021/08/23
 
-doi:`10.5281/zenodo.5235242 <https://doi.org/10.5281/zenodo.5235242>`__
+DOI: https://doi.org/10.5281/zenodo.5235242
 
 New features:
 
@@ -243,9 +273,9 @@ This release contains contributions from:
 Version 1.4.0
 -------------
 
-*Released on: 2021/06/08*
+Released on: 2021/06/08
 
-doi:`10.5281/zenodo.4914758 <https://doi.org/10.5281/zenodo.4914758>`__
+DOI: https://doi.org/10.5281/zenodo.4914758
 
 Bug fixes:
 
@@ -285,11 +315,9 @@ This release contains contributions from:
 Version 1.3.0
 -------------
 
-*Released on: 2020/11/27*
+Released on: 2020/11/27
 
-.. image:: https://zenodo.org/badge/DOI/10.5281/zenodo.4293216.svg
-    :alt: Digital Object Identifier for the Zenodo archive
-    :target: https://doi.org/10.5281/zenodo.4293216
+DOI: https://doi.org/10.5281/zenodo.4293216
 
 Bug fixes:
 
@@ -341,11 +369,9 @@ This release contains contributions from:
 Version 1.2.0
 -------------
 
-*Released on: 2020/09/10*
+Released on: 2020/09/10
 
-.. image:: https://zenodo.org/badge/DOI/10.5281/zenodo.4022246.svg
-    :alt: Digital Object Identifier for the Zenodo archive
-    :target: https://doi.org/10.5281/zenodo.4022246
+DOI: https://doi.org/10.5281/zenodo.4022246
 
 .. warning::
 
@@ -403,11 +429,9 @@ This release contains contributions from:
 Version 1.1.1
 -------------
 
-*Released on: 2020/05/14*
+Released on: 2020/05/14
 
-.. image:: https://zenodo.org/badge/DOI/10.5281/zenodo.3826458.svg
-    :alt: Digital Object Identifier for the Zenodo archive
-    :target: https://doi.org/10.5281/zenodo.3826458
+DOI: https://doi.org/10.5281/zenodo.3826458
 
 Bug fixes:
 
@@ -440,11 +464,9 @@ This release contains contributions from:
 Version 1.1.0
 -------------
 
-*Released on: 2020/04/13*
+Released on: 2020/04/13
 
-.. image:: https://zenodo.org/badge/DOI/10.5281/zenodo.3747184.svg
-    :alt: Digital Object Identifier for the Zenodo archive
-    :target: https://doi.org/10.5281/zenodo.3747184
+DOI: https://doi.org/10.5281/zenodo.3747184
 
 New features:
 
@@ -496,11 +518,9 @@ This release contains contributions from:
 Version 1.0.0
 -------------
 
-*Released on: 2020/01/28*
+Released on: 2020/01/28
 
-.. image:: https://zenodo.org/badge/DOI/10.5281/zenodo.3629329.svg
-    :alt: Digital Object Identifier for the Zenodo archive
-    :target: https://doi.org/10.5281/zenodo.3629329
+DOI: https://doi.org/10.5281/zenodo.3629329
 
 This release marks the stabilization of the Pooch API. Further changes to the
 1.* line will be fully backwards compatible (meaning that updating Pooch should
@@ -531,7 +551,7 @@ This release contains contributions from:
 Version 0.7.2
 -------------
 
-*Released on: 2020/01/17*
+Released on: 2020/01/17
 
 🚨 **Announcement:** 🚨
 We now have a `JOSS paper about Pooch <https://doi.org/10.21105/joss.01943>`__!
@@ -547,11 +567,9 @@ no code or documentation changes.
 Version 0.7.1
 -------------
 
-*Released on: 2020/01/17*
+Released on: 2020/01/17
 
-.. image:: https://zenodo.org/badge/DOI/10.5281/zenodo.3611376.svg
-    :alt: Digital Object Identifier for the Zenodo archive
-    :target: https://doi.org/10.5281/zenodo.3611376
+DOI: https://doi.org/10.5281/zenodo.3611376
 
 Improvements:
 
@@ -589,11 +607,9 @@ software paper contain contributions from:
 Version 0.7.0
 -------------
 
-*Released on: 2019/11/19*
+Released on: 2019/11/19
 
-.. image:: https://zenodo.org/badge/DOI/10.5281/zenodo.3547640.svg
-    :alt: Digital Object Identifier for the Zenodo archive
-    :target: https://doi.org/10.5281/zenodo.3547640
+DOI: https://doi.org/10.5281/zenodo.3547640
 
 New features:
 
@@ -638,11 +654,9 @@ This release contains contributions from:
 Version 0.6.0
 -------------
 
-*Released on: 2019/10/22*
+Released on: 2019/10/22
 
-.. image:: https://zenodo.org/badge/DOI/10.5281/zenodo.3515031.svg
-    :alt: Digital Object Identifier for the Zenodo archive
-    :target: https://doi.org/10.5281/zenodo.3515031
+DOI: https://doi.org/10.5281/zenodo.3515031
 
 🚨 **Pooch v0.6.0 is the last release to support Python 2.7** 🚨
 
@@ -671,7 +685,7 @@ This release contains contributions from:
 Version 0.5.2
 -------------
 
-*Released on: 2019/06/24*
+Released on: 2019/06/24
 
 Maintenance:
 
@@ -686,7 +700,7 @@ This release contains contributions from:
 Version 0.5.1
 -------------
 
-*Released on: 2019/05/21*
+Released on: 2019/05/21
 
 Documentation fixes:
 
@@ -705,7 +719,7 @@ This release contains contributions from:
 Version 0.5.0
 -------------
 
-*Released on: 2019/05/20*
+Released on: 2019/05/20
 
 New features:
 
@@ -725,7 +739,7 @@ This release contains contributions from:
 Version 0.4.0
 -------------
 
-*Released on: 2019/05/01*
+Released on: 2019/05/01
 
 New features:
 
@@ -758,7 +772,7 @@ This release contains contributions from:
 Version 0.3.1
 -------------
 
-*Released on: 2019/03/28*
+Released on: 2019/03/28
 
 Minor patches:
 
@@ -769,7 +783,7 @@ Minor patches:
 Version 0.3.0
 -------------
 
-*Released on: 2019/03/27*
+Released on: 2019/03/27
 
 New features:
 
@@ -800,7 +814,7 @@ This release contains contributions from:
 Version 0.2.1
 -------------
 
-*Released on: 2018/11/15*
+Released on: 2018/11/15
 
 Bug fixes:
 
@@ -811,7 +825,7 @@ Bug fixes:
 Version 0.2.0
 -------------
 
-*Released on: 2018/10/31*
+Released on: 2018/10/31
 
 Bug fixes:
 
@@ -832,7 +846,7 @@ Maintenance:
 Version 0.1.1
 -------------
 
-*Released on: 2018/08/30*
+Released on: 2018/08/30
 
 Bug fixes:
 
@@ -843,7 +857,7 @@ Bug fixes:
 Version 0.1
 -----------
 
-*Released on: 2018/08/20*
+Released on: 2018/08/20
 
 * Fist release of Pooch. Manages downloading sample data files over HTTP from a server
   and storing them in a local directory. Main features:
