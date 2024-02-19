@@ -165,7 +165,9 @@ class HTTPDownloader:  # pylint: disable=too-few-public-methods
         if self.progressbar is True and tqdm is None:
             raise ValueError("Missing package 'tqdm' required for progress bars.")
 
-    def __call__(self, url, output_file, pooch, check_only=False):
+    def __call__(
+        self, url, output_file, pooch, check_only=False
+    ):  # pylint: disable=R0914
         """
         Download the given URL over HTTP to the given output file.
 
@@ -195,17 +197,21 @@ class HTTPDownloader:  # pylint: disable=too-few-public-methods
         import requests  # pylint: disable=C0415
 
         if check_only:
-            response = requests.head(url, allow_redirects=True)
+            timeout = self.kwargs.get("timeout", 5)
+            response = requests.head(url, timeout=timeout, allow_redirects=True)
             available = bool(response.status_code == 200)
             return available
 
         kwargs = self.kwargs.copy()
+        timeout = kwargs.pop("timeout", 5)
         kwargs.setdefault("stream", True)
         ispath = not hasattr(output_file, "write")
         if ispath:
+            # pylint: disable=consider-using-with
             output_file = open(output_file, "w+b")
+            # pylint: enable=consider-using-with
         try:
-            response = requests.get(url, **kwargs)
+            response = requests.get(url, timeout=timeout, **kwargs)
             response.raise_for_status()
             content = response.iter_content(chunk_size=self.chunk_size)
             total = int(response.headers.get("content-length", 0))
@@ -344,7 +350,9 @@ class FTPDownloader:  # pylint: disable=too-few-public-methods
 
         ispath = not hasattr(output_file, "write")
         if ispath:
+            # pylint: disable=consider-using-with
             output_file = open(output_file, "w+b")
+            # pylint: enable=consider-using-with
         try:
             ftp.login(user=self.username, passwd=self.password, acct=self.account)
             command = f"RETR {parsed_url['path']}"
@@ -632,7 +640,7 @@ def doi_to_url(doi):
     import requests  # pylint: disable=C0415
 
     # Use doi.org to resolve the DOI to the repository website.
-    response = requests.get(f"https://doi.org/{doi}")
+    response = requests.get(f"https://doi.org/{doi}", timeout=5)
     url = response.url
     if 400 <= response.status_code < 600:
         raise ValueError(
@@ -791,7 +799,8 @@ class ZenodoRepository(DataRepository):  # pylint: disable=missing-class-docstri
 
             article_id = self.archive_url.split("/")[-1]
             self._api_response = requests.get(
-                f"{self.base_api_url}/{article_id}"
+                f"{self.base_api_url}/{article_id}",
+                timeout=5,
             ).json()
 
         return self._api_response
@@ -817,9 +826,9 @@ class ZenodoRepository(DataRepository):  # pylint: disable=missing-class-docstri
         str
         """
         if self._api_version is None:
-            if all(["key" in file for file in self.api_response["files"]]):
+            if all("key" in file for file in self.api_response["files"]):
                 self._api_version = "legacy"
-            elif all(["filename" in file for file in self.api_response["files"]]):
+            elif all("filename" in file for file in self.api_response["files"]):
                 self._api_version = "new"
             else:
                 raise ValueError(
@@ -956,7 +965,8 @@ class FigshareRepository(DataRepository):  # pylint: disable=missing-class-docst
 
             # Use the figshare API to find the article ID from the DOI
             article = requests.get(
-                f"https://api.figshare.com/v2/articles?doi={self.doi}"
+                f"https://api.figshare.com/v2/articles?doi={self.doi}",
+                timeout=5,
             ).json()[0]
             article_id = article["id"]
             # Parse desired version from the doi
@@ -983,7 +993,7 @@ class FigshareRepository(DataRepository):  # pylint: disable=missing-class-docst
                     f"{article_id}/versions/{version}"
                 )
             # Make the request and return the files in the figshare repository
-            response = requests.get(api_url)
+            response = requests.get(api_url, timeout=5)
             response.raise_for_status()
             self._api_response = response.json()["files"]
 
@@ -1076,7 +1086,8 @@ class DataverseRepository(DataRepository):  # pylint: disable=missing-class-docs
         parsed = parse_url(archive_url)
         response = requests.get(
             f"{parsed['protocol']}://{parsed['netloc']}/api/datasets/"
-            f":persistentId?persistentId=doi:{doi}"
+            f":persistentId?persistentId=doi:{doi}",
+            timeout=5,
         )
         return response
 

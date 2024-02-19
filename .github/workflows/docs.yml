@@ -42,7 +42,7 @@ jobs:
 
       # Checks-out your repository under $GITHUB_WORKSPACE
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           # Need to fetch more than the last commit so that setuptools-scm can
           # create the correct version string. If the number of commits since
@@ -86,7 +86,7 @@ jobs:
           echo "::set-output name=dir::$(pip cache dir)"
 
       - name: Setup caching for pip packages
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: ${{ steps.pip-cache.outputs.dir }}
           key: ${{ runner.os }}-pip-${{ hashFiles('requirements-full.txt') }}
@@ -113,7 +113,7 @@ jobs:
 
       # Store the docs as a build artifact so we can deploy it later
       - name: Upload HTML documentation as an artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: docs-${{ github.sha }}
           path: doc/_build/html
@@ -127,17 +127,17 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       # Fetch the built docs from the "build" job
       - name: Download HTML documentation artifact
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: docs-${{ github.sha }}
           path: doc/_build/html
 
       - name: Checkout the gh-pages branch in a separate folder
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           ref: gh-pages
           # Checkout to this folder instead of the current one

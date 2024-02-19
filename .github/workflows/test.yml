@@ -68,7 +68,7 @@ jobs:
 
       # Checks-out your repository under $GITHUB_WORKSPACE
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           # Need to fetch more than the last commit so that setuptools-scm can
           # create the correct version string. If the number of commits since
@@ -119,7 +119,7 @@ jobs:
           echo "::set-output name=dir::$(pip cache dir)"
 
       - name: Setup caching for pip packages
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: ${{ steps.pip-cache.outputs.dir }}
           key: ${{ runner.os }}-pip-${{ hashFiles('requirements-full.txt') }}
@@ -148,7 +148,7 @@ jobs:
         run: coverage xml
 
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v3
+        uses: codecov/codecov-action@v4
         with:
           files: ./coverage.xml
           env_vars: OS,PYTHON,DEPENDENCIES
@@ -156,3 +156,5 @@ jobs:
           # It does sometimes but shouldn't be the reason for running
           # everything again unless something else is broken.
           fail_ci_if_error: false
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}

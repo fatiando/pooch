@@ -249,15 +249,18 @@ def make_local_storage(path, env=None):
     """
     path = str(path)
     # Check that the data directory is writable
+    if not os.path.exists(path):
+        action = "create"
+    else:
+        action = "write to"
+
     try:
-        if not os.path.exists(path):
-            action = "create"
+        if action == "create":
             # When running in parallel, it's possible that multiple jobs will
             # try to create the path at the same time. Use exist_ok to avoid
             # raising an error.
             os.makedirs(path, exist_ok=True)
         else:
-            action = "write to"
             with tempfile.NamedTemporaryFile(dir=path):
                 pass
     except PermissionError as error:

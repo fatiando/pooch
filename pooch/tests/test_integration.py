@@ -41,7 +41,7 @@ def test_create_and_fetch():
             assert log_file.getvalue().split()[0] == "Downloading"
         check_tiny_data(fname)
         # Now modify the file to trigger an update on the next fetch
-        with open(fname, "w") as fin:
+        with open(fname, "w", encoding="utf-8") as fin:
             fin.write("The data is now different")
         with capture_log() as log_file:
             fname = pup.fetch(target)

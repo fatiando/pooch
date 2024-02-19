@@ -215,7 +215,7 @@ def make_registry(directory, output, recursive=True):
 
     hashes = [file_hash(str(directory / fname)) for fname in files]
 
-    with open(output, "w") as outfile:
+    with open(output, "w", encoding="utf-8") as outfile:
         for fname, fhash in zip(files, hashes):
             # Only use Unix separators for the registry so that we don't go
             # insane dealing with file paths.
