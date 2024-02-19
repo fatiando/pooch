@@ -22,7 +22,7 @@ from .utils import get_logger
 
 class ExtractorProcessor(abc.ABC):  # pylint: disable=too-few-public-methods
     """
-    Base class for extractions from compressed archives.
+    Abstract base class for extractions from compressed archives.
 
     Subclasses can be used with :meth:`pooch.Pooch.fetch` and
     :func:`pooch.retrieve` to unzip a downloaded data file into a folder in the
@@ -35,15 +35,27 @@ class ExtractorProcessor(abc.ABC):  # pylint: disable=too-few-public-methods
         If None, will unpack all files in the archive. Otherwise, *members*
         must be a list of file names to unpack from the archive. Only these
         files will be unpacked.
+    extract_dir : str or None
+        If None, files will be unpacked to the default location (a folder in
+        the same location as the downloaded zip file, with a suffix added).
+        Otherwise, files will be unpacked to ``extract_dir``, which is
+        interpreted as a *relative path* (relative to the cache location
+        provided by :func:`pooch.retrieve` or :meth:`pooch.Pooch.fetch`).
 
     """
-
-    # String appended to unpacked archive. To be implemented in subclass
-    suffix = None
 
     def __init__(self, members=None, extract_dir=None):
         self.members = members
         self.extract_dir = extract_dir
+
+    @property
+    @abc.abstractmethod
+    def suffix(self):
+        """
+        String appended to unpacked archive folder name.
+        Only used if extract_dir is None.
+        MUST BE IMPLEMENTED BY CHILD CLASSES.
+        """
 
     @abc.abstractmethod
     def _all_members(self, fname):
@@ -85,11 +97,6 @@ class ExtractorProcessor(abc.ABC):  # pylint: disable=too-few-public-methods
             A list of the full path to all files in the extracted archive.
 
         """
-        if self.suffix is None and self.extract_dir is None:
-            raise NotImplementedError(
-                "Derived classes must define either a 'suffix' attribute or "
-                "an 'extract_dir' attribute."
-            )
         if self.extract_dir is None:
             self.extract_dir = fname + self.suffix
         else:
@@ -156,7 +163,13 @@ class Unzip(ExtractorProcessor):  # pylint: disable=too-few-public-methods
 
     """
 
-    suffix = ".unzip"
+    @property
+    def suffix(self):
+        """
+        String appended to unpacked archive folder name.
+        Only used if extract_dir is None.
+        """
+        return ".unzip"
 
     def _all_members(self, fname):
         """Return all members from a given archive."""
@@ -222,7 +235,13 @@ class Untar(ExtractorProcessor):  # pylint: disable=too-few-public-methods
         :meth:`pooch.Pooch.fetch`).
     """
 
-    suffix = ".untar"
+    @property
+    def suffix(self):
+        """
+        String appended to unpacked archive folder name.
+        Only used if extract_dir is None.
+        """
+        return ".untar"
 
     def _all_members(self, fname):
         """Return all members from a given archive."""
