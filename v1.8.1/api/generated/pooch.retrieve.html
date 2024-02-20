@@ -1,0 +1,712 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    
+        <title>pooch.retrieve | Pooch v1.8.1</title>
+    
+
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+
+  
+  <link href="../../_static/vendor/fontawesome/6.5.1/css/all.min.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.1/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.1/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.1/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css?v=384b581d" />
+    <link rel="stylesheet" type="text/css" href="../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7" />
+    <link rel="stylesheet" type="text/css" href="../../_static/style.css?v=63f081c0" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae" />
+  <script src="../../_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
+
+    <script src="../../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?v=efea14e4"></script>
+    <script src="../../_static/design-tabs.js?v=36754332"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'api/generated/pooch.retrieve';</script>
+    <link rel="icon" href="../../_static/favicon.png"/>
+    <link rel="author" title="About these documents" href="../../about.html" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="pooch.os_cache" href="pooch.os_cache.html" />
+    <link rel="prev" title="pooch.Pooch" href="pooch.Pooch.html" />
+    <!-- Plausible analytics for anonymous usage statistics -->
+    <script defer data-domain="fatiando.org" src="https://plausible.io/js/plausible.js"></script>
+
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a id="pst-skip-link" class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Pooch <span class="project-version">v1.8.1</span></p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../../index.html">
+                    Home
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../about.html">Why use Pooch?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../install.html">Installing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../retrieve.html">Retrieving a single data file</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../multiple-files.html">Fetching files from a registry</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../sample-data.html">Manage a package’s sample data</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Training your Pooch</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../hashes.html">Hashes: Calculating and bypassing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../user-defined-cache.html">User-defined cache location</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../registry-files.html">Registry files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../multiple-urls.html">Multiple download URLs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../protocols.html">Download protocols</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../logging.html">Logging and verbosity</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../downloaders.html">Downloaders: Customizing the download</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../processors.html">Processors: Post-download actions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../authentication.html">Authentication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../progressbars.html">Printing progress bars</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../unpacking.html">Unpacking archives</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../decompressing.html">Decompressing</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../index.html">List of functions and classes (API)</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="pooch.create.html">pooch.create</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pooch.Pooch.html">pooch.Pooch</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">pooch.retrieve</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pooch.os_cache.html">pooch.os_cache</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pooch.make_registry.html">pooch.make_registry</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pooch.file_hash.html">pooch.file_hash</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pooch.check_version.html">pooch.check_version</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pooch.get_logger.html">pooch.get_logger</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pooch.HTTPDownloader.html">pooch.HTTPDownloader</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pooch.FTPDownloader.html">pooch.FTPDownloader</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pooch.SFTPDownloader.html">pooch.SFTPDownloader</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pooch.DOIDownloader.html">pooch.DOIDownloader</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pooch.Unzip.html">pooch.Unzip</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pooch.Untar.html">pooch.Untar</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pooch.Decompress.html">pooch.Decompress</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pooch.test.html">pooch.test</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../compatibility.html">Version compatibility</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../citing.html">Citing Pooch</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changes.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../versions.html">Documentation for other versions</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Community</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference external" href="https://www.fatiando.org/contact/">Join the community</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/fatiando/community/blob/main/CODE_OF_CONDUCT.md">Code of Conduct</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/fatiando/pooch/blob/main/CONTRIBUTING.md">How to contribute</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/fatiando/pooch">Source code on GitHub</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/fatiando/pooch/blob/main/AUTHORS.md">Authors</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://www.fatiando.org">Fatiando a Terra</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/fatiando/pooch" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/fatiando/pooch/edit/main/doc/api/generated/pooch.retrieve.rst" target="_blank"
+   class="btn btn-sm btn-source-edit-button dropdown-item"
+   title="Suggest edit"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-pencil-alt"></i>
+  </span>
+<span class="btn__text-container">Suggest edit</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/fatiando/pooch/issues/new?title=Issue%20on%20page%20%2Fapi/generated/pooch.retrieve.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../../_sources/api/generated/pooch.retrieve.rst" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.rst</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>pooch.retrieve</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pooch.retrieve"><code class="docutils literal notranslate"><span class="pre">retrieve</span></code></a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="pooch-retrieve">
+<h1>pooch.retrieve<a class="headerlink" href="#pooch-retrieve" title="Link to this heading">#</a></h1>
+<dl class="py function">
+<dt class="sig sig-object py" id="pooch.retrieve">
+<span class="sig-prename descclassname"><span class="pre">pooch.</span></span><span class="sig-name descname"><span class="pre">retrieve</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">known_hash</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">processor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">downloader</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">progressbar</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pooch/core.html#retrieve"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pooch.retrieve" title="Link to this definition">#</a></dt>
+<dd><p>Download and cache a single file locally.</p>
+<p>Uses HTTP or FTP by default, depending on the protocol in the given <em>url</em>.
+Other download methods can be controlled through the <em>downloader</em> argument
+(see below).</p>
+<p>The file will be downloaded to a temporary location first and its hash will
+be compared to the given <em>known_hash</em>. This is done to ensure that the
+download happened correctly and securely. If the hash doesn’t match, the
+file will be deleted and an exception will be raised.</p>
+<p>If the file already exists locally, its hash will be compared to
+<em>known_hash</em>. If they are not the same, this is interpreted as the file
+needing to be updated and it will be downloaded again.</p>
+<p>You can bypass these checks by passing <code class="docutils literal notranslate"><span class="pre">known_hash=None</span></code>. If this is
+done, the SHA256 hash of the downloaded file will be logged to the screen.
+It is highly recommended that you copy and paste this hash as <em>known_hash</em>
+so that future downloads are guaranteed to be the exact same file. This is
+crucial for reproducible computations.</p>
+<p>If the file exists in the given <em>path</em> with the given <em>fname</em> and the hash
+matches, it will not be downloaded and the absolute path to the file will
+be returned.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This function is meant for downloading single files. If you need to
+manage the download and caching of several files, with versioning, use
+<a class="reference internal" href="pooch.create.html#pooch.create" title="pooch.create"><code class="xref py py-func docutils literal notranslate"><span class="pre">pooch.create</span></code></a> and <a class="reference internal" href="pooch.Pooch.html#pooch.Pooch" title="pooch.Pooch"><code class="xref py py-class docutils literal notranslate"><span class="pre">pooch.Pooch</span></code></a> instead.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>url</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – The URL to the file that is to be downloaded. Ideally, the URL should
+end in a file name.</p></li>
+<li><p><strong>known_hash</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em> or </em><em>None</em>) – A known hash (checksum) of the file. Will be used to verify the
+download or check if an existing file needs to be updated. By default,
+will assume it’s a SHA256 hash. To specify a different hashing method,
+prepend the hash with <code class="docutils literal notranslate"><span class="pre">algorithm:</span></code>, for example
+<code class="docutils literal notranslate"><span class="pre">md5:pw9co2iun29juoh</span></code> or <code class="docutils literal notranslate"><span class="pre">sha1:092odwhi2ujdp2du2od2odh2wod2</span></code>. If
+None, will NOT check the hash of the downloaded file or check if an
+existing file needs to be updated.</p></li>
+<li><p><strong>fname</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em> or </em><em>None</em>) – The name that will be used to save the file. Should NOT include the
+full path, just the file name (it will be appended to <em>path</em>). If
+None, will create a unique file name using a combination of the last
+part of the URL (assuming it’s the file name) and the MD5 hash of the
+URL. For example, <code class="docutils literal notranslate"><span class="pre">81whdo2d2e928yd1wi22-data-file.csv</span></code>. This ensures
+that files from different URLs never overwrite each other, even if they
+have the same name.</p></li>
+<li><p><strong>path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em> or </em><em>PathLike</em><em> or </em><em>None</em>) – The location of the cache folder on disk. This is where the file will
+be saved. If None, will save to a <code class="docutils literal notranslate"><span class="pre">pooch</span></code> folder in the default cache
+location for your operating system (see <a class="reference internal" href="pooch.os_cache.html#pooch.os_cache" title="pooch.os_cache"><code class="xref py py-func docutils literal notranslate"><span class="pre">pooch.os_cache</span></code></a>).</p></li>
+<li><p><strong>processor</strong> (<em>None</em><em> or </em><em>callable</em>) – If not None, then a function (or callable object) that will be called
+before returning the full path and after the file has been downloaded
+(if required). See <a class="reference internal" href="../../processors.html#processors"><span class="std std-ref">Processors: Post-download actions</span></a> for details.</p></li>
+<li><p><strong>downloader</strong> (<em>None</em><em> or </em><em>callable</em>) – If not None, then a function (or callable object) that will be called
+to download a given URL to a provided local file name. See
+<a class="reference internal" href="../../downloaders.html#downloaders"><span class="std std-ref">Downloaders: Customizing the download</span></a> for details.</p></li>
+<li><p><strong>progressbar</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a><em> or </em><em>an arbitrary progress bar object</em>) – If True, will print a progress bar of the download to standard error
+(stderr). Requires <a class="reference external" href="https://github.com/tqdm/tqdm">tqdm</a> to be
+installed. Alternatively, an arbitrary progress bar object can be
+passed. See <a class="reference internal" href="../../progressbars.html#custom-progressbar"><span class="std std-ref">Using custom progress bars</span></a> for details.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>full_path</strong> (<em>str</em>) – The absolute path (including the file name) of the file in the local
+storage.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<p>Download one of the data files from the Pooch repository on GitHub:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">os</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pooch</span> <span class="kn">import</span> <span class="n">__version__</span><span class="p">,</span> <span class="n">check_version</span><span class="p">,</span> <span class="n">retrieve</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Make a URL for the version of pooch we have installed</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;https://github.com/fatiando/pooch/raw/</span><span class="si">{}</span><span class="s2">/data/tiny-data.txt&quot;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">url</span> <span class="o">=</span> <span class="n">url</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">check_version</span><span class="p">(</span><span class="n">__version__</span><span class="p">,</span> <span class="n">fallback</span><span class="o">=</span><span class="s2">&quot;main&quot;</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Download the file and save it locally. Will check the MD5 checksum of</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># the downloaded file against the given value to make sure it&#39;s the</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># right file. You can use other hashes by specifying different</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># algorithm names (sha256, sha1, etc).</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fname</span> <span class="o">=</span> <span class="n">retrieve</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">url</span><span class="p">,</span> <span class="n">known_hash</span><span class="o">=</span><span class="s2">&quot;md5:70e2afd3fd7e336ae478b1e740a5f08e&quot;</span><span class="p">,</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>
+<span class="go"># A tiny data file for test purposes only</span>
+<span class="go">1  2  3  4  5  6</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Running again won&#39;t trigger a download and only return the path to</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># the existing file.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fname2</span> <span class="o">=</span> <span class="n">retrieve</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">url</span><span class="p">,</span> <span class="n">known_hash</span><span class="o">=</span><span class="s2">&quot;md5:70e2afd3fd7e336ae478b1e740a5f08e&quot;</span><span class="p">,</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">fname2</span> <span class="o">==</span> <span class="n">fname</span><span class="p">)</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Files that are compressed with gzip, xz/lzma, or bzip2 can be automatically
+decompressed by passing using the <a class="reference internal" href="pooch.Decompress.html#pooch.Decompress" title="pooch.Decompress"><code class="xref py py-class docutils literal notranslate"><span class="pre">pooch.Decompress</span></code></a> processor:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pooch</span> <span class="kn">import</span> <span class="n">Decompress</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># URLs to a gzip compressed version of the data file.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">url</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;https://github.com/fatiando/pooch/raw/</span><span class="si">{}</span><span class="s2">/&quot;</span>
+<span class="gp">... </span>       <span class="o">+</span> <span class="s2">&quot;pooch/tests/data/tiny-data.txt.gz&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">url</span> <span class="o">=</span> <span class="n">url</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">check_version</span><span class="p">(</span><span class="n">__version__</span><span class="p">,</span> <span class="n">fallback</span><span class="o">=</span><span class="s2">&quot;main&quot;</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># By default, you would have to decompress the file yourself</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fname</span> <span class="o">=</span> <span class="n">retrieve</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">url</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">known_hash</span><span class="o">=</span><span class="s2">&quot;md5:8812ba10b6c7778014fdae81b03f9def&quot;</span><span class="p">,</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">fname</span><span class="p">)[</span><span class="mi">1</span><span class="p">])</span>
+<span class="go">.gz</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Use the processor to decompress after download automatically and</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># return the path to the decompressed file instead.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fname2</span> <span class="o">=</span> <span class="n">retrieve</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">url</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">known_hash</span><span class="o">=</span><span class="s2">&quot;md5:8812ba10b6c7778014fdae81b03f9def&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">processor</span><span class="o">=</span><span class="n">Decompress</span><span class="p">(),</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">fname2</span> <span class="o">==</span> <span class="n">fname</span><span class="p">)</span>
+<span class="go">False</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">fname2</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>
+<span class="go"># A tiny data file for test purposes only</span>
+<span class="go">1  2  3  4  5  6</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">fname2</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>When downloading archives (zip or tar), it can be useful to unpack them
+after download to avoid having to do that yourself. Use the processors
+<a class="reference internal" href="pooch.Unzip.html#pooch.Unzip" title="pooch.Unzip"><code class="xref py py-class docutils literal notranslate"><span class="pre">pooch.Unzip</span></code></a> or <a class="reference internal" href="pooch.Untar.html#pooch.Untar" title="pooch.Untar"><code class="xref py py-class docutils literal notranslate"><span class="pre">pooch.Untar</span></code></a> to do this automatically:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pooch</span> <span class="kn">import</span> <span class="n">Unzip</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># URLs to a zip archive with a single data file.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">url</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;https://github.com/fatiando/pooch/raw/</span><span class="si">{}</span><span class="s2">/&quot;</span>
+<span class="gp">... </span>       <span class="o">+</span> <span class="s2">&quot;pooch/tests/data/tiny-data.zip&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">url</span> <span class="o">=</span> <span class="n">url</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">check_version</span><span class="p">(</span><span class="n">__version__</span><span class="p">,</span> <span class="n">fallback</span><span class="o">=</span><span class="s2">&quot;main&quot;</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># By default, you would get the path to the archive</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fname</span> <span class="o">=</span> <span class="n">retrieve</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">url</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">known_hash</span><span class="o">=</span><span class="s2">&quot;md5:e9592cb46cf3514a1079051f8a148148&quot;</span><span class="p">,</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">fname</span><span class="p">)[</span><span class="mi">1</span><span class="p">])</span>
+<span class="go">.zip</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Using the processor, the archive will be unzipped and a list with the</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># path to every file will be returned instead of a single path.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fnames</span> <span class="o">=</span> <span class="n">retrieve</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">url</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">known_hash</span><span class="o">=</span><span class="s2">&quot;md5:e9592cb46cf3514a1079051f8a148148&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">processor</span><span class="o">=</span><span class="n">Unzip</span><span class="p">(),</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># There was only a single file in our archive.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">fnames</span><span class="p">))</span>
+<span class="go">1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">fnames</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>
+<span class="go"># A tiny data file for test purposes only</span>
+<span class="go">1  2  3  4  5  6</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">fnames</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<div style='clear:both'></div></section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="pooch.Pooch.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">pooch.Pooch</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="pooch.os_cache.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">pooch.os_cache</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pooch.retrieve"><code class="docutils literal notranslate"><span class="pre">retrieve</span></code></a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2024, The Pooch Developers.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    <p class="last-updated">
+  Last updated on Feb 20, 2024.
+  <br/>
+</p>
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
