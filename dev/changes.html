@@ -2,44 +2,53 @@
 
 <!DOCTYPE html>
 
-<html>
+
+<html lang="en" data-content_root="./" >
+
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
     
         <title>Changelog | Pooch dev</title>
     
 
-    
-  <link href="_static/css/theme.css" rel="stylesheet">
-  <link href="_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
 
-    
-  <link rel="stylesheet"
-    href="_static/vendor/fontawesome/5.13.0/css/all.min.css">
-  <link rel="preload" as="font" type="font/woff2" crossorigin
-    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
-  <link rel="preload" as="font" type="font/woff2" crossorigin
-    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+  
+  <link href="_static/vendor/fontawesome/6.5.1/css/all.min.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.1/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.1/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.1/webfonts/fa-regular-400.woff2" />
 
-    
-      
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=384b581d" />
+    <link rel="stylesheet" type="text/css" href="_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7" />
+    <link rel="stylesheet" type="text/css" href="_static/style.css?v=63f081c0" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae" />
+  <script src="_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
 
-    
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="_static/sphinx-book-theme.css?digest=84ace793992934648b4de8eed757e5a2" />
-    <link rel="stylesheet" type="text/css" href="_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
-    <link rel="stylesheet" type="text/css" href="_static/panels-variables.87249bd3f7b54630a2508c1b61607c7f.css" />
-    <link rel="stylesheet" type="text/css" href="_static/style.css" />
-    
-  <link rel="preload" as="script" href="_static/js/index.be7d3bbb2ef33a8344ce.js">
-
-    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-    <script src="_static/jquery.js"></script>
-    <script src="_static/underscore.js"></script>
-    <script src="_static/doctools.js"></script>
-    <script src="_static/sphinx-book-theme.9d8b4a8b9bb19db25eeaddc40d639ba2.js"></script>
-    <link rel="shortcut icon" href="_static/favicon.png"/>
+    <script src="_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="_static/doctools.js?v=888ff710"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=efea14e4"></script>
+    <script src="_static/design-tabs.js?v=36754332"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'changes';</script>
+    <link rel="icon" href="_static/favicon.png"/>
     <link rel="author" title="About these documents" href="about.html" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -49,685 +58,453 @@
     <script defer data-domain="fatiando.org" src="https://plausible.io/js/plausible.js"></script>
 
   </head>
-  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
-    
-    <div class="container-fluid" id="banner"></div>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
 
-    
+  
+  
+  <a id="pst-skip-link" class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
 
-    <div class="container-xl">
-      <div class="row">
-          
-<!-- Checkboxes to toggle the left sidebar -->
-<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
-<label class="overlay" for="__navigation">
-    <div class="visually-hidden">Toggle navigation sidebar</div>
-</label>
-<div class="col-12 col-md-3 bd-sidebar site-navigation " id="site-navigation">
-    
-        <div class="navbar-brand-box">
-    <a class="navbar-brand text-wrap" href="index.html">
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
       
-        <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
         
-      
-      
-      <img src="_static/pooch-logo.png" class="logo" alt="logo">
-      
-      
-      <h1 class="site-logo" id="site-title">Pooch <span class="project-version">dev</span></h1>
-      
-    </a>
-</div><form class="bd-search d-flex align-items-center" action="search.html" method="get">
-  <i class="icon fas fa-search"></i>
-  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
-</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
-    <div class="bd-toc-item active">
-        <ul class="nav bd-sidenav">
- <li class="toctree-l1">
-  <a class="reference internal" href="index.html">
-   Pooch Documentation
-  </a>
- </li>
-</ul>
-<p aria-level="2" class="caption" role="heading">
- <span class="caption-text">
-  Getting Started
- </span>
-</p>
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+
+<a class="navbar-brand logo" href="index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Pooch <span class="project-version">dev</span></p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="index.html">
+                    Home
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
 <ul class="nav bd-sidenav">
- <li class="toctree-l1">
-  <a class="reference internal" href="about.html">
-   Why use Pooch?
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="install.html">
-   Installing
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="retrieve.html">
-   Retrieving a single data file
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="multiple-files.html">
-   Fetching files from a registry
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="sample-data.html">
-   Manage a package’s sample data
-  </a>
- </li>
+<li class="toctree-l1"><a class="reference internal" href="about.html">Why use Pooch?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="retrieve.html">Retrieving a single data file</a></li>
+<li class="toctree-l1"><a class="reference internal" href="multiple-files.html">Fetching files from a registry</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sample-data.html">Manage a package’s sample data</a></li>
 </ul>
-<p aria-level="2" class="caption" role="heading">
- <span class="caption-text">
-  Training your Pooch
- </span>
-</p>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Training your Pooch</span></p>
 <ul class="nav bd-sidenav">
- <li class="toctree-l1">
-  <a class="reference internal" href="hashes.html">
-   Hashes: Calculating and bypassing
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="user-defined-cache.html">
-   User-defined cache location
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="registry-files.html">
-   Registry files
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="multiple-urls.html">
-   Multiple download URLs
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="protocols.html">
-   Download protocols
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="logging.html">
-   Logging and verbosity
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="downloaders.html">
-   Downloaders: Customizing the download
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="processors.html">
-   Processors: Post-download actions
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="authentication.html">
-   Authentication
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="progressbars.html">
-   Printing progress bars
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="unpacking.html">
-   Unpacking archives
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="decompressing.html">
-   Decompressing
-  </a>
- </li>
+<li class="toctree-l1"><a class="reference internal" href="hashes.html">Hashes: Calculating and bypassing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user-defined-cache.html">User-defined cache location</a></li>
+<li class="toctree-l1"><a class="reference internal" href="registry-files.html">Registry files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="multiple-urls.html">Multiple download URLs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="protocols.html">Download protocols</a></li>
+<li class="toctree-l1"><a class="reference internal" href="logging.html">Logging and verbosity</a></li>
+<li class="toctree-l1"><a class="reference internal" href="downloaders.html">Downloaders: Customizing the download</a></li>
+<li class="toctree-l1"><a class="reference internal" href="processors.html">Processors: Post-download actions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="authentication.html">Authentication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="progressbars.html">Printing progress bars</a></li>
+<li class="toctree-l1"><a class="reference internal" href="unpacking.html">Unpacking archives</a></li>
+<li class="toctree-l1"><a class="reference internal" href="decompressing.html">Decompressing</a></li>
 </ul>
-<p aria-level="2" class="caption" role="heading">
- <span class="caption-text">
-  Reference
- </span>
-</p>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Reference</span></p>
 <ul class="current nav bd-sidenav">
- <li class="toctree-l1 has-children">
-  <a class="reference internal" href="api/index.html">
-   List of functions and classes (API)
-  </a>
-  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
-  <label for="toctree-checkbox-1">
-   <i class="fas fa-chevron-down">
-   </i>
-  </label>
-  <ul>
-   <li class="toctree-l2">
-    <a class="reference internal" href="api/generated/pooch.create.html">
-     pooch.create
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="api/generated/pooch.Pooch.html">
-     pooch.Pooch
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="api/generated/pooch.retrieve.html">
-     pooch.retrieve
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="api/generated/pooch.os_cache.html">
-     pooch.os_cache
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="api/generated/pooch.make_registry.html">
-     pooch.make_registry
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="api/generated/pooch.file_hash.html">
-     pooch.file_hash
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="api/generated/pooch.check_version.html">
-     pooch.check_version
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="api/generated/pooch.get_logger.html">
-     pooch.get_logger
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="api/generated/pooch.HTTPDownloader.html">
-     pooch.HTTPDownloader
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="api/generated/pooch.FTPDownloader.html">
-     pooch.FTPDownloader
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="api/generated/pooch.SFTPDownloader.html">
-     pooch.SFTPDownloader
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="api/generated/pooch.DOIDownloader.html">
-     pooch.DOIDownloader
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="api/generated/pooch.Unzip.html">
-     pooch.Unzip
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="api/generated/pooch.Untar.html">
-     pooch.Untar
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="api/generated/pooch.Decompress.html">
-     pooch.Decompress
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="api/generated/pooch.test.html">
-     pooch.test
-    </a>
-   </li>
-  </ul>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="compatibility.html">
-   Version compatibility
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="citing.html">
-   Citing Pooch
-  </a>
- </li>
- <li class="toctree-l1 current active">
-  <a class="current reference internal" href="#">
-   Changelog
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="versions.html">
-   Documentation for other versions
-  </a>
- </li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="api/index.html">List of functions and classes (API)</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="api/generated/pooch.create.html">pooch.create</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/generated/pooch.Pooch.html">pooch.Pooch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/generated/pooch.retrieve.html">pooch.retrieve</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/generated/pooch.os_cache.html">pooch.os_cache</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/generated/pooch.make_registry.html">pooch.make_registry</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/generated/pooch.file_hash.html">pooch.file_hash</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/generated/pooch.check_version.html">pooch.check_version</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/generated/pooch.get_logger.html">pooch.get_logger</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/generated/pooch.HTTPDownloader.html">pooch.HTTPDownloader</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/generated/pooch.FTPDownloader.html">pooch.FTPDownloader</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/generated/pooch.SFTPDownloader.html">pooch.SFTPDownloader</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/generated/pooch.DOIDownloader.html">pooch.DOIDownloader</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/generated/pooch.Unzip.html">pooch.Unzip</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/generated/pooch.Untar.html">pooch.Untar</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/generated/pooch.Decompress.html">pooch.Decompress</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/generated/pooch.test.html">pooch.test</a></li>
 </ul>
-<p aria-level="2" class="caption" role="heading">
- <span class="caption-text">
-  Community
- </span>
-</p>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="compatibility.html">Version compatibility</a></li>
+<li class="toctree-l1"><a class="reference internal" href="citing.html">Citing Pooch</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="versions.html">Documentation for other versions</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Community</span></p>
 <ul class="nav bd-sidenav">
- <li class="toctree-l1">
-  <a class="reference external" href="https://www.fatiando.org/contact/">
-   Join the community
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference external" href="https://github.com/fatiando/community/blob/main/CODE_OF_CONDUCT.md">
-   Code of Conduct
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference external" href="https://github.com/fatiando/pooch/blob/main/CONTRIBUTING.md">
-   How to contribute
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference external" href="https://github.com/fatiando/pooch">
-   Source code on GitHub
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference external" href="https://github.com/fatiando/pooch/blob/main/AUTHORS.md">
-   Authors
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference external" href="https://www.fatiando.org">
-   Fatiando a Terra
-  </a>
- </li>
+<li class="toctree-l1"><a class="reference external" href="https://www.fatiando.org/contact/">Join the community</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/fatiando/community/blob/main/CODE_OF_CONDUCT.md">Code of Conduct</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/fatiando/pooch/blob/main/CONTRIBUTING.md">How to contribute</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/fatiando/pooch">Source code on GitHub</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/fatiando/pooch/blob/main/AUTHORS.md">Authors</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://www.fatiando.org">Fatiando a Terra</a></li>
 </ul>
 
     </div>
-</nav> <!-- To handle the deprecated key -->
-
-<div class="navbar_extra_footer">
-  Theme by the <a href="https://ebp.jupyterbook.org">Executable Book Project</a>
-</div>
-
-</div>
-
-
-          
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
 
 
-          
-<!-- This is an invisible pixel that we watch to see if we've scrolled. -->
-<div class="sbt-scroll-pixel-helper"></div>
-<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
-    
-    <div class="topbar container-xl fixed-top">
-    <div class="topbar-contents row">
-        <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show"></div>
-        <div class="col pl-md-4 topbar-main">
-            <div class="topbar-left">
-                
-                <label class="nav-toggle-button" for="__navigation">
-                    <div class="visually-hidden">Toggle navigation</div>
-                    <i class="fas fa-bars"></i>
-                </label>
-                
-            </div>
-            
-<div class="dropdown-buttons-trigger">
-    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
-            class="fas fa-download"></i></button>
-
-    <div class="dropdown-buttons">
-        <!-- ipynb file if we had a myst markdown file -->
+      </div>
+      
+      <main id="main-content" class="bd-main">
         
-        <!-- Download raw file -->
-        <a class="dropdown-buttons" href="_sources/changes.rst.txt"><button type="button"
-                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
-                data-placement="left">.rst</button></a>
-        <!-- Download PDF via print -->
-        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
-                onclick="printPdf(this)" data-toggle="tooltip" data-placement="left">.pdf</button>
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
     </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/fatiando/pooch" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/fatiando/pooch/edit/main/doc/changes.rst" target="_blank"
+   class="btn btn-sm btn-source-edit-button dropdown-item"
+   title="Suggest edit"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-pencil-alt"></i>
+  </span>
+<span class="btn__text-container">Suggest edit</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/fatiando/pooch/issues/new?title=Issue%20on%20page%20%2Fchanges.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
 </div>
 
-            <!-- Source interaction buttons -->
 
-<div class="dropdown-buttons-trigger">
-    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
-        aria-label="Connect with source repository"><i class="fab fa-github"></i></button>
-    <div class="dropdown-buttons sourcebuttons">
-        <a class="repository-button"
-            href="https://github.com/fatiando/pooch"><button type="button" class="btn btn-secondary topbarbtn"
-                data-toggle="tooltip" data-placement="left" title="Source repository"><i
-                    class="fab fa-github"></i>repository</button></a>
-        <a class="issues-button"
-            href="https://github.com/fatiando/pooch/issues/new?title=Issue%20on%20page%20%2Fchanges.html&body=Your%20issue%20content%20here."><button
-                type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
-                title="Open an issue"><i class="fas fa-lightbulb"></i>open issue</button></a>
-        <a class="edit-button" href="https://github.com/fatiando/pooch/edit/main/doc/changes.rst"><button
-                type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
-                title="Edit this page"><i class="fas fa-pencil-alt"></i>suggest edit</button></a>
-    </div>
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/changes.rst" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.rst</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
 </div>
 
-            <!-- Full screen (wrap in <a> to have style consistency -->
 
-<a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
-        data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
-        title="Fullscreen mode"><i
-            class="fas fa-expand"></i></button></a>
 
-            <!-- Launch buttons -->
 
-        </div>
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
 
-        <!-- Table of contents -->
-        <div class="d-none d-md-block col-md-2 bd-toc show noprint">
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Changelog</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
             
-            <div class="tocsection onthispage pt-5 pb-3">
-                <i class="fas fa-list"></i> Contents
+            <div>
+                <h2> Contents </h2>
             </div>
-            <nav id="bd-toc-nav" aria-label="Page">
+            <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#version-1-8-0">
-   Version 1.8.0
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#version-1-7-0">
-   Version 1.7.0
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#version-1-6-0">
-   Version 1.6.0
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#version-1-5-2">
-   Version 1.5.2
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#version-1-5-1">
-   Version 1.5.1
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#version-1-5-0">
-   Version 1.5.0
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#version-1-4-0">
-   Version 1.4.0
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#version-1-3-0">
-   Version 1.3.0
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#version-1-2-0">
-   Version 1.2.0
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#version-1-1-1">
-   Version 1.1.1
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#version-1-1-0">
-   Version 1.1.0
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#version-1-0-0">
-   Version 1.0.0
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#version-0-7-2">
-   Version 0.7.2
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#version-0-7-1">
-   Version 0.7.1
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#version-0-7-0">
-   Version 0.7.0
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#version-0-6-0">
-   Version 0.6.0
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#version-0-5-2">
-   Version 0.5.2
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#version-0-5-1">
-   Version 0.5.1
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#version-0-5-0">
-   Version 0.5.0
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#version-0-4-0">
-   Version 0.4.0
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#version-0-3-1">
-   Version 0.3.1
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#version-0-3-0">
-   Version 0.3.0
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#version-0-2-1">
-   Version 0.2.1
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#version-0-2-0">
-   Version 0.2.0
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#version-0-1-1">
-   Version 0.1.1
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#version-0-1">
-   Version 0.1
-  </a>
- </li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#version-1-8-1">Version 1.8.1</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#version-1-8-0">Version 1.8.0</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#version-1-7-0">Version 1.7.0</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#version-1-6-0">Version 1.6.0</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#version-1-5-2">Version 1.5.2</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#version-1-5-1">Version 1.5.1</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#version-1-5-0">Version 1.5.0</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#version-1-4-0">Version 1.4.0</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#version-1-3-0">Version 1.3.0</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#version-1-2-0">Version 1.2.0</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#version-1-1-1">Version 1.1.1</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#version-1-1-0">Version 1.1.0</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#version-1-0-0">Version 1.0.0</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#version-0-7-2">Version 0.7.2</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#version-0-7-1">Version 0.7.1</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#version-0-7-0">Version 0.7.0</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#version-0-6-0">Version 0.6.0</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#version-0-5-2">Version 0.5.2</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#version-0-5-1">Version 0.5.1</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#version-0-5-0">Version 0.5.0</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#version-0-4-0">Version 0.4.0</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#version-0-3-1">Version 0.3.1</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#version-0-3-0">Version 0.3.0</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#version-0-2-1">Version 0.2.1</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#version-0-2-0">Version 0.2.0</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#version-0-1-1">Version 0.1.1</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#version-0-1">Version 0.1</a></li>
 </ul>
-
             </nav>
         </div>
     </div>
 </div>
-    <div id="main-content" class="row">
-        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
-            <!-- Table of contents that is only displayed when printing the page -->
-            <div id="jb-print-docs-body" class="onlyprint">
-                <h1>Changelog</h1>
-                <!-- Table of contents -->
-                <div id="print-main-content">
-                    <div id="jb-print-toc">
-                        
-                        <div>
-                            <h2> Contents </h2>
-                        </div>
-                        <nav aria-label="Page">
-                            <ul class="visible nav section-nav flex-column">
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#version-1-8-0">
-   Version 1.8.0
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#version-1-7-0">
-   Version 1.7.0
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#version-1-6-0">
-   Version 1.6.0
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#version-1-5-2">
-   Version 1.5.2
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#version-1-5-1">
-   Version 1.5.1
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#version-1-5-0">
-   Version 1.5.0
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#version-1-4-0">
-   Version 1.4.0
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#version-1-3-0">
-   Version 1.3.0
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#version-1-2-0">
-   Version 1.2.0
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#version-1-1-1">
-   Version 1.1.1
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#version-1-1-0">
-   Version 1.1.0
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#version-1-0-0">
-   Version 1.0.0
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#version-0-7-2">
-   Version 0.7.2
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#version-0-7-1">
-   Version 0.7.1
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#version-0-7-0">
-   Version 0.7.0
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#version-0-6-0">
-   Version 0.6.0
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#version-0-5-2">
-   Version 0.5.2
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#version-0-5-1">
-   Version 0.5.1
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#version-0-5-0">
-   Version 0.5.0
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#version-0-4-0">
-   Version 0.4.0
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#version-0-3-1">
-   Version 0.3.1
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#version-0-3-0">
-   Version 0.3.0
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#version-0-2-1">
-   Version 0.2.1
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#version-0-2-0">
-   Version 0.2.0
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#version-0-1-1">
-   Version 0.1.1
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#version-0-1">
-   Version 0.1
-  </a>
- </li>
-</ul>
 
-                        </nav>
-                    </div>
-                </div>
-            </div>
-            
-              <div>
+              
                 
-  <div class="section" id="changelog">
-<span id="changes"></span><h1>Changelog<a class="headerlink" href="#changelog" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="version-1-8-0">
-<h2>Version 1.8.0<a class="headerlink" href="#version-1-8-0" title="Permalink to this headline">¶</a></h2>
-<p><em>Released on: 2023/10/24</em></p>
-<p>doi:<a class="reference external" href="https://doi.org/10.5281/zenodo.10037888">10.5281/zenodo.10037888</a></p>
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="changelog">
+<span id="changes"></span><h1>Changelog<a class="headerlink" href="#changelog" title="Link to this heading">#</a></h1>
+<section id="version-1-8-1">
+<h2>Version 1.8.1<a class="headerlink" href="#version-1-8-1" title="Link to this heading">#</a></h2>
+<p>Released on: 2024/02/19</p>
+<p>DOI: <a class="reference external" href="https://doi.org/10.5281/zenodo.10680982">https://doi.org/10.5281/zenodo.10680982</a></p>
+<p>Bug fixes:</p>
+<ul class="simple">
+<li><p>Use the ID instead of persistentID for Dataverse downloads since some repositories don’t issue persistentIDs but all issue normal IDs (<a class="reference external" href="https://github.com/fatiando/pooch/pull/355">#355</a>)</p></li>
+<li><p>Ensure all archive members are unpacked in subsequent uses of <code class="docutils literal notranslate"><span class="pre">Untar</span></code>/<code class="docutils literal notranslate"><span class="pre">Unzip</span></code> if the first call only asked for a few members (<a class="reference external" href="https://github.com/fatiando/pooch/pull/365">#365</a>)</p></li>
+</ul>
+<p>Documentation:</p>
+<ul class="simple">
+<li><p>Move “Projects using Pooch” further up the README (<a class="reference external" href="https://github.com/fatiando/pooch/pull/386">#386</a>)</p></li>
+<li><p>Update the versions of sphinx and its plugins (<a class="reference external" href="https://github.com/fatiando/pooch/pull/385">#385</a>)</p></li>
+</ul>
+<p>Maintenance:</p>
+<ul class="simple">
+<li><p>Remove many deprecated pylint options (<a class="reference external" href="https://github.com/fatiando/pooch/pull/329">#329</a>)</p></li>
+<li><p>Use Dependabot to manage GitHub Actions (<a class="reference external" href="https://github.com/fatiando/pooch/pull/387">#387</a>)</p></li>
+<li><p>Simplify the test GitHub Actions workflow (<a class="reference external" href="https://github.com/fatiando/pooch/pull/384">#384</a>)</p></li>
+<li><p>Update format for Black 24.1.1 (<a class="reference external" href="https://github.com/fatiando/pooch/pull/383">#383</a>)</p></li>
+</ul>
+<p>This release contains contributions from:</p>
+<ul class="simple">
+<li><p>Mark Harfouche</p></li>
+<li><p>Juan Nunez-Iglesias</p></li>
+<li><p>Santiago Soler</p></li>
+<li><p>Leonardo Uieda</p></li>
+</ul>
+</section>
+<section id="version-1-8-0">
+<h2>Version 1.8.0<a class="headerlink" href="#version-1-8-0" title="Link to this heading">#</a></h2>
+<p>Released on: 2023/10/24</p>
+<p>DOI: <a class="reference external" href="https://doi.org/10.5281/zenodo.10037888">https://doi.org/10.5281/zenodo.10037888</a></p>
 <p>Bug fixes:</p>
 <ul class="simple">
 <li><p>Fix bug: add support for old and new Zenodo APIs (<a class="reference external" href="https://github.com/fatiando/pooch/pull/375">#375</a>)</p></li>
@@ -758,11 +535,11 @@
 <li><p>Santiago Soler</p></li>
 <li><p>Stephan Hoyer</p></li>
 </ul>
-</div>
-<div class="section" id="version-1-7-0">
-<h2>Version 1.7.0<a class="headerlink" href="#version-1-7-0" title="Permalink to this headline">¶</a></h2>
-<p><em>Released on: 2023/02/27</em></p>
-<p>doi:<a class="reference external" href="https://doi.org/10.5281/zenodo.7678844">10.5281/zenodo.7678844</a></p>
+</section>
+<section id="version-1-7-0">
+<h2>Version 1.7.0<a class="headerlink" href="#version-1-7-0" title="Link to this heading">#</a></h2>
+<p>Released on: 2023/02/27</p>
+<p>DOI: <a class="reference external" href="https://doi.org/10.5281/zenodo.7678844">https://doi.org/10.5281/zenodo.7678844</a></p>
 <p>Bug fixes:</p>
 <ul class="simple">
 <li><p>Make archive extraction always take members into account (<a class="reference external" href="https://github.com/fatiando/pooch/pull/316">#316</a>)</p></li>
@@ -814,11 +591,11 @@
 <li><p>Rowan Cockett</p></li>
 <li><p>Santiago Soler</p></li>
 </ul>
-</div>
-<div class="section" id="version-1-6-0">
-<h2>Version 1.6.0<a class="headerlink" href="#version-1-6-0" title="Permalink to this headline">¶</a></h2>
-<p><em>Released on: 2022/01/24</em></p>
-<p>doi:<a class="reference external" href="https://doi.org/10.5281/zenodo.5793074">10.5281/zenodo.5793074</a></p>
+</section>
+<section id="version-1-6-0">
+<h2>Version 1.6.0<a class="headerlink" href="#version-1-6-0" title="Link to this heading">#</a></h2>
+<p>Released on: 2022/01/24</p>
+<p>DOI: <a class="reference external" href="https://doi.org/10.5281/zenodo.5793074">https://doi.org/10.5281/zenodo.5793074</a></p>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
 <p><strong>Pooch v1.6.0 is the last release that is compatible with Python 3.6.</strong></p>
@@ -858,11 +635,11 @@
 <li><p>Ryan May</p></li>
 <li><p>Leonardo Uieda</p></li>
 </ul>
-</div>
-<div class="section" id="version-1-5-2">
-<h2>Version 1.5.2<a class="headerlink" href="#version-1-5-2" title="Permalink to this headline">¶</a></h2>
-<p><em>Released on: 2021/10/11</em></p>
-<p>doi:<a class="reference external" href="https://doi.org/10.5281/zenodo.5560923">10.5281/zenodo.5560923</a></p>
+</section>
+<section id="version-1-5-2">
+<h2>Version 1.5.2<a class="headerlink" href="#version-1-5-2" title="Link to this heading">#</a></h2>
+<p>Released on: 2021/10/11</p>
+<p>DOI: <a class="reference external" href="https://doi.org/10.5281/zenodo.5560923">https://doi.org/10.5281/zenodo.5560923</a></p>
 <p>Bug fixes:</p>
 <ul class="simple">
 <li><p>Fix bug when unpacking an entire subfolder from an archive. Now both unpacking processors (<code class="docutils literal notranslate"><span class="pre">Untar</span></code> and <code class="docutils literal notranslate"><span class="pre">Unzip</span></code>) handle <code class="docutils literal notranslate"><span class="pre">members</span></code> that are folders (not files) correctly. (<a class="reference external" href="https://github.com/fatiando/pooch/pull/266">#266</a>)</p></li>
@@ -888,11 +665,11 @@
 <li><p>Mark Harfouche</p></li>
 <li><p>Leonardo Uieda</p></li>
 </ul>
-</div>
-<div class="section" id="version-1-5-1">
-<h2>Version 1.5.1<a class="headerlink" href="#version-1-5-1" title="Permalink to this headline">¶</a></h2>
-<p><em>Released on: 2021/08/24</em></p>
-<p>doi:<a class="reference external" href="https://doi.org/10.5281/zenodo.5242882">10.5281/zenodo.5242882</a></p>
+</section>
+<section id="version-1-5-1">
+<h2>Version 1.5.1<a class="headerlink" href="#version-1-5-1" title="Link to this heading">#</a></h2>
+<p>Released on: 2021/08/24</p>
+<p>DOI: <a class="reference external" href="https://doi.org/10.5281/zenodo.5242882">https://doi.org/10.5281/zenodo.5242882</a></p>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
 <p><strong>Please use</strong> <code class="docutils literal notranslate"><span class="pre">from</span> <span class="pre">pooch</span> <span class="pre">import</span> <span class="pre">file_hash</span></code> <strong>instead of</strong> <code class="docutils literal notranslate"><span class="pre">from</span>
@@ -917,11 +694,11 @@ excluded when testing offline. (<a class="reference external" href="https://gith
 <li><p>Antonio Valentino</p></li>
 <li><p>Leonardo Uieda</p></li>
 </ul>
-</div>
-<div class="section" id="version-1-5-0">
-<h2>Version 1.5.0<a class="headerlink" href="#version-1-5-0" title="Permalink to this headline">¶</a></h2>
-<p><em>Released on: 2021/08/23</em></p>
-<p>doi:<a class="reference external" href="https://doi.org/10.5281/zenodo.5235242">10.5281/zenodo.5235242</a></p>
+</section>
+<section id="version-1-5-0">
+<h2>Version 1.5.0<a class="headerlink" href="#version-1-5-0" title="Link to this heading">#</a></h2>
+<p>Released on: 2021/08/23</p>
+<p>DOI: <a class="reference external" href="https://doi.org/10.5281/zenodo.5235242">https://doi.org/10.5281/zenodo.5235242</a></p>
 <p>New features:</p>
 <ul class="simple">
 <li><p>Add support for non-cryptographic hashes from the xxhash package. They aren’t
@@ -944,11 +721,11 @@ API. (<a class="reference external" href="https://github.com/fatiando/pooch/pull
 <li><p>Mark Harfouche</p></li>
 <li><p>Leonardo Uieda</p></li>
 </ul>
-</div>
-<div class="section" id="version-1-4-0">
-<h2>Version 1.4.0<a class="headerlink" href="#version-1-4-0" title="Permalink to this headline">¶</a></h2>
-<p><em>Released on: 2021/06/08</em></p>
-<p>doi:<a class="reference external" href="https://doi.org/10.5281/zenodo.4914758">10.5281/zenodo.4914758</a></p>
+</section>
+<section id="version-1-4-0">
+<h2>Version 1.4.0<a class="headerlink" href="#version-1-4-0" title="Link to this heading">#</a></h2>
+<p>Released on: 2021/06/08</p>
+<p>DOI: <a class="reference external" href="https://doi.org/10.5281/zenodo.4914758">https://doi.org/10.5281/zenodo.4914758</a></p>
 <p>Bug fixes:</p>
 <ul class="simple">
 <li><p>Fix bug in <code class="docutils literal notranslate"><span class="pre">Untar</span></code> and <code class="docutils literal notranslate"><span class="pre">Unzip</span></code> when the archive contains subfolders
@@ -976,11 +753,11 @@ API. (<a class="reference external" href="https://github.com/fatiando/pooch/pull
 <li><p>Clément Robert</p></li>
 <li><p>Daniel McCloy</p></li>
 </ul>
-</div>
-<div class="section" id="version-1-3-0">
-<h2>Version 1.3.0<a class="headerlink" href="#version-1-3-0" title="Permalink to this headline">¶</a></h2>
-<p><em>Released on: 2020/11/27</em></p>
-<a class="reference external image-reference" href="https://doi.org/10.5281/zenodo.4293216"><img alt="Digital Object Identifier for the Zenodo archive" src="https://zenodo.org/badge/DOI/10.5281/zenodo.4293216.svg" /></a>
+</section>
+<section id="version-1-3-0">
+<h2>Version 1.3.0<a class="headerlink" href="#version-1-3-0" title="Link to this heading">#</a></h2>
+<p>Released on: 2020/11/27</p>
+<p>DOI: <a class="reference external" href="https://doi.org/10.5281/zenodo.4293216">https://doi.org/10.5281/zenodo.4293216</a></p>
 <p>Bug fixes:</p>
 <ul class="simple">
 <li><p>Properly handle capitalized hashes. On Windows, users might sometimes get
@@ -1020,11 +797,11 @@ previous naming convention for backward compatibility. (<a class="reference exte
 <li><p>Hugo van Kemenade</p></li>
 <li><p>SarthakJariwala</p></li>
 </ul>
-</div>
-<div class="section" id="version-1-2-0">
-<h2>Version 1.2.0<a class="headerlink" href="#version-1-2-0" title="Permalink to this headline">¶</a></h2>
-<p><em>Released on: 2020/09/10</em></p>
-<a class="reference external image-reference" href="https://doi.org/10.5281/zenodo.4022246"><img alt="Digital Object Identifier for the Zenodo archive" src="https://zenodo.org/badge/DOI/10.5281/zenodo.4022246.svg" /></a>
+</section>
+<section id="version-1-2-0">
+<h2>Version 1.2.0<a class="headerlink" href="#version-1-2-0" title="Link to this heading">#</a></h2>
+<p>Released on: 2020/09/10</p>
+<p>DOI: <a class="reference external" href="https://doi.org/10.5281/zenodo.4022246">https://doi.org/10.5281/zenodo.4022246</a></p>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
 <p><strong>Pooch v1.2.0 is the last release that is compatible with Python 3.5.</strong></p>
@@ -1068,11 +845,11 @@ projects (<a class="reference external" href="https://github.com/fatiando/pooch/
 <li><p>Luke Gregor</p></li>
 <li><p>Mathias Hauser</p></li>
 </ul>
-</div>
-<div class="section" id="version-1-1-1">
-<h2>Version 1.1.1<a class="headerlink" href="#version-1-1-1" title="Permalink to this headline">¶</a></h2>
-<p><em>Released on: 2020/05/14</em></p>
-<a class="reference external image-reference" href="https://doi.org/10.5281/zenodo.3826458"><img alt="Digital Object Identifier for the Zenodo archive" src="https://zenodo.org/badge/DOI/10.5281/zenodo.3826458.svg" /></a>
+</section>
+<section id="version-1-1-1">
+<h2>Version 1.1.1<a class="headerlink" href="#version-1-1-1" title="Link to this heading">#</a></h2>
+<p>Released on: 2020/05/14</p>
+<p>DOI: <a class="reference external" href="https://doi.org/10.5281/zenodo.3826458">https://doi.org/10.5281/zenodo.3826458</a></p>
 <p>Bug fixes:</p>
 <ul class="simple">
 <li><p>Delay data cache folder creation until the first download is attempted. As
@@ -1100,11 +877,11 @@ cope with parallel execution as well.
 <li><p>Egor Panfilov</p></li>
 <li><p>Rowan Cockett</p></li>
 </ul>
-</div>
-<div class="section" id="version-1-1-0">
-<h2>Version 1.1.0<a class="headerlink" href="#version-1-1-0" title="Permalink to this headline">¶</a></h2>
-<p><em>Released on: 2020/04/13</em></p>
-<a class="reference external image-reference" href="https://doi.org/10.5281/zenodo.3747184"><img alt="Digital Object Identifier for the Zenodo archive" src="https://zenodo.org/badge/DOI/10.5281/zenodo.3747184.svg" /></a>
+</section>
+<section id="version-1-1-0">
+<h2>Version 1.1.0<a class="headerlink" href="#version-1-1-0" title="Link to this heading">#</a></h2>
+<p>Released on: 2020/04/13</p>
+<p>DOI: <a class="reference external" href="https://doi.org/10.5281/zenodo.3747184">https://doi.org/10.5281/zenodo.3747184</a></p>
 <p>New features:</p>
 <ul class="simple">
 <li><p>New function <code class="docutils literal notranslate"><span class="pre">pooch.retrieve</span></code> to fetch single files This is much more
@@ -1152,11 +929,11 @@ development of the new <code class="docutils literal notranslate"><span class="p
 <li><p>Lucas Martin-King</p></li>
 <li><p>Zac Flamig</p></li>
 </ul>
-</div>
-<div class="section" id="version-1-0-0">
-<h2>Version 1.0.0<a class="headerlink" href="#version-1-0-0" title="Permalink to this headline">¶</a></h2>
-<p><em>Released on: 2020/01/28</em></p>
-<a class="reference external image-reference" href="https://doi.org/10.5281/zenodo.3629329"><img alt="Digital Object Identifier for the Zenodo archive" src="https://zenodo.org/badge/DOI/10.5281/zenodo.3629329.svg" /></a>
+</section>
+<section id="version-1-0-0">
+<h2>Version 1.0.0<a class="headerlink" href="#version-1-0-0" title="Link to this heading">#</a></h2>
+<p>Released on: 2020/01/28</p>
+<p>DOI: <a class="reference external" href="https://doi.org/10.5281/zenodo.3629329">https://doi.org/10.5281/zenodo.3629329</a></p>
 <p>This release marks the stabilization of the Pooch API. Further changes to the
 1.* line will be fully backwards compatible (meaning that updating Pooch should
 not break existing code). If there is great need to make backwards incompatible
@@ -1182,10 +959,10 @@ instead.</strong> All other parts of the API remain unchanged.
 <ul class="simple">
 <li><p>Daniel Shapero</p></li>
 </ul>
-</div>
-<div class="section" id="version-0-7-2">
-<h2>Version 0.7.2<a class="headerlink" href="#version-0-7-2" title="Permalink to this headline">¶</a></h2>
-<p><em>Released on: 2020/01/17</em></p>
+</section>
+<section id="version-0-7-2">
+<h2>Version 0.7.2<a class="headerlink" href="#version-0-7-2" title="Link to this heading">#</a></h2>
+<p>Released on: 2020/01/17</p>
 <p>🚨 <strong>Announcement:</strong> 🚨
 We now have a <a class="reference external" href="https://doi.org/10.21105/joss.01943">JOSS paper about Pooch</a>!
 Please <a class="reference internal" href="citing.html#citing"><span class="std std-ref">cite it</span></a> when you use Pooch for your research.
@@ -1195,11 +972,11 @@ Please <a class="reference internal" href="citing.html#citing"><span class="std 
 <p>This is minor release which only updates the citation information to
 the new JOSS paper. No DOI was issued for this release since there are
 no code or documentation changes.</p>
-</div>
-<div class="section" id="version-0-7-1">
-<h2>Version 0.7.1<a class="headerlink" href="#version-0-7-1" title="Permalink to this headline">¶</a></h2>
-<p><em>Released on: 2020/01/17</em></p>
-<a class="reference external image-reference" href="https://doi.org/10.5281/zenodo.3611376"><img alt="Digital Object Identifier for the Zenodo archive" src="https://zenodo.org/badge/DOI/10.5281/zenodo.3611376.svg" /></a>
+</section>
+<section id="version-0-7-1">
+<h2>Version 0.7.1<a class="headerlink" href="#version-0-7-1" title="Link to this heading">#</a></h2>
+<p>Released on: 2020/01/17</p>
+<p>DOI: <a class="reference external" href="https://doi.org/10.5281/zenodo.3611376">https://doi.org/10.5281/zenodo.3611376</a></p>
 <p>Improvements:</p>
 <ul class="simple">
 <li><p>Better error messages when hashes don’t match. Include the file name in the
@@ -1232,11 +1009,11 @@ software paper contain contributions from:</p>
 <li><p>Matthew Turk</p></li>
 <li><p>Leonardo Uieda</p></li>
 </ul>
-</div>
-<div class="section" id="version-0-7-0">
-<h2>Version 0.7.0<a class="headerlink" href="#version-0-7-0" title="Permalink to this headline">¶</a></h2>
-<p><em>Released on: 2019/11/19</em></p>
-<a class="reference external image-reference" href="https://doi.org/10.5281/zenodo.3547640"><img alt="Digital Object Identifier for the Zenodo archive" src="https://zenodo.org/badge/DOI/10.5281/zenodo.3547640.svg" /></a>
+</section>
+<section id="version-0-7-0">
+<h2>Version 0.7.0<a class="headerlink" href="#version-0-7-0" title="Link to this heading">#</a></h2>
+<p>Released on: 2019/11/19</p>
+<p>DOI: <a class="reference external" href="https://doi.org/10.5281/zenodo.3547640">https://doi.org/10.5281/zenodo.3547640</a></p>
 <p>New features:</p>
 <ul class="simple">
 <li><p>New <code class="docutils literal notranslate"><span class="pre">pooch.FTPDownloader</span></code> class for downloading files over FTP. Uses the
@@ -1277,11 +1054,11 @@ longer lines made the docstring unreadable.
 <li><p>Remi Rampin</p></li>
 <li><p>Leonardo Uieda</p></li>
 </ul>
-</div>
-<div class="section" id="version-0-6-0">
-<h2>Version 0.6.0<a class="headerlink" href="#version-0-6-0" title="Permalink to this headline">¶</a></h2>
-<p><em>Released on: 2019/10/22</em></p>
-<a class="reference external image-reference" href="https://doi.org/10.5281/zenodo.3515031"><img alt="Digital Object Identifier for the Zenodo archive" src="https://zenodo.org/badge/DOI/10.5281/zenodo.3515031.svg" /></a>
+</section>
+<section id="version-0-6-0">
+<h2>Version 0.6.0<a class="headerlink" href="#version-0-6-0" title="Link to this heading">#</a></h2>
+<p>Released on: 2019/10/22</p>
+<p>DOI: <a class="reference external" href="https://doi.org/10.5281/zenodo.3515031">https://doi.org/10.5281/zenodo.3515031</a></p>
 <p>🚨 <strong>Pooch v0.6.0 is the last release to support Python 2.7</strong> 🚨</p>
 <p>New features:</p>
 <ul class="simple">
@@ -1305,10 +1082,10 @@ longer lines made the docstring unreadable.
 <li><p>Daniel Shapero</p></li>
 <li><p>Leonardo Uieda</p></li>
 </ul>
-</div>
-<div class="section" id="version-0-5-2">
-<h2>Version 0.5.2<a class="headerlink" href="#version-0-5-2" title="Permalink to this headline">¶</a></h2>
-<p><em>Released on: 2019/06/24</em></p>
+</section>
+<section id="version-0-5-2">
+<h2>Version 0.5.2<a class="headerlink" href="#version-0-5-2" title="Link to this heading">#</a></h2>
+<p>Released on: 2019/06/24</p>
 <p>Maintenance:</p>
 <ul class="simple">
 <li><p>Add back support for Python 3.5 with continuous integration tests. No code changes
@@ -1319,10 +1096,10 @@ were needed, only removing the restriction from <code class="docutils literal no
 <ul class="simple">
 <li><p>Leonardo Uieda</p></li>
 </ul>
-</div>
-<div class="section" id="version-0-5-1">
-<h2>Version 0.5.1<a class="headerlink" href="#version-0-5-1" title="Permalink to this headline">¶</a></h2>
-<p><em>Released on: 2019/05/21</em></p>
+</section>
+<section id="version-0-5-1">
+<h2>Version 0.5.1<a class="headerlink" href="#version-0-5-1" title="Link to this heading">#</a></h2>
+<p>Released on: 2019/05/21</p>
 <p>Documentation fixes:</p>
 <ul class="simple">
 <li><p>Fix formatting error in <code class="docutils literal notranslate"><span class="pre">pooch.Decompress</span></code> docstring.
@@ -1337,10 +1114,10 @@ were needed, only removing the restriction from <code class="docutils literal no
 <li><p>Santiago Soler</p></li>
 <li><p>Leonardo Uieda</p></li>
 </ul>
-</div>
-<div class="section" id="version-0-5-0">
-<h2>Version 0.5.0<a class="headerlink" href="#version-0-5-0" title="Permalink to this headline">¶</a></h2>
-<p><em>Released on: 2019/05/20</em></p>
+</section>
+<section id="version-0-5-0">
+<h2>Version 0.5.0<a class="headerlink" href="#version-0-5-0" title="Link to this heading">#</a></h2>
+<p>Released on: 2019/05/20</p>
 <p>New features:</p>
 <ul class="simple">
 <li><p>New processor <code class="docutils literal notranslate"><span class="pre">pooch.Decompress</span></code> saves a decompressed version of the downloaded
@@ -1355,10 +1132,10 @@ soft dependencies and not required to use Pooch. See <a class="reference interna
 <li><p>Matthew Turk</p></li>
 <li><p>Leonardo Uieda</p></li>
 </ul>
-</div>
-<div class="section" id="version-0-4-0">
-<h2>Version 0.4.0<a class="headerlink" href="#version-0-4-0" title="Permalink to this headline">¶</a></h2>
-<p><em>Released on: 2019/05/01</em></p>
+</section>
+<section id="version-0-4-0">
+<h2>Version 0.4.0<a class="headerlink" href="#version-0-4-0" title="Link to this heading">#</a></h2>
+<p>Released on: 2019/05/01</p>
 <p>New features:</p>
 <ul class="simple">
 <li><p>Add customizable downloaders. Delegate file download into separate classes that can be
@@ -1385,20 +1162,20 @@ numpydoc style docstrings. (<a class="reference external" href="https://github.c
 <li><p>Santiago Soler</p></li>
 <li><p>Leonardo Uieda</p></li>
 </ul>
-</div>
-<div class="section" id="version-0-3-1">
-<h2>Version 0.3.1<a class="headerlink" href="#version-0-3-1" title="Permalink to this headline">¶</a></h2>
-<p><em>Released on: 2019/03/28</em></p>
+</section>
+<section id="version-0-3-1">
+<h2>Version 0.3.1<a class="headerlink" href="#version-0-3-1" title="Link to this heading">#</a></h2>
+<p>Released on: 2019/03/28</p>
 <p>Minor patches:</p>
 <ul class="simple">
 <li><p>Add a project logo (<a class="reference external" href="https://github.com/fatiando/pooch/pull/57">#57</a>)</p></li>
 <li><p>Replace <code class="docutils literal notranslate"><span class="pre">http</span></code> with <code class="docutils literal notranslate"><span class="pre">https</span></code> in the <code class="docutils literal notranslate"><span class="pre">README.rst</span></code> to avoid mixed content warnings
 in some browsers (<a class="reference external" href="https://github.com/fatiando/pooch/pull/56">#56</a>)</p></li>
 </ul>
-</div>
-<div class="section" id="version-0-3-0">
-<h2>Version 0.3.0<a class="headerlink" href="#version-0-3-0" title="Permalink to this headline">¶</a></h2>
-<p><em>Released on: 2019/03/27</em></p>
+</section>
+<section id="version-0-3-0">
+<h2>Version 0.3.0<a class="headerlink" href="#version-0-3-0" title="Link to this heading">#</a></h2>
+<p>Released on: 2019/03/27</p>
 <p>New features:</p>
 <ul class="simple">
 <li><p>Use the <code class="docutils literal notranslate"><span class="pre">appdirs</span></code> library to get the cache directory. <strong>Could change the default
@@ -1425,19 +1202,19 @@ data location on all platforms</strong>. Locations are compatible with the
 <li><p>Rémi Rampin</p></li>
 <li><p>Leonardo Uieda</p></li>
 </ul>
-</div>
-<div class="section" id="version-0-2-1">
-<h2>Version 0.2.1<a class="headerlink" href="#version-0-2-1" title="Permalink to this headline">¶</a></h2>
-<p><em>Released on: 2018/11/15</em></p>
+</section>
+<section id="version-0-2-1">
+<h2>Version 0.2.1<a class="headerlink" href="#version-0-2-1" title="Link to this heading">#</a></h2>
+<p>Released on: 2018/11/15</p>
 <p>Bug fixes:</p>
 <ul class="simple">
 <li><p>Fix unwanted <code class="docutils literal notranslate"><span class="pre">~</span></code> directory creation when not using a <code class="docutils literal notranslate"><span class="pre">version</span></code> in <code class="docutils literal notranslate"><span class="pre">pooch.create</span></code>
 (<a class="reference external" href="https://github.com/fatiando/pooch/pull/37">#37</a>)</p></li>
 </ul>
-</div>
-<div class="section" id="version-0-2-0">
-<h2>Version 0.2.0<a class="headerlink" href="#version-0-2-0" title="Permalink to this headline">¶</a></h2>
-<p><em>Released on: 2018/10/31</em></p>
+</section>
+<section id="version-0-2-0">
+<h2>Version 0.2.0<a class="headerlink" href="#version-0-2-0" title="Link to this heading">#</a></h2>
+<p>Released on: 2018/10/31</p>
 <p>Bug fixes:</p>
 <ul class="simple">
 <li><p>Avoid copying of files across the file system (<a class="reference external" href="https://github.com/fatiando/pooch/pull/33">#33</a>)</p></li>
@@ -1453,19 +1230,19 @@ data location on all platforms</strong>. Locations are compatible with the
 <li><p>Move URLs building to a dedicated method for easy subclassing (<a class="reference external" href="https://github.com/fatiando/pooch/pull/31">#31</a>)</p></li>
 <li><p>Add testing and support for Python 3.7 (<a class="reference external" href="https://github.com/fatiando/pooch/pull/25">#25</a>)</p></li>
 </ul>
-</div>
-<div class="section" id="version-0-1-1">
-<h2>Version 0.1.1<a class="headerlink" href="#version-0-1-1" title="Permalink to this headline">¶</a></h2>
-<p><em>Released on: 2018/08/30</em></p>
+</section>
+<section id="version-0-1-1">
+<h2>Version 0.1.1<a class="headerlink" href="#version-0-1-1" title="Link to this heading">#</a></h2>
+<p>Released on: 2018/08/30</p>
 <p>Bug fixes:</p>
 <ul class="simple">
 <li><p>Check if the local data folder is writable and warn the user instead of crashing
 (<a class="reference external" href="https://github.com/fatiando/pooch/pull/23">#23</a>)</p></li>
 </ul>
-</div>
-<div class="section" id="version-0-1">
-<h2>Version 0.1<a class="headerlink" href="#version-0-1" title="Permalink to this headline">¶</a></h2>
-<p><em>Released on: 2018/08/20</em></p>
+</section>
+<section id="version-0-1">
+<h2>Version 0.1<a class="headerlink" href="#version-0-1" title="Link to this heading">#</a></h2>
+<p>Released on: 2018/08/20</p>
 <ul class="simple">
 <li><p>Fist release of Pooch. Manages downloading sample data files over HTTP from a server
 and storing them in a local directory. Main features:</p>
@@ -1479,47 +1256,132 @@ data corruption.</p></li>
 </ul>
 </li>
 </ul>
-</div>
-</div>
+</section>
+</section>
 
 
-              </div>
+                </article>
               
-            
-                <!-- Previous / next buttons -->
-<div class='prev-next-area'> 
-    <a class='left-prev' id="prev-link" href="citing.html" title="previous page">
-        <i class="fas fa-angle-left"></i>
-        <div class="prev-next-info">
-            <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title">Citing Pooch</p>
-        </div>
+
+              
+              
+              
+              
+                <footer class="prev-next-footer">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="citing.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Citing Pooch</p>
+      </div>
     </a>
-    <a class='right-next' id="next-link" href="versions.html" title="next page">
-    <div class="prev-next-info">
+    <a class="right-next"
+       href="versions.html"
+       title="next page">
+      <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
         <p class="prev-next-title">Documentation for other versions</p>
-    </div>
-    <i class="fas fa-angle-right"></i>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
     </a>
 </div>
+                </footer>
+              
+            </div>
             
-        </div>
-    </div>
-    <footer class="footer">
-  <p>
-    
-        &copy; Copyright 2023, The Pooch Developers.<br/>
-      Last updated on Oct 24, 2023.<br/>
-  </p>
-</footer>
-</main>
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
 
 
-      </div>
-    </div>
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#version-1-8-1">Version 1.8.1</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#version-1-8-0">Version 1.8.0</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#version-1-7-0">Version 1.7.0</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#version-1-6-0">Version 1.6.0</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#version-1-5-2">Version 1.5.2</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#version-1-5-1">Version 1.5.1</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#version-1-5-0">Version 1.5.0</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#version-1-4-0">Version 1.4.0</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#version-1-3-0">Version 1.3.0</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#version-1-2-0">Version 1.2.0</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#version-1-1-1">Version 1.1.1</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#version-1-1-0">Version 1.1.0</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#version-1-0-0">Version 1.0.0</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#version-0-7-2">Version 0.7.2</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#version-0-7-1">Version 0.7.1</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#version-0-7-0">Version 0.7.0</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#version-0-6-0">Version 0.6.0</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#version-0-5-2">Version 0.5.2</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#version-0-5-1">Version 0.5.1</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#version-0-5-0">Version 0.5.0</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#version-0-4-0">Version 0.4.0</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#version-0-3-1">Version 0.3.1</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#version-0-3-0">Version 0.3.0</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#version-0-2-1">Version 0.2.1</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#version-0-2-0">Version 0.2.0</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#version-0-1-1">Version 0.1.1</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#version-0-1">Version 0.1</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
   
-  <script src="_static/js/index.be7d3bbb2ef33a8344ce.js"></script>
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
 
+  <p class="copyright">
+    
+      © Copyright 2024, The Pooch Developers.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    <p class="last-updated">
+  Last updated on Feb 20, 2024.
+  <br/>
+</p>
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae"></script>
+
+  <footer class="bd-footer">
+  </footer>
   </body>
 </html>
