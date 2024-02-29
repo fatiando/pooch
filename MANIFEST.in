@@ -12,3 +12,4 @@ exclude .gitignore
 exclude .gitattributes
 exclude environment.yml
 exclude license_notice.py
+include pooch/tests/data
