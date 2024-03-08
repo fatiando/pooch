@@ -44,16 +44,38 @@ Are you a **scientist** or researcher? Pooch can help you too!
 
 [SciPy](https://github.com/scipy/scipy), 
 [scikit-image](https://github.com/scikit-image/scikit-image),
+[xarray](https://github.com/pydata/xarray),
 [Ensaio](https://github.com/fatiando/ensaio),
+[GemPy](https://github.com/cgre-aachen/gempy),
 [MetPy](https://github.com/Unidata/MetPy),
 [napari](https://github.com/napari/napari),
+[Satpy](https://github.com/pytroll/satpy),
+[yt](https://github.com/yt-project/yt),
+[PyVista](https://github.com/pyvista/pyvista),
 [icepack](https://github.com/icepack/icepack),
 [histolab](https://github.com/histolab/histolab),
 [seaborn-image](https://github.com/SarthakJariwala/seaborn-image),
 [Open AR-Sandbox](https://github.com/cgre-aachen/open_AR_Sandbox),
 [climlab](https://github.com/climlab/climlab),
 [mne-python](https://github.com/mne-tools/mne-python),
-[GemGIS](https://github.com/cgre-aachen/gemgis)
+[GemGIS](https://github.com/cgre-aachen/gemgis),
+[SHTOOLS](https://github.com/SHTOOLS/SHTOOLS),
+[MOABB](https://github.com/NeuroTechX/moabb),
+[GeoViews](https://github.com/holoviz/geoviews),
+[ScopeSim](https://github.com/AstarVienna/ScopeSim),
+[Brainrender](https://github.com/brainglobe/brainrender),
+[pyxem](https://github.com/pyxem/pyxem),
+[cellfinder](https://github.com/brainglobe/cellfinder),
+[PVGeo](https://github.com/OpenGeoVis/PVGeo),
+[geosnap](https://github.com/oturns/geosnap),
+[BioCypher](https://github.com/biocypher/biocypher),
+[cf-xarray](https://github.com/xarray-contrib/cf-xarray),
+[Scirpy](https://github.com/scverse/scirpy),
+[rembg](https://github.com/danielgatis/rembg),
+[DASCore](https://github.com/DASDAE/dascore),
+[scikit-mobility](https://github.com/scikit-mobility/scikit-mobility),
+[Py-ART](https://github.com/ARM-DOE/pyart)
+
 
 > If you're using Pooch, **send us a pull request** adding your project to the list.
 
