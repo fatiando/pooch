@@ -36,7 +36,7 @@ jobs:
         run: python -m pip freeze
 
       - name: Check code format
-        run: make black-check license-check
+        run: make check-format
 
   style:
     runs-on: ubuntu-latest
@@ -58,4 +58,4 @@ jobs:
         run: python -m pip freeze
 
       - name: Check code style
-        run: make flake8 lint
+        run: make check-style lint
