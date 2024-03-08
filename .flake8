@@ -1,0 +1,4 @@
+[flake8]
+ignore = E203, E266, E501, W503, F401, E741
+max-line-length = 88
+max-doc-length = 79

@@ -5,11 +5,11 @@ prune data
 prune doc
 prune env
 prune paper
+prune tools
 exclude .*.yml
 exclude .*rc
 exclude Makefile
 exclude .gitignore
 exclude .gitattributes
 exclude environment.yml
-exclude license_notice.py
 include pooch/tests/data
