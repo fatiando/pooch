@@ -1,5 +1,53 @@
-# Specify that we use setuptools and setuptools_scm (to generate the version
-# string). Actual configuration is in setup.cfg.
+[project]
+name = "pooch"
+description = "Forward modeling, inversion, and processing gravity and magnetic data"
+dynamic = ["version"]
+authors = [
+  {name="The Pooch Developers", email="fatiandoaterra@protonmail.com"},
+]
+maintainers = [
+  {name = "Leonardo Uieda", email = "leo@uieda.com"}
+]
+readme = "README.md"
+license = {text = "BSD-3-Clause"}
+keywords = ["data", "download", "caching", "http"]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Science/Research",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Education",
+    "License :: OSI Approved :: BSD License",
+    "Operating System :: OS Independent",
+    "Topic :: Scientific/Engineering",
+    "Topic :: Software Development :: Libraries",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+]
+requires-python = ">=3.7"
+dependencies = [
+    "platformdirs >= 2.5.0",
+    "packaging >= 20.0",
+    "requests >= 2.19.0",
+]
+
+[project.optional-dependencies]
+progress = ["tqdm>=4.41.0,<5.0.0"]
+sftp = ["paramiko>=2.7.0"]
+xxhash = ["xxhash>=1.4.3"]
+
+[project.urls]
+"Documentation" = "https://www.fatiando.org/pooch"
+"Changelog" = "https://www.fatiando.org/pooch/latest/changes.html"
+"Bug Tracker" = "https://github.com/fatiando/pooch/issues"
+"Source Code" = "https://github.com/fatiando/pooch"
+
+[tool.setuptools.packages]
+find = {}  # Scanning implicit namespaces is active by default
+
 [build-system]
 requires = ["setuptools>=45", "wheel", "setuptools_scm[toml]>=6.2"]
 build-backend = "setuptools.build_meta"
