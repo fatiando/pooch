@@ -3,7 +3,7 @@ PROJECT=pooch
 TESTDIR=tmp-test-dir-with-unique-name
 PYTEST_ARGS=--cov-config=../.coveragerc --cov-report=term-missing --cov=$(PROJECT) --doctest-modules -v --pyargs
 LINT_FILES=$(PROJECT)
-CHECK_STYLE=doc/conf.py $(PROJECT) tools
+CHECK_STYLE=$(PROJECT) doc
 
 help:
 	@echo "Commands:"
@@ -30,23 +30,17 @@ test:
 	cp $(TESTDIR)/.coverage* .
 	rm -r $(TESTDIR)
 
-format: license black
-
-check: black-check license-check flake8
-
-black:
+format:
 	black $(CHECK_STYLE)
+	burocrata --extension=py $(CHECK_STYLE)
 
-black-check:
+check: check-format check-style
+
+check-format:
 	black --check $(CHECK_STYLE)
+	burocrata --check --extension=py $(CHECK_STYLE)
 
-license:
-	python tools/license_notice.py
-
-license-check:
-	python tools/license_notice.py --check
-
-flake8:
+check-style:
 	flake8 $(CHECK_STYLE)
 
 lint:

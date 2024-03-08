@@ -26,3 +26,5 @@ dependencies:
     - black>=20.8b1
     - flake8
     - pylint>=2.4
+    - pip:
+      - burocrata
