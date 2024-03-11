@@ -34,7 +34,7 @@ format:
 	black $(CHECK_STYLE)
 	burocrata --extension=py $(CHECK_STYLE)
 
-check: check-format check-style
+check: check-format check-style check-types
 
 check-format:
 	black --check $(CHECK_STYLE)
@@ -42,6 +42,9 @@ check-format:
 
 check-style:
 	flake8 $(CHECK_STYLE)
+
+check-style:
+	mypy $(CHECK_STYLE)
 
 lint:
 	pylint --jobs=0 $(LINT_FILES)
