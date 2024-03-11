@@ -19,12 +19,12 @@ import pytest
 try:
     import tqdm
 except ImportError:
-    tqdm = None # type: ignore
+    tqdm = None  # type: ignore
 
 try:
     import paramiko
 except ImportError:
-    paramiko = None # type: ignore
+    paramiko = None  # type: ignore
 
 from .. import Pooch
 from ..downloaders import (

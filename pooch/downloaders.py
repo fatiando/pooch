@@ -20,12 +20,12 @@ from .utils import parse_url
 try:
     from tqdm import tqdm
 except ImportError:
-    tqdm = None # type: ignore
+    tqdm = None  # type: ignore
 
 try:
     import paramiko
 except ImportError:
-    paramiko = None # type: ignore
+    paramiko = None  # type: ignore
 
 
 def choose_downloader(url, progressbar=False):

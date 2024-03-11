@@ -19,7 +19,7 @@ from .downloaders import (
 from .processors import Unzip, Untar, Decompress
 
 # This file is generated automatically by setuptools_scm
-from . import _version # type: ignore
+from . import _version  # type: ignore
 
 
 # Add a "v" to the version number
