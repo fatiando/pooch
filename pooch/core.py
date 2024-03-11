@@ -32,8 +32,19 @@ from .downloaders import DOIDownloader, choose_downloader, doi_to_repository
 FilePathT = t.Union[str, os.PathLike[str]]
 ActionsT = te.Literal["download", "fetch", "update"]
 
-DownloaderT = t.Callable[[str, FilePathT, "Pooch"], bool]
-ProcessorT = t.Callable[[str, ActionsT, "Pooch"]]
+
+class DownloaderT(te.Protocol):
+    def __call__(
+        self,
+        fname: str,
+        action: t.Optional[FilePathT],
+        pooch: "Pooch",
+        *,
+        check_only: t.Optional[bool] = None,
+    ) -> t.Any: ...
+
+
+ProcessorT = t.Callable[[str, ActionsT, "Pooch"], t.Any]
 
 
 def retrieve(
@@ -658,7 +669,7 @@ class Pooch:
         with contextlib.ExitStack() as stack:
             if hasattr(fname, "read"):
                 # It's a file object
-                fin = fname
+                fin: t.Any = fname
             else:
                 # It's a file path
                 fin = stack.enter_context(open(fname, encoding="utf-8"))
