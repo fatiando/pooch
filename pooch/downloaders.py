@@ -15,15 +15,17 @@ import warnings
 
 from .utils import parse_url
 
+# Mypy doesn't like assigning None like this.
+# Can just use a guard variable
 try:
     from tqdm import tqdm
 except ImportError:
-    tqdm = None
+    tqdm = None # type: ignore
 
 try:
     import paramiko
 except ImportError:
-    paramiko = None
+    paramiko = None # type: ignore
 
 
 def choose_downloader(url, progressbar=False):
