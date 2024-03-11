@@ -13,6 +13,8 @@ import contextlib
 from pathlib import Path
 import shlex
 import shutil
+import typing as t
+import typing_extensions as te
 
 
 from .hashes import hash_matches, file_hash
@@ -26,6 +28,12 @@ from .utils import (
     unique_file_name,
 )
 from .downloaders import DOIDownloader, choose_downloader, doi_to_repository
+
+FilePathT = t.Union[str, os.PathLike[str]]
+ActionsT = te.Literal["download", "fetch", "update"]
+
+DownloaderT = t.Callable[[str, FilePathT, "Pooch"], bool]
+ProcessorT = t.Callable[[str, ActionsT, "Pooch"]]
 
 
 def retrieve(
@@ -479,13 +487,13 @@ class Pooch:
 
     def __init__(
         self,
-        path,
-        base_url,
-        registry=None,
-        urls=None,
-        retry_if_failed=0,
-        allow_updates=True,
-    ):
+        path: str,
+        base_url: str,
+        registry: t.Optional[t.Dict[str, str]] = None,
+        urls: t.Optional[t.Dict[str, str]] = None,
+        retry_if_failed: int = 0,
+        allow_updates: bool = True,
+    ) -> None:
         self.path = path
         self.base_url = base_url
         if registry is None:
@@ -498,16 +506,22 @@ class Pooch:
         self.allow_updates = allow_updates
 
     @property
-    def abspath(self):
+    def abspath(self) -> Path:
         "Absolute path to the local storage"
         return Path(os.path.abspath(os.path.expanduser(str(self.path))))
 
     @property
-    def registry_files(self):
+    def registry_files(self) -> t.List[str]:
         "List of file names on the registry"
         return list(self.registry)
 
-    def fetch(self, fname, processor=None, downloader=None, progressbar=False):
+    def fetch(
+        self,
+        fname: str,
+        processor: t.Optional[ProcessorT] = None,
+        downloader: t.Optional[DownloaderT] = None,
+        progressbar: bool = False,
+    ) -> str:
         """
         Get the absolute path to a file in the local storage.
 
@@ -600,7 +614,7 @@ class Pooch:
 
         return str(full_path)
 
-    def _assert_file_in_registry(self, fname):
+    def _assert_file_in_registry(self, fname: str) -> None:
         """
         Check if a file is in the registry and raise :class:`ValueError` if
         it's not.
@@ -608,7 +622,7 @@ class Pooch:
         if fname not in self.registry:
             raise ValueError(f"File '{fname}' is not in the registry.")
 
-    def get_url(self, fname):
+    def get_url(self, fname: str) -> str:
         """
         Get the full URL to download a file in the registry.
 
@@ -622,7 +636,7 @@ class Pooch:
         self._assert_file_in_registry(fname)
         return self.urls.get(fname, "".join([self.base_url, fname]))
 
-    def load_registry(self, fname):
+    def load_registry(self, fname: FilePathT) -> None:
         """
         Load entries from a file and add them to the registry.
 
@@ -673,7 +687,7 @@ class Pooch:
                         self.urls[file_name] = file_url
                     self.registry[file_name] = file_checksum.lower()
 
-    def load_registry_from_doi(self):
+    def load_registry_from_doi(self) -> None:
         """
         Populate the registry using the data repository API
 
@@ -703,7 +717,7 @@ class Pooch:
         # Call registry population for this repository
         return repository.populate_registry(self)
 
-    def is_available(self, fname, downloader=None):
+    def is_available(self, fname: str, downloader: t.Optional[DownloaderT] = None):
         """
         Check availability of a remote file without downloading it.
 
