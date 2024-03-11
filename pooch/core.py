@@ -29,7 +29,7 @@ from .utils import (
 )
 from .downloaders import DOIDownloader, choose_downloader, doi_to_repository
 
-FilePath = t.Union[str, os.PathLike[str]]
+FilePath = t.Union[str, os.PathLike]
 Actions = te.Literal["download", "fetch", "update"]
 
 
