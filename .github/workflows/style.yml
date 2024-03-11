@@ -60,7 +60,7 @@ jobs:
       - name: Check code style
         run: make check-style lint
 
-  style:
+  types:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
