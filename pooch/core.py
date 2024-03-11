@@ -29,22 +29,27 @@ from .utils import (
 )
 from .downloaders import DOIDownloader, choose_downloader, doi_to_repository
 
-FilePathT = t.Union[str, os.PathLike[str]]
-ActionsT = te.Literal["download", "fetch", "update"]
+FilePath = t.Union[str, os.PathLike[str]]
+Actions = te.Literal["download", "fetch", "update"]
 
 
 class DownloaderT(te.Protocol):
-    def __call__(
+    """
+    A class used to define the type definition for the downloader function.
+    """
+
+    # pylint: disable=too-few-public-methods
+    def __call__(  # noqa: E704
         self,
         fname: str,
-        action: t.Optional[FilePathT],
+        action: t.Optional[FilePath],
         pooch: "Pooch",
         *,
         check_only: t.Optional[bool] = None,
     ) -> t.Any: ...
 
 
-ProcessorT = t.Callable[[str, ActionsT, "Pooch"], t.Any]
+ProcessorT = t.Callable[[str, Actions, "Pooch"], t.Any]
 
 
 def retrieve(
@@ -647,7 +652,7 @@ class Pooch:
         self._assert_file_in_registry(fname)
         return self.urls.get(fname, "".join([self.base_url, fname]))
 
-    def load_registry(self, fname: FilePathT) -> None:
+    def load_registry(self, fname: FilePath) -> None:
         """
         Load entries from a file and add them to the registry.
 

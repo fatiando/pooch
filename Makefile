@@ -43,7 +43,7 @@ check-format:
 check-style:
 	flake8 $(CHECK_STYLE)
 
-check-style:
+check-types:
 	mypy $(CHECK_STYLE)
 
 lint:

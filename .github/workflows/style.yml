@@ -59,3 +59,25 @@ jobs:
 
       - name: Check code style
         run: make check-style lint
+
+  style:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+
+      - name: Install requirements
+        run: python -m pip install -r env/requirements-style.txt
+
+      - name: List installed packages
+        run: python -m pip freeze
+
+      - name: Check code style
+        run: make check-types
