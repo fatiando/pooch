@@ -91,6 +91,10 @@ jobs:
     needs: build
     # Only publish from the origin repository, not forks
     if: github.repository_owner == 'fatiando' && github.event_name != 'pull_request'
+    environment: pypi
+    permissions:
+      # This permission allows trusted publishing to PyPI (without an API token)
+      id-token: write
 
     steps:
       - name: Checkout
@@ -112,8 +116,6 @@ jobs:
         if: success() && github.event_name == 'push'
         uses: pypa/gh-action-pypi-publish@v1.8.14
         with:
-          user: __token__
-          password: ${{ secrets.TEST_PYPI_TOKEN}}
           repository_url: https://test.pypi.org/legacy/
           # Allow existing releases on test PyPI without errors.
           # NOT TO BE USED in PyPI!
@@ -123,6 +125,3 @@ jobs:
         # Only publish to PyPI when a release triggers the build
         if: success() && github.event_name == 'release'
         uses: pypa/gh-action-pypi-publish@v1.8.14
-        with:
-          user: __token__
-          password: ${{ secrets.PYPI_TOKEN}}
