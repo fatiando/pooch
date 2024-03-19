@@ -74,7 +74,10 @@ Are you a **scientist** or researcher? Pooch can help you too!
 [rembg](https://github.com/danielgatis/rembg),
 [DASCore](https://github.com/DASDAE/dascore),
 [scikit-mobility](https://github.com/scikit-mobility/scikit-mobility),
-[Py-ART](https://github.com/ARM-DOE/pyart)
+[Py-ART](https://github.com/ARM-DOE/pyart),
+[HyperSpy](https://github.com/hyperspy/hyperspy),
+[RosettaSciIO](https://github.com/hyperspy/rosettasciio),
+[eXSpy](https://github.com/hyperspy/exspy)
 
 
 > If you're using Pooch, **send us a pull request** adding your project to the list.
