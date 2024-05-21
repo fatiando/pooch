@@ -86,6 +86,7 @@ def test_unsupported_protocol():
         choose_downloader("doii:XXX/XXX/file")
 
 
+@pytest.mark.network
 def test_invalid_doi_repository():
     "Should fail if data repository is not supported"
     with pytest.raises(ValueError) as exc:
@@ -96,6 +97,7 @@ def test_invalid_doi_repository():
     assert "Invalid data repository 'joss.theoj.org'" in str(exc.value)
 
 
+@pytest.mark.network
 def test_doi_url_not_found():
     "Should fail if the DOI is not found"
     with pytest.raises(ValueError) as exc:
@@ -103,6 +105,7 @@ def test_doi_url_not_found():
     assert "Is the DOI correct?" in str(exc.value)
 
 
+@pytest.mark.network
 @pytest.mark.parametrize(
     "repository,doi",
     [
@@ -121,6 +124,7 @@ def test_figshare_url_file_not_found(repository, doi):
     assert "File 'bla.txt' not found" in str(exc.value)
 
 
+@pytest.mark.network
 @pytest.mark.parametrize(
     "url",
     [FIGSHAREURL, ZENODOURL, DATAVERSEURL],
