@@ -105,6 +105,7 @@ def test_doi_url_not_found():
     assert "Is the DOI correct?" in str(exc.value)
 
 
+@pytest.mark.network
 @pytest.mark.parametrize(
     "repository,doi",
     [
@@ -114,7 +115,6 @@ def test_doi_url_not_found():
     ],
     ids=["figshare", "zenodo", "dataverse"],
 )
-@pytest.mark.network
 def test_figshare_url_file_not_found(repository, doi):
     "Should fail if the file is not found in the archive"
     with pytest.raises(ValueError) as exc:
@@ -124,12 +124,12 @@ def test_figshare_url_file_not_found(repository, doi):
     assert "File 'bla.txt' not found" in str(exc.value)
 
 
+@pytest.mark.network
 @pytest.mark.parametrize(
     "url",
     [FIGSHAREURL, ZENODOURL, DATAVERSEURL],
     ids=["figshare", "zenodo", "dataverse"],
 )
-@pytest.mark.network
 def test_doi_downloader(url):
     "Test the DOI downloader"
     # Use the test data we have on the repository
