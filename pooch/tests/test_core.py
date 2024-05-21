@@ -624,12 +624,12 @@ def test_stream_download(fname):
         check_tiny_data(str(destination))
 
 
+@pytest.mark.network
 @pytest.mark.parametrize(
     "url",
     [FIGSHAREURL, ZENODOURL, DATAVERSEURL],
     ids=["figshare", "zenodo", "dataverse"],
 )
-@pytest.mark.network
 def test_load_registry_from_doi(url):
     """Check that the registry is correctly populated from the API"""
     with TemporaryDirectory() as local_store:
