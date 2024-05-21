@@ -29,16 +29,16 @@ jobs:
   test:
     name: ${{ matrix.os }} python=${{ matrix.python }} dependencies=${{ matrix.dependencies }}
     if: ${{ github.repository_owner == 'fatiando' || github.event_name != 'schedule' }}
-    runs-on: ${{ matrix.os }}-latest
+    runs-on: ${{ matrix.os }}
     strategy:
       # Otherwise, the workflow would stop if a single job fails. We want to
       # run all of them to catch failures in different combinations.
       fail-fast: false
       matrix:
         os:
-          - ubuntu
-          - macos
-          - windows
+          - ubuntu-latest
+          - macos-latest
+          - windows-latest
         dependencies:
           - oldest
           - latest
@@ -50,6 +50,14 @@ jobs:
             python: "3.11"
           - dependencies: optional
             python: "3.11"
+          # test on macos-13 (x86) using oldest dependencies and python 3.7
+          - os: macos-13
+            dependencies: oldest
+            python: "3.7"
+        exclude:
+          # don't test on macos-latest (arm64) with oldest dependencies
+          - os: macos-latest
+            dependencies: oldest
     env:
       REQUIREMENTS: env/requirements-build.txt env/requirements-test.txt
       # Used to tag codecov submissions
