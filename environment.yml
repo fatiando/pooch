@@ -21,6 +21,7 @@ dependencies:
     - sphinx==7.2.*
     - sphinx-book-theme==1.1.*
     - sphinx-design==0.5.*
+    - filelock
     # Style
     - pathspec
     - black>=20.8b1
