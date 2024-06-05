@@ -3,6 +3,39 @@
 Changelog
 =========
 
+Version 1.8.2
+-------------
+
+Released on: 2024/06/06
+
+DOI: https://doi.org/10.5281/zenodo.11493461
+
+Bug fixes:
+
+* Use a variable to set the default request timeout (`#418 <https://github.com/fatiando/pooch/pull/418>`__)
+
+Documentation:
+
+* Add HyperSpy, RosettaSciIO, eXSpy to projects using pooch (`#408 <https://github.com/fatiando/pooch/pull/408>`__)
+* Add more packages using Pooch (`#403 <https://github.com/fatiando/pooch/pull/403>`__)
+
+Maintenance:
+
+* Add optional dependencies to environment.yml (`#413 <https://github.com/fatiando/pooch/pull/413>`__)
+* Run tests with oldest dependencies on x86 macos (`#414 <https://github.com/fatiando/pooch/pull/414>`__)
+* Mark additional tests requiring network (`#412 <https://github.com/fatiando/pooch/pull/412>`__)
+* Fix package description in pyproject.toml (`#407 <https://github.com/fatiando/pooch/pull/407>`__)
+* Setup Trusted Publisher deployment to PyPI (`#406 <https://github.com/fatiando/pooch/pull/406>`__)
+* Use Burocrata to check and add license notices (`#402 <https://github.com/fatiando/pooch/pull/402>`__)
+* Use pyproject.toml instead of setup.cfg (`#401 <https://github.com/fatiando/pooch/pull/401>`__)
+
+This release contains contributions from:
+
+* Sandro
+* Jonas Lähnemann
+* Santiago Soler
+* Leonardo Uieda
+
 Version 1.8.1
 -------------
 
