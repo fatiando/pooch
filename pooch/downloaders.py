@@ -26,6 +26,12 @@ except ImportError:
     paramiko = None
 
 
+# Set the default timeout in seconds so it can be configured in a pinch for the
+# methods that don't or can't expose a way set it at runtime.
+# See https://github.com/fatiando/pooch/issues/409
+DEFAULT_TIMEOUT = 30
+
+
 def choose_downloader(url, progressbar=False):
     """
     Choose the appropriate downloader for the given URL based on the protocol.
@@ -197,13 +203,13 @@ class HTTPDownloader:  # pylint: disable=too-few-public-methods
         import requests  # pylint: disable=C0415
 
         if check_only:
-            timeout = self.kwargs.get("timeout", 5)
+            timeout = self.kwargs.get("timeout", DEFAULT_TIMEOUT)
             response = requests.head(url, timeout=timeout, allow_redirects=True)
             available = bool(response.status_code == 200)
             return available
 
         kwargs = self.kwargs.copy()
-        timeout = kwargs.pop("timeout", 5)
+        timeout = kwargs.pop("timeout", DEFAULT_TIMEOUT)
         kwargs.setdefault("stream", True)
         ispath = not hasattr(output_file, "write")
         if ispath:
@@ -640,7 +646,7 @@ def doi_to_url(doi):
     import requests  # pylint: disable=C0415
 
     # Use doi.org to resolve the DOI to the repository website.
-    response = requests.get(f"https://doi.org/{doi}", timeout=5)
+    response = requests.get(f"https://doi.org/{doi}", timeout=DEFAULT_TIMEOUT)
     url = response.url
     if 400 <= response.status_code < 600:
         raise ValueError(
@@ -800,7 +806,7 @@ class ZenodoRepository(DataRepository):  # pylint: disable=missing-class-docstri
             article_id = self.archive_url.split("/")[-1]
             self._api_response = requests.get(
                 f"{self.base_api_url}/{article_id}",
-                timeout=5,
+                timeout=DEFAULT_TIMEOUT,
             ).json()
 
         return self._api_response
@@ -966,7 +972,7 @@ class FigshareRepository(DataRepository):  # pylint: disable=missing-class-docst
             # Use the figshare API to find the article ID from the DOI
             article = requests.get(
                 f"https://api.figshare.com/v2/articles?doi={self.doi}",
-                timeout=5,
+                timeout=DEFAULT_TIMEOUT,
             ).json()[0]
             article_id = article["id"]
             # Parse desired version from the doi
@@ -993,7 +999,7 @@ class FigshareRepository(DataRepository):  # pylint: disable=missing-class-docst
                     f"{article_id}/versions/{version}"
                 )
             # Make the request and return the files in the figshare repository
-            response = requests.get(api_url, timeout=5)
+            response = requests.get(api_url, timeout=DEFAULT_TIMEOUT)
             response.raise_for_status()
             self._api_response = response.json()["files"]
 
@@ -1087,7 +1093,7 @@ class DataverseRepository(DataRepository):  # pylint: disable=missing-class-docs
         response = requests.get(
             f"{parsed['protocol']}://{parsed['netloc']}/api/datasets/"
             f":persistentId?persistentId=doi:{doi}",
-            timeout=5,
+            timeout=DEFAULT_TIMEOUT,
         )
         return response
 
