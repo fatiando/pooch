@@ -18,19 +18,19 @@
   
   <script data-cfasync="false">
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
-    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
   </script>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../_static/styles/theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
-<link href="../_static/styles/bootstrap.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
-<link href="../_static/styles/pydata-sphinx-theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+  <link href="../_static/styles/theme.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
 
   
-  <link href="../_static/vendor/fontawesome/6.5.1/css/all.min.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
-  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.1/webfonts/fa-solid-900.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.1/webfonts/fa-brands-400.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.1/webfonts/fa-regular-400.woff2" />
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=80d5e7a1" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=384b581d" />
@@ -38,9 +38,9 @@
     <link rel="stylesheet" type="text/css" href="../_static/style.css?v=63f081c0" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae" />
-<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae" />
-  <script src="../_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=3ee479438cf8b5e0d341" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=3ee479438cf8b5e0d341" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=3ee479438cf8b5e0d341"></script>
 
     <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
     <script src="../_static/doctools.js?v=888ff710"></script>
@@ -64,27 +64,23 @@
 
   
   
-  <a id="pst-skip-link" class="skip-link" href="#main-content">Skip to main content</a>
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
   
   <div id="pst-scroll-pixel-helper"></div>
   
   <button type="button" class="btn rounded-pill" id="pst-back-to-top">
-    <i class="fa-solid fa-arrow-up"></i>
-    Back to top
-  </button>
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
 
   
   <input type="checkbox"
           class="sidebar-toggle"
-          name="__primary"
-          id="__primary"/>
-  <label class="overlay overlay-primary" for="__primary"></label>
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
   
   <input type="checkbox"
           class="sidebar-toggle"
-          name="__secondary"
-          id="__secondary"/>
-  <label class="overlay overlay-secondary" for="__secondary"></label>
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
   
   <div class="search-button__wrapper">
     <div class="search-button__overlay"></div>
@@ -106,8 +102,13 @@
   <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
 </form></div>
   </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
   
-    <header class="bd-header navbar navbar-expand-lg bd-navbar">
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
     </header>
   
 
@@ -188,7 +189,7 @@
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Reference</span></p>
 <ul class="current nav bd-sidenav">
-<li class="toctree-l1 current active has-children"><a class="current reference internal" href="#">List of functions and classes (API)</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l1 current active has-children"><a class="current reference internal" href="#">List of functions and classes (API)</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="generated/pooch.create.html">pooch.create</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generated/pooch.Pooch.html">pooch.Pooch</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generated/pooch.retrieve.html">pooch.retrieve</a></li>
@@ -206,7 +207,7 @@
 <li class="toctree-l2"><a class="reference internal" href="generated/pooch.Decompress.html">pooch.Decompress</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generated/pooch.test.html">pooch.test</a></li>
 </ul>
-</li>
+</details></li>
 <li class="toctree-l1"><a class="reference internal" href="../compatibility.html">Version compatibility</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../citing.html">Citing Pooch</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../changes.html">Changelog</a></li>
@@ -235,7 +236,7 @@
 
       </div>
       
-      <main id="main-content" class="bd-main">
+      <main id="main-content" class="bd-main" role="main">
         
         
 
@@ -244,7 +245,7 @@
           <div class="bd-content">
             <div class="bd-article-container">
               
-              <div class="bd-header-article">
+              <div class="bd-header-article d-print-none">
 <div class="header-article-items header-article__inner">
   
     <div class="header-article-items__start">
@@ -460,7 +461,7 @@ functions/classes may be moved around.</p>
 </div>
 <section id="core">
 <span id="module-pooch"></span><h2>Core<a class="headerlink" href="#core" title="Link to this heading">#</a></h2>
-<table class="autosummary longtable table autosummary">
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="generated/pooch.create.html#pooch.create" title="pooch.create"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pooch.create</span></code></a>(path, base_url[, version, ...])</p></td>
 <td><p>Create a <a class="reference internal" href="generated/pooch.Pooch.html#pooch.Pooch" title="pooch.Pooch"><code class="xref py py-class docutils literal notranslate"><span class="pre">Pooch</span></code></a> with sensible defaults to fetch data files.</p></td>
@@ -473,10 +474,11 @@ functions/classes may be moved around.</p>
 </tr>
 </tbody>
 </table>
+</div>
 </section>
 <section id="utilities">
 <h2>Utilities<a class="headerlink" href="#utilities" title="Link to this heading">#</a></h2>
-<table class="autosummary longtable table autosummary">
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="generated/pooch.os_cache.html#pooch.os_cache" title="pooch.os_cache"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pooch.os_cache</span></code></a>(project)</p></td>
 <td><p>Default cache location based on the operating system.</p></td>
@@ -495,10 +497,11 @@ functions/classes may be moved around.</p>
 </tr>
 </tbody>
 </table>
+</div>
 </section>
 <section id="downloaders">
 <h2>Downloaders<a class="headerlink" href="#downloaders" title="Link to this heading">#</a></h2>
-<table class="autosummary longtable table autosummary">
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="generated/pooch.HTTPDownloader.html#pooch.HTTPDownloader" title="pooch.HTTPDownloader"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pooch.HTTPDownloader</span></code></a>([progressbar, chunk_size])</p></td>
 <td><p>Download manager for fetching files over HTTP/HTTPS.</p></td>
@@ -514,10 +517,11 @@ functions/classes may be moved around.</p>
 </tr>
 </tbody>
 </table>
+</div>
 </section>
 <section id="processors">
 <h2>Processors<a class="headerlink" href="#processors" title="Link to this heading">#</a></h2>
-<table class="autosummary longtable table autosummary">
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="generated/pooch.Unzip.html#pooch.Unzip" title="pooch.Unzip"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pooch.Unzip</span></code></a>([members, extract_dir])</p></td>
 <td><p>Processor that unpacks a zip archive and returns a list of all files.</p></td>
@@ -530,16 +534,18 @@ functions/classes may be moved around.</p>
 </tr>
 </tbody>
 </table>
+</div>
 </section>
 <section id="miscellaneous">
 <h2>Miscellaneous<a class="headerlink" href="#miscellaneous" title="Link to this heading">#</a></h2>
-<table class="autosummary longtable table autosummary">
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="generated/pooch.test.html#pooch.test" title="pooch.test"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pooch.test</span></code></a>([doctest, verbose, coverage])</p></td>
 <td><p>Run the test suite.</p></td>
 </tr>
 </tbody>
 </table>
+</div>
 </section>
 </section>
 
@@ -551,7 +557,7 @@ functions/classes may be moved around.</p>
               
               
               
-                <footer class="prev-next-footer">
+                <footer class="prev-next-footer d-print-none">
                   
 <div class="prev-next-area">
     <a class="left-prev"
@@ -622,7 +628,7 @@ functions/classes may be moved around.</p>
   
   <div class="footer-item">
     <p class="last-updated">
-  Last updated on Feb 20, 2024.
+  Last updated on Jun 06, 2024.
   <br/>
 </p>
   </div>
@@ -640,8 +646,8 @@ functions/classes may be moved around.</p>
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae"></script>
-<script src="../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae"></script>
+  <script src="../_static/scripts/bootstrap.js?digest=3ee479438cf8b5e0d341"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=3ee479438cf8b5e0d341"></script>
 
   <footer class="bd-footer">
   </footer>
