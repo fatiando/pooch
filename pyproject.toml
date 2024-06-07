@@ -48,6 +48,11 @@ xxhash = ["xxhash>=1.4.3"]
 [tool.setuptools.packages]
 find = {}  # Scanning implicit namespaces is active by default
 
+[tool.setuptools.package-data]
+"pooch.tests.data" = ["*.txt", "*.zip", "*.gz", "*.xz", "*.bz2"]
+"pooch.tests.data.store" = ["*.txt"]
+"pooch.tests.data.store.subdir" = ["*.txt"]
+
 [build-system]
 requires = ["setuptools>=45", "wheel", "setuptools_scm[toml]>=6.2"]
 build-backend = "setuptools.build_meta"
