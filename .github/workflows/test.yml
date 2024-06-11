@@ -25,7 +25,7 @@ defaults:
 
 jobs:
   #############################################################################
-  # Run tests and upload to codecov
+  # Run tests
   test:
     name: ${{ matrix.os }} python=${{ matrix.python }} dependencies=${{ matrix.dependencies }}
     if: ${{ github.repository_owner == 'fatiando' || github.event_name != 'schedule' }}
@@ -155,14 +155,40 @@ jobs:
       - name: Convert coverage report to XML for codecov
         run: coverage xml
 
-      - name: Upload coverage to Codecov
+      - name: Upload coverage report as an artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage_${{ matrix.os }}_${{ matrix.dependencies }}
+          path: ./coverage.xml
+
+
+  #############################################################################
+  # Upload coverage report to codecov
+  codecov-upload:
+    runs-on: ubuntu-latest
+    needs: test
+
+    steps:
+
+      - name: Download coverage report artifacts
+        # Download coverage reports from every runner.
+        # Maximum coverage is achieved by combining reports from every runner.
+        # Each coverage file will live in its own folder with the same name as
+        # the artifact.
+        uses: actions/download-artifact@v4
+        with:
+          pattern: coverage_*
+
+      - name: List all downloaded artifacts
+        run: ls -l -R .
+
+      - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v4
         with:
-          files: ./coverage.xml
-          env_vars: OS,PYTHON,DEPENDENCIES
-          # Don't mark the job as failed if the upload fails for some reason.
-          # It does sometimes but shouldn't be the reason for running
-          # everything again unless something else is broken.
-          fail_ci_if_error: false
+          # Upload all coverage report files
+          files: ./coverage_*/coverage.xml
+          # Fail the job so we know coverage isn't being updated. Otherwise it
+          # can silently drop and we won't know.
+          fail_ci_if_error: true
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
