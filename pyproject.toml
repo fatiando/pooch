@@ -45,8 +45,8 @@ xxhash = ["xxhash>=1.4.3"]
 "Bug Tracker" = "https://github.com/fatiando/pooch/issues"
 "Source Code" = "https://github.com/fatiando/pooch"
 
-[tool.setuptools.packages]
-find = {}  # Scanning implicit namespaces is active by default
+[tool.setuptools.packages.find]
+where = ["src"]
 
 [tool.setuptools.package-data]
 "pooch.tests.data" = ["*.txt", "*.zip", "*.gz", "*.xz", "*.bz2"]
