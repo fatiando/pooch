@@ -1,7 +1,7 @@
 # Build, package, test, and clean
 PROJECT=pooch
-TESTDIR=tmp-test-dir-with-unique-name
-PYTEST_ARGS=--cov-config=../.coveragerc --cov-report=term-missing --cov=$(PROJECT) --doctest-modules -v --pyargs
+TESTS=tests
+PYTEST_ARGS=--cov-config=.coveragerc --cov-report=term-missing --cov=$(PROJECT) --doctest-modules -v --pyargs
 LINT_FILES=$(PROJECT)
 CHECK_STYLE=$(PROJECT) doc
 
@@ -24,11 +24,7 @@ install:
 	python -m pip install --no-deps -e .
 
 test:
-	# Run a tmp folder to make sure the tests are run on the installed version
-	mkdir -p $(TESTDIR)
-	cd $(TESTDIR); pytest $(PYTEST_ARGS) $(PROJECT)
-	cp $(TESTDIR)/.coverage* .
-	rm -r $(TESTDIR)
+	pytest $(PYTEST_ARGS) $(TESTS)
 
 format:
 	black $(CHECK_STYLE)
@@ -50,5 +46,5 @@ clean:
 	find . -name "*.pyc" -exec rm -v {} \;
 	find . -name "*.orig" -exec rm -v {} \;
 	find . -name ".coverage.*" -exec rm -v {} \;
-	rm -rvf build dist MANIFEST *.egg-info __pycache__ .coverage .cache .pytest_cache $(PROJECT)/_version.py
-	rm -rvf $(TESTDIR) dask-worker-space
+	rm -rvf build dist MANIFEST *.egg-info __pycache__ .coverage .cache .pytest_cache src/$(PROJECT)/_version.py
+	rm -rvf dask-worker-space
