@@ -5,6 +5,8 @@ PYTEST_ARGS=--cov-config=.coveragerc --cov-report=term-missing --cov=$(PROJECT) 
 LINT_FILES=$(PROJECT)
 CHECK_STYLE=$(PROJECT) doc
 
+.PHONY: help build install test format check check-format check-style lint clean
+
 help:
 	@echo "Commands:"
 	@echo ""
