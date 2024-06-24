@@ -15,13 +15,13 @@ from tempfile import TemporaryDirectory
 
 import pytest
 
-from ..core import create, Pooch, retrieve, download_action, stream_download
-from ..utils import get_logger, temporary_file, os_cache
-from ..hashes import file_hash, hash_matches
+from pooch.core import create, Pooch, retrieve, download_action, stream_download
+from pooch.utils import get_logger, temporary_file, os_cache
+from pooch.hashes import file_hash, hash_matches
 
 # Import the core module so that we can monkeypatch some functions
-from .. import core
-from ..downloaders import HTTPDownloader, FTPDownloader
+from pooch import core
+from pooch.downloaders import HTTPDownloader, FTPDownloader
 
 from .utils import (
     pooch_test_url,

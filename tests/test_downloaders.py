@@ -23,8 +23,8 @@ try:
 except ImportError:
     paramiko = None
 
-from .. import Pooch
-from ..downloaders import (
+from pooch import Pooch
+from pooch.downloaders import (
     HTTPDownloader,
     FTPDownloader,
     SFTPDownloader,
@@ -35,7 +35,7 @@ from ..downloaders import (
     DataverseRepository,
     doi_to_url,
 )
-from ..processors import Unzip
+from pooch.processors import Unzip
 from .utils import (
     pooch_test_url,
     check_large_data,
