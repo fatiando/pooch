@@ -3,7 +3,7 @@ PROJECT=pooch
 TESTS=tests
 PYTEST_ARGS=--cov-config=.coveragerc --cov-report=term-missing --cov=$(PROJECT) --doctest-modules -v --pyargs
 LINT_FILES=$(PROJECT)
-CHECK_STYLE=$(PROJECT) doc
+CHECK_STYLE=src/$(PROJECT) doc
 
 .PHONY: help build install test format check check-format check-style lint clean
 
