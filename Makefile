@@ -1,6 +1,6 @@
 # Build, package, test, and clean
 PROJECT=pooch
-TESTS=tests
+TESTS=tests src/$(PROJECT)
 PYTEST_ARGS=--cov-config=.coveragerc --cov-report=term-missing --cov=$(PROJECT) --doctest-modules -v --pyargs
 LINT_FILES=$(PROJECT)
 CHECK_STYLE=src/$(PROJECT) doc
