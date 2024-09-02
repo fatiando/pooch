@@ -114,7 +114,7 @@ jobs:
       - name: Publish to Test PyPI
         # Only publish to TestPyPI when a PR is merged (pushed to main)
         if: success() && github.event_name == 'push'
-        uses: pypa/gh-action-pypi-publish@v1.9.0
+        uses: pypa/gh-action-pypi-publish@v1.10.0
         with:
           repository_url: https://test.pypi.org/legacy/
           # Allow existing releases on test PyPI without errors.
@@ -124,4 +124,4 @@ jobs:
       - name: Publish to PyPI
         # Only publish to PyPI when a release triggers the build
         if: success() && github.event_name == 'release'
-        uses: pypa/gh-action-pypi-publish@v1.9.0
+        uses: pypa/gh-action-pypi-publish@v1.10.0
