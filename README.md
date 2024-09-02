@@ -77,7 +77,8 @@ Are you a **scientist** or researcher? Pooch can help you too!
 [Py-ART](https://github.com/ARM-DOE/pyart),
 [HyperSpy](https://github.com/hyperspy/hyperspy),
 [RosettaSciIO](https://github.com/hyperspy/rosettasciio),
-[eXSpy](https://github.com/hyperspy/exspy)
+[eXSpy](https://github.com/hyperspy/exspy),
+[SPLASH](https://github.com/Adam-Boesky/astro_SPLASH)
 
 
 > If you're using Pooch, **send us a pull request** adding your project to the list.
