@@ -12,9 +12,10 @@ dependencies:
     # Optional dependencies
     - tqdm>=4.41.0,<5.0.0
     - paramiko>=2.7.0
-    - xxhash>=1.4.3
+    - python-xxhash>=1.4.3  # in conda-forge python-xxhash is the python pkg
+    - xxhash # this is the xxHash library in conda-forge
     # Build
-    - build
+    - python-build
     # Test
     - pytest
     - pytest-cov
