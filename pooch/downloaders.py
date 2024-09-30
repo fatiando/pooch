@@ -75,6 +75,7 @@ def choose_downloader(url, progressbar=False):
         "http": HTTPDownloader,
         "sftp": SFTPDownloader,
         "doi": DOIDownloader,
+        "file": FileDownloader,
     }
 
     parsed_url = parse_url(url)
@@ -502,6 +503,67 @@ class SFTPDownloader:  # pylint: disable=too-few-public-methods
             if sftp is not None:
                 sftp.close()
 
+class FileDownloader:  # pylint: disable=too-few-public-methods
+    """
+    Download manager for fetching files over a file system mounted in the operating system.
+
+    When called, downloads the given file path into the specified local file.
+    Uses :mod:`shutil` to copy files from paths.
+
+    Note: Does not support a progressbar.
+    """
+
+    def __init__(self, progressbar=False, chunk_size=1024, **kwargs):
+        self.kwargs = kwargs
+        self.progressbar = progressbar
+        self.chunk_size = chunk_size
+
+    def __call__(
+        self, url, output_file, pooch, check_only=False
+    ):  # pylint: disable=R0914
+        """
+        Download the given file in the filesystem to the given output file.
+
+        Uses :func:`shutil.copyfile` or :func:`shutil.copyfileobj`.
+
+        Parameters
+        ----------
+        url : str
+            The url path to the file you want to download.
+        output_file : str or file-like object
+            Path (and file name) to which the file will be downloaded.
+        pooch : :class:`~pooch.Pooch`
+            The instance of :class:`~pooch.Pooch` that is calling this method.
+        check_only : bool
+            If True, will only check if a file exists in the directory and
+            **without downloading the file**. Will return ``True`` if the file
+            exists and ``False`` otherwise.
+
+        Returns
+        -------
+        availability : bool or None
+            If ``check_only==True``, returns a boolean indicating if the file
+            is available on the server. Otherwise, returns ``None``.
+
+        """
+        import pathlib  # pylint: disable=C0415
+
+        parsed_url = parse_url(url)
+        source_path = pathlib.Path(parsed_url['netloc'] + parsed_url['path'])
+
+        if check_only:
+            return source_path.exists()
+        
+        import shutil   # pylint: disable=C0415
+
+        ispath = not hasattr(output_file, "write")
+        if ispath:
+            shutil.copyfile(source_path, output_file)
+        else:
+            with source_path.open('rb') as fsrc:
+                shutil.copyfileobj(fsrc, output_file)
+
+        return None
 
 class DOIDownloader:  # pylint: disable=too-few-public-methods
     """
