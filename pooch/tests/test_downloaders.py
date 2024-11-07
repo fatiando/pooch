@@ -162,7 +162,9 @@ def test_doi_downloader_nist_pdr():
         assert os.path.exists(outfile)
         with open(outfile, encoding="utf-8") as tinydata:
             content = tinydata.read()
-        true_content = "The `labbench` python library provides tools for instrument automation"
+        true_content = (
+            "The `labbench` python library provides tools for instrument automation"
+        )
         assert content.strip()[:70] == true_content
 
 

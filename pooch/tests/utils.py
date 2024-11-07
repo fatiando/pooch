@@ -139,7 +139,7 @@ def pooch_test_nist_pdr_url(file_type="simple"):
     """
     urls = {
         "simple": "doi:10.18434/M32122/",
-        "nested_collection": "doi:10.18434/M32082/"
+        "nested_collection": "doi:10.18434/M32082/",
     }
     return urls[file_type]
 

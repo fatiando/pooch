@@ -1234,7 +1234,8 @@ class NISTPDRRepository(DataRepository):  # pylint: disable=missing-class-docstr
         # with filepath as key in the record's components:
         files = {
             i["filepath"]: i
-            for i in response['components'] if "nrdp:DataFile" in i['@type']
+            for i in response["components"]
+            if "nrdp:DataFile" in i["@type"]
         }
         if file_name not in files:
             raise ValueError(
@@ -1263,7 +1264,8 @@ class NISTPDRRepository(DataRepository):  # pylint: disable=missing-class-docstr
         """
         files = {
             i["filepath"]: i
-            for i in self.api_response.json()['components'] if "nrdp:DataFile" in i['@type']
+            for i in self.api_response.json()["components"]
+            if "nrdp:DataFile" in i["@type"]
         }
         for file_name, file_data in files.items():
             checksum_value = file_data["checksum"]["hash"]
