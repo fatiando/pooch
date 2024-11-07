@@ -159,11 +159,11 @@ def parse_url(url):
 
     The DOI is a special case. The protocol will be "doi", the netloc will be
     the DOI, and the path is what comes after the last "/".
-    The only exception are Zenodo dois: the protocol will be "doi", the netloc
-    will be composed by the "prefix/suffix" and the path is what comes after
-    the second "/". This allows to support special cases of Zenodo dois where
-    the path contains forward slashes "/", created by the GitHub-Zenodo
-    integration service.
+    The only exception are Zenodo and NIST PDR dois: the protocol will be
+    "doi", the netloc will be composed by the "prefix/suffix" and the path is
+    what comes after the second "/". This allows to support special cases of
+    Zenodo dois where the path contains forward slashes "/", created by the
+    GitHub-Zenodo integration service.
 
     Parameters
     ----------
@@ -184,7 +184,7 @@ def parse_url(url):
     if url.startswith("doi:"):
         protocol = "doi"
         parts = url[4:].split("/")
-        if "zenodo" in parts[1].lower():
+        if "zenodo" in parts[1].lower() or "10.18434" in parts:
             netloc = "/".join(parts[:2])
             path = "/" + "/".join(parts[2:])
         else:

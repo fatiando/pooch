@@ -531,6 +531,7 @@ class DOIDownloader:  # pylint: disable=too-few-public-methods
     * `figshare <https://www.figshare.com>`__
     * `Zenodo <https://www.zenodo.org>`__
     * `Dataverse <https://dataverse.org/>`__ instances
+    * The `NIST Public Data Repository <https://data.nist.gov/>`__
 
     .. attention::
 
@@ -683,6 +684,7 @@ def doi_to_repository(doi):
         FigshareRepository,
         ZenodoRepository,
         DataverseRepository,
+        NISTPDRRepository,
     ]
 
     # Extract the DOI and the repository information
@@ -1161,3 +1163,110 @@ class DataverseRepository(DataRepository):  # pylint: disable=missing-class-docs
             pooch.registry[filedata["dataFile"]["filename"]] = (
                 f"md5:{filedata['dataFile']['md5']}"
             )
+
+
+class NISTPDRRepository(DataRepository):  # pylint: disable=missing-class-docstring
+    base_api_url = "https://data.nist.gov/rmm/records"
+
+    def __init__(self, doi, archive_url):
+        self.archive_url = archive_url
+        self.doi = doi
+        self._api_response = None
+
+    @classmethod
+    def initialize(cls, doi, archive_url):
+        """
+        Initialize the data repository if the given URL points to a
+        corresponding repository.
+
+        Initializes a data repository object. This is done as part of
+        a chain of responsibility. If the class cannot handle the given
+        repository URL, it returns `None`. Otherwise a `DataRepository`
+        instance is returned.
+
+        Parameters
+        ----------
+        doi : str
+            The DOI that identifies the repository
+        archive_url : str
+            The resolved URL for the DOI
+        """
+
+        # Check whether this is a Zenodo URL
+        parsed_archive_url = parse_url(archive_url)
+        if parsed_archive_url["netloc"] != "data.nist.gov":
+            return None
+
+        return cls(doi, archive_url)
+
+    @property
+    def api_response(self):
+        """Cached API response from NIST PDR"""
+        if self._api_response is None:
+            # Lazy import requests to speed up import time
+            import requests  # pylint: disable=C0415
+
+            article_id = self.archive_url.split("/")[-1]
+            self._api_response = requests.get(
+                f"{self.base_api_url}/{article_id}",
+                timeout=DEFAULT_TIMEOUT,
+            )
+
+        return self._api_response
+
+    def download_url(self, file_name):
+        """
+        Use the repository API to get the download URL for a file given
+        the archive URL.
+
+        Parameters
+        ----------
+        file_name : str
+            The name of the file in the archive that will be downloaded.
+
+        Returns
+        -------
+        download_url : str
+            The HTTP URL that can be used to download the file.
+        """
+        response = self.api_response.json()
+        # files is dictionary of nrdp:DataFile types,
+        # with filepath as key in the record's components:
+        files = {
+            i["filepath"]: i
+            for i in response['components'] if "nrdp:DataFile" in i['@type']
+        }
+        if file_name not in files:
+            raise ValueError(
+                f"File '{file_name}' not found in data archive "
+                f"{self.archive_url} (doi:{self.doi})."
+            )
+        # Generate download_url using the file id
+        download_url = files[file_name]["downloadURL"]
+        return download_url
+
+    def populate_registry(self, pooch):
+        """
+        Populate the registry using the data repository's API
+
+        Parameters
+        ----------
+        pooch : Pooch
+            The pooch instance that the registry will be added to.
+
+        Notes
+        -----
+        After Zenodo migrated to InvenioRDM on Oct 2023, their API changed. The
+        checksums for each file listed in the API reference is now an md5 sum.
+
+        This method supports both the legacy and the new API.
+        """
+        files = {
+            i["filepath"]: i
+            for i in self.api_response.json()['components'] if "nrdp:DataFile" in i['@type']
+        }
+        for file_name, file_data in files.items():
+            checksum_value = file_data["checksum"]["hash"]
+            checksum_type = file_data["checksum"]["algorithm"]["tag"]
+            checksum = f"{checksum_type}:{checksum_value}"
+            pooch.registry[file_name] = checksum
