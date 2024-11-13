@@ -1159,8 +1159,20 @@ class DataverseRepository(DataRepository):  # pylint: disable=missing-class-docs
 
         for filedata in self.api_response.json()["data"]["latestVersion"]["files"]:
             for algorithm in ["md5", "sha1", "sha256", "sha512"]:
+                # Look for the checksum directly in the file dictionary
                 if algorithm in filedata["dataFile"]:
                     pooch.registry[filedata["dataFile"]["filename"]] = (
                         f"{algorithm}:{filedata['dataFile'][algorithm]}"
                     )
                     break
+                # Look for the checksum in the checksum sub-dictionary
+                if algorithm in filedata["dataFile"].get("checksum", {}):
+                    pooch.registry[filedata["dataFile"]["filename"]] = (
+                        f"{algorithm}:{filedata['dataFile']['checksum'][algorithm]}"
+                    )
+                    break
+
+                raise ValueError(
+                    f"Checksum for file '{filedata['dataFile']['filename']}'"
+                    " not found in the DataVerse API response."
+                )
