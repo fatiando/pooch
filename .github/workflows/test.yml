@@ -183,7 +183,7 @@ jobs:
         run: ls -l -R .
 
       - name: Upload coverage reports to Codecov
-        uses: codecov/codecov-action@v4
+        uses: codecov/codecov-action@v5
         with:
           # Upload all coverage report files
           files: ./coverage_*/coverage.xml
