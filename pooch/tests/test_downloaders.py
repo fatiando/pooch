@@ -543,3 +543,150 @@ class TestZenodoAPISupport:
         # Populate registry
         downloader.populate_registry(puppy)
         assert puppy.registry == {self.file_name: f"md5:{self.file_checksum}"}
+
+
+class MockOldResponse:
+    """
+    Mock request response to test checksum algorithm in DataverseRepository.
+
+    Use the old API where the checksum algorithm was listed as a key in the
+    file information.
+    """
+
+    status_code = 200
+
+    def __init__(self, algorithm: str, checksum_key=False):
+        """
+        Parameters
+        ----------
+        algorithm : str
+            Hashing algorithm that will be used in the fake repsonse.
+        checksum_key : bool, optional
+            Whether to add the 'checksum' key in the response (new API), or
+            use the hashing algorithm type as key (old API).
+
+        Notes
+        -----
+
+        Old API response:
+
+        .. code::
+
+            {
+              ...
+              "data": {
+                "files": [
+                  {
+                    "label": "foobar.txt",
+                      "dataFile": {
+                        ...
+                        "id": 12345,
+                        "filename": "foobar.txt",
+                        "md5": "0123456789abcdef",
+                      }
+                  }
+                  ...
+                ]
+              }
+            }
+
+
+        New API response:
+
+        .. code::
+
+            {
+              ...
+              "data": {
+                "files": [
+                  {
+                    "label": "foobar.txt",
+                      "dataFile": {
+                        ...
+                        "id": 12345,
+                        "filename": "foobar.txt",
+                        "checksum": {
+                          "type": "MD5",
+                          "value": "0123456789abcdef"
+                        }
+                      }
+                  }
+                  ...
+                ]
+              }
+            }
+        """
+
+        self._algorithm = algorithm
+        self._checksum_key = checksum_key
+
+    @property
+    def _file(self) -> dict:
+        file_dict = {
+            "label": "foobar.txt",
+            "dataFile": {
+                "id": 12345,
+                "filename": "foobar.txt",
+            },
+        }
+        checksum = "0123456789abcdef"
+        if self._checksum_key:
+            file_dict = {
+                "label": "foobar.txt",
+                "dataFile": {
+                    "id": 12345,
+                    "filename": "foobar.txt",
+                    "checksum": {
+                        "type": self._algorithm.upper(),
+                        "value": checksum,
+                    },
+                },
+            }
+        else:
+            file_dict = {
+                "label": "foobar.txt",
+                "dataFile": {
+                    "id": 12345,
+                    "filename": "foobar.txt",
+                    self._algorithm: checksum,
+                },
+            }
+        return file_dict
+
+    def json(self) -> dict:
+        """
+        Return a dictionary with a fake response.
+        """
+        files = [self._file]
+        response = {"data": {"latestVersion": {"files": files}}}
+        return response
+
+
+class MockDataverse(DataverseRepository):
+    """
+    Mock class to test checksum algorithms in DataverseRepository.
+    """
+
+    def __init__(self, response):
+        super().__init__(doi=None, archive_url=None)
+        self._api_response = response
+
+
+class TestDataversePopulateRegistry:
+    """
+    Test checksum algorithms in Dataverse downloaders.
+    """
+
+    @pytest.mark.parametrize("checksum_key", (False, True), ids=["old_api", "new_api"])
+    @pytest.mark.parametrize("algorithm", ["md5", "sha1", "sha256", "sha512"])
+    def test_populate_registry(self, tmp_path, algorithm, checksum_key):
+        """
+        Test populating registry of DataverseRepository.
+
+        Test if the new and old APIs are supported.
+        """
+        response = MockOldResponse(algorithm, checksum_key)
+        downloader = MockDataverse(response)
+        puppy = Pooch(path=tmp_path, base_url="https://foo.bar/")
+        downloader.populate_registry(puppy)
+        assert puppy.registry == {"foobar.txt": f"{algorithm}:0123456789abcdef"}
