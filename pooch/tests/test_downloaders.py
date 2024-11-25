@@ -548,9 +548,6 @@ class TestZenodoAPISupport:
 class MockOldResponse:
     """
     Mock request response to test checksum algorithm in DataverseRepository.
-
-    Use the old API where the checksum algorithm was listed as a key in the
-    file information.
     """
 
     status_code = 200
