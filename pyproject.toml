@@ -45,8 +45,8 @@ xxhash = ["xxhash>=1.4.3"]
 "Bug Tracker" = "https://github.com/fatiando/pooch/issues"
 "Source Code" = "https://github.com/fatiando/pooch"
 
-[tool.setuptools.packages]
-find = {}  # Scanning implicit namespaces is active by default
+[tool.setuptools.packages.find]
+where = ["src"]
 
 [tool.setuptools.package-data]
 "pooch.tests.data" = ["*.txt", "*.zip", "*.gz", "*.xz", "*.bz2"]
@@ -60,7 +60,7 @@ build-backend = "setuptools.build_meta"
 [tool.setuptools_scm]
 version_scheme =  "post-release"
 local_scheme =  "node-and-date"
-write_to =  "pooch/_version.py"
+write_to =  "src/pooch/_version.py"
 
 [tool.pytest.ini_options]
 markers = [

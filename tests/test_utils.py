@@ -17,7 +17,7 @@ from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor
 
 import pytest
 
-from ..utils import (
+from pooch.utils import (
     parse_url,
     make_local_storage,
     temporary_file,

@@ -22,8 +22,8 @@ except ImportError:
     xxhash = None
     XXHASH_MAJOR_VERSION = 0
 
-from ..core import Pooch
-from ..hashes import (
+from pooch.core import Pooch
+from pooch.hashes import (
     make_registry,
     file_hash,
     hash_matches,

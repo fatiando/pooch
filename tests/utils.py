@@ -15,8 +15,8 @@ import stat
 from pathlib import Path
 from contextlib import contextmanager
 
-from .. import __version__ as full_version
-from ..utils import check_version, get_logger
+from pooch import __version__ as full_version
+from pooch.utils import check_version, get_logger
 
 
 def check_tiny_data(fname):
