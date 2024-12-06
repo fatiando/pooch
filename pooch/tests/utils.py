@@ -140,16 +140,16 @@ def pooch_test_registry():
 
     """
     registry = {
-        "tiny-data.txt": "baee0894dba14b12085eacb204284b97e362f4f3e5a5807693cc90ef415c1b2d",
-        "large-data.txt": "98de171fb320da82982e6bf0f3994189fff4b42b23328769afce12bdd340444a",
-        "subdir/tiny-data.txt": "baee0894dba14b12085eacb204284b97e362f4f3e5a5807693cc90ef415c1b2d",
-        "tiny-data.zip": "0d49e94f07bc1866ec57e7fd1b93a351fba36842ec9b13dd50bf94e8dfa35cbb",
+        "tiny-data.txt": "baee0894dba14b12085eacb204284b97e362f4f3e5a5807693cc90ef415c1b2d",  # noqa: E501
+        "large-data.txt": "98de171fb320da82982e6bf0f3994189fff4b42b23328769afce12bdd340444a",  # noqa: E501
+        "subdir/tiny-data.txt": "baee0894dba14b12085eacb204284b97e362f4f3e5a5807693cc90ef415c1b2d",  # noqa: E501
+        "tiny-data.zip": "0d49e94f07bc1866ec57e7fd1b93a351fba36842ec9b13dd50bf94e8dfa35cbb",  # noqa: E501
         "store.zip": "0498d2a001e71051bbd2acd2346f38da7cbd345a633cb7bf0f8a20938714b51a",
-        "tiny-data.tar.gz": "41503f083814f43a01a8e9a30c28d7a9fe96839a99727a7fdd0acf7cd5bab63b",
-        "store.tar.gz": "088c7f4e0f1859b1c769bb6065de24376f366374817ede8691a6ac2e49f29511",
-        "tiny-data.txt.bz2": "753663687a4040c90c8578061867d1df623e6aa8011c870a5dbd88ee3c82e306",
-        "tiny-data.txt.gz": "2e2da6161291657617c32192dba95635706af80c6e7335750812907b58fd4b52",
-        "tiny-data.txt.xz": "99dcb5c32a6e916344bacb4badcbc2f2b6ee196977d1d8187610c21e7e607765",
+        "tiny-data.tar.gz": "41503f083814f43a01a8e9a30c28d7a9fe96839a99727a7fdd0acf7cd5bab63b",  # noqa: E501
+        "store.tar.gz": "088c7f4e0f1859b1c769bb6065de24376f366374817ede8691a6ac2e49f29511",  # noqa: E501
+        "tiny-data.txt.bz2": "753663687a4040c90c8578061867d1df623e6aa8011c870a5dbd88ee3c82e306",  # noqa: E501
+        "tiny-data.txt.gz": "2e2da6161291657617c32192dba95635706af80c6e7335750812907b58fd4b52",  # noqa: E501
+        "tiny-data.txt.xz": "99dcb5c32a6e916344bacb4badcbc2f2b6ee196977d1d8187610c21e7e607765",  # noqa: E501
     }
     return registry
 

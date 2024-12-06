@@ -506,7 +506,7 @@ def test_check_availability_on_ftp(ftpserver):
             path=DATA_DIR,
             base_url=url.replace("tiny-data.txt", ""),
             registry={
-                "tiny-data.txt": "baee0894dba14b12085eacb204284b97e362f4f3e5a5807693cc90ef415c1b2d",
+                "tiny-data.txt": "baee0894dba14b12085eacb204284b97e362f4f3e5a5807693cc90ef415c1b2d",  # noqa: E501
                 "doesnot_exist.zip": "jdjdjdjdflld",
             },
         )
