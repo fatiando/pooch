@@ -75,3 +75,25 @@ notice = '''
 #
 # This code is part of the Fatiando a Terra project (https://www.fatiando.org)
 #'''
+
+[tool.ruff]
+line-length = 88
+exclude = [
+    "doc/_build",
+    "pooch/_version.py",
+]
+
+[tool.ruff.lint]
+select = [
+    "E",   # pycodestyle
+    "F",   # Pyflakes
+    "UP",  # pyupgrade
+    "B",   # flake8-bugbear
+    "ARG", # unused arguments
+    # "SIM", # flake8-simplify
+    "I",   # isort
+]
+
+[tool.ruff.lint.per-file-ignores]
+# disable unused-imports errors on __init__.py
+"__init__.py" = ["F401"]
