@@ -659,7 +659,7 @@ class Pooch:
                     continue
 
                 elements = shlex.split(line)
-                if not len(elements) in [0, 2, 3]:
+                if len(elements) not in [0, 2, 3]:
                     raise OSError(
                         f"Invalid entry in Pooch registry file '{fname}': "
                         f"expected 2 or 3 elements in line {linenum + 1} but got "
