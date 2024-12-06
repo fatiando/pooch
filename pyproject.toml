@@ -93,6 +93,9 @@ select = [
     # "SIM", # flake8-simplify
     "I",   # isort
 ]
+ignore = [
+    "UP015", # ignore redundant modes in `open` (it's ok to be explicit)
+]
 
 [tool.ruff.lint.per-file-ignores]
 # disable unused-imports errors on __init__.py
