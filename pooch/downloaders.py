@@ -985,6 +985,7 @@ class FigshareRepository(DataRepository):  # pylint: disable=missing-class-docst
                     "the repository should be used. "
                     "Figshare will point to the latest version available.",
                     UserWarning,
+                    stacklevel=2,
                 )
                 # Define API url using only the article id
                 # (figshare will resolve the latest version)
