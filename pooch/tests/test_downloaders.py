@@ -7,6 +7,7 @@
 """
 Test the downloader classes and functions separately from the Pooch core.
 """
+
 import os
 import sys
 from tempfile import TemporaryDirectory
@@ -25,28 +26,27 @@ except ImportError:
 
 from .. import Pooch
 from ..downloaders import (
-    HTTPDownloader,
-    FTPDownloader,
-    SFTPDownloader,
-    DOIDownloader,
-    choose_downloader,
-    FigshareRepository,
-    ZenodoRepository,
     DataverseRepository,
+    DOIDownloader,
+    FigshareRepository,
+    FTPDownloader,
+    HTTPDownloader,
+    SFTPDownloader,
+    ZenodoRepository,
+    choose_downloader,
     doi_to_url,
 )
 from ..processors import Unzip
 from .utils import (
-    pooch_test_url,
     check_large_data,
     check_tiny_data,
     data_over_ftp,
+    pooch_test_dataverse_url,
     pooch_test_figshare_url,
+    pooch_test_url,
     pooch_test_zenodo_url,
     pooch_test_zenodo_with_slash_url,
-    pooch_test_dataverse_url,
 )
-
 
 BASEURL = pooch_test_url()
 FIGSHAREURL = pooch_test_figshare_url()
