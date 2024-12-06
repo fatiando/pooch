@@ -1,6 +1,3 @@
 # Style checks
-black
-flake8
-pylint>=2.4
-pathspec
+ruff
 burocrata

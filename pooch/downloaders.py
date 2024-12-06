@@ -7,10 +7,10 @@
 """
 The classes that actually handle the downloads.
 """
+
+import ftplib
 import os
 import sys
-import ftplib
-
 import warnings
 
 from .utils import parse_url
@@ -171,9 +171,7 @@ class HTTPDownloader:  # pylint: disable=too-few-public-methods
         if self.progressbar is True and tqdm is None:
             raise ValueError("Missing package 'tqdm' required for progress bars.")
 
-    def __call__(
-        self, url, output_file, pooch, check_only=False
-    ):  # pylint: disable=R0914
+    def __call__(self, url, output_file, pooch, check_only=False):  # pylint: disable=R0914
         """
         Download the given URL over HTTP to the given output file.
 
@@ -987,6 +985,7 @@ class FigshareRepository(DataRepository):  # pylint: disable=missing-class-docst
                     "the repository should be used. "
                     "Figshare will point to the latest version available.",
                     UserWarning,
+                    stacklevel=2,
                 )
                 # Define API url using only the article id
                 # (figshare will resolve the latest version)
@@ -1023,7 +1022,8 @@ class FigshareRepository(DataRepository):  # pylint: disable=missing-class-docst
         files = {item["name"]: item for item in self.api_response}
         if file_name not in files:
             raise ValueError(
-                f"File '{file_name}' not found in data archive {self.archive_url} (doi:{self.doi})."
+                f"File '{file_name}' not found in data archive {self.archive_url} "
+                f"(doi:{self.doi})."
             )
         download_url = files[file_name]["download_url"]
         return download_url

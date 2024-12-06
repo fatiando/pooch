@@ -8,6 +8,7 @@
 """
 Test the hash calculation and checking functions.
 """
+
 import os
 from pathlib import Path
 from tempfile import NamedTemporaryFile
@@ -24,9 +25,9 @@ except ImportError:
 
 from ..core import Pooch
 from ..hashes import (
-    make_registry,
     file_hash,
     hash_matches,
+    make_registry,
 )
 from .utils import check_tiny_data, mirror_directory
 
@@ -35,7 +36,7 @@ REGISTRY = (
     "tiny-data.txt baee0894dba14b12085eacb204284b97e362f4f3e5a5807693cc90ef415c1b2d\n"
 )
 REGISTRY_RECURSIVE = (
-    "subdir/tiny-data.txt baee0894dba14b12085eacb204284b97e362f4f3e5a5807693cc90ef415c1b2d\n"
+    "subdir/tiny-data.txt baee0894dba14b12085eacb204284b97e362f4f3e5a5807693cc90ef415c1b2d\n"  # noqa: E501
     "tiny-data.txt baee0894dba14b12085eacb204284b97e362f4f3e5a5807693cc90ef415c1b2d\n"
 )
 TINY_DATA_HASHES_HASHLIB = {

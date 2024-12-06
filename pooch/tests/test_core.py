@@ -8,6 +8,7 @@
 """
 Test the core class and factory function.
 """
+
 import hashlib
 import os
 from pathlib import Path
@@ -15,26 +16,24 @@ from tempfile import TemporaryDirectory
 
 import pytest
 
-from ..core import create, Pooch, retrieve, download_action, stream_download
-from ..utils import get_logger, temporary_file, os_cache
-from ..hashes import file_hash, hash_matches
-
 # Import the core module so that we can monkeypatch some functions
 from .. import core
-from ..downloaders import HTTPDownloader, FTPDownloader
-
+from ..core import Pooch, create, download_action, retrieve, stream_download
+from ..downloaders import FTPDownloader, HTTPDownloader
+from ..hashes import file_hash, hash_matches
+from ..utils import get_logger, os_cache, temporary_file
 from .utils import (
-    pooch_test_url,
+    capture_log,
+    check_large_data,
+    check_tiny_data,
     data_over_ftp,
+    mirror_directory,
+    pooch_test_dataverse_url,
     pooch_test_figshare_url,
+    pooch_test_registry,
+    pooch_test_url,
     pooch_test_zenodo_url,
     pooch_test_zenodo_with_slash_url,
-    pooch_test_dataverse_url,
-    pooch_test_registry,
-    check_tiny_data,
-    check_large_data,
-    capture_log,
-    mirror_directory,
 )
 
 DATA_DIR = str(Path(__file__).parent / "data")
@@ -507,7 +506,7 @@ def test_check_availability_on_ftp(ftpserver):
             path=DATA_DIR,
             base_url=url.replace("tiny-data.txt", ""),
             registry={
-                "tiny-data.txt": "baee0894dba14b12085eacb204284b97e362f4f3e5a5807693cc90ef415c1b2d",
+                "tiny-data.txt": "baee0894dba14b12085eacb204284b97e362f4f3e5a5807693cc90ef415c1b2d",  # noqa: E501
                 "doesnot_exist.zip": "jdjdjdjdflld",
             },
         )
@@ -520,7 +519,7 @@ def test_check_availability_on_ftp(ftpserver):
 def test_check_availability_invalid_downloader():
     "Should raise an exception if the downloader doesn't support this"
 
-    def downloader(url, output, pooch):  # pylint: disable=unused-argument
+    def downloader(url, output, pooch):  # noqa: ARG001
         "A downloader that doesn't support check_only"
         return None
 

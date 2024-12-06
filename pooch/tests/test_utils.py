@@ -7,19 +7,20 @@
 """
 Test the utility functions.
 """
+
 import os
 import shutil
-import time
-from pathlib import Path
 import tempfile
+import time
+from concurrent.futures import ProcessPoolExecutor, ThreadPoolExecutor
+from pathlib import Path
 from tempfile import TemporaryDirectory
-from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor
 
 import pytest
 
 from ..utils import (
-    parse_url,
     make_local_storage,
+    parse_url,
     temporary_file,
     unique_file_name,
 )
@@ -80,7 +81,7 @@ def test_make_local_storage_parallel(pool, monkeypatch):
 def test_local_storage_makedirs_permissionerror(monkeypatch):
     "Should warn the user when can't create the local data dir"
 
-    def mockmakedirs(path, exist_ok=False):  # pylint: disable=unused-argument
+    def mockmakedirs(path, exist_ok=False):  # noqa: ARG001
         "Raise an exception to mimic permission issues"
         raise PermissionError("Fake error")
 
@@ -103,7 +104,7 @@ def test_local_storage_newfile_permissionerror(monkeypatch):
     # This is a separate function because there should be a warning if the data
     # dir already exists but we can't write to it.
 
-    def mocktempfile(**kwargs):  # pylint: disable=unused-argument
+    def mocktempfile(**kwargs):  # noqa: ARG001
         "Raise an exception to mimic permission issues"
         raise PermissionError("Fake error")
 
