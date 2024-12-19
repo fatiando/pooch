@@ -45,7 +45,7 @@ jobs:
           - optional
         include:
           - dependencies: oldest
-            python: "3.7"
+            python: "3.9"
           - dependencies: latest
             python: "3.13"
           - dependencies: optional
@@ -53,7 +53,7 @@ jobs:
           # test on macos-13 (x86) using oldest dependencies and python 3.7
           - os: macos-13
             dependencies: oldest
-            python: "3.7"
+            python: "3.9"
         exclude:
           # don't test on macos-latest (arm64) with oldest dependencies
           - os: macos-latest
