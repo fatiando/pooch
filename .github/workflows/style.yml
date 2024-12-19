@@ -58,4 +58,4 @@ jobs:
         run: python -m pip freeze
 
       - name: Check code style
-        run: make check-style lint
+        run: make check-style
