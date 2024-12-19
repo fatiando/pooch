@@ -119,7 +119,7 @@ For **package developers** including sample data in their projects:
 """
 Module mypackage/datasets.py
 """
-import pkg_resources
+from importlib import resources
 import pandas
 import pooch
 
@@ -154,7 +154,7 @@ GOODBOY = pooch.create(
 # manage large numbers of data files. The registry file should be packaged
 # and distributed with your software.
 GOODBOY.load_registry(
-    pkg_resources.resource_stream("mypackage", "registry.txt")
+    resources.open_text("mypackage", "registry.txt")
 )
 
 # Define functions that your users can call to get back the data in memory
