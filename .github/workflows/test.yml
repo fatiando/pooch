@@ -47,9 +47,9 @@ jobs:
           - dependencies: oldest
             python: "3.9"
           - dependencies: latest
-            python: "3.11"
+            python: "3.13"
           - dependencies: optional
-            python: "3.11"
+            python: "3.13"
           # test on macos-13 (x86) using oldest dependencies and python 3.7
           - os: macos-13
             dependencies: oldest
