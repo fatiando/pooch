@@ -7,6 +7,7 @@
 """
 Test the version.
 """
+
 from packaging.version import Version
 
 import pooch

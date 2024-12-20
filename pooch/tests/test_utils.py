@@ -7,19 +7,20 @@
 """
 Test the utility functions.
 """
+
 import os
 import shutil
-import time
-from pathlib import Path
 import tempfile
+import time
+from concurrent.futures import ProcessPoolExecutor, ThreadPoolExecutor
+from pathlib import Path
 from tempfile import TemporaryDirectory
-from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor
 
 import pytest
 
 from ..utils import (
-    parse_url,
     make_local_storage,
+    parse_url,
     temporary_file,
     unique_file_name,
 )

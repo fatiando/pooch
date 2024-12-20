@@ -7,20 +7,18 @@
 # pylint: disable=missing-docstring,import-outside-toplevel,import-self
 #
 # Import functions/classes to make the API
-from .core import Pooch, create, retrieve
-from .utils import os_cache, check_version, get_logger
-from .hashes import file_hash, make_registry
-from .downloaders import (
-    HTTPDownloader,
-    FTPDownloader,
-    SFTPDownloader,
-    DOIDownloader,
-)
-from .processors import Unzip, Untar, Decompress
-
 # This file is generated automatically by setuptools_scm
 from . import _version
-
+from .core import Pooch, create, retrieve
+from .downloaders import (
+    DOIDownloader,
+    FTPDownloader,
+    HTTPDownloader,
+    SFTPDownloader,
+)
+from .hashes import file_hash, make_registry
+from .processors import Decompress, Untar, Unzip
+from .utils import check_version, get_logger, os_cache
 
 # Add a "v" to the version number
 __version__ = f"v{_version.version}"
