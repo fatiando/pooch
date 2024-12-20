@@ -7,8 +7,9 @@
 """
 Calculating and checking file hashes.
 """
-import hashlib
+
 import functools
+import hashlib
 from pathlib import Path
 
 # From the docs: https://docs.python.org/3/library/hashlib.html#hashlib.new

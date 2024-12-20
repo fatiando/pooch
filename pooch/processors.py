@@ -8,14 +8,15 @@
 """
 Post-processing hooks
 """
+
 import abc
-import os
 import bz2
 import gzip
 import lzma
+import os
 import shutil
-from zipfile import ZipFile
 from tarfile import TarFile
+from zipfile import ZipFile
 
 from .utils import get_logger
 

@@ -7,18 +7,18 @@
 """
 Misc utilities
 """
+
+import hashlib
 import logging
 import os
 import tempfile
-import hashlib
+import warnings
+from contextlib import contextmanager
 from pathlib import Path
 from urllib.parse import urlsplit
-from contextlib import contextmanager
-import warnings
 
 import platformdirs
 from packaging.version import Version
-
 
 LOGGER = logging.Logger("pooch")
 LOGGER.addHandler(logging.StreamHandler())
