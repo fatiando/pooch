@@ -108,7 +108,7 @@ extend-select = [
   "YTT",      # flake8-2020
 ]
 ignore = [
-    "UP015", # ignore redundant modes in `open` (it's ok to be explicit)
+    "UP015",    # ignore redundant modes in `open` (it's ok to be explicit)
     "ISC001",   # Conflicts with formatter
     "PLR09",    # Too many <...>
     "PLR2004",  # Magic value used in comparison
@@ -119,3 +119,5 @@ ignore = [
 [tool.ruff.lint.per-file-ignores]
 # disable unused-imports errors on __init__.py
 "__init__.py" = ["F401"]
+# allow print statements in tests
+"pooch/tests/**" = ["T20"]
