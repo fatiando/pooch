@@ -7,17 +7,16 @@
 """
 Test the processor hooks
 """
+
+import warnings
 from pathlib import Path
 from tempfile import TemporaryDirectory
-import warnings
 
 import pytest
 
 from .. import Pooch
-from ..processors import Unzip, Untar, Decompress
-
-from .utils import pooch_test_url, pooch_test_registry, check_tiny_data, capture_log
-
+from ..processors import Decompress, Untar, Unzip
+from .utils import capture_log, check_tiny_data, pooch_test_registry, pooch_test_url
 
 REGISTRY = pooch_test_registry()
 BASEURL = pooch_test_url()
