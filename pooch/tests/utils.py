@@ -7,13 +7,14 @@
 """
 Utilities for testing code.
 """
-import os
+
 import io
 import logging
+import os
 import shutil
 import stat
-from pathlib import Path
 from contextlib import contextmanager
+from pathlib import Path
 
 from .. import __version__ as full_version
 from ..utils import check_version, get_logger

@@ -8,6 +8,7 @@
 """
 Test the core class and factory function.
 """
+
 import hashlib
 import os
 from pathlib import Path
@@ -15,26 +16,24 @@ from tempfile import TemporaryDirectory
 
 import pytest
 
-from ..core import create, Pooch, retrieve, download_action, stream_download
-from ..utils import get_logger, temporary_file, os_cache
-from ..hashes import file_hash, hash_matches
-
 # Import the core module so that we can monkeypatch some functions
 from .. import core
-from ..downloaders import HTTPDownloader, FTPDownloader
-
+from ..core import Pooch, create, download_action, retrieve, stream_download
+from ..downloaders import FTPDownloader, HTTPDownloader
+from ..hashes import file_hash, hash_matches
+from ..utils import get_logger, os_cache, temporary_file
 from .utils import (
-    pooch_test_url,
+    capture_log,
+    check_large_data,
+    check_tiny_data,
     data_over_ftp,
+    mirror_directory,
+    pooch_test_dataverse_url,
     pooch_test_figshare_url,
+    pooch_test_registry,
+    pooch_test_url,
     pooch_test_zenodo_url,
     pooch_test_zenodo_with_slash_url,
-    pooch_test_dataverse_url,
-    pooch_test_registry,
-    check_tiny_data,
-    check_large_data,
-    capture_log,
-    mirror_directory,
 )
 
 DATA_DIR = str(Path(__file__).parent / "data")

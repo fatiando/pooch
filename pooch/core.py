@@ -7,25 +7,25 @@
 """
 The main Pooch class and a factory function for it.
 """
-import os
-import time
+
 import contextlib
-from pathlib import Path
+import os
 import shlex
 import shutil
+import time
+from pathlib import Path
 
-
-from .hashes import hash_matches, file_hash
+from .downloaders import DOIDownloader, choose_downloader, doi_to_repository
+from .hashes import file_hash, hash_matches
 from .utils import (
+    cache_location,
     check_version,
     get_logger,
     make_local_storage,
-    cache_location,
-    temporary_file,
     os_cache,
+    temporary_file,
     unique_file_name,
 )
-from .downloaders import DOIDownloader, choose_downloader, doi_to_repository
 
 
 def retrieve(

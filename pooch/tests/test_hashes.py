@@ -8,6 +8,7 @@
 """
 Test the hash calculation and checking functions.
 """
+
 import os
 from pathlib import Path
 from tempfile import NamedTemporaryFile
@@ -24,9 +25,9 @@ except ImportError:
 
 from ..core import Pooch
 from ..hashes import (
-    make_registry,
     file_hash,
     hash_matches,
+    make_registry,
 )
 from .utils import check_tiny_data, mirror_directory
 
