@@ -14,4 +14,4 @@ doc/api/generated
 *.egg-info
 MANIFEST
 .coverage.*
-pooch/_version.py
+src/pooch/_version.py

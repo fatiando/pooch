@@ -13,8 +13,8 @@ import warnings
 
 import pytest
 
-from .. import Pooch
-from ..processors import Unzip, Untar, Decompress
+from pooch import Pooch
+from pooch.processors import Unzip, Untar, Decompress
 
 from .utils import pooch_test_url, pooch_test_registry, check_tiny_data, capture_log
 

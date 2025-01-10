@@ -12,4 +12,3 @@ exclude Makefile
 exclude .gitignore
 exclude .gitattributes
 exclude environment.yml
-include pooch/tests/data
