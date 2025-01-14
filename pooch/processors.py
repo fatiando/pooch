@@ -259,7 +259,7 @@ class Untar(ExtractorProcessor):  # pylint: disable=too-few-public-methods
                     "Untarring contents of '%s' to '%s'", fname, extract_dir
                 )
                 # Unpack all files from the archive into our new folder
-                tar_file.extractall(path=extract_dir)
+                tar_file.extractall(path=extract_dir, filter="data")
             else:
                 for member in self.members:
                     get_logger().info(
@@ -281,7 +281,9 @@ class Untar(ExtractorProcessor):  # pylint: disable=too-few-public-methods
                         )
                     ]
                     # Extract the data file from within the archive
-                    tar_file.extractall(members=subdir_members, path=extract_dir)
+                    tar_file.extractall(
+                        members=subdir_members, path=extract_dir, filter="data"
+                    )
 
 
 class Decompress:  # pylint: disable=too-few-public-methods
