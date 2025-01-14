@@ -8,12 +8,14 @@
 """
 Post-processing hooks
 """
+
 import abc
 import os
 import bz2
 import gzip
 import lzma
 import shutil
+import sys
 from zipfile import ZipFile
 from tarfile import TarFile
 
@@ -253,13 +255,14 @@ class Untar(ExtractorProcessor):  # pylint: disable=too-few-public-methods
         This method receives an argument for the archive to extract and the
         destination path.
         """
+        filter_kwarg = dict() if sys.version_info < (3, 12) else dict(filter="data")
         with TarFile.open(fname, "r") as tar_file:
             if self.members is None:
                 get_logger().info(
                     "Untarring contents of '%s' to '%s'", fname, extract_dir
                 )
                 # Unpack all files from the archive into our new folder
-                tar_file.extractall(path=extract_dir, filter="data")
+                tar_file.extractall(path=extract_dir, **filter_kwarg)
             else:
                 for member in self.members:
                     get_logger().info(
@@ -282,7 +285,7 @@ class Untar(ExtractorProcessor):  # pylint: disable=too-few-public-methods
                     ]
                     # Extract the data file from within the archive
                     tar_file.extractall(
-                        members=subdir_members, path=extract_dir, filter="data"
+                        members=subdir_members, path=extract_dir, **filter_kwarg
                     )
 
 
