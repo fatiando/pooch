@@ -255,7 +255,7 @@ class Untar(ExtractorProcessor):  # pylint: disable=too-few-public-methods
         This method receives an argument for the archive to extract and the
         destination path.
         """
-        filter_kwarg = dict() if sys.version_info < (3, 12) else dict(filter="data")
+        filter_kwarg = {} if sys.version_info < (3, 12) else {"filter": "data"}
         with TarFile.open(fname, "r") as tar_file:
             if self.members is None:
                 get_logger().info(
