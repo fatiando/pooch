@@ -38,6 +38,7 @@ dependencies = [
 progress = ["tqdm>=4.41.0,<5.0.0"]
 sftp = ["paramiko>=2.7.0"]
 xxhash = ["xxhash>=1.4.3"]
+test = ["pytest-httpserver", "pytest-localftpserver"]
 
 [project.urls]
 "Documentation" = "https://www.fatiando.org/pooch"
