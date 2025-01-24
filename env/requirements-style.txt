@@ -4,3 +4,8 @@ flake8
 pylint>=2.4
 pathspec
 burocrata
+types-requests
+types-tqdm
+types-paramiko
+mypy
+pytest
