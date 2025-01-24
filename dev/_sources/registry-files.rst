@@ -13,7 +13,7 @@ hashes in a file and use :meth:`pooch.Pooch.load_registry` to read them.
 .. code:: python
 
     import os
-    import pkg_resources
+    from importlib import resources
 
     POOCH = pooch.create(
         path=pooch.os_cache("plumbus"),
@@ -24,14 +24,15 @@ hashes in a file and use :meth:`pooch.Pooch.load_registry` to read them.
         registry=None,
     )
     # Get registry file from package_data
-    registry_file = pkg_resources.resource_stream("plumbus", "registry.txt")
+    registry_file = resources.open_text("plumbus", "registry.txt")
     # Load this registry file
     POOCH.load_registry(registry_file)
 
 In this case, the ``registry.txt`` file is in the ``plumbus/`` package
 directory and should be shipped with the package (see below for instructions).
-We use `pkg_resources <https://setuptools.readthedocs.io/en/latest/pkg_resources.html#basic-resource-access>`__
-to access the ``registry.txt``, giving it the name of our Python package.
+We use `importlib.resources
+<https://docs.python.org/3/library/importlib.resources.html>`__ to access the
+``registry.txt``, giving it the name of our Python package.
 
 Registry file format
 --------------------
