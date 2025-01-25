@@ -33,7 +33,7 @@ FilePath = t.Union[str, os.PathLike]
 Actions = te.Literal["download", "fetch", "update"]
 
 
-class DownloaderT(te.Protocol):
+class Downloader(te.Protocol):
     """
     A class used to define the type definition for the downloader function.
     """
@@ -49,7 +49,7 @@ class DownloaderT(te.Protocol):
     ) -> t.Any: ...
 
 
-ProcessorT = t.Callable[[str, Actions, "Pooch"], t.Any]
+Processor = t.Callable[[str, Actions, "Pooch"], t.Any]
 
 
 def retrieve(
@@ -534,8 +534,8 @@ class Pooch:
     def fetch(
         self,
         fname: str,
-        processor: t.Optional[ProcessorT] = None,
-        downloader: t.Optional[DownloaderT] = None,
+        processor: t.Optional[Processor] = None,
+        downloader: t.Optional[Downloader] = None,
         progressbar: bool = False,
     ) -> str:
         """
@@ -733,7 +733,7 @@ class Pooch:
         # Call registry population for this repository
         return repository.populate_registry(self)
 
-    def is_available(self, fname: str, downloader: t.Optional[DownloaderT] = None):
+    def is_available(self, fname: str, downloader: t.Optional[Downloader] = None):
         """
         Check availability of a remote file without downloading it.
 
