@@ -7,6 +7,7 @@
 """
 Misc utilities
 """
+
 import logging
 import os
 import tempfile
@@ -198,7 +199,14 @@ def parse_url(url):
     return {"protocol": protocol, "netloc": netloc, "path": path}
 
 
-def cache_location(path, env=None, version=None):
+from typing import Optional, Union
+
+FilePath = Union[str, os.PathLike]
+FilePathInput = Union[FilePath, list[FilePath], tuple[FilePath]]
+
+def cache_location(
+    path: FilePathInput, env: Optional[str] = None, version: Optional[str] = None
+) -> Path:
     """
     Location of the cache given a base path and optional configuration.
 

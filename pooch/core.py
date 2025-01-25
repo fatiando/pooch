@@ -26,10 +26,11 @@ from .utils import (
     temporary_file,
     os_cache,
     unique_file_name,
+    FilePath,
+    FilePathInput,
 )
 from .downloaders import DOIDownloader, choose_downloader, doi_to_repository
 
-FilePath = Union[str, os.PathLike]
 Actions = Literal["download", "fetch", "update"]
 
 
@@ -49,18 +50,18 @@ class Downloader(Protocol):
     ) -> Any: ...
 
 
-Processor = Callable[[str, Actions, "Pooch"], Any]
+Processor = Callable[[str, Actions, Optional["Pooch"]], Any]
 
 
 def retrieve(
-    url,
-    known_hash,
-    fname=None,
-    path=None,
-    processor=None,
-    downloader=None,
-    progressbar=False,
-):
+    url: str,
+    known_hash: Optional[str] = None,
+    fname: Optional[str] = None,
+    path: Optional[FilePath] = None,
+    processor: Optional[Processor] = None,
+    downloader: Optional[Downloader] = None,
+    progressbar: bool = False,
+) -> str:
     """
     Download and cache a single file locally.
 
@@ -278,15 +279,15 @@ def retrieve(
 
 
 def create(
-    path,
-    base_url,
-    version=None,
-    version_dev="master",
-    env=None,
-    registry=None,
-    urls=None,
-    retry_if_failed=0,
-    allow_updates=True,
+    path: FilePathInput,
+    base_url: str,
+    version: Optional[str] = None,
+    version_dev: str = "master",
+    env: Optional[str] = None,
+    registry: Optional[dict] = None,
+    urls: Optional[dict] = None,
+    retry_if_failed: int = 0,
+    allow_updates: Union[bool, str] = True,
 ):
     """
     Create a :class:`~pooch.Pooch` with sensible defaults to fetch data files.
@@ -503,7 +504,7 @@ class Pooch:
 
     def __init__(
         self,
-        path: str,
+        path: FilePath,
         base_url: str,
         registry: Optional[dict[str, str]] = None,
         urls: Optional[dict[str, str]] = None,
