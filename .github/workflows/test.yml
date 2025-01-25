@@ -25,31 +25,39 @@ defaults:
 
 jobs:
   #############################################################################
-  # Run tests and upload to codecov
+  # Run tests
   test:
     name: ${{ matrix.os }} python=${{ matrix.python }} dependencies=${{ matrix.dependencies }}
     if: ${{ github.repository_owner == 'fatiando' || github.event_name != 'schedule' }}
-    runs-on: ${{ matrix.os }}-latest
+    runs-on: ${{ matrix.os }}
     strategy:
       # Otherwise, the workflow would stop if a single job fails. We want to
       # run all of them to catch failures in different combinations.
       fail-fast: false
       matrix:
         os:
-          - ubuntu
-          - macos
-          - windows
+          - ubuntu-latest
+          - macos-latest
+          - windows-latest
         dependencies:
           - oldest
           - latest
           - optional
         include:
           - dependencies: oldest
-            python: "3.7"
+            python: "3.9"
           - dependencies: latest
-            python: "3.11"
+            python: "3.13"
           - dependencies: optional
-            python: "3.11"
+            python: "3.13"
+          # test on macos-13 (x86) using oldest dependencies and python 3.7
+          - os: macos-13
+            dependencies: oldest
+            python: "3.9"
+        exclude:
+          # don't test on macos-latest (arm64) with oldest dependencies
+          - os: macos-latest
+            dependencies: oldest
     env:
       REQUIREMENTS: env/requirements-build.txt env/requirements-test.txt
       # Used to tag codecov submissions
@@ -116,7 +124,7 @@ jobs:
       - name: Get the pip cache folder
         id: pip-cache
         run: |
-          echo "::set-output name=dir::$(pip cache dir)"
+          echo "dir=$(pip cache dir)" >> $GITHUB_OUTPUT
 
       - name: Setup caching for pip packages
         uses: actions/cache@v4
@@ -147,14 +155,40 @@ jobs:
       - name: Convert coverage report to XML for codecov
         run: coverage xml
 
-      - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v4
+      - name: Upload coverage report as an artifact
+        uses: actions/upload-artifact@v4
         with:
-          files: ./coverage.xml
-          env_vars: OS,PYTHON,DEPENDENCIES
-          # Don't mark the job as failed if the upload fails for some reason.
-          # It does sometimes but shouldn't be the reason for running
-          # everything again unless something else is broken.
-          fail_ci_if_error: false
+          name: coverage_${{ matrix.os }}_${{ matrix.dependencies }}
+          path: ./coverage.xml
+
+
+  #############################################################################
+  # Upload coverage report to codecov
+  codecov-upload:
+    runs-on: ubuntu-latest
+    needs: test
+
+    steps:
+
+      - name: Download coverage report artifacts
+        # Download coverage reports from every runner.
+        # Maximum coverage is achieved by combining reports from every runner.
+        # Each coverage file will live in its own folder with the same name as
+        # the artifact.
+        uses: actions/download-artifact@v4
+        with:
+          pattern: coverage_*
+
+      - name: List all downloaded artifacts
+        run: ls -l -R .
+
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v5
+        with:
+          # Upload all coverage report files
+          files: ./coverage_*/coverage.xml
+          # Fail the job so we know coverage isn't being updated. Otherwise it
+          # can silently drop and we won't know.
+          fail_ci_if_error: true
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}

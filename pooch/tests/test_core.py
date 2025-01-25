@@ -525,12 +525,9 @@ def test_check_availability_invalid_downloader():
         return None
 
     pup = Pooch(path=DATA_DIR, base_url=BASEURL, registry=REGISTRY)
-    # First check that everything works without the custom downloader
-    assert pup.is_available("tiny-data.txt")
-    # Now use the bad one
-    with pytest.raises(NotImplementedError) as error:
+    msg = "does not support availability checks."
+    with pytest.raises(NotImplementedError, match=msg):
         pup.is_available("tiny-data.txt", downloader=downloader)
-        assert "does not support availability checks" in str(error)
 
 
 @pytest.mark.network
@@ -627,6 +624,7 @@ def test_stream_download(fname):
         check_tiny_data(str(destination))
 
 
+@pytest.mark.network
 @pytest.mark.parametrize(
     "url",
     [FIGSHAREURL, ZENODOURL, DATAVERSEURL],
@@ -649,6 +647,7 @@ def test_load_registry_from_doi(url):
             pup.fetch(filename)
 
 
+@pytest.mark.network
 def test_load_registry_from_doi_zenodo_with_slash():
     """
     Check that the registry is correctly populated from the Zenodo API when

@@ -74,7 +74,13 @@ Are you a **scientist** or researcher? Pooch can help you too!
 [rembg](https://github.com/danielgatis/rembg),
 [DASCore](https://github.com/DASDAE/dascore),
 [scikit-mobility](https://github.com/scikit-mobility/scikit-mobility),
-[Py-ART](https://github.com/ARM-DOE/pyart)
+[Py-ART](https://github.com/ARM-DOE/pyart),
+[HyperSpy](https://github.com/hyperspy/hyperspy),
+[RosettaSciIO](https://github.com/hyperspy/rosettasciio),
+[eXSpy](https://github.com/hyperspy/exspy),
+[SPLASH](https://github.com/Adam-Boesky/astro_SPLASH)
+[xclim](https://github.com/Ouranosinc/xclim)
+[CLISOPS](https://github.com/roocs/clisops)
 
 
 > If you're using Pooch, **send us a pull request** adding your project to the list.
@@ -113,7 +119,7 @@ For **package developers** including sample data in their projects:
 """
 Module mypackage/datasets.py
 """
-import pkg_resources
+from importlib import resources
 import pandas
 import pooch
 
@@ -148,7 +154,7 @@ GOODBOY = pooch.create(
 # manage large numbers of data files. The registry file should be packaged
 # and distributed with your software.
 GOODBOY.load_registry(
-    pkg_resources.resource_stream("mypackage", "registry.txt")
+    resources.open_text("mypackage", "registry.txt")
 )
 
 # Define functions that your users can call to get back the data in memory
