@@ -7,13 +7,14 @@
 """
 The main Pooch class and a factory function for it.
 """
+
 import os
 import time
 import contextlib
 from pathlib import Path
 import shlex
 import shutil
-import typing as t
+from typing import Union, Literal, Protocol, Optional, Any, Callable
 
 
 from .hashes import hash_matches, file_hash
@@ -28,11 +29,11 @@ from .utils import (
 )
 from .downloaders import DOIDownloader, choose_downloader, doi_to_repository
 
-FilePath = t.Union[str, os.PathLike]
-Actions = t.Literal["download", "fetch", "update"]
+FilePath = Union[str, os.PathLike]
+Actions = Literal["download", "fetch", "update"]
 
 
-class Downloader(t.Protocol):
+class Downloader(Protocol):
     """
     A class used to define the type definition for the downloader function.
     """
@@ -41,14 +42,14 @@ class Downloader(t.Protocol):
     def __call__(  # noqa: E704
         self,
         fname: str,
-        action: t.Optional[FilePath],
+        action: Optional[FilePath],
         pooch: "Pooch",
         *,
-        check_only: t.Optional[bool] = None,
-    ) -> t.Any: ...
+        check_only: Optional[bool] = None,
+    ) -> Any: ...
 
 
-Processor = t.Callable[[str, Actions, "Pooch"], t.Any]
+Processor = Callable[[str, Actions, "Pooch"], Any]
 
 
 def retrieve(
@@ -504,8 +505,8 @@ class Pooch:
         self,
         path: str,
         base_url: str,
-        registry: t.Optional[t.Dict[str, str]] = None,
-        urls: t.Optional[t.Dict[str, str]] = None,
+        registry: Optional[dict[str, str]] = None,
+        urls: Optional[dict[str, str]] = None,
         retry_if_failed: int = 0,
         allow_updates: bool = True,
     ) -> None:
@@ -526,15 +527,15 @@ class Pooch:
         return Path(os.path.abspath(os.path.expanduser(str(self.path))))
 
     @property
-    def registry_files(self) -> t.List[str]:
+    def registry_files(self) -> list[str]:
         "List of file names on the registry"
         return list(self.registry)
 
     def fetch(
         self,
         fname: str,
-        processor: t.Optional[Processor] = None,
-        downloader: t.Optional[Downloader] = None,
+        processor: Optional[Processor] = None,
+        downloader: Optional[Downloader] = None,
         progressbar: bool = False,
     ) -> str:
         """
@@ -673,7 +674,7 @@ class Pooch:
         with contextlib.ExitStack() as stack:
             if hasattr(fname, "read"):
                 # It's a file object
-                fin: t.Any = fname
+                fin: Any = fname
             else:
                 # It's a file path
                 fin = stack.enter_context(open(fname, encoding="utf-8"))
@@ -732,7 +733,7 @@ class Pooch:
         # Call registry population for this repository
         return repository.populate_registry(self)
 
-    def is_available(self, fname: str, downloader: t.Optional[Downloader] = None):
+    def is_available(self, fname: str, downloader: Optional[Downloader] = None):
         """
         Check availability of a remote file without downloading it.
 
