@@ -44,7 +44,7 @@ class Downloader(Protocol):
         self,
         fname: str,
         action: Optional[FilePath],
-        pooch: "Pooch",
+        pooch: Optional["Pooch"],
         *,
         check_only: Optional[bool] = None,
     ) -> Any: ...
@@ -805,7 +805,14 @@ def download_action(path: Path, known_hash: Optional[str]) -> tuple[Actions, str
     return "fetch", "Fetching"
 
 
-def stream_download(url, fname, known_hash, downloader, pooch=None, retry_if_failed=0):
+def stream_download(
+    url: str,
+    fname: Path,
+    known_hash: Optional[str],
+    downloader: Downloader,
+    pooch: Optional[Pooch] = None,
+    retry_if_failed: int = 0,
+) -> None:
     """
     Stream the file and check that its hash matches the known one.
 
