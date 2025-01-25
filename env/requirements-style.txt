@@ -8,4 +8,3 @@ types-requests
 types-tqdm
 types-paramiko
 mypy
-pytest

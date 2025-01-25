@@ -32,7 +32,6 @@ dependencies = [
     "platformdirs >= 2.5.0",
     "packaging >= 20.0",
     "requests >= 2.19.0",
-    "typing_extensions >= 4.0.0",
 ]
 
 [[tool.mypy.overrides]]

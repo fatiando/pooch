@@ -14,7 +14,6 @@ from pathlib import Path
 import shlex
 import shutil
 import typing as t
-import typing_extensions as te
 
 
 from .hashes import hash_matches, file_hash
@@ -30,10 +29,10 @@ from .utils import (
 from .downloaders import DOIDownloader, choose_downloader, doi_to_repository
 
 FilePath = t.Union[str, os.PathLike]
-Actions = te.Literal["download", "fetch", "update"]
+Actions = t.Literal["download", "fetch", "update"]
 
 
-class Downloader(te.Protocol):
+class Downloader(t.Protocol):
     """
     A class used to define the type definition for the downloader function.
     """
