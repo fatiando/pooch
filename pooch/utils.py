@@ -20,12 +20,24 @@ import warnings
 import platformdirs
 from packaging.version import Version
 
+from typing import Optional, Union, Any, TypedDict, Generator
+
+
+class ParsedURL(TypedDict):
+    protocol: str
+    netloc: str
+    path: str
+
+
+FilePath = Union[str, os.PathLike]
+FilePathInput = Union[FilePath, list[FilePath], tuple[FilePath]]
+
 
 LOGGER = logging.Logger("pooch")
 LOGGER.addHandler(logging.StreamHandler())
 
 
-def file_hash(*args, **kwargs):
+def file_hash(*args, **kwargs) -> Any:
     """
     WARNING: Importing this function from pooch.utils is DEPRECATED.
     Please import from the top-level namespace (`from pooch import file_hash`)
@@ -55,7 +67,7 @@ def file_hash(*args, **kwargs):
     return new_file_hash(*args, **kwargs)
 
 
-def get_logger():
+def get_logger() -> logging.Logger:
     r"""
     Get the default event logger.
 
@@ -71,7 +83,7 @@ def get_logger():
     return LOGGER
 
 
-def os_cache(project):
+def os_cache(project: str) -> Path:
     r"""
     Default cache location based on the operating system.
 
@@ -100,7 +112,7 @@ def os_cache(project):
     return Path(platformdirs.user_cache_dir(project))
 
 
-def check_version(version, fallback="master"):
+def check_version(version: str, fallback: str = "master") -> str:
     """
     Check if a version is PEP440 compliant and there are no unreleased changes.
 
@@ -146,7 +158,7 @@ def check_version(version, fallback="master"):
     return version
 
 
-def parse_url(url):
+def parse_url(url: str) -> ParsedURL:
     """
     Parse a URL into 3 components:
 
@@ -199,11 +211,6 @@ def parse_url(url):
     return {"protocol": protocol, "netloc": netloc, "path": path}
 
 
-from typing import Optional, Union
-
-FilePath = Union[str, os.PathLike]
-FilePathInput = Union[FilePath, list[FilePath], tuple[FilePath]]
-
 def cache_location(
     path: FilePathInput, env: Optional[str] = None, version: Optional[str] = None
 ) -> Path:
@@ -243,7 +250,7 @@ def cache_location(
     return Path(path)
 
 
-def make_local_storage(path, env=None):
+def make_local_storage(path: FilePath, env: Optional[str] = None) -> None:
     """
     Create the local cache directory and make sure it's writable.
 
@@ -285,7 +292,7 @@ def make_local_storage(path, env=None):
 
 
 @contextmanager
-def temporary_file(path=None):
+def temporary_file(path: Optional[FilePath] = None) -> Generator[str, None, None]:
     """
     Create a closed and named temporary file and make sure it's cleaned up.
 
@@ -305,7 +312,7 @@ def temporary_file(path=None):
         The path to the temporary file.
 
     """
-    tmp = tempfile.NamedTemporaryFile(delete=False, dir=path)
+    tmp = tempfile.NamedTemporaryFile(delete=False, dir=path)  # type: ignore
     # Close the temp file so that it can be opened elsewhere
     tmp.close()
     try:
@@ -315,7 +322,7 @@ def temporary_file(path=None):
             os.remove(tmp.name)
 
 
-def unique_file_name(url):
+def unique_file_name(url: str) -> str:
     """
     Create a unique file name based on the given URL.
 
