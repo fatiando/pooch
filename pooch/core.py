@@ -771,7 +771,7 @@ class Pooch:
         return available
 
 
-def download_action(path, known_hash):
+def download_action(path: Path, known_hash: Optional[str]) -> tuple[Actions, str]:
     """
     Determine the action that is needed to get the file on disk.
 
@@ -798,15 +798,11 @@ def download_action(path, known_hash):
 
     """
     if not path.exists():
-        action = "download"
-        verb = "Downloading"
+        return "download", "Downloading"
     elif not hash_matches(str(path), known_hash):
-        action = "update"
-        verb = "Updating"
-    else:
-        action = "fetch"
-        verb = "Fetching"
-    return action, verb
+        return "update", "Updating"
+
+    return "fetch", "Fetching"
 
 
 def stream_download(url, fname, known_hash, downloader, pooch=None, retry_if_failed=0):
