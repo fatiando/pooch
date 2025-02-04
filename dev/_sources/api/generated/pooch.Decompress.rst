@@ -76,12 +76,20 @@ pooch.Decompress
     
     
     
+    
+    
+    
+    
 
 ----
 
 
 
 .. automethod:: Decompress.__call__
+
+
+
+
 
 
 
