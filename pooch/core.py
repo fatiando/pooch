@@ -28,14 +28,14 @@ from .utils import (
     unique_file_name,
 )
 from .downloaders import DOIDownloader, choose_downloader, doi_to_repository
-from .typing import FilePath, FilePathInput, Processor, Downloader, Action
+from .typing import PathType, PathInputType, Processor, Downloader, Action
 
 
 def retrieve(
     url: str,
     known_hash: Optional[str] = None,
     fname: Optional[str] = None,
-    path: Optional[FilePath] = None,
+    path: Optional[PathType] = None,
     processor: Optional[Processor] = None,
     downloader: Optional[Downloader] = None,
     progressbar: bool = False,
@@ -257,7 +257,7 @@ def retrieve(
 
 
 def create(
-    path: FilePathInput,
+    path: PathInputType,
     base_url: str,
     version: Optional[str] = None,
     version_dev: str = "master",
@@ -482,7 +482,7 @@ class Pooch:
 
     def __init__(
         self,
-        path: FilePath,
+        path: PathType,
         base_url: str,
         registry: Optional[dict[str, str]] = None,
         urls: Optional[dict[str, str]] = None,
@@ -631,7 +631,7 @@ class Pooch:
         self._assert_file_in_registry(fname)
         return self.urls.get(fname, "".join([self.base_url, fname]))
 
-    def load_registry(self, fname: FilePath) -> None:
+    def load_registry(self, fname: PathType) -> None:
         """
         Load entries from a file and add them to the registry.
 

@@ -21,7 +21,7 @@ import platformdirs
 from packaging.version import Version
 from typing import Optional, Any, Generator
 
-from .typing import ParsedURL, FilePath, FilePathInput
+from .typing import ParsedURL, PathType, PathInputType
 
 
 LOGGER = logging.Logger("pooch")
@@ -203,7 +203,7 @@ def parse_url(url: str) -> ParsedURL:
 
 
 def cache_location(
-    path: FilePathInput, env: Optional[str] = None, version: Optional[str] = None
+    path: PathInputType, env: Optional[str] = None, version: Optional[str] = None
 ) -> Path:
     """
     Location of the cache given a base path and optional configuration.
@@ -241,7 +241,7 @@ def cache_location(
     return Path(path)
 
 
-def make_local_storage(path: FilePath, env: Optional[str] = None) -> None:
+def make_local_storage(path: PathType, env: Optional[str] = None) -> None:
     """
     Create the local cache directory and make sure it's writable.
 
@@ -283,7 +283,7 @@ def make_local_storage(path: FilePath, env: Optional[str] = None) -> None:
 
 
 @contextmanager
-def temporary_file(path: Optional[FilePath] = None) -> Generator[str, None, None]:
+def temporary_file(path: Optional[PathType] = None) -> Generator[str, None, None]:
     """
     Create a closed and named temporary file and make sure it's cleaned up.
 

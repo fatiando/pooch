@@ -77,7 +77,7 @@ type aliases used in ``pooch``'s codebase.
 
     pooch.typing.Action
     pooch.typing.Downloader
-    pooch.typing.FilePath
-    pooch.typing.FilePathInput
+    pooch.typing.PathType
+    pooch.typing.PathInputType
     pooch.typing.ParsedURL
     pooch.typing.Processor

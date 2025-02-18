@@ -31,16 +31,16 @@ if TYPE_CHECKING:
 __all__ = [
     "Action",
     "Downloader",
-    "FilePath",
-    "FilePathInput",
+    "PathType",
+    "PathInputType",
     "ParsedURL",
     "Processor",
 ]
 
 
 Action = Literal["download", "fetch", "update"]
-FilePath = Union[str, os.PathLike]
-FilePathInput = Union[FilePath, list[FilePath], tuple[FilePath]]
+PathType = Union[str, os.PathLike]
+PathInputType = Union[PathType, list[PathType], tuple[PathType]]
 Processor = Callable[[str, Action, Optional["Pooch"]], Any]
 
 
@@ -53,7 +53,7 @@ class Downloader(Protocol):
     def __call__(  # noqa: E704
         self,
         fname: str,
-        action: Optional[FilePath],
+        action: Optional[PathType],
         pooch: Optional["Pooch"],
         *,
         check_only: Optional[bool] = None,
