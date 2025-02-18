@@ -5,26 +5,10 @@
 # This code is part of the Fatiando a Terra project (https://www.fatiando.org)
 #
 """
-=============================
-Typing (:mod:`pooch.typing`)
-=============================
+Custom classes for type annotations
 
 This module provides additional `PEP 484 <https://peps.python.org/pep-0484/>`_
 type aliases used in ``pooch``'s codebase.
-
-API
----
-
-.. autosummary::
-   :toctree: generated/
-
-    Action
-    Downloader
-    FilePath
-    FilePathInput
-    ParsedURL
-    Processor
-
 """
 
 import os
