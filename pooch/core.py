@@ -14,7 +14,7 @@ import contextlib
 from pathlib import Path
 import shlex
 import shutil
-from typing import Union, Literal, Protocol, Optional, Any, Callable
+from typing import Union, Optional, Any
 
 
 from .hashes import hash_matches, file_hash
@@ -26,31 +26,9 @@ from .utils import (
     temporary_file,
     os_cache,
     unique_file_name,
-    FilePath,
-    FilePathInput,
 )
 from .downloaders import DOIDownloader, choose_downloader, doi_to_repository
-
-Actions = Literal["download", "fetch", "update"]
-
-
-class Downloader(Protocol):
-    """
-    A class used to define the type definition for the downloader function.
-    """
-
-    # pylint: disable=too-few-public-methods
-    def __call__(  # noqa: E704
-        self,
-        fname: str,
-        action: Optional[FilePath],
-        pooch: Optional["Pooch"],
-        *,
-        check_only: Optional[bool] = None,
-    ) -> Any: ...
-
-
-Processor = Callable[[str, Actions, Optional["Pooch"]], Any]
+from .typing import FilePath, FilePathInput, Processor, Downloader, Actions
 
 
 def retrieve(

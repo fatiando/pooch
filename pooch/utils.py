@@ -19,18 +19,9 @@ import warnings
 
 import platformdirs
 from packaging.version import Version
+from typing import Optional, Any, Generator
 
-from typing import Optional, Union, Any, TypedDict, Generator
-
-
-class ParsedURL(TypedDict):
-    protocol: str
-    netloc: str
-    path: str
-
-
-FilePath = Union[str, os.PathLike]
-FilePathInput = Union[FilePath, list[FilePath], tuple[FilePath]]
+from .typing import ParsedURL, FilePath, FilePathInput
 
 
 LOGGER = logging.Logger("pooch")
