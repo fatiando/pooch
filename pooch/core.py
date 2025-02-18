@@ -777,9 +777,8 @@ def download_action(path: Path, known_hash: Optional[str]) -> tuple[Action, str]
     """
     if not path.exists():
         return "download", "Downloading"
-    elif not hash_matches(str(path), known_hash):
+    if not hash_matches(str(path), known_hash):
         return "update", "Updating"
-
     return "fetch", "Fetching"
 
 
