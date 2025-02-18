@@ -1,4 +1,4 @@
-# Style checks
+# Style and type checks
 black
 flake8
 pylint>=2.4

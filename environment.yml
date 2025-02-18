@@ -26,11 +26,14 @@ dependencies:
     - sphinx==7.2.*
     - sphinx-book-theme==1.1.*
     - sphinx-design==0.5.*
-    # Style
+    # Style and types
     - pathspec
     - black>=20.8b1
     - flake8
     - pylint>=2.4
     - mypy
+    - types-requests
+    - types-tqdm
+    - types-paramiko
     - pip:
       - burocrata
