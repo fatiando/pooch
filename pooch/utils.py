@@ -16,10 +16,10 @@ from pathlib import Path
 from urllib.parse import urlsplit
 from contextlib import contextmanager
 import warnings
+from typing import Optional, Any, Generator
 
 import platformdirs
 from packaging.version import Version
-from typing import Optional, Any, Generator
 
 from .typing import ParsedURL, PathType, PathInputType
 
