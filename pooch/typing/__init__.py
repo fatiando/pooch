@@ -18,7 +18,7 @@ API
 .. autosummary::
    :toctree: generated/
 
-    Actions
+    Action
     Downloader
     FilePath
     FilePathInput
@@ -45,7 +45,7 @@ if TYPE_CHECKING:
 
 
 __all__ = [
-    "Actions",
+    "Action",
     "Downloader",
     "FilePath",
     "FilePathInput",
@@ -54,10 +54,10 @@ __all__ = [
 ]
 
 
-Actions = Literal["download", "fetch", "update"]
+Action = Literal["download", "fetch", "update"]
 FilePath = Union[str, os.PathLike]
 FilePathInput = Union[FilePath, list[FilePath], tuple[FilePath]]
-Processor = Callable[[str, Actions, Optional["Pooch"]], Any]
+Processor = Callable[[str, Action, Optional["Pooch"]], Any]
 
 
 class Downloader(Protocol):

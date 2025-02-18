@@ -28,7 +28,7 @@ from .utils import (
     unique_file_name,
 )
 from .downloaders import DOIDownloader, choose_downloader, doi_to_repository
-from .typing import FilePath, FilePathInput, Processor, Downloader, Actions
+from .typing import FilePath, FilePathInput, Processor, Downloader, Action
 
 
 def retrieve(
@@ -749,7 +749,7 @@ class Pooch:
         return available
 
 
-def download_action(path: Path, known_hash: Optional[str]) -> tuple[Actions, str]:
+def download_action(path: Path, known_hash: Optional[str]) -> tuple[Action, str]:
     """
     Determine the action that is needed to get the file on disk.
 
