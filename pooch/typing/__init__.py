@@ -46,7 +46,7 @@ Processor = Callable[[str, Action, Optional["Pooch"]], Any]
 
 class Downloader(Protocol):
     """
-    A class used to define the type definition for the downloader function.
+    Class used to define the type definition for the downloader function.
     """
 
     # pylint: disable=too-few-public-methods
@@ -61,6 +61,12 @@ class Downloader(Protocol):
 
 
 class ParsedURL(TypedDict):
+    """
+    Type for a dictionary generated after parsing a URL.
+
+    The dictionary contains three keys: protocol, netloc and path.
+    """
+
     protocol: str
     netloc: str
     path: str
