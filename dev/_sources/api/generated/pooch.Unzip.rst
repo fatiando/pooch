@@ -84,6 +84,10 @@ pooch.Unzip
     
     
     
+    
+    
+    
+    
 
 ----
 
@@ -94,6 +98,10 @@ pooch.Unzip
 
 
 .. automethod:: Unzip.__call__
+
+
+
+
 
 
 

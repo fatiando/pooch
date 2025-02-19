@@ -70,12 +70,20 @@ pooch.HTTPDownloader
     
     
     
+    
+    
+    
+    
 
 ----
 
 
 
 .. automethod:: HTTPDownloader.__call__
+
+
+
+
 
 
 

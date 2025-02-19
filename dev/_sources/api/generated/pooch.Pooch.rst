@@ -83,6 +83,10 @@ pooch.Pooch
     
     
     
+    
+    
+    
+    
         Pooch.fetch
     
     
@@ -104,6 +108,10 @@ pooch.Pooch
     
 
 ----
+
+
+
+
 
 
 
