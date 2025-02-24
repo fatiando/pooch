@@ -4,7 +4,8 @@
 <a href="https://www.fatiando.org/pooch"><strong>Documentation</strong> (latest)</a> •
 <a href="https://www.fatiando.org/pooch/dev"><strong>Documentation</strong> (main branch)</a> •
 <a href="https://github.com/fatiando/pooch/blob/main/CONTRIBUTING.md"><strong>Contributing</strong></a> •
-<a href="https://www.fatiando.org/contact/"><strong>Contact</strong></a>
+<a href="https://www.fatiando.org/contact/"><strong>Contact</strong></a> •
+<a href="https://github.com/orgs/fatiando/discussions"><strong>Ask a question</strong></a>
 </p>
 
 <p align="center">
@@ -42,7 +43,7 @@ Are you a **scientist** or researcher? Pooch can help you too!
 
 ## Projects using Pooch
 
-[SciPy](https://github.com/scipy/scipy), 
+[SciPy](https://github.com/scipy/scipy),
 [scikit-image](https://github.com/scikit-image/scikit-image),
 [xarray](https://github.com/pydata/xarray),
 [Ensaio](https://github.com/fatiando/ensaio),
