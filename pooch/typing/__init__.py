@@ -60,6 +60,19 @@ class Downloader(Protocol):
     ) -> Any: ...
 
 
+class ProgressBar(Protocol):
+    """
+    Class used to define the type definition for a progress bar.
+    """
+
+    total: int
+
+    # pylint: disable=too-few-public-methods
+    def update(self, n: Union[float, None]) -> Union[None, bool]: ...
+    def reset(self) -> None: ...
+    def close(self) -> None: ...
+
+
 class ParsedURL(TypedDict):
     """
     Type for a dictionary generated after parsing a URL.

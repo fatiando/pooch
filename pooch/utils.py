@@ -303,7 +303,7 @@ def temporary_file(path: Optional[PathType] = None) -> Generator[str, None, None
         The path to the temporary file.
 
     """
-    tmp = tempfile.NamedTemporaryFile(delete=False, dir=path)  # type: ignore
+    tmp = tempfile.NamedTemporaryFile(delete=False, dir=path)  # type: ignore[type-var]
     # Close the temp file so that it can be opened elsewhere
     tmp.close()
     try:

@@ -19,7 +19,9 @@ import sys
 from zipfile import ZipFile
 from tarfile import TarFile
 
+from typing import Any, Union
 from .utils import get_logger
+from .typing import Pooch
 
 
 class ExtractorProcessor(abc.ABC):  # pylint: disable=too-few-public-methods
@@ -46,13 +48,15 @@ class ExtractorProcessor(abc.ABC):  # pylint: disable=too-few-public-methods
 
     """
 
-    def __init__(self, members=None, extract_dir=None):
+    def __init__(
+        self, members: Union[None, list] = None, extract_dir: Union[None, str] = None
+    ) -> None:
         self.members = members
         self.extract_dir = extract_dir
 
     @property
     @abc.abstractmethod
-    def suffix(self):
+    def suffix(self) -> str:
         """
         String appended to unpacked archive folder name.
         Only used if extract_dir is None.
@@ -60,21 +64,21 @@ class ExtractorProcessor(abc.ABC):  # pylint: disable=too-few-public-methods
         """
 
     @abc.abstractmethod
-    def _all_members(self, fname):
+    def _all_members(self, fname: str) -> list[str]:
         """
         Return all the members in the archive.
         MUST BE IMPLEMENTED BY CHILD CLASSES.
         """
 
     @abc.abstractmethod
-    def _extract_file(self, fname, extract_dir):
+    def _extract_file(self, fname: str, extract_dir: str) -> None:
         """
         This method receives an argument for the archive to extract and the
         destination path.
         MUST BE IMPLEMENTED BY CHILD CLASSES.
         """
 
-    def __call__(self, fname, action, pooch):
+    def __call__(self, fname: str, action: str, pooch: Pooch) -> list[str]:
         """
         Extract all files from the given archive.
 
@@ -166,19 +170,19 @@ class Unzip(ExtractorProcessor):  # pylint: disable=too-few-public-methods
     """
 
     @property
-    def suffix(self):
+    def suffix(self) -> str:
         """
         String appended to unpacked archive folder name.
         Only used if extract_dir is None.
         """
         return ".unzip"
 
-    def _all_members(self, fname):
+    def _all_members(self, fname: str) -> list[str]:
         """Return all members from a given archive."""
         with ZipFile(fname, "r") as zip_file:
             return zip_file.namelist()
 
-    def _extract_file(self, fname, extract_dir):
+    def _extract_file(self, fname: str, extract_dir: str) -> None:
         """
         This method receives an argument for the archive to extract and the
         destination path.
@@ -238,19 +242,19 @@ class Untar(ExtractorProcessor):  # pylint: disable=too-few-public-methods
     """
 
     @property
-    def suffix(self):
+    def suffix(self) -> str:
         """
         String appended to unpacked archive folder name.
         Only used if extract_dir is None.
         """
         return ".untar"
 
-    def _all_members(self, fname):
+    def _all_members(self, fname: str) -> list[str]:
         """Return all members from a given archive."""
         with TarFile.open(fname, "r") as tar_file:
             return [info.name for info in tar_file.getmembers()]
 
-    def _extract_file(self, fname, extract_dir):
+    def _extract_file(self, fname: str, extract_dir: str) -> None:
         """
         This method receives an argument for the archive to extract and the
         destination path.
@@ -262,7 +266,10 @@ class Untar(ExtractorProcessor):  # pylint: disable=too-few-public-methods
                     "Untarring contents of '%s' to '%s'", fname, extract_dir
                 )
                 # Unpack all files from the archive into our new folder
-                tar_file.extractall(path=extract_dir, **filter_kwarg)
+                tar_file.extractall(
+                    path=extract_dir,
+                    **filter_kwarg,  # type: ignore[arg-type]
+                )
             else:
                 for member in self.members:
                     get_logger().info(
@@ -285,7 +292,9 @@ class Untar(ExtractorProcessor):  # pylint: disable=too-few-public-methods
                     ]
                     # Extract the data file from within the archive
                     tar_file.extractall(
-                        members=subdir_members, path=extract_dir, **filter_kwarg
+                        members=subdir_members,
+                        path=extract_dir,
+                        **filter_kwarg,  # type: ignore[arg-type]
                     )
 
 
@@ -336,11 +345,11 @@ class Decompress:  # pylint: disable=too-few-public-methods
     modules = {"auto": None, "lzma": lzma, "xz": lzma, "gzip": gzip, "bzip2": bz2}
     extensions = {".xz": "lzma", ".gz": "gzip", ".bz2": "bzip2"}
 
-    def __init__(self, method="auto", name=None):
+    def __init__(self, method: str = "auto", name: Union[None, str] = None) -> None:
         self.method = method
         self.name = name
 
-    def __call__(self, fname, action, pooch):
+    def __call__(self, fname: str, action: str, pooch: Pooch) -> str:
         """
         Decompress the given file.
 
@@ -384,7 +393,7 @@ class Decompress:  # pylint: disable=too-few-public-methods
                     shutil.copyfileobj(compressed, output)
         return decompressed
 
-    def _compression_module(self, fname):
+    def _compression_module(self, fname: str) -> Any:
         """
         Get the Python module compatible with fname and the chosen method.
 

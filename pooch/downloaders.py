@@ -7,25 +7,30 @@
 """
 The classes that actually handle the downloads.
 """
+
 import os
 import sys
 import ftplib
+from io import BufferedRandom
+from abc import abstractmethod
 
 import warnings
 
 from .utils import parse_url
+from .typing import Downloader, ProgressBar, PathType, Pooch
+from typing import Union, TYPE_CHECKING, cast, Optional, Any
 
 # Mypy doesn't like assigning None like this.
 # Can just use a guard variable
 try:
     from tqdm import tqdm
 except ImportError:
-    tqdm = None  # type: ignore
+    tqdm = None  # type: ignore[misc, assignment]
 
 try:
     import paramiko
 except ImportError:
-    paramiko = None  # type: ignore
+    paramiko = None  # type: ignore[misc, assignment]
 
 
 # Set the default timeout in seconds so it can be configured in a pinch for the
@@ -33,8 +38,11 @@ except ImportError:
 # See https://github.com/fatiando/pooch/issues/409
 DEFAULT_TIMEOUT = 30
 
+if TYPE_CHECKING:
+    ProgressBarArg = Union[ProgressBar, bool, tqdm]
 
-def choose_downloader(url, progressbar=False):
+
+def choose_downloader(url: str, progressbar: ProgressBarArg = False) -> Downloader:
     """
     Choose the appropriate downloader for the given URL based on the protocol.
 
@@ -166,7 +174,9 @@ class HTTPDownloader:  # pylint: disable=too-few-public-methods
 
     """
 
-    def __init__(self, progressbar=False, chunk_size=1024, **kwargs):
+    def __init__(
+        self, progressbar: ProgressBarArg = False, chunk_size: int = 1024, **kwargs
+    ) -> None:
         self.kwargs = kwargs
         self.progressbar = progressbar
         self.chunk_size = chunk_size
@@ -174,8 +184,8 @@ class HTTPDownloader:  # pylint: disable=too-few-public-methods
             raise ValueError("Missing package 'tqdm' required for progress bars.")
 
     def __call__(
-        self, url, output_file, pooch, check_only=False
-    ):  # pylint: disable=R0914
+        self, url: str, output_file: PathType, pooch: Pooch, check_only: bool = False
+    ) -> Union[None, bool]:  # pylint: disable=R0914
         """
         Download the given URL over HTTP to the given output file.
 
@@ -216,8 +226,10 @@ class HTTPDownloader:  # pylint: disable=too-few-public-methods
         ispath = not hasattr(output_file, "write")
         if ispath:
             # pylint: disable=consider-using-with
-            output_file = open(output_file, "w+b")
+            output_file_writer = open(output_file, "w+b")
             # pylint: enable=consider-using-with
+        else:
+            output_file_writer = cast(BufferedRandom, output_file)
         try:
             response = requests.get(url, timeout=timeout, **kwargs)
             response.raise_for_status()
@@ -228,7 +240,7 @@ class HTTPDownloader:  # pylint: disable=too-few-public-methods
                 # always full unicode support
                 # (see https://github.com/tqdm/tqdm/issues/454)
                 use_ascii = bool(sys.platform == "win32")
-                progress = tqdm(
+                progress: ProgressBar = tqdm(
                     total=total,
                     ncols=79,
                     ascii=use_ascii,
@@ -237,12 +249,12 @@ class HTTPDownloader:  # pylint: disable=too-few-public-methods
                     leave=True,
                 )
             elif self.progressbar:
-                progress = self.progressbar
+                progress: ProgressBar = self.progressbar  # type: ignore[no-redef]
                 progress.total = total
             for chunk in content:
                 if chunk:
-                    output_file.write(chunk)
-                    output_file.flush()
+                    output_file_writer.write(chunk)
+                    output_file_writer.flush()
                     if self.progressbar:
                         # Use the chunk size here because chunk may be much
                         # larger if the data are decompressed by requests after
@@ -258,7 +270,7 @@ class HTTPDownloader:  # pylint: disable=too-few-public-methods
                 progress.close()
         finally:
             if ispath:
-                output_file.close()
+                output_file_writer.close()
         return None
 
 
@@ -286,7 +298,7 @@ class FTPDownloader:  # pylint: disable=too-few-public-methods
         to indicate no password is required.
     account : str
         Some servers also require an "account" name for authentication.
-    timeout : int
+    timeout : Optional[int]
         Timeout in seconds for ftp socket operations, use None to mean no
         timeout.
     progressbar : bool
@@ -301,14 +313,14 @@ class FTPDownloader:  # pylint: disable=too-few-public-methods
 
     def __init__(
         self,
-        port=21,
-        username="anonymous",
-        password="",
-        account="",
-        timeout=None,
-        progressbar=False,
-        chunk_size=1024,
-    ):
+        port: int = 21,
+        username: str = "anonymous",
+        password: str = "",
+        account: str = "",
+        timeout: Optional[int] = None,
+        progressbar: bool = False,
+        chunk_size: int = 1024,
+    ) -> None:
         self.port = port
         self.username = username
         self.password = password
@@ -319,7 +331,9 @@ class FTPDownloader:  # pylint: disable=too-few-public-methods
         if self.progressbar is True and tqdm is None:
             raise ValueError("Missing package 'tqdm' required for progress bars.")
 
-    def __call__(self, url, output_file, pooch, check_only=False):
+    def __call__(
+        self, url: str, output_file: PathType, pooch: Pooch, check_only: bool = False
+    ) -> Union[None, bool]:
         """
         Download the given URL over FTP to the given output file.
 
@@ -359,8 +373,10 @@ class FTPDownloader:  # pylint: disable=too-few-public-methods
         ispath = not hasattr(output_file, "write")
         if ispath:
             # pylint: disable=consider-using-with
-            output_file = open(output_file, "w+b")
+            output_file_writer = open(output_file, "w+b")
             # pylint: enable=consider-using-with
+        else:
+            output_file_writer = cast(BufferedRandom, output_file)
         try:
             ftp.login(user=self.username, passwd=self.password, acct=self.account)
             command = f"RETR {parsed_url['path']}"
@@ -369,8 +385,9 @@ class FTPDownloader:  # pylint: disable=too-few-public-methods
                 # get the file size. See: https://stackoverflow.com/a/22093848
                 ftp.voidcmd("TYPE I")
                 use_ascii = bool(sys.platform == "win32")
+                file_size = ftp.size(parsed_url["path"])
                 progress = tqdm(
-                    total=int(ftp.size(parsed_url["path"])),
+                    total=int(file_size) if file_size is not None else 0,
                     ncols=79,
                     ascii=use_ascii,
                     unit="B",
@@ -382,15 +399,17 @@ class FTPDownloader:  # pylint: disable=too-few-public-methods
                     def callback(data):
                         "Update the progress bar and write to output"
                         progress.update(len(data))
-                        output_file.write(data)
+                        output_file_writer.write(data)
 
                     ftp.retrbinary(command, callback, blocksize=self.chunk_size)
             else:
-                ftp.retrbinary(command, output_file.write, blocksize=self.chunk_size)
+                ftp.retrbinary(
+                    command, output_file_writer.write, blocksize=self.chunk_size
+                )
         finally:
             ftp.quit()
             if ispath:
-                output_file.close()
+                output_file_writer.close()
         return None
 
 
@@ -417,7 +436,7 @@ class SFTPDownloader:  # pylint: disable=too-few-public-methods
         Password used to login to the server. Only needed if the server
         requires authentication (i.e., no anonymous SFTP). Use the empty
         string to indicate no password is required.
-    timeout : int
+    timeout : Optional[int]
         Timeout in seconds for sftp socket operations, use None to mean no
         timeout.
     progressbar : bool or an arbitrary progress bar object
@@ -429,13 +448,13 @@ class SFTPDownloader:  # pylint: disable=too-few-public-methods
 
     def __init__(
         self,
-        port=22,
-        username="anonymous",
-        password="",
-        account="",
-        timeout=None,
-        progressbar=False,
-    ):
+        port: int = 22,
+        username: str = "anonymous",
+        password: str = "",
+        account: str = "",
+        timeout: Optional[int] = None,
+        progressbar: ProgressBarArg = False,
+    ) -> None:
         self.port = port
         self.username = username
         self.password = password
@@ -445,7 +464,7 @@ class SFTPDownloader:  # pylint: disable=too-few-public-methods
         # Collect errors and raise only once so that both missing packages are
         # captured. Otherwise, the user is only warned of one of them at a
         # time (and we can't test properly when they are both missing).
-        errors = []
+        errors: list[str] = []
         if self.progressbar and tqdm is None:
             errors.append("Missing package 'tqdm' required for progress bars.")
         if paramiko is None:
@@ -453,7 +472,7 @@ class SFTPDownloader:  # pylint: disable=too-few-public-methods
         if errors:
             raise ValueError(" ".join(errors))
 
-    def __call__(self, url, output_file, pooch):
+    def __call__(self, url: str, output_file: str, pooch: Pooch) -> None:
         """
         Download the given URL over SFTP to the given output file.
 
@@ -476,12 +495,16 @@ class SFTPDownloader:  # pylint: disable=too-few-public-methods
         try:
             connection.connect(username=self.username, password=self.password)
             sftp = paramiko.SFTPClient.from_transport(connection)
-            sftp.get_channel().settimeout = self.timeout
+
+            if sftp is None:
+                raise ValueError
+
+            sftp.get_channel().settimeout = self.timeout  # type: ignore[method-assign, union-attr]
             if self.progressbar:
-                size = int(sftp.stat(parsed_url["path"]).st_size)
+                size = sftp.stat(parsed_url["path"]).st_size
                 use_ascii = bool(sys.platform == "win32")
                 progress = tqdm(
-                    total=size,
+                    total=int(size) if size is not None else 0,
                     ncols=79,
                     ascii=use_ascii,
                     unit="B",
@@ -587,12 +610,14 @@ class DOIDownloader:  # pylint: disable=too-few-public-methods
 
     """
 
-    def __init__(self, progressbar=False, chunk_size=1024, **kwargs):
+    def __init__(
+        self, progressbar: ProgressBarArg = False, chunk_size: int = 1024, **kwargs
+    ) -> None:
         self.kwargs = kwargs
         self.progressbar = progressbar
         self.chunk_size = chunk_size
 
-    def __call__(self, url, output_file, pooch):
+    def __call__(self, url: str, output_file: PathType, pooch: Pooch) -> None:
         """
         Download the given DOI URL over HTTP to the given output file.
 
@@ -629,7 +654,7 @@ class DOIDownloader:  # pylint: disable=too-few-public-methods
         downloader(download_url, output_file, pooch)
 
 
-def doi_to_url(doi):
+def doi_to_url(doi: str) -> str:
     """
     Follow a DOI link to resolve the URL of the archive.
 
@@ -657,7 +682,7 @@ def doi_to_url(doi):
     return url
 
 
-def doi_to_repository(doi):
+def doi_to_repository(doi: str) -> DataRepository:
     """
     Instantiate a data repository instance from a given DOI.
 
@@ -712,7 +737,8 @@ def doi_to_repository(doi):
 
 class DataRepository:  # pylint: disable=too-few-public-methods, missing-class-docstring
     @classmethod
-    def initialize(cls, doi, archive_url):  # pylint: disable=unused-argument
+    @abstractmethod
+    def initialize(cls, doi: str, archive_url: str) -> Union[None, DataRepository]:  # pylint: disable=unused-argument
         """
         Initialize the data repository if the given URL points to a
         corresponding repository.
@@ -732,7 +758,8 @@ class DataRepository:  # pylint: disable=too-few-public-methods, missing-class-d
 
         return None  # pragma: no cover
 
-    def download_url(self, file_name):
+    @abstractmethod
+    def download_url(self, file_name: str) -> str:
         """
         Use the repository API to get the download URL for a file given
         the archive URL.
@@ -750,7 +777,8 @@ class DataRepository:  # pylint: disable=too-few-public-methods, missing-class-d
 
         raise NotImplementedError  # pragma: no cover
 
-    def populate_registry(self, pooch):
+    @abstractmethod
+    def populate_registry(self, pooch: Pooch) -> None:
         """
         Populate the registry using the data repository's API
 
@@ -766,14 +794,14 @@ class DataRepository:  # pylint: disable=too-few-public-methods, missing-class-d
 class ZenodoRepository(DataRepository):  # pylint: disable=missing-class-docstring
     base_api_url = "https://zenodo.org/api/records"
 
-    def __init__(self, doi, archive_url):
+    def __init__(self, doi: str, archive_url: str) -> None:
         self.archive_url = archive_url
         self.doi = doi
         self._api_response = None
-        self._api_version = None
+        self._api_version: Union[None, str] = None
 
     @classmethod
-    def initialize(cls, doi, archive_url):
+    def initialize(cls, doi: str, archive_url: str) -> Union[None, ZenodoRepository]:
         """
         Initialize the data repository if the given URL points to a
         corresponding repository.
@@ -799,7 +827,7 @@ class ZenodoRepository(DataRepository):  # pylint: disable=missing-class-docstri
         return cls(doi, archive_url)
 
     @property
-    def api_response(self):
+    def api_response(self) -> Any:
         """Cached API response from Zenodo"""
         if self._api_response is None:
             # Lazy import requests to speed up import time
@@ -814,7 +842,7 @@ class ZenodoRepository(DataRepository):  # pylint: disable=missing-class-docstri
         return self._api_response
 
     @property
-    def api_version(self):
+    def api_version(self) -> str:
         """
         Version of the Zenodo API we are interacting with
 
@@ -845,7 +873,7 @@ class ZenodoRepository(DataRepository):  # pylint: disable=missing-class-docstri
                 )
         return self._api_version
 
-    def download_url(self, file_name):
+    def download_url(self, file_name: str) -> str:
         """
         Use the repository API to get the download URL for a file given
         the archive URL.
@@ -873,7 +901,7 @@ class ZenodoRepository(DataRepository):  # pylint: disable=missing-class-docstri
         if self.api_version == "legacy":
             files = {item["key"]: item for item in self.api_response["files"]}
         else:
-            files = [item["filename"] for item in self.api_response["files"]]
+            files = {item["filename"]: None for item in self.api_response["files"]}
         # Check if file exists in the repository
         if file_name not in files:
             raise ValueError(
@@ -890,7 +918,7 @@ class ZenodoRepository(DataRepository):  # pylint: disable=missing-class-docstri
             )
         return download_url
 
-    def populate_registry(self, pooch):
+    def populate_registry(self, pooch: Pooch) -> None:
         """
         Populate the registry using the data repository's API
 
@@ -917,13 +945,13 @@ class ZenodoRepository(DataRepository):  # pylint: disable=missing-class-docstri
 
 
 class FigshareRepository(DataRepository):  # pylint: disable=missing-class-docstring
-    def __init__(self, doi, archive_url):
+    def __init__(self, doi: str, archive_url: str) -> None:
         self.archive_url = archive_url
         self.doi = doi
         self._api_response = None
 
     @classmethod
-    def initialize(cls, doi, archive_url):
+    def initialize(cls, doi: str, archive_url: str) -> Union[None, FigshareRepository]:
         """
         Initialize the data repository if the given URL points to a
         corresponding repository.
@@ -948,7 +976,7 @@ class FigshareRepository(DataRepository):  # pylint: disable=missing-class-docst
 
         return cls(doi, archive_url)
 
-    def _parse_version_from_doi(self):
+    def _parse_version_from_doi(self) -> Union[None, int]:
         """
         Parse version from the doi
 
@@ -965,7 +993,7 @@ class FigshareRepository(DataRepository):  # pylint: disable=missing-class-docst
         return version
 
     @property
-    def api_response(self):
+    def api_response(self) -> Any:
         """Cached API response from Figshare"""
         if self._api_response is None:
             # Lazy import requests to speed up import time
@@ -1007,7 +1035,7 @@ class FigshareRepository(DataRepository):  # pylint: disable=missing-class-docst
 
         return self._api_response
 
-    def download_url(self, file_name):
+    def download_url(self, file_name: str) -> str:
         """
         Use the repository API to get the download URL for a file given
         the archive URL.
@@ -1030,7 +1058,7 @@ class FigshareRepository(DataRepository):  # pylint: disable=missing-class-docst
         download_url = files[file_name]["download_url"]
         return download_url
 
-    def populate_registry(self, pooch):
+    def populate_registry(self, pooch: Pooch) -> None:
         """
         Populate the registry using the data repository's API
 
@@ -1045,13 +1073,13 @@ class FigshareRepository(DataRepository):  # pylint: disable=missing-class-docst
 
 
 class DataverseRepository(DataRepository):  # pylint: disable=missing-class-docstring
-    def __init__(self, doi, archive_url):
+    def __init__(self, doi: str, archive_url: str) -> None:
         self.archive_url = archive_url
         self.doi = doi
         self._api_response = None
 
     @classmethod
-    def initialize(cls, doi, archive_url):
+    def initialize(cls, doi: str, archive_url: str) -> Union[None, DataverseRepository]:
         """
         Initialize the data repository if the given URL points to a
         corresponding repository.
@@ -1081,7 +1109,7 @@ class DataverseRepository(DataRepository):  # pylint: disable=missing-class-docs
         return repository
 
     @classmethod
-    def _get_api_response(cls, doi, archive_url):
+    def _get_api_response(cls, doi: str, archive_url: str) -> Any:
         """
         Perform the actual API request
 
@@ -1100,7 +1128,7 @@ class DataverseRepository(DataRepository):  # pylint: disable=missing-class-docs
         return response
 
     @property
-    def api_response(self):
+    def api_response(self) -> Any:
         """Cached API response from a DataVerse instance"""
 
         if self._api_response is None:
@@ -1111,12 +1139,12 @@ class DataverseRepository(DataRepository):  # pylint: disable=missing-class-docs
         return self._api_response
 
     @api_response.setter
-    def api_response(self, response):
+    def api_response(self, response: Any) -> Any:
         """Update the cached API response"""
 
         self._api_response = response
 
-    def download_url(self, file_name):
+    def download_url(self, file_name: str) -> str:
         """
         Use the repository API to get the download URL for a file given
         the archive URL.
@@ -1149,7 +1177,7 @@ class DataverseRepository(DataRepository):  # pylint: disable=missing-class-docs
         )
         return download_url
 
-    def populate_registry(self, pooch):
+    def populate_registry(self, pooch: Pooch) -> None:
         """
         Populate the registry using the data repository's API
 
