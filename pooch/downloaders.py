@@ -17,8 +17,11 @@ from abc import abstractmethod
 import warnings
 
 from .utils import parse_url
-from .typing import Downloader, ProgressBar, PathType, Pooch
+from .typing import Downloader, ProgressBar, PathType
 from typing import Union, TYPE_CHECKING, cast, Optional, Any
+
+if TYPE_CHECKING:
+    from .typing import Pooch
 
 # Mypy doesn't like assigning None like this.
 # Can just use a guard variable

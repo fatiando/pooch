@@ -19,9 +19,11 @@ import sys
 from zipfile import ZipFile
 from tarfile import TarFile
 
-from typing import Any, Union
+from typing import Any, Union, TYPE_CHECKING
 from .utils import get_logger
-from .typing import Pooch
+
+if TYPE_CHECKING:
+    from .typing import Pooch
 
 
 class ExtractorProcessor(abc.ABC):  # pylint: disable=too-few-public-methods
