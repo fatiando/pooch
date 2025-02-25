@@ -23,7 +23,7 @@ from typing import Any, Union, TYPE_CHECKING
 from .utils import get_logger
 
 if TYPE_CHECKING:
-    from .typing import Pooch
+    from .core import Pooch
 
 
 class ExtractorProcessor(abc.ABC):  # pylint: disable=too-few-public-methods
@@ -80,7 +80,7 @@ class ExtractorProcessor(abc.ABC):  # pylint: disable=too-few-public-methods
         MUST BE IMPLEMENTED BY CHILD CLASSES.
         """
 
-    def __call__(self, fname: str, action: str, pooch: Pooch) -> list[str]:
+    def __call__(self, fname: str, action: str, pooch: "Pooch") -> list[str]:
         """
         Extract all files from the given archive.
 
@@ -351,7 +351,7 @@ class Decompress:  # pylint: disable=too-few-public-methods
         self.method = method
         self.name = name
 
-    def __call__(self, fname: str, action: str, pooch: Pooch) -> str:
+    def __call__(self, fname: str, action: str, pooch: "Pooch") -> str:
         """
         Decompress the given file.
 

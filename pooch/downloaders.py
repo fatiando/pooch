@@ -21,7 +21,7 @@ from .typing import Downloader, ProgressBar, PathType
 from typing import Union, TYPE_CHECKING, cast, Optional, Any
 
 if TYPE_CHECKING:
-    from .typing import Pooch
+    from .core import Pooch
 
 # Mypy doesn't like assigning None like this.
 # Can just use a guard variable
@@ -45,7 +45,7 @@ if TYPE_CHECKING:
     ProgressBarArg = Union[ProgressBar, bool, tqdm]
 
 
-def choose_downloader(url: str, progressbar: ProgressBarArg = False) -> Downloader:
+def choose_downloader(url: str, progressbar: "ProgressBarArg" = False) -> Downloader:
     """
     Choose the appropriate downloader for the given URL based on the protocol.
 
@@ -178,7 +178,7 @@ class HTTPDownloader:  # pylint: disable=too-few-public-methods
     """
 
     def __init__(
-        self, progressbar: ProgressBarArg = False, chunk_size: int = 1024, **kwargs
+        self, progressbar: "ProgressBarArg" = False, chunk_size: int = 1024, **kwargs
     ) -> None:
         self.kwargs = kwargs
         self.progressbar = progressbar
@@ -187,7 +187,7 @@ class HTTPDownloader:  # pylint: disable=too-few-public-methods
             raise ValueError("Missing package 'tqdm' required for progress bars.")
 
     def __call__(
-        self, url: str, output_file: PathType, pooch: Pooch, check_only: bool = False
+        self, url: str, output_file: PathType, pooch: "Pooch", check_only: bool = False
     ) -> Union[None, bool]:  # pylint: disable=R0914
         """
         Download the given URL over HTTP to the given output file.
@@ -335,7 +335,7 @@ class FTPDownloader:  # pylint: disable=too-few-public-methods
             raise ValueError("Missing package 'tqdm' required for progress bars.")
 
     def __call__(
-        self, url: str, output_file: PathType, pooch: Pooch, check_only: bool = False
+        self, url: str, output_file: PathType, pooch: "Pooch", check_only: bool = False
     ) -> Union[None, bool]:
         """
         Download the given URL over FTP to the given output file.
@@ -456,7 +456,7 @@ class SFTPDownloader:  # pylint: disable=too-few-public-methods
         password: str = "",
         account: str = "",
         timeout: Optional[int] = None,
-        progressbar: ProgressBarArg = False,
+        progressbar: "ProgressBarArg" = False,
     ) -> None:
         self.port = port
         self.username = username
@@ -475,7 +475,7 @@ class SFTPDownloader:  # pylint: disable=too-few-public-methods
         if errors:
             raise ValueError(" ".join(errors))
 
-    def __call__(self, url: str, output_file: str, pooch: Pooch) -> None:
+    def __call__(self, url: str, output_file: str, pooch: "Pooch") -> None:
         """
         Download the given URL over SFTP to the given output file.
 
@@ -614,13 +614,13 @@ class DOIDownloader:  # pylint: disable=too-few-public-methods
     """
 
     def __init__(
-        self, progressbar: ProgressBarArg = False, chunk_size: int = 1024, **kwargs
+        self, progressbar: "ProgressBarArg" = False, chunk_size: int = 1024, **kwargs
     ) -> None:
         self.kwargs = kwargs
         self.progressbar = progressbar
         self.chunk_size = chunk_size
 
-    def __call__(self, url: str, output_file: PathType, pooch: Pooch) -> None:
+    def __call__(self, url: str, output_file: PathType, pooch: "Pooch") -> None:
         """
         Download the given DOI URL over HTTP to the given output file.
 
@@ -685,7 +685,7 @@ def doi_to_url(doi: str) -> str:
     return url
 
 
-def doi_to_repository(doi: str) -> DataRepository:
+def doi_to_repository(doi: str) -> "DataRepository":
     """
     Instantiate a data repository instance from a given DOI.
 
@@ -741,7 +741,7 @@ def doi_to_repository(doi: str) -> DataRepository:
 class DataRepository:  # pylint: disable=too-few-public-methods, missing-class-docstring
     @classmethod
     @abstractmethod
-    def initialize(cls, doi: str, archive_url: str) -> Union[None, DataRepository]:  # pylint: disable=unused-argument
+    def initialize(cls, doi: str, archive_url: str) -> Union[None, "DataRepository"]:  # pylint: disable=unused-argument
         """
         Initialize the data repository if the given URL points to a
         corresponding repository.
@@ -781,7 +781,7 @@ class DataRepository:  # pylint: disable=too-few-public-methods, missing-class-d
         raise NotImplementedError  # pragma: no cover
 
     @abstractmethod
-    def populate_registry(self, pooch: Pooch) -> None:
+    def populate_registry(self, pooch: "Pooch") -> None:
         """
         Populate the registry using the data repository's API
 
@@ -804,7 +804,7 @@ class ZenodoRepository(DataRepository):  # pylint: disable=missing-class-docstri
         self._api_version: Union[None, str] = None
 
     @classmethod
-    def initialize(cls, doi: str, archive_url: str) -> Union[None, ZenodoRepository]:
+    def initialize(cls, doi: str, archive_url: str) -> Union[None, "ZenodoRepository"]:
         """
         Initialize the data repository if the given URL points to a
         corresponding repository.
@@ -921,7 +921,7 @@ class ZenodoRepository(DataRepository):  # pylint: disable=missing-class-docstri
             )
         return download_url
 
-    def populate_registry(self, pooch: Pooch) -> None:
+    def populate_registry(self, pooch: "Pooch") -> None:
         """
         Populate the registry using the data repository's API
 
@@ -954,7 +954,7 @@ class FigshareRepository(DataRepository):  # pylint: disable=missing-class-docst
         self._api_response = None
 
     @classmethod
-    def initialize(cls, doi: str, archive_url: str) -> Union[None, FigshareRepository]:
+    def initialize(cls, doi: str, archive_url: str) -> Union[None, "FigshareRepository"]:
         """
         Initialize the data repository if the given URL points to a
         corresponding repository.
@@ -1061,7 +1061,7 @@ class FigshareRepository(DataRepository):  # pylint: disable=missing-class-docst
         download_url = files[file_name]["download_url"]
         return download_url
 
-    def populate_registry(self, pooch: Pooch) -> None:
+    def populate_registry(self, pooch: "Pooch") -> None:
         """
         Populate the registry using the data repository's API
 
@@ -1082,7 +1082,7 @@ class DataverseRepository(DataRepository):  # pylint: disable=missing-class-docs
         self._api_response = None
 
     @classmethod
-    def initialize(cls, doi: str, archive_url: str) -> Union[None, DataverseRepository]:
+    def initialize(cls, doi: str, archive_url: str) -> Union[None, "DataverseRepository"]:
         """
         Initialize the data repository if the given URL points to a
         corresponding repository.
@@ -1180,7 +1180,7 @@ class DataverseRepository(DataRepository):  # pylint: disable=missing-class-docs
         )
         return download_url
 
-    def populate_registry(self, pooch: Pooch) -> None:
+    def populate_registry(self, pooch: "Pooch") -> None:
         """
         Populate the registry using the data repository's API
 
