@@ -954,7 +954,9 @@ class FigshareRepository(DataRepository):  # pylint: disable=missing-class-docst
         self._api_response = None
 
     @classmethod
-    def initialize(cls, doi: str, archive_url: str) -> Union[None, "FigshareRepository"]:
+    def initialize(
+        cls, doi: str, archive_url: str
+    ) -> Union[None, "FigshareRepository"]:
         """
         Initialize the data repository if the given URL points to a
         corresponding repository.
@@ -1082,7 +1084,9 @@ class DataverseRepository(DataRepository):  # pylint: disable=missing-class-docs
         self._api_response = None
 
     @classmethod
-    def initialize(cls, doi: str, archive_url: str) -> Union[None, "DataverseRepository"]:
+    def initialize(
+        cls, doi: str, archive_url: str
+    ) -> Union[None, "DataverseRepository"]:
         """
         Initialize the data repository if the given URL points to a
         corresponding repository.

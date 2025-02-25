@@ -68,9 +68,11 @@ class ProgressBar(Protocol):
     total: int
 
     # pylint: disable=too-few-public-methods
-    def update(self, n: Union[float, None]) -> Union[None, bool]: ...
-    def reset(self) -> None: ...
-    def close(self) -> None: ...
+    def update(self, n: Union[float, None]) -> Union[None, bool]: ...  # noqa: E704
+
+    def reset(self) -> None: ...  # noqa: E704
+
+    def close(self) -> None: ...  # noqa: E704
 
 
 class ParsedURL(TypedDict):
