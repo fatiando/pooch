@@ -68,7 +68,9 @@ class ProgressBar(Protocol):
     total: int
 
     # pylint: disable=too-few-public-methods
-    def update(self, n: Union[float, None]) -> Union[None, bool]: ...  # noqa: E704, C0116
+    def update(
+        self, n: Union[float, None]
+    ) -> Union[None, bool]: ...  # noqa: E704, C0116
 
     def reset(self) -> None: ...  # noqa: E704, C0116
 
