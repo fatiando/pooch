@@ -741,7 +741,9 @@ def doi_to_repository(doi: str) -> "DataRepository":
 class DataRepository:  # pylint: disable=too-few-public-methods, missing-class-docstring
     @classmethod
     @abstractmethod
-    def initialize(cls, doi: str, archive_url: str) -> Union[None, "DataRepository"]:  # pylint: disable=unused-argument
+    def initialize(
+        cls, doi: str, archive_url: str
+    ) -> Union[None, "DataRepository"]:  # pylint: disable=unused-argument
         """
         Initialize the data repository if the given URL points to a
         corresponding repository.
