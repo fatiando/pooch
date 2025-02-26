@@ -11,8 +11,8 @@ Calculating and checking file hashes.
 import hashlib
 import functools
 from pathlib import Path
-from .typing import PathType
 from typing import Optional
+from .typing import PathType
 
 # From the docs: https://docs.python.org/3/library/hashlib.html#hashlib.new
 #   The named constructors are much faster than new() and should be

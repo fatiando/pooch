@@ -15,10 +15,10 @@ from io import BufferedRandom
 from abc import abstractmethod
 
 import warnings
+from typing import Union, TYPE_CHECKING, cast, Optional, Any
 
 from .utils import parse_url
 from .typing import Downloader, ProgressBar, PathType
-from typing import Union, TYPE_CHECKING, cast, Optional, Any
 
 if TYPE_CHECKING:
     from .core import Pooch
