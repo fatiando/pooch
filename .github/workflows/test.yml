@@ -45,15 +45,15 @@ jobs:
           - optional
         include:
           - dependencies: oldest
-            python: "3.7"
+            python: "3.9"
           - dependencies: latest
-            python: "3.11"
+            python: "3.13"
           - dependencies: optional
-            python: "3.11"
+            python: "3.13"
           # test on macos-13 (x86) using oldest dependencies and python 3.7
           - os: macos-13
             dependencies: oldest
-            python: "3.7"
+            python: "3.9"
         exclude:
           # don't test on macos-latest (arm64) with oldest dependencies
           - os: macos-latest
@@ -124,7 +124,7 @@ jobs:
       - name: Get the pip cache folder
         id: pip-cache
         run: |
-          echo "::set-output name=dir::$(pip cache dir)"
+          echo "dir=$(pip cache dir)" >> $GITHUB_OUTPUT
 
       - name: Setup caching for pip packages
         uses: actions/cache@v4
@@ -183,7 +183,7 @@ jobs:
         run: ls -l -R .
 
       - name: Upload coverage reports to Codecov
-        uses: codecov/codecov-action@v4
+        uses: codecov/codecov-action@v5
         with:
           # Upload all coverage report files
           files: ./coverage_*/coverage.xml

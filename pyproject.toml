@@ -21,23 +21,28 @@ classifiers = [
     "Topic :: Scientific/Engineering",
     "Topic :: Software Development :: Libraries",
     "Programming Language :: Python :: 3 :: Only",
-    "Programming Language :: Python :: 3.7",
-    "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
 ]
-requires-python = ">=3.7"
+requires-python = ">=3.9"
 dependencies = [
     "platformdirs >= 2.5.0",
     "packaging >= 20.0",
     "requests >= 2.19.0",
 ]
 
+[[tool.mypy.overrides]]
+module = ["xxhash"]
+ignore_missing_imports = true
+
 [project.optional-dependencies]
 progress = ["tqdm>=4.41.0,<5.0.0"]
 sftp = ["paramiko>=2.7.0"]
 xxhash = ["xxhash>=1.4.3"]
+test = ["pytest-httpserver", "pytest-localftpserver"]
 
 [project.urls]
 "Documentation" = "https://www.fatiando.org/pooch"

@@ -4,7 +4,8 @@
 <a href="https://www.fatiando.org/pooch"><strong>Documentation</strong> (latest)</a> •
 <a href="https://www.fatiando.org/pooch/dev"><strong>Documentation</strong> (main branch)</a> •
 <a href="https://github.com/fatiando/pooch/blob/main/CONTRIBUTING.md"><strong>Contributing</strong></a> •
-<a href="https://www.fatiando.org/contact/"><strong>Contact</strong></a>
+<a href="https://www.fatiando.org/contact/"><strong>Contact</strong></a> •
+<a href="https://github.com/orgs/fatiando/discussions"><strong>Ask a question</strong></a>
 </p>
 
 <p align="center">
@@ -42,7 +43,7 @@ Are you a **scientist** or researcher? Pooch can help you too!
 
 ## Projects using Pooch
 
-[SciPy](https://github.com/scipy/scipy), 
+[SciPy](https://github.com/scipy/scipy),
 [scikit-image](https://github.com/scikit-image/scikit-image),
 [xarray](https://github.com/pydata/xarray),
 [Ensaio](https://github.com/fatiando/ensaio),
@@ -77,7 +78,10 @@ Are you a **scientist** or researcher? Pooch can help you too!
 [Py-ART](https://github.com/ARM-DOE/pyart),
 [HyperSpy](https://github.com/hyperspy/hyperspy),
 [RosettaSciIO](https://github.com/hyperspy/rosettasciio),
-[eXSpy](https://github.com/hyperspy/exspy)
+[eXSpy](https://github.com/hyperspy/exspy),
+[SPLASH](https://github.com/Adam-Boesky/astro_SPLASH)
+[xclim](https://github.com/Ouranosinc/xclim)
+[CLISOPS](https://github.com/roocs/clisops)
 
 
 > If you're using Pooch, **send us a pull request** adding your project to the list.
@@ -116,7 +120,7 @@ For **package developers** including sample data in their projects:
 """
 Module mypackage/datasets.py
 """
-import pkg_resources
+from importlib import resources
 import pandas
 import pooch
 
@@ -151,7 +155,7 @@ GOODBOY = pooch.create(
 # manage large numbers of data files. The registry file should be packaged
 # and distributed with your software.
 GOODBOY.load_registry(
-    pkg_resources.resource_stream("mypackage", "registry.txt")
+    resources.open_text("mypackage", "registry.txt")
 )
 
 # Define functions that your users can call to get back the data in memory

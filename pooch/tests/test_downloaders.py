@@ -13,15 +13,18 @@ from tempfile import TemporaryDirectory
 
 import pytest
 
+# Mypy doesn't like assigning None like this.
+# Can just use a guard variable
+
 try:
     import tqdm
 except ImportError:
-    tqdm = None
+    tqdm = None  # type: ignore
 
 try:
     import paramiko
 except ImportError:
-    paramiko = None
+    paramiko = None  # type: ignore
 
 from .. import Pooch
 from ..downloaders import (
