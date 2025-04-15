@@ -8,10 +8,13 @@
 The classes that actually handle the downloads.
 """
 import os
+import shutil
 import sys
 import ftplib
 
 import warnings
+from contextlib import nullcontext
+from pathlib import Path
 
 from .utils import parse_url
 
@@ -26,7 +29,6 @@ try:
     import paramiko
 except ImportError:
     paramiko = None  # type: ignore
-
 
 # Set the default timeout in seconds so it can be configured in a pinch for the
 # methods that don't or can't expose a way set it at runtime.
@@ -175,7 +177,7 @@ class HTTPDownloader:  # pylint: disable=too-few-public-methods
             raise ValueError("Missing package 'tqdm' required for progress bars.")
 
     def __call__(
-        self, url, output_file, pooch, check_only=False
+            self, url, output_file, pooch, check_only=False
     ):  # pylint: disable=R0914
         """
         Download the given URL over HTTP to the given output file.
@@ -301,14 +303,14 @@ class FTPDownloader:  # pylint: disable=too-few-public-methods
     """
 
     def __init__(
-        self,
-        port=21,
-        username="anonymous",
-        password="",
-        account="",
-        timeout=None,
-        progressbar=False,
-        chunk_size=1024,
+            self,
+            port=21,
+            username="anonymous",
+            password="",
+            account="",
+            timeout=None,
+            progressbar=False,
+            chunk_size=1024,
     ):
         self.port = port
         self.username = username
@@ -429,13 +431,13 @@ class SFTPDownloader:  # pylint: disable=too-few-public-methods
     """
 
     def __init__(
-        self,
-        port=22,
-        username="anonymous",
-        password="",
-        account="",
-        timeout=None,
-        progressbar=False,
+            self,
+            port=22,
+            username="anonymous",
+            password="",
+            account="",
+            timeout=None,
+            progressbar=False,
     ):
         self.port = port
         self.username = username
@@ -505,6 +507,7 @@ class SFTPDownloader:  # pylint: disable=too-few-public-methods
             if sftp is not None:
                 sftp.close()
 
+
 class FileDownloader:  # pylint: disable=too-few-public-methods
     """
     Download manager for fetching files over a file system mounted in the operating system.
@@ -512,7 +515,7 @@ class FileDownloader:  # pylint: disable=too-few-public-methods
     When called, downloads the given file path into the specified local file.
     Uses :mod:`shutil` to copy files from paths.
 
-    Note: Does not support a progressbar.
+    Note: Progressbar does add overhead.  To mitigate this, consider increasing the chunk_size for large files.
     """
 
     def __init__(self, progressbar=False, chunk_size=1024, **kwargs):
@@ -520,13 +523,16 @@ class FileDownloader:  # pylint: disable=too-few-public-methods
         self.progressbar = progressbar
         self.chunk_size = chunk_size
 
+        if self.progressbar and tqdm is None:
+            raise ImportError("Missing package 'tqdm' required for progress bars.")
+
     def __call__(
-        self, url, output_file, pooch, check_only=False
+            self, url, output_file, pooch, check_only=False
     ):  # pylint: disable=R0914
         """
         Download the given file in the filesystem to the given output file.
 
-        Uses :func:`shutil.copyfile` or :func:`shutil.copyfileobj`.
+        Uses :func:`shutil.copyfile` or :func:`shutil.copyfileobj` and :func:`shutil.copystat`.
 
         Parameters
         ----------
@@ -548,24 +554,55 @@ class FileDownloader:  # pylint: disable=too-few-public-methods
             is available on the server. Otherwise, returns ``None``.
 
         """
-        import pathlib  # pylint: disable=C0415
 
         parsed_url = parse_url(url)
-        source_path = pathlib.Path(parsed_url['netloc'] + parsed_url['path'])
+        source_path = Path(parsed_url['netloc'] + parsed_url['path'])
 
         if check_only:
             return source_path.exists()
-        
-        import shutil   # pylint: disable=C0415
 
         ispath = not hasattr(output_file, "write")
-        if ispath:
-            shutil.copyfile(source_path, output_file)
-        else:
-            with source_path.open('rb') as fsrc:
-                shutil.copyfileobj(fsrc, output_file)
+        total_size = source_path.stat().st_size  # Get the total file size
+
+        with source_path.open("rb") as fsrc:
+            if self.progressbar:
+                # Wrap the source file in a progress bar
+                with tqdm(total=total_size, unit="B", unit_scale=True, leave=True) as progress:
+                    fsrc = ProgressFileWrapper(fsrc, progress)
+                    if ispath:
+                        with open(output_file, "wb") as fdst:
+                            shutil.copyfileobj(fsrc, fdst, length=self.chunk_size)
+                        shutil.copystat(source_path, output_file)
+                    else:
+                        shutil.copyfileobj(fsrc, output_file, length=self.chunk_size)
+            else:
+                # Use shutil directly for simplicity
+                if ispath:
+                    shutil.copyfile(source_path, output_file)
+                    shutil.copystat(source_path, output_file)
+                else:
+                    shutil.copyfileobj(fsrc, output_file)
 
         return None
+
+
+class ProgressFileWrapper:
+    """
+    A file-like wrapper that updates a progress bar as data is read.
+    """
+
+    def __init__(self, file, progress):
+        self.file = file
+        self.progress = progress
+
+    def read(self, size=-1):
+        chunk = self.file.read(size)
+        self.progress.update(len(chunk))
+        return chunk
+
+    def __getattr__(self, attr):
+        return getattr(self.file, attr)
+
 
 class DOIDownloader:  # pylint: disable=too-few-public-methods
     """
