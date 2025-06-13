@@ -18,7 +18,7 @@ from .utils import parse_url
 # Mypy doesn't like assigning None like this.
 # Can just use a guard variable
 try:
-    from tqdm import tqdm
+    from tqdm.auto import tqdm
 except ImportError:
     tqdm = None  # type: ignore
 
