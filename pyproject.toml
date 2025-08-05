@@ -9,7 +9,7 @@ maintainers = [
   {name = "Leonardo Uieda", email = "leo@uieda.com"}
 ]
 readme = "README.md"
-license = {text = "BSD-3-Clause"}
+license = "BSD-3-Clause"
 keywords = ["data", "download", "caching", "http"]
 classifiers = [
     "Development Status :: 5 - Production/Stable",
