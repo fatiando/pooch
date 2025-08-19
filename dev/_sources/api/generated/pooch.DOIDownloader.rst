@@ -70,12 +70,20 @@ pooch.DOIDownloader
     
     
     
+    
+    
+    
+    
 
 ----
 
 
 
 .. automethod:: DOIDownloader.__call__
+
+
+
+
 
 
 
