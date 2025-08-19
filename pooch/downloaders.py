@@ -567,13 +567,13 @@ class DOIDownloader:  # pylint: disable=too-few-public-methods
     >>> downloader(
     ...     url=url, output_file="tiny-data.txt", pooch=None
     ... ) # doctest: +SKIP
-    >>> os.path.exists("tiny-data.txt")
+    >>> os.path.exists("tiny-data.txt") # doctest: +SKIP
     True
-    >>> with open("tiny-data.txt") as f:
+    >>> with open("tiny-data.txt") as f: # doctest: +SKIP
     ...     print(f.read().strip())
     # A tiny data file for test purposes only
     1  2  3  4  5  6
-    >>> os.remove("tiny-data.txt")
+    >>> os.remove("tiny-data.txt") # doctest: +SKIP
 
     Same thing but for our Zenodo archive:
 
