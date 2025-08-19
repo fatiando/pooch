@@ -63,7 +63,7 @@ DATAVERSEURL = pooch_test_dataverse_url()
     "url",
     [
         BASEURL + "tiny-data.txt",  # HTTPDownloader
-        FIGSHAREURL,  # DOIDownloader
+        ZENODOURL,  # DOIDownloader
     ],
 )
 def test_progressbar_kwarg_passed(url):
