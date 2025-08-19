@@ -150,7 +150,7 @@ jobs:
         run: python -m pip freeze
 
       - name: Run the tests
-        run:
+        run: |
           echo ${{ runner.os }}
           if [ ${{ runner.os }} == "macOS" ]; then
             make EXTRA_PYTEST_ARGS="-m 'not figshare'" test
