@@ -140,7 +140,12 @@ def test_pooch_local(data_dir_mirror):
 @pytest.mark.network
 @pytest.mark.parametrize(
     "url",
-    [BASEURL, FIGSHAREURL, ZENODOURL, DATAVERSEURL],
+    [
+        BASEURL,
+        pytest.param(FIGSHAREURL, marks=pytest.mark.figshare),
+        ZENODOURL,
+        DATAVERSEURL,
+    ],
     ids=["https", "figshare", "zenodo", "dataverse"],
 )
 def test_pooch_custom_url(url):
@@ -166,7 +171,12 @@ def test_pooch_custom_url(url):
 @pytest.mark.network
 @pytest.mark.parametrize(
     "url",
-    [BASEURL, FIGSHAREURL, ZENODOURL, DATAVERSEURL],
+    [
+        BASEURL,
+        pytest.param(FIGSHAREURL, marks=pytest.mark.figshare),
+        ZENODOURL,
+        DATAVERSEURL,
+    ],
     ids=["https", "figshare", "zenodo", "dataverse"],
 )
 def test_pooch_download(url):
@@ -627,7 +637,7 @@ def test_stream_download(fname):
 @pytest.mark.network
 @pytest.mark.parametrize(
     "url",
-    [FIGSHAREURL, ZENODOURL, DATAVERSEURL],
+    [pytest.param(FIGSHAREURL, marks=pytest.mark.figshare), ZENODOURL, DATAVERSEURL],
     ids=["figshare", "zenodo", "dataverse"],
 )
 def test_load_registry_from_doi(url):
