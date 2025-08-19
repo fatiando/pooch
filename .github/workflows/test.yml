@@ -153,7 +153,7 @@ jobs:
         run:
           echo ${{ runner.os }}
           if [ ${{ runner.os }} == "macOS" ]; then
-            make EXTRA_PYTEST_ARGS="-m 'not figshare' test
+            make EXTRA_PYTEST_ARGS="-m 'not figshare'" test
           else
             make test
           fi
