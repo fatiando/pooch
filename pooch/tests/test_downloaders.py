@@ -63,7 +63,7 @@ DATAVERSEURL = pooch_test_dataverse_url()
     "url",
     [
         BASEURL + "tiny-data.txt",  # HTTPDownloader
-        FIGSHAREURL,  # DOIDownloader
+        ZENODOURL,  # DOIDownloader
     ],
 )
 def test_progressbar_kwarg_passed(url):
@@ -112,7 +112,11 @@ def test_doi_url_not_found():
 @pytest.mark.parametrize(
     "repository,doi",
     [
-        (FigshareRepository, "10.6084/m9.figshare.14763051.v1"),
+        pytest.param(
+            FigshareRepository,
+            "10.6084/m9.figshare.14763051.v1",
+            marks=pytest.mark.figshare,
+        ),
         (ZenodoRepository, "10.5281/zenodo.4924875"),
         (DataverseRepository, "10.11588/data/TKCFEF"),
     ],
@@ -130,7 +134,7 @@ def test_figshare_url_file_not_found(repository, doi):
 @pytest.mark.network
 @pytest.mark.parametrize(
     "url",
-    [FIGSHAREURL, ZENODOURL, DATAVERSEURL],
+    [pytest.param(FIGSHAREURL, marks=pytest.mark.figshare), ZENODOURL, DATAVERSEURL],
     ids=["figshare", "zenodo", "dataverse"],
 )
 def test_doi_downloader(url):
@@ -164,6 +168,7 @@ def test_zenodo_downloader_with_slash_in_fname():
 
 
 @pytest.mark.network
+@pytest.mark.figshare
 def test_figshare_unspecified_version():
     """
     Test if passing a Figshare url without a version warns about it, but still
@@ -183,6 +188,7 @@ def test_figshare_unspecified_version():
 
 
 @pytest.mark.network
+@pytest.mark.figshare
 @pytest.mark.parametrize(
     "version, missing, present",
     [
@@ -269,7 +275,10 @@ def test_downloader_progressbar_fails(downloader):
 @pytest.mark.skipif(tqdm is None, reason="requires tqdm")
 @pytest.mark.parametrize(
     "url,downloader",
-    [(BASEURL, HTTPDownloader), (FIGSHAREURL, DOIDownloader)],
+    [
+        (BASEURL, HTTPDownloader),
+        pytest.param(FIGSHAREURL, DOIDownloader, marks=pytest.mark.figshare),
+    ],
     ids=["http", "figshare"],
 )
 def test_downloader_progressbar(url, downloader, capsys):
