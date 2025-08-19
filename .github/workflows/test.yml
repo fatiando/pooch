@@ -152,7 +152,7 @@ jobs:
       - name: Run the tests
         run:
           if [ ${{ steps.sys-info.outputs.os-name }} == "macOS" ]; then
-            make EXTRA_PYTEST_ARGS="-m 'not figshare' test
+            make EXTRA_PYTEST_ARGS="-m 'not figshare'" test
           else
             make test
           fi
