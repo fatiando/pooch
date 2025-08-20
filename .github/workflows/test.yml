@@ -150,7 +150,13 @@ jobs:
         run: python -m pip freeze
 
       - name: Run the tests
-        run: make test
+        run: |
+          echo ${{ runner.os }}
+          if [ ${{ runner.os }} == "macOS" ]; then
+            make PYTEST_ARGS_EXTRA="-m 'not figshare'" test
+          else
+            make test
+          fi
 
       - name: Convert coverage report to XML for codecov
         run: coverage xml
