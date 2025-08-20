@@ -1,7 +1,7 @@
 # Build, package, test, and clean
 PROJECT=pooch
 TESTDIR=tmp-test-dir-with-unique-name
-PYTEST_ARGS=--cov-config=../.coveragerc --cov-report=term-missing --cov=$(PROJECT) --doctest-modules -v --pyargs
+PYTEST_ARGS=--cov-config=../.coveragerc --cov-report=term-missing --cov=$(PROJECT) --doctest-modules -v --pyargs $(PYTEST_ARGS_EXTRA)
 LINT_FILES=$(PROJECT)
 CHECK_STYLE=$(PROJECT) doc
 

@@ -564,14 +564,16 @@ class DOIDownloader:  # pylint: disable=too-few-public-methods
     >>> downloader = DOIDownloader()
     >>> url = "doi:10.6084/m9.figshare.14763051.v1/tiny-data.txt"
     >>> # Not using with Pooch.fetch so no need to pass an instance of Pooch
-    >>> downloader(url=url, output_file="tiny-data.txt", pooch=None)
-    >>> os.path.exists("tiny-data.txt")
+    >>> downloader(
+    ...     url=url, output_file="tiny-data.txt", pooch=None
+    ... ) # doctest: +SKIP
+    >>> os.path.exists("tiny-data.txt") # doctest: +SKIP
     True
-    >>> with open("tiny-data.txt") as f:
+    >>> with open("tiny-data.txt") as f: # doctest: +SKIP
     ...     print(f.read().strip())
     # A tiny data file for test purposes only
     1  2  3  4  5  6
-    >>> os.remove("tiny-data.txt")
+    >>> os.remove("tiny-data.txt") # doctest: +SKIP
 
     Same thing but for our Zenodo archive:
 
