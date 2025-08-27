@@ -27,7 +27,7 @@ jobs:
   #############################################################################
   # Run tests
   test:
-    name: ${{ matrix.os }} python=${{ matrix.python }} dependencies=${{ matrix.dependencies }}
+    name: ${{ matrix.os }} python=${{ matrix.python }} dependencies=${{ matrix.dependencies }} network=${{ matrix.network }}
     if: ${{ github.repository_owner == 'fatiando' || github.event_name != 'schedule' }}
     runs-on: ${{ matrix.os }}
     strategy:
@@ -52,7 +52,11 @@ jobs:
             network: false
           - dependencies: optional
             python: "3.13"
+            network: false
+          - dependencies: optional
+            python: "3.13"
             network: true
+            os: ubuntu-latest
     env:
       REQUIREMENTS: env/requirements-build.txt env/requirements-test.txt
       # Used to tag codecov submissions
@@ -139,7 +143,7 @@ jobs:
 
       - name: Run the tests
         run: |
-          if [ ${{ matrix.network }} ]; then
+          if [ ${{ matrix.network }} == "true" ]; then
             make test
           else
             make PYTEST_ARGS_EXTRA="-m 'not network'" test
