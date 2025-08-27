@@ -69,6 +69,7 @@ write_to =  "pooch/_version.py"
 [tool.pytest.ini_options]
 markers = [
     "network: test requires network access",
+    "figshare: test make request to Figshare",
 ]
 
 [tool.burocrata]
