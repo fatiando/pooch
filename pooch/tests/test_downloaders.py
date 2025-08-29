@@ -264,6 +264,7 @@ def test_sftp_downloader_fail_if_paramiko_missing():
         SFTPDownloader()
     assert "'paramiko'" in str(exc.value)
 
+
 def test_file_downloader(tmp_path):
     "Test file downloader"
     src = tmp_path / "tiny-data.txt"
@@ -281,13 +282,14 @@ def test_file_downloader(tmp_path):
             content = f.read()
         assert content == "This is a test file."
 
+
 def test_file_downloader_progress(tmp_path):
     "Test file downloader with progress bar"
     src = tmp_path / "tiny-data.txt"
     with open(src, "w") as f:
         f.write("This is a test file.")
     url = Path(src).as_uri()
-    
+
     with TemporaryDirectory() as local_store:
         downloader = FileDownloader(progressbar=True)
         outfile = os.path.join(local_store, "tiny-data.txt")
@@ -297,6 +299,7 @@ def test_file_downloader_progress(tmp_path):
         with open(outfile, "r") as f:
             content = f.read()
         assert content == "This is a test file."
+
 
 def test_file_downloader_chunked_copy(tmp_path):
     """Test FileDownloader with chunked file copying and progress bar."""
@@ -310,7 +313,9 @@ def test_file_downloader_chunked_copy(tmp_path):
     with TemporaryDirectory() as local_store:
         print(local_store)
         # Enable progress bar and set a chunk size
-        downloader = FileDownloader(progressbar=False, chunk_size=1024 * 1024)  # 1 MB chunks
+        downloader = FileDownloader(
+            progressbar=False, chunk_size=1024 * 1024
+        )  # 1 MB chunks
         outfile = os.path.join(local_store, "copied-large-data.txt")
         with open(outfile, "wb") as f:
             downloader(url, f, None)
@@ -320,6 +325,7 @@ def test_file_downloader_chunked_copy(tmp_path):
         with open(outfile, "rb") as f:
             copied_content = f.read()
         assert copied_content == content
+
 
 def test_file_downloader_chunked_copy_with_progress(tmp_path):
     """Test FileDownloader with chunked file copying and progress bar."""
@@ -333,7 +339,9 @@ def test_file_downloader_chunked_copy_with_progress(tmp_path):
     with TemporaryDirectory() as local_store:
         print(local_store)
         # Enable progress bar and set a chunk size
-        downloader = FileDownloader(progressbar=True, chunk_size=1024 * 1024)  # 1 MB chunks
+        downloader = FileDownloader(
+            progressbar=True, chunk_size=1024 * 1024
+        )  # 1 MB chunks
         outfile = os.path.join(local_store, "copied-large-data.txt")
         with open(outfile, "wb") as f:
             downloader(url, f, None)
@@ -343,6 +351,7 @@ def test_file_downloader_chunked_copy_with_progress(tmp_path):
         with open(outfile, "rb") as f:
             copied_content = f.read()
         assert copied_content == content
+
 
 @pytest.mark.skipif(tqdm is not None, reason="tqdm must be missing")
 @pytest.mark.parametrize("downloader", [HTTPDownloader, FTPDownloader, SFTPDownloader])

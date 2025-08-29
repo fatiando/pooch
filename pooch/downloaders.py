@@ -177,7 +177,7 @@ class HTTPDownloader:  # pylint: disable=too-few-public-methods
             raise ValueError("Missing package 'tqdm' required for progress bars.")
 
     def __call__(
-            self, url, output_file, pooch, check_only=False
+        self, url, output_file, pooch, check_only=False
     ):  # pylint: disable=R0914
         """
         Download the given URL over HTTP to the given output file.
@@ -303,14 +303,14 @@ class FTPDownloader:  # pylint: disable=too-few-public-methods
     """
 
     def __init__(
-            self,
-            port=21,
-            username="anonymous",
-            password="",
-            account="",
-            timeout=None,
-            progressbar=False,
-            chunk_size=1024,
+        self,
+        port=21,
+        username="anonymous",
+        password="",
+        account="",
+        timeout=None,
+        progressbar=False,
+        chunk_size=1024,
     ):
         self.port = port
         self.username = username
@@ -431,13 +431,13 @@ class SFTPDownloader:  # pylint: disable=too-few-public-methods
     """
 
     def __init__(
-            self,
-            port=22,
-            username="anonymous",
-            password="",
-            account="",
-            timeout=None,
-            progressbar=False,
+        self,
+        port=22,
+        username="anonymous",
+        password="",
+        account="",
+        timeout=None,
+        progressbar=False,
     ):
         self.port = port
         self.username = username
@@ -527,7 +527,7 @@ class FileDownloader:  # pylint: disable=too-few-public-methods
             raise ImportError("Missing package 'tqdm' required for progress bars.")
 
     def __call__(
-            self, url, output_file, pooch, check_only=False
+        self, url, output_file, pooch, check_only=False
     ):  # pylint: disable=R0914
         """
         Download the given file in the filesystem to the given output file.
@@ -556,7 +556,7 @@ class FileDownloader:  # pylint: disable=too-few-public-methods
         """
 
         parsed_url = parse_url(url)
-        source_path = Path(parsed_url['netloc'] + parsed_url['path'])
+        source_path = Path(parsed_url["netloc"] + parsed_url["path"])
 
         if check_only:
             return source_path.exists()
@@ -567,7 +567,9 @@ class FileDownloader:  # pylint: disable=too-few-public-methods
         with source_path.open("rb") as fsrc:
             if self.progressbar:
                 # Wrap the source file in a progress bar
-                with tqdm(total=total_size, unit="B", unit_scale=True, leave=True) as progress:
+                with tqdm(
+                    total=total_size, unit="B", unit_scale=True, leave=True
+                ) as progress:
                     fsrc = ProgressFileWrapper(fsrc, progress)
                     if ispath:
                         with open(output_file, "wb") as fdst:

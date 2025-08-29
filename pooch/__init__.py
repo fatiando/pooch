@@ -15,7 +15,7 @@ from .downloaders import (
     FTPDownloader,
     SFTPDownloader,
     DOIDownloader,
-    FileDownloader
+    FileDownloader,
 )
 from .processors import Unzip, Untar, Decompress
 
