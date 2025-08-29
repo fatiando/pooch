@@ -517,8 +517,8 @@ class FileDownloader:  # pylint: disable=too-few-public-methods
 
     .. note::
 
-        Progressbar does add overhead.  To mitigate this, consider increasing the
-        chunk_size for large files.
+        Progressbar does add overhead.  To mitigate this, consider increasing
+        the chunk_size for large files.
     """
 
     def __init__(self, progressbar=False, chunk_size=1024, **kwargs):
