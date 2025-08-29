@@ -510,12 +510,15 @@ class SFTPDownloader:  # pylint: disable=too-few-public-methods
 
 class FileDownloader:  # pylint: disable=too-few-public-methods
     """
-    Download manager for fetching files over a file system mounted in the operating system.
+    Download manager for fetching files over a file system mounted in the OS.
 
     When called, downloads the given file path into the specified local file.
     Uses :mod:`shutil` to copy files from paths.
 
-    Note: Progressbar does add overhead.  To mitigate this, consider increasing the chunk_size for large files.
+    .. note::
+
+        Progressbar does add overhead.  To mitigate this, consider increasing the
+        chunk_size for large files.
     """
 
     def __init__(self, progressbar=False, chunk_size=1024, **kwargs):
@@ -532,7 +535,8 @@ class FileDownloader:  # pylint: disable=too-few-public-methods
         """
         Download the given file in the filesystem to the given output file.
 
-        Uses :func:`shutil.copyfile` or :func:`shutil.copyfileobj` and :func:`shutil.copystat`.
+        Uses :func:`shutil.copyfile` or :func:`shutil.copyfileobj` and
+        :func:`shutil.copystat`.
 
         Parameters
         ----------
