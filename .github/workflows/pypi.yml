@@ -106,7 +106,7 @@ jobs:
 
       # Fetch the built archives from the "build" job
       - name: Download built archives artifact
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v5
         with:
           name: pypi-${{ github.sha }}
           path: dist
