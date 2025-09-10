@@ -46,6 +46,7 @@ Downloaders
     pooch.FTPDownloader
     pooch.SFTPDownloader
     pooch.DOIDownloader
+    pooch.FileDownloader
 
 Processors
 ----------
