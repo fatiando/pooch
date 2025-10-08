@@ -215,7 +215,6 @@ class HTTPDownloader:
         kwargs.setdefault("stream", True)
         ispath = not hasattr(output_file, "write")
         if ispath:
-
             output_file = open(output_file, "w+b")
 
         try:
@@ -359,7 +358,6 @@ class FTPDownloader:
 
         ispath = not hasattr(output_file, "write")
         if ispath:
-
             output_file = open(output_file, "w+b")
 
         try:

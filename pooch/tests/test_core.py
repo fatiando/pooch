@@ -201,7 +201,7 @@ def test_pooch_download(url):
             assert log_file.getvalue() == ""
 
 
-class FakeHashMatches:  
+class FakeHashMatches:
     "Create a fake version of hash_matches that fails n times"
 
     def __init__(self, nfailures):
@@ -236,7 +236,7 @@ def test_pooch_download_retry_off_by_default(monkeypatch):
         assert logs[0].endswith(f"'{path}'.")
 
 
-class FakeSleep:  
+class FakeSleep:
     "Create a fake version of sleep that logs the specified times"
 
     def __init__(self):
@@ -528,7 +528,7 @@ def test_check_availability_on_ftp(ftpserver):
 def test_check_availability_invalid_downloader():
     "Should raise an exception if the downloader doesn't support this"
 
-    def downloader(url, output, pooch):  
+    def downloader(url, output, pooch):
         "A downloader that doesn't support check_only"
         return
 
@@ -542,7 +542,7 @@ def test_check_availability_invalid_downloader():
 def test_fetch_with_downloader(capsys):
     "Setup a downloader function for fetch"
 
-    def download(url, output_file, pup):  
+    def download(url, output_file, pup):
         "Download through HTTP and warn that we're doing it"
         get_logger().info("downloader executed")
         HTTPDownloader()(url, output_file, pup)

@@ -46,7 +46,7 @@ def file_hash(*args, **kwargs) -> Any:
     >>> os.remove(fname)
 
     """
-    
+
     from .hashes import file_hash as new_file_hash
 
     message = """
