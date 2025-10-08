@@ -1,0 +1,9 @@
+# Requirements to run type checks.
+mypy
+types-requests
+types-tqdm
+types-paramiko
+types-xxhash
+pytest                 # Install pytest to provide type stubs
+platformdirs >= 2.5.0  # install plaformdirs to provide type stubs
+packaging >= 20.0      # install packaging to provide type stubs

@@ -26,11 +26,13 @@ dependencies:
     - sphinx==7.2.*
     - sphinx-book-theme==1.1.*
     - sphinx-design==0.5.*
-    # Style and types
+    # Style
     - ruff
+    # Types
     - mypy
     - types-requests
     - types-tqdm
     - types-paramiko
+    - types-xxhash
     - pip:
       - burocrata

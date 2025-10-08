@@ -32,10 +32,6 @@ dependencies = [
     "requests >= 2.19.0",
 ]
 
-[[tool.mypy.overrides]]
-module = ["xxhash"]
-ignore_missing_imports = true
-
 [project.optional-dependencies]
 progress = ["tqdm>=4.41.0,<5.0.0"]
 sftp = ["paramiko>=2.7.0"]
