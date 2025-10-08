@@ -89,7 +89,7 @@ def choose_downloader(url, progressbar=False):
     return downloader
 
 
-class HTTPDownloader:  # pylint: disable=too-few-public-methods
+class HTTPDownloader:
     """
     Download manager for fetching files over HTTP/HTTPS.
 
@@ -173,7 +173,7 @@ class HTTPDownloader:  # pylint: disable=too-few-public-methods
         if self.progressbar is True and tqdm is None:
             raise ValueError("Missing package 'tqdm' required for progress bars.")
 
-    def __call__(self, url, output_file, pooch, check_only=False):  # pylint: disable=R0914
+    def __call__(self, url, output_file, pooch, check_only=False):
         """
         Download the given URL over HTTP to the given output file.
 
@@ -200,7 +200,7 @@ class HTTPDownloader:  # pylint: disable=too-few-public-methods
 
         """
         # Lazy import requests to speed up import time
-        import requests  # pylint: disable=C0415
+        import requests
 
         if check_only:
             timeout = self.kwargs.get("timeout", DEFAULT_TIMEOUT)
@@ -213,9 +213,9 @@ class HTTPDownloader:  # pylint: disable=too-few-public-methods
         kwargs.setdefault("stream", True)
         ispath = not hasattr(output_file, "write")
         if ispath:
-            # pylint: disable=consider-using-with
+
             output_file = open(output_file, "w+b")
-            # pylint: enable=consider-using-with
+
         try:
             response = requests.get(url, timeout=timeout, **kwargs)
             response.raise_for_status()
@@ -260,7 +260,7 @@ class HTTPDownloader:  # pylint: disable=too-few-public-methods
         return None
 
 
-class FTPDownloader:  # pylint: disable=too-few-public-methods
+class FTPDownloader:
     """
     Download manager for fetching files over FTP.
 
@@ -356,9 +356,9 @@ class FTPDownloader:  # pylint: disable=too-few-public-methods
 
         ispath = not hasattr(output_file, "write")
         if ispath:
-            # pylint: disable=consider-using-with
+
             output_file = open(output_file, "w+b")
-            # pylint: enable=consider-using-with
+
         try:
             ftp.login(user=self.username, passwd=self.password, acct=self.account)
             command = f"RETR {parsed_url['path']}"
@@ -392,7 +392,7 @@ class FTPDownloader:  # pylint: disable=too-few-public-methods
         return None
 
 
-class SFTPDownloader:  # pylint: disable=too-few-public-methods
+class SFTPDownloader:
     """
     Download manager for fetching files over SFTP.
 
@@ -503,7 +503,7 @@ class SFTPDownloader:  # pylint: disable=too-few-public-methods
                 sftp.close()
 
 
-class DOIDownloader:  # pylint: disable=too-few-public-methods
+class DOIDownloader:
     """
     Download manager for fetching files from Digital Object Identifiers (DOIs).
 
@@ -645,7 +645,7 @@ def doi_to_url(doi):
 
     """
     # Lazy import requests to speed up import time
-    import requests  # pylint: disable=C0415
+    import requests
 
     # Use doi.org to resolve the DOI to the repository website.
     response = requests.get(f"https://doi.org/{doi}", timeout=DEFAULT_TIMEOUT)
@@ -710,9 +710,9 @@ def doi_to_repository(doi):
     return data_repository
 
 
-class DataRepository:  # pylint: disable=too-few-public-methods, missing-class-docstring
+class DataRepository:
     @classmethod
-    def initialize(cls, doi, archive_url):  # pylint: disable=unused-argument
+    def initialize(cls, doi, archive_url):
         """
         Initialize the data repository if the given URL points to a
         corresponding repository.
@@ -763,7 +763,7 @@ class DataRepository:  # pylint: disable=too-few-public-methods, missing-class-d
         raise NotImplementedError  # pragma: no cover
 
 
-class ZenodoRepository(DataRepository):  # pylint: disable=missing-class-docstring
+class ZenodoRepository(DataRepository):
     base_api_url = "https://zenodo.org/api/records"
 
     def __init__(self, doi, archive_url):
@@ -803,7 +803,7 @@ class ZenodoRepository(DataRepository):  # pylint: disable=missing-class-docstri
         """Cached API response from Zenodo"""
         if self._api_response is None:
             # Lazy import requests to speed up import time
-            import requests  # pylint: disable=C0415
+            import requests
 
             article_id = self.archive_url.split("/")[-1]
             self._api_response = requests.get(
@@ -916,7 +916,7 @@ class ZenodoRepository(DataRepository):  # pylint: disable=missing-class-docstri
             pooch.registry[filedata[key]] = checksum
 
 
-class FigshareRepository(DataRepository):  # pylint: disable=missing-class-docstring
+class FigshareRepository(DataRepository):
     def __init__(self, doi, archive_url):
         self.archive_url = archive_url
         self.doi = doi
@@ -969,7 +969,7 @@ class FigshareRepository(DataRepository):  # pylint: disable=missing-class-docst
         """Cached API response from Figshare"""
         if self._api_response is None:
             # Lazy import requests to speed up import time
-            import requests  # pylint: disable=C0415
+            import requests
 
             # Use the figshare API to find the article ID from the DOI
             article = requests.get(
@@ -1044,7 +1044,7 @@ class FigshareRepository(DataRepository):  # pylint: disable=missing-class-docst
             pooch.registry[filedata["name"]] = f"md5:{filedata['computed_md5']}"
 
 
-class DataverseRepository(DataRepository):  # pylint: disable=missing-class-docstring
+class DataverseRepository(DataRepository):
     def __init__(self, doi, archive_url):
         self.archive_url = archive_url
         self.doi = doi
@@ -1089,7 +1089,7 @@ class DataverseRepository(DataRepository):  # pylint: disable=missing-class-docs
         used prior and after the initialization.
         """
         # Lazy import requests to speed up import time
-        import requests  # pylint: disable=C0415
+        import requests
 
         parsed = parse_url(archive_url)
         response = requests.get(

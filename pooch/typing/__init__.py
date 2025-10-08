@@ -49,7 +49,7 @@ class Downloader(Protocol):
     Class used to define the type definition for the downloader function.
     """
 
-    # pylint: disable=too-few-public-methods
+    
     def __call__(  # noqa: E704
         self,
         fname: str,

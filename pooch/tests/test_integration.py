@@ -4,7 +4,7 @@
 #
 # This code is part of the Fatiando a Terra project (https://www.fatiando.org)
 #
-# pylint: disable=redefined-outer-name
+
 """
 Test the entire process of creating a Pooch and using it.
 """
