@@ -126,9 +126,7 @@ def hash_algorithm(hash_string):
 
     """
     default = "sha256"
-    if hash_string is None:
-        algorithm = default
-    elif ":" not in hash_string:
+    if hash_string is None or ":" not in hash_string:
         algorithm = default
     else:
         algorithm = hash_string.split(":")[0]

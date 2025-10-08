@@ -13,16 +13,16 @@ import logging
 import os
 import tempfile
 import warnings
+from collections.abc import Generator
 from contextlib import contextmanager
 from pathlib import Path
+from typing import Any, Optional
 from urllib.parse import urlsplit
-from typing import Optional, Any, Generator
 
 import platformdirs
 from packaging.version import Version
 
-from .typing import ParsedURL, PathType, PathInputType
-
+from .typing import ParsedURL, PathInputType, PathType
 
 LOGGER = logging.Logger("pooch")
 LOGGER.addHandler(logging.StreamHandler())

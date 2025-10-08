@@ -249,9 +249,8 @@ def test_sftp_downloader_fail_if_file_object():
         downloader = SFTPDownloader(username="demo", password="password")
         url = "sftp://test.rebex.net/pub/example/pocketftp.png"
         outfile = os.path.join(local_store, "pocketftp.png")
-        with open(outfile, "wb") as outfile_obj:
-            with pytest.raises(TypeError):
-                downloader(url, outfile_obj, None)
+        with open(outfile, "wb") as outfile_obj, pytest.raises(TypeError):
+            downloader(url, outfile_obj, None)
 
 
 @pytest.mark.skipif(paramiko is not None, reason="paramiko must be missing")
@@ -383,7 +382,7 @@ def test_downloader_arbitrary_progressbar(capsys):
         @staticmethod
         def close():
             """print a new empty line"""
-            print("", file=sys.stderr)
+            print(file=sys.stderr)
 
     pbar = MinimalProgressDisplay(total=None)
     download = HTTPDownloader(progressbar=pbar)

@@ -31,9 +31,9 @@ if TYPE_CHECKING:
 __all__ = [
     "Action",
     "Downloader",
-    "PathType",
-    "PathInputType",
     "ParsedURL",
+    "PathInputType",
+    "PathType",
     "Processor",
 ]
 
@@ -50,7 +50,7 @@ class Downloader(Protocol):
     """
 
     # pylint: disable=too-few-public-methods
-    def __call__(  # noqa: E704
+    def __call__(
         self,
         fname: str,
         action: Optional[PathType],

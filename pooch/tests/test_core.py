@@ -226,9 +226,8 @@ def test_pooch_download_retry_off_by_default(monkeypatch):
         path = Path(local_store)
         pup = Pooch(path=path, base_url=BASEURL, registry=REGISTRY)
         # Make sure it fails with no retries
-        with pytest.raises(ValueError) as error:
-            with capture_log() as log_file:
-                pup.fetch("tiny-data.txt")
+        with pytest.raises(ValueError) as error, capture_log() as log_file:
+            pup.fetch("tiny-data.txt")
         assert "does not match the known hash" in str(error)
         # Check that the log doesn't have the download retry message
         logs = log_file.getvalue().strip().split("\n")
@@ -531,7 +530,7 @@ def test_check_availability_invalid_downloader():
 
     def downloader(url, output, pooch):  # pylint: disable=unused-argument
         "A downloader that doesn't support check_only"
-        return None
+        return
 
     pup = Pooch(path=DATA_DIR, base_url=BASEURL, registry=REGISTRY)
     msg = "does not support availability checks."

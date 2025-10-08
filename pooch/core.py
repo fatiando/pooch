@@ -8,16 +8,17 @@
 The main Pooch class and a factory function for it.
 """
 
-import os
-import time
 import contextlib
+import os
 import shlex
 import shutil
+import time
 from pathlib import Path
-from typing import Union, Optional, Any
+from typing import Any, Optional, Union
 
 from .downloaders import DOIDownloader, choose_downloader, doi_to_repository
 from .hashes import file_hash, hash_matches
+from .typing import Action, Downloader, PathInputType, PathType, Processor
 from .utils import (
     cache_location,
     check_version,
@@ -27,7 +28,6 @@ from .utils import (
     temporary_file,
     unique_file_name,
 )
-from .typing import PathType, PathInputType, Processor, Downloader, Action
 
 
 def retrieve(
@@ -667,7 +667,7 @@ class Pooch:
                     continue
 
                 elements = shlex.split(line)
-                if not len(elements) in [0, 2, 3]:
+                if len(elements) not in [0, 2, 3]:
                     raise OSError(
                         f"Invalid entry in Pooch registry file '{fname}': "
                         f"expected 2 or 3 elements in line {linenum + 1} but got "
@@ -742,7 +742,7 @@ class Pooch:
             available = downloader(url, None, self, check_only=True)
         except TypeError as error:
             error_msg = (
-                f"Downloader '{str(downloader)}' does not support availability checks."
+                f"Downloader '{downloader!s}' does not support availability checks."
             )
             raise NotImplementedError(error_msg) from error
         return available

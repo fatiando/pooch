@@ -730,7 +730,7 @@ class DataRepository:  # pylint: disable=too-few-public-methods, missing-class-d
             The resolved URL for the DOI
         """
 
-        return None  # pragma: no cover
+        return  # pragma: no cover
 
     def download_url(self, file_name):
         """
