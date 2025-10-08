@@ -1,3 +1,8 @@
-# Style checks
+# Style and type checks
 ruff
 burocrata
+types-requests
+types-tqdm
+types-paramiko
+mypy
+pytest

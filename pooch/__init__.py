@@ -20,6 +20,10 @@ from .hashes import file_hash, make_registry
 from .processors import Decompress, Untar, Unzip
 from .utils import check_version, get_logger, os_cache
 
+# This file is generated automatically by setuptools_scm
+from . import _version  # type: ignore
+
+
 # Add a "v" to the version number
 __version__ = f"v{_version.version}"
 

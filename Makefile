@@ -1,7 +1,7 @@
 # Build, package, test, and clean
 PROJECT=pooch
 TESTDIR=tmp-test-dir-with-unique-name
-PYTEST_ARGS=--cov-config=../.coveragerc --cov-report=term-missing --cov=$(PROJECT) --doctest-modules -v --pyargs
+PYTEST_ARGS=--cov-config=../.coveragerc --cov-report=term-missing --cov=$(PROJECT) --doctest-modules -v --pyargs $(PYTEST_ARGS_EXTRA)
 LINT_FILES=$(PROJECT)
 CHECK_STYLE=$(PROJECT) doc
 
@@ -34,7 +34,7 @@ format:
 	ruff format $(CHECK_STYLE)
 	burocrata --extension=py $(CHECK_STYLE)
 
-check: check-format check-style
+check: check-format check-style check-types
 
 check-format:
 	ruff format --check $(CHECK_STYLE)
@@ -42,6 +42,9 @@ check-format:
 
 check-style:
 	ruff check $(CHECK_STYLE)
+
+check-types:
+	mypy $(CHECK_STYLE)
 
 clean:
 	find . -name "*.pyc" -exec rm -v {} \;
