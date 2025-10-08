@@ -4,7 +4,7 @@
 #
 # This code is part of the Fatiando a Terra project (https://www.fatiando.org)
 #
-# pylint: disable=missing-docstring,import-outside-toplevel,import-self
+
 #
 # Import functions/classes to make the API
 # This file is generated automatically by setuptools_scm

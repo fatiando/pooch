@@ -4,7 +4,7 @@
 #
 # This code is part of the Fatiando a Terra project (https://www.fatiando.org)
 #
-# pylint: disable=redefined-outer-name
+
 """
 Test the hash calculation and checking functions.
 """
@@ -67,7 +67,7 @@ def data_dir_mirror(tmp_path):
 
 def test_make_registry(data_dir_mirror):
     "Check that the registry builder creates the right file names and hashes"
-    outfile = NamedTemporaryFile(delete=False)  # pylint: disable=consider-using-with
+    outfile = NamedTemporaryFile(delete=False)  
     # Need to close the file before writing to it.
     outfile.close()
     try:
@@ -88,7 +88,7 @@ def test_make_registry(data_dir_mirror):
 
 def test_make_registry_recursive(data_dir_mirror):
     "Check that the registry builder works in recursive mode"
-    outfile = NamedTemporaryFile(delete=False)  # pylint: disable=consider-using-with
+    outfile = NamedTemporaryFile(delete=False)  
     # Need to close the file before writing to it.
     outfile.close()
     try:

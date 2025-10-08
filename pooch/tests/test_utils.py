@@ -55,7 +55,7 @@ def test_make_local_storage_parallel(pool, monkeypatch):
     # recursions from the monkey patching.
     makedirs = os.makedirs
 
-    def mockmakedirs(path, exist_ok=False):  # pylint: disable=unused-argument
+    def mockmakedirs(path, exist_ok=False):  
         "Delay before calling makedirs"
         time.sleep(1.5)
         makedirs(path, exist_ok=exist_ok)
@@ -81,7 +81,7 @@ def test_make_local_storage_parallel(pool, monkeypatch):
 def test_local_storage_makedirs_permissionerror(monkeypatch):
     "Should warn the user when can't create the local data dir"
 
-    def mockmakedirs(path, exist_ok=False):  # pylint: disable=unused-argument
+    def mockmakedirs(path, exist_ok=False):  
         "Raise an exception to mimic permission issues"
         msg = "Fake error"
         raise PermissionError(msg)
@@ -105,7 +105,7 @@ def test_local_storage_newfile_permissionerror(monkeypatch):
     # This is a separate function because there should be a warning if the data
     # dir already exists but we can't write to it.
 
-    def mocktempfile(**kwargs):  # pylint: disable=unused-argument
+    def mocktempfile(**kwargs):  
         "Raise an exception to mimic permission issues"
         msg = "Fake error"
         raise PermissionError(msg)
