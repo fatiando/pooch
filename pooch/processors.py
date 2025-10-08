@@ -4,7 +4,7 @@
 #
 # This code is part of the Fatiando a Terra project (https://www.fatiando.org)
 #
-# pylint: disable=line-too-long
+
 """
 Post-processing hooks
 """
@@ -22,7 +22,7 @@ from zipfile import ZipFile
 from .utils import get_logger
 
 
-class ExtractorProcessor(abc.ABC):  # pylint: disable=too-few-public-methods
+class ExtractorProcessor(abc.ABC):  
     """
     Abstract base class for extractions from compressed archives.
 
@@ -138,7 +138,7 @@ class ExtractorProcessor(abc.ABC):  # pylint: disable=too-few-public-methods
         return fnames
 
 
-class Unzip(ExtractorProcessor):  # pylint: disable=too-few-public-methods
+class Unzip(ExtractorProcessor):  
     """
     Processor that unpacks a zip archive and returns a list of all files.
 
@@ -210,7 +210,7 @@ class Unzip(ExtractorProcessor):  # pylint: disable=too-few-public-methods
                     zip_file.extractall(members=subdir_members, path=extract_dir)
 
 
-class Untar(ExtractorProcessor):  # pylint: disable=too-few-public-methods
+class Untar(ExtractorProcessor):  
     """
     Processor that unpacks a tar archive and returns a list of all files.
 
@@ -289,7 +289,7 @@ class Untar(ExtractorProcessor):  # pylint: disable=too-few-public-methods
                     )
 
 
-class Decompress:  # pylint: disable=too-few-public-methods
+class Decompress:  
     """
     Processor that decompress a file and returns the decompressed version.
 
