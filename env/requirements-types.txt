@@ -1,12 +1,9 @@
 # Requirements to run type checks.
-# Need to install required and optional dependencies so mypy have access to
-# each library stubs.
-platformdirs >= 2.5.0
-packaging >= 20.0
-requests >= 2.19.0
-# Install mypy and required packages for running type checks
+mypy
 types-requests
 types-tqdm
 types-paramiko
-mypy
-pytest
+types-xxhash
+pytest                 # Install pytest to provide type stubs
+platformdirs >= 2.5.0  # install plaformdirs to provide type stubs
+packaging >= 20.0      # install packaging to provide type stubs
