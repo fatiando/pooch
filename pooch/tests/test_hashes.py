@@ -116,7 +116,7 @@ def test_file_hash_invalid_algorithm():
 
 
 @pytest.mark.parametrize(
-    "alg,expected_hash",
+    ("alg", "expected_hash"),
     list(TINY_DATA_HASHES.items()),
     ids=list(TINY_DATA_HASHES.keys()),
 )
@@ -134,7 +134,7 @@ def test_file_hash(alg, expected_hash):
 
 
 @pytest.mark.parametrize(
-    "alg,expected_hash",
+    ("alg", "expected_hash"),
     list(TINY_DATA_HASHES.items()),
     ids=list(TINY_DATA_HASHES.keys()),
 )
@@ -156,7 +156,7 @@ def test_hash_matches(alg, expected_hash):
 
 
 @pytest.mark.parametrize(
-    "alg,expected_hash",
+    ("alg", "expected_hash"),
     list(TINY_DATA_HASHES_HASHLIB.items()),
     ids=list(TINY_DATA_HASHES_HASHLIB.keys()),
 )
@@ -188,7 +188,7 @@ def test_hash_matches_none():
 
 
 @pytest.mark.parametrize(
-    "alg,expected_hash",
+    ("alg", "expected_hash"),
     list(TINY_DATA_HASHES_HASHLIB.items()),
     ids=list(TINY_DATA_HASHES_HASHLIB.keys()),
 )

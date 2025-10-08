@@ -574,9 +574,8 @@ class Pooch:
         action, verb = download_action(full_path, known_hash)
 
         if action == "update" and not self.allow_updates:
-            raise ValueError(
-                f"{fname} needs to update {full_path} but updates are disallowed."
-            )
+            msg = f"{fname} needs to update {full_path} but updates are disallowed."
+            raise ValueError(msg)
 
         if action in ("download", "update"):
             # We need to write data, so create the local data directory if it
@@ -614,7 +613,8 @@ class Pooch:
         it's not.
         """
         if fname not in self.registry:
-            raise ValueError(f"File '{fname}' is not in the registry.")
+            msg = f"File '{fname}' is not in the registry."
+            raise ValueError(msg)
 
     def get_url(self, fname: str) -> str:
         """
@@ -668,11 +668,12 @@ class Pooch:
 
                 elements = shlex.split(line)
                 if len(elements) not in [0, 2, 3]:
-                    raise OSError(
+                    msg = (
                         f"Invalid entry in Pooch registry file '{fname}': "
                         f"expected 2 or 3 elements in line {linenum + 1} but got "
                         f"{len(elements)}. Offending entry: '{line}'"
                     )
+                    raise OSError(msg)
                 if elements:
                     file_name = elements[0]
                     file_checksum = elements[1]

@@ -110,7 +110,7 @@ def test_doi_url_not_found():
 
 @pytest.mark.network
 @pytest.mark.parametrize(
-    "repository,doi",
+    ("repository", "doi"),
     [
         pytest.param(
             FigshareRepository,
@@ -190,7 +190,7 @@ def test_figshare_unspecified_version():
 @pytest.mark.network
 @pytest.mark.figshare
 @pytest.mark.parametrize(
-    "version, missing, present",
+    ("version", "missing", "present"),
     [
         (
             1,
@@ -273,7 +273,7 @@ def test_downloader_progressbar_fails(downloader):
 @pytest.mark.network
 @pytest.mark.skipif(tqdm is None, reason="requires tqdm")
 @pytest.mark.parametrize(
-    "url,downloader",
+    ("url", "downloader"),
     [
         (BASEURL, HTTPDownloader),
         pytest.param(FIGSHAREURL, DOIDownloader, marks=pytest.mark.figshare),
@@ -479,7 +479,7 @@ class TestZenodoAPISupport:
     }
 
     @pytest.mark.parametrize(
-        "api_version, api_response",
+        ("api_version", "api_response"),
         [
             ("legacy", legacy_api_response),
             ("new", new_api_response),
@@ -507,7 +507,7 @@ class TestZenodoAPISupport:
                 api_version = downloader.api_version
 
     @pytest.mark.parametrize(
-        "api_version, api_response",
+        ("api_version", "api_response"),
         [("legacy", legacy_api_response), ("new", new_api_response)],
     )
     def test_download_url(self, httpserver, api_version, api_response):

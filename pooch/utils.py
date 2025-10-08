@@ -182,9 +182,8 @@ def parse_url(url: str) -> ParsedURL:
 
     """
     if url.startswith("doi://"):
-        raise ValueError(
-            f"Invalid DOI link '{url}'. You must not use '//' after 'doi:'."
-        )
+        msg = f"Invalid DOI link '{url}'. You must not use '//' after 'doi:'."
+        raise ValueError(msg)
     if url.startswith("doi:"):
         protocol = "doi"
         parts = url[4:].split("/")
@@ -255,10 +254,7 @@ def make_local_storage(path: PathType, env: Optional[str] = None) -> None:
     """
     path = str(path)
     # Check that the data directory is writable
-    if not os.path.exists(path):
-        action = "create"
-    else:
-        action = "write to"
+    action = "create" if not os.path.exists(path) else "write to"
 
     try:
         if action == "create":

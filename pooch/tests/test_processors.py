@@ -24,7 +24,7 @@ BASEURL = pooch_test_url()
 
 @pytest.mark.network
 @pytest.mark.parametrize(
-    "method,ext,name",
+    ("method", "ext", "name"),
     [
         ("auto", "xz", None),
         ("lzma", "xz", None),
@@ -97,7 +97,7 @@ def test_decompress_fails():
     "target_path", [None, "some_custom_path"], ids=["default_path", "custom_path"]
 )
 @pytest.mark.parametrize(
-    "archive,members",
+    ("archive", "members"),
     [
         ("tiny-data", ["tiny-data.txt"]),
         ("store", None),
@@ -116,7 +116,7 @@ def test_decompress_fails():
     ],
 )
 @pytest.mark.parametrize(
-    "processor_class,extension",
+    ("processor_class", "extension"),
     [(Unzip, ".zip"), (Untar, ".tar.gz")],
     ids=["Unzip", "Untar"],
 )
@@ -150,7 +150,7 @@ def test_unpacking(processor_class, extension, target_path, archive, members):
 
 @pytest.mark.network
 @pytest.mark.parametrize(
-    "processor_class,extension",
+    ("processor_class", "extension"),
     [(Unzip, ".zip"), (Untar, ".tar.gz")],
 )
 def test_multiple_unpacking(processor_class, extension):
@@ -183,7 +183,7 @@ def test_multiple_unpacking(processor_class, extension):
 
 @pytest.mark.network
 @pytest.mark.parametrize(
-    "processor_class,extension",
+    ("processor_class", "extension"),
     [(Unzip, ".zip"), (Untar, ".tar.gz")],
 )
 def test_unpack_members_with_leading_dot(processor_class, extension):
@@ -238,7 +238,7 @@ def _unpacking_expected_paths_and_logs(archive, members, path, name):
 
 @pytest.mark.network
 @pytest.mark.parametrize(
-    "processor_class,extension",
+    ("processor_class", "extension"),
     [(Unzip, ".zip"), (Untar, ".tar.gz")],
 )
 def test_unpacking_members_then_no_members(processor_class, extension):
@@ -262,7 +262,7 @@ def test_unpacking_members_then_no_members(processor_class, extension):
 
 @pytest.mark.network
 @pytest.mark.parametrize(
-    "processor_class,extension",
+    ("processor_class", "extension"),
     [(Unzip, ".zip"), (Untar, ".tar.gz")],
 )
 def test_unpacking_wrong_members_then_no_members(processor_class, extension):

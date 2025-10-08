@@ -72,11 +72,12 @@ def file_hash(fname, alg="sha256"):
 
     """
     if alg not in ALGORITHMS_AVAILABLE:
-        raise ValueError(
+        msg = (
             f"Algorithm '{alg}' not available to the pooch library. "
             "Only the following algorithms are available "
             f"{list(ALGORITHMS_AVAILABLE.keys())}."
         )
+        raise ValueError(msg)
     # Calculate the hash in chunks to avoid overloading the memory
     chunksize = 65536
     hasher = ALGORITHMS_AVAILABLE[alg]()
@@ -172,12 +173,13 @@ def hash_matches(fname, known_hash, strict=False, source=None):
     if strict and not matches:
         if source is None:
             source = str(fname)
-        raise ValueError(
+        msg = (
             f"{algorithm.upper()} hash of downloaded file ({source}) does not match"
             f" the known hash: expected {known_hash} but got {new_hash}. Deleted"
             " download for safety. The downloaded file may have been corrupted or"
             " the known hash may be outdated."
         )
+        raise ValueError(msg)
     return matches
 
 
@@ -201,10 +203,7 @@ def make_registry(directory, output, recursive=True):
 
     """
     directory = Path(directory)
-    if recursive:
-        pattern = "**/*"
-    else:
-        pattern = "*"
+    pattern = "**/*" if recursive else "*"
 
     files = sorted(
         str(path.relative_to(directory))
@@ -215,7 +214,7 @@ def make_registry(directory, output, recursive=True):
     hashes = [file_hash(str(directory / fname)) for fname in files]
 
     with open(output, "w", encoding="utf-8") as outfile:
-        for fname, fhash in zip(files, hashes):
-            # Only use Unix separators for the registry so that we don't go
-            # insane dealing with file paths.
-            outfile.write("{} {}\n".format(fname.replace("\\", "/"), fhash))
+        outfile.writelines(
+            "{} {}\n".format(fname.replace("\\", "/"), fhash)
+            for fname, fhash in zip(files, hashes)
+        )

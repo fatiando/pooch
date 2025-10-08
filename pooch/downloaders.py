@@ -81,10 +81,11 @@ def choose_downloader(url, progressbar=False):
 
     parsed_url = parse_url(url)
     if parsed_url["protocol"] not in known_downloaders:
-        raise ValueError(
+        msg = (
             f"Unrecognized URL protocol '{parsed_url['protocol']}' in '{url}'. "
             f"Must be one of {known_downloaders.keys()}."
         )
+        raise ValueError(msg)
     downloader = known_downloaders[parsed_url["protocol"]](progressbar=progressbar)
     return downloader
 
@@ -171,7 +172,8 @@ class HTTPDownloader:  # pylint: disable=too-few-public-methods
         self.progressbar = progressbar
         self.chunk_size = chunk_size
         if self.progressbar is True and tqdm is None:
-            raise ValueError("Missing package 'tqdm' required for progress bars.")
+            msg = "Missing package 'tqdm' required for progress bars."
+            raise ValueError(msg)
 
     def __call__(self, url, output_file, pooch, check_only=False):  # pylint: disable=R0914
         """
@@ -315,7 +317,8 @@ class FTPDownloader:  # pylint: disable=too-few-public-methods
         self.progressbar = progressbar
         self.chunk_size = chunk_size
         if self.progressbar is True and tqdm is None:
-            raise ValueError("Missing package 'tqdm' required for progress bars.")
+            msg = "Missing package 'tqdm' required for progress bars."
+            raise ValueError(msg)
 
     def __call__(self, url, output_file, pooch, check_only=False):
         """
@@ -651,9 +654,8 @@ def doi_to_url(doi):
     response = requests.get(f"https://doi.org/{doi}", timeout=DEFAULT_TIMEOUT)
     url = response.url
     if 400 <= response.status_code < 600:
-        raise ValueError(
-            f"Archive with doi:{doi} not found (see {url}). Is the DOI correct?"
-        )
+        msg = f"Archive with doi:{doi} not found (see {url}). Is the DOI correct?"
+        raise ValueError(msg)
     return url
 
 
@@ -701,11 +703,12 @@ def doi_to_repository(doi):
 
     if data_repository is None:
         repository = parse_url(archive_url)["netloc"]
-        raise ValueError(
+        msg = (
             f"Invalid data repository '{repository}'. "
             "To request or contribute support for this repository, "
             "please open an issue at https://github.com/fatiando/pooch/issues"
         )
+        raise ValueError(msg)
 
     return data_repository
 
@@ -839,10 +842,11 @@ class ZenodoRepository(DataRepository):  # pylint: disable=missing-class-docstri
             elif all("filename" in file for file in self.api_response["files"]):
                 self._api_version = "new"
             else:
-                raise ValueError(
+                msg = (
                     "Couldn't determine the version of the Zenodo API for "
                     f"{self.archive_url} (doi:{self.doi})."
                 )
+                raise ValueError(msg)
         return self._api_version
 
     def download_url(self, file_name):
@@ -876,10 +880,11 @@ class ZenodoRepository(DataRepository):  # pylint: disable=missing-class-docstri
             files = [item["filename"] for item in self.api_response["files"]]
         # Check if file exists in the repository
         if file_name not in files:
-            raise ValueError(
+            msg = (
                 f"File '{file_name}' not found in data archive "
                 f"{self.archive_url} (doi:{self.doi})."
             )
+            raise ValueError(msg)
         # Build download url
         if self.api_version == "legacy":
             download_url = files[file_name]["links"]["self"]
@@ -989,6 +994,7 @@ class FigshareRepository(DataRepository):  # pylint: disable=missing-class-docst
                     "the repository should be used. "
                     "Figshare will point to the latest version available.",
                     UserWarning,
+                    stacklevel=2,
                 )
                 # Define API url using only the article id
                 # (figshare will resolve the latest version)
@@ -1024,9 +1030,8 @@ class FigshareRepository(DataRepository):  # pylint: disable=missing-class-docst
         """
         files = {item["name"]: item for item in self.api_response}
         if file_name not in files:
-            raise ValueError(
-                f"File '{file_name}' not found in data archive {self.archive_url} (doi:{self.doi})."
-            )
+            msg = f"File '{file_name}' not found in data archive {self.archive_url} (doi:{self.doi})."
+            raise ValueError(msg)
         download_url = files[file_name]["download_url"]
         return download_url
 
@@ -1138,10 +1143,11 @@ class DataverseRepository(DataRepository):  # pylint: disable=missing-class-docs
             for file in response["data"]["latestVersion"]["files"]
         }
         if file_name not in files:
-            raise ValueError(
+            msg = (
                 f"File '{file_name}' not found in data archive "
                 f"{self.archive_url} (doi:{self.doi})."
             )
+            raise ValueError(msg)
         # Generate download_url using the file id
         download_url = (
             f"{parsed['protocol']}://{parsed['netloc']}/api/access/datafile/"

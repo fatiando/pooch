@@ -83,7 +83,8 @@ def test_local_storage_makedirs_permissionerror(monkeypatch):
 
     def mockmakedirs(path, exist_ok=False):  # pylint: disable=unused-argument
         "Raise an exception to mimic permission issues"
-        raise PermissionError("Fake error")
+        msg = "Fake error"
+        raise PermissionError(msg)
 
     data_cache = os.path.join(os.curdir, "test_permission")
     assert not os.path.exists(data_cache)
@@ -106,7 +107,8 @@ def test_local_storage_newfile_permissionerror(monkeypatch):
 
     def mocktempfile(**kwargs):  # pylint: disable=unused-argument
         "Raise an exception to mimic permission issues"
-        raise PermissionError("Fake error")
+        msg = "Fake error"
+        raise PermissionError(msg)
 
     with TemporaryDirectory() as data_cache:
         os.makedirs(os.path.join(data_cache, "1.0"))
@@ -124,7 +126,7 @@ def test_local_storage_newfile_permissionerror(monkeypatch):
 
 
 @pytest.mark.parametrize(
-    "url,output",
+    ("url", "output"),
     [
         (
             "http://127.0.0.1:8080/test.nc",
@@ -193,6 +195,7 @@ def test_temporary_file_exception():
     try:
         with temporary_file() as tmp:
             assert Path(tmp).exists()
-            raise ValueError("Nooooooooo!")
+            msg = "Nooooooooo!"
+            raise ValueError(msg)
     except ValueError:
         assert not Path(tmp).exists()
