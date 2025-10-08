@@ -110,7 +110,7 @@ def test_doi_url_not_found():
 
 @pytest.mark.network
 @pytest.mark.parametrize(
-    "repository,doi",
+    ("repository", "doi"),
     [
         pytest.param(
             FigshareRepository,
@@ -190,7 +190,7 @@ def test_figshare_unspecified_version():
 @pytest.mark.network
 @pytest.mark.figshare
 @pytest.mark.parametrize(
-    "version, missing, present",
+    ("version", "missing", "present"),
     [
         (
             1,
@@ -249,9 +249,8 @@ def test_sftp_downloader_fail_if_file_object():
         downloader = SFTPDownloader(username="demo", password="password")
         url = "sftp://test.rebex.net/pub/example/pocketftp.png"
         outfile = os.path.join(local_store, "pocketftp.png")
-        with open(outfile, "wb") as outfile_obj:
-            with pytest.raises(TypeError):
-                downloader(url, outfile_obj, None)
+        with open(outfile, "wb") as outfile_obj, pytest.raises(TypeError):
+            downloader(url, outfile_obj, None)
 
 
 @pytest.mark.skipif(paramiko is not None, reason="paramiko must be missing")
@@ -274,7 +273,7 @@ def test_downloader_progressbar_fails(downloader):
 @pytest.mark.network
 @pytest.mark.skipif(tqdm is None, reason="requires tqdm")
 @pytest.mark.parametrize(
-    "url,downloader",
+    ("url", "downloader"),
     [
         (BASEURL, HTTPDownloader),
         pytest.param(FIGSHAREURL, DOIDownloader, marks=pytest.mark.figshare),
@@ -383,7 +382,7 @@ def test_downloader_arbitrary_progressbar(capsys):
         @staticmethod
         def close():
             """print a new empty line"""
-            print("", file=sys.stderr)
+            print(file=sys.stderr)
 
     pbar = MinimalProgressDisplay(total=None)
     download = HTTPDownloader(progressbar=pbar)
@@ -480,7 +479,7 @@ class TestZenodoAPISupport:
     }
 
     @pytest.mark.parametrize(
-        "api_version, api_response",
+        ("api_version", "api_response"),
         [
             ("legacy", legacy_api_response),
             ("new", new_api_response),
@@ -508,7 +507,7 @@ class TestZenodoAPISupport:
                 api_version = downloader.api_version
 
     @pytest.mark.parametrize(
-        "api_version, api_response",
+        ("api_version", "api_response"),
         [("legacy", legacy_api_response), ("new", new_api_response)],
     )
     def test_download_url(self, httpserver, api_version, api_response):

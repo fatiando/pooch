@@ -201,7 +201,7 @@ def test_pooch_download(url):
             assert log_file.getvalue() == ""
 
 
-class FakeHashMatches:  
+class FakeHashMatches:
     "Create a fake version of hash_matches that fails n times"
 
     def __init__(self, nfailures):
@@ -226,9 +226,8 @@ def test_pooch_download_retry_off_by_default(monkeypatch):
         path = Path(local_store)
         pup = Pooch(path=path, base_url=BASEURL, registry=REGISTRY)
         # Make sure it fails with no retries
-        with pytest.raises(ValueError) as error:
-            with capture_log() as log_file:
-                pup.fetch("tiny-data.txt")
+        with pytest.raises(ValueError) as error, capture_log() as log_file:
+            pup.fetch("tiny-data.txt")
         assert "does not match the known hash" in str(error)
         # Check that the log doesn't have the download retry message
         logs = log_file.getvalue().strip().split("\n")
@@ -237,7 +236,7 @@ def test_pooch_download_retry_off_by_default(monkeypatch):
         assert logs[0].endswith(f"'{path}'.")
 
 
-class FakeSleep:  
+class FakeSleep:
     "Create a fake version of sleep that logs the specified times"
 
     def __init__(self):
@@ -529,9 +528,9 @@ def test_check_availability_on_ftp(ftpserver):
 def test_check_availability_invalid_downloader():
     "Should raise an exception if the downloader doesn't support this"
 
-    def downloader(url, output, pooch):  
+    def downloader(url, output, pooch):
         "A downloader that doesn't support check_only"
-        return None
+        return
 
     pup = Pooch(path=DATA_DIR, base_url=BASEURL, registry=REGISTRY)
     msg = "does not support availability checks."
@@ -543,7 +542,7 @@ def test_check_availability_invalid_downloader():
 def test_fetch_with_downloader(capsys):
     "Setup a downloader function for fetch"
 
-    def download(url, output_file, pup):  
+    def download(url, output_file, pup):
         "Download through HTTP and warn that we're doing it"
         get_logger().info("downloader executed")
         HTTPDownloader()(url, output_file, pup)
