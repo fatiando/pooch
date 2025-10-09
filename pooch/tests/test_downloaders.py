@@ -416,7 +416,7 @@ class TestZenodoAPISupport:
     )
     file_checksum = "2942bfabb3d05332b66eb128e0842cff"
 
-    legacy_api_response = {
+    legacy_api_response = {  # noqa: RUF012
         "created": "2021-20-19T08:00:00.000000+00:00",
         "modified": "2021-20-19T08:00:00.000000+00:00",
         "id": article_id,
@@ -434,7 +434,7 @@ class TestZenodoAPISupport:
         ],
     }
 
-    new_api_response = {
+    new_api_response = {  # noqa: RUF012
         "created": "2021-20-19T08:00:00.000000+00:00",
         "modified": "2021-20-19T08:00:00.000000+00:00",
         "id": article_id,
@@ -452,7 +452,7 @@ class TestZenodoAPISupport:
         ],
     }
 
-    invalid_api_response = {
+    invalid_api_response = {  # noqa: RUF012
         "created": "2021-20-19T08:00:00.000000+00:00",
         "modified": "2021-20-19T08:00:00.000000+00:00",
         "id": article_id,
