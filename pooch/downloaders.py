@@ -175,7 +175,7 @@ class HTTPDownloader:
             msg = "Missing package 'tqdm' required for progress bars."
             raise ValueError(msg)
 
-    def __call__(self, url, output_file, pooch, check_only=False):
+    def __call__(self, url, output_file, pooch, check_only=False):  # noqa: ARG002
         """
         Download the given URL over HTTP to the given output file.
 
@@ -319,7 +319,7 @@ class FTPDownloader:
             msg = "Missing package 'tqdm' required for progress bars."
             raise ValueError(msg)
 
-    def __call__(self, url, output_file, pooch, check_only=False):
+    def __call__(self, url, output_file, pooch, check_only=False):  # noqa: ARG002
         """
         Download the given URL over FTP to the given output file.
 
@@ -452,7 +452,7 @@ class SFTPDownloader:
         if errors:
             raise ValueError(" ".join(errors))
 
-    def __call__(self, url, output_file, pooch):
+    def __call__(self, url, output_file, pooch):  # noqa: ARG002
         """
         Download the given URL over SFTP to the given output file.
 
@@ -713,7 +713,7 @@ def doi_to_repository(doi):
 
 class DataRepository:
     @classmethod
-    def initialize(cls, doi, archive_url):
+    def initialize(cls, doi, archive_url):  # noqa: ARG003
         """
         Initialize the data repository if the given URL points to a
         corresponding repository.

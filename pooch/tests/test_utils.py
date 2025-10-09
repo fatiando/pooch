@@ -81,7 +81,7 @@ def test_make_local_storage_parallel(pool, monkeypatch):
 def test_local_storage_makedirs_permissionerror(monkeypatch):
     "Should warn the user when can't create the local data dir"
 
-    def mockmakedirs(path, exist_ok=False):
+    def mockmakedirs(path, exist_ok=False):  # noqa: ARG001
         "Raise an exception to mimic permission issues"
         msg = "Fake error"
         raise PermissionError(msg)
@@ -105,7 +105,7 @@ def test_local_storage_newfile_permissionerror(monkeypatch):
     # This is a separate function because there should be a warning if the data
     # dir already exists but we can't write to it.
 
-    def mocktempfile(**kwargs):
+    def mocktempfile(**kwargs):  # noqa: ARG001
         "Raise an exception to mimic permission issues"
         msg = "Fake error"
         raise PermissionError(msg)
