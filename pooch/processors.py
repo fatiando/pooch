@@ -74,7 +74,7 @@ class ExtractorProcessor(abc.ABC):
         MUST BE IMPLEMENTED BY CHILD CLASSES.
         """
 
-    def __call__(self, fname, action, pooch):
+    def __call__(self, fname, action, pooch):  # noqa: ARG002
         """
         Extract all files from the given archive.
 
@@ -340,7 +340,7 @@ class Decompress:
         self.method = method
         self.name = name
 
-    def __call__(self, fname, action, pooch):
+    def __call__(self, fname, action, pooch):  # noqa: ARG002
         """
         Decompress the given file.
 
