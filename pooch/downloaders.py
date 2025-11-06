@@ -1161,7 +1161,44 @@ class DataverseRepository(DataRepository):  # pylint: disable=missing-class-docs
             The pooch instance that the registry will be added to.
         """
 
-        for filedata in self.api_response.json()["data"]["latestVersion"]["files"]:
-            pooch.registry[filedata["dataFile"]["filename"]] = (
-                f"md5:{filedata['dataFile']['md5']}"
-            )
+        for file in self.api_response.json()["data"]["latestVersion"]["files"]:
+            filedata = file["dataFile"]
+            # Support old API: algorithm listed in the dataFile key
+            algorithms = [
+                k for k in {"md5", "sha1", "sha256", "sha512"} if k in filedata.keys()
+            ]
+            if algorithms:
+                (algorithm,) = algorithms
+                pooch.registry[filedata["filename"]] = (
+                    f"{algorithm}:{filedata[algorithm]}"
+                )
+
+            # Support new API
+            elif "checksum" in filedata.keys():
+                algorithm = self._parse_hashing_algorithm(filedata["checksum"]["type"])
+                pooch.registry[filedata["filename"]] = (
+                    f"{algorithm}:{filedata['checksum']['value']}"
+                )
+
+            else:
+                raise ValueError(
+                    f"Checksum for file '{filedata['filename']}'"
+                    " not found in the DataVerse API response."
+                )
+
+    def _parse_hashing_algorithm(self, algorithm):
+        """
+        Parse hashing algorithm in Dataverse API responses.
+
+        Parse the algorithms (MD5, SHA-1, SHA-256, SHA-512, etc.) present under
+        the "checksum" key in Dataverse API responses to the corresponding ones
+        supported by Pooch.
+        """
+        algorithm = algorithm.lower()
+        if algorithm == "sha-1":
+            return "sha1"
+        if algorithm == "sha-256":
+            return "sha256"
+        if algorithm == "sha-512":
+            return "sha512"
+        return algorithm
