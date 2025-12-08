@@ -79,9 +79,10 @@ Are you a **scientist** or researcher? Pooch can help you too!
 [HyperSpy](https://github.com/hyperspy/hyperspy),
 [RosettaSciIO](https://github.com/hyperspy/rosettasciio),
 [eXSpy](https://github.com/hyperspy/exspy),
-[SPLASH](https://github.com/Adam-Boesky/astro_SPLASH)
-[xclim](https://github.com/Ouranosinc/xclim)
-[CLISOPS](https://github.com/roocs/clisops)
+[SPLASH](https://github.com/Adam-Boesky/astro_SPLASH),
+[xclim](https://github.com/Ouranosinc/xclim),
+[CLISOPS](https://github.com/roocs/clisops),
+[scXpand](https://github.com/yizhak-lab-ccg/scXpand)
 
 
 > If you're using Pooch, **send us a pull request** adding your project to the list.
