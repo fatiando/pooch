@@ -19,7 +19,7 @@ try:
 
     XXHASH_MAJOR_VERSION = int(xxhash.VERSION.split(".", maxsplit=1)[0])
 except ImportError:
-    xxhash = None
+    xxhash = None  # type: ignore[assignment]
     XXHASH_MAJOR_VERSION = 0
 
 from ..core import Pooch
