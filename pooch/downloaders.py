@@ -8,10 +8,13 @@
 The classes that actually handle the downloads.
 """
 import os
+import shutil
 import sys
 import ftplib
 
 import warnings
+from contextlib import nullcontext
+from pathlib import Path
 
 from .utils import parse_url
 from ._version import __version__  # type: ignore[import-not-found]
@@ -27,7 +30,6 @@ try:
     import paramiko
 except ImportError:
     paramiko = None  # type: ignore
-
 
 # Set the default timeout in seconds so it can be configured in a pinch for the
 # methods that don't or can't expose a way set it at runtime.
@@ -85,6 +87,7 @@ def choose_downloader(url, progressbar=False):
         "http": HTTPDownloader,
         "sftp": SFTPDownloader,
         "doi": DOIDownloader,
+        "file": FileDownloader,
     }
 
     parsed_url = parse_url(url)
@@ -511,6 +514,108 @@ class SFTPDownloader:  # pylint: disable=too-few-public-methods
             connection.close()
             if sftp is not None:
                 sftp.close()
+
+
+class FileDownloader:  # pylint: disable=too-few-public-methods
+    """
+    Download manager for fetching files over a file system mounted in the OS.
+
+    When called, downloads the given file path into the specified local file.
+    Uses :mod:`shutil` to copy files from paths.
+
+    .. note::
+
+        Progressbar does add overhead.  To mitigate this, consider increasing
+        the chunk_size for large files.
+    """
+
+    def __init__(self, progressbar=False, chunk_size=1024, **kwargs):
+        self.kwargs = kwargs
+        self.progressbar = progressbar
+        self.chunk_size = chunk_size
+
+        if self.progressbar and tqdm is None:
+            raise ImportError("Missing package 'tqdm' required for progress bars.")
+
+    def __call__(
+        self, url, output_file, pooch, check_only=False
+    ):  # pylint: disable=R0914
+        """
+        Download the given file in the filesystem to the given output file.
+
+        Uses :func:`shutil.copyfile` or :func:`shutil.copyfileobj` and
+        :func:`shutil.copystat`.
+
+        Parameters
+        ----------
+        url : str
+            The url path to the file you want to download.
+        output_file : str or file-like object
+            Path (and file name) to which the file will be downloaded.
+        pooch : :class:`~pooch.Pooch`
+            The instance of :class:`~pooch.Pooch` that is calling this method.
+        check_only : bool
+            If True, will only check if a file exists in the directory and
+            **without downloading the file**. Will return ``True`` if the file
+            exists and ``False`` otherwise.
+
+        Returns
+        -------
+        availability : bool or None
+            If ``check_only==True``, returns a boolean indicating if the file
+            is available on the server. Otherwise, returns ``None``.
+
+        """
+
+        parsed_url = parse_url(url)
+        source_path = Path(parsed_url["netloc"] + parsed_url["path"])
+
+        if check_only:
+            return source_path.exists()
+
+        ispath = not hasattr(output_file, "write")
+        total_size = source_path.stat().st_size  # Get the total file size
+
+        with source_path.open("rb") as fsrc:
+            if self.progressbar:
+                # Wrap the source file in a progress bar
+                with tqdm(
+                    total=total_size, unit="B", unit_scale=True, leave=True
+                ) as progress:
+                    fsrc = ProgressFileWrapper(fsrc, progress)
+                    if ispath:
+                        with open(output_file, "wb") as fdst:
+                            shutil.copyfileobj(fsrc, fdst, length=self.chunk_size)
+                        shutil.copystat(source_path, output_file)
+                    else:
+                        shutil.copyfileobj(fsrc, output_file, length=self.chunk_size)
+            else:
+                # Use shutil directly for simplicity
+                if ispath:
+                    shutil.copyfile(source_path, output_file)
+                    shutil.copystat(source_path, output_file)
+                else:
+                    shutil.copyfileobj(fsrc, output_file)
+
+        return None
+
+
+class ProgressFileWrapper:
+    """
+    A file-like wrapper that updates a progress bar as data is read.
+    """
+
+    def __init__(self, file, progress):
+        self.file = file
+        self.progress = progress
+
+    def read(self, size=-1):
+        chunk = self.file.read(size)
+        self.progress.update(len(chunk))
+        return chunk
+
+    def __getattr__(self, attr):
+        return getattr(self.file, attr)
 
 
 class DOIDownloader:  # pylint: disable=too-few-public-methods

@@ -4,7 +4,7 @@ Downloaders: Customizing the download
 =====================================
 
 By default, :meth:`pooch.Pooch.fetch` and :meth:`pooch.retrieve` will detect
-the download protocol from the given URL (HTTP, FTP, SFTP, DOI) and use the
+the download protocol from the given URL (HTTP, FTP, SFTP, FILE, DOI) and use the
 appropriate download method.
 Sometimes this is not enough: some servers require logins, redirections, or
 other non-standard operations.

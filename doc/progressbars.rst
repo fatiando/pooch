@@ -65,6 +65,30 @@ Alternatively, you can pass ``progressbar=True`` directly into one of our
     ``tqdm`` is not installed by default with Pooch. You will have to install
     it separately in order to use this feature.
 
+.. _tqdm-file-progressbar:
+
+Using file progress bars
+------------------------
+
+The ``tqdm`` progress bar can also be used to show the progress of
+file copy with the file protocol ``file://``.
+
+This is done by passing ``progressbar=True`` to the :func:`pooch.retrieve`
+function or the :meth:`pooch.Pooch.fetch` method:
+
+.. code:: python
+
+    # Using retrieve
+    fname = retrieve(
+        url="file://path/to/local/file.txt",
+        known_hash="md5:70e2afd3fd7e336ae478b1e740a5f08e",
+        progressbar=True,
+    )
+
+.. note::
+
+    The file progress bar can impact performance when copying large files.  The impact
+    can be mitigated by increasing the ``chunk_size`` argument.
 
 .. _custom-progressbar:
 
