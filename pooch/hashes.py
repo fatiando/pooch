@@ -7,9 +7,12 @@
 """
 Calculating and checking file hashes.
 """
+
 import hashlib
 import functools
 from pathlib import Path
+from typing import Optional
+from .typing import PathType
 
 # From the docs: https://docs.python.org/3/library/hashlib.html#hashlib.new
 #   The named constructors are much faster than new() and should be
@@ -40,7 +43,7 @@ except ImportError:
     pass
 
 
-def file_hash(fname, alg="sha256"):
+def file_hash(fname: PathType, alg: str = "sha256") -> str:
     """
     Calculate the hash of a given file.
 
@@ -48,8 +51,8 @@ def file_hash(fname, alg="sha256"):
 
     Parameters
     ----------
-    fname : str
-        The name of the file.
+    fname : str or PathLike
+        The path to the file.
     alg : str
         The type of the hashing algorithm
 
@@ -87,7 +90,7 @@ def file_hash(fname, alg="sha256"):
     return hasher.hexdigest()
 
 
-def hash_algorithm(hash_string):
+def hash_algorithm(hash_string: str) -> str:
     """
     Parse the name of the hash method from the hash string.
 
@@ -134,7 +137,12 @@ def hash_algorithm(hash_string):
     return algorithm.lower()
 
 
-def hash_matches(fname, known_hash, strict=False, source=None):
+def hash_matches(
+    fname: PathType,
+    known_hash: Optional[str],
+    strict: bool = False,
+    source: Optional[str] = None,
+) -> bool:
     """
     Check if the hash of a file matches a known hash.
 
@@ -147,13 +155,13 @@ def hash_matches(fname, known_hash, strict=False, source=None):
     ----------
     fname : str or PathLike
         The path to the file.
-    known_hash : str
+    known_hash : Optional[str]
         The known hash. Optionally, prepend ``alg:`` to the hash to specify the
         hashing algorithm. Default is SHA256.
     strict : bool
         If True, will raise a :class:`ValueError` if the hash does not match
         informing the user that the file may be corrupted.
-    source : str
+    source : Optional[str]
         The source of the downloaded file (name or URL, for example). Will be
         used in the error message if *strict* is True. Has no other use other
         than reporting to the user where the file came from in case of hash
@@ -182,7 +190,7 @@ def hash_matches(fname, known_hash, strict=False, source=None):
     return matches
 
 
-def make_registry(directory, output, recursive=True):
+def make_registry(directory: str, output: str, recursive: bool = True) -> None:
     """
     Make a registry of files and hashes for the given directory.
 
@@ -201,19 +209,19 @@ def make_registry(directory, output, recursive=True):
         *directory*.
 
     """
-    directory = Path(directory)
+    directory_path = Path(directory)
     if recursive:
         pattern = "**/*"
     else:
         pattern = "*"
 
     files = sorted(
-        str(path.relative_to(directory))
-        for path in directory.glob(pattern)
+        str(path.relative_to(directory_path))
+        for path in directory_path.glob(pattern)
         if path.is_file()
     )
 
-    hashes = [file_hash(str(directory / fname)) for fname in files]
+    hashes = [file_hash(str(directory_path / fname)) for fname in files]
 
     with open(output, "w", encoding="utf-8") as outfile:
         for fname, fhash in zip(files, hashes):
