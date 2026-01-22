@@ -9,14 +9,13 @@ maintainers = [
   {name = "Leonardo Uieda", email = "leo@uieda.com"}
 ]
 readme = "README.md"
-license = {text = "BSD-3-Clause"}
+license = "BSD-3-Clause"
 keywords = ["data", "download", "caching", "http"]
 classifiers = [
     "Development Status :: 5 - Production/Stable",
     "Intended Audience :: Science/Research",
     "Intended Audience :: Developers",
     "Intended Audience :: Education",
-    "License :: OSI Approved :: BSD License",
     "Operating System :: OS Independent",
     "Topic :: Scientific/Engineering",
     "Topic :: Software Development :: Libraries",
@@ -27,6 +26,7 @@ classifiers = [
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
 ]
 requires-python = ">=3.9"
 dependencies = [
@@ -34,10 +34,6 @@ dependencies = [
     "packaging >= 20.0",
     "requests >= 2.19.0",
 ]
-
-[[tool.mypy.overrides]]
-module = ["xxhash"]
-ignore_missing_imports = true
 
 [project.optional-dependencies]
 progress = ["tqdm>=4.41.0,<5.0.0"]
@@ -71,6 +67,7 @@ write_to =  "pooch/_version.py"
 [tool.pytest.ini_options]
 markers = [
     "network: test requires network access",
+    "figshare: test make request to Figshare",
 ]
 
 [tool.burocrata]
