@@ -14,7 +14,7 @@ import ftplib
 import warnings
 
 from .utils import parse_url
-from ._version import __version__
+from ._version import __version__  # type: ignore[import-not-found]
 
 # Mypy doesn't like assigning None like this.
 # Can just use a guard variable
