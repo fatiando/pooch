@@ -590,7 +590,9 @@ class DOIDownloader:  # pylint: disable=too-few-public-methods
     Same thing but for our Zenodo archive:
 
     >>> url = "doi:10.5281/zenodo.4924875/tiny-data.txt"
-    >>> downloader(url=url, output_file="tiny-data.txt", pooch=None) # doctest: +SKIP
+    >>> downloader(
+    ...     url=url, output_file="tiny-data.txt", pooch=None
+    ... ) # doctest: +SKIP
     >>> os.path.exists("tiny-data.txt")
     True
     >>> with open("tiny-data.txt") as f:
