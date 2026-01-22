@@ -558,9 +558,10 @@ class DOIDownloader:  # pylint: disable=too-few-public-methods
     chunk_size : int, optional
         Files are streamed *chunk_size* bytes at a time instead of loading
         everything into memory at one. Usually doesn't need to be changed.
-    headers : dict, optional
-        Headers that will be passed to :func:`requests.get`. By default, it'll
-        contain the default user agent defined by Pooch.
+    headers : dict or None, optional
+        Headers that will be passed to :func:`requests.get`.
+        If None, default headers containing Pooch's user agent will be used.
+        If no headers should be used, pass an empty dictionary.
     **kwargs
         All keyword arguments given when creating an instance of this class
         will be passed to :func:`requests.get`.
@@ -600,11 +601,9 @@ class DOIDownloader:  # pylint: disable=too-few-public-methods
 
     """
 
-    def __init__(
-        self, progressbar=False, chunk_size=1024, headers=REQUESTS_HEADERS, **kwargs
-    ):
+    def __init__(self, progressbar=False, chunk_size=1024, headers=None, **kwargs):
         self.kwargs = kwargs
-        self.headers = headers
+        self.headers = headers if headers is not None else REQUESTS_HEADERS
         self.progressbar = progressbar
         self.chunk_size = chunk_size
 
