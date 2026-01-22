@@ -13,6 +13,7 @@ import ftplib
 
 import warnings
 
+from . import __version__
 from .utils import parse_url
 
 # Mypy doesn't like assigning None like this.
@@ -774,6 +775,12 @@ class ZenodoRepository(DataRepository):  # pylint: disable=missing-class-docstri
         self._api_response = None
         self._api_version = None
 
+        # Define headers that will be used when making requests to Zenodo.
+        # Setting the user agent can bypass limit rates (see #502).
+        self._requests_headers = {
+            "User-Agent": f"pooch{__version__} (https://www.fatiando.org/pooch)",
+        }
+
     @classmethod
     def initialize(cls, doi, archive_url):
         """
@@ -810,6 +817,7 @@ class ZenodoRepository(DataRepository):  # pylint: disable=missing-class-docstri
             article_id = self.archive_url.split("/")[-1]
             self._api_response = requests.get(
                 f"{self.base_api_url}/{article_id}",
+                headers=self._requests_headers,
                 timeout=DEFAULT_TIMEOUT,
             ).json()
 
