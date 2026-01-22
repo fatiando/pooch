@@ -50,8 +50,8 @@ jobs:
             python: "3.14"
           - dependencies: optional
             python: "3.14"
-          # test on macos-13 (x86) using oldest dependencies and python 3.7
-          - os: macos-13
+          # test on macos-15 (x86) using oldest dependencies and python 3.9
+          - os: macos-15-intel
             dependencies: oldest
             python: "3.9"
         exclude:
