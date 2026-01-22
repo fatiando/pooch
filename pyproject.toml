@@ -25,6 +25,7 @@ classifiers = [
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
 ]
 requires-python = ">=3.9"
 dependencies = [
@@ -32,10 +33,6 @@ dependencies = [
     "packaging >= 20.0",
     "requests >= 2.19.0",
 ]
-
-[[tool.mypy.overrides]]
-module = ["xxhash"]
-ignore_missing_imports = true
 
 [project.optional-dependencies]
 progress = ["tqdm>=4.41.0,<5.0.0"]
