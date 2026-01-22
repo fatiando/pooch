@@ -184,7 +184,7 @@ jobs:
         # Maximum coverage is achieved by combining reports from every runner.
         # Each coverage file will live in its own folder with the same name as
         # the artifact.
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@v7
         with:
           pattern: coverage_*
 
