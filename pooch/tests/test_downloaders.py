@@ -37,6 +37,7 @@ from ..downloaders import (
     ZenodoRepository,
     DataverseRepository,
     doi_to_url,
+    REQUESTS_HEADERS,
 )
 from ..processors import Unzip
 from .utils import (
@@ -555,3 +556,27 @@ class TestZenodoAPISupport:
         # Populate registry
         downloader.populate_registry(puppy)
         assert puppy.registry == {self.file_name: f"md5:{self.file_checksum}"}
+
+
+class TestDOIDownloaderHeaders:
+    """Test the headers argument in DOIDownloader."""
+
+    def test_default_headers(self):
+        """Test the default value for headers."""
+        downloader = DOIDownloader()
+        assert downloader.headers == REQUESTS_HEADERS
+        downloader = DOIDownloader(headers=None)
+        assert downloader.headers == REQUESTS_HEADERS
+
+    def test_overwrite_headers(self):
+        """Test overwriting for headers."""
+        downloader = DOIDownloader(headers={"custom": "field"})
+        expected_headers = {
+            "custom": "field",
+        }
+        assert downloader.headers == expected_headers
+
+    def test_headers_empty_dict(self):
+        """Test passing an emtpy dict to headers."""
+        downloader = DOIDownloader(headers={})
+        assert downloader.headers == {}
