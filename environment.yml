@@ -28,7 +28,7 @@ dependencies:
     - sphinx-design==0.5.*
     # Style
     - pathspec
-    - black>=20.8b1
+    - black==25.*.*
     - flake8
     - pylint>=2.4
     # Types

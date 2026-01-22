@@ -1,5 +1,5 @@
 # Style and type checks
-black
+black<26.0.0
 flake8
 pylint>=2.4
 pathspec
