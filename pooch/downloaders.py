@@ -673,9 +673,7 @@ def doi_to_url(doi):
     )
     url = response.url
     if 400 <= response.status_code < 600:
-        raise ValueError(
-            f"Archive with doi:{doi} not found (see {url}). Is the DOI correct?"
-        )
+        response.raise_for_status()
     return url
 
 
