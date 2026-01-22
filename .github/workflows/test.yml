@@ -48,13 +48,13 @@ jobs:
             python: "3.9"
             network: false
           - dependencies: latest
-            python: "3.13"
+            python: "3.14"
             network: false
           - dependencies: optional
-            python: "3.13"
+            python: "3.14"
             network: false
           - dependencies: optional
-            python: "3.13"
+            python: "3.14"
             network: true
             os: ubuntu-latest
     env:
