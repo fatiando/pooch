@@ -9,14 +9,13 @@ maintainers = [
   {name = "Leonardo Uieda", email = "leo@uieda.com"}
 ]
 readme = "README.md"
-license = {text = "BSD-3-Clause"}
+license = "BSD-3-Clause"
 keywords = ["data", "download", "caching", "http"]
 classifiers = [
     "Development Status :: 5 - Production/Stable",
     "Intended Audience :: Science/Research",
     "Intended Audience :: Developers",
     "Intended Audience :: Education",
-    "License :: OSI Approved :: BSD License",
     "Operating System :: OS Independent",
     "Topic :: Scientific/Engineering",
     "Topic :: Software Development :: Libraries",
