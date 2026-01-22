@@ -13,8 +13,8 @@ import ftplib
 
 import warnings
 
-from . import __version__
 from .utils import parse_url
+from ._version import __version__
 
 # Mypy doesn't like assigning None like this.
 # Can just use a guard variable
