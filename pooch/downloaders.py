@@ -14,6 +14,7 @@ import ftplib
 import warnings
 
 from .utils import parse_url
+from ._version import __version__  # type: ignore[import-not-found]
 
 # Mypy doesn't like assigning None like this.
 # Can just use a guard variable
@@ -32,6 +33,13 @@ except ImportError:
 # methods that don't or can't expose a way set it at runtime.
 # See https://github.com/fatiando/pooch/issues/409
 DEFAULT_TIMEOUT = 30
+
+# Define headers that will be used by DOI downloaders when making requests.
+# Setting the user agent can bypass limit rates imposed by some services
+# like Zenodo (see #502).
+REQUESTS_HEADERS = {
+    "User-Agent": f"pooch{__version__} (https://www.fatiando.org/pooch)",
+}
 
 
 def choose_downloader(url, progressbar=False):
@@ -547,9 +555,13 @@ class DOIDownloader:  # pylint: disable=too-few-public-methods
         (stderr). Requires `tqdm <https://github.com/tqdm/tqdm>`__ to be
         installed. Alternatively, an arbitrary progress bar object can be
         passed. See :ref:`custom-progressbar` for details.
-    chunk_size : int
+    chunk_size : int, optional
         Files are streamed *chunk_size* bytes at a time instead of loading
         everything into memory at one. Usually doesn't need to be changed.
+    headers : dict or None, optional
+        Headers that will be passed to :func:`requests.get`.
+        If None, default headers containing Pooch's user agent will be used.
+        If no headers should be used, pass an empty dictionary.
     **kwargs
         All keyword arguments given when creating an instance of this class
         will be passed to :func:`requests.get`.
@@ -578,19 +590,22 @@ class DOIDownloader:  # pylint: disable=too-few-public-methods
     Same thing but for our Zenodo archive:
 
     >>> url = "doi:10.5281/zenodo.4924875/tiny-data.txt"
-    >>> downloader(url=url, output_file="tiny-data.txt", pooch=None)
-    >>> os.path.exists("tiny-data.txt")
+    >>> downloader(
+    ...     url=url, output_file="tiny-data.txt", pooch=None
+    ... ) # doctest: +SKIP
+    >>> os.path.exists("tiny-data.txt") # doctest: +SKIP
     True
-    >>> with open("tiny-data.txt") as f:
+    >>> with open("tiny-data.txt") as f: # doctest: +SKIP
     ...     print(f.read().strip())
     # A tiny data file for test purposes only
     1  2  3  4  5  6
-    >>> os.remove("tiny-data.txt")
+    >>> os.remove("tiny-data.txt") # doctest: +SKIP
 
     """
 
-    def __init__(self, progressbar=False, chunk_size=1024, **kwargs):
+    def __init__(self, progressbar=False, chunk_size=1024, headers=None, **kwargs):
         self.kwargs = kwargs
+        self.headers = headers if headers is not None else REQUESTS_HEADERS
         self.progressbar = progressbar
         self.chunk_size = chunk_size
 
@@ -626,7 +641,10 @@ class DOIDownloader:  # pylint: disable=too-few-public-methods
 
         # Instantiate the downloader object
         downloader = HTTPDownloader(
-            progressbar=self.progressbar, chunk_size=self.chunk_size, **self.kwargs
+            progressbar=self.progressbar,
+            chunk_size=self.chunk_size,
+            headers=self.headers,
+            **self.kwargs,
         )
         downloader(download_url, output_file, pooch)
 
@@ -650,12 +668,12 @@ def doi_to_url(doi):
     import requests  # pylint: disable=C0415
 
     # Use doi.org to resolve the DOI to the repository website.
-    response = requests.get(f"https://doi.org/{doi}", timeout=DEFAULT_TIMEOUT)
+    response = requests.get(
+        f"https://doi.org/{doi}", headers=REQUESTS_HEADERS, timeout=DEFAULT_TIMEOUT
+    )
     url = response.url
     if 400 <= response.status_code < 600:
-        raise ValueError(
-            f"Archive with doi:{doi} not found (see {url}). Is the DOI correct?"
-        )
+        response.raise_for_status()
     return url
 
 
@@ -810,6 +828,7 @@ class ZenodoRepository(DataRepository):  # pylint: disable=missing-class-docstri
             article_id = self.archive_url.split("/")[-1]
             self._api_response = requests.get(
                 f"{self.base_api_url}/{article_id}",
+                headers=REQUESTS_HEADERS,
                 timeout=DEFAULT_TIMEOUT,
             ).json()
 
@@ -976,6 +995,7 @@ class FigshareRepository(DataRepository):  # pylint: disable=missing-class-docst
             # Use the figshare API to find the article ID from the DOI
             article = requests.get(
                 f"https://api.figshare.com/v2/articles?doi={self.doi}",
+                headers=REQUESTS_HEADERS,
                 timeout=DEFAULT_TIMEOUT,
             ).json()[0]
             article_id = article["id"]
@@ -1003,7 +1023,9 @@ class FigshareRepository(DataRepository):  # pylint: disable=missing-class-docst
                     f"{article_id}/versions/{version}"
                 )
             # Make the request and return the files in the figshare repository
-            response = requests.get(api_url, timeout=DEFAULT_TIMEOUT)
+            response = requests.get(
+                api_url, headers=REQUESTS_HEADERS, timeout=DEFAULT_TIMEOUT
+            )
             response.raise_for_status()
             self._api_response = response.json()["files"]
 
@@ -1097,6 +1119,7 @@ class DataverseRepository(DataRepository):  # pylint: disable=missing-class-docs
         response = requests.get(
             f"{parsed['protocol']}://{parsed['netloc']}/api/datasets/"
             f":persistentId?persistentId=doi:{doi}",
+            headers=REQUESTS_HEADERS,
             timeout=DEFAULT_TIMEOUT,
         )
         return response
