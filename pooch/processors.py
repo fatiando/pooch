@@ -16,6 +16,7 @@ import lzma
 import os
 import shutil
 import sys
+import typing
 from tarfile import TarFile
 from zipfile import ZipFile
 
@@ -333,8 +334,14 @@ class Decompress:
 
     """
 
-    modules = {"auto": None, "lzma": lzma, "xz": lzma, "gzip": gzip, "bzip2": bz2}
-    extensions = {".xz": "lzma", ".gz": "gzip", ".bz2": "bzip2"}
+    modules: typing.ClassVar = {
+        "auto": None,
+        "lzma": lzma,
+        "xz": lzma,
+        "gzip": gzip,
+        "bzip2": bz2,
+    }
+    extensions: typing.ClassVar = {".xz": "lzma", ".gz": "gzip", ".bz2": "bzip2"}
 
     def __init__(self, method="auto", name=None):
         self.method = method
