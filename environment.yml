@@ -3,7 +3,7 @@ channels:
     - conda-forge
     - defaults
 dependencies:
-    - python==3.13
+    - python==3.14
     - pip
     # Run
     - requests
@@ -26,14 +26,16 @@ dependencies:
     - sphinx==7.2.*
     - sphinx-book-theme==1.1.*
     - sphinx-design==0.5.*
-    # Style and types
+    # Style
     - pathspec
-    - black>=20.8b1
+    - black==25.*.*
     - flake8
     - pylint>=2.4
+    # Types
     - mypy
     - types-requests
     - types-tqdm
     - types-paramiko
+    - types-xxhash
     - pip:
       - burocrata
