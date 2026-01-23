@@ -78,7 +78,12 @@ def file_hash(fname, alg="sha256"):
         )
     # Calculate the hash in chunks to avoid overloading the memory
     chunksize = 65536
-    hasher = ALGORITHMS_AVAILABLE[alg]()
+    # For hashlib algorithms, use usedforsecurity=False to support FIPS-enabled
+    # systems. xxhash algorithms don't support this parameter.
+    if alg.startswith("xxh"):
+        hasher = ALGORITHMS_AVAILABLE[alg]()
+    else:
+        hasher = ALGORITHMS_AVAILABLE[alg](usedforsecurity=False)
     with open(fname, "rb") as fin:
         buff = fin.read(chunksize)
         while buff:
