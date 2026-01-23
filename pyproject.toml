@@ -103,7 +103,7 @@ extend-select = [
   "PIE",      # flake8-pie
   "PL",       # pylint
   "PT",       # flake8-pytest-style
-  "PTH",      # flake8-use-pathlib
+  # "PTH",      # flake8-use-pathlib (ignore them for now)
   "PYI",      # flake8-pyi
   "RET",      # flake8-return
   "RUF",      # Ruff-specific
