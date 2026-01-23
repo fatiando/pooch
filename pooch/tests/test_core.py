@@ -11,6 +11,7 @@ Test the core class and factory function.
 
 import hashlib
 import os
+import re
 from pathlib import Path
 from tempfile import TemporaryDirectory
 
@@ -226,9 +227,9 @@ def test_pooch_download_retry_off_by_default(monkeypatch):
         path = Path(local_store)
         pup = Pooch(path=path, base_url=BASEURL, registry=REGISTRY)
         # Make sure it fails with no retries
-        with pytest.raises(ValueError) as error, capture_log() as log_file:
+        msg = "does not match the known hash"
+        with pytest.raises(ValueError, match=msg), capture_log() as log_file:
             pup.fetch("tiny-data.txt")
-        assert "does not match the known hash" in str(error)
         # Check that the log doesn't have the download retry message
         logs = log_file.getvalue().strip().split("\n")
         assert len(logs) == 1
@@ -289,17 +290,16 @@ def test_pooch_download_retry_fails_eventually(monkeypatch):
         path = Path(local_store)
         pup = Pooch(path=path, base_url=BASEURL, registry=REGISTRY, retry_if_failed=1)
         # Make sure it fails with no retries
-        with pytest.raises(ValueError) as error:
-            # Check that the logs say that the download failed n times
-            with capture_log() as log_file:
-                pup.fetch("tiny-data.txt")
+        msg = "does not match the known hash"
+        # Check that the logs say that the download failed n times
+        with pytest.raises(ValueError, match=msg), capture_log() as log_file:
+            pup.fetch("tiny-data.txt")
         logs = log_file.getvalue().strip().split("\n")
         assert len(logs) == 2
         assert logs[0].startswith("Downloading")
         assert logs[0].endswith(f"'{path}'.")
         assert "Failed to download" in logs[1]
         assert "download again 1 more time." in logs[1]
-        assert "does not match the known hash" in str(error)
 
 
 @pytest.mark.network
@@ -361,7 +361,8 @@ def test_pooch_update_disallowed():
             registry=REGISTRY,
             allow_updates=False,
         )
-        with pytest.raises(ValueError):
+        msg = "but updates are disallowed"
+        with pytest.raises(ValueError, match=msg):
             pup.fetch("tiny-data.txt")
 
 
@@ -384,7 +385,8 @@ def test_pooch_update_disallowed_environment():
                 registry=REGISTRY,
                 allow_updates=variable_name,
             )
-            with pytest.raises(ValueError):
+            msg = "but updates are disallowed"
+            with pytest.raises(ValueError, match=msg):
                 pup.fetch("tiny-data.txt")
     finally:
         os.environ.pop(variable_name)
@@ -407,18 +409,18 @@ def test_pooch_corrupted(data_dir_mirror):
         path = os.path.abspath(local_store)
         pup = Pooch(path=path, base_url=BASEURL, registry=REGISTRY_CORRUPTED)
         with capture_log() as log_file:
-            with pytest.raises(ValueError) as error:
+            msg = "(tiny-data.txt)"
+            with pytest.raises(ValueError, match=msg):
                 pup.fetch("tiny-data.txt")
-            assert "(tiny-data.txt)" in str(error.value)
             logs = log_file.getvalue()
             assert logs.split()[0] == "Downloading"
             assert logs.split()[-1] == f"'{path}'."
     # and the case where the file exists but hash doesn't match
     pup = Pooch(path=data_dir_mirror, base_url=BASEURL, registry=REGISTRY_CORRUPTED)
     with capture_log() as log_file:
-        with pytest.raises(ValueError) as error:
+        msg = "(tiny-data.txt)"
+        with pytest.raises(ValueError, match=msg):
             pup.fetch("tiny-data.txt")
-        assert "(tiny-data.txt)" in str(error.value)
         logs = log_file.getvalue()
         assert logs.split()[0] == "Updating"
         assert logs.split()[-1] == f"'{data_dir_mirror}'."
@@ -429,7 +431,8 @@ def test_pooch_file_not_in_registry():
     pup = Pooch(
         path="it shouldn't matter", base_url="this shouldn't either", registry=REGISTRY
     )
-    with pytest.raises(ValueError):
+    msg = "is not in the registry"
+    with pytest.raises(ValueError, match=msg):
         pup.fetch("this-file-does-not-exit.csv")
 
 
@@ -479,7 +482,8 @@ def test_pooch_load_registry_custom_url():
 def test_pooch_load_registry_invalid_line():
     "Should raise an exception when a line doesn't have two elements"
     pup = Pooch(path="", base_url="", registry={})
-    with pytest.raises(IOError):
+    msg = "Invalid entry in Pooch registry file"
+    with pytest.raises(OSError, match=msg):
         pup.load_registry(os.path.join(DATA_DIR, "registry-invalid.txt"))
 
 
@@ -574,10 +578,9 @@ def test_invalid_hash_alg(data_dir_mirror):
     pup = Pooch(
         path=data_dir_mirror, base_url=BASEURL, registry={"tiny-data.txt": "blah:1234"}
     )
-    with pytest.raises(ValueError) as exc:
+    msg = re.escape("Algorithm 'blah' not available to the pooch library")
+    with pytest.raises(ValueError, match=msg):
         pup.fetch("tiny-data.txt")
-
-    assert "'blah'" in str(exc.value)
 
 
 def test_alternative_hashing_algorithms(data_dir_mirror):
@@ -681,7 +684,6 @@ def test_wrong_load_registry_from_doi():
 
     pup = Pooch(path="", base_url=BASEURL)
 
-    with pytest.raises(ValueError) as exc:
+    msg = "only implemented for DOIs"
+    with pytest.raises(ValueError, match=msg):
         pup.load_registry_from_doi()
-
-    assert "only implemented for DOIs" in str(exc.value)
