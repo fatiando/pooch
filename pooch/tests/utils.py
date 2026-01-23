@@ -128,6 +128,37 @@ def pooch_test_dataverse_url():
     return url
 
 
+def pooch_test_nist_pdr_url(file_type="simple"):
+    """
+    Get the base URL for test data stored on the NIST Public Data Repository.
+
+    Returns
+    -------
+    url
+        The URL for pooch's test data.
+    """
+    urls = {
+        "simple": "doi:10.18434/M32122/",
+        "nested_collection": "doi:10.18434/M32082/",
+    }
+    return urls[file_type]
+
+
+def pooch_test_nist_pdr_nested_file():
+    """
+    Get filename and checksum for a nested file stored on the NIST PDR.
+
+    Returns
+    -------
+    dict
+        Dictionary containing the filename and checksum for a test data file.
+    """
+    return {
+        "filename": "EDS/Figure 5 - Point Scans/EDS Objects Supplement Raw Data/CSL/CSL_SQ.xlsx",
+        "checksum": "sha256:5867c7048743c4814d68e09b3738cd9b90a5bab102cec87126c77b2924e1070b",
+    }
+
+
 def pooch_test_registry():
     """
     Get a registry for the test data used in Pooch itself.

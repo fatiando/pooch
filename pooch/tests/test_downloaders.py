@@ -7,7 +7,9 @@
 """
 Test the downloader classes and functions separately from the Pooch core.
 """
+import hashlib
 import os
+import re
 import sys
 from tempfile import TemporaryDirectory
 
@@ -37,6 +39,7 @@ from ..downloaders import (
     FigshareRepository,
     ZenodoRepository,
     DataverseRepository,
+    NISTPDRRepository,
     doi_to_url,
     REQUESTS_HEADERS,
 )
@@ -50,6 +53,8 @@ from .utils import (
     pooch_test_zenodo_url,
     pooch_test_zenodo_with_slash_url,
     pooch_test_dataverse_url,
+    pooch_test_nist_pdr_url,
+    pooch_test_nist_pdr_nested_file,
 )
 
 
@@ -146,6 +151,93 @@ def test_doi_downloader(url):
         outfile = os.path.join(local_store, "tiny-data.txt")
         downloader(url + "tiny-data.txt", outfile, None)
         check_tiny_data(outfile)
+
+
+@pytest.mark.network
+def test_doi_downloader_nist_pdr():
+    """
+    Test the DOI downloader for the NIST PDR.
+
+    The NIST PDR does not have a record with 'tiny-data.txt',
+    so uses a slightly different test implementation than test_doi_downloader()
+    """
+    with TemporaryDirectory() as local_store:
+        downloader = DOIDownloader()
+        outfile = os.path.join(local_store, "README.txt")
+        to_download = pooch_test_nist_pdr_url("simple") + "README.txt"
+        downloader(to_download, outfile, None)
+
+        assert os.path.exists(outfile)
+        with open(outfile, encoding="utf-8") as tinydata:
+            content = tinydata.read()
+        true_content = (
+            "The `labbench` python library provides tools for instrument automation"
+        )
+        assert content.strip()[:70] == true_content
+
+
+@pytest.mark.network
+def test_doi_downloader_nist_pdr_file_in_collection():
+    """
+    Test the DOI downloader for the NIST PDR.
+
+    This test tests a file deeper in a nested collection
+    """
+    with TemporaryDirectory() as local_store:
+        downloader = DOIDownloader()
+        file_path = pooch_test_nist_pdr_nested_file()["filename"]
+        outfile = os.path.join(local_store, file_path.rsplit("/", maxsplit=1)[-1])
+        to_download = pooch_test_nist_pdr_url("nested_collection") + file_path
+        downloader(to_download, outfile, None)
+
+        assert os.path.exists(outfile)
+        with open(outfile, "rb") as tinydata:
+            assert (
+                hashlib.sha256(tinydata.read()).hexdigest()
+                == pooch_test_nist_pdr_nested_file()["checksum"][7:]
+            )
+
+
+@pytest.mark.network
+def test_doi_downloader_nist_pdr_missing_file():
+    """
+    Test the DOI downloader for the NIST PDR.
+
+    This test tests a file deeper in a nested collection
+    """
+    with TemporaryDirectory() as local_store:
+        downloader = DOIDownloader()
+        file_path = "nonexistent_file.txt"
+        outfile = os.path.join(local_store, file_path.rsplit("/", maxsplit=1)[-1])
+        to_download = pooch_test_nist_pdr_url("nested_collection") + file_path
+        with pytest.raises(
+            ValueError,
+            match=re.escape(
+                "File 'nonexistent_file.txt' not found in data archive "
+                "https://data.nist.gov/od/id/8C40CFA7931709DAE0532457068179072082 "
+                "(doi:10.18434/M32082).",
+            ),
+        ):
+            downloader(to_download, outfile, None)
+
+
+def test_populate_registry_nist_pdr(tmp_path):
+    """
+    Test if population of registry is correctly done for NIST PDR.
+    """
+    # Create sample pooch object
+    puppy = Pooch(base_url="", path=tmp_path)
+    _doi = "10.18434/M32082"
+    _doi_url = doi_to_url(_doi)
+    # Create NIST PDR downloader
+    downloader = NISTPDRRepository(doi=_doi, archive_url=_doi_url)
+    # Populate registry
+    downloader.populate_registry(puppy)
+    assert len(puppy.registry) == 101
+    assert (
+        puppy.registry[pooch_test_nist_pdr_nested_file()["filename"]]
+        == pooch_test_nist_pdr_nested_file()["checksum"]
+    )
 
 
 @pytest.mark.network
