@@ -10,6 +10,7 @@ Test the hash calculation and checking functions.
 """
 
 import os
+import re
 from pathlib import Path
 from tempfile import NamedTemporaryFile
 
@@ -110,9 +111,9 @@ def test_make_registry_recursive(data_dir_mirror):
 
 def test_file_hash_invalid_algorithm():
     "Test an invalid hashing algorithm"
-    with pytest.raises(ValueError) as exc:
+    msg = re.escape("Algorithm 'blah' not available to the pooch library")
+    with pytest.raises(ValueError, match=msg):
         file_hash(fname="something", alg="blah")
-    assert "'blah'" in str(exc.value)
 
 
 @pytest.mark.parametrize(
@@ -169,12 +170,12 @@ def test_hash_matches_strict(alg, expected_hash):
     assert hash_matches(fname, known_hash, strict=True)
     # And also if it fails
     bad_hash = f"{alg}:blablablabla"
-    with pytest.raises(ValueError) as error:
+    msg = re.escape("hash of downloaded file (Neverland) does not match the known hash")
+    with pytest.raises(ValueError, match=msg):
         hash_matches(fname, bad_hash, strict=True, source="Neverland")
-    assert "Neverland" in str(error.value)
-    with pytest.raises(ValueError) as error:
+    msg = re.escape(f"hash of downloaded file ({fname}) does not match the known hash")
+    with pytest.raises(ValueError, match=msg):
         hash_matches(fname, bad_hash, strict=True, source=None)
-    assert fname in str(error.value)
 
 
 def test_hash_matches_none():
@@ -200,6 +201,6 @@ def test_hash_matches_uppercase(alg, expected_hash):
     known_hash = f"{alg}:{expected_hash.upper()}"
     assert hash_matches(fname, known_hash, strict=True)
     # And also if it fails
-    with pytest.raises(ValueError) as error:
+    msg = re.escape("hash of downloaded file (Neverland) does not match the known hash")
+    with pytest.raises(ValueError, match=msg):
         hash_matches(fname, known_hash[:-5], strict=True, source="Neverland")
-    assert "Neverland" in str(error.value)
