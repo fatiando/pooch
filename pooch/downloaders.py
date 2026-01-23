@@ -19,7 +19,7 @@ from ._version import __version__  # type: ignore[import-not-found]
 # Mypy doesn't like assigning None like this.
 # Can just use a guard variable
 try:
-    from tqdm import tqdm
+    from tqdm.auto import tqdm
 except ImportError:
     tqdm = None  # type: ignore
 
