@@ -17,6 +17,7 @@ on:
   release:
     types:
       - published
+  workflow_dispatch:
 
 # Use bash by default in all jobs
 defaults:
@@ -27,7 +28,7 @@ jobs:
   #############################################################################
   # Run tests
   test:
-    name: ${{ matrix.os }} python=${{ matrix.python }} dependencies=${{ matrix.dependencies }}
+    name: ${{ matrix.os }} python=${{ matrix.python }} dependencies=${{ matrix.dependencies }} network=${{ matrix.network }}
     if: ${{ github.repository_owner == 'fatiando' || github.event_name != 'schedule' }}
     runs-on: ${{ matrix.os }}
     strategy:
@@ -46,18 +47,17 @@ jobs:
         include:
           - dependencies: oldest
             python: "3.9"
+            network: false
           - dependencies: latest
-            python: "3.13"
+            python: "3.14"
+            network: false
           - dependencies: optional
-            python: "3.13"
-          # test on macos-13 (x86) using oldest dependencies and python 3.7
-          - os: macos-13
-            dependencies: oldest
-            python: "3.9"
-        exclude:
-          # don't test on macos-latest (arm64) with oldest dependencies
-          - os: macos-latest
-            dependencies: oldest
+            python: "3.14"
+            network: false
+          - dependencies: optional
+            python: "3.14"
+            network: true
+            os: ubuntu-latest
     env:
       REQUIREMENTS: env/requirements-build.txt env/requirements-test.txt
       # Used to tag codecov submissions
@@ -66,17 +66,10 @@ jobs:
       DEPENDENCIES: ${{ matrix.dependencies }}
 
     steps:
-      # Cancel any previous run of the test job
-      # We pin the commit hash corresponding to v0.5.0, and not pinning the tag
-      # because we are giving full access through the github.token.
-      - name: Cancel Previous Runs
-        uses: styfle/cancel-workflow-action@0.12.1
-        with:
-          access_token: ${{ github.token }}
 
       # Checks-out your repository under $GITHUB_WORKSPACE
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           # Need to fetch more than the last commit so that setuptools-scm can
           # create the correct version string. If the number of commits since
@@ -127,7 +120,7 @@ jobs:
           echo "dir=$(pip cache dir)" >> $GITHUB_OUTPUT
 
       - name: Setup caching for pip packages
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: ${{ steps.pip-cache.outputs.dir }}
           key: ${{ runner.os }}-pip-${{ hashFiles('requirements-full.txt') }}
@@ -151,18 +144,17 @@ jobs:
 
       - name: Run the tests
         run: |
-          echo ${{ runner.os }}
-          if [ ${{ runner.os }} == "macOS" ]; then
-            make PYTEST_ARGS_EXTRA="-m 'not figshare'" test
-          else
+          if [ ${{ matrix.network }} == "true" ]; then
             make test
+          else
+            make PYTEST_ARGS_EXTRA="-m 'not network'" test
           fi
 
       - name: Convert coverage report to XML for codecov
         run: coverage xml
 
       - name: Upload coverage report as an artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: coverage_${{ matrix.os }}_${{ matrix.dependencies }}
           path: ./coverage.xml
@@ -176,12 +168,24 @@ jobs:
 
     steps:
 
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          # Need to fetch more than the last commit so that setuptools-scm can
+          # create the correct version string. If the number of commits since
+          # the last release is greater than this, the version still be wrong.
+          # Increase if necessary.
+          fetch-depth: 100
+          # The GitHub token is preserved by default but this job doesn't need
+          # to be able to push to GitHub.
+          persist-credentials: false
+
       - name: Download coverage report artifacts
         # Download coverage reports from every runner.
         # Maximum coverage is achieved by combining reports from every runner.
         # Each coverage file will live in its own folder with the same name as
         # the artifact.
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v7
         with:
           pattern: coverage_*
 
