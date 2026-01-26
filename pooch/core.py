@@ -707,7 +707,12 @@ class Pooch:
 
         # Create a repository instance
         doi = self.base_url.replace("doi:", "")
-        repository = doi_to_repository(doi)
+        repository = doi_to_repository(
+            doi,
+            headers=downloader.headers,
+            timeout=downloader.timeout,
+            **downloader.kwargs,
+        )
 
         # Call registry population for this repository
         return repository.populate_registry(self)
