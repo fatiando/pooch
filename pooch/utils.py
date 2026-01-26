@@ -347,7 +347,7 @@ def unique_file_name(url: str) -> str:
     181a9d52e908219c2076f55145d6a344-data.txt.gz
 
     """
-    md5 = hashlib.md5(url.encode()).hexdigest()
+    md5 = hashlib.md5(url.encode(), usedforsecurity=False).hexdigest()
     fname = parse_url(url)["path"].split("/")[-1]
     # Crop the start of the file name to fit 255 characters including the hash
     # and the :
