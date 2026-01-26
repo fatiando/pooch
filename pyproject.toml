@@ -9,25 +9,26 @@ maintainers = [
   {name = "Leonardo Uieda", email = "leo@uieda.com"}
 ]
 readme = "README.md"
-license = {text = "BSD-3-Clause"}
+license = "BSD-3-Clause"
 keywords = ["data", "download", "caching", "http"]
 classifiers = [
     "Development Status :: 5 - Production/Stable",
     "Intended Audience :: Science/Research",
     "Intended Audience :: Developers",
     "Intended Audience :: Education",
-    "License :: OSI Approved :: BSD License",
     "Operating System :: OS Independent",
     "Topic :: Scientific/Engineering",
     "Topic :: Software Development :: Libraries",
+    "Typing :: Typed",
     "Programming Language :: Python :: 3 :: Only",
-    "Programming Language :: Python :: 3.7",
-    "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
 ]
-requires-python = ">=3.7"
+requires-python = ">=3.9"
 dependencies = [
     "platformdirs >= 2.5.0",
     "packaging >= 20.0",
@@ -38,6 +39,7 @@ dependencies = [
 progress = ["tqdm>=4.41.0,<5.0.0"]
 sftp = ["paramiko>=2.7.0"]
 xxhash = ["xxhash>=1.4.3"]
+test = ["pytest-httpserver", "pytest-localftpserver"]
 
 [project.urls]
 "Documentation" = "https://www.fatiando.org/pooch"
@@ -66,6 +68,7 @@ write_to =  "pooch/_version.py"
 [tool.pytest.ini_options]
 markers = [
     "network: test requires network access",
+    "figshare: test make request to Figshare",
 ]
 
 [tool.burocrata]

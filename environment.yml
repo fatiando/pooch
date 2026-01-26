@@ -3,7 +3,7 @@ channels:
     - conda-forge
     - defaults
 dependencies:
-    - python==3.11
+    - python==3.14
     - pip
     # Run
     - requests
@@ -12,9 +12,10 @@ dependencies:
     # Optional dependencies
     - tqdm>=4.41.0,<5.0.0
     - paramiko>=2.7.0
-    - xxhash>=1.4.3
+    - python-xxhash>=1.4.3  # in conda-forge python-xxhash is the python pkg
+    - xxhash # this is the xxHash library in conda-forge
     # Build
-    - build
+    - python-build
     # Test
     - pytest
     - pytest-cov
@@ -27,8 +28,14 @@ dependencies:
     - sphinx-design==0.5.*
     # Style
     - pathspec
-    - black>=20.8b1
+    - black==25.*.*
     - flake8
     - pylint>=2.4
+    # Types
+    - mypy
+    - types-requests
+    - types-tqdm
+    - types-paramiko
+    - types-xxhash
     - pip:
       - burocrata

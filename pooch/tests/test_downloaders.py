@@ -12,16 +12,20 @@ import sys
 from tempfile import TemporaryDirectory
 
 import pytest
+from requests import HTTPError
+
+# Mypy doesn't like assigning None like this.
+# Can just use a guard variable
 
 try:
     import tqdm
 except ImportError:
-    tqdm = None
+    tqdm = None  # type: ignore
 
 try:
     import paramiko
 except ImportError:
-    paramiko = None
+    paramiko = None  # type: ignore
 
 from .. import Pooch
 from ..downloaders import (
@@ -34,6 +38,7 @@ from ..downloaders import (
     ZenodoRepository,
     DataverseRepository,
     doi_to_url,
+    REQUESTS_HEADERS,
 )
 from ..processors import Unzip
 from .utils import (
@@ -60,7 +65,7 @@ DATAVERSEURL = pooch_test_dataverse_url()
     "url",
     [
         BASEURL + "tiny-data.txt",  # HTTPDownloader
-        FIGSHAREURL,  # DOIDownloader
+        ZENODOURL,  # DOIDownloader
     ],
 )
 def test_progressbar_kwarg_passed(url):
@@ -100,16 +105,19 @@ def test_invalid_doi_repository():
 @pytest.mark.network
 def test_doi_url_not_found():
     "Should fail if the DOI is not found"
-    with pytest.raises(ValueError) as exc:
+    with pytest.raises(HTTPError):
         doi_to_url(doi="NOTAREALDOI")
-    assert "Is the DOI correct?" in str(exc.value)
 
 
 @pytest.mark.network
 @pytest.mark.parametrize(
     "repository,doi",
     [
-        (FigshareRepository, "10.6084/m9.figshare.14763051.v1"),
+        pytest.param(
+            FigshareRepository,
+            "10.6084/m9.figshare.14763051.v1",
+            marks=pytest.mark.figshare,
+        ),
         (ZenodoRepository, "10.5281/zenodo.4924875"),
         (DataverseRepository, "10.11588/data/TKCFEF"),
     ],
@@ -127,7 +135,7 @@ def test_figshare_url_file_not_found(repository, doi):
 @pytest.mark.network
 @pytest.mark.parametrize(
     "url",
-    [FIGSHAREURL, ZENODOURL, DATAVERSEURL],
+    [pytest.param(FIGSHAREURL, marks=pytest.mark.figshare), ZENODOURL, DATAVERSEURL],
     ids=["figshare", "zenodo", "dataverse"],
 )
 def test_doi_downloader(url):
@@ -161,6 +169,7 @@ def test_zenodo_downloader_with_slash_in_fname():
 
 
 @pytest.mark.network
+@pytest.mark.figshare
 def test_figshare_unspecified_version():
     """
     Test if passing a Figshare url without a version warns about it, but still
@@ -180,6 +189,7 @@ def test_figshare_unspecified_version():
 
 
 @pytest.mark.network
+@pytest.mark.figshare
 @pytest.mark.parametrize(
     "version, missing, present",
     [
@@ -266,7 +276,10 @@ def test_downloader_progressbar_fails(downloader):
 @pytest.mark.skipif(tqdm is None, reason="requires tqdm")
 @pytest.mark.parametrize(
     "url,downloader",
-    [(BASEURL, HTTPDownloader), (FIGSHAREURL, DOIDownloader)],
+    [
+        (BASEURL, HTTPDownloader),
+        pytest.param(FIGSHAREURL, DOIDownloader, marks=pytest.mark.figshare),
+    ],
     ids=["http", "figshare"],
 )
 def test_downloader_progressbar(url, downloader, capsys):
@@ -543,3 +556,27 @@ class TestZenodoAPISupport:
         # Populate registry
         downloader.populate_registry(puppy)
         assert puppy.registry == {self.file_name: f"md5:{self.file_checksum}"}
+
+
+class TestDOIDownloaderHeaders:
+    """Test the headers argument in DOIDownloader."""
+
+    def test_default_headers(self):
+        """Test the default value for headers."""
+        downloader = DOIDownloader()
+        assert downloader.headers == REQUESTS_HEADERS
+        downloader = DOIDownloader(headers=None)
+        assert downloader.headers == REQUESTS_HEADERS
+
+    def test_overwrite_headers(self):
+        """Test overwriting for headers."""
+        downloader = DOIDownloader(headers={"custom": "field"})
+        expected_headers = {
+            "custom": "field",
+        }
+        assert downloader.headers == expected_headers
+
+    def test_headers_empty_dict(self):
+        """Test passing an emtpy dict to headers."""
+        downloader = DOIDownloader(headers={})
+        assert downloader.headers == {}

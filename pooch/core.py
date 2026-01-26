@@ -7,12 +7,14 @@
 """
 The main Pooch class and a factory function for it.
 """
+
 import os
 import time
 import contextlib
 from pathlib import Path
 import shlex
 import shutil
+from typing import Union, Optional, Any
 
 
 from .hashes import hash_matches, file_hash
@@ -26,17 +28,18 @@ from .utils import (
     unique_file_name,
 )
 from .downloaders import DOIDownloader, choose_downloader, doi_to_repository
+from .typing import PathType, PathInputType, Processor, Downloader, Action
 
 
 def retrieve(
-    url,
-    known_hash,
-    fname=None,
-    path=None,
-    processor=None,
-    downloader=None,
-    progressbar=False,
-):
+    url: str,
+    known_hash: Optional[str] = None,
+    fname: Optional[str] = None,
+    path: Optional[PathType] = None,
+    processor: Optional[Processor] = None,
+    downloader: Optional[Downloader] = None,
+    progressbar: bool = False,
+) -> str:
     """
     Download and cache a single file locally.
 
@@ -254,15 +257,15 @@ def retrieve(
 
 
 def create(
-    path,
-    base_url,
-    version=None,
-    version_dev="master",
-    env=None,
-    registry=None,
-    urls=None,
-    retry_if_failed=0,
-    allow_updates=True,
+    path: PathInputType,
+    base_url: str,
+    version: Optional[str] = None,
+    version_dev: str = "master",
+    env: Optional[str] = None,
+    registry: Optional[dict] = None,
+    urls: Optional[dict] = None,
+    retry_if_failed: int = 0,
+    allow_updates: Union[bool, str] = True,
 ):
     """
     Create a :class:`~pooch.Pooch` with sensible defaults to fetch data files.
@@ -479,13 +482,13 @@ class Pooch:
 
     def __init__(
         self,
-        path,
-        base_url,
-        registry=None,
-        urls=None,
-        retry_if_failed=0,
-        allow_updates=True,
-    ):
+        path: PathType,
+        base_url: str,
+        registry: Optional[dict[str, str]] = None,
+        urls: Optional[dict[str, str]] = None,
+        retry_if_failed: int = 0,
+        allow_updates: bool = True,
+    ) -> None:
         self.path = path
         self.base_url = base_url
         if registry is None:
@@ -498,16 +501,22 @@ class Pooch:
         self.allow_updates = allow_updates
 
     @property
-    def abspath(self):
+    def abspath(self) -> Path:
         "Absolute path to the local storage"
         return Path(os.path.abspath(os.path.expanduser(str(self.path))))
 
     @property
-    def registry_files(self):
+    def registry_files(self) -> list[str]:
         "List of file names on the registry"
         return list(self.registry)
 
-    def fetch(self, fname, processor=None, downloader=None, progressbar=False):
+    def fetch(
+        self,
+        fname: str,
+        processor: Optional[Processor] = None,
+        downloader: Optional[Downloader] = None,
+        progressbar: bool = False,
+    ) -> str:
         """
         Get the absolute path to a file in the local storage.
 
@@ -600,7 +609,7 @@ class Pooch:
 
         return str(full_path)
 
-    def _assert_file_in_registry(self, fname):
+    def _assert_file_in_registry(self, fname: str) -> None:
         """
         Check if a file is in the registry and raise :class:`ValueError` if
         it's not.
@@ -608,7 +617,7 @@ class Pooch:
         if fname not in self.registry:
             raise ValueError(f"File '{fname}' is not in the registry.")
 
-    def get_url(self, fname):
+    def get_url(self, fname: str) -> str:
         """
         Get the full URL to download a file in the registry.
 
@@ -622,7 +631,7 @@ class Pooch:
         self._assert_file_in_registry(fname)
         return self.urls.get(fname, "".join([self.base_url, fname]))
 
-    def load_registry(self, fname):
+    def load_registry(self, fname: PathType) -> None:
         """
         Load entries from a file and add them to the registry.
 
@@ -644,7 +653,7 @@ class Pooch:
         with contextlib.ExitStack() as stack:
             if hasattr(fname, "read"):
                 # It's a file object
-                fin = fname
+                fin: Any = fname
             else:
                 # It's a file path
                 fin = stack.enter_context(open(fname, encoding="utf-8"))
@@ -673,7 +682,7 @@ class Pooch:
                         self.urls[file_name] = file_url
                     self.registry[file_name] = file_checksum.lower()
 
-    def load_registry_from_doi(self):
+    def load_registry_from_doi(self) -> None:
         """
         Populate the registry using the data repository API
 
@@ -703,7 +712,7 @@ class Pooch:
         # Call registry population for this repository
         return repository.populate_registry(self)
 
-    def is_available(self, fname, downloader=None):
+    def is_available(self, fname: str, downloader: Optional[Downloader] = None):
         """
         Check availability of a remote file without downloading it.
 
@@ -740,7 +749,7 @@ class Pooch:
         return available
 
 
-def download_action(path, known_hash):
+def download_action(path: Path, known_hash: Optional[str]) -> tuple[Action, str]:
     """
     Determine the action that is needed to get the file on disk.
 
@@ -767,18 +776,20 @@ def download_action(path, known_hash):
 
     """
     if not path.exists():
-        action = "download"
-        verb = "Downloading"
-    elif not hash_matches(str(path), known_hash):
-        action = "update"
-        verb = "Updating"
-    else:
-        action = "fetch"
-        verb = "Fetching"
-    return action, verb
+        return "download", "Downloading"
+    if not hash_matches(str(path), known_hash):
+        return "update", "Updating"
+    return "fetch", "Fetching"
 
 
-def stream_download(url, fname, known_hash, downloader, pooch=None, retry_if_failed=0):
+def stream_download(
+    url: str,
+    fname: Path,
+    known_hash: Optional[str],
+    downloader: Downloader,
+    pooch: Optional[Pooch] = None,
+    retry_if_failed: int = 0,
+) -> None:
     """
     Stream the file and check that its hash matches the known one.
 
