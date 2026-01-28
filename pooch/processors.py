@@ -4,25 +4,26 @@
 #
 # This code is part of the Fatiando a Terra project (https://www.fatiando.org)
 #
-# pylint: disable=line-too-long
+
 """
 Post-processing hooks
 """
 
 import abc
-import os
 import bz2
 import gzip
 import lzma
+import os
 import shutil
 import sys
-from zipfile import ZipFile
+import typing
 from tarfile import TarFile
+from zipfile import ZipFile
 
 from .utils import get_logger
 
 
-class ExtractorProcessor(abc.ABC):  # pylint: disable=too-few-public-methods
+class ExtractorProcessor(abc.ABC):
     """
     Abstract base class for extractions from compressed archives.
 
@@ -74,7 +75,7 @@ class ExtractorProcessor(abc.ABC):  # pylint: disable=too-few-public-methods
         MUST BE IMPLEMENTED BY CHILD CLASSES.
         """
 
-    def __call__(self, fname, action, pooch):
+    def __call__(self, fname, action, pooch):  # noqa: ARG002
         """
         Extract all files from the given archive.
 
@@ -138,7 +139,7 @@ class ExtractorProcessor(abc.ABC):  # pylint: disable=too-few-public-methods
         return fnames
 
 
-class Unzip(ExtractorProcessor):  # pylint: disable=too-few-public-methods
+class Unzip(ExtractorProcessor):
     """
     Processor that unpacks a zip archive and returns a list of all files.
 
@@ -210,7 +211,7 @@ class Unzip(ExtractorProcessor):  # pylint: disable=too-few-public-methods
                     zip_file.extractall(members=subdir_members, path=extract_dir)
 
 
-class Untar(ExtractorProcessor):  # pylint: disable=too-few-public-methods
+class Untar(ExtractorProcessor):
     """
     Processor that unpacks a tar archive and returns a list of all files.
 
@@ -289,7 +290,7 @@ class Untar(ExtractorProcessor):  # pylint: disable=too-few-public-methods
                     )
 
 
-class Decompress:  # pylint: disable=too-few-public-methods
+class Decompress:
     """
     Processor that decompress a file and returns the decompressed version.
 
@@ -333,14 +334,20 @@ class Decompress:  # pylint: disable=too-few-public-methods
 
     """
 
-    modules = {"auto": None, "lzma": lzma, "xz": lzma, "gzip": gzip, "bzip2": bz2}
-    extensions = {".xz": "lzma", ".gz": "gzip", ".bz2": "bzip2"}
+    modules: typing.ClassVar = {
+        "auto": None,
+        "lzma": lzma,
+        "xz": lzma,
+        "gzip": gzip,
+        "bzip2": bz2,
+    }
+    extensions: typing.ClassVar = {".xz": "lzma", ".gz": "gzip", ".bz2": "bzip2"}
 
     def __init__(self, method="auto", name=None):
         self.method = method
         self.name = name
 
-    def __call__(self, fname, action, pooch):
+    def __call__(self, fname, action, pooch):  # noqa: ARG002
         """
         Decompress the given file.
 

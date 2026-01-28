@@ -4,10 +4,11 @@
 #
 # This code is part of the Fatiando a Terra project (https://www.fatiando.org)
 #
-# pylint: disable=redefined-outer-name
+
 """
 Test the core class and factory function.
 """
+
 import hashlib
 import os
 from pathlib import Path
@@ -15,26 +16,24 @@ from tempfile import TemporaryDirectory
 
 import pytest
 
-from ..core import create, Pooch, retrieve, download_action, stream_download
-from ..utils import get_logger, temporary_file, os_cache
-from ..hashes import file_hash, hash_matches
-
 # Import the core module so that we can monkeypatch some functions
 from .. import core
-from ..downloaders import HTTPDownloader, FTPDownloader
-
+from ..core import Pooch, create, download_action, retrieve, stream_download
+from ..downloaders import FTPDownloader, HTTPDownloader
+from ..hashes import file_hash, hash_matches
+from ..utils import get_logger, os_cache, temporary_file
 from .utils import (
-    pooch_test_url,
+    capture_log,
+    check_large_data,
+    check_tiny_data,
     data_over_ftp,
+    mirror_directory,
+    pooch_test_dataverse_url,
     pooch_test_figshare_url,
+    pooch_test_registry,
+    pooch_test_url,
     pooch_test_zenodo_url,
     pooch_test_zenodo_with_slash_url,
-    pooch_test_dataverse_url,
-    pooch_test_registry,
-    check_tiny_data,
-    check_large_data,
-    capture_log,
-    mirror_directory,
 )
 
 DATA_DIR = str(Path(__file__).parent / "data")
@@ -202,7 +201,7 @@ def test_pooch_download(url):
             assert log_file.getvalue() == ""
 
 
-class FakeHashMatches:  # pylint: disable=too-few-public-methods
+class FakeHashMatches:
     "Create a fake version of hash_matches that fails n times"
 
     def __init__(self, nfailures):
@@ -227,9 +226,8 @@ def test_pooch_download_retry_off_by_default(monkeypatch):
         path = Path(local_store)
         pup = Pooch(path=path, base_url=BASEURL, registry=REGISTRY)
         # Make sure it fails with no retries
-        with pytest.raises(ValueError) as error:
-            with capture_log() as log_file:
-                pup.fetch("tiny-data.txt")
+        with pytest.raises(ValueError) as error, capture_log() as log_file:
+            pup.fetch("tiny-data.txt")
         assert "does not match the known hash" in str(error)
         # Check that the log doesn't have the download retry message
         logs = log_file.getvalue().strip().split("\n")
@@ -238,7 +236,7 @@ def test_pooch_download_retry_off_by_default(monkeypatch):
         assert logs[0].endswith(f"'{path}'.")
 
 
-class FakeSleep:  # pylint: disable=too-few-public-methods
+class FakeSleep:
     "Create a fake version of sleep that logs the specified times"
 
     def __init__(self):
@@ -530,9 +528,9 @@ def test_check_availability_on_ftp(ftpserver):
 def test_check_availability_invalid_downloader():
     "Should raise an exception if the downloader doesn't support this"
 
-    def downloader(url, output, pooch):  # pylint: disable=unused-argument
+    def downloader(url, output, pooch):  # noqa: ARG001
         "A downloader that doesn't support check_only"
-        return None
+        return
 
     pup = Pooch(path=DATA_DIR, base_url=BASEURL, registry=REGISTRY)
     msg = "does not support availability checks."
@@ -544,7 +542,7 @@ def test_check_availability_invalid_downloader():
 def test_fetch_with_downloader(capsys):
     "Setup a downloader function for fetch"
 
-    def download(url, output_file, pup):  # pylint: disable=unused-argument
+    def download(url, output_file, pup):
         "Download through HTTP and warn that we're doing it"
         get_logger().info("downloader executed")
         HTTPDownloader()(url, output_file, pup)

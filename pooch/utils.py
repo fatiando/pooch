@@ -8,21 +8,21 @@
 Misc utilities
 """
 
+import hashlib
 import logging
 import os
 import tempfile
-import hashlib
-from pathlib import Path
-from urllib.parse import urlsplit
-from contextlib import contextmanager
 import warnings
-from typing import Optional, Any, Generator
+from collections.abc import Generator
+from contextlib import contextmanager
+from pathlib import Path
+from typing import Any, Optional
+from urllib.parse import urlsplit
 
 import platformdirs
 from packaging.version import Version
 
-from .typing import ParsedURL, PathType, PathInputType
-
+from .typing import ParsedURL, PathInputType, PathType
 
 LOGGER = logging.Logger("pooch")
 LOGGER.addHandler(logging.StreamHandler())
@@ -46,7 +46,7 @@ def file_hash(*args, **kwargs) -> Any:
     >>> os.remove(fname)
 
     """
-    # pylint: disable=import-outside-toplevel
+
     from .hashes import file_hash as new_file_hash
 
     message = """
@@ -182,9 +182,8 @@ def parse_url(url: str) -> ParsedURL:
 
     """
     if url.startswith("doi://"):
-        raise ValueError(
-            f"Invalid DOI link '{url}'. You must not use '//' after 'doi:'."
-        )
+        msg = f"Invalid DOI link '{url}'. You must not use '//' after 'doi:'."
+        raise ValueError(msg)
     if url.startswith("doi:"):
         protocol = "doi"
         parts = url[4:].split("/")
@@ -255,10 +254,7 @@ def make_local_storage(path: PathType, env: Optional[str] = None) -> None:
     """
     path = str(path)
     # Check that the data directory is writable
-    if not os.path.exists(path):
-        action = "create"
-    else:
-        action = "write to"
+    action = "create" if not os.path.exists(path) else "write to"
 
     try:
         if action == "create":
@@ -303,7 +299,7 @@ def temporary_file(path: Optional[PathType] = None) -> Generator[str, None, None
         The path to the temporary file.
 
     """
-    tmp = tempfile.NamedTemporaryFile(delete=False, dir=path)  # type: ignore
+    tmp = tempfile.NamedTemporaryFile(delete=False, dir=path)  # type: ignore[type-var]
     # Close the temp file so that it can be opened elsewhere
     tmp.close()
     try:

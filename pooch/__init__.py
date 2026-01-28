@@ -4,23 +4,21 @@
 #
 # This code is part of the Fatiando a Terra project (https://www.fatiando.org)
 #
-# pylint: disable=missing-docstring,import-outside-toplevel,import-self
+
 #
 # Import functions/classes to make the API
+# The _version.py is generated automatically by setuptools_scm
+from . import _version  # type: ignore[attr-defined]
 from .core import Pooch, create, retrieve
-from .utils import os_cache, check_version, get_logger
-from .hashes import file_hash, make_registry
 from .downloaders import (
-    HTTPDownloader,
-    FTPDownloader,
-    SFTPDownloader,
     DOIDownloader,
+    FTPDownloader,
+    HTTPDownloader,
+    SFTPDownloader,
 )
-from .processors import Unzip, Untar, Decompress
-
-# This file is generated automatically by setuptools_scm
-from . import _version  # type: ignore
-
+from .hashes import file_hash, make_registry
+from .processors import Decompress, Untar, Unzip
+from .utils import check_version, get_logger, os_cache
 
 # Add a "v" to the version number
 __version__ = f"v{_version.version}"

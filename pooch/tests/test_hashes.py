@@ -4,10 +4,11 @@
 #
 # This code is part of the Fatiando a Terra project (https://www.fatiando.org)
 #
-# pylint: disable=redefined-outer-name
+
 """
 Test the hash calculation and checking functions.
 """
+
 import os
 from pathlib import Path
 from tempfile import NamedTemporaryFile
@@ -24,9 +25,9 @@ except ImportError:
 
 from ..core import Pooch
 from ..hashes import (
-    make_registry,
     file_hash,
     hash_matches,
+    make_registry,
 )
 from .utils import check_tiny_data, mirror_directory
 
@@ -66,7 +67,7 @@ def data_dir_mirror(tmp_path):
 
 def test_make_registry(data_dir_mirror):
     "Check that the registry builder creates the right file names and hashes"
-    outfile = NamedTemporaryFile(delete=False)  # pylint: disable=consider-using-with
+    outfile = NamedTemporaryFile(delete=False)
     # Need to close the file before writing to it.
     outfile.close()
     try:
@@ -87,7 +88,7 @@ def test_make_registry(data_dir_mirror):
 
 def test_make_registry_recursive(data_dir_mirror):
     "Check that the registry builder works in recursive mode"
-    outfile = NamedTemporaryFile(delete=False)  # pylint: disable=consider-using-with
+    outfile = NamedTemporaryFile(delete=False)
     # Need to close the file before writing to it.
     outfile.close()
     try:
@@ -115,7 +116,7 @@ def test_file_hash_invalid_algorithm():
 
 
 @pytest.mark.parametrize(
-    "alg,expected_hash",
+    ("alg", "expected_hash"),
     list(TINY_DATA_HASHES.items()),
     ids=list(TINY_DATA_HASHES.keys()),
 )
@@ -133,7 +134,7 @@ def test_file_hash(alg, expected_hash):
 
 
 @pytest.mark.parametrize(
-    "alg,expected_hash",
+    ("alg", "expected_hash"),
     list(TINY_DATA_HASHES.items()),
     ids=list(TINY_DATA_HASHES.keys()),
 )
@@ -155,7 +156,7 @@ def test_hash_matches(alg, expected_hash):
 
 
 @pytest.mark.parametrize(
-    "alg,expected_hash",
+    ("alg", "expected_hash"),
     list(TINY_DATA_HASHES_HASHLIB.items()),
     ids=list(TINY_DATA_HASHES_HASHLIB.keys()),
 )
@@ -187,7 +188,7 @@ def test_hash_matches_none():
 
 
 @pytest.mark.parametrize(
-    "alg,expected_hash",
+    ("alg", "expected_hash"),
     list(TINY_DATA_HASHES_HASHLIB.items()),
     ids=list(TINY_DATA_HASHES_HASHLIB.keys()),
 )

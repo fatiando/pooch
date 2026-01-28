@@ -12,7 +12,6 @@ help:
 	@echo "  test      run the test suite (including doctests) and report coverage"
 	@echo "  format    automatically format the code"
 	@echo "  check     run code style and quality checks"
-	@echo "  lint      run pylint for a deeper (and slower) quality check"
 	@echo "  build     build source and wheel distributions"
 	@echo "  clean     clean up build and generated files"
 	@echo ""
@@ -31,23 +30,21 @@ test:
 	rm -r $(TESTDIR)
 
 format:
-	black $(CHECK_STYLE)
+	ruff check --select I --fix $(CHECK_STYLE) # autoformat with isort
+	ruff format $(CHECK_STYLE)
 	burocrata --extension=py $(CHECK_STYLE)
 
 check: check-format check-style check-types
 
 check-format:
-	black --check $(CHECK_STYLE)
+	ruff format --check $(CHECK_STYLE)
 	burocrata --check --extension=py $(CHECK_STYLE)
 
 check-style:
-	flake8 $(CHECK_STYLE)
+	ruff check $(CHECK_STYLE)
 
 check-types:
 	mypy $(CHECK_STYLE)
-
-lint:
-	pylint --jobs=0 $(LINT_FILES)
 
 clean:
 	find . -name "*.pyc" -exec rm -v {} \;

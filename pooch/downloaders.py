@@ -7,10 +7,10 @@
 """
 The classes that actually handle the downloads.
 """
+
+import ftplib
 import os
 import sys
-import ftplib
-
 import warnings
 
 from .utils import parse_url
@@ -21,12 +21,12 @@ from ._version import __version__  # type: ignore[import-not-found]
 try:
     from tqdm.auto import tqdm
 except ImportError:
-    tqdm = None  # type: ignore
+    tqdm = None  # type: ignore[assignment,misc]
 
 try:
     import paramiko
 except ImportError:
-    paramiko = None  # type: ignore
+    paramiko = None  # type: ignore[assignment]
 
 
 # Set the default timeout in seconds so it can be configured in a pinch for the
@@ -89,15 +89,16 @@ def choose_downloader(url, progressbar=False):
 
     parsed_url = parse_url(url)
     if parsed_url["protocol"] not in known_downloaders:
-        raise ValueError(
+        msg = (
             f"Unrecognized URL protocol '{parsed_url['protocol']}' in '{url}'. "
             f"Must be one of {known_downloaders.keys()}."
         )
+        raise ValueError(msg)
     downloader = known_downloaders[parsed_url["protocol"]](progressbar=progressbar)
     return downloader
 
 
-class HTTPDownloader:  # pylint: disable=too-few-public-methods
+class HTTPDownloader:
     """
     Download manager for fetching files over HTTP/HTTPS.
 
@@ -179,11 +180,10 @@ class HTTPDownloader:  # pylint: disable=too-few-public-methods
         self.progressbar = progressbar
         self.chunk_size = chunk_size
         if self.progressbar is True and tqdm is None:
-            raise ValueError("Missing package 'tqdm' required for progress bars.")
+            msg = "Missing package 'tqdm' required for progress bars."
+            raise ValueError(msg)
 
-    def __call__(
-        self, url, output_file, pooch, check_only=False
-    ):  # pylint: disable=R0914
+    def __call__(self, url, output_file, pooch, check_only=False):  # noqa: ARG002
         """
         Download the given URL over HTTP to the given output file.
 
@@ -210,7 +210,7 @@ class HTTPDownloader:  # pylint: disable=too-few-public-methods
 
         """
         # Lazy import requests to speed up import time
-        import requests  # pylint: disable=C0415
+        import requests
 
         if check_only:
             timeout = self.kwargs.get("timeout", DEFAULT_TIMEOUT)
@@ -223,9 +223,8 @@ class HTTPDownloader:  # pylint: disable=too-few-public-methods
         kwargs.setdefault("stream", True)
         ispath = not hasattr(output_file, "write")
         if ispath:
-            # pylint: disable=consider-using-with
             output_file = open(output_file, "w+b")
-            # pylint: enable=consider-using-with
+
         try:
             response = requests.get(url, timeout=timeout, **kwargs)
             response.raise_for_status()
@@ -270,7 +269,7 @@ class HTTPDownloader:  # pylint: disable=too-few-public-methods
         return None
 
 
-class FTPDownloader:  # pylint: disable=too-few-public-methods
+class FTPDownloader:
     """
     Download manager for fetching files over FTP.
 
@@ -325,9 +324,10 @@ class FTPDownloader:  # pylint: disable=too-few-public-methods
         self.progressbar = progressbar
         self.chunk_size = chunk_size
         if self.progressbar is True and tqdm is None:
-            raise ValueError("Missing package 'tqdm' required for progress bars.")
+            msg = "Missing package 'tqdm' required for progress bars."
+            raise ValueError(msg)
 
-    def __call__(self, url, output_file, pooch, check_only=False):
+    def __call__(self, url, output_file, pooch, check_only=False):  # noqa: ARG002
         """
         Download the given URL over FTP to the given output file.
 
@@ -366,9 +366,8 @@ class FTPDownloader:  # pylint: disable=too-few-public-methods
 
         ispath = not hasattr(output_file, "write")
         if ispath:
-            # pylint: disable=consider-using-with
             output_file = open(output_file, "w+b")
-            # pylint: enable=consider-using-with
+
         try:
             ftp.login(user=self.username, passwd=self.password, acct=self.account)
             command = f"RETR {parsed_url['path']}"
@@ -402,7 +401,7 @@ class FTPDownloader:  # pylint: disable=too-few-public-methods
         return None
 
 
-class SFTPDownloader:  # pylint: disable=too-few-public-methods
+class SFTPDownloader:
     """
     Download manager for fetching files over SFTP.
 
@@ -461,7 +460,7 @@ class SFTPDownloader:  # pylint: disable=too-few-public-methods
         if errors:
             raise ValueError(" ".join(errors))
 
-    def __call__(self, url, output_file, pooch):
+    def __call__(self, url, output_file, pooch):  # noqa: ARG002
         """
         Download the given URL over SFTP to the given output file.
 
@@ -513,7 +512,7 @@ class SFTPDownloader:  # pylint: disable=too-few-public-methods
                 sftp.close()
 
 
-class DOIDownloader:  # pylint: disable=too-few-public-methods
+class DOIDownloader:
     """
     Download manager for fetching files from Digital Object Identifiers (DOIs).
 
@@ -665,7 +664,7 @@ def doi_to_url(doi):
 
     """
     # Lazy import requests to speed up import time
-    import requests  # pylint: disable=C0415
+    import requests
 
     # Use doi.org to resolve the DOI to the repository website.
     response = requests.get(
@@ -721,18 +720,19 @@ def doi_to_repository(doi):
 
     if data_repository is None:
         repository = parse_url(archive_url)["netloc"]
-        raise ValueError(
+        msg = (
             f"Invalid data repository '{repository}'. "
             "To request or contribute support for this repository, "
             "please open an issue at https://github.com/fatiando/pooch/issues"
         )
+        raise ValueError(msg)
 
     return data_repository
 
 
-class DataRepository:  # pylint: disable=too-few-public-methods, missing-class-docstring
+class DataRepository:
     @classmethod
-    def initialize(cls, doi, archive_url):  # pylint: disable=unused-argument
+    def initialize(cls, doi, archive_url):  # noqa: ARG003
         """
         Initialize the data repository if the given URL points to a
         corresponding repository.
@@ -750,7 +750,7 @@ class DataRepository:  # pylint: disable=too-few-public-methods, missing-class-d
             The resolved URL for the DOI
         """
 
-        return None  # pragma: no cover
+        return  # pragma: no cover
 
     def download_url(self, file_name):
         """
@@ -783,7 +783,7 @@ class DataRepository:  # pylint: disable=too-few-public-methods, missing-class-d
         raise NotImplementedError  # pragma: no cover
 
 
-class ZenodoRepository(DataRepository):  # pylint: disable=missing-class-docstring
+class ZenodoRepository(DataRepository):
     base_api_url = "https://zenodo.org/api/records"
 
     def __init__(self, doi, archive_url):
@@ -823,7 +823,7 @@ class ZenodoRepository(DataRepository):  # pylint: disable=missing-class-docstri
         """Cached API response from Zenodo"""
         if self._api_response is None:
             # Lazy import requests to speed up import time
-            import requests  # pylint: disable=C0415
+            import requests
 
             article_id = self.archive_url.split("/")[-1]
             self._api_response = requests.get(
@@ -860,10 +860,11 @@ class ZenodoRepository(DataRepository):  # pylint: disable=missing-class-docstri
             elif all("filename" in file for file in self.api_response["files"]):
                 self._api_version = "new"
             else:
-                raise ValueError(
+                msg = (
                     "Couldn't determine the version of the Zenodo API for "
                     f"{self.archive_url} (doi:{self.doi})."
                 )
+                raise ValueError(msg)
         return self._api_version
 
     def download_url(self, file_name):
@@ -897,10 +898,11 @@ class ZenodoRepository(DataRepository):  # pylint: disable=missing-class-docstri
             files = [item["filename"] for item in self.api_response["files"]]
         # Check if file exists in the repository
         if file_name not in files:
-            raise ValueError(
+            msg = (
                 f"File '{file_name}' not found in data archive "
                 f"{self.archive_url} (doi:{self.doi})."
             )
+            raise ValueError(msg)
         # Build download url
         if self.api_version == "legacy":
             download_url = files[file_name]["links"]["self"]
@@ -937,7 +939,7 @@ class ZenodoRepository(DataRepository):  # pylint: disable=missing-class-docstri
             pooch.registry[filedata[key]] = checksum
 
 
-class FigshareRepository(DataRepository):  # pylint: disable=missing-class-docstring
+class FigshareRepository(DataRepository):
     def __init__(self, doi, archive_url):
         self.archive_url = archive_url
         self.doi = doi
@@ -990,7 +992,7 @@ class FigshareRepository(DataRepository):  # pylint: disable=missing-class-docst
         """Cached API response from Figshare"""
         if self._api_response is None:
             # Lazy import requests to speed up import time
-            import requests  # pylint: disable=C0415
+            import requests
 
             # Use the figshare API to find the article ID from the DOI
             article = requests.get(
@@ -1011,6 +1013,7 @@ class FigshareRepository(DataRepository):  # pylint: disable=missing-class-docst
                     "the repository should be used. "
                     "Figshare will point to the latest version available.",
                     UserWarning,
+                    stacklevel=2,
                 )
                 # Define API url using only the article id
                 # (figshare will resolve the latest version)
@@ -1048,9 +1051,8 @@ class FigshareRepository(DataRepository):  # pylint: disable=missing-class-docst
         """
         files = {item["name"]: item for item in self.api_response}
         if file_name not in files:
-            raise ValueError(
-                f"File '{file_name}' not found in data archive {self.archive_url} (doi:{self.doi})."
-            )
+            msg = f"File '{file_name}' not found in data archive {self.archive_url} (doi:{self.doi})."
+            raise ValueError(msg)
         download_url = files[file_name]["download_url"]
         return download_url
 
@@ -1068,7 +1070,7 @@ class FigshareRepository(DataRepository):  # pylint: disable=missing-class-docst
             pooch.registry[filedata["name"]] = f"md5:{filedata['computed_md5']}"
 
 
-class DataverseRepository(DataRepository):  # pylint: disable=missing-class-docstring
+class DataverseRepository(DataRepository):
     def __init__(self, doi, archive_url):
         self.archive_url = archive_url
         self.doi = doi
@@ -1113,7 +1115,7 @@ class DataverseRepository(DataRepository):  # pylint: disable=missing-class-docs
         used prior and after the initialization.
         """
         # Lazy import requests to speed up import time
-        import requests  # pylint: disable=C0415
+        import requests
 
         parsed = parse_url(archive_url)
         response = requests.get(
@@ -1163,10 +1165,11 @@ class DataverseRepository(DataRepository):  # pylint: disable=missing-class-docs
             for file in response["data"]["latestVersion"]["files"]
         }
         if file_name not in files:
-            raise ValueError(
+            msg = (
                 f"File '{file_name}' not found in data archive "
                 f"{self.archive_url} (doi:{self.doi})."
             )
+            raise ValueError(msg)
         # Generate download_url using the file id
         download_url = (
             f"{parsed['protocol']}://{parsed['netloc']}/api/access/datafile/"
