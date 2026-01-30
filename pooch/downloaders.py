@@ -658,6 +658,7 @@ class DOIDownloader:  # pylint: disable=too-few-public-methods
             progressbar=self.progressbar,
             chunk_size=self.chunk_size,
             headers=self.headers,
+            timeout=self.timeout,
             **self.kwargs,
         )
         downloader(download_url, output_file, pooch)
