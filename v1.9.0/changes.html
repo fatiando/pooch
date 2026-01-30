@@ -1,0 +1,1489 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    
+        <title>Changelog | Pooch v1.9.0</title>
+    
+
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7" />
+    <link rel="stylesheet" type="text/css" href="_static/style.css?v=63f081c0" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="_static/doctools.js?v=888ff710"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script src="_static/design-tabs.js?v=36754332"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'changes';</script>
+    <link rel="icon" href="_static/favicon.png"/>
+    <link rel="author" title="About these documents" href="about.html" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Documentation for other versions" href="versions.html" />
+    <link rel="prev" title="Citing Pooch" href="citing.html" />
+    <!-- Plausible analytics for anonymous usage statistics -->
+    <script defer data-domain="fatiando.org" src="https://plausible.io/js/plausible.js"></script>
+
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Pooch <span class="project-version">v1.9.0</span></p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="index.html">
+                    Home
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="about.html">Why use Pooch?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="retrieve.html">Retrieving a single data file</a></li>
+<li class="toctree-l1"><a class="reference internal" href="multiple-files.html">Fetching files from a registry</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sample-data.html">Manage a package’s sample data</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Training your Pooch</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="hashes.html">Hashes: Calculating and bypassing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user-defined-cache.html">User-defined cache location</a></li>
+<li class="toctree-l1"><a class="reference internal" href="registry-files.html">Registry files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="multiple-urls.html">Multiple download URLs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="protocols.html">Download protocols</a></li>
+<li class="toctree-l1"><a class="reference internal" href="logging.html">Logging and verbosity</a></li>
+<li class="toctree-l1"><a class="reference internal" href="downloaders.html">Downloaders: Customizing the download</a></li>
+<li class="toctree-l1"><a class="reference internal" href="processors.html">Processors: Post-download actions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="authentication.html">Authentication</a></li>
+<li class="toctree-l1"><a class="reference internal" href="progressbars.html">Printing progress bars</a></li>
+<li class="toctree-l1"><a class="reference internal" href="unpacking.html">Unpacking archives</a></li>
+<li class="toctree-l1"><a class="reference internal" href="decompressing.html">Decompressing</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="api/index.html">List of functions and classes (API)</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="api/generated/pooch.create.html">pooch.create</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/generated/pooch.Pooch.html">pooch.Pooch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/generated/pooch.retrieve.html">pooch.retrieve</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/generated/pooch.os_cache.html">pooch.os_cache</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/generated/pooch.make_registry.html">pooch.make_registry</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/generated/pooch.file_hash.html">pooch.file_hash</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/generated/pooch.check_version.html">pooch.check_version</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/generated/pooch.get_logger.html">pooch.get_logger</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/generated/pooch.HTTPDownloader.html">pooch.HTTPDownloader</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/generated/pooch.FTPDownloader.html">pooch.FTPDownloader</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/generated/pooch.SFTPDownloader.html">pooch.SFTPDownloader</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/generated/pooch.DOIDownloader.html">pooch.DOIDownloader</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/generated/pooch.Unzip.html">pooch.Unzip</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/generated/pooch.Untar.html">pooch.Untar</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/generated/pooch.Decompress.html">pooch.Decompress</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/generated/pooch.test.html">pooch.test</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/generated/pooch.typing.Action.html">pooch.typing.Action</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/generated/pooch.typing.Downloader.html">pooch.typing.Downloader</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/generated/pooch.typing.PathType.html">pooch.typing.PathType</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/generated/pooch.typing.PathInputType.html">pooch.typing.PathInputType</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/generated/pooch.typing.ParsedURL.html">pooch.typing.ParsedURL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/generated/pooch.typing.Processor.html">pooch.typing.Processor</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="compatibility.html">Version compatibility</a></li>
+<li class="toctree-l1"><a class="reference internal" href="citing.html">Citing Pooch</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="versions.html">Documentation for other versions</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Community</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference external" href="https://www.fatiando.org/contact/">Join the community</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/fatiando/community/blob/main/CODE_OF_CONDUCT.md">Code of Conduct</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/fatiando/pooch/blob/main/CONTRIBUTING.md">How to contribute</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/fatiando/pooch">Source code on GitHub</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/fatiando/pooch/blob/main/AUTHORS.md">Authors</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://www.fatiando.org">Fatiando a Terra</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/fatiando/pooch" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/fatiando/pooch/edit/main/doc/changes.rst" target="_blank"
+   class="btn btn-sm btn-source-edit-button dropdown-item"
+   title="Suggest edit"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-pencil-alt"></i>
+  </span>
+<span class="btn__text-container">Suggest edit</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/fatiando/pooch/issues/new?title=Issue%20on%20page%20%2Fchanges.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/changes.rst" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.rst</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Changelog</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#version-1-9-0">Version 1.9.0</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#version-1-8-2">Version 1.8.2</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#version-1-8-1">Version 1.8.1</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#version-1-8-0">Version 1.8.0</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#version-1-7-0">Version 1.7.0</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#version-1-6-0">Version 1.6.0</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#version-1-5-2">Version 1.5.2</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#version-1-5-1">Version 1.5.1</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#version-1-5-0">Version 1.5.0</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#version-1-4-0">Version 1.4.0</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#version-1-3-0">Version 1.3.0</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#version-1-2-0">Version 1.2.0</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#version-1-1-1">Version 1.1.1</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#version-1-1-0">Version 1.1.0</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#version-1-0-0">Version 1.0.0</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#version-0-7-2">Version 0.7.2</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#version-0-7-1">Version 0.7.1</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#version-0-7-0">Version 0.7.0</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#version-0-6-0">Version 0.6.0</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#version-0-5-2">Version 0.5.2</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#version-0-5-1">Version 0.5.1</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#version-0-5-0">Version 0.5.0</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#version-0-4-0">Version 0.4.0</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#version-0-3-1">Version 0.3.1</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#version-0-3-0">Version 0.3.0</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#version-0-2-1">Version 0.2.1</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#version-0-2-0">Version 0.2.0</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#version-0-1-1">Version 0.1.1</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#version-0-1">Version 0.1</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="changelog">
+<span id="changes"></span><h1>Changelog<a class="headerlink" href="#changelog" title="Link to this heading">#</a></h1>
+<section id="version-1-9-0">
+<h2>Version 1.9.0<a class="headerlink" href="#version-1-9-0" title="Link to this heading">#</a></h2>
+<p>Released on: 2026/01/30</p>
+<p>DOI: <a class="reference external" href="https://doi.org/10.5281/zenodo.18379610">https://doi.org/10.5281/zenodo.18379610</a></p>
+<p>Breaking changes:</p>
+<ul class="simple">
+<li><p>Drop support for Python 3.7 and 3.8 (<a class="reference external" href="https://github.com/fatiando/pooch/pull/450">#450</a>).</p></li>
+</ul>
+<p>Bug fixes:</p>
+<ul class="simple">
+<li><p>Explicitly pass <code class="docutils literal notranslate"><span class="pre">filter</span></code> to <code class="docutils literal notranslate"><span class="pre">TarFile.extractall</span></code> on Python &gt;=3.12 (<a class="reference external" href="https://github.com/fatiando/pooch/pull/458">#458</a>). Pass a <code class="docutils literal notranslate"><span class="pre">filter=&quot;data&quot;</span></code> argument to <code class="docutils literal notranslate"><span class="pre">TarFile.extractall</span></code> to prevent dangerous security issues. The <code class="docutils literal notranslate"><span class="pre">filter</span></code> argument was added in Python 3.12, so only pass it on versions greater or equal than that. This change matches the default behaviour that will take place since Python 3.14.</p></li>
+<li><p>Fix TQDM usage (<a class="reference external" href="https://github.com/fatiando/pooch/pull/465">#465</a>). Newer versions of tqdm behave differently at a terminal vs in a jupyter notebook. Import from <code class="docutils literal notranslate"><span class="pre">tqdm.auto</span></code> instead so that the downloader looks right in either a notebook or the terminal.</p></li>
+<li><p>Fix bug in file hashing on FIPS enabled system (<a class="reference external" href="https://github.com/fatiando/pooch/pull/511">#511</a>). Set <code class="docutils literal notranslate"><span class="pre">userforsecurity=False</span></code> on <code class="docutils literal notranslate"><span class="pre">hashlib</span></code> hashing algorithms to make FIPS enabled systems happy.</p></li>
+</ul>
+<p>New features:</p>
+<ul class="simple">
+<li><p>Set User-Agent in requests headers for DOI downloaders (<a class="reference external" href="https://github.com/fatiando/pooch/pull/507">#507</a>). Pass a custom User-Agent when making requests through DOI downloaders in order to bypass limit rates imposed by services like Zenodo to block abusive requests. The can now filter requests coming from Pooch from the rest. Add a global <code class="docutils literal notranslate"><span class="pre">REQUESTS_HEADERS</span></code> variable that is used by the <code class="docutils literal notranslate"><span class="pre">doi_to_url</span></code> function (which requires to make a request to doi.org to figure out the service provider). Add a new <code class="docutils literal notranslate"><span class="pre">headers</span></code> argument to the <code class="docutils literal notranslate"><span class="pre">DOIDownloader</span></code> to specifically pass requests headers. By default it’ll use the Pooch’s default user agent.</p></li>
+<li><p>Extend support for Python 3.13 (<a class="reference external" href="https://github.com/fatiando/pooch/pull/451">#451</a>) and Python 3.14 (<a class="reference external" href="https://github.com/fatiando/pooch/pull/505">#505</a>).</p></li>
+<li><p>Provide more descriptive errors when DOI request fails (<a class="reference external" href="https://github.com/fatiando/pooch/pull/477">#477</a>). Raise the <code class="docutils literal notranslate"><span class="pre">requests</span></code> response to provide more informative errors when the status code is between 400 and 600.</p></li>
+</ul>
+<p>Maintenance:</p>
+<ul class="simple">
+<li><p>Add testing data to the package distributions (<a class="reference external" href="https://github.com/fatiando/pooch/pull/421">#421</a>). The test code <code class="docutils literal notranslate"><span class="pre">pooch/tests</span></code> is installed but he data in <code class="docutils literal notranslate"><span class="pre">pooch/tests/data</span></code> are not. This makes it impossible to run tests on the installed package. Add the appropriate setuptools configuration to make it happen.</p></li>
+<li><p>Move push to codecov to its own job in Actions (<a class="reference external" href="https://github.com/fatiando/pooch/pull/424">#424</a>). Remove the push to codecov step from the <code class="docutils literal notranslate"><span class="pre">test</span></code> job into a new job that depends on the test job. Upload the coverage reports as artifacts after testing, and reuse the artifacts in the new job. Upload all coverage reports in a single push to Codecov to minimize the number of hits.</p></li>
+<li><p>Increase the max positional args allowed by pylint (<a class="reference external" href="https://github.com/fatiando/pooch/pull/438">#438</a>). Configure <code class="docutils literal notranslate"><span class="pre">pylint</span></code> to increase the maximum number of positional arguments allowed in any function or method.</p></li>
+<li><p>Replace usage of <code class="docutils literal notranslate"><span class="pre">pkg_resources</span></code> for <code class="docutils literal notranslate"><span class="pre">importlib.resources</span></code> (<a class="reference external" href="https://github.com/fatiando/pooch/pull/449">#449</a>).</p></li>
+<li><p>Add mypy to CI job and type hints for one class. (<a class="reference external" href="https://github.com/fatiando/pooch/pull/404">#404</a>). Add type hints to <code class="docutils literal notranslate"><span class="pre">pooch/core.py</span></code> and create a new <code class="docutils literal notranslate"><span class="pre">typing</span></code> submodule for custom type classes, and add it to the API Reference. Run <code class="docutils literal notranslate"><span class="pre">mypy</span></code> on CI to perform type checks, and create new targets in the <code class="docutils literal notranslate"><span class="pre">Makefile</span></code>. Extend the list of dependencies required to run the type checks.</p></li>
+<li><p>Add pytest <code class="docutils literal notranslate"><span class="pre">figshare</span></code> mark to tests (<a class="reference external" href="https://github.com/fatiando/pooch/pull/481">#481</a>). Add a pytest <code class="docutils literal notranslate"><span class="pre">figshare</span></code> mark to tests that make requests to Figshare. Such mark allows us to filter tests: use <code class="docutils literal notranslate"><span class="pre">pytest</span> <span class="pre">-v</span> <span class="pre">-m</span> <span class="pre">figshare</span></code> to only run tests with that mark, or use <code class="docutils literal notranslate"><span class="pre">pytest</span>&#160;&#160; <span class="pre">-v</span> <span class="pre">-m</span> <span class="pre">&quot;not</span> <span class="pre">figshare</span></code> to run all test but the marked ones.</p></li>
+<li><p>Skip Figshare related tests on Actions under MacOS (<a class="reference external" href="https://github.com/fatiando/pooch/pull/482">#482</a>). Skip tests marked with <code class="docutils literal notranslate"><span class="pre">figshare</span></code> on Actions that use MacOS as runner. Those tests in CI were constantly failing, probably due to too many requests coming from GitHub. Add an optional <code class="docutils literal notranslate"><span class="pre">PYTEST_ARGS_EXTRA</span></code> variable to <code class="docutils literal notranslate"><span class="pre">Makefile</span></code> that can be used to pass extra arguments to <code class="docutils literal notranslate"><span class="pre">pytest</span></code>. Skip doctests that download files from Figshare.</p></li>
+<li><p>List requirements to run type checks in new file (<a class="reference external" href="https://github.com/fatiando/pooch/pull/492">#492</a>). Create a new <code class="docutils literal notranslate"><span class="pre">env/requirements-types.txt</span></code> file with the list of required packages to run types checks. This file is used by the GitHub Action workflow that automatically runs the type checks. List new requirements for type checks in <code class="docutils literal notranslate"><span class="pre">environment.yml</span></code>. Stop ignoring missing imports of <code class="docutils literal notranslate"><span class="pre">xxhash</span></code> in <code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code>. Ignore type assignment for <code class="docutils literal notranslate"><span class="pre">xxhash</span></code> in test file.</p></li>
+<li><p>Fix uploads of coverage reports to codecov (<a class="reference external" href="https://github.com/fatiando/pooch/pull/496">#496</a>). Checkout the repository in the <code class="docutils literal notranslate"><span class="pre">codecov-upload</span></code> job before uploading the coverage reports to codecov.</p></li>
+<li><p>Pin black to v25 (<a class="reference external" href="https://github.com/fatiando/pooch/pull/506">#506</a>). Pin black version used in the <code class="docutils literal notranslate"><span class="pre">environment.yml</span></code> and to run style checks on CI to <code class="docutils literal notranslate"><span class="pre">25.*.*</span></code> and <code class="docutils literal notranslate"><span class="pre">&lt;26.0.0</span></code>, respectively. Since we plan to replace black with Ruff for autoformatting, it’s better to pin for now than reformat it with latest version.</p></li>
+<li><p>Only run tests with network access on some CI jobs (<a class="reference external" href="https://github.com/fatiando/pooch/pull/484">#484</a>). Our CI is continuously hitting some external network providers which is causing some of them (mostly figshare for now) to block our traffic. This means that our CI fails randomly and it’s annoying. Only run network tests on jobs with the latest Python and optional dependencies installed to try to mitigate this.</p></li>
+<li><p>Use a SPDX expression for license in <code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code> (<a class="reference external" href="https://github.com/fatiando/pooch/pull/476">#476</a>). Use a SPDX expression for the license in <code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code> and remove the unneeded license classifier. This removes the warnings we were getting after running <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">build</span></code>.</p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">Typing</span> <span class="pre">::</span> <span class="pre">Typed</span></code> trove classifier (<a class="reference external" href="https://github.com/fatiando/pooch/pull/472">#472</a>). Allow PyPI users know that Pooch supports type hints.</p></li>
+<li><p>Allow to manually trigger test job in Actions (<a class="reference external" href="https://github.com/fatiando/pooch/pull/475">#475</a>). Add <code class="docutils literal notranslate"><span class="pre">workflow_dispatch</span></code> as an event trigger for the <code class="docutils literal notranslate"><span class="pre">test.yml</span></code> workflow.</p></li>
+<li><p>Standardize requests made by <code class="docutils literal notranslate"><span class="pre">DOIDownloaders</span></code> (<a class="reference external" href="https://github.com/fatiando/pooch/pull/514">#514</a>). Respect user’s decisions when defining the <code class="docutils literal notranslate"><span class="pre">DOIDownloader</span></code> with respect to arguments passed to <code class="docutils literal notranslate"><span class="pre">requests.get</span></code> whenever we call that function. This way, all calls made by <code class="docutils literal notranslate"><span class="pre">DOIDownloaders</span></code> and the repository classes make use of the same arguments, including <code class="docutils literal notranslate"><span class="pre">timeout</span></code>, <code class="docutils literal notranslate"><span class="pre">headers</span></code>, etc.</p></li>
+</ul>
+<p>Documentation:</p>
+<ul class="simple">
+<li><p>Add a link to the Fatiando Forum in the README (<a class="reference external" href="https://github.com/fatiando/pooch/pull/461">#461</a>).</p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">scXpand</span></code> (<a class="reference external" href="https://github.com/fatiando/pooch/pull/488">#488</a>), <code class="docutils literal notranslate"><span class="pre">xclim</span></code> (<a class="reference external" href="https://github.com/fatiando/pooch/pull/445">#445</a>), <code class="docutils literal notranslate"><span class="pre">CLISOPS</span></code> (<a class="reference external" href="https://github.com/fatiando/pooch/pull/445">#445</a>), and <code class="docutils literal notranslate"><span class="pre">SPLASH</span></code> (<a class="reference external" href="https://github.com/fatiando/pooch/pull/432">#432</a>) to list of projects using Pooch.</p></li>
+</ul>
+<p>This release contains contributions from:</p>
+<ul class="simple">
+<li><p>Adam Boesky</p></li>
+<li><p>Antonio Valentino</p></li>
+<li><p>Daniel McCloy</p></li>
+<li><p>Daniel Shapero</p></li>
+<li><p>Eliot Robson</p></li>
+<li><p>Joren Hammudoglu</p></li>
+<li><p>Leonardo Uieda</p></li>
+<li><p>Mridul Seth</p></li>
+<li><p>ofirshorer</p></li>
+<li><p>Santiago Soler</p></li>
+<li><p>Trevor James Smith</p></li>
+</ul>
+</section>
+<section id="version-1-8-2">
+<h2>Version 1.8.2<a class="headerlink" href="#version-1-8-2" title="Link to this heading">#</a></h2>
+<p>Released on: 2024/06/06</p>
+<p>DOI: <a class="reference external" href="https://doi.org/10.5281/zenodo.11493461">https://doi.org/10.5281/zenodo.11493461</a></p>
+<p>Bug fixes:</p>
+<ul class="simple">
+<li><p>Use a variable to set the default request timeout (<a class="reference external" href="https://github.com/fatiando/pooch/pull/418">#418</a>)</p></li>
+</ul>
+<p>Documentation:</p>
+<ul class="simple">
+<li><p>Add HyperSpy, RosettaSciIO, eXSpy to projects using pooch (<a class="reference external" href="https://github.com/fatiando/pooch/pull/408">#408</a>)</p></li>
+<li><p>Add more packages using Pooch (<a class="reference external" href="https://github.com/fatiando/pooch/pull/403">#403</a>)</p></li>
+</ul>
+<p>Maintenance:</p>
+<ul class="simple">
+<li><p>Add optional dependencies to environment.yml (<a class="reference external" href="https://github.com/fatiando/pooch/pull/413">#413</a>)</p></li>
+<li><p>Run tests with oldest dependencies on x86 macos (<a class="reference external" href="https://github.com/fatiando/pooch/pull/414">#414</a>)</p></li>
+<li><p>Mark additional tests requiring network (<a class="reference external" href="https://github.com/fatiando/pooch/pull/412">#412</a>)</p></li>
+<li><p>Fix package description in pyproject.toml (<a class="reference external" href="https://github.com/fatiando/pooch/pull/407">#407</a>)</p></li>
+<li><p>Setup Trusted Publisher deployment to PyPI (<a class="reference external" href="https://github.com/fatiando/pooch/pull/406">#406</a>)</p></li>
+<li><p>Use Burocrata to check and add license notices (<a class="reference external" href="https://github.com/fatiando/pooch/pull/402">#402</a>)</p></li>
+<li><p>Use pyproject.toml instead of setup.cfg (<a class="reference external" href="https://github.com/fatiando/pooch/pull/401">#401</a>)</p></li>
+</ul>
+<p>This release contains contributions from:</p>
+<ul class="simple">
+<li><p>Sandro</p></li>
+<li><p>Jonas Lähnemann</p></li>
+<li><p>Santiago Soler</p></li>
+<li><p>Leonardo Uieda</p></li>
+</ul>
+</section>
+<section id="version-1-8-1">
+<h2>Version 1.8.1<a class="headerlink" href="#version-1-8-1" title="Link to this heading">#</a></h2>
+<p>Released on: 2024/02/19</p>
+<p>DOI: <a class="reference external" href="https://doi.org/10.5281/zenodo.10680982">https://doi.org/10.5281/zenodo.10680982</a></p>
+<p>Bug fixes:</p>
+<ul class="simple">
+<li><p>Use the ID instead of persistentID for Dataverse downloads since some repositories don’t issue persistentIDs but all issue normal IDs (<a class="reference external" href="https://github.com/fatiando/pooch/pull/355">#355</a>)</p></li>
+<li><p>Ensure all archive members are unpacked in subsequent uses of <code class="docutils literal notranslate"><span class="pre">Untar</span></code>/<code class="docutils literal notranslate"><span class="pre">Unzip</span></code> if the first call only asked for a few members (<a class="reference external" href="https://github.com/fatiando/pooch/pull/365">#365</a>)</p></li>
+</ul>
+<p>Documentation:</p>
+<ul class="simple">
+<li><p>Move “Projects using Pooch” further up the README (<a class="reference external" href="https://github.com/fatiando/pooch/pull/386">#386</a>)</p></li>
+<li><p>Update the versions of sphinx and its plugins (<a class="reference external" href="https://github.com/fatiando/pooch/pull/385">#385</a>)</p></li>
+</ul>
+<p>Maintenance:</p>
+<ul class="simple">
+<li><p>Remove many deprecated pylint options (<a class="reference external" href="https://github.com/fatiando/pooch/pull/329">#329</a>)</p></li>
+<li><p>Use Dependabot to manage GitHub Actions (<a class="reference external" href="https://github.com/fatiando/pooch/pull/387">#387</a>)</p></li>
+<li><p>Simplify the test GitHub Actions workflow (<a class="reference external" href="https://github.com/fatiando/pooch/pull/384">#384</a>)</p></li>
+<li><p>Update format for Black 24.1.1 (<a class="reference external" href="https://github.com/fatiando/pooch/pull/383">#383</a>)</p></li>
+</ul>
+<p>This release contains contributions from:</p>
+<ul class="simple">
+<li><p>Mark Harfouche</p></li>
+<li><p>Juan Nunez-Iglesias</p></li>
+<li><p>Santiago Soler</p></li>
+<li><p>Leonardo Uieda</p></li>
+</ul>
+</section>
+<section id="version-1-8-0">
+<h2>Version 1.8.0<a class="headerlink" href="#version-1-8-0" title="Link to this heading">#</a></h2>
+<p>Released on: 2023/10/24</p>
+<p>DOI: <a class="reference external" href="https://doi.org/10.5281/zenodo.10037888">https://doi.org/10.5281/zenodo.10037888</a></p>
+<p>Bug fixes:</p>
+<ul class="simple">
+<li><p>Fix bug: add support for old and new Zenodo APIs (<a class="reference external" href="https://github.com/fatiando/pooch/pull/375">#375</a>)</p></li>
+</ul>
+<p>New features:</p>
+<ul class="simple">
+<li><p>Only create local data directories if necessary (<a class="reference external" href="https://github.com/fatiando/pooch/pull/370">#370</a>)</p></li>
+<li><p>Speed up import time by lazy loading requests (<a class="reference external" href="https://github.com/fatiando/pooch/pull/328">#328</a>)</p></li>
+</ul>
+<p>Maintenance:</p>
+<ul class="simple">
+<li><p>Add support for Python 3.11 (<a class="reference external" href="https://github.com/fatiando/pooch/pull/348">#348</a>)</p></li>
+<li><p>Only run CI cron job for the upstream repository (<a class="reference external" href="https://github.com/fatiando/pooch/pull/361">#361</a>)</p></li>
+</ul>
+<p>Documentation:</p>
+<ul class="simple">
+<li><p>Add GemGIS to list of projects using Pooch (<a class="reference external" href="https://github.com/fatiando/pooch/pull/349">#349</a>)</p></li>
+<li><p>Fix spelling of Dataverse (<a class="reference external" href="https://github.com/fatiando/pooch/pull/353">#353</a>)</p></li>
+<li><p>Fix grammar on retrieve documentation (<a class="reference external" href="https://github.com/fatiando/pooch/pull/359">#359</a>)</p></li>
+</ul>
+<p>This release contains contributions from:</p>
+<ul class="simple">
+<li><p>Hugo van Kemenade</p></li>
+<li><p>AlexanderJuestel</p></li>
+<li><p>Mark Harfouche</p></li>
+<li><p>Philip Durbin</p></li>
+<li><p>Rob Luke</p></li>
+<li><p>Santiago Soler</p></li>
+<li><p>Stephan Hoyer</p></li>
+</ul>
+</section>
+<section id="version-1-7-0">
+<h2>Version 1.7.0<a class="headerlink" href="#version-1-7-0" title="Link to this heading">#</a></h2>
+<p>Released on: 2023/02/27</p>
+<p>DOI: <a class="reference external" href="https://doi.org/10.5281/zenodo.7678844">https://doi.org/10.5281/zenodo.7678844</a></p>
+<p>Bug fixes:</p>
+<ul class="simple">
+<li><p>Make archive extraction always take members into account (<a class="reference external" href="https://github.com/fatiando/pooch/pull/316">#316</a>)</p></li>
+<li><p>Figshare downloaders fetch the correct version, instead of always the latest one. (<a class="reference external" href="https://github.com/fatiando/pooch/pull/343">#343</a>)</p></li>
+</ul>
+<p>New features:</p>
+<ul class="simple">
+<li><p>Allow spaces in filenames in registry files (<a class="reference external" href="https://github.com/fatiando/pooch/pull/315">#315</a>)</p></li>
+<li><p>Refactor <code class="docutils literal notranslate"><span class="pre">Pooch.is_available</span></code> to use downloaders (<a class="reference external" href="https://github.com/fatiando/pooch/pull/322">#322</a>)</p></li>
+<li><p>Add support for downloading files from Dataverse DOIs (<a class="reference external" href="https://github.com/fatiando/pooch/pull/318">#318</a>)</p></li>
+<li><p>Add a new <code class="docutils literal notranslate"><span class="pre">Pooch.load_registry_from_doi</span></code> method that populates the Pooch registry using DOI-based data repositories (<a class="reference external" href="https://github.com/fatiando/pooch/pull/325">#325</a>)</p></li>
+<li><p>Support urls for Zenodo repositories created through the GitHub integration service, which include slashes in the filename of the main zip files (<a class="reference external" href="https://github.com/fatiando/pooch/pull/340">#340</a>)</p></li>
+<li><p>Automatically add a trailing slash to <code class="docutils literal notranslate"><span class="pre">base_url</span></code> on <code class="docutils literal notranslate"><span class="pre">pooch.create</span></code> (<a class="reference external" href="https://github.com/fatiando/pooch/pull/344">#344</a>)</p></li>
+</ul>
+<p>Maintenance:</p>
+<ul class="simple">
+<li><p>Drop support for Python 3.6 (<a class="reference external" href="https://github.com/fatiando/pooch/pull/299">#299</a>)</p></li>
+<li><p>Port from deprecated <code class="docutils literal notranslate"><span class="pre">appdirs</span></code> to <code class="docutils literal notranslate"><span class="pre">platformdirs</span></code> (<a class="reference external" href="https://github.com/fatiando/pooch/pull/339">#339</a>)</p></li>
+<li><p>Update version of Codecov’s Action to v3 (<a class="reference external" href="https://github.com/fatiando/pooch/pull/345">#345</a>)</p></li>
+</ul>
+<p>Documentation:</p>
+<ul class="simple">
+<li><p>Update sphinx, theme, and sphinx-panels (<a class="reference external" href="https://github.com/fatiando/pooch/pull/300">#300</a>)</p></li>
+<li><p>Add CITATION.cff for the JOSS article (<a class="reference external" href="https://github.com/fatiando/pooch/pull/308">#308</a>)</p></li>
+<li><p>Use Markdown for the README (<a class="reference external" href="https://github.com/fatiando/pooch/pull/311">#311</a>)</p></li>
+<li><p>Improve docstring of <cite>known_hash</cite> in <cite>retrieve</cite> function (<a class="reference external" href="https://github.com/fatiando/pooch/pull/333">#333</a>)</p></li>
+<li><p>Replace link to Pooch’s citation with a BibTeX code snippet (<a class="reference external" href="https://github.com/fatiando/pooch/pull/335">#335</a>)</p></li>
+</ul>
+<p>Projects that started using Pooch:</p>
+<ul class="simple">
+<li><p>Open AR-Sandbox (<a class="reference external" href="https://github.com/fatiando/pooch/pull/305">#305</a>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">climlab</span></code> (<a class="reference external" href="https://github.com/fatiando/pooch/pull/312">#312</a>)</p></li>
+<li><p>SciPy (<a class="reference external" href="https://github.com/fatiando/pooch/pull/320">#320</a>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">napari</span></code> (<a class="reference external" href="https://github.com/fatiando/pooch/pull/321">#321</a>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">mne-python</span></code> (<a class="reference external" href="https://github.com/fatiando/pooch/pull/323">#323</a>)</p></li>
+</ul>
+<p>This release contains contributions from:</p>
+<ul class="simple">
+<li><p>Alex Fikl</p></li>
+<li><p>Anirudh Dagar</p></li>
+<li><p>Björn Ludwig</p></li>
+<li><p>Brian Rose</p></li>
+<li><p>Dominic Kempf</p></li>
+<li><p>Florian Wellmann</p></li>
+<li><p>Gabriel Fu</p></li>
+<li><p>Kyle I S Harrington</p></li>
+<li><p>Leonardo Uieda</p></li>
+<li><p>myd7349</p></li>
+<li><p>Rowan Cockett</p></li>
+<li><p>Santiago Soler</p></li>
+</ul>
+</section>
+<section id="version-1-6-0">
+<h2>Version 1.6.0<a class="headerlink" href="#version-1-6-0" title="Link to this heading">#</a></h2>
+<p>Released on: 2022/01/24</p>
+<p>DOI: <a class="reference external" href="https://doi.org/10.5281/zenodo.5793074">https://doi.org/10.5281/zenodo.5793074</a></p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p><strong>Pooch v1.6.0 is the last release that is compatible with Python 3.6.</strong></p>
+</div>
+<p>Important notes:</p>
+<ul class="simple">
+<li><p>Pooch now specifies version bounds for our required dependencies and a plan for dropping support for older versions. Please revise it if you depend on Pooch.</p></li>
+</ul>
+<p>Enhancements:</p>
+<ul class="simple">
+<li><p>Add option to disable updates on hash mismatch (<a class="reference external" href="https://github.com/fatiando/pooch/pull/291">#291</a> and <a class="reference external" href="https://github.com/fatiando/pooch/pull/292">#292</a>)</p></li>
+<li><p>Allow enabling progress bars with an argument in <code class="docutils literal notranslate"><span class="pre">Pooch.fetch</span></code> and <code class="docutils literal notranslate"><span class="pre">retrieve</span></code> (<a class="reference external" href="https://github.com/fatiando/pooch/pull/277">#277</a>)</p></li>
+</ul>
+<p>Documentation:</p>
+<ul class="simple">
+<li><p>Use real data URLs in the README example code (<a class="reference external" href="https://github.com/fatiando/pooch/pull/295">#295</a>)</p></li>
+<li><p>Tell users to import from the top-level namespace (<a class="reference external" href="https://github.com/fatiando/pooch/pull/288">#288</a>)</p></li>
+<li><p>Update the contact link to <a class="reference external" href="https://www.fatiando.org/contact/">fatiando.org/contact</a> (<a class="reference external" href="https://github.com/fatiando/pooch/pull/282">#282</a>)</p></li>
+<li><p>Refer the community guides to <a class="reference external" href="https://github.com/fatiando/community">fatiando/community</a> (<a class="reference external" href="https://github.com/fatiando/pooch/pull/281">#281</a>)</p></li>
+<li><p>Mention in docs that figshare collections aren’t supported (<a class="reference external" href="https://github.com/fatiando/pooch/pull/275">#275</a>)</p></li>
+</ul>
+<p>Maintenance:</p>
+<ul class="simple">
+<li><p>Replace Google Analytics for <a class="reference external" href="https://plausible.io">Plausible</a> to make our docs more privacy-friendly (<a class="reference external" href="https://github.com/fatiando/pooch/pull/293">#293</a>)</p></li>
+<li><p>Use <a class="reference external" href="https://github.com/fatiando/dependente">Dependente</a> to capture dependencies on CI (<a class="reference external" href="https://github.com/fatiando/pooch/pull/289">#289</a>)</p></li>
+<li><p>Use <code class="docutils literal notranslate"><span class="pre">build</span></code> instead of setup.py (<a class="reference external" href="https://github.com/fatiando/pooch/pull/287">#287</a>)</p></li>
+<li><p>Run the tests weekly on GitHub Actions (<a class="reference external" href="https://github.com/fatiando/pooch/pull/286">#286</a>)</p></li>
+<li><p>Set minimum required version of dependencies (<a class="reference external" href="https://github.com/fatiando/pooch/pull/280">#280</a>)</p></li>
+<li><p>Rename “master” to “main” throughout the project (<a class="reference external" href="https://github.com/fatiando/pooch/pull/278">#278</a>)</p></li>
+<li><p>Remove trailing slash from GitHub handle in <code class="docutils literal notranslate"><span class="pre">AUTHORS.md</span></code> (<a class="reference external" href="https://github.com/fatiando/pooch/pull/279">#279</a>)</p></li>
+</ul>
+<p>This release contains contributions from:</p>
+<ul class="simple">
+<li><p>Santiago Soler</p></li>
+<li><p>Genevieve Buckley</p></li>
+<li><p>Ryan Abernathey</p></li>
+<li><p>Ryan May</p></li>
+<li><p>Leonardo Uieda</p></li>
+</ul>
+</section>
+<section id="version-1-5-2">
+<h2>Version 1.5.2<a class="headerlink" href="#version-1-5-2" title="Link to this heading">#</a></h2>
+<p>Released on: 2021/10/11</p>
+<p>DOI: <a class="reference external" href="https://doi.org/10.5281/zenodo.5560923">https://doi.org/10.5281/zenodo.5560923</a></p>
+<p>Bug fixes:</p>
+<ul class="simple">
+<li><p>Fix bug when unpacking an entire subfolder from an archive. Now both unpacking processors (<code class="docutils literal notranslate"><span class="pre">Untar</span></code> and <code class="docutils literal notranslate"><span class="pre">Unzip</span></code>) handle <code class="docutils literal notranslate"><span class="pre">members</span></code> that are folders (not files) correctly. (<a class="reference external" href="https://github.com/fatiando/pooch/pull/266">#266</a>)</p></li>
+</ul>
+<p>Enhancements:</p>
+<ul class="simple">
+<li><p>Add support for Python 3.10 (<a class="reference external" href="https://github.com/fatiando/pooch/pull/260">#260</a>)</p></li>
+<li><p>Point to the user’s code for the file_hash warning instead of our internal code (which isn’t very useful) (<a class="reference external" href="https://github.com/fatiando/pooch/pull/259">#259</a>)</p></li>
+</ul>
+<p>Documentation:</p>
+<ul class="simple">
+<li><p>Fix typo in a variable name of the examples in the documentation (<a class="reference external" href="https://github.com/fatiando/pooch/pull/268">#268</a>)</p></li>
+<li><p>Fix typo when specifying the SFTP protocol in the about page (<a class="reference external" href="https://github.com/fatiando/pooch/pull/267">#267</a>)</p></li>
+</ul>
+<p>Maintenance:</p>
+<ul class="simple">
+<li><p>Remove old testing checks if running on TravisCI (<a class="reference external" href="https://github.com/fatiando/pooch/pull/265">#265</a>)</p></li>
+</ul>
+<p>This release contains contributions from:</p>
+<ul class="simple">
+<li><p>Santiago Soler</p></li>
+<li><p>Hugo van Kemenade</p></li>
+<li><p>Mark Harfouche</p></li>
+<li><p>Leonardo Uieda</p></li>
+</ul>
+</section>
+<section id="version-1-5-1">
+<h2>Version 1.5.1<a class="headerlink" href="#version-1-5-1" title="Link to this heading">#</a></h2>
+<p>Released on: 2021/08/24</p>
+<p>DOI: <a class="reference external" href="https://doi.org/10.5281/zenodo.5242882">https://doi.org/10.5281/zenodo.5242882</a></p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p><strong>Please use</strong> <code class="docutils literal notranslate"><span class="pre">from</span> <span class="pre">pooch</span> <span class="pre">import</span> <span class="pre">file_hash</span></code> <strong>instead of</strong> <code class="docutils literal notranslate"><span class="pre">from</span>
+<span class="pre">pooch.utils</span> <span class="pre">import</span> <span class="pre">file_hash</span></code>. This is backwards compatible with all
+previous versions of Pooch. We recommend importing all functions and
+classes from the top-level namespace.</p>
+</div>
+<p>Bug fixes:</p>
+<ul class="simple">
+<li><p>Make <code class="docutils literal notranslate"><span class="pre">file_hash</span></code> accessible from the <code class="docutils literal notranslate"><span class="pre">pooch.utils</span></code> module again. Moving
+this function to <code class="docutils literal notranslate"><span class="pre">pooch.hashes</span></code> caused crashes downstream. To prevent these
+crashes, add a wrapper back to utils that issues a warning that users should
+import from the top-level namespace instead.
+(<a class="reference external" href="https://github.com/fatiando/pooch/pull/257">#257</a>)</p></li>
+<li><p>Use a mirror of the test data directory in tests that write to it.
+(<a class="reference external" href="https://github.com/fatiando/pooch/pull/255">#255</a>)</p></li>
+<li><p>Add a pytest mark for tests accessing the network so that they can easily
+excluded when testing offline. (<a class="reference external" href="https://github.com/fatiando/pooch/pull/254">#254</a>)</p></li>
+</ul>
+<p>This release contains contributions from:</p>
+<ul class="simple">
+<li><p>Antonio Valentino</p></li>
+<li><p>Leonardo Uieda</p></li>
+</ul>
+</section>
+<section id="version-1-5-0">
+<h2>Version 1.5.0<a class="headerlink" href="#version-1-5-0" title="Link to this heading">#</a></h2>
+<p>Released on: 2021/08/23</p>
+<p>DOI: <a class="reference external" href="https://doi.org/10.5281/zenodo.5235242">https://doi.org/10.5281/zenodo.5235242</a></p>
+<p>New features:</p>
+<ul class="simple">
+<li><p>Add support for non-cryptographic hashes from the xxhash package. They aren’t
+as safe (but safe enough) and compute in fractions of the time from SHA or
+MD5. This makes it feasible to use hash checking on large datasets. (<a class="reference external" href="https://github.com/fatiando/pooch/pull/242">#242</a>)</p></li>
+<li><p>Add support for using figshare and Zenodo DOIs as URLs (with the protocol
+<code class="docutils literal notranslate"><span class="pre">doi:{DOI}/{file</span> <span class="pre">name}</span></code>, which works out-of-the-box with <code class="docutils literal notranslate"><span class="pre">Pooch.fetch</span></code>
+and <code class="docutils literal notranslate"><span class="pre">retrieve</span></code>). Can only download 1 file from the archive (not the full
+archive) and the file name must be specified in the URL. (<a class="reference external" href="https://github.com/fatiando/pooch/pull/241">#241</a>)</p></li>
+</ul>
+<p>Maintenance:</p>
+<ul class="simple">
+<li><p>Move hash functions to their own private module. No changes to the public
+API. (<a class="reference external" href="https://github.com/fatiando/pooch/pull/244">#244</a>)</p></li>
+<li><p>Run CI jobs on Python version extremes instead of all supported versions
+(<a class="reference external" href="https://github.com/fatiando/pooch/pull/243">#243</a>)</p></li>
+</ul>
+<p>This release contains contributions from:</p>
+<ul class="simple">
+<li><p>Mark Harfouche</p></li>
+<li><p>Leonardo Uieda</p></li>
+</ul>
+</section>
+<section id="version-1-4-0">
+<h2>Version 1.4.0<a class="headerlink" href="#version-1-4-0" title="Link to this heading">#</a></h2>
+<p>Released on: 2021/06/08</p>
+<p>DOI: <a class="reference external" href="https://doi.org/10.5281/zenodo.4914758">https://doi.org/10.5281/zenodo.4914758</a></p>
+<p>Bug fixes:</p>
+<ul class="simple">
+<li><p>Fix bug in <code class="docutils literal notranslate"><span class="pre">Untar</span></code> and <code class="docutils literal notranslate"><span class="pre">Unzip</span></code> when the archive contains subfolders
+(<a class="reference external" href="https://github.com/fatiando/pooch/pull/224">#224</a>)</p></li>
+</ul>
+<p>Documentation:</p>
+<ul class="simple">
+<li><p>New theme (<code class="docutils literal notranslate"><span class="pre">sphinx-book-theme</span></code>) and layout of the documentation (<a class="reference external" href="https://github.com/fatiando/pooch/pull/236">#236</a> <a class="reference external" href="https://github.com/fatiando/pooch/pull/237">#237</a> <a class="reference external" href="https://github.com/fatiando/pooch/pull/238">#238</a>)</p></li>
+</ul>
+<p>Enhancements:</p>
+<ul class="simple">
+<li><p>Add support for non-tqdm progress bars on HTTPDownloader (<a class="reference external" href="https://github.com/fatiando/pooch/pull/228">#228</a>)</p></li>
+<li><p>Allow custom unpack locations in <code class="docutils literal notranslate"><span class="pre">Untar</span></code> and <code class="docutils literal notranslate"><span class="pre">Unzip</span></code> (<a class="reference external" href="https://github.com/fatiando/pooch/pull/224">#224</a>)</p></li>
+</ul>
+<p>Maintenance:</p>
+<ul class="simple">
+<li><p>Replace versioneer with setuptools-scm (<a class="reference external" href="https://github.com/fatiando/pooch/pull/235">#235</a>)</p></li>
+<li><p>Automatically check license notice on code files (<a class="reference external" href="https://github.com/fatiando/pooch/pull/231">#231</a>)</p></li>
+<li><p>Don’t store documentation HTML as CI build artifacts (<a class="reference external" href="https://github.com/fatiando/pooch/pull/221">#221</a>)</p></li>
+</ul>
+<p>This release contains contributions from:</p>
+<ul class="simple">
+<li><p>Leonardo Uieda</p></li>
+<li><p>Agustina Pesce</p></li>
+<li><p>Clément Robert</p></li>
+<li><p>Daniel McCloy</p></li>
+</ul>
+</section>
+<section id="version-1-3-0">
+<h2>Version 1.3.0<a class="headerlink" href="#version-1-3-0" title="Link to this heading">#</a></h2>
+<p>Released on: 2020/11/27</p>
+<p>DOI: <a class="reference external" href="https://doi.org/10.5281/zenodo.4293216">https://doi.org/10.5281/zenodo.4293216</a></p>
+<p>Bug fixes:</p>
+<ul class="simple">
+<li><p>Properly handle capitalized hashes. On Windows, users might sometimes get
+capitalized hashes from the system. To avoid false hash mismatches, convert
+stored and computed hashes to lowercase before doing comparisons. Convert
+hashes to lowercase when reading from the registry to make sure stored hashes
+are always lowercase. (<a class="reference external" href="https://github.com/fatiando/pooch/pull/214">#214</a>)</p></li>
+</ul>
+<p>New features:</p>
+<ul class="simple">
+<li><p>Add option to retry downloads if they fail. The new <code class="docutils literal notranslate"><span class="pre">retry_if_failed</span></code>
+option to <code class="docutils literal notranslate"><span class="pre">pooch.create</span></code> and <code class="docutils literal notranslate"><span class="pre">pooch.Pooch</span></code> allows retrying the download
+the specified number of times in case of failures due to hash mismatches
+(coming from Pooch) or network issues (coming from <code class="docutils literal notranslate"><span class="pre">requests</span></code>). This is
+useful for running downloads on CI that tend to fail sporadically. Waits a
+period of time between consecutive downloads starting with 1s and increasing
+up to 10s in 1s increments. (<a class="reference external" href="https://github.com/fatiando/pooch/pull/215">#215</a>)</p></li>
+<li><p>Allow user defined decompressed file names. Introduce new <code class="docutils literal notranslate"><span class="pre">name</span></code> argument
+to <code class="docutils literal notranslate"><span class="pre">pooch.Decompress</span></code> to allow user defined file names. Defaults to the
+previous naming convention for backward compatibility. (<a class="reference external" href="https://github.com/fatiando/pooch/pull/203">#203</a>)</p></li>
+</ul>
+<p>Documentation:</p>
+<ul class="simple">
+<li><p>Add seaborn-image to list of packages using Pooch (<a class="reference external" href="https://github.com/fatiando/pooch/pull/218">#218</a>)</p></li>
+</ul>
+<p>Maintenance:</p>
+<ul class="simple">
+<li><p>Add support for Python 3.9. (<a class="reference external" href="https://github.com/fatiando/pooch/pull/220">#220</a>)</p></li>
+<li><p>Drop support for Python 3.5. (<a class="reference external" href="https://github.com/fatiando/pooch/pull/204">#204</a>)</p></li>
+<li><p>Use pip instead of conda to speed up Actions (<a class="reference external" href="https://github.com/fatiando/pooch/pull/216">#216</a>)</p></li>
+<li><p>Add license and copyright notice to every .py file (<a class="reference external" href="https://github.com/fatiando/pooch/pull/213">#213</a>)</p></li>
+</ul>
+<p>This release contains contributions from:</p>
+<ul class="simple">
+<li><p>Leonardo Uieda</p></li>
+<li><p>Danilo Horta</p></li>
+<li><p>Hugo van Kemenade</p></li>
+<li><p>SarthakJariwala</p></li>
+</ul>
+</section>
+<section id="version-1-2-0">
+<h2>Version 1.2.0<a class="headerlink" href="#version-1-2-0" title="Link to this heading">#</a></h2>
+<p>Released on: 2020/09/10</p>
+<p>DOI: <a class="reference external" href="https://doi.org/10.5281/zenodo.4022246">https://doi.org/10.5281/zenodo.4022246</a></p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p><strong>Pooch v1.2.0 is the last release that is compatible with Python 3.5.</strong></p>
+</div>
+<p>Bug fixes:</p>
+<ul class="simple">
+<li><p>Fix FTP availability check when the file is in a directory. If the data file
+is not in the base directory, the <code class="docutils literal notranslate"><span class="pre">Pooch.is_available</span></code> test was broken
+since we were checking for the full path in <code class="docutils literal notranslate"><span class="pre">ftp.nlst</span></code> instead of just the
+file name. (<a class="reference external" href="https://github.com/fatiando/pooch/pull/191">#191</a>)</p></li>
+</ul>
+<p>New features:</p>
+<ul class="simple">
+<li><p>Add the SFTPDownloader class for secure FTP downloads (<a class="reference external" href="https://github.com/fatiando/pooch/pull/165">#165</a>)</p></li>
+<li><p>Expose Pooch version as <code class="docutils literal notranslate"><span class="pre">pooch.__version__</span></code> (<a class="reference external" href="https://github.com/fatiando/pooch/pull/179">#179</a>)</p></li>
+<li><p>Allow line comments in registry files with <code class="docutils literal notranslate"><span class="pre">#</span></code> (<a class="reference external" href="https://github.com/fatiando/pooch/pull/180">#180</a>)</p></li>
+</ul>
+<p>Enhancements:</p>
+<ul class="simple">
+<li><p>Point to Unzip/tar from Decompress docs and errors (<a class="reference external" href="https://github.com/fatiando/pooch/pull/200">#200</a>)</p></li>
+</ul>
+<p>Documentation:</p>
+<ul class="simple">
+<li><p>Re-factor the documentation into separate pages (<a class="reference external" href="https://github.com/fatiando/pooch/pull/202">#202</a>)</p></li>
+<li><p>Add warning to the docs about dropping Python 3.5 (<a class="reference external" href="https://github.com/fatiando/pooch/pull/201">#201</a>)</p></li>
+<li><p>Add <a class="reference external" href="https://github.com/histolab/histolab">histolab</a> to the Pooch-powered
+projects (<a class="reference external" href="https://github.com/fatiando/pooch/pull/189">#189</a>)</p></li>
+</ul>
+<p>Maintenance:</p>
+<ul class="simple">
+<li><p>Push documentation to GitHub Pages using Actions (<a class="reference external" href="https://github.com/fatiando/pooch/pull/198">#198</a>)</p></li>
+<li><p>Add GitHub Actions workflow for publishing to PyPI (<a class="reference external" href="https://github.com/fatiando/pooch/pull/196">#196</a>)</p></li>
+<li><p>Set up GitHub Actions for testing and linting (<a class="reference external" href="https://github.com/fatiando/pooch/pull/194">#194</a>)</p></li>
+<li><p>Test FTP downloads using a local test server (<a class="reference external" href="https://github.com/fatiando/pooch/pull/192">#192</a>)</p></li>
+</ul>
+<p>This release contains contributions from:</p>
+<ul class="simple">
+<li><p>Leonardo Uieda</p></li>
+<li><p>Hugo van Kemenade</p></li>
+<li><p>Alessia Marcolini</p></li>
+<li><p>Luke Gregor</p></li>
+<li><p>Mathias Hauser</p></li>
+</ul>
+</section>
+<section id="version-1-1-1">
+<h2>Version 1.1.1<a class="headerlink" href="#version-1-1-1" title="Link to this heading">#</a></h2>
+<p>Released on: 2020/05/14</p>
+<p>DOI: <a class="reference external" href="https://doi.org/10.5281/zenodo.3826458">https://doi.org/10.5281/zenodo.3826458</a></p>
+<p>Bug fixes:</p>
+<ul class="simple">
+<li><p>Delay data cache folder creation until the first download is attempted. As
+seen in <a class="reference external" href="https://github.com/scikit-image/scikit-image/issues/4719">recent issues in scikit-image</a>, creating the
+data folder in <code class="docutils literal notranslate"><span class="pre">pooch.create</span></code> can cause problems since this function is
+called at import time. This means that importing the package in parallel can
+cause race conditions and crashes. To prevent that from happening, delay the
+creation of the cache folder until <code class="docutils literal notranslate"><span class="pre">Pooch.fetch</span></code> or <code class="docutils literal notranslate"><span class="pre">retrieve</span></code> are
+called.
+(<a class="reference external" href="https://github.com/fatiando/pooch/pull/173">#173</a>)</p></li>
+<li><p>Allow the data folder to already exist when creating it. This is can help
+cope with parallel execution as well.
+(<a class="reference external" href="https://github.com/fatiando/pooch/pull/171">#171</a>)</p></li>
+</ul>
+<p>Documentation:</p>
+<ul class="simple">
+<li><p>Added scikit-image to list of Pooch users.
+(<a class="reference external" href="https://github.com/fatiando/pooch/pull/168">#168</a>)</p></li>
+<li><p>Fix typo in README and front page contributing section.
+(<a class="reference external" href="https://github.com/fatiando/pooch/pull/166">#166</a>)</p></li>
+</ul>
+<p>This release contains contributions from:</p>
+<ul class="simple">
+<li><p>Leonardo Uieda</p></li>
+<li><p>Egor Panfilov</p></li>
+<li><p>Rowan Cockett</p></li>
+</ul>
+</section>
+<section id="version-1-1-0">
+<h2>Version 1.1.0<a class="headerlink" href="#version-1-1-0" title="Link to this heading">#</a></h2>
+<p>Released on: 2020/04/13</p>
+<p>DOI: <a class="reference external" href="https://doi.org/10.5281/zenodo.3747184">https://doi.org/10.5281/zenodo.3747184</a></p>
+<p>New features:</p>
+<ul class="simple">
+<li><p>New function <code class="docutils literal notranslate"><span class="pre">pooch.retrieve</span></code> to fetch single files This is much more
+convenient than setting up a <code class="docutils literal notranslate"><span class="pre">Pooch</span></code> while retaining the hash checks and
+use of downloaders and processors. It automatically selects a unique file
+name and saves files to a cache folder.
+(<a class="reference external" href="https://github.com/fatiando/pooch/pull/152">#152</a>)</p></li>
+<li><p>Allow to use of different hashing algorithms (other than SHA256). Optionally
+specify the hash as <code class="docutils literal notranslate"><span class="pre">alg:hash</span></code> and allow <code class="docutils literal notranslate"><span class="pre">pooch.Pooch</span></code> to recognize the
+algorithm when comparing hashes. Setting an algorithsm is optional and
+omiting it defaults to SHA256. This is particularly useful when data are
+coming from external sources and published hashes are already available.
+(<a class="reference external" href="https://github.com/fatiando/pooch/pull/133">#133</a>)</p></li>
+</ul>
+<p>Documentation:</p>
+<ul class="simple">
+<li><p>Add example for fetching datasets that change on the server, for which the
+hash check would always fail.
+(<a class="reference external" href="https://github.com/fatiando/pooch/pull/144">#144</a>)</p></li>
+<li><p>Fix path examples in docstring of <code class="docutils literal notranslate"><span class="pre">pooch.os_cache</span></code>. The docstring mentioned
+the data path as examples instead of the cache path.
+(<a class="reference external" href="https://github.com/fatiando/pooch/pull/140">#140</a>)</p></li>
+<li><p>Add example of creating a registry when you don’t have the data files locally
+and would have to download them manually. The example uses the
+<code class="docutils literal notranslate"><span class="pre">pooch.retrieve</span></code> function to automate the process. The example covers two
+cases: when all remote files share the same base URL and when every file has
+its own URL.
+(<a class="reference external" href="https://github.com/fatiando/pooch/pull/161">#161</a>)</p></li>
+</ul>
+<p>Maintenance:</p>
+<ul class="simple">
+<li><p>A lot of general refactoring of the internals of Pooch to facilitate
+development of the new <code class="docutils literal notranslate"><span class="pre">pooch.retrieve</span></code> function
+(<a class="reference external" href="https://github.com/fatiando/pooch/pull/159">#159</a>
+<a class="reference external" href="https://github.com/fatiando/pooch/pull/157">#157</a>
+<a class="reference external" href="https://github.com/fatiando/pooch/pull/156">#156</a>
+<a class="reference external" href="https://github.com/fatiando/pooch/pull/151">#151</a>
+<a class="reference external" href="https://github.com/fatiando/pooch/pull/149">#149</a>)</p></li>
+</ul>
+<p>This release contains contributions from:</p>
+<ul class="simple">
+<li><p>Leonardo Uieda</p></li>
+<li><p>Santiago Soler</p></li>
+<li><p>Kacper Kowalik</p></li>
+<li><p>Lucas Martin-King</p></li>
+<li><p>Zac Flamig</p></li>
+</ul>
+</section>
+<section id="version-1-0-0">
+<h2>Version 1.0.0<a class="headerlink" href="#version-1-0-0" title="Link to this heading">#</a></h2>
+<p>Released on: 2020/01/28</p>
+<p>DOI: <a class="reference external" href="https://doi.org/10.5281/zenodo.3629329">https://doi.org/10.5281/zenodo.3629329</a></p>
+<p>This release marks the stabilization of the Pooch API. Further changes to the
+1.* line will be fully backwards compatible (meaning that updating Pooch should
+not break existing code). If there is great need to make backwards incompatible
+changes, we will release a 2.* line. In that case, bug fixes will still be
+ported to the 1.* line for a period of time.</p>
+<p>Improvements:</p>
+<ul class="simple">
+<li><p>Allow blank lines in registry files. Previously, they would cause an error.
+(<a class="reference external" href="https://github.com/fatiando/pooch/pull/138">#138</a>)</p></li>
+</ul>
+<p><strong>Backwards incompatible changes</strong>:</p>
+<ul class="simple">
+<li><p>Using Python’s <code class="docutils literal notranslate"><span class="pre">logging</span></code> module to instead of <code class="docutils literal notranslate"><span class="pre">warnings</span></code> to inform users
+of download, update, and decompression/unpacking actions. This allows
+messages to be logged with different priorities and the user filter out log
+messages or silence Pooch entirely. Introduces the function
+<code class="docutils literal notranslate"><span class="pre">pooch.get_logger</span></code> to access the <code class="docutils literal notranslate"><span class="pre">logging</span></code> object used by Pooch. <strong>Users
+who relied on Pooch issuing warnings will need to update to capturing logs
+instead.</strong> All other parts of the API remain unchanged.
+(<a class="reference external" href="https://github.com/fatiando/pooch/pull/115">#115</a>)</p></li>
+</ul>
+<p>This release contains contributions from:</p>
+<ul class="simple">
+<li><p>Daniel Shapero</p></li>
+</ul>
+</section>
+<section id="version-0-7-2">
+<h2>Version 0.7.2<a class="headerlink" href="#version-0-7-2" title="Link to this heading">#</a></h2>
+<p>Released on: 2020/01/17</p>
+<p>🚨 <strong>Announcement:</strong> 🚨
+We now have a <a class="reference external" href="https://doi.org/10.21105/joss.01943">JOSS paper about Pooch</a>!
+Please <a class="reference internal" href="citing.html#citing"><span class="std std-ref">cite it</span></a> when you use Pooch for your research.
+(<a class="reference external" href="https://github.com/fatiando/pooch/pull/116">#116</a> with reviews in
+<a class="reference external" href="https://github.com/fatiando/pooch/pull/132">#132</a> and
+<a class="reference external" href="https://github.com/fatiando/pooch/pull/134">#134</a>)</p>
+<p>This is minor release which only updates the citation information to
+the new JOSS paper. No DOI was issued for this release since there are
+no code or documentation changes.</p>
+</section>
+<section id="version-0-7-1">
+<h2>Version 0.7.1<a class="headerlink" href="#version-0-7-1" title="Link to this heading">#</a></h2>
+<p>Released on: 2020/01/17</p>
+<p>DOI: <a class="reference external" href="https://doi.org/10.5281/zenodo.3611376">https://doi.org/10.5281/zenodo.3611376</a></p>
+<p>Improvements:</p>
+<ul class="simple">
+<li><p>Better error messages when hashes don’t match. Include the file name in the
+exception for a hash mismatch between a downloaded file and the registry.
+Before, we included the name of temporary file, which wasn’t very
+informative.
+(<a class="reference external" href="https://github.com/fatiando/pooch/pull/128">#128</a>)</p></li>
+<li><p>Better error message for malformed registry files. When loading a registry
+file, inform the name of the file and include the offending content in the
+error message instead of just the line number.
+(<a class="reference external" href="https://github.com/fatiando/pooch/pull/129">#129</a>)</p></li>
+</ul>
+<p>Maintenance:</p>
+<ul class="simple">
+<li><p>Change development status flag in <code class="docutils literal notranslate"><span class="pre">setup.py</span></code> to “stable” instead of
+“alpha”.
+(<a class="reference external" href="https://github.com/fatiando/pooch/pull/127">#127</a>)</p></li>
+</ul>
+<p>This release was reviewed at the <a class="reference external" href="https://github.com/openjournals/joss-reviews/issues/1943">Journal of Open Source Software</a>. The code and
+software paper contain contributions from:</p>
+<ul class="simple">
+<li><p>Anderson Banihirwe</p></li>
+<li><p>Martin Durant</p></li>
+<li><p>Mark Harfouche</p></li>
+<li><p>Hugo van Kemenade</p></li>
+<li><p>John Leeman</p></li>
+<li><p>Rémi Rampin</p></li>
+<li><p>Daniel Shapero</p></li>
+<li><p>Santiago Rubén Soler</p></li>
+<li><p>Matthew Turk</p></li>
+<li><p>Leonardo Uieda</p></li>
+</ul>
+</section>
+<section id="version-0-7-0">
+<h2>Version 0.7.0<a class="headerlink" href="#version-0-7-0" title="Link to this heading">#</a></h2>
+<p>Released on: 2019/11/19</p>
+<p>DOI: <a class="reference external" href="https://doi.org/10.5281/zenodo.3547640">https://doi.org/10.5281/zenodo.3547640</a></p>
+<p>New features:</p>
+<ul class="simple">
+<li><p>New <code class="docutils literal notranslate"><span class="pre">pooch.FTPDownloader</span></code> class for downloading files over FTP. Uses the
+standard library <code class="docutils literal notranslate"><span class="pre">ftplib</span></code>. The appropriate downloader is automatically
+selected by <code class="docutils literal notranslate"><span class="pre">pooch.Pooch.fetch</span></code> based on the URL (for anonymous FTP only),
+so no configuration is required.
+If authentication is required, <code class="docutils literal notranslate"><span class="pre">pooch.FTPDownloader</span></code> provides the need
+support. Ported from
+<a class="reference external" href="https://github.com/NCAR/aletheia-data">NCAR/aletheia-data</a> by the author.
+(<a class="reference external" href="https://github.com/fatiando/pooch/pull/118">#118</a>)</p></li>
+<li><p>Support for file-like objects to <code class="docutils literal notranslate"><span class="pre">Pooch.load_registry</span></code> (opened either in
+binary or text mode).
+(<a class="reference external" href="https://github.com/fatiando/pooch/pull/117">#117</a>)</p></li>
+</ul>
+<p>Maintenance:</p>
+<ul class="simple">
+<li><p>Testing and official support for Python 3.8.
+(<a class="reference external" href="https://github.com/fatiando/pooch/pull/113">#113</a>)</p></li>
+<li><p>🚨 <strong>Drop support for Python 2.7.</strong> 🚨 Remove conditional dependencies and CI
+jobs.
+(<a class="reference external" href="https://github.com/fatiando/pooch/pull/100">#100</a>)</p></li>
+</ul>
+<p>Documentation:</p>
+<ul class="simple">
+<li><p>In the tutorial, use <code class="docutils literal notranslate"><span class="pre">pkg_resources.resource_stream()</span></code> from setuptools to
+load the <code class="docutils literal notranslate"><span class="pre">registry.txt</span></code> file. It’s less error-prone than using <code class="docutils literal notranslate"><span class="pre">os.path</span></code>
+and <code class="docutils literal notranslate"><span class="pre">__file__</span></code> and allows the package to work from zip files.
+(<a class="reference external" href="https://github.com/fatiando/pooch/pull/120">#120</a>)</p></li>
+<li><p>Docstrings formatted to 79 characters (instead of 88) for better rendering in
+Jupyter notebooks and IPython. These displays are limited to 80 chars so the
+longer lines made the docstring unreadable.
+(<a class="reference external" href="https://github.com/fatiando/pooch/pull/123">#123</a>)</p></li>
+</ul>
+<p>This release contains contributions from:</p>
+<ul class="simple">
+<li><p>Anderson Banihirwe</p></li>
+<li><p>Hugo van Kemenade</p></li>
+<li><p>Remi Rampin</p></li>
+<li><p>Leonardo Uieda</p></li>
+</ul>
+</section>
+<section id="version-0-6-0">
+<h2>Version 0.6.0<a class="headerlink" href="#version-0-6-0" title="Link to this heading">#</a></h2>
+<p>Released on: 2019/10/22</p>
+<p>DOI: <a class="reference external" href="https://doi.org/10.5281/zenodo.3515031">https://doi.org/10.5281/zenodo.3515031</a></p>
+<p>🚨 <strong>Pooch v0.6.0 is the last release to support Python 2.7</strong> 🚨</p>
+<p>New features:</p>
+<ul class="simple">
+<li><p>Add optional download progress bar to <code class="docutils literal notranslate"><span class="pre">pooch.HTTPDownloader</span></code>
+(<a class="reference external" href="https://github.com/fatiando/pooch/pull/97">#97</a>)</p></li>
+</ul>
+<p>Maintenance:</p>
+<ul class="simple">
+<li><p>Warn that 0.6.0 is the last version to support Python 2.7
+(<a class="reference external" href="https://github.com/fatiando/pooch/pull/108">#108</a>)</p></li>
+</ul>
+<p>Documentation:</p>
+<ul class="simple">
+<li><p>Update contact information to point to our Slack channel
+(<a class="reference external" href="https://github.com/fatiando/pooch/pull/107">#107</a>)</p></li>
+<li><p>Add icepack to list of projects using Pooch
+(<a class="reference external" href="https://github.com/fatiando/pooch/pull/98">#98</a>)</p></li>
+</ul>
+<p>This release contains contributions from:</p>
+<ul class="simple">
+<li><p>Daniel Shapero</p></li>
+<li><p>Leonardo Uieda</p></li>
+</ul>
+</section>
+<section id="version-0-5-2">
+<h2>Version 0.5.2<a class="headerlink" href="#version-0-5-2" title="Link to this heading">#</a></h2>
+<p>Released on: 2019/06/24</p>
+<p>Maintenance:</p>
+<ul class="simple">
+<li><p>Add back support for Python 3.5 with continuous integration tests. No code changes
+were needed, only removing the restriction from <code class="docutils literal notranslate"><span class="pre">setup.py</span></code>.
+(<a class="reference external" href="https://github.com/fatiando/pooch/pull/93">#93</a>)</p></li>
+</ul>
+<p>This release contains contributions from:</p>
+<ul class="simple">
+<li><p>Leonardo Uieda</p></li>
+</ul>
+</section>
+<section id="version-0-5-1">
+<h2>Version 0.5.1<a class="headerlink" href="#version-0-5-1" title="Link to this heading">#</a></h2>
+<p>Released on: 2019/05/21</p>
+<p>Documentation fixes:</p>
+<ul class="simple">
+<li><p>Fix formatting error in <code class="docutils literal notranslate"><span class="pre">pooch.Decompress</span></code> docstring.
+(<a class="reference external" href="https://github.com/fatiando/pooch/pull/81">#81</a>)</p></li>
+<li><p>Fix wrong imports in the usage guide for post-processing hooks.
+(<a class="reference external" href="https://github.com/fatiando/pooch/pull/84">#84</a>)</p></li>
+<li><p>Add section to the usage guide explaining when to use <code class="docutils literal notranslate"><span class="pre">pooch.Decompress</span></code>.
+(<a class="reference external" href="https://github.com/fatiando/pooch/pull/85">#85</a>)</p></li>
+</ul>
+<p>This release contains contributions from:</p>
+<ul class="simple">
+<li><p>Santiago Soler</p></li>
+<li><p>Leonardo Uieda</p></li>
+</ul>
+</section>
+<section id="version-0-5-0">
+<h2>Version 0.5.0<a class="headerlink" href="#version-0-5-0" title="Link to this heading">#</a></h2>
+<p>Released on: 2019/05/20</p>
+<p>New features:</p>
+<ul class="simple">
+<li><p>New processor <code class="docutils literal notranslate"><span class="pre">pooch.Decompress</span></code> saves a decompressed version of the downloaded
+file. Supports gzip, lzma/xz, and bzip2 compression. <strong>Note</strong>: Under Python 2.7, lzma
+and bzip2 require the <code class="docutils literal notranslate"><span class="pre">backports.lzma</span></code> and <code class="docutils literal notranslate"><span class="pre">bz2file</span></code> packages as well. These are
+soft dependencies and not required to use Pooch. See <a class="reference internal" href="install.html#install"><span class="std std-ref">Installing</span></a>. (<a class="reference external" href="https://github.com/fatiando/pooch/pull/78">#78</a>)</p></li>
+<li><p>New processor <code class="docutils literal notranslate"><span class="pre">pooch.Untar</span></code> unpacks files contained in a downloaded tar archive
+(with or without compression). (<a class="reference external" href="https://github.com/fatiando/pooch/pull/77">#77</a>)</p></li>
+</ul>
+<p>This release contains contributions from:</p>
+<ul class="simple">
+<li><p>Matthew Turk</p></li>
+<li><p>Leonardo Uieda</p></li>
+</ul>
+</section>
+<section id="version-0-4-0">
+<h2>Version 0.4.0<a class="headerlink" href="#version-0-4-0" title="Link to this heading">#</a></h2>
+<p>Released on: 2019/05/01</p>
+<p>New features:</p>
+<ul class="simple">
+<li><p>Add customizable downloaders. Delegate file download into separate classes that can be
+passed to <code class="docutils literal notranslate"><span class="pre">Pooch.fetch</span></code>. Created the <code class="docutils literal notranslate"><span class="pre">HTTPDownloader</span></code> class (used by default)
+which can also be used to download files that require authentication/login. (<a class="reference external" href="https://github.com/fatiando/pooch/pull/66">#66</a>)</p></li>
+<li><p>Add post-download processor hooks to <code class="docutils literal notranslate"><span class="pre">Pooch.fetch</span></code>. Allows users to pass in a
+function that is executed right before returning and can overwrite the file path that
+is returned by <code class="docutils literal notranslate"><span class="pre">fetch</span></code>. Use this, for example, to perform unpacking/decompression
+operations on larger files that can be time consuming and we only want to do once.
+(<a class="reference external" href="https://github.com/fatiando/pooch/pull/59">#59</a>)</p></li>
+<li><p>Add the <code class="docutils literal notranslate"><span class="pre">Unzip</span></code> post-download processor to extract files from a downloaded zip
+archive. Unpacks files into a directory in the local store and returns a list of all
+unzipped files. (<a class="reference external" href="https://github.com/fatiando/pooch/pull/72">#72</a>)</p></li>
+<li><p>Make the <code class="docutils literal notranslate"><span class="pre">check_version</span></code> function public. It’s used internally but will be useful in
+examples that want to download things from the pooch repository. (<a class="reference external" href="https://github.com/fatiando/pooch/pull/69">#69</a>)</p></li>
+</ul>
+<p>Maintenance:</p>
+<ul class="simple">
+<li><p>Pin sphinx to version 1.8.5. New versions of Sphinx (2.0.*) are messing up the
+numpydoc style docstrings. (<a class="reference external" href="https://github.com/fatiando/pooch/pull/64">#64</a>)</p></li>
+</ul>
+<p>This release contains contributions from:</p>
+<ul class="simple">
+<li><p>Santiago Soler</p></li>
+<li><p>Leonardo Uieda</p></li>
+</ul>
+</section>
+<section id="version-0-3-1">
+<h2>Version 0.3.1<a class="headerlink" href="#version-0-3-1" title="Link to this heading">#</a></h2>
+<p>Released on: 2019/03/28</p>
+<p>Minor patches:</p>
+<ul class="simple">
+<li><p>Add a project logo (<a class="reference external" href="https://github.com/fatiando/pooch/pull/57">#57</a>)</p></li>
+<li><p>Replace <code class="docutils literal notranslate"><span class="pre">http</span></code> with <code class="docutils literal notranslate"><span class="pre">https</span></code> in the <code class="docutils literal notranslate"><span class="pre">README.rst</span></code> to avoid mixed content warnings
+in some browsers (<a class="reference external" href="https://github.com/fatiando/pooch/pull/56">#56</a>)</p></li>
+</ul>
+</section>
+<section id="version-0-3-0">
+<h2>Version 0.3.0<a class="headerlink" href="#version-0-3-0" title="Link to this heading">#</a></h2>
+<p>Released on: 2019/03/27</p>
+<p>New features:</p>
+<ul class="simple">
+<li><p>Use the <code class="docutils literal notranslate"><span class="pre">appdirs</span></code> library to get the cache directory. <strong>Could change the default
+data location on all platforms</strong>. Locations are compatible with the
+<a class="reference external" href="https://specifications.freedesktop.org/basedir-spec/basedir-spec-latest.html">XDG Base Directory Specification</a>
+(<a class="reference external" href="https://github.com/fatiando/pooch/pull/45">#45</a>)</p></li>
+<li><p>Add method <code class="docutils literal notranslate"><span class="pre">Pooch.is_available</span></code> to check remote file availability
+(<a class="reference external" href="https://github.com/fatiando/pooch/pull/50">#50</a>)</p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">Pooch.registry_files</span></code> property to get a name of all files in the registry
+(<a class="reference external" href="https://github.com/fatiando/pooch/pull/42">#42</a>)</p></li>
+<li><p>Make <code class="docutils literal notranslate"><span class="pre">Pooch.get_url</span></code> a public method to get the download URL for a given file
+(<a class="reference external" href="https://github.com/fatiando/pooch/pull/55">#55</a>)</p></li>
+</ul>
+<p>Maintenance:</p>
+<ul class="simple">
+<li><p><strong>Drop support for Python 3.5</strong>. Pooch now requires Python &gt;= 3.6.
+(<a class="reference external" href="https://github.com/fatiando/pooch/pull/52">#52</a>)</p></li>
+<li><p>Add a private method to check if a file is in the registry (<a class="reference external" href="https://github.com/fatiando/pooch/pull/49">#49</a>)</p></li>
+<li><p>Fix typo in the <code class="docutils literal notranslate"><span class="pre">Pooch.load_registry</span></code> docstring (<a class="reference external" href="https://github.com/fatiando/pooch/pull/41">#41</a>)</p></li>
+</ul>
+<p>This release contains contributions from:</p>
+<ul class="simple">
+<li><p>Santiago Soler</p></li>
+<li><p>Rémi Rampin</p></li>
+<li><p>Leonardo Uieda</p></li>
+</ul>
+</section>
+<section id="version-0-2-1">
+<h2>Version 0.2.1<a class="headerlink" href="#version-0-2-1" title="Link to this heading">#</a></h2>
+<p>Released on: 2018/11/15</p>
+<p>Bug fixes:</p>
+<ul class="simple">
+<li><p>Fix unwanted <code class="docutils literal notranslate"><span class="pre">~</span></code> directory creation when not using a <code class="docutils literal notranslate"><span class="pre">version</span></code> in <code class="docutils literal notranslate"><span class="pre">pooch.create</span></code>
+(<a class="reference external" href="https://github.com/fatiando/pooch/pull/37">#37</a>)</p></li>
+</ul>
+</section>
+<section id="version-0-2-0">
+<h2>Version 0.2.0<a class="headerlink" href="#version-0-2-0" title="Link to this heading">#</a></h2>
+<p>Released on: 2018/10/31</p>
+<p>Bug fixes:</p>
+<ul class="simple">
+<li><p>Avoid copying of files across the file system (<a class="reference external" href="https://github.com/fatiando/pooch/pull/33">#33</a>)</p></li>
+<li><p>Correctly delete temporary downloads on error (<a class="reference external" href="https://github.com/fatiando/pooch/pull/32">#32</a>)</p></li>
+</ul>
+<p>New features:</p>
+<ul class="simple">
+<li><p>Allow custom download URLs for individual files (<a class="reference external" href="https://github.com/fatiando/pooch/pull/30">#30</a>)</p></li>
+<li><p>Allow dataset versioning to be optional (<a class="reference external" href="https://github.com/fatiando/pooch/pull/29">#29</a>)</p></li>
+</ul>
+<p>Maintenance:</p>
+<ul class="simple">
+<li><p>Move URLs building to a dedicated method for easy subclassing (<a class="reference external" href="https://github.com/fatiando/pooch/pull/31">#31</a>)</p></li>
+<li><p>Add testing and support for Python 3.7 (<a class="reference external" href="https://github.com/fatiando/pooch/pull/25">#25</a>)</p></li>
+</ul>
+</section>
+<section id="version-0-1-1">
+<h2>Version 0.1.1<a class="headerlink" href="#version-0-1-1" title="Link to this heading">#</a></h2>
+<p>Released on: 2018/08/30</p>
+<p>Bug fixes:</p>
+<ul class="simple">
+<li><p>Check if the local data folder is writable and warn the user instead of crashing
+(<a class="reference external" href="https://github.com/fatiando/pooch/pull/23">#23</a>)</p></li>
+</ul>
+</section>
+<section id="version-0-1">
+<h2>Version 0.1<a class="headerlink" href="#version-0-1" title="Link to this heading">#</a></h2>
+<p>Released on: 2018/08/20</p>
+<ul class="simple">
+<li><p>Fist release of Pooch. Manages downloading sample data files over HTTP from a server
+and storing them in a local directory. Main features:</p>
+<ul>
+<li><p>Download a file only if it’s not in the local storage.</p></li>
+<li><p>Check the SHA256 hash to make sure the file is not corrupted or needs updating.</p></li>
+<li><p>If the hash is different from the registry, Pooch will download a new version of
+the file.</p></li>
+<li><p>If the hash still doesn’t match, Pooch will raise an exception warning of possible
+data corruption.</p></li>
+</ul>
+</li>
+</ul>
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="citing.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Citing Pooch</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="versions.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Documentation for other versions</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#version-1-9-0">Version 1.9.0</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#version-1-8-2">Version 1.8.2</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#version-1-8-1">Version 1.8.1</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#version-1-8-0">Version 1.8.0</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#version-1-7-0">Version 1.7.0</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#version-1-6-0">Version 1.6.0</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#version-1-5-2">Version 1.5.2</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#version-1-5-1">Version 1.5.1</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#version-1-5-0">Version 1.5.0</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#version-1-4-0">Version 1.4.0</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#version-1-3-0">Version 1.3.0</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#version-1-2-0">Version 1.2.0</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#version-1-1-1">Version 1.1.1</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#version-1-1-0">Version 1.1.0</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#version-1-0-0">Version 1.0.0</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#version-0-7-2">Version 0.7.2</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#version-0-7-1">Version 0.7.1</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#version-0-7-0">Version 0.7.0</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#version-0-6-0">Version 0.6.0</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#version-0-5-2">Version 0.5.2</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#version-0-5-1">Version 0.5.1</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#version-0-5-0">Version 0.5.0</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#version-0-4-0">Version 0.4.0</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#version-0-3-1">Version 0.3.1</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#version-0-3-0">Version 0.3.0</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#version-0-2-1">Version 0.2.1</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#version-0-2-0">Version 0.2.0</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#version-0-1-1">Version 0.1.1</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#version-0-1">Version 0.1</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2026, The Pooch Developers.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    <p class="last-updated">
+  Last updated on Jan 30, 2026.
+  <br/>
+</p>
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
