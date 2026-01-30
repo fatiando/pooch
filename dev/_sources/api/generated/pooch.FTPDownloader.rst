@@ -70,12 +70,20 @@ pooch.FTPDownloader
     
     
     
+    
+    
+    
+    
 
 ----
 
 
 
 .. automethod:: FTPDownloader.__call__
+
+
+
+
 
 
 

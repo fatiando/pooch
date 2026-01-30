@@ -70,12 +70,20 @@ pooch.SFTPDownloader
     
     
     
+    
+    
+    
+    
 
 ----
 
 
 
 .. automethod:: SFTPDownloader.__call__
+
+
+
+
 
 
 

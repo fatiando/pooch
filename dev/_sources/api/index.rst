@@ -64,3 +64,20 @@ Miscellaneous
     :toctree: generated/
 
     pooch.test
+
+Typing
+------
+
+Custom classes for type annotations.
+This module provides additional `PEP 484 <https://peps.python.org/pep-0484/>`_
+type aliases used in ``pooch``'s codebase.
+
+.. autosummary::
+   :toctree: generated/
+
+    pooch.typing.Action
+    pooch.typing.Downloader
+    pooch.typing.PathType
+    pooch.typing.PathInputType
+    pooch.typing.ParsedURL
+    pooch.typing.Processor

@@ -82,6 +82,10 @@ pooch.Untar
     
     
     
+    
+    
+    
+    
 
 ----
 
@@ -90,6 +94,10 @@ pooch.Untar
 
 
 .. automethod:: Untar.__call__
+
+
+
+
 
 
 

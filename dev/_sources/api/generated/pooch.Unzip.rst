@@ -14,7 +14,13 @@ pooch.Unzip
     
     
     
+    
+    
         Unzip.__call__
+    
+    
+    
+    
     
     
     
@@ -93,7 +99,13 @@ pooch.Unzip
 
 
 
+
+
 .. automethod:: Unzip.__call__
+
+
+
+
 
 
 
