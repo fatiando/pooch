@@ -707,8 +707,8 @@ def doi_to_repository(doi, **kwargs):
         The DOI of the archive.
     **kwargs
         All keyword arguments will be passed also as ``**kwargs`` to the
-        :meth:`DataRepository.initialize` method, that will ultimately get passed to
-        :func:`requests.get`.
+        :meth:`DataRepository.initialize` method, that will ultimately get
+        passed to :func:`requests.get`.
 
     Returns
     -------
