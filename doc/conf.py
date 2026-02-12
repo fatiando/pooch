@@ -12,10 +12,7 @@ import pooch
 # -----------------------------------------------------------------------------
 project = "Pooch"
 copyright = f"{datetime.date.today().year}, The {project} Developers"
-if len(pooch.__version__.split(".")) > 3:
-    version = "dev"
-else:
-    version = pooch.__version__
+version = "dev" if len(pooch.__version__.split(".")) > 3 else pooch.__version__
 
 
 # General configuration
