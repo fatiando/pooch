@@ -3,6 +3,67 @@
 Changelog
 =========
 
+Version 1.9.0
+-------------
+
+Released on: 2026/01/30
+
+DOI: https://doi.org/10.5281/zenodo.18379610
+
+Breaking changes:
+
+* Drop support for Python 3.7 and 3.8 (`#450 <https://github.com/fatiando/pooch/pull/450>`__).
+
+Bug fixes:
+
+* Explicitly pass ``filter`` to ``TarFile.extractall`` on Python >=3.12 (`#458 <https://github.com/fatiando/pooch/pull/458>`__). Pass a ``filter="data"`` argument to ``TarFile.extractall`` to prevent dangerous security issues. The ``filter`` argument was added in Python 3.12, so only pass it on versions greater or equal than that. This change matches the default behaviour that will take place since Python 3.14.
+* Fix TQDM usage (`#465 <https://github.com/fatiando/pooch/pull/465>`__). Newer versions of tqdm behave differently at a terminal vs in a jupyter notebook. Import from ``tqdm.auto`` instead so that the downloader looks right in either a notebook or the terminal.
+* Fix bug in file hashing on FIPS enabled system (`#511 <https://github.com/fatiando/pooch/pull/511>`__). Set ``userforsecurity=False`` on ``hashlib`` hashing algorithms to make FIPS enabled systems happy.
+
+New features:
+
+* Set User-Agent in requests headers for DOI downloaders (`#507 <https://github.com/fatiando/pooch/pull/507>`__). Pass a custom User-Agent when making requests through DOI downloaders in order to bypass limit rates imposed by services like Zenodo to block abusive requests. The can now filter requests coming from Pooch from the rest. Add a global ``REQUESTS_HEADERS`` variable that is used by the ``doi_to_url`` function (which requires to make a request to doi.org to figure out the service provider). Add a new ``headers`` argument to the ``DOIDownloader`` to specifically pass requests headers. By default it’ll use the Pooch’s default user agent.
+* Extend support for Python 3.13 (`#451 <https://github.com/fatiando/pooch/pull/451>`__) and Python 3.14 (`#505 <https://github.com/fatiando/pooch/pull/505>`__).
+* Provide more descriptive errors when DOI request fails (`#477 <https://github.com/fatiando/pooch/pull/477>`__). Raise the ``requests`` response to provide more informative errors when the status code is between 400 and 600.
+
+Maintenance:
+
+* Add testing data to the package distributions (`#421 <https://github.com/fatiando/pooch/pull/421>`__). The test code ``pooch/tests`` is installed but he data in ``pooch/tests/data`` are not. This makes it impossible to run tests on the installed package. Add the appropriate setuptools configuration to make it happen.
+* Move push to codecov to its own job in Actions (`#424 <https://github.com/fatiando/pooch/pull/424>`__). Remove the push to codecov step from the ``test`` job into a new job that depends on the test job. Upload the coverage reports as artifacts after testing, and reuse the artifacts in the new job. Upload all coverage reports in a single push to Codecov to minimize the number of hits.
+* Increase the max positional args allowed by pylint (`#438 <https://github.com/fatiando/pooch/pull/438>`__). Configure ``pylint`` to increase the maximum number of positional arguments allowed in any function or method.
+* Replace usage of ``pkg_resources`` for ``importlib.resources`` (`#449 <https://github.com/fatiando/pooch/pull/449>`__).
+* Add mypy to CI job and type hints for one class. (`#404 <https://github.com/fatiando/pooch/pull/404>`__). Add type hints to ``pooch/core.py`` and create a new ``typing`` submodule for custom type classes, and add it to the API Reference. Run ``mypy`` on CI to perform type checks, and create new targets in the ``Makefile``. Extend the list of dependencies required to run the type checks.
+* Add pytest ``figshare`` mark to tests (`#481 <https://github.com/fatiando/pooch/pull/481>`__). Add a pytest ``figshare`` mark to tests that make requests to Figshare. Such mark allows us to filter tests: use ``pytest -v -m figshare`` to only run tests with that mark, or use ``pytest   -v -m "not figshare`` to run all test but the marked ones.
+* Skip Figshare related tests on Actions under MacOS (`#482 <https://github.com/fatiando/pooch/pull/482>`__). Skip tests marked with ``figshare`` on Actions that use MacOS as runner. Those tests in CI were constantly failing, probably due to too many requests coming from GitHub. Add an optional ``PYTEST_ARGS_EXTRA`` variable to ``Makefile`` that can be used to pass extra arguments to ``pytest``. Skip doctests that download files from Figshare.
+* List requirements to run type checks in new file (`#492 <https://github.com/fatiando/pooch/pull/492>`__). Create a new ``env/requirements-types.txt`` file with the list of required packages to run types checks. This file is used by the GitHub Action workflow that automatically runs the type checks. List new requirements for type checks in ``environment.yml``. Stop ignoring missing imports of ``xxhash`` in ``pyproject.toml``. Ignore type assignment for ``xxhash`` in test file.
+* Fix uploads of coverage reports to codecov (`#496 <https://github.com/fatiando/pooch/pull/496>`__). Checkout the repository in the ``codecov-upload`` job before uploading the coverage reports to codecov.
+* Pin black to v25 (`#506 <https://github.com/fatiando/pooch/pull/506>`__). Pin black version used in the ``environment.yml`` and to run style checks on CI to ``25.*.*`` and ``<26.0.0``, respectively. Since we plan to replace black with Ruff for autoformatting, it’s better to pin for now than reformat it with latest version.
+* Only run tests with network access on some CI jobs (`#484 <https://github.com/fatiando/pooch/pull/484>`__). Our CI is continuously hitting some external network providers which is causing some of them (mostly figshare for now) to block our traffic. This means that our CI fails randomly and it’s annoying. Only run network tests on jobs with the latest Python and optional dependencies installed to try to mitigate this.
+* Use a SPDX expression for license in ``pyproject.toml`` (`#476 <https://github.com/fatiando/pooch/pull/476>`__). Use a SPDX expression for the license in ``pyproject.toml`` and remove the unneeded license classifier. This removes the warnings we were getting after running ``make build``.
+* Add ``Typing :: Typed`` trove classifier (`#472 <https://github.com/fatiando/pooch/pull/472>`__). Allow PyPI users know that Pooch supports type hints.
+* Allow to manually trigger test job in Actions (`#475 <https://github.com/fatiando/pooch/pull/475>`__). Add ``workflow_dispatch`` as an event trigger for the ``test.yml`` workflow.
+* Standardize requests made by ``DOIDownloaders`` (`#514 <https://github.com/fatiando/pooch/pull/514>`__). Respect user’s decisions when defining the ``DOIDownloader`` with respect to arguments passed to ``requests.get`` whenever we call that function. This way, all calls made by ``DOIDownloaders`` and the repository classes make use of the same arguments, including ``timeout``, ``headers``, etc.
+
+Documentation:
+
+* Add a link to the Fatiando Forum in the README (`#461 <https://github.com/fatiando/pooch/pull/461>`__).
+* Add ``scXpand`` (`#488 <https://github.com/fatiando/pooch/pull/488>`__), ``xclim`` (`#445 <https://github.com/fatiando/pooch/pull/445>`__), ``CLISOPS`` (`#445 <https://github.com/fatiando/pooch/pull/445>`__), and ``SPLASH`` (`#432 <https://github.com/fatiando/pooch/pull/432>`__) to list of projects using Pooch.
+
+This release contains contributions from:
+
+* Adam Boesky
+* Antonio Valentino
+* Daniel McCloy
+* Daniel Shapero
+* Eliot Robson
+* Joren Hammudoglu
+* Leonardo Uieda
+* Mridul Seth
+* ofirshorer
+* Santiago Soler
+* Trevor James Smith
+
+
 Version 1.8.2
 -------------
 

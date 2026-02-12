@@ -19,7 +19,7 @@ from ._version import __version__  # type: ignore[import-not-found]
 # Mypy doesn't like assigning None like this.
 # Can just use a guard variable
 try:
-    from tqdm import tqdm
+    from tqdm.auto import tqdm
 except ImportError:
     tqdm = None  # type: ignore[assignment,misc]
 
@@ -602,9 +602,17 @@ class DOIDownloader:
 
     """
 
-    def __init__(self, progressbar=False, chunk_size=1024, headers=None, **kwargs):
+    def __init__(
+        self,
+        progressbar=False,
+        chunk_size=1024,
+        headers=None,
+        timeout=DEFAULT_TIMEOUT,
+        **kwargs,
+    ):
         self.kwargs = kwargs
         self.headers = headers if headers is not None else REQUESTS_HEADERS
+        self.timeout = timeout
         self.progressbar = progressbar
         self.chunk_size = chunk_size
 
@@ -629,7 +637,13 @@ class DOIDownloader:
         """
 
         parsed_url = parse_url(url)
-        data_repository = doi_to_repository(parsed_url["netloc"])
+
+        data_repository = doi_to_repository(
+            parsed_url["netloc"],
+            headers=self.headers,
+            timeout=self.timeout,
+            **self.kwargs,
+        )
 
         # Resolve the URL
         file_name = parsed_url["path"]
@@ -643,12 +657,13 @@ class DOIDownloader:
             progressbar=self.progressbar,
             chunk_size=self.chunk_size,
             headers=self.headers,
+            timeout=self.timeout,
             **self.kwargs,
         )
         downloader(download_url, output_file, pooch)
 
 
-def doi_to_url(doi):
+def doi_to_url(doi, **kwargs):
     """
     Follow a DOI link to resolve the URL of the archive.
 
@@ -656,6 +671,8 @@ def doi_to_url(doi):
     ----------
     doi : str
         The DOI of the archive.
+    **kwargs
+        All keyword arguments will be passed to :func:`requests.get`.
 
     Returns
     -------
@@ -668,7 +685,8 @@ def doi_to_url(doi):
 
     # Use doi.org to resolve the DOI to the repository website.
     response = requests.get(
-        f"https://doi.org/{doi}", headers=REQUESTS_HEADERS, timeout=DEFAULT_TIMEOUT
+        f"https://doi.org/{doi}",
+        **kwargs,
     )
     url = response.url
     if 400 <= response.status_code < 600:
@@ -676,7 +694,7 @@ def doi_to_url(doi):
     return url
 
 
-def doi_to_repository(doi):
+def doi_to_repository(doi, **kwargs):
     """
     Instantiate a data repository instance from a given DOI.
 
@@ -687,6 +705,10 @@ def doi_to_repository(doi):
     ----------
     doi : str
         The DOI of the archive.
+    **kwargs
+        All keyword arguments will be passed also as ``**kwargs`` to the
+        :meth:`DataRepository.initialize` method, that will ultimately get
+        passed to :func:`requests.get`.
 
     Returns
     -------
@@ -707,7 +729,7 @@ def doi_to_repository(doi):
     ]
 
     # Extract the DOI and the repository information
-    archive_url = doi_to_url(doi)
+    archive_url = doi_to_url(doi, **kwargs)
 
     # Try the converters one by one until one of them returned a URL
     data_repository = None
@@ -716,6 +738,7 @@ def doi_to_repository(doi):
             data_repository = repo.initialize(
                 archive_url=archive_url,
                 doi=doi,
+                **kwargs,
             )
 
     if data_repository is None:
@@ -732,7 +755,7 @@ def doi_to_repository(doi):
 
 class DataRepository:
     @classmethod
-    def initialize(cls, doi, archive_url):  # noqa: ARG003
+    def initialize(cls, doi, archive_url, **kwargs):  # noqa: ARG003
         """
         Initialize the data repository if the given URL points to a
         corresponding repository.
@@ -786,14 +809,15 @@ class DataRepository:
 class ZenodoRepository(DataRepository):
     base_api_url = "https://zenodo.org/api/records"
 
-    def __init__(self, doi, archive_url):
+    def __init__(self, doi, archive_url, **kwargs):
         self.archive_url = archive_url
         self.doi = doi
         self._api_response = None
         self._api_version = None
+        self.kwargs = kwargs
 
     @classmethod
-    def initialize(cls, doi, archive_url):
+    def initialize(cls, doi, archive_url, **kwargs):
         """
         Initialize the data repository if the given URL points to a
         corresponding repository.
@@ -809,6 +833,9 @@ class ZenodoRepository(DataRepository):
             The DOI that identifies the repository
         archive_url : str
             The resolved URL for the DOI
+        **kwargs
+            All keyword arguments given when creating an instance of this class
+            will be passed to :func:`requests.get`.
         """
 
         # Check whether this is a Zenodo URL
@@ -816,7 +843,7 @@ class ZenodoRepository(DataRepository):
         if parsed_archive_url["netloc"] != "zenodo.org":
             return None
 
-        return cls(doi, archive_url)
+        return cls(doi, archive_url, **kwargs)
 
     @property
     def api_response(self):
@@ -827,9 +854,7 @@ class ZenodoRepository(DataRepository):
 
             article_id = self.archive_url.split("/")[-1]
             self._api_response = requests.get(
-                f"{self.base_api_url}/{article_id}",
-                headers=REQUESTS_HEADERS,
-                timeout=DEFAULT_TIMEOUT,
+                f"{self.base_api_url}/{article_id}", **self.kwargs
             ).json()
 
         return self._api_response
@@ -940,13 +965,14 @@ class ZenodoRepository(DataRepository):
 
 
 class FigshareRepository(DataRepository):
-    def __init__(self, doi, archive_url):
+    def __init__(self, doi, archive_url, **kwargs):
         self.archive_url = archive_url
         self.doi = doi
         self._api_response = None
+        self.kwargs = kwargs
 
     @classmethod
-    def initialize(cls, doi, archive_url):
+    def initialize(cls, doi, archive_url, **kwargs):
         """
         Initialize the data repository if the given URL points to a
         corresponding repository.
@@ -962,6 +988,9 @@ class FigshareRepository(DataRepository):
             The DOI that identifies the repository
         archive_url : str
             The resolved URL for the DOI
+        **kwargs
+            All keyword arguments given when creating an instance of this class
+            will be passed to :func:`requests.get`.
         """
 
         # Check whether this is a Figshare URL
@@ -969,7 +998,7 @@ class FigshareRepository(DataRepository):
         if parsed_archive_url["netloc"] != "figshare.com":
             return None
 
-        return cls(doi, archive_url)
+        return cls(doi, archive_url, **kwargs)
 
     def _parse_version_from_doi(self):
         """
@@ -997,8 +1026,7 @@ class FigshareRepository(DataRepository):
             # Use the figshare API to find the article ID from the DOI
             article = requests.get(
                 f"https://api.figshare.com/v2/articles?doi={self.doi}",
-                headers=REQUESTS_HEADERS,
-                timeout=DEFAULT_TIMEOUT,
+                **self.kwargs,
             ).json()[0]
             article_id = article["id"]
             # Parse desired version from the doi
@@ -1026,9 +1054,7 @@ class FigshareRepository(DataRepository):
                     f"{article_id}/versions/{version}"
                 )
             # Make the request and return the files in the figshare repository
-            response = requests.get(
-                api_url, headers=REQUESTS_HEADERS, timeout=DEFAULT_TIMEOUT
-            )
+            response = requests.get(api_url, **self.kwargs)
             response.raise_for_status()
             self._api_response = response.json()["files"]
 
@@ -1071,13 +1097,14 @@ class FigshareRepository(DataRepository):
 
 
 class DataverseRepository(DataRepository):
-    def __init__(self, doi, archive_url):
+    def __init__(self, doi, archive_url, **kwargs):
         self.archive_url = archive_url
         self.doi = doi
         self._api_response = None
+        self.kwargs = kwargs
 
     @classmethod
-    def initialize(cls, doi, archive_url):
+    def initialize(cls, doi, archive_url, **kwargs):
         """
         Initialize the data repository if the given URL points to a
         corresponding repository.
@@ -1093,21 +1120,24 @@ class DataverseRepository(DataRepository):
             The DOI that identifies the repository
         archive_url : str
             The resolved URL for the DOI
+        **kwargs
+            All keyword arguments given when creating an instance of this class
+            will be passed to :func:`requests.get`.
         """
         # Access the DOI as if this was a DataVerse instance
-        response = cls._get_api_response(doi, archive_url)
+        response = cls._get_api_response(doi, archive_url, **kwargs)
 
         # If we failed, this is probably not a DataVerse instance
         if 400 <= response.status_code < 600:
             return None
 
         # Initialize the repository and overwrite the api response
-        repository = cls(doi, archive_url)
+        repository = cls(doi, archive_url, **kwargs)
         repository.api_response = response
         return repository
 
     @classmethod
-    def _get_api_response(cls, doi, archive_url):
+    def _get_api_response(cls, doi, archive_url, **kwargs):
         """
         Perform the actual API request
 
@@ -1121,8 +1151,7 @@ class DataverseRepository(DataRepository):
         response = requests.get(
             f"{parsed['protocol']}://{parsed['netloc']}/api/datasets/"
             f":persistentId?persistentId=doi:{doi}",
-            headers=REQUESTS_HEADERS,
-            timeout=DEFAULT_TIMEOUT,
+            **kwargs,
         )
         return response
 
@@ -1132,7 +1161,7 @@ class DataverseRepository(DataRepository):
 
         if self._api_response is None:
             self._api_response = self._get_api_response(
-                self.doi, self.archive_url
+                self.doi, self.archive_url, **self.kwargs
             )  # pragma: no cover
 
         return self._api_response
