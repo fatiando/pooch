@@ -659,9 +659,9 @@ class Pooch:
 
             for linenum, line in enumerate(fin):
                 if isinstance(line, bytes):
-                    line = line.decode("utf-8")
+                    line = line.decode("utf-8")  # noqa: PLW2901
 
-                line = line.strip()
+                line = line.strip()  # noqa: PLW2901
                 # skip line comments
                 if line.startswith("#"):
                     continue
