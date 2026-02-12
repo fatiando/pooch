@@ -224,12 +224,14 @@ def test_figshare_data_repository_versions(version, missing, present):
 @pytest.mark.network
 def test_ftp_downloader(ftpserver):
     "Test ftp downloader"
-    with data_over_ftp(ftpserver, "tiny-data.txt") as url:
-        with TemporaryDirectory() as local_store:
-            downloader = FTPDownloader(port=ftpserver.server_port)
-            outfile = os.path.join(local_store, "tiny-data.txt")
-            downloader(url, outfile, None)
-            check_tiny_data(outfile)
+    with (
+        data_over_ftp(ftpserver, "tiny-data.txt") as url,
+        TemporaryDirectory() as local_store,
+    ):
+        downloader = FTPDownloader(port=ftpserver.server_port)
+        outfile = os.path.join(local_store, "tiny-data.txt")
+        downloader(url, outfile, None)
+        check_tiny_data(outfile)
 
 
 @pytest.mark.network

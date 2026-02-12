@@ -221,9 +221,12 @@ class HTTPDownloader:
         kwargs = self.kwargs.copy()
         timeout = kwargs.pop("timeout", DEFAULT_TIMEOUT)
         kwargs.setdefault("stream", True)
+
         ispath = not hasattr(output_file, "write")
         if ispath:
-            output_file = open(output_file, "w+b")
+            # It's safe to ignore not using a context manager here (SIM115), since we
+            # are using the try...finally construct.
+            output_file = open(output_file, "w+b")  # noqa: SIM115
 
         try:
             response = requests.get(url, timeout=timeout, **kwargs)
@@ -366,7 +369,9 @@ class FTPDownloader:
 
         ispath = not hasattr(output_file, "write")
         if ispath:
-            output_file = open(output_file, "w+b")
+            # It's safe to ignore not using a context manager here (SIM115), since we
+            # are using the try...finally construct.
+            output_file = open(output_file, "w+b")  # noqa: SIM115
 
         try:
             ftp.login(user=self.username, passwd=self.password, acct=self.account)

@@ -386,9 +386,8 @@ class Decompress:
                 self.method,
             )
             module = self._compression_module(fname)
-            with open(decompressed, "w+b") as output:
-                with module.open(fname) as compressed:
-                    shutil.copyfileobj(compressed, output)
+            with open(decompressed, "w+b") as output, module.open(fname) as compressed:
+                shutil.copyfileobj(compressed, output)
         return decompressed
 
     def _compression_module(self, fname):
