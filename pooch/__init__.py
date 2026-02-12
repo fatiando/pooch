@@ -24,7 +24,7 @@ from .utils import check_version, get_logger, os_cache
 __version__ = f"v{_version.version}"
 
 
-def test(doctest=True, verbose=True, coverage=False):
+def test(doctest=True, verbose=True, coverage=False):  # noqa: PT028
     """
     Run the test suite.
 
