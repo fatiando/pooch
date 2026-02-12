@@ -9,6 +9,7 @@ Test the downloader classes and functions separately from the Pooch core.
 """
 
 import os
+import re
 import sys
 from tempfile import TemporaryDirectory
 
@@ -30,6 +31,7 @@ except ImportError:
 
 from .. import Pooch
 from ..downloaders import (
+    REQUESTS_HEADERS,
     DataverseRepository,
     DOIDownloader,
     FigshareRepository,
@@ -39,7 +41,6 @@ from ..downloaders import (
     ZenodoRepository,
     choose_downloader,
     doi_to_url,
-    REQUESTS_HEADERS,
 )
 from ..processors import Unzip
 from .utils import (
@@ -84,22 +85,23 @@ def test_progressbar_kwarg_passed_sftp():
 
 def test_unsupported_protocol():
     "Should raise ValueError when protocol is not supported"
-    with pytest.raises(ValueError):
+    msg = "Unrecognized URL protocol"
+    with pytest.raises(ValueError, match=msg):
         choose_downloader("httpup://some-invalid-url.com")
     # Simulate the DOI format
-    with pytest.raises(ValueError):
+    with pytest.raises(ValueError, match=msg):
         choose_downloader("doii:XXX/XXX/file")
 
 
 @pytest.mark.network
 def test_invalid_doi_repository():
     "Should fail if data repository is not supported"
-    with pytest.raises(ValueError) as exc:
+    msg = re.escape("Invalid data repository 'joss.theoj.org'")
+    with pytest.raises(ValueError, match=msg):
         # Use the DOI of the Pooch paper in JOSS (not a data repository)
         DOIDownloader()(
             url="doi:10.21105/joss.01943/file_name.txt", output_file=None, pooch=None
         )
-    assert "Invalid data repository 'joss.theoj.org'" in str(exc.value)
 
 
 @pytest.mark.network
@@ -125,11 +127,11 @@ def test_doi_url_not_found():
 )
 def test_figshare_url_file_not_found(repository, doi):
     "Should fail if the file is not found in the archive"
-    with pytest.raises(ValueError) as exc:
-        url = doi_to_url(doi)
-        repo = repository.initialize(doi, url)
+    msg = "File 'bla.txt' not found"
+    url = doi_to_url(doi)
+    repo = repository.initialize(doi, url)
+    with pytest.raises(ValueError, match=msg):
         repo.download_url(file_name="bla.txt")
-    assert "File 'bla.txt' not found" in str(exc.value)
 
 
 @pytest.mark.network
@@ -257,18 +259,18 @@ def test_sftp_downloader_fail_if_file_object():
 @pytest.mark.skipif(paramiko is not None, reason="paramiko must be missing")
 def test_sftp_downloader_fail_if_paramiko_missing():
     "test must fail if paramiko is not installed"
-    with pytest.raises(ValueError) as exc:
+    msg = re.escape("'paramiko'")
+    with pytest.raises(ValueError, match=msg):
         SFTPDownloader()
-    assert "'paramiko'" in str(exc.value)
 
 
 @pytest.mark.skipif(tqdm is not None, reason="tqdm must be missing")
 @pytest.mark.parametrize("downloader", [HTTPDownloader, FTPDownloader, SFTPDownloader])
 def test_downloader_progressbar_fails(downloader):
     "Make sure an error is raised if trying to use progressbar without tqdm"
-    with pytest.raises(ValueError) as exc:
+    msg = re.escape("'tqdm'")
+    with pytest.raises(ValueError, match=msg):
         downloader(progressbar=True)
-    assert "'tqdm'" in str(exc.value)
 
 
 @pytest.mark.network

@@ -9,6 +9,7 @@ Test the utility functions.
 """
 
 import os
+import re
 import shutil
 import tempfile
 import time
@@ -91,13 +92,16 @@ def test_local_storage_makedirs_permissionerror(monkeypatch):
 
     monkeypatch.setattr(os, "makedirs", mockmakedirs)
 
-    with pytest.raises(PermissionError) as error:
+    msg = re.escape(
+        f"Pooch could not create data cache folder '{data_cache}'. "
+        "Will not be able to download data files. "
+        "Use environment variable 'SOME_VARIABLE' to specify a different location."
+    )
+    with pytest.raises(PermissionError, match=msg):
         make_local_storage(
             path=data_cache,
             env="SOME_VARIABLE",
         )
-        assert "Pooch could not create data cache" in str(error)
-        assert "'SOME_VARIABLE'" in str(error)
 
 
 def test_local_storage_newfile_permissionerror(monkeypatch):
@@ -116,13 +120,16 @@ def test_local_storage_newfile_permissionerror(monkeypatch):
 
         monkeypatch.setattr(tempfile, "NamedTemporaryFile", mocktempfile)
 
-        with pytest.raises(PermissionError) as error:
+        msg = re.escape(
+            f"Pooch could not write to data cache folder '{data_cache}'. "
+            "Will not be able to download data files. "
+            "Use environment variable 'SOME_VARIABLE' to specify a different location."
+        )
+        with pytest.raises(PermissionError, match=msg):
             make_local_storage(
                 path=data_cache,
                 env="SOME_VARIABLE",
             )
-            assert "Pooch could not write to data cache" in str(error)
-            assert "'SOME_VARIABLE'" in str(error)
 
 
 @pytest.mark.parametrize(
@@ -162,7 +169,8 @@ def test_parse_url(url, output):
 
 def test_parse_url_invalid_doi():
     "Should fail if we forget to not include // in the DOI link"
-    with pytest.raises(ValueError):
+    msg = re.escape("Invalid DOI link")
+    with pytest.raises(ValueError, match=msg):
         parse_url("doi://XXX/XXX/fname.txt")
 
 

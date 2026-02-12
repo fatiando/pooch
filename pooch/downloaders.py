@@ -13,8 +13,8 @@ import os
 import sys
 import warnings
 
-from .utils import parse_url
 from ._version import __version__  # type: ignore[import-not-found]
+from .utils import parse_url
 
 # Mypy doesn't like assigning None like this.
 # Can just use a guard variable
