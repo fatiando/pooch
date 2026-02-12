@@ -50,7 +50,7 @@ def test(doctest=True, verbose=True, coverage=False):  # noqa: PT028
         failed.
 
     """
-    import pytest
+    import pytest  # noqa: PLC0415
 
     package = __name__
     args = []

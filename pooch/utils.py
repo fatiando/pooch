@@ -47,7 +47,7 @@ def file_hash(*args, **kwargs) -> Any:
 
     """
 
-    from .hashes import file_hash as new_file_hash
+    from .hashes import file_hash as new_file_hash  # noqa: PLC0415
 
     message = """
     Importing file_hash from pooch.utils is DEPRECATED. Please import from the
