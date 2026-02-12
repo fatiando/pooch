@@ -807,7 +807,7 @@ def stream_download(
     was due to a network error.
     """
     # Lazy import requests to speed up import time
-    import requests.exceptions
+    import requests.exceptions  # noqa: PLC0415
 
     # Ensure the parent directory exists in case the file is in a subdirectory.
     # Otherwise, move will cause an error.
