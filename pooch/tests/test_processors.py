@@ -129,7 +129,7 @@ def test_unpacking(processor_class, extension, target_path, archive, members):
     if target_path is None:
         target_path = archive + extension + processor.suffix
     with TemporaryDirectory() as path:
-        path = Path(path)
+        path = Path(path)  # noqa: PLW2901
         true_paths, expected_log = _unpacking_expected_paths_and_logs(
             archive, members, path / target_path, processor_class.__name__
         )
