@@ -9,7 +9,6 @@ Test the processor hooks
 """
 
 import re
-import warnings
 from pathlib import Path
 from tempfile import TemporaryDirectory
 
