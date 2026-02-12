@@ -210,7 +210,7 @@ class HTTPDownloader:
 
         """
         # Lazy import requests to speed up import time
-        import requests
+        import requests  # noqa: PLC0415
 
         if check_only:
             timeout = self.kwargs.get("timeout", DEFAULT_TIMEOUT)
@@ -681,7 +681,7 @@ def doi_to_url(doi, **kwargs):
 
     """
     # Lazy import requests to speed up import time
-    import requests
+    import requests  # noqa: PLC0415
 
     # Use doi.org to resolve the DOI to the repository website.
     response = requests.get(
@@ -850,7 +850,7 @@ class ZenodoRepository(DataRepository):
         """Cached API response from Zenodo"""
         if self._api_response is None:
             # Lazy import requests to speed up import time
-            import requests
+            import requests  # noqa: PLC0415
 
             article_id = self.archive_url.split("/")[-1]
             self._api_response = requests.get(
@@ -1021,7 +1021,7 @@ class FigshareRepository(DataRepository):
         """Cached API response from Figshare"""
         if self._api_response is None:
             # Lazy import requests to speed up import time
-            import requests
+            import requests  # noqa: PLC0415
 
             # Use the figshare API to find the article ID from the DOI
             article = requests.get(
@@ -1145,7 +1145,7 @@ class DataverseRepository(DataRepository):
         used prior and after the initialization.
         """
         # Lazy import requests to speed up import time
-        import requests
+        import requests  # noqa: PLC0415
 
         parsed = parse_url(archive_url)
         response = requests.get(
