@@ -87,7 +87,7 @@ class ExtractorProcessor(abc.ABC):  # pylint: disable=too-few-public-methods
             :func:`pooch.retrieve`:
 
             * ``"download"``: File didn't exist locally and was downloaded
-            * ``"update"``: Local file was outdated and was re-download
+            * ``"update"``: Local file was outdated and was re-downloaded
             * ``"fetch"``: File exists and is updated so it wasn't downloaded
 
         pooch : :class:`pooch.Pooch`
