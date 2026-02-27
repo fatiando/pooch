@@ -14,7 +14,7 @@ from pathlib import Path
 # From the docs: https://docs.python.org/3/library/hashlib.html#hashlib.new
 #   The named constructors are much faster than new() and should be
 #   preferred.
-# Need to fallback on new() for some algorithms.
+# Need to fall back on new() for some algorithms.
 ALGORITHMS_AVAILABLE = {
     alg: getattr(hashlib, alg, functools.partial(hashlib.new, alg))
     for alg in hashlib.algorithms_available
