@@ -140,7 +140,7 @@ GOODBOY = pooch.create(
     # package simultaneously. Use PEP440 compliant version number. The
     # version will be appended to the path.
     version=version,
-    # If a version as a "+XX.XXXXX" suffix, we'll assume that this is a dev
+    # If a version has a "+XX.XXXXX" suffix, we'll assume that this is a dev
     # version and replace the version with this string.
     version_dev="main",
     # An environment variable that overwrites the path.
@@ -152,7 +152,7 @@ GOODBOY = pooch.create(
     registry={"gravity-data.csv": "89y10phsdwhs09whljwc09whcowsdhcwodcydw"}
 )
 # You can also load the registry from a file. Each line contains a file
-# name and it's sha256 hash separated by a space. This makes it easier to
+# name and its sha256 hash separated by a space. This makes it easier to
 # manage large numbers of data files. The registry file should be packaged
 # and distributed with your software.
 GOODBOY.load_registry(
