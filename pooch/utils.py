@@ -80,7 +80,7 @@ def os_cache(project: str) -> Path:
 
     The folder locations are defined by the ``platformdirs``  package
     using the ``user_cache_dir`` function.
-    Usually, the locations will be following (see the
+    Usually, the locations will be as follows (see the
     `platformdirs documentation <https://platformdirs.readthedocs.io>`__):
 
     * Mac: ``~/Library/Caches/<AppName>``
@@ -164,8 +164,8 @@ def parse_url(url: str) -> ParsedURL:
     The DOI is a special case. The protocol will be "doi", the netloc will be
     the DOI, and the path is what comes after the last "/".
     The only exception are Zenodo dois: the protocol will be "doi", the netloc
-    will be composed by the "prefix/suffix" and the path is what comes after
-    the second "/". This allows to support special cases of Zenodo dois where
+    will be composed of the "prefix/suffix" and the path is what comes after
+    the second "/". This makes it possible to support special cases of Zenodo dois where
     the path contains forward slashes "/", created by the GitHub-Zenodo
     integration service.
 
