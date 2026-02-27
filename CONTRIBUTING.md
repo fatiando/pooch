@@ -8,7 +8,7 @@ These are some of the many ways to contribute:
 
 * :bug: Submitting bug reports and feature requests
 * :memo: Writing tutorials or examples
-* :mag: Fixing typos and improving to the documentation
+* :mag: Fixing typos and improving the documentation
 * :bulb: Writing code for everyone to use
 
 **Please refer to our [organization-wide guidelines][contrib]**
