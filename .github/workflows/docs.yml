@@ -132,7 +132,7 @@ jobs:
 
       # Fetch the built docs from the "build" job
       - name: Download HTML documentation artifact
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@v8
         with:
           name: docs-${{ github.sha }}
           path: doc/_build/html
