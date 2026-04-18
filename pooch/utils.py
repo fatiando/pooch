@@ -199,6 +199,11 @@ def parse_url(url: str) -> ParsedURL:
         protocol = parsed_url.scheme or "file"
         netloc = parsed_url.netloc
         path = parsed_url.path
+
+        # Handle Windows-specific behavior for file:// URLs
+        if protocol == "file" and os.name == "nt" and path.startswith("/"):
+            path = path.lstrip("/")
+
     return {"protocol": protocol, "netloc": netloc, "path": path}
 
 

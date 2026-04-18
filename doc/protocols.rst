@@ -3,7 +3,7 @@
 Download protocols
 ==================
 
-Pooch supports the HTTP, FTP, and SFTP protocols by default.
+Pooch supports the HTTP, FTP, SFTP and FILE protocols by default.
 It also includes a custom protocol for Digital Object Identifiers (DOI) from
 providers like `figshare <https://www.figshare.com>`__ and `Zenodo
 <https://www.zenodo.org>`__ (see :ref:`below <doidownloads>`).
