@@ -287,3 +287,47 @@ def test_unpacking_wrong_members_then_no_members(processor_class, extension):
         processor2 = processor_class()
         filenames2 = pup.fetch("store" + extension, processor=processor2)
         assert len(filenames2) > 0
+
+
+@pytest.mark.network
+@pytest.mark.parametrize(
+    "processor_class,extension",
+    [(Unzip, ".zip"), (Untar, ".tar.gz")],
+)
+def test_unpacking_members_order_preserved(processor_class, extension):
+    """
+    Returned file list must follow the order of the *members* argument.
+
+    Previously, os.walk() determined the order of the results, which is
+    filesystem-dependent and unrelated to the caller-supplied order.
+    https://github.com/fatiando/pooch/issues/457
+    """
+    members_forward = [
+        "store/tiny-data.txt",
+        "store/subdir/tiny-data.txt",
+    ]
+    members_reversed = list(reversed(members_forward))
+
+    with TemporaryDirectory() as local_store:
+        path = Path(local_store)
+        pup = Pooch(path=path, base_url=BASEURL, registry=REGISTRY)
+
+        # Forward order
+        processor_fwd = processor_class(members=members_forward)
+        fnames_fwd = pup.fetch("store" + extension, processor=processor_fwd)
+        assert len(fnames_fwd) == 2
+        # The last component of each path should match the member order
+        assert fnames_fwd[0].endswith("tiny-data.txt") or "subdir" not in fnames_fwd[0]
+        assert "subdir" in fnames_fwd[1]
+
+        # Reversed order — result must mirror the reversed members list
+    with TemporaryDirectory() as local_store:
+        path = Path(local_store)
+        pup = Pooch(path=path, base_url=BASEURL, registry=REGISTRY)
+
+        processor_rev = processor_class(members=members_reversed)
+        fnames_rev = pup.fetch("store" + extension, processor=processor_rev)
+        assert len(fnames_rev) == 2
+        # First result should be the subdirectory file (reversed order)
+        assert "subdir" in fnames_rev[0]
+        assert "subdir" not in fnames_rev[1]
