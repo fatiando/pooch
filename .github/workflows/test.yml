@@ -154,7 +154,7 @@ jobs:
         run: coverage xml
 
       - name: Upload coverage report as an artifact
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: coverage_${{ matrix.os }}_${{ matrix.dependencies }}
           path: ./coverage.xml
@@ -185,7 +185,7 @@ jobs:
         # Maximum coverage is achieved by combining reports from every runner.
         # Each coverage file will live in its own folder with the same name as
         # the artifact.
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@v8
         with:
           pattern: coverage_*
 
@@ -193,7 +193,7 @@ jobs:
         run: ls -l -R .
 
       - name: Upload coverage reports to Codecov
-        uses: codecov/codecov-action@v5
+        uses: codecov/codecov-action@v6
         with:
           # Upload all coverage report files
           files: ./coverage_*/coverage.xml
