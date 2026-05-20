@@ -4,20 +4,15 @@
 #
 # This code is part of the Fatiando a Terra project (https://www.fatiando.org)
 #
-import os
 import datetime
 
 import pooch
-
 
 # Project information
 # -----------------------------------------------------------------------------
 project = "Pooch"
 copyright = f"{datetime.date.today().year}, The {project} Developers"
-if len(pooch.__version__.split(".")) > 3:
-    version = "dev"
-else:
-    version = pooch.__version__
+version = "dev" if len(pooch.__version__.split(".")) > 3 else pooch.__version__
 
 
 # General configuration

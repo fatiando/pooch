@@ -4,19 +4,20 @@
 #
 # This code is part of the Fatiando a Terra project (https://www.fatiando.org)
 #
-# pylint: disable=redefined-outer-name
+
 """
 Test the entire process of creating a Pooch and using it.
 """
+
 import os
 import shutil
 from pathlib import Path
 
 import pytest
 
-from .. import create, os_cache
 from .. import __version__ as full_version
-from .utils import check_tiny_data, capture_log
+from .. import create, os_cache
+from .utils import capture_log, check_tiny_data
 
 
 @pytest.mark.network

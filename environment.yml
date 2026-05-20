@@ -27,10 +27,7 @@ dependencies:
     - sphinx-book-theme==1.1.*
     - sphinx-design==0.5.*
     # Style
-    - pathspec
-    - black==25.*.*
-    - flake8
-    - pylint>=2.4
+    - ruff
     # Types
     - mypy
     - types-requests

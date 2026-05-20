@@ -7,17 +7,16 @@
 """
 Test the processor hooks
 """
+
+import re
 from pathlib import Path
 from tempfile import TemporaryDirectory
-import warnings
 
 import pytest
 
 from .. import Pooch
-from ..processors import Unzip, Untar, Decompress
-
-from .utils import pooch_test_url, pooch_test_registry, check_tiny_data, capture_log
-
+from ..processors import Decompress, Untar, Unzip
+from .utils import capture_log, check_tiny_data, pooch_test_registry, pooch_test_url
 
 REGISTRY = pooch_test_registry()
 BASEURL = pooch_test_url()
@@ -25,7 +24,7 @@ BASEURL = pooch_test_url()
 
 @pytest.mark.network
 @pytest.mark.parametrize(
-    "method,ext,name",
+    ("method", "ext", "name"),
     [
         ("auto", "xz", None),
         ("lzma", "xz", None),
@@ -72,28 +71,27 @@ def test_decompress_fails():
     with TemporaryDirectory() as local_store:
         path = Path(local_store)
         pup = Pooch(path=path, base_url=BASEURL, registry=REGISTRY)
+
         # Invalid extension
-        with pytest.raises(ValueError) as exception:
-            with warnings.catch_warnings():
-                pup.fetch("tiny-data.txt", processor=Decompress(method="auto"))
-        assert exception.value.args[0].startswith("Unrecognized file extension '.txt'")
+        msg = re.escape("Unrecognized file extension '.txt'")
+        with pytest.raises(ValueError, match=msg) as exception:
+            pup.fetch("tiny-data.txt", processor=Decompress(method="auto"))
         assert "pooch.Unzip/Untar" not in exception.value.args[0]
+
         # Should also fail for a bad method name
-        with pytest.raises(ValueError) as exception:
-            with warnings.catch_warnings():
-                pup.fetch("tiny-data.txt", processor=Decompress(method="bla"))
-        assert exception.value.args[0].startswith("Invalid compression method 'bla'")
+        msg = re.escape("Invalid compression method 'bla'")
+        with pytest.raises(ValueError, match=msg) as exception:
+            pup.fetch("tiny-data.txt", processor=Decompress(method="bla"))
         assert "pooch.Unzip/Untar" not in exception.value.args[0]
+
         # Point people to Untar and Unzip
-        with pytest.raises(ValueError) as exception:
-            with warnings.catch_warnings():
-                pup.fetch("tiny-data.txt", processor=Decompress(method="zip"))
-        assert exception.value.args[0].startswith("Invalid compression method 'zip'")
+        msg = re.escape("Invalid compression method 'zip'")
+        with pytest.raises(ValueError, match=msg) as exception:
+            pup.fetch("tiny-data.txt", processor=Decompress(method="zip"))
         assert "pooch.Unzip/Untar" in exception.value.args[0]
-        with pytest.raises(ValueError) as exception:
-            with warnings.catch_warnings():
-                pup.fetch("store.zip", processor=Decompress(method="auto"))
-        assert exception.value.args[0].startswith("Unrecognized file extension '.zip'")
+        msg = re.escape("Unrecognized file extension '.zip'")
+        with pytest.raises(ValueError, match=msg) as exception:
+            pup.fetch("store.zip", processor=Decompress(method="auto"))
         assert "pooch.Unzip/Untar" in exception.value.args[0]
 
 
@@ -102,7 +100,7 @@ def test_decompress_fails():
     "target_path", [None, "some_custom_path"], ids=["default_path", "custom_path"]
 )
 @pytest.mark.parametrize(
-    "archive,members",
+    ("archive", "members"),
     [
         ("tiny-data", ["tiny-data.txt"]),
         ("store", None),
@@ -121,7 +119,7 @@ def test_decompress_fails():
     ],
 )
 @pytest.mark.parametrize(
-    "processor_class,extension",
+    ("processor_class", "extension"),
     [(Unzip, ".zip"), (Untar, ".tar.gz")],
     ids=["Unzip", "Untar"],
 )
@@ -131,7 +129,7 @@ def test_unpacking(processor_class, extension, target_path, archive, members):
     if target_path is None:
         target_path = archive + extension + processor.suffix
     with TemporaryDirectory() as path:
-        path = Path(path)
+        path = Path(path)  # noqa: PLW2901
         true_paths, expected_log = _unpacking_expected_paths_and_logs(
             archive, members, path / target_path, processor_class.__name__
         )
@@ -155,7 +153,7 @@ def test_unpacking(processor_class, extension, target_path, archive, members):
 
 @pytest.mark.network
 @pytest.mark.parametrize(
-    "processor_class,extension",
+    ("processor_class", "extension"),
     [(Unzip, ".zip"), (Untar, ".tar.gz")],
 )
 def test_multiple_unpacking(processor_class, extension):
@@ -188,7 +186,7 @@ def test_multiple_unpacking(processor_class, extension):
 
 @pytest.mark.network
 @pytest.mark.parametrize(
-    "processor_class,extension",
+    ("processor_class", "extension"),
     [(Unzip, ".zip"), (Untar, ".tar.gz")],
 )
 def test_unpack_members_with_leading_dot(processor_class, extension):
@@ -243,7 +241,7 @@ def _unpacking_expected_paths_and_logs(archive, members, path, name):
 
 @pytest.mark.network
 @pytest.mark.parametrize(
-    "processor_class,extension",
+    ("processor_class", "extension"),
     [(Unzip, ".zip"), (Untar, ".tar.gz")],
 )
 def test_unpacking_members_then_no_members(processor_class, extension):
@@ -267,7 +265,7 @@ def test_unpacking_members_then_no_members(processor_class, extension):
 
 @pytest.mark.network
 @pytest.mark.parametrize(
-    "processor_class,extension",
+    ("processor_class", "extension"),
     [(Unzip, ".zip"), (Untar, ".tar.gz")],
 )
 def test_unpacking_wrong_members_then_no_members(processor_class, extension):

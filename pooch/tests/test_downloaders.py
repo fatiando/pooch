@@ -7,7 +7,9 @@
 """
 Test the downloader classes and functions separately from the Pooch core.
 """
+
 import os
+import re
 import sys
 from tempfile import TemporaryDirectory
 
@@ -20,38 +22,37 @@ from requests import HTTPError
 try:
     import tqdm
 except ImportError:
-    tqdm = None  # type: ignore
+    tqdm = None  # type: ignore[assignment]
 
 try:
     import paramiko
 except ImportError:
-    paramiko = None  # type: ignore
+    paramiko = None  # type: ignore[assignment]
 
 from .. import Pooch
 from ..downloaders import (
-    HTTPDownloader,
-    FTPDownloader,
-    SFTPDownloader,
-    DOIDownloader,
-    choose_downloader,
-    FigshareRepository,
-    ZenodoRepository,
-    DataverseRepository,
-    doi_to_url,
     REQUESTS_HEADERS,
+    DataverseRepository,
+    DOIDownloader,
+    FigshareRepository,
+    FTPDownloader,
+    HTTPDownloader,
+    SFTPDownloader,
+    ZenodoRepository,
+    choose_downloader,
+    doi_to_url,
 )
 from ..processors import Unzip
 from .utils import (
-    pooch_test_url,
     check_large_data,
     check_tiny_data,
     data_over_ftp,
+    pooch_test_dataverse_url,
     pooch_test_figshare_url,
+    pooch_test_url,
     pooch_test_zenodo_url,
     pooch_test_zenodo_with_slash_url,
-    pooch_test_dataverse_url,
 )
-
 
 BASEURL = pooch_test_url()
 FIGSHAREURL = pooch_test_figshare_url()
@@ -84,22 +85,23 @@ def test_progressbar_kwarg_passed_sftp():
 
 def test_unsupported_protocol():
     "Should raise ValueError when protocol is not supported"
-    with pytest.raises(ValueError):
+    msg = "Unrecognized URL protocol"
+    with pytest.raises(ValueError, match=msg):
         choose_downloader("httpup://some-invalid-url.com")
     # Simulate the DOI format
-    with pytest.raises(ValueError):
+    with pytest.raises(ValueError, match=msg):
         choose_downloader("doii:XXX/XXX/file")
 
 
 @pytest.mark.network
 def test_invalid_doi_repository():
     "Should fail if data repository is not supported"
-    with pytest.raises(ValueError) as exc:
+    msg = re.escape("Invalid data repository 'joss.theoj.org'")
+    with pytest.raises(ValueError, match=msg):
         # Use the DOI of the Pooch paper in JOSS (not a data repository)
         DOIDownloader()(
             url="doi:10.21105/joss.01943/file_name.txt", output_file=None, pooch=None
         )
-    assert "Invalid data repository 'joss.theoj.org'" in str(exc.value)
 
 
 @pytest.mark.network
@@ -111,7 +113,7 @@ def test_doi_url_not_found():
 
 @pytest.mark.network
 @pytest.mark.parametrize(
-    "repository,doi",
+    ("repository", "doi"),
     [
         pytest.param(
             FigshareRepository,
@@ -125,11 +127,11 @@ def test_doi_url_not_found():
 )
 def test_figshare_url_file_not_found(repository, doi):
     "Should fail if the file is not found in the archive"
-    with pytest.raises(ValueError) as exc:
-        url = doi_to_url(doi)
-        repo = repository.initialize(doi, url)
+    msg = "File 'bla.txt' not found"
+    url = doi_to_url(doi)
+    repo = repository.initialize(doi, url)
+    with pytest.raises(ValueError, match=msg):
         repo.download_url(file_name="bla.txt")
-    assert "File 'bla.txt' not found" in str(exc.value)
 
 
 @pytest.mark.network
@@ -191,7 +193,7 @@ def test_figshare_unspecified_version():
 @pytest.mark.network
 @pytest.mark.figshare
 @pytest.mark.parametrize(
-    "version, missing, present",
+    ("version", "missing", "present"),
     [
         (
             1,
@@ -222,12 +224,14 @@ def test_figshare_data_repository_versions(version, missing, present):
 @pytest.mark.network
 def test_ftp_downloader(ftpserver):
     "Test ftp downloader"
-    with data_over_ftp(ftpserver, "tiny-data.txt") as url:
-        with TemporaryDirectory() as local_store:
-            downloader = FTPDownloader(port=ftpserver.server_port)
-            outfile = os.path.join(local_store, "tiny-data.txt")
-            downloader(url, outfile, None)
-            check_tiny_data(outfile)
+    with (
+        data_over_ftp(ftpserver, "tiny-data.txt") as url,
+        TemporaryDirectory() as local_store,
+    ):
+        downloader = FTPDownloader(port=ftpserver.server_port)
+        outfile = os.path.join(local_store, "tiny-data.txt")
+        downloader(url, outfile, None)
+        check_tiny_data(outfile)
 
 
 @pytest.mark.network
@@ -250,32 +254,31 @@ def test_sftp_downloader_fail_if_file_object():
         downloader = SFTPDownloader(username="demo", password="password")
         url = "sftp://test.rebex.net/pub/example/pocketftp.png"
         outfile = os.path.join(local_store, "pocketftp.png")
-        with open(outfile, "wb") as outfile_obj:
-            with pytest.raises(TypeError):
-                downloader(url, outfile_obj, None)
+        with open(outfile, "wb") as outfile_obj, pytest.raises(TypeError):
+            downloader(url, outfile_obj, None)
 
 
 @pytest.mark.skipif(paramiko is not None, reason="paramiko must be missing")
 def test_sftp_downloader_fail_if_paramiko_missing():
     "test must fail if paramiko is not installed"
-    with pytest.raises(ValueError) as exc:
+    msg = re.escape("'paramiko'")
+    with pytest.raises(ValueError, match=msg):
         SFTPDownloader()
-    assert "'paramiko'" in str(exc.value)
 
 
 @pytest.mark.skipif(tqdm is not None, reason="tqdm must be missing")
 @pytest.mark.parametrize("downloader", [HTTPDownloader, FTPDownloader, SFTPDownloader])
 def test_downloader_progressbar_fails(downloader):
     "Make sure an error is raised if trying to use progressbar without tqdm"
-    with pytest.raises(ValueError) as exc:
+    msg = re.escape("'tqdm'")
+    with pytest.raises(ValueError, match=msg):
         downloader(progressbar=True)
-    assert "'tqdm'" in str(exc.value)
 
 
 @pytest.mark.network
 @pytest.mark.skipif(tqdm is None, reason="requires tqdm")
 @pytest.mark.parametrize(
-    "url,downloader",
+    ("url", "downloader"),
     [
         (BASEURL, HTTPDownloader),
         pytest.param(FIGSHAREURL, DOIDownloader, marks=pytest.mark.figshare),
@@ -384,7 +387,7 @@ def test_downloader_arbitrary_progressbar(capsys):
         @staticmethod
         def close():
             """print a new empty line"""
-            print("", file=sys.stderr)
+            print(file=sys.stderr)
 
     pbar = MinimalProgressDisplay(total=None)
     download = HTTPDownloader(progressbar=pbar)
@@ -418,7 +421,7 @@ class TestZenodoAPISupport:
     )
     file_checksum = "2942bfabb3d05332b66eb128e0842cff"
 
-    legacy_api_response = {
+    legacy_api_response = {  # noqa: RUF012
         "created": "2021-20-19T08:00:00.000000+00:00",
         "modified": "2021-20-19T08:00:00.000000+00:00",
         "id": article_id,
@@ -436,7 +439,7 @@ class TestZenodoAPISupport:
         ],
     }
 
-    new_api_response = {
+    new_api_response = {  # noqa: RUF012
         "created": "2021-20-19T08:00:00.000000+00:00",
         "modified": "2021-20-19T08:00:00.000000+00:00",
         "id": article_id,
@@ -454,7 +457,7 @@ class TestZenodoAPISupport:
         ],
     }
 
-    invalid_api_response = {
+    invalid_api_response = {  # noqa: RUF012
         "created": "2021-20-19T08:00:00.000000+00:00",
         "modified": "2021-20-19T08:00:00.000000+00:00",
         "id": article_id,
@@ -481,7 +484,7 @@ class TestZenodoAPISupport:
     }
 
     @pytest.mark.parametrize(
-        "api_version, api_response",
+        ("api_version", "api_response"),
         [
             ("legacy", legacy_api_response),
             ("new", new_api_response),
@@ -509,7 +512,7 @@ class TestZenodoAPISupport:
                 api_version = downloader.api_version
 
     @pytest.mark.parametrize(
-        "api_version, api_response",
+        ("api_version", "api_response"),
         [("legacy", legacy_api_response), ("new", new_api_response)],
     )
     def test_download_url(self, httpserver, api_version, api_response):

@@ -7,19 +7,21 @@
 """
 Test the utility functions.
 """
+
 import os
+import re
 import shutil
-import time
-from pathlib import Path
 import tempfile
+import time
+from concurrent.futures import ProcessPoolExecutor, ThreadPoolExecutor
+from pathlib import Path
 from tempfile import TemporaryDirectory
-from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor
 
 import pytest
 
 from ..utils import (
-    parse_url,
     make_local_storage,
+    parse_url,
     temporary_file,
     unique_file_name,
 )
@@ -54,7 +56,7 @@ def test_make_local_storage_parallel(pool, monkeypatch):
     # recursions from the monkey patching.
     makedirs = os.makedirs
 
-    def mockmakedirs(path, exist_ok=False):  # pylint: disable=unused-argument
+    def mockmakedirs(path, exist_ok=False):
         "Delay before calling makedirs"
         time.sleep(1.5)
         makedirs(path, exist_ok=exist_ok)
@@ -80,22 +82,26 @@ def test_make_local_storage_parallel(pool, monkeypatch):
 def test_local_storage_makedirs_permissionerror(monkeypatch):
     "Should warn the user when can't create the local data dir"
 
-    def mockmakedirs(path, exist_ok=False):  # pylint: disable=unused-argument
+    def mockmakedirs(path, exist_ok=False):  # noqa: ARG001
         "Raise an exception to mimic permission issues"
-        raise PermissionError("Fake error")
+        msg = "Fake error"
+        raise PermissionError(msg)
 
     data_cache = os.path.join(os.curdir, "test_permission")
     assert not os.path.exists(data_cache)
 
     monkeypatch.setattr(os, "makedirs", mockmakedirs)
 
-    with pytest.raises(PermissionError) as error:
+    msg = re.escape(
+        f"Pooch could not create data cache folder '{data_cache}'. "
+        "Will not be able to download data files. "
+        "Use environment variable 'SOME_VARIABLE' to specify a different location."
+    )
+    with pytest.raises(PermissionError, match=msg):
         make_local_storage(
             path=data_cache,
             env="SOME_VARIABLE",
         )
-        assert "Pooch could not create data cache" in str(error)
-        assert "'SOME_VARIABLE'" in str(error)
 
 
 def test_local_storage_newfile_permissionerror(monkeypatch):
@@ -103,9 +109,10 @@ def test_local_storage_newfile_permissionerror(monkeypatch):
     # This is a separate function because there should be a warning if the data
     # dir already exists but we can't write to it.
 
-    def mocktempfile(**kwargs):  # pylint: disable=unused-argument
+    def mocktempfile(**kwargs):  # noqa: ARG001
         "Raise an exception to mimic permission issues"
-        raise PermissionError("Fake error")
+        msg = "Fake error"
+        raise PermissionError(msg)
 
     with TemporaryDirectory() as data_cache:
         os.makedirs(os.path.join(data_cache, "1.0"))
@@ -113,17 +120,20 @@ def test_local_storage_newfile_permissionerror(monkeypatch):
 
         monkeypatch.setattr(tempfile, "NamedTemporaryFile", mocktempfile)
 
-        with pytest.raises(PermissionError) as error:
+        msg = re.escape(
+            f"Pooch could not write to data cache folder '{data_cache}'. "
+            "Will not be able to download data files. "
+            "Use environment variable 'SOME_VARIABLE' to specify a different location."
+        )
+        with pytest.raises(PermissionError, match=msg):
             make_local_storage(
                 path=data_cache,
                 env="SOME_VARIABLE",
             )
-            assert "Pooch could not write to data cache" in str(error)
-            assert "'SOME_VARIABLE'" in str(error)
 
 
 @pytest.mark.parametrize(
-    "url,output",
+    ("url", "output"),
     [
         (
             "http://127.0.0.1:8080/test.nc",
@@ -159,7 +169,8 @@ def test_parse_url(url, output):
 
 def test_parse_url_invalid_doi():
     "Should fail if we forget to not include // in the DOI link"
-    with pytest.raises(ValueError):
+    msg = re.escape("Invalid DOI link")
+    with pytest.raises(ValueError, match=msg):
         parse_url("doi://XXX/XXX/fname.txt")
 
 
@@ -192,6 +203,7 @@ def test_temporary_file_exception():
     try:
         with temporary_file() as tmp:
             assert Path(tmp).exists()
-            raise ValueError("Nooooooooo!")
+            msg = "Nooooooooo!"
+            raise ValueError(msg)
     except ValueError:
         assert not Path(tmp).exists()

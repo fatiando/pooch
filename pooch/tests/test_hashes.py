@@ -4,11 +4,13 @@
 #
 # This code is part of the Fatiando a Terra project (https://www.fatiando.org)
 #
-# pylint: disable=redefined-outer-name
+
 """
 Test the hash calculation and checking functions.
 """
+
 import os
+import re
 from pathlib import Path
 from tempfile import NamedTemporaryFile
 
@@ -24,9 +26,9 @@ except ImportError:
 
 from ..core import Pooch
 from ..hashes import (
-    make_registry,
     file_hash,
     hash_matches,
+    make_registry,
 )
 from .utils import check_tiny_data, mirror_directory
 
@@ -66,7 +68,7 @@ def data_dir_mirror(tmp_path):
 
 def test_make_registry(data_dir_mirror):
     "Check that the registry builder creates the right file names and hashes"
-    outfile = NamedTemporaryFile(delete=False)  # pylint: disable=consider-using-with
+    outfile = NamedTemporaryFile(delete=False)  # noqa: SIM115
     # Need to close the file before writing to it.
     outfile.close()
     try:
@@ -87,7 +89,7 @@ def test_make_registry(data_dir_mirror):
 
 def test_make_registry_recursive(data_dir_mirror):
     "Check that the registry builder works in recursive mode"
-    outfile = NamedTemporaryFile(delete=False)  # pylint: disable=consider-using-with
+    outfile = NamedTemporaryFile(delete=False)  # noqa: SIM115
     # Need to close the file before writing to it.
     outfile.close()
     try:
@@ -109,13 +111,13 @@ def test_make_registry_recursive(data_dir_mirror):
 
 def test_file_hash_invalid_algorithm():
     "Test an invalid hashing algorithm"
-    with pytest.raises(ValueError) as exc:
+    msg = re.escape("Algorithm 'blah' not available to the pooch library")
+    with pytest.raises(ValueError, match=msg):
         file_hash(fname="something", alg="blah")
-    assert "'blah'" in str(exc.value)
 
 
 @pytest.mark.parametrize(
-    "alg,expected_hash",
+    ("alg", "expected_hash"),
     list(TINY_DATA_HASHES.items()),
     ids=list(TINY_DATA_HASHES.keys()),
 )
@@ -133,7 +135,7 @@ def test_file_hash(alg, expected_hash):
 
 
 @pytest.mark.parametrize(
-    "alg,expected_hash",
+    ("alg", "expected_hash"),
     list(TINY_DATA_HASHES.items()),
     ids=list(TINY_DATA_HASHES.keys()),
 )
@@ -155,7 +157,7 @@ def test_hash_matches(alg, expected_hash):
 
 
 @pytest.mark.parametrize(
-    "alg,expected_hash",
+    ("alg", "expected_hash"),
     list(TINY_DATA_HASHES_HASHLIB.items()),
     ids=list(TINY_DATA_HASHES_HASHLIB.keys()),
 )
@@ -168,12 +170,12 @@ def test_hash_matches_strict(alg, expected_hash):
     assert hash_matches(fname, known_hash, strict=True)
     # And also if it fails
     bad_hash = f"{alg}:blablablabla"
-    with pytest.raises(ValueError) as error:
+    msg = re.escape("hash of downloaded file (Neverland) does not match the known hash")
+    with pytest.raises(ValueError, match=msg):
         hash_matches(fname, bad_hash, strict=True, source="Neverland")
-    assert "Neverland" in str(error.value)
-    with pytest.raises(ValueError) as error:
+    msg = re.escape(f"hash of downloaded file ({fname}) does not match the known hash")
+    with pytest.raises(ValueError, match=msg):
         hash_matches(fname, bad_hash, strict=True, source=None)
-    assert fname in str(error.value)
 
 
 def test_hash_matches_none():
@@ -187,7 +189,7 @@ def test_hash_matches_none():
 
 
 @pytest.mark.parametrize(
-    "alg,expected_hash",
+    ("alg", "expected_hash"),
     list(TINY_DATA_HASHES_HASHLIB.items()),
     ids=list(TINY_DATA_HASHES_HASHLIB.keys()),
 )
@@ -199,6 +201,6 @@ def test_hash_matches_uppercase(alg, expected_hash):
     known_hash = f"{alg}:{expected_hash.upper()}"
     assert hash_matches(fname, known_hash, strict=True)
     # And also if it fails
-    with pytest.raises(ValueError) as error:
+    msg = re.escape("hash of downloaded file (Neverland) does not match the known hash")
+    with pytest.raises(ValueError, match=msg):
         hash_matches(fname, known_hash[:-5], strict=True, source="Neverland")
-    assert "Neverland" in str(error.value)
