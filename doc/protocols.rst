@@ -71,6 +71,25 @@ We can could use :func:`pooch.retrieve` to download it like so:
         known_hash="md5:70e2afd3fd7e336ae478b1e740a5f08e",
     )
 
+By default, :class:`pooch.DOIDownloader` uses Pooch's user agent in the
+``User-Agent`` request header.
+Some repositories use this header to identify traffic from clients and filter
+out abusive requests.
+Projects that distribute data through DOI repositories can set a custom user
+agent by creating a :class:`pooch.DOIDownloader` with custom ``headers``:
+
+.. code-block:: python
+
+    downloader = pooch.DOIDownloader(
+        headers={"User-Agent": "plumbus-data/1.0 (https://example.com)"},
+    )
+
+    file_path = pooch.retrieve(
+        url="doi:10.6084/m9.figshare.14763051.v1/tiny-data.txt",
+        known_hash="md5:70e2afd3fd7e336ae478b1e740a5f08e",
+        downloader=downloader,
+    )
+
 We can also make a :class:`pooch.Pooch` with a registry stored entirely on a
 figshare dataset:
 
@@ -94,6 +113,12 @@ figshare dataset:
         fname = POOCH.fetch("tiny-data.txt")
         data = numpy.loadtxt(fname)
         return data
+
+The same custom downloader can be passed to :meth:`pooch.Pooch.fetch`:
+
+.. code-block:: python
+
+    fname = POOCH.fetch("tiny-data.txt", downloader=downloader)
 
 
 .. warning::
