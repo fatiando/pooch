@@ -9,6 +9,8 @@ Test the processor hooks
 """
 
 import re
+import subprocess
+import sys
 from pathlib import Path
 from tempfile import TemporaryDirectory
 
@@ -93,6 +95,50 @@ def test_decompress_fails():
         with pytest.raises(ValueError, match=msg) as exception:
             pup.fetch("store.zip", processor=Decompress(method="auto"))
         assert "pooch.Unzip/Untar" in exception.value.args[0]
+
+
+@pytest.mark.parametrize(
+    ("method", "fname", "module_name"),
+    [
+        ("lzma", "data.xz", "lzma"),
+        ("xz", "data.xz", "lzma"),
+        ("bzip2", "data.bz2", "bz2"),
+        ("auto", "data.bz2", "bz2"),
+    ],
+)
+def test_decompress_unavailable_module(monkeypatch, method, fname, module_name):
+    "A clear error should be raised when the compression module is unavailable"
+    # Simulate a Python built without the optional module (see GH #468)
+    monkeypatch.setitem(Decompress.modules, "lzma", None)
+    monkeypatch.setitem(Decompress.modules, "xz", None)
+    monkeypatch.setitem(Decompress.modules, "bzip2", None)
+    processor = Decompress(method=method)
+    with pytest.raises(ValueError, match=re.escape(f"'{module_name}' module")):
+        processor._compression_module(fname)
+
+
+def test_processors_import_without_optional_modules():
+    "Importing pooch must not fail when bz2/lzma are missing (see GH #468)"
+    code = (
+        "import builtins\n"
+        "_real = builtins.__import__\n"
+        "def _fake(name, *args, **kwargs):\n"
+        "    if name in ('lzma', '_lzma', 'bz2', '_bz2'):\n"
+        "        raise ModuleNotFoundError(\"No module named '%s'\" % name)\n"
+        "    return _real(name, *args, **kwargs)\n"
+        "builtins.__import__ = _fake\n"
+        "import pooch.processors as p\n"
+        "assert p.lzma is None and p.bz2 is None and p.gzip is not None\n"
+        "print('IMPORT_OK')\n"
+    )
+    result = subprocess.run(
+        [sys.executable, "-c", code],
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    assert result.returncode == 0, result.stderr
+    assert "IMPORT_OK" in result.stdout
 
 
 @pytest.mark.network

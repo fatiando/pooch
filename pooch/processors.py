@@ -10,15 +10,31 @@ Post-processing hooks
 """
 
 import abc
-import bz2
-import gzip
-import lzma
 import os
 import shutil
 import sys
 import typing
 from tarfile import TarFile
 from zipfile import ZipFile
+
+# bz2, gzip and lzma are optional features of the Python standard library: a
+# Python interpreter can be built without them (e.g. when the bzip2/lzma/zlib
+# development headers are missing). Importing them at module level would make
+# *any* use of pooch fail on such interpreters, even when no decompression is
+# needed. Guard the imports so the modules are only required when the matching
+# Decompress method is actually used (see GH #468).
+try:
+    import bz2
+except ImportError:
+    bz2 = None
+try:
+    import gzip
+except ImportError:
+    gzip = None
+try:
+    import lzma
+except ImportError:
+    lzma = None
 
 from .utils import get_logger
 
@@ -342,6 +358,14 @@ class Decompress:
         "bzip2": bz2,
     }
     extensions: typing.ClassVar = {".xz": "lzma", ".gz": "gzip", ".bz2": "bzip2"}
+    # Name of the standard-library module backing each method, used to give a
+    # clear error when that (optional) module isn't available (see GH #468).
+    module_names: typing.ClassVar = {
+        "lzma": "lzma",
+        "xz": "lzma",
+        "gzip": "gzip",
+        "bzip2": "bz2",
+    }
 
     def __init__(self, method="auto", name=None):
         self.method = method
@@ -417,5 +441,18 @@ class Decompress:
                 if ext in {".zip", ".tar"}:
                     message = " ".join([message, error_archives])
                 raise ValueError(message)
-            return self.modules[self.extensions[ext]]
-        return self.modules[self.method]
+            method = self.extensions[ext]
+        else:
+            method = self.method
+        module = self.modules[method]
+        if module is None:
+            module_name = self.module_names[method]
+            message = (
+                f"Could not decompress '{fname}' because the '{module_name}' "
+                "module is not available in this Python installation. This "
+                f"usually means Python was built without '{module_name}' "
+                "support. Rebuild or reinstall Python with the required "
+                "support to use this compression method."
+            )
+            raise ValueError(message)
+        return module
