@@ -22,19 +22,20 @@ from zipfile import ZipFile
 # development headers are missing). Importing them at module level would make
 # *any* use of pooch fail on such interpreters, even when no decompression is
 # needed. Guard the imports so the modules are only required when the matching
-# Decompress method is actually used (see GH #468).
+# Decompress method is actually used (see GH #468). The ``type: ignore`` marks
+# the ``None`` fallback as intentional for the type checker.
 try:
     import bz2
 except ImportError:
-    bz2 = None
+    bz2 = None  # type: ignore[assignment]
 try:
     import gzip
 except ImportError:
-    gzip = None
+    gzip = None  # type: ignore[assignment]
 try:
     import lzma
 except ImportError:
-    lzma = None
+    lzma = None  # type: ignore[assignment]
 
 from .utils import get_logger
 
