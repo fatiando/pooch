@@ -15,7 +15,7 @@ import gzip
 import lzma
 import os
 import shutil
-import sys
+import tarfile
 import typing
 from tarfile import TarFile
 from zipfile import ZipFile
@@ -256,7 +256,13 @@ class Untar(ExtractorProcessor):
         This method receives an argument for the archive to extract and the
         destination path.
         """
-        filter_kwarg = {} if sys.version_info < (3, 12) else {"filter": "data"}
+        # Extract with the "data" filter to reject unsafe members (symlinks,
+        # hardlinks, or absolute/``..`` paths pointing outside the destination)
+        # that would otherwise let a malicious archive write files anywhere on
+        # disk. The filter was added in Python 3.12 and backported to 3.9.17,
+        # 3.10.12, and 3.11.4, so detect it by feature instead of minor version
+        # to protect every interpreter that supports it (see GH #543).
+        filter_kwarg = {"filter": "data"} if hasattr(tarfile, "data_filter") else {}
         with TarFile.open(fname, "r") as tar_file:
             if self.members is None:
                 get_logger().info(
