@@ -8,15 +8,15 @@
 Test the processor hooks
 """
 
+import builtins
+import importlib
 import re
-import subprocess
-import sys
 from pathlib import Path
 from tempfile import TemporaryDirectory
 
 import pytest
 
-from .. import Pooch
+from .. import Pooch, processors
 from ..processors import Decompress, Untar, Unzip
 from .utils import capture_log, check_tiny_data, pooch_test_registry, pooch_test_url
 
@@ -120,28 +120,25 @@ def test_decompress_unavailable_module(monkeypatch, method, fname, module_name):
         processor._compression_module(fname)
 
 
-def test_processors_import_without_optional_modules():
+def test_processors_import_without_optional_modules(monkeypatch):
     "Importing pooch must not fail when bz2/lzma are missing (see GH #468)"
-    code = (
-        "import builtins\n"
-        "_real = builtins.__import__\n"
-        "def _fake(name, *args, **kwargs):\n"
-        "    if name in ('lzma', '_lzma', 'gzip', '_gzip', 'bz2', '_bz2'):\n"
-        "        raise ModuleNotFoundError(\"No module named '%s'\" % name)\n"
-        "    return _real(name, *args, **kwargs)\n"
-        "builtins.__import__ = _fake\n"
-        "import pooch.processors as p\n"
-        "assert p.lzma is None and p.gzip is None and p.bz2 is None\n"
-        "print('IMPORT_OK')\n"
-    )
-    result = subprocess.run(
-        [sys.executable, "-c", code],
-        capture_output=True,
-        text=True,
-        check=False,
-    )
-    assert result.returncode == 0, result.stderr
-    assert "IMPORT_OK" in result.stdout
+    real_import = builtins.__import__
+
+    def fake_import(name, *args, **kwargs):
+        if name in ("lzma", "_lzma", "gzip", "_gzip", "bz2", "_bz2"):
+            message = f"No module named '{name}'"
+            raise ModuleNotFoundError(message)
+        return real_import(name, *args, **kwargs)
+
+    monkeypatch.setattr(builtins, "__import__", fake_import)
+    try:
+        reloaded_processors = importlib.reload(processors)
+        assert reloaded_processors.lzma is None
+        assert reloaded_processors.gzip is None
+        assert reloaded_processors.bz2 is None
+    finally:
+        monkeypatch.setattr(builtins, "__import__", real_import)
+        importlib.reload(processors)
 
 
 @pytest.mark.network
