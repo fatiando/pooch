@@ -102,6 +102,8 @@ def test_decompress_fails():
     [
         ("lzma", "data.xz", "lzma"),
         ("xz", "data.xz", "lzma"),
+        ("gzip", "data.gz", "gzip"),
+        ("auto", "data.gz", "gzip"),
         ("bzip2", "data.bz2", "bz2"),
         ("auto", "data.bz2", "bz2"),
     ],
@@ -111,6 +113,7 @@ def test_decompress_unavailable_module(monkeypatch, method, fname, module_name):
     # Simulate a Python built without the optional module (see GH #468)
     monkeypatch.setitem(Decompress.modules, "lzma", None)
     monkeypatch.setitem(Decompress.modules, "xz", None)
+    monkeypatch.setitem(Decompress.modules, "gzip", None)
     monkeypatch.setitem(Decompress.modules, "bzip2", None)
     processor = Decompress(method=method)
     with pytest.raises(ValueError, match=re.escape(f"'{module_name}' module")):
@@ -123,12 +126,12 @@ def test_processors_import_without_optional_modules():
         "import builtins\n"
         "_real = builtins.__import__\n"
         "def _fake(name, *args, **kwargs):\n"
-        "    if name in ('lzma', '_lzma', 'bz2', '_bz2'):\n"
+        "    if name in ('lzma', '_lzma', 'gzip', '_gzip', 'bz2', '_bz2'):\n"
         "        raise ModuleNotFoundError(\"No module named '%s'\" % name)\n"
         "    return _real(name, *args, **kwargs)\n"
         "builtins.__import__ = _fake\n"
         "import pooch.processors as p\n"
-        "assert p.lzma is None and p.bz2 is None and p.gzip is not None\n"
+        "assert p.lzma is None and p.gzip is None and p.bz2 is None\n"
         "print('IMPORT_OK')\n"
     )
     result = subprocess.run(
