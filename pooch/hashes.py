@@ -10,6 +10,7 @@ Calculating and checking file hashes.
 
 import functools
 import hashlib
+import shlex
 from pathlib import Path
 
 # From the docs: https://docs.python.org/3/library/hashlib.html#hashlib.new
@@ -223,6 +224,6 @@ def make_registry(directory, output, recursive=True):
         # Only use Unix separators for the registry so that we don't go
         # insane dealing with file paths.
         outfile.writelines(
-            "{} {}\n".format(fname.replace("\\", "/"), fhash)
+            "{} {}\n".format(shlex.quote(fname.replace("\\", "/")), fhash)
             for fname, fhash in zip(files, hashes)
         )

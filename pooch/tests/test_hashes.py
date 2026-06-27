@@ -87,6 +87,23 @@ def test_make_registry(data_dir_mirror):
         os.remove(outfile.name)
 
 
+def test_make_registry_quotes_files_with_spaces(tmp_path):
+    "Check that files with spaces can be written and read back from a registry"
+    data_dir = tmp_path / "data"
+    data_dir.mkdir()
+    fname = "file with spaces.txt"
+    (data_dir / fname).write_text("content", encoding="utf-8")
+    registry_file = tmp_path / "registry.txt"
+
+    make_registry(data_dir, registry_file, recursive=False)
+
+    registry = registry_file.read_text(encoding="utf-8")
+    assert registry == f"'{fname}' {file_hash(data_dir / fname)}\n"
+    pup = Pooch(path=data_dir, base_url="some bogus URL", registry={})
+    pup.load_registry(registry_file)
+    assert pup.registry == {fname: file_hash(data_dir / fname)}
+
+
 def test_make_registry_recursive(data_dir_mirror):
     "Check that the registry builder works in recursive mode"
     outfile = NamedTemporaryFile(delete=False)  # noqa: SIM115
