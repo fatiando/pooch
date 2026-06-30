@@ -387,26 +387,26 @@ document.write(`
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">The classes that actually handle the downloads.</span>
 <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">ftplib</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">ftplib</span>
-
 <span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
 
-<span class="kn">from</span><span class="w"> </span><span class="nn">.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">parse_url</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">._version</span><span class="w"> </span><span class="kn">import</span> <span class="n">__version__</span>  <span class="c1"># type: ignore[import-not-found]</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">parse_url</span>
 
 <span class="c1"># Mypy doesn&#39;t like assigning None like this.</span>
 <span class="c1"># Can just use a guard variable</span>
 <span class="k">try</span><span class="p">:</span>
     <span class="kn">from</span><span class="w"> </span><span class="nn">tqdm.auto</span><span class="w"> </span><span class="kn">import</span> <span class="n">tqdm</span>
 <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
-    <span class="n">tqdm</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># type: ignore</span>
+    <span class="n">tqdm</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># type: ignore[assignment,misc]</span>
 
 <span class="k">try</span><span class="p">:</span>
     <span class="kn">import</span><span class="w"> </span><span class="nn">paramiko</span>
 <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
-    <span class="n">paramiko</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># type: ignore</span>
+    <span class="n">paramiko</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># type: ignore[assignment]</span>
 
 
 <span class="c1"># Set the default timeout in seconds so it can be configured in a pinch for the</span>
@@ -469,17 +469,18 @@ document.write(`
 
     <span class="n">parsed_url</span> <span class="o">=</span> <span class="n">parse_url</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">parsed_url</span><span class="p">[</span><span class="s2">&quot;protocol&quot;</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">known_downloaders</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="p">(</span>
             <span class="sa">f</span><span class="s2">&quot;Unrecognized URL protocol &#39;</span><span class="si">{</span><span class="n">parsed_url</span><span class="p">[</span><span class="s1">&#39;protocol&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&#39; in &#39;</span><span class="si">{</span><span class="n">url</span><span class="si">}</span><span class="s2">&#39;. &quot;</span>
             <span class="sa">f</span><span class="s2">&quot;Must be one of </span><span class="si">{</span><span class="n">known_downloaders</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span><span class="si">}</span><span class="s2">.&quot;</span>
         <span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
     <span class="n">downloader</span> <span class="o">=</span> <span class="n">known_downloaders</span><span class="p">[</span><span class="n">parsed_url</span><span class="p">[</span><span class="s2">&quot;protocol&quot;</span><span class="p">]](</span><span class="n">progressbar</span><span class="o">=</span><span class="n">progressbar</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">downloader</span>
 
 
 <div class="viewcode-block" id="HTTPDownloader">
 <a class="viewcode-back" href="../../api/generated/pooch.HTTPDownloader.html#pooch.HTTPDownloader">[docs]</a>
-<span class="k">class</span><span class="w"> </span><span class="nc">HTTPDownloader</span><span class="p">:</span>  <span class="c1"># pylint: disable=too-few-public-methods</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">HTTPDownloader</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Download manager for fetching files over HTTP/HTTPS.</span>
 
@@ -561,13 +562,12 @@ document.write(`
         <span class="bp">self</span><span class="o">.</span><span class="n">progressbar</span> <span class="o">=</span> <span class="n">progressbar</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">chunk_size</span> <span class="o">=</span> <span class="n">chunk_size</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">progressbar</span> <span class="ow">is</span> <span class="kc">True</span> <span class="ow">and</span> <span class="n">tqdm</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Missing package &#39;tqdm&#39; required for progress bars.&quot;</span><span class="p">)</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;Missing package &#39;tqdm&#39; required for progress bars.&quot;</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
 
 <div class="viewcode-block" id="HTTPDownloader.__call__">
 <a class="viewcode-back" href="../../api/generated/pooch.HTTPDownloader.html#pooch.HTTPDownloader.__call__">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="n">output_file</span><span class="p">,</span> <span class="n">pooch</span><span class="p">,</span> <span class="n">check_only</span><span class="o">=</span><span class="kc">False</span>
-    <span class="p">):</span>  <span class="c1"># pylint: disable=R0914</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="n">output_file</span><span class="p">,</span> <span class="n">pooch</span><span class="p">,</span> <span class="n">check_only</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>  <span class="c1"># noqa: ARG002</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Download the given URL over HTTP to the given output file.</span>
 
@@ -594,7 +594,7 @@ document.write(`
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Lazy import requests to speed up import time</span>
-        <span class="kn">import</span><span class="w"> </span><span class="nn">requests</span>  <span class="c1"># pylint: disable=C0415</span>
+        <span class="kn">import</span><span class="w"> </span><span class="nn">requests</span>  <span class="c1"># noqa: PLC0415</span>
 
         <span class="k">if</span> <span class="n">check_only</span><span class="p">:</span>
             <span class="n">timeout</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;timeout&quot;</span><span class="p">,</span> <span class="n">DEFAULT_TIMEOUT</span><span class="p">)</span>
@@ -605,11 +605,13 @@ document.write(`
         <span class="n">kwargs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">kwargs</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
         <span class="n">timeout</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;timeout&quot;</span><span class="p">,</span> <span class="n">DEFAULT_TIMEOUT</span><span class="p">)</span>
         <span class="n">kwargs</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">&quot;stream&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+
         <span class="n">ispath</span> <span class="o">=</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">output_file</span><span class="p">,</span> <span class="s2">&quot;write&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">ispath</span><span class="p">:</span>
-            <span class="c1"># pylint: disable=consider-using-with</span>
-            <span class="n">output_file</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">output_file</span><span class="p">,</span> <span class="s2">&quot;w+b&quot;</span><span class="p">)</span>
-            <span class="c1"># pylint: enable=consider-using-with</span>
+            <span class="c1"># It&#39;s safe to ignore not using a context manager here (SIM115), since we</span>
+            <span class="c1"># are using the try...finally construct.</span>
+            <span class="n">output_file</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">output_file</span><span class="p">,</span> <span class="s2">&quot;w+b&quot;</span><span class="p">)</span>  <span class="c1"># noqa: SIM115</span>
+
         <span class="k">try</span><span class="p">:</span>
             <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="n">timeout</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
             <span class="n">response</span><span class="o">.</span><span class="n">raise_for_status</span><span class="p">()</span>
@@ -658,7 +660,7 @@ document.write(`
 
 <div class="viewcode-block" id="FTPDownloader">
 <a class="viewcode-back" href="../../api/generated/pooch.FTPDownloader.html#pooch.FTPDownloader">[docs]</a>
-<span class="k">class</span><span class="w"> </span><span class="nc">FTPDownloader</span><span class="p">:</span>  <span class="c1"># pylint: disable=too-few-public-methods</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">FTPDownloader</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Download manager for fetching files over FTP.</span>
 
@@ -713,11 +715,12 @@ document.write(`
         <span class="bp">self</span><span class="o">.</span><span class="n">progressbar</span> <span class="o">=</span> <span class="n">progressbar</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">chunk_size</span> <span class="o">=</span> <span class="n">chunk_size</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">progressbar</span> <span class="ow">is</span> <span class="kc">True</span> <span class="ow">and</span> <span class="n">tqdm</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Missing package &#39;tqdm&#39; required for progress bars.&quot;</span><span class="p">)</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;Missing package &#39;tqdm&#39; required for progress bars.&quot;</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
 
 <div class="viewcode-block" id="FTPDownloader.__call__">
 <a class="viewcode-back" href="../../api/generated/pooch.FTPDownloader.html#pooch.FTPDownloader.__call__">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="n">output_file</span><span class="p">,</span> <span class="n">pooch</span><span class="p">,</span> <span class="n">check_only</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="n">output_file</span><span class="p">,</span> <span class="n">pooch</span><span class="p">,</span> <span class="n">check_only</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>  <span class="c1"># noqa: ARG002</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Download the given URL over FTP to the given output file.</span>
 
@@ -756,9 +759,10 @@ document.write(`
 
         <span class="n">ispath</span> <span class="o">=</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">output_file</span><span class="p">,</span> <span class="s2">&quot;write&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">ispath</span><span class="p">:</span>
-            <span class="c1"># pylint: disable=consider-using-with</span>
-            <span class="n">output_file</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">output_file</span><span class="p">,</span> <span class="s2">&quot;w+b&quot;</span><span class="p">)</span>
-            <span class="c1"># pylint: enable=consider-using-with</span>
+            <span class="c1"># It&#39;s safe to ignore not using a context manager here (SIM115), since we</span>
+            <span class="c1"># are using the try...finally construct.</span>
+            <span class="n">output_file</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">output_file</span><span class="p">,</span> <span class="s2">&quot;w+b&quot;</span><span class="p">)</span>  <span class="c1"># noqa: SIM115</span>
+
         <span class="k">try</span><span class="p">:</span>
             <span class="n">ftp</span><span class="o">.</span><span class="n">login</span><span class="p">(</span><span class="n">user</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">username</span><span class="p">,</span> <span class="n">passwd</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">password</span><span class="p">,</span> <span class="n">acct</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">account</span><span class="p">)</span>
             <span class="n">command</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;RETR </span><span class="si">{</span><span class="n">parsed_url</span><span class="p">[</span><span class="s1">&#39;path&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>
@@ -796,7 +800,7 @@ document.write(`
 
 <div class="viewcode-block" id="SFTPDownloader">
 <a class="viewcode-back" href="../../api/generated/pooch.SFTPDownloader.html#pooch.SFTPDownloader">[docs]</a>
-<span class="k">class</span><span class="w"> </span><span class="nc">SFTPDownloader</span><span class="p">:</span>  <span class="c1"># pylint: disable=too-few-public-methods</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">SFTPDownloader</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Download manager for fetching files over SFTP.</span>
 
@@ -857,7 +861,7 @@ document.write(`
 
 <div class="viewcode-block" id="SFTPDownloader.__call__">
 <a class="viewcode-back" href="../../api/generated/pooch.SFTPDownloader.html#pooch.SFTPDownloader.__call__">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="n">output_file</span><span class="p">,</span> <span class="n">pooch</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="n">output_file</span><span class="p">,</span> <span class="n">pooch</span><span class="p">):</span>  <span class="c1"># noqa: ARG002</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Download the given URL over SFTP to the given output file.</span>
 
@@ -913,7 +917,7 @@ document.write(`
 
 <div class="viewcode-block" id="DOIDownloader">
 <a class="viewcode-back" href="../../api/generated/pooch.DOIDownloader.html#pooch.DOIDownloader">[docs]</a>
-<span class="k">class</span><span class="w"> </span><span class="nc">DOIDownloader</span><span class="p">:</span>  <span class="c1"># pylint: disable=too-few-public-methods</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">DOIDownloader</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Download manager for fetching files from Digital Object Identifiers (DOIs).</span>
 
@@ -1086,7 +1090,7 @@ document.write(`
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Lazy import requests to speed up import time</span>
-    <span class="kn">import</span><span class="w"> </span><span class="nn">requests</span>  <span class="c1"># pylint: disable=C0415</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">requests</span>  <span class="c1"># noqa: PLC0415</span>
 
     <span class="c1"># Use doi.org to resolve the DOI to the repository website.</span>
     <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
@@ -1148,18 +1152,19 @@ document.write(`
 
     <span class="k">if</span> <span class="n">data_repository</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">repository</span> <span class="o">=</span> <span class="n">parse_url</span><span class="p">(</span><span class="n">archive_url</span><span class="p">)[</span><span class="s2">&quot;netloc&quot;</span><span class="p">]</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="p">(</span>
             <span class="sa">f</span><span class="s2">&quot;Invalid data repository &#39;</span><span class="si">{</span><span class="n">repository</span><span class="si">}</span><span class="s2">&#39;. &quot;</span>
             <span class="s2">&quot;To request or contribute support for this repository, &quot;</span>
             <span class="s2">&quot;please open an issue at https://github.com/fatiando/pooch/issues&quot;</span>
         <span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">data_repository</span>
 
 
-<span class="k">class</span><span class="w"> </span><span class="nc">DataRepository</span><span class="p">:</span>  <span class="c1"># pylint: disable=too-few-public-methods, missing-class-docstring</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">DataRepository</span><span class="p">:</span>
     <span class="nd">@classmethod</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">initialize</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">doi</span><span class="p">,</span> <span class="n">archive_url</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>  <span class="c1"># pylint: disable=unused-argument</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">initialize</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">doi</span><span class="p">,</span> <span class="n">archive_url</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>  <span class="c1"># noqa: ARG003</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Initialize the data repository if the given URL points to a</span>
 <span class="sd">        corresponding repository.</span>
@@ -1177,7 +1182,7 @@ document.write(`
 <span class="sd">            The resolved URL for the DOI</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="k">return</span> <span class="kc">None</span>  <span class="c1"># pragma: no cover</span>
+        <span class="k">return</span>  <span class="c1"># pragma: no cover</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">download_url</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_name</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
@@ -1210,7 +1215,7 @@ document.write(`
         <span class="k">raise</span> <span class="ne">NotImplementedError</span>  <span class="c1"># pragma: no cover</span>
 
 
-<span class="k">class</span><span class="w"> </span><span class="nc">ZenodoRepository</span><span class="p">(</span><span class="n">DataRepository</span><span class="p">):</span>  <span class="c1"># pylint: disable=missing-class-docstring</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">ZenodoRepository</span><span class="p">(</span><span class="n">DataRepository</span><span class="p">):</span>
     <span class="n">base_api_url</span> <span class="o">=</span> <span class="s2">&quot;https://zenodo.org/api/records&quot;</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">doi</span><span class="p">,</span> <span class="n">archive_url</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
@@ -1254,7 +1259,7 @@ document.write(`
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Cached API response from Zenodo&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_api_response</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="c1"># Lazy import requests to speed up import time</span>
-            <span class="kn">import</span><span class="w"> </span><span class="nn">requests</span>  <span class="c1"># pylint: disable=C0415</span>
+            <span class="kn">import</span><span class="w"> </span><span class="nn">requests</span>  <span class="c1"># noqa: PLC0415</span>
 
             <span class="n">article_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">archive_url</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_api_response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
@@ -1289,10 +1294,11 @@ document.write(`
             <span class="k">elif</span> <span class="nb">all</span><span class="p">(</span><span class="s2">&quot;filename&quot;</span> <span class="ow">in</span> <span class="n">file</span> <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">api_response</span><span class="p">[</span><span class="s2">&quot;files&quot;</span><span class="p">]):</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_api_version</span> <span class="o">=</span> <span class="s2">&quot;new&quot;</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="n">msg</span> <span class="o">=</span> <span class="p">(</span>
                     <span class="s2">&quot;Couldn&#39;t determine the version of the Zenodo API for &quot;</span>
                     <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">archive_url</span><span class="si">}</span><span class="s2"> (doi:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">doi</span><span class="si">}</span><span class="s2">).&quot;</span>
                 <span class="p">)</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_api_version</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">download_url</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_name</span><span class="p">):</span>
@@ -1326,10 +1332,11 @@ document.write(`
             <span class="n">files</span> <span class="o">=</span> <span class="p">[</span><span class="n">item</span><span class="p">[</span><span class="s2">&quot;filename&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">api_response</span><span class="p">[</span><span class="s2">&quot;files&quot;</span><span class="p">]]</span>
         <span class="c1"># Check if file exists in the repository</span>
         <span class="k">if</span> <span class="n">file_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">files</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="p">(</span>
                 <span class="sa">f</span><span class="s2">&quot;File &#39;</span><span class="si">{</span><span class="n">file_name</span><span class="si">}</span><span class="s2">&#39; not found in data archive &quot;</span>
                 <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">archive_url</span><span class="si">}</span><span class="s2"> (doi:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">doi</span><span class="si">}</span><span class="s2">).&quot;</span>
             <span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
         <span class="c1"># Build download url</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">api_version</span> <span class="o">==</span> <span class="s2">&quot;legacy&quot;</span><span class="p">:</span>
             <span class="n">download_url</span> <span class="o">=</span> <span class="n">files</span><span class="p">[</span><span class="n">file_name</span><span class="p">][</span><span class="s2">&quot;links&quot;</span><span class="p">][</span><span class="s2">&quot;self&quot;</span><span class="p">]</span>
@@ -1366,7 +1373,7 @@ document.write(`
             <span class="n">pooch</span><span class="o">.</span><span class="n">registry</span><span class="p">[</span><span class="n">filedata</span><span class="p">[</span><span class="n">key</span><span class="p">]]</span> <span class="o">=</span> <span class="n">checksum</span>
 
 
-<span class="k">class</span><span class="w"> </span><span class="nc">FigshareRepository</span><span class="p">(</span><span class="n">DataRepository</span><span class="p">):</span>  <span class="c1"># pylint: disable=missing-class-docstring</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">FigshareRepository</span><span class="p">(</span><span class="n">DataRepository</span><span class="p">):</span>
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">doi</span><span class="p">,</span> <span class="n">archive_url</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">archive_url</span> <span class="o">=</span> <span class="n">archive_url</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">doi</span> <span class="o">=</span> <span class="n">doi</span>
@@ -1423,7 +1430,7 @@ document.write(`
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Cached API response from Figshare&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_api_response</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="c1"># Lazy import requests to speed up import time</span>
-            <span class="kn">import</span><span class="w"> </span><span class="nn">requests</span>  <span class="c1"># pylint: disable=C0415</span>
+            <span class="kn">import</span><span class="w"> </span><span class="nn">requests</span>  <span class="c1"># noqa: PLC0415</span>
 
             <span class="c1"># Use the figshare API to find the article ID from the DOI</span>
             <span class="n">article</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
@@ -1443,6 +1450,7 @@ document.write(`
                     <span class="s2">&quot;the repository should be used. &quot;</span>
                     <span class="s2">&quot;Figshare will point to the latest version available.&quot;</span><span class="p">,</span>
                     <span class="ne">UserWarning</span><span class="p">,</span>
+                    <span class="n">stacklevel</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
                 <span class="p">)</span>
                 <span class="c1"># Define API url using only the article id</span>
                 <span class="c1"># (figshare will resolve the latest version)</span>
@@ -1478,9 +1486,8 @@ document.write(`
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">files</span> <span class="o">=</span> <span class="p">{</span><span class="n">item</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]:</span> <span class="n">item</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">api_response</span><span class="p">}</span>
         <span class="k">if</span> <span class="n">file_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">files</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;File &#39;</span><span class="si">{</span><span class="n">file_name</span><span class="si">}</span><span class="s2">&#39; not found in data archive </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">archive_url</span><span class="si">}</span><span class="s2"> (doi:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">doi</span><span class="si">}</span><span class="s2">).&quot;</span>
-            <span class="p">)</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;File &#39;</span><span class="si">{</span><span class="n">file_name</span><span class="si">}</span><span class="s2">&#39; not found in data archive </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">archive_url</span><span class="si">}</span><span class="s2"> (doi:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">doi</span><span class="si">}</span><span class="s2">).&quot;</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
         <span class="n">download_url</span> <span class="o">=</span> <span class="n">files</span><span class="p">[</span><span class="n">file_name</span><span class="p">][</span><span class="s2">&quot;download_url&quot;</span><span class="p">]</span>
         <span class="k">return</span> <span class="n">download_url</span>
 
@@ -1498,7 +1505,7 @@ document.write(`
             <span class="n">pooch</span><span class="o">.</span><span class="n">registry</span><span class="p">[</span><span class="n">filedata</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;md5:</span><span class="si">{</span><span class="n">filedata</span><span class="p">[</span><span class="s1">&#39;computed_md5&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>
 
 
-<span class="k">class</span><span class="w"> </span><span class="nc">DataverseRepository</span><span class="p">(</span><span class="n">DataRepository</span><span class="p">):</span>  <span class="c1"># pylint: disable=missing-class-docstring</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">DataverseRepository</span><span class="p">(</span><span class="n">DataRepository</span><span class="p">):</span>
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">doi</span><span class="p">,</span> <span class="n">archive_url</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">archive_url</span> <span class="o">=</span> <span class="n">archive_url</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">doi</span> <span class="o">=</span> <span class="n">doi</span>
@@ -1547,7 +1554,7 @@ document.write(`
 <span class="sd">        used prior and after the initialization.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Lazy import requests to speed up import time</span>
-        <span class="kn">import</span><span class="w"> </span><span class="nn">requests</span>  <span class="c1"># pylint: disable=C0415</span>
+        <span class="kn">import</span><span class="w"> </span><span class="nn">requests</span>  <span class="c1"># noqa: PLC0415</span>
 
         <span class="n">parsed</span> <span class="o">=</span> <span class="n">parse_url</span><span class="p">(</span><span class="n">archive_url</span><span class="p">)</span>
         <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
@@ -1596,10 +1603,11 @@ document.write(`
             <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">response</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="s2">&quot;latestVersion&quot;</span><span class="p">][</span><span class="s2">&quot;files&quot;</span><span class="p">]</span>
         <span class="p">}</span>
         <span class="k">if</span> <span class="n">file_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">files</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="p">(</span>
                 <span class="sa">f</span><span class="s2">&quot;File &#39;</span><span class="si">{</span><span class="n">file_name</span><span class="si">}</span><span class="s2">&#39; not found in data archive &quot;</span>
                 <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">archive_url</span><span class="si">}</span><span class="s2"> (doi:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">doi</span><span class="si">}</span><span class="s2">).&quot;</span>
             <span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
         <span class="c1"># Generate download_url using the file id</span>
         <span class="n">download_url</span> <span class="o">=</span> <span class="p">(</span>
             <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">parsed</span><span class="p">[</span><span class="s1">&#39;protocol&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">://</span><span class="si">{</span><span class="n">parsed</span><span class="p">[</span><span class="s1">&#39;netloc&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">/api/access/datafile/&quot;</span>
@@ -1664,7 +1672,7 @@ document.write(`
   
   <div class="footer-item">
     <p class="last-updated">
-  Last updated on Jan 30, 2026.
+  Last updated on Jun 30, 2026.
   <br/>
 </p>
   </div>

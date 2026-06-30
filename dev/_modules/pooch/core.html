@@ -388,27 +388,26 @@ document.write(`
 <span class="sd">The main Pooch class and a factory function for it.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">contextlib</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">shlex</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">shutil</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Any</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span>
 
-
-<span class="kn">from</span><span class="w"> </span><span class="nn">.hashes</span><span class="w"> </span><span class="kn">import</span> <span class="n">hash_matches</span><span class="p">,</span> <span class="n">file_hash</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.downloaders</span><span class="w"> </span><span class="kn">import</span> <span class="n">DOIDownloader</span><span class="p">,</span> <span class="n">choose_downloader</span><span class="p">,</span> <span class="n">doi_to_repository</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.hashes</span><span class="w"> </span><span class="kn">import</span> <span class="n">file_hash</span><span class="p">,</span> <span class="n">hash_matches</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Action</span><span class="p">,</span> <span class="n">Downloader</span><span class="p">,</span> <span class="n">PathInputType</span><span class="p">,</span> <span class="n">PathType</span><span class="p">,</span> <span class="n">Processor</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.utils</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">cache_location</span><span class="p">,</span>
     <span class="n">check_version</span><span class="p">,</span>
     <span class="n">get_logger</span><span class="p">,</span>
     <span class="n">make_local_storage</span><span class="p">,</span>
-    <span class="n">cache_location</span><span class="p">,</span>
-    <span class="n">temporary_file</span><span class="p">,</span>
     <span class="n">os_cache</span><span class="p">,</span>
+    <span class="n">temporary_file</span><span class="p">,</span>
     <span class="n">unique_file_name</span><span class="p">,</span>
 <span class="p">)</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">.downloaders</span><span class="w"> </span><span class="kn">import</span> <span class="n">DOIDownloader</span><span class="p">,</span> <span class="n">choose_downloader</span><span class="p">,</span> <span class="n">doi_to_repository</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">.typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">PathType</span><span class="p">,</span> <span class="n">PathInputType</span><span class="p">,</span> <span class="n">Processor</span><span class="p">,</span> <span class="n">Downloader</span><span class="p">,</span> <span class="n">Action</span>
 
 
 <div class="viewcode-block" id="retrieve">
@@ -965,9 +964,8 @@ document.write(`
         <span class="n">action</span><span class="p">,</span> <span class="n">verb</span> <span class="o">=</span> <span class="n">download_action</span><span class="p">(</span><span class="n">full_path</span><span class="p">,</span> <span class="n">known_hash</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">action</span> <span class="o">==</span> <span class="s2">&quot;update&quot;</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">allow_updates</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">fname</span><span class="si">}</span><span class="s2"> needs to update </span><span class="si">{</span><span class="n">full_path</span><span class="si">}</span><span class="s2"> but updates are disallowed.&quot;</span>
-            <span class="p">)</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">fname</span><span class="si">}</span><span class="s2"> needs to update </span><span class="si">{</span><span class="n">full_path</span><span class="si">}</span><span class="s2"> but updates are disallowed.&quot;</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">action</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;download&quot;</span><span class="p">,</span> <span class="s2">&quot;update&quot;</span><span class="p">):</span>
             <span class="c1"># We need to write data, so create the local data directory if it</span>
@@ -1006,7 +1004,8 @@ document.write(`
 <span class="sd">        it&#39;s not.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">fname</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">registry</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;File &#39;</span><span class="si">{</span><span class="n">fname</span><span class="si">}</span><span class="s2">&#39; is not in the registry.&quot;</span><span class="p">)</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;File &#39;</span><span class="si">{</span><span class="n">fname</span><span class="si">}</span><span class="s2">&#39; is not in the registry.&quot;</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
 
 <div class="viewcode-block" id="Pooch.get_url">
 <a class="viewcode-back" href="../../api/generated/pooch.Pooch.html#pooch.Pooch.get_url">[docs]</a>
@@ -1056,20 +1055,21 @@ document.write(`
 
             <span class="k">for</span> <span class="n">linenum</span><span class="p">,</span> <span class="n">line</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">fin</span><span class="p">):</span>
                 <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">line</span><span class="p">,</span> <span class="nb">bytes</span><span class="p">):</span>
-                    <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span>
+                    <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span>  <span class="c1"># noqa: PLW2901</span>
 
-                <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+                <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>  <span class="c1"># noqa: PLW2901</span>
                 <span class="c1"># skip line comments</span>
                 <span class="k">if</span> <span class="n">line</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;#&quot;</span><span class="p">):</span>
                     <span class="k">continue</span>
 
                 <span class="n">elements</span> <span class="o">=</span> <span class="n">shlex</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
-                <span class="k">if</span> <span class="ow">not</span> <span class="nb">len</span><span class="p">(</span><span class="n">elements</span><span class="p">)</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]:</span>
-                    <span class="k">raise</span> <span class="ne">OSError</span><span class="p">(</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">elements</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]:</span>
+                    <span class="n">msg</span> <span class="o">=</span> <span class="p">(</span>
                         <span class="sa">f</span><span class="s2">&quot;Invalid entry in Pooch registry file &#39;</span><span class="si">{</span><span class="n">fname</span><span class="si">}</span><span class="s2">&#39;: &quot;</span>
                         <span class="sa">f</span><span class="s2">&quot;expected 2 or 3 elements in line </span><span class="si">{</span><span class="n">linenum</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2"> but got &quot;</span>
                         <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">elements</span><span class="p">)</span><span class="si">}</span><span class="s2">. Offending entry: &#39;</span><span class="si">{</span><span class="n">line</span><span class="si">}</span><span class="s2">&#39;&quot;</span>
                     <span class="p">)</span>
+                    <span class="k">raise</span> <span class="ne">OSError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
                 <span class="k">if</span> <span class="n">elements</span><span class="p">:</span>
                     <span class="n">file_name</span> <span class="o">=</span> <span class="n">elements</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
                     <span class="n">file_checksum</span> <span class="o">=</span> <span class="n">elements</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
@@ -1150,7 +1150,7 @@ document.write(`
             <span class="n">available</span> <span class="o">=</span> <span class="n">downloader</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="n">check_only</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
         <span class="k">except</span> <span class="ne">TypeError</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
             <span class="n">error_msg</span> <span class="o">=</span> <span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Downloader &#39;</span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">downloader</span><span class="p">)</span><span class="si">}</span><span class="s2">&#39; does not support availability checks.&quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;Downloader &#39;</span><span class="si">{</span><span class="n">downloader</span><span class="si">!s}</span><span class="s2">&#39; does not support availability checks.&quot;</span>
             <span class="p">)</span>
             <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="n">error_msg</span><span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">error</span>
         <span class="k">return</span> <span class="n">available</span></div>
@@ -1211,7 +1211,7 @@ document.write(`
 <span class="sd">    was due to a network error.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Lazy import requests to speed up import time</span>
-    <span class="kn">import</span><span class="w"> </span><span class="nn">requests.exceptions</span>  <span class="c1"># pylint: disable=C0415</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">requests.exceptions</span>  <span class="c1"># noqa: PLC0415</span>
 
     <span class="c1"># Ensure the parent directory exists in case the file is in a subdirectory.</span>
     <span class="c1"># Otherwise, move will cause an error.</span>
@@ -1283,7 +1283,7 @@ document.write(`
   
   <div class="footer-item">
     <p class="last-updated">
-  Last updated on Jan 30, 2026.
+  Last updated on Jun 30, 2026.
   <br/>
 </p>
   </div>

@@ -387,8 +387,9 @@ document.write(`
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">Calculating and checking file hashes.</span>
 <span class="sd">&quot;&quot;&quot;</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">hashlib</span>
+
 <span class="kn">import</span><span class="w"> </span><span class="nn">functools</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">hashlib</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
 
 <span class="c1"># From the docs: https://docs.python.org/3/library/hashlib.html#hashlib.new</span>
@@ -453,11 +454,12 @@ document.write(`
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">alg</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">ALGORITHMS_AVAILABLE</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="p">(</span>
             <span class="sa">f</span><span class="s2">&quot;Algorithm &#39;</span><span class="si">{</span><span class="n">alg</span><span class="si">}</span><span class="s2">&#39; not available to the pooch library. &quot;</span>
             <span class="s2">&quot;Only the following algorithms are available &quot;</span>
             <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="n">ALGORITHMS_AVAILABLE</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span><span class="si">}</span><span class="s2">.&quot;</span>
         <span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
     <span class="c1"># Calculate the hash in chunks to avoid overloading the memory</span>
     <span class="n">chunksize</span> <span class="o">=</span> <span class="mi">65536</span>
     <span class="c1"># For hashlib algorithms, use usedforsecurity=False to support FIPS-enabled</span>
@@ -514,9 +516,7 @@ document.write(`
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">default</span> <span class="o">=</span> <span class="s2">&quot;sha256&quot;</span>
-    <span class="k">if</span> <span class="n">hash_string</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">algorithm</span> <span class="o">=</span> <span class="n">default</span>
-    <span class="k">elif</span> <span class="s2">&quot;:&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">hash_string</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">hash_string</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="s2">&quot;:&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">hash_string</span><span class="p">:</span>
         <span class="n">algorithm</span> <span class="o">=</span> <span class="n">default</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">algorithm</span> <span class="o">=</span> <span class="n">hash_string</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;:&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
@@ -562,12 +562,13 @@ document.write(`
     <span class="k">if</span> <span class="n">strict</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">matches</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">source</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">source</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="p">(</span>
             <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">algorithm</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span><span class="si">}</span><span class="s2"> hash of downloaded file (</span><span class="si">{</span><span class="n">source</span><span class="si">}</span><span class="s2">) does not match&quot;</span>
             <span class="sa">f</span><span class="s2">&quot; the known hash: expected </span><span class="si">{</span><span class="n">known_hash</span><span class="si">}</span><span class="s2"> but got </span><span class="si">{</span><span class="n">new_hash</span><span class="si">}</span><span class="s2">. Deleted&quot;</span>
             <span class="s2">&quot; download for safety. The downloaded file may have been corrupted or&quot;</span>
             <span class="s2">&quot; the known hash may be outdated.&quot;</span>
         <span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">matches</span>
 
 
@@ -593,10 +594,7 @@ document.write(`
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">directory</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">directory</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">recursive</span><span class="p">:</span>
-        <span class="n">pattern</span> <span class="o">=</span> <span class="s2">&quot;**/*&quot;</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">pattern</span> <span class="o">=</span> <span class="s2">&quot;*&quot;</span>
+    <span class="n">pattern</span> <span class="o">=</span> <span class="s2">&quot;**/*&quot;</span> <span class="k">if</span> <span class="n">recursive</span> <span class="k">else</span> <span class="s2">&quot;*&quot;</span>
 
     <span class="n">files</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span>
         <span class="nb">str</span><span class="p">(</span><span class="n">path</span><span class="o">.</span><span class="n">relative_to</span><span class="p">(</span><span class="n">directory</span><span class="p">))</span>
@@ -607,10 +605,12 @@ document.write(`
     <span class="n">hashes</span> <span class="o">=</span> <span class="p">[</span><span class="n">file_hash</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">directory</span> <span class="o">/</span> <span class="n">fname</span><span class="p">))</span> <span class="k">for</span> <span class="n">fname</span> <span class="ow">in</span> <span class="n">files</span><span class="p">]</span>
 
     <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">output</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">outfile</span><span class="p">:</span>
-        <span class="k">for</span> <span class="n">fname</span><span class="p">,</span> <span class="n">fhash</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">files</span><span class="p">,</span> <span class="n">hashes</span><span class="p">):</span>
-            <span class="c1"># Only use Unix separators for the registry so that we don&#39;t go</span>
-            <span class="c1"># insane dealing with file paths.</span>
-            <span class="n">outfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> </span><span class="si">{}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">fname</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;/&quot;</span><span class="p">),</span> <span class="n">fhash</span><span class="p">))</span></div>
+        <span class="c1"># Only use Unix separators for the registry so that we don&#39;t go</span>
+        <span class="c1"># insane dealing with file paths.</span>
+        <span class="n">outfile</span><span class="o">.</span><span class="n">writelines</span><span class="p">(</span>
+            <span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> </span><span class="si">{}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">fname</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;/&quot;</span><span class="p">),</span> <span class="n">fhash</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">fname</span><span class="p">,</span> <span class="n">fhash</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">files</span><span class="p">,</span> <span class="n">hashes</span><span class="p">)</span>
+        <span class="p">)</span></div>
 
 </pre></div>
 
@@ -655,7 +655,7 @@ document.write(`
   
   <div class="footer-item">
     <p class="last-updated">
-  Last updated on Jan 30, 2026.
+  Last updated on Jun 30, 2026.
   <br/>
 </p>
   </div>

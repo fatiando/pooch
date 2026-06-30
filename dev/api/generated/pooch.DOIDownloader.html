@@ -469,7 +469,7 @@ finding out the download URL for a file given the DOI.</p>
 the download URL from the DOI and file name. It then uses
 <a class="reference internal" href="pooch.HTTPDownloader.html#pooch.HTTPDownloader" title="pooch.HTTPDownloader"><code class="xref py py-class docutils literal notranslate"><span class="pre">pooch.HTTPDownloader</span></code></a> to download the URL into the specified local
 file. Allowing “URL”s  to be specified with the DOI instead of the actual
-HTTP download link. Uses the <a class="reference external" href="https://requests.readthedocs.io/en/latest/api/#module-requests" title="(in Requests v2.32.5)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">requests</span></code></a> library to manage downloads
+HTTP download link. Uses the <a class="reference external" href="https://requests.readthedocs.io/en/latest/api/#module-requests" title="(in Requests v2.34.2)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">requests</span></code></a> library to manage downloads
 and interact with the APIs.</p>
 <p>The <strong>format of the “URL”</strong> is: <code class="docutils literal notranslate"><span class="pre">doi:{DOI}/{file</span> <span class="pre">name}</span></code>.</p>
 <p>Notice that there are no <code class="docutils literal notranslate"><span class="pre">//</span></code> like in HTTP/FTP and you must specify a
@@ -497,11 +497,11 @@ installed. Alternatively, an arbitrary progress bar object can be
 passed. See <a class="reference internal" href="../../progressbars.html#custom-progressbar"><span class="std std-ref">Using custom progress bars</span></a> for details.</p></li>
 <li><p><strong>chunk_size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a><em>, </em><em>optional</em>) – Files are streamed <em>chunk_size</em> bytes at a time instead of loading
 everything into memory at one. Usually doesn’t need to be changed.</p></li>
-<li><p><strong>headers</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><em>dict</em></a><em> or </em><em>None</em><em>, </em><em>optional</em>) – Headers that will be passed to <a class="reference external" href="https://requests.readthedocs.io/en/latest/api/#requests.get" title="(in Requests v2.32.5)"><code class="xref py py-func docutils literal notranslate"><span class="pre">requests.get</span></code></a>.
+<li><p><strong>headers</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><em>dict</em></a><em> or </em><em>None</em><em>, </em><em>optional</em>) – Headers that will be passed to <a class="reference external" href="https://requests.readthedocs.io/en/latest/api/#requests.get" title="(in Requests v2.34.2)"><code class="xref py py-func docutils literal notranslate"><span class="pre">requests.get</span></code></a>.
 If None, default headers containing Pooch’s user agent will be used.
 If no headers should be used, pass an empty dictionary.</p></li>
 <li><p><strong>**kwargs</strong> – All keyword arguments given when creating an instance of this class
-will be passed to <a class="reference external" href="https://requests.readthedocs.io/en/latest/api/#requests.get" title="(in Requests v2.32.5)"><code class="xref py py-func docutils literal notranslate"><span class="pre">requests.get</span></code></a>.</p></li>
+will be passed to <a class="reference external" href="https://requests.readthedocs.io/en/latest/api/#requests.get" title="(in Requests v2.34.2)"><code class="xref py py-func docutils literal notranslate"><span class="pre">requests.get</span></code></a>.</p></li>
 </ul>
 </dd>
 </dl>
@@ -556,7 +556,7 @@ data:</p>
 <dd><p>Download the given DOI URL over HTTP to the given output file.</p>
 <p>Uses the repository’s API to determine the actual HTTP download URL
 from the given DOI.</p>
-<p>Uses <a class="reference external" href="https://requests.readthedocs.io/en/latest/api/#requests.get" title="(in Requests v2.32.5)"><code class="xref py py-func docutils literal notranslate"><span class="pre">requests.get</span></code></a>.</p>
+<p>Uses <a class="reference external" href="https://requests.readthedocs.io/en/latest/api/#requests.get" title="(in Requests v2.34.2)"><code class="xref py py-func docutils literal notranslate"><span class="pre">requests.get</span></code></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -648,7 +648,7 @@ from the given DOI.</p>
   
   <div class="footer-item">
     <p class="last-updated">
-  Last updated on Jan 30, 2026.
+  Last updated on Jun 30, 2026.
   <br/>
 </p>
   </div>

@@ -384,23 +384,21 @@ document.write(`
 <span class="c1">#</span>
 <span class="c1"># This code is part of the Fatiando a Terra project (https://www.fatiando.org)</span>
 <span class="c1">#</span>
-<span class="c1"># pylint: disable=missing-docstring,import-outside-toplevel,import-self</span>
+
 <span class="c1">#</span>
 <span class="c1"># Import functions/classes to make the API</span>
+<span class="c1"># The _version.py is generated automatically by setuptools_scm</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.</span><span class="w"> </span><span class="kn">import</span> <span class="n">_version</span>  <span class="c1"># type: ignore[attr-defined]</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.core</span><span class="w"> </span><span class="kn">import</span> <span class="n">Pooch</span><span class="p">,</span> <span class="n">create</span><span class="p">,</span> <span class="n">retrieve</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">os_cache</span><span class="p">,</span> <span class="n">check_version</span><span class="p">,</span> <span class="n">get_logger</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">.hashes</span><span class="w"> </span><span class="kn">import</span> <span class="n">file_hash</span><span class="p">,</span> <span class="n">make_registry</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.downloaders</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
-    <span class="n">HTTPDownloader</span><span class="p">,</span>
-    <span class="n">FTPDownloader</span><span class="p">,</span>
-    <span class="n">SFTPDownloader</span><span class="p">,</span>
     <span class="n">DOIDownloader</span><span class="p">,</span>
+    <span class="n">FTPDownloader</span><span class="p">,</span>
+    <span class="n">HTTPDownloader</span><span class="p">,</span>
+    <span class="n">SFTPDownloader</span><span class="p">,</span>
 <span class="p">)</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">.processors</span><span class="w"> </span><span class="kn">import</span> <span class="n">Unzip</span><span class="p">,</span> <span class="n">Untar</span><span class="p">,</span> <span class="n">Decompress</span>
-
-<span class="c1"># This file is generated automatically by setuptools_scm</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">.</span><span class="w"> </span><span class="kn">import</span> <span class="n">_version</span>  <span class="c1"># type: ignore</span>
-
+<span class="kn">from</span><span class="w"> </span><span class="nn">.hashes</span><span class="w"> </span><span class="kn">import</span> <span class="n">file_hash</span><span class="p">,</span> <span class="n">make_registry</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.processors</span><span class="w"> </span><span class="kn">import</span> <span class="n">Decompress</span><span class="p">,</span> <span class="n">Untar</span><span class="p">,</span> <span class="n">Unzip</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">check_version</span><span class="p">,</span> <span class="n">get_logger</span><span class="p">,</span> <span class="n">os_cache</span>
 
 <span class="c1"># Add a &quot;v&quot; to the version number</span>
 <span class="n">__version__</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;v</span><span class="si">{</span><span class="n">_version</span><span class="o">.</span><span class="n">version</span><span class="si">}</span><span class="s2">&quot;</span>
@@ -408,7 +406,7 @@ document.write(`
 
 <div class="viewcode-block" id="test">
 <a class="viewcode-back" href="../api/generated/pooch.test.html#pooch.test">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">test</span><span class="p">(</span><span class="n">doctest</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">coverage</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">test</span><span class="p">(</span><span class="n">doctest</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">coverage</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>  <span class="c1"># noqa: PT028</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Run the test suite.</span>
 
@@ -434,7 +432,7 @@ document.write(`
 <span class="sd">        failed.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="kn">import</span><span class="w"> </span><span class="nn">pytest</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">pytest</span>  <span class="c1"># noqa: PLC0415</span>
 
     <span class="n">package</span> <span class="o">=</span> <span class="vm">__name__</span>
     <span class="n">args</span> <span class="o">=</span> <span class="p">[]</span>
@@ -493,7 +491,7 @@ document.write(`
   
   <div class="footer-item">
     <p class="last-updated">
-  Last updated on Jan 30, 2026.
+  Last updated on Jun 30, 2026.
   <br/>
 </p>
   </div>
