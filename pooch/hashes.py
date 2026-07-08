@@ -146,7 +146,7 @@ def hash_matches(fname, known_hash, strict=False, source=None):
 
     If the *known_hash* is None, will always return True.
 
-    Coverts hashes to lowercase before comparison to avoid system specific
+    Converts hashes to lowercase before comparison to avoid system specific
     mismatches between hashes in the registry and computed hashes.
 
     Parameters

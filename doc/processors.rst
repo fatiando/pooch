@@ -125,7 +125,7 @@ the ``fname, action, pup`` arguments. Example use cases for this would be:
   size) to a more user friendly format (easy to open and fast to load into
   memory).
 * Add missing metadata to data from public servers. You might be using public
-  data that has known issues (poorly formated entries, missing metadata, etc)
+  data that has known issues (poorly formatted entries, missing metadata, etc)
   which can be fixed when the file is downloaded.
 
 The main advantage to using a processor for these actions is that they are
