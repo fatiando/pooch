@@ -123,9 +123,20 @@ def test_decompress_fails():
     [(Unzip, ".zip"), (Untar, ".tar.gz")],
     ids=["Unzip", "Untar"],
 )
-def test_unpacking(processor_class, extension, target_path, archive, members):
+@pytest.mark.parametrize(
+    "delete_after_extraction",
+    [False, True],
+    ids=["dont_delete", "delete_after"],
+)
+def test_unpacking(
+    delete_after_extraction, processor_class, extension, target_path, archive, members
+):
     "Tests the behaviour of processors for unpacking archives (Untar, Unzip)"
-    processor = processor_class(members=members, extract_dir=target_path)
+    processor = processor_class(
+        members=members,
+        extract_dir=target_path,
+        delete_after_extraction=delete_after_extraction,
+    )
     if target_path is None:
         target_path = archive + extension + processor.suffix
     with TemporaryDirectory() as path:
@@ -149,6 +160,17 @@ def test_unpacking(processor_class, extension, target_path, archive, members):
             _check_logs(log_file, [])
         for fname in fnames:
             check_tiny_data(fname)
+        # Check that .pooch_hash file is created depending on delete_after_extraction
+        if delete_after_extraction:
+            pooch_hash = path / (archive + extension + ".pooch_hash")
+            assert pooch_hash.exists()
+            with open(pooch_hash, "r") as phf:
+                assert (
+                    next(phf).strip().split(" ", maxsplit=1)[1] == archive + extension
+                )
+                for line, fname in zip(phf, fnames):
+                    phf_fname = line.strip().split(" ", maxsplit=1)[1]
+                    assert fname == str(path / phf_fname)
 
 
 @pytest.mark.network

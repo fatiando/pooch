@@ -72,5 +72,23 @@ To extract all files into a folder and return the path to each file, omit the
         fnames = GOODBOY.fetch("zipped-archive.zip", processor=Unzip())
         return fnames
 
+
+To save disk space, you might want to remove the archive after the required
+files have been extracted. To do this without triggering re-downloads of the
+archive when it is fetched in future, set ``delete_after_extraction=True``:
+
+.. code:: python
+
+    def fetch_zipped_archive_and_delete():
+        """
+        Load all files from a zipped archive, then delete the archive while making
+        a record of it's hash and the hashes of the extracted files
+        """
+        fnames = GOODBOY.fetch(
+            "zipped-archive.zip", processor=Unzip(delete_after_extraction=True)
+        )
+        return fnames
+
+
 Use :class:`pooch.Untar` to do the exact same for tar archives (with optional
 compression).

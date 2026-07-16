@@ -17,9 +17,11 @@ import os
 import shutil
 import sys
 import typing
+from pathlib import Path
 from tarfile import TarFile
 from zipfile import ZipFile
 
+from .hashes import file_hash
 from .utils import get_logger
 
 
@@ -44,12 +46,19 @@ class ExtractorProcessor(abc.ABC):
         Otherwise, files will be unpacked to ``extract_dir``, which is
         interpreted as a *relative path* (relative to the cache location
         provided by :func:`pooch.retrieve` or :meth:`pooch.Pooch.fetch`).
+    delete_after_extraction : bool
+        If True, then the archive will be deleted after extraction,
+        leaving behind a record of it's hash and the hashes of the extracted
+        files so that `pooch.retrieve` knows not to re-download it.
+        The record has the same name as the downloaded file, with the
+        additional suffix ".pooch_hash" appended.
 
     """
 
-    def __init__(self, members=None, extract_dir=None):
+    def __init__(self, members=None, extract_dir=None, delete_after_extraction=False):
         self.members = members
         self.extract_dir = extract_dir
+        self.delete_after_extraction = delete_after_extraction
 
     @property
     @abc.abstractmethod
@@ -108,8 +117,21 @@ class ExtractorProcessor(abc.ABC):
         # Get a list of everyone who is supposed to be in the unpacked folder
         # so we can check if they are all there or if we need to extract new
         # files.
+        pooch_hash = Path(fname).with_name(f"{Path(fname).name}.pooch_hash")
         if self.members is None or not self.members:
-            members = self._all_members(fname)
+            if (
+                self.delete_after_extraction
+                and pooch_hash.exists()
+                and not Path(fname).exists()
+            ):
+                with open(pooch_hash, "r") as phf:
+                    next(phf)  # First line is for file itself
+                    members = [
+                        str(Path(fname).parent / line.strip().split(" ", maxsplit=1)[1])
+                        for line in phf
+                    ]
+            else:
+                members = self._all_members(fname)
         else:
             members = self.members
         if (
@@ -135,6 +157,18 @@ class ExtractorProcessor(abc.ABC):
                     relpath.startswith(os.path.normpath(m)) for m in self.members
                 ):
                     fnames.append(os.path.join(path, filename))
+
+        # Make a .pooch_hash and delete the archive if requested
+        if self.delete_after_extraction and action in ("update", "download"):
+            with open(pooch_hash, "w") as phf:
+                print(file_hash(fname), Path(fname).name, file=phf)
+                for filename in fnames:
+                    print(
+                        file_hash(filename),
+                        Path(filename).relative_to(Path(fname).parent),
+                        file=phf,
+                    )
+            Path(fname).unlink()
 
         return fnames
 
