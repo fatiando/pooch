@@ -384,26 +384,27 @@ document.write(`
 <span class="c1">#</span>
 <span class="c1"># This code is part of the Fatiando a Terra project (https://www.fatiando.org)</span>
 <span class="c1">#</span>
-<span class="c1"># pylint: disable=line-too-long</span>
-<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">"""</span>
 <span class="sd">Post-processing hooks</span>
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">abc</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">bz2</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">gzip</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">lzma</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">shutil</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">zipfile</span><span class="w"> </span><span class="kn">import</span> <span class="n">ZipFile</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">typing</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">tarfile</span><span class="w"> </span><span class="kn">import</span> <span class="n">TarFile</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">zipfile</span><span class="w"> </span><span class="kn">import</span> <span class="n">ZipFile</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_logger</span>
 
 
-<span class="k">class</span><span class="w"> </span><span class="nc">ExtractorProcessor</span><span class="p">(</span><span class="n">abc</span><span class="o">.</span><span class="n">ABC</span><span class="p">):</span>  <span class="c1"># pylint: disable=too-few-public-methods</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">ExtractorProcessor</span><span class="p">(</span><span class="n">abc</span><span class="o">.</span><span class="n">ABC</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Abstract base class for extractions from compressed archives.</span>
 
 <span class="sd">    Subclasses can be used with :meth:`pooch.Pooch.fetch` and</span>
@@ -424,7 +425,7 @@ document.write(`
 <span class="sd">        interpreted as a *relative path* (relative to the cache location</span>
 <span class="sd">        provided by :func:`pooch.retrieve` or :meth:`pooch.Pooch.fetch`).</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">members</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">extract_dir</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">members</span> <span class="o">=</span> <span class="n">members</span>
@@ -433,29 +434,29 @@ document.write(`
     <span class="nd">@property</span>
     <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">suffix</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        String appended to unpacked archive folder name.</span>
 <span class="sd">        Only used if extract_dir is None.</span>
 <span class="sd">        MUST BE IMPLEMENTED BY CHILD CLASSES.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
 
     <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">_all_members</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fname</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Return all the members in the archive.</span>
 <span class="sd">        MUST BE IMPLEMENTED BY CHILD CLASSES.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
 
     <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">_extract_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fname</span><span class="p">,</span> <span class="n">extract_dir</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        This method receives an argument for the archive to extract and the</span>
 <span class="sd">        destination path.</span>
 <span class="sd">        MUST BE IMPLEMENTED BY CHILD CLASSES.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fname</span><span class="p">,</span> <span class="n">action</span><span class="p">,</span> <span class="n">pooch</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fname</span><span class="p">,</span> <span class="n">action</span><span class="p">,</span> <span class="n">pooch</span><span class="p">):</span>  <span class="c1"># noqa: ARG002</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Extract all files from the given archive.</span>
 
 <span class="sd">        Parameters</span>
@@ -466,9 +467,9 @@ document.write(`
 <span class="sd">            Indicates what action was taken by :meth:`pooch.Pooch.fetch` or</span>
 <span class="sd">            :func:`pooch.retrieve`:</span>
 
-<span class="sd">            * ``&quot;download&quot;``: File didn&#39;t exist locally and was downloaded</span>
-<span class="sd">            * ``&quot;update&quot;``: Local file was outdated and was re-download</span>
-<span class="sd">            * ``&quot;fetch&quot;``: File exists and is updated so it wasn&#39;t downloaded</span>
+<span class="sd">            * ``"download"``: File didn't exist locally and was downloaded</span>
+<span class="sd">            * ``"update"``: Local file was outdated and was re-download</span>
+<span class="sd">            * ``"fetch"``: File exists and is updated so it wasn't downloaded</span>
 
 <span class="sd">        pooch : :class:`pooch.Pooch`</span>
 <span class="sd">            The instance of :class:`pooch.Pooch` that is calling this.</span>
@@ -478,7 +479,7 @@ document.write(`
 <span class="sd">        fnames : list of str</span>
 <span class="sd">            A list of the full path to all files in the extracted archive.</span>
 
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">extract_dir</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">extract_dir</span> <span class="o">=</span> <span class="n">fname</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">suffix</span>
         <span class="k">else</span><span class="p">:</span>
@@ -492,7 +493,7 @@ document.write(`
         <span class="k">else</span><span class="p">:</span>
             <span class="n">members</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">members</span>
         <span class="k">if</span> <span class="p">(</span>
-            <span class="p">(</span><span class="n">action</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;update&quot;</span><span class="p">,</span> <span class="s2">&quot;download&quot;</span><span class="p">))</span>
+            <span class="p">(</span><span class="n">action</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">"update"</span><span class="p">,</span> <span class="s2">"download"</span><span class="p">))</span>
             <span class="ow">or</span> <span class="p">(</span><span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">extract_dir</span><span class="p">))</span>
             <span class="ow">or</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span>
                 <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">extract_dir</span><span class="p">,</span> <span class="n">m</span><span class="p">))</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">members</span>
@@ -520,8 +521,8 @@ document.write(`
 
 <div class="viewcode-block" id="Unzip">
 <a class="viewcode-back" href="../../api/generated/pooch.Unzip.html#pooch.Unzip">[docs]</a>
-<span class="k">class</span><span class="w"> </span><span class="nc">Unzip</span><span class="p">(</span><span class="n">ExtractorProcessor</span><span class="p">):</span>  <span class="c1"># pylint: disable=too-few-public-methods</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Unzip</span><span class="p">(</span><span class="n">ExtractorProcessor</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Processor that unpacks a zip archive and returns a list of all files.</span>
 
 <span class="sd">    Use with :meth:`pooch.Pooch.fetch` or :func:`pooch.retrieve` to unzip a</span>
@@ -545,41 +546,41 @@ document.write(`
 <span class="sd">        the cache location provided by :func:`pooch.retrieve` or</span>
 <span class="sd">        :meth:`pooch.Pooch.fetch`).</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">suffix</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        String appended to unpacked archive folder name.</span>
 <span class="sd">        Only used if extract_dir is None.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="s2">&quot;.unzip&quot;</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="s2">".unzip"</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_all_members</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fname</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return all members from a given archive.&quot;&quot;&quot;</span>
-        <span class="k">with</span> <span class="n">ZipFile</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">zip_file</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Return all members from a given archive."""</span>
+        <span class="k">with</span> <span class="n">ZipFile</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="s2">"r"</span><span class="p">)</span> <span class="k">as</span> <span class="n">zip_file</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">zip_file</span><span class="o">.</span><span class="n">namelist</span><span class="p">()</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_extract_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fname</span><span class="p">,</span> <span class="n">extract_dir</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        This method receives an argument for the archive to extract and the</span>
 <span class="sd">        destination path.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">with</span> <span class="n">ZipFile</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">zip_file</span><span class="p">:</span>
+<span class="sd">        """</span>
+        <span class="k">with</span> <span class="n">ZipFile</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="s2">"r"</span><span class="p">)</span> <span class="k">as</span> <span class="n">zip_file</span><span class="p">:</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">members</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
-                    <span class="s2">&quot;Unzipping contents of &#39;</span><span class="si">%s</span><span class="s2">&#39; to &#39;</span><span class="si">%s</span><span class="s2">&#39;&quot;</span><span class="p">,</span> <span class="n">fname</span><span class="p">,</span> <span class="n">extract_dir</span>
+                    <span class="s2">"Unzipping contents of '</span><span class="si">%s</span><span class="s2">' to '</span><span class="si">%s</span><span class="s2">'"</span><span class="p">,</span> <span class="n">fname</span><span class="p">,</span> <span class="n">extract_dir</span>
                 <span class="p">)</span>
                 <span class="c1"># Unpack all files from the archive into our new folder</span>
                 <span class="n">zip_file</span><span class="o">.</span><span class="n">extractall</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="n">extract_dir</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">for</span> <span class="n">member</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">members</span><span class="p">:</span>
                     <span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
-                        <span class="s2">&quot;Extracting &#39;</span><span class="si">%s</span><span class="s2">&#39; from &#39;</span><span class="si">%s</span><span class="s2">&#39; to &#39;</span><span class="si">%s</span><span class="s2">&#39;&quot;</span><span class="p">,</span> <span class="n">member</span><span class="p">,</span> <span class="n">fname</span><span class="p">,</span> <span class="n">extract_dir</span>
+                        <span class="s2">"Extracting '</span><span class="si">%s</span><span class="s2">' from '</span><span class="si">%s</span><span class="s2">' to '</span><span class="si">%s</span><span class="s2">'"</span><span class="p">,</span> <span class="n">member</span><span class="p">,</span> <span class="n">fname</span><span class="p">,</span> <span class="n">extract_dir</span>
                     <span class="p">)</span>
                     <span class="c1"># If the member is a dir, we need to get the names of the</span>
                     <span class="c1"># elements it contains for extraction (ZipFile does not</span>
-                    <span class="c1"># support dirs on .extract). If it&#39;s not a dir, this will</span>
+                    <span class="c1"># support dirs on .extract). If it's not a dir, this will</span>
                     <span class="c1"># only include the member itself.</span>
                     <span class="c1"># Based on:</span>
                     <span class="c1"># https://stackoverflow.com/questions/8008829/extract-only-a-single-directory-from-tar</span>
@@ -595,8 +596,8 @@ document.write(`
 
 <div class="viewcode-block" id="Untar">
 <a class="viewcode-back" href="../../api/generated/pooch.Untar.html#pooch.Untar">[docs]</a>
-<span class="k">class</span><span class="w"> </span><span class="nc">Untar</span><span class="p">(</span><span class="n">ExtractorProcessor</span><span class="p">):</span>  <span class="c1"># pylint: disable=too-few-public-methods</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Untar</span><span class="p">(</span><span class="n">ExtractorProcessor</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Processor that unpacks a tar archive and returns a list of all files.</span>
 
 <span class="sd">    Use with :meth:`pooch.Pooch.fetch` or :func:`pooch.retrieve` to untar a</span>
@@ -620,46 +621,46 @@ document.write(`
 <span class="sd">        ``extract_dir``, which is interpreted as a *relative path* (relative to</span>
 <span class="sd">        the cache location  provided by :func:`pooch.retrieve` or</span>
 <span class="sd">        :meth:`pooch.Pooch.fetch`).</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">suffix</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        String appended to unpacked archive folder name.</span>
 <span class="sd">        Only used if extract_dir is None.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="s2">&quot;.untar&quot;</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="s2">".untar"</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_all_members</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fname</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return all members from a given archive.&quot;&quot;&quot;</span>
-        <span class="k">with</span> <span class="n">TarFile</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">tar_file</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Return all members from a given archive."""</span>
+        <span class="k">with</span> <span class="n">TarFile</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="s2">"r"</span><span class="p">)</span> <span class="k">as</span> <span class="n">tar_file</span><span class="p">:</span>
             <span class="k">return</span> <span class="p">[</span><span class="n">info</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">info</span> <span class="ow">in</span> <span class="n">tar_file</span><span class="o">.</span><span class="n">getmembers</span><span class="p">()]</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_extract_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fname</span><span class="p">,</span> <span class="n">extract_dir</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        This method receives an argument for the archive to extract and the</span>
 <span class="sd">        destination path.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">filter_kwarg</span> <span class="o">=</span> <span class="p">{}</span> <span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span> <span class="o">&lt;</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">12</span><span class="p">)</span> <span class="k">else</span> <span class="p">{</span><span class="s2">&quot;filter&quot;</span><span class="p">:</span> <span class="s2">&quot;data&quot;</span><span class="p">}</span>
-        <span class="k">with</span> <span class="n">TarFile</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">tar_file</span><span class="p">:</span>
+<span class="sd">        """</span>
+        <span class="n">filter_kwarg</span> <span class="o">=</span> <span class="p">{}</span> <span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span> <span class="o">&lt;</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">12</span><span class="p">)</span> <span class="k">else</span> <span class="p">{</span><span class="s2">"filter"</span><span class="p">:</span> <span class="s2">"data"</span><span class="p">}</span>
+        <span class="k">with</span> <span class="n">TarFile</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="s2">"r"</span><span class="p">)</span> <span class="k">as</span> <span class="n">tar_file</span><span class="p">:</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">members</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
-                    <span class="s2">&quot;Untarring contents of &#39;</span><span class="si">%s</span><span class="s2">&#39; to &#39;</span><span class="si">%s</span><span class="s2">&#39;&quot;</span><span class="p">,</span> <span class="n">fname</span><span class="p">,</span> <span class="n">extract_dir</span>
+                    <span class="s2">"Untarring contents of '</span><span class="si">%s</span><span class="s2">' to '</span><span class="si">%s</span><span class="s2">'"</span><span class="p">,</span> <span class="n">fname</span><span class="p">,</span> <span class="n">extract_dir</span>
                 <span class="p">)</span>
                 <span class="c1"># Unpack all files from the archive into our new folder</span>
                 <span class="n">tar_file</span><span class="o">.</span><span class="n">extractall</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="n">extract_dir</span><span class="p">,</span> <span class="o">**</span><span class="n">filter_kwarg</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">for</span> <span class="n">member</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">members</span><span class="p">:</span>
                     <span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
-                        <span class="s2">&quot;Extracting &#39;</span><span class="si">%s</span><span class="s2">&#39; from &#39;</span><span class="si">%s</span><span class="s2">&#39; to &#39;</span><span class="si">%s</span><span class="s2">&#39;&quot;</span><span class="p">,</span> <span class="n">member</span><span class="p">,</span> <span class="n">fname</span><span class="p">,</span> <span class="n">extract_dir</span>
+                        <span class="s2">"Extracting '</span><span class="si">%s</span><span class="s2">' from '</span><span class="si">%s</span><span class="s2">' to '</span><span class="si">%s</span><span class="s2">'"</span><span class="p">,</span> <span class="n">member</span><span class="p">,</span> <span class="n">fname</span><span class="p">,</span> <span class="n">extract_dir</span>
                     <span class="p">)</span>
                     <span class="c1"># If the member is a dir, we need to get the names of the</span>
                     <span class="c1"># elements it contains for extraction (TarFile does not</span>
-                    <span class="c1"># support dirs on .extract). If it&#39;s not a dir, this will</span>
+                    <span class="c1"># support dirs on .extract). If it's not a dir, this will</span>
                     <span class="c1"># only include the member itself.</span>
                     <span class="c1"># Based on:</span>
                     <span class="c1"># https://stackoverflow.com/questions/8008829/extract-only-a-single-directory-from-tar</span>
-                    <span class="c1"># Can&#39;t use .getnames because extractall expects TarInfo</span>
+                    <span class="c1"># Can't use .getnames because extractall expects TarInfo</span>
                     <span class="c1"># objects.</span>
                     <span class="n">subdir_members</span> <span class="o">=</span> <span class="p">[</span>
                         <span class="n">info</span>
@@ -677,8 +678,8 @@ document.write(`
 
 <div class="viewcode-block" id="Decompress">
 <a class="viewcode-back" href="../../api/generated/pooch.Decompress.html#pooch.Decompress">[docs]</a>
-<span class="k">class</span><span class="w"> </span><span class="nc">Decompress</span><span class="p">:</span>  <span class="c1"># pylint: disable=too-few-public-methods</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Decompress</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Processor that decompress a file and returns the decompressed version.</span>
 
 <span class="sd">    Use with :meth:`pooch.Pooch.fetch` or :func:`pooch.retrieve` to decompress</span>
@@ -690,7 +691,7 @@ document.write(`
 <span class="sd">    gzip (``.gz``).</span>
 
 <span class="sd">    File names with the standard extensions (see above) can use</span>
-<span class="sd">    ``method=&quot;auto&quot;`` to automatically determine the compression method. This</span>
+<span class="sd">    ``method="auto"`` to automatically determine the compression method. This</span>
 <span class="sd">    can be overwritten by setting the *method* argument.</span>
 
 <span class="sd">    .. note::</span>
@@ -711,27 +712,33 @@ document.write(`
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    method : str</span>
-<span class="sd">        Name of the compression method. Can be &quot;auto&quot;, &quot;lzma&quot;, &quot;xz&quot;, &quot;bzip2&quot;,</span>
-<span class="sd">        or &quot;gzip&quot;.</span>
+<span class="sd">        Name of the compression method. Can be "auto", "lzma", "xz", "bzip2",</span>
+<span class="sd">        or "gzip".</span>
 <span class="sd">    name : None or str</span>
 <span class="sd">        Defines the decompressed file name. The file name will be</span>
 <span class="sd">        ``{fname}.decomp`` if ``None`` (default) or the given name otherwise.</span>
 <span class="sd">        Note that the name should **not** include the full (or relative) path,</span>
 <span class="sd">        it should be just the file name itself.</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
-    <span class="n">modules</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;auto&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;lzma&quot;</span><span class="p">:</span> <span class="n">lzma</span><span class="p">,</span> <span class="s2">&quot;xz&quot;</span><span class="p">:</span> <span class="n">lzma</span><span class="p">,</span> <span class="s2">&quot;gzip&quot;</span><span class="p">:</span> <span class="n">gzip</span><span class="p">,</span> <span class="s2">&quot;bzip2&quot;</span><span class="p">:</span> <span class="n">bz2</span><span class="p">}</span>
-    <span class="n">extensions</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;.xz&quot;</span><span class="p">:</span> <span class="s2">&quot;lzma&quot;</span><span class="p">,</span> <span class="s2">&quot;.gz&quot;</span><span class="p">:</span> <span class="s2">&quot;gzip&quot;</span><span class="p">,</span> <span class="s2">&quot;.bz2&quot;</span><span class="p">:</span> <span class="s2">&quot;bzip2&quot;</span><span class="p">}</span>
+    <span class="n">modules</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">ClassVar</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">"auto"</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="s2">"lzma"</span><span class="p">:</span> <span class="n">lzma</span><span class="p">,</span>
+        <span class="s2">"xz"</span><span class="p">:</span> <span class="n">lzma</span><span class="p">,</span>
+        <span class="s2">"gzip"</span><span class="p">:</span> <span class="n">gzip</span><span class="p">,</span>
+        <span class="s2">"bzip2"</span><span class="p">:</span> <span class="n">bz2</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="n">extensions</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">ClassVar</span> <span class="o">=</span> <span class="p">{</span><span class="s2">".xz"</span><span class="p">:</span> <span class="s2">"lzma"</span><span class="p">,</span> <span class="s2">".gz"</span><span class="p">:</span> <span class="s2">"gzip"</span><span class="p">,</span> <span class="s2">".bz2"</span><span class="p">:</span> <span class="s2">"bzip2"</span><span class="p">}</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;auto&quot;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">"auto"</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">method</span> <span class="o">=</span> <span class="n">method</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
 
 <div class="viewcode-block" id="Decompress.__call__">
 <a class="viewcode-back" href="../../api/generated/pooch.Decompress.html#pooch.Decompress.__call__">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fname</span><span class="p">,</span> <span class="n">action</span><span class="p">,</span> <span class="n">pooch</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fname</span><span class="p">,</span> <span class="n">action</span><span class="p">,</span> <span class="n">pooch</span><span class="p">):</span>  <span class="c1"># noqa: ARG002</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Decompress the given file.</span>
 
 <span class="sd">        The output file will be either ``{fname}.decomp`` or the given *name*</span>
@@ -745,9 +752,9 @@ document.write(`
 <span class="sd">            Indicates what action was taken by :meth:`pooch.Pooch.fetch` or</span>
 <span class="sd">            :func:`pooch.retrieve`:</span>
 
-<span class="sd">            - ``&quot;download&quot;``: File didn&#39;t exist locally and was downloaded</span>
-<span class="sd">            - ``&quot;update&quot;``: Local file was outdated and was re-download</span>
-<span class="sd">            - ``&quot;fetch&quot;``: File exists and is updated so it wasn&#39;t downloaded</span>
+<span class="sd">            - ``"download"``: File didn't exist locally and was downloaded</span>
+<span class="sd">            - ``"update"``: Local file was outdated and was re-download</span>
+<span class="sd">            - ``"fetch"``: File exists and is updated so it wasn't downloaded</span>
 
 <span class="sd">        pooch : :class:`pooch.Pooch`</span>
 <span class="sd">            The instance of :class:`pooch.Pooch` that is calling this.</span>
@@ -756,51 +763,50 @@ document.write(`
 <span class="sd">        -------</span>
 <span class="sd">        fname : str</span>
 <span class="sd">            The full path to the decompressed file.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">decompressed</span> <span class="o">=</span> <span class="n">fname</span> <span class="o">+</span> <span class="s2">&quot;.decomp&quot;</span>
+            <span class="n">decompressed</span> <span class="o">=</span> <span class="n">fname</span> <span class="o">+</span> <span class="s2">".decomp"</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">decompressed</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">fname</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">action</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;update&quot;</span><span class="p">,</span> <span class="s2">&quot;download&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">decompressed</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">action</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">"update"</span><span class="p">,</span> <span class="s2">"download"</span><span class="p">)</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">decompressed</span><span class="p">):</span>
             <span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
-                <span class="s2">&quot;Decompressing &#39;</span><span class="si">%s</span><span class="s2">&#39; to &#39;</span><span class="si">%s</span><span class="s2">&#39; using method &#39;</span><span class="si">%s</span><span class="s2">&#39;.&quot;</span><span class="p">,</span>
+                <span class="s2">"Decompressing '</span><span class="si">%s</span><span class="s2">' to '</span><span class="si">%s</span><span class="s2">' using method '</span><span class="si">%s</span><span class="s2">'."</span><span class="p">,</span>
                 <span class="n">fname</span><span class="p">,</span>
                 <span class="n">decompressed</span><span class="p">,</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">method</span><span class="p">,</span>
             <span class="p">)</span>
             <span class="n">module</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_compression_module</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
-            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">decompressed</span><span class="p">,</span> <span class="s2">&quot;w+b&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">output</span><span class="p">:</span>
-                <span class="k">with</span> <span class="n">module</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span> <span class="k">as</span> <span class="n">compressed</span><span class="p">:</span>
-                    <span class="n">shutil</span><span class="o">.</span><span class="n">copyfileobj</span><span class="p">(</span><span class="n">compressed</span><span class="p">,</span> <span class="n">output</span><span class="p">)</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">decompressed</span><span class="p">,</span> <span class="s2">"w+b"</span><span class="p">)</span> <span class="k">as</span> <span class="n">output</span><span class="p">,</span> <span class="n">module</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span> <span class="k">as</span> <span class="n">compressed</span><span class="p">:</span>
+                <span class="n">shutil</span><span class="o">.</span><span class="n">copyfileobj</span><span class="p">(</span><span class="n">compressed</span><span class="p">,</span> <span class="n">output</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">decompressed</span></div>
 
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_compression_module</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fname</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Get the Python module compatible with fname and the chosen method.</span>
 
-<span class="sd">        If the *method* attribute is &quot;auto&quot;, will select a method based on the</span>
+<span class="sd">        If the *method* attribute is "auto", will select a method based on the</span>
 <span class="sd">        extension. If no recognized extension is in the file name, will raise a</span>
 <span class="sd">        ValueError.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">error_archives</span> <span class="o">=</span> <span class="s2">&quot;To unpack zip/tar archives, use pooch.Unzip/Untar instead.&quot;</span>
+<span class="sd">        """</span>
+        <span class="n">error_archives</span> <span class="o">=</span> <span class="s2">"To unpack zip/tar archives, use pooch.Unzip/Untar instead."</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">method</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">modules</span><span class="p">:</span>
             <span class="n">message</span> <span class="o">=</span> <span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Invalid compression method &#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">method</span><span class="si">}</span><span class="s2">&#39;. &quot;</span>
-                <span class="sa">f</span><span class="s2">&quot;Must be one of &#39;</span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">modules</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span><span class="si">}</span><span class="s2">&#39;.&quot;</span>
+                <span class="sa">f</span><span class="s2">"Invalid compression method '</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">method</span><span class="si">}</span><span class="s2">'. "</span>
+                <span class="sa">f</span><span class="s2">"Must be one of '</span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">modules</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span><span class="si">}</span><span class="s2">'."</span>
             <span class="p">)</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">method</span> <span class="ow">in</span> <span class="p">{</span><span class="s2">&quot;zip&quot;</span><span class="p">,</span> <span class="s2">&quot;tar&quot;</span><span class="p">}:</span>
-                <span class="n">message</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">message</span><span class="p">,</span> <span class="n">error_archives</span><span class="p">])</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">method</span> <span class="ow">in</span> <span class="p">{</span><span class="s2">"zip"</span><span class="p">,</span> <span class="s2">"tar"</span><span class="p">}:</span>
+                <span class="n">message</span> <span class="o">=</span> <span class="s2">" "</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">message</span><span class="p">,</span> <span class="n">error_archives</span><span class="p">])</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;auto&quot;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s2">"auto"</span><span class="p">:</span>
             <span class="n">ext</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">fname</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
             <span class="k">if</span> <span class="n">ext</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">extensions</span><span class="p">:</span>
                 <span class="n">message</span> <span class="o">=</span> <span class="p">(</span>
-                    <span class="sa">f</span><span class="s2">&quot;Unrecognized file extension &#39;</span><span class="si">{</span><span class="n">ext</span><span class="si">}</span><span class="s2">&#39;. &quot;</span>
-                    <span class="sa">f</span><span class="s2">&quot;Must be one of &#39;</span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">extensions</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span><span class="si">}</span><span class="s2">&#39;.&quot;</span>
+                    <span class="sa">f</span><span class="s2">"Unrecognized file extension '</span><span class="si">{</span><span class="n">ext</span><span class="si">}</span><span class="s2">'. "</span>
+                    <span class="sa">f</span><span class="s2">"Must be one of '</span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">extensions</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span><span class="si">}</span><span class="s2">'."</span>
                 <span class="p">)</span>
-                <span class="k">if</span> <span class="n">ext</span> <span class="ow">in</span> <span class="p">{</span><span class="s2">&quot;.zip&quot;</span><span class="p">,</span> <span class="s2">&quot;.tar&quot;</span><span class="p">}:</span>
-                    <span class="n">message</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">message</span><span class="p">,</span> <span class="n">error_archives</span><span class="p">])</span>
+                <span class="k">if</span> <span class="n">ext</span> <span class="ow">in</span> <span class="p">{</span><span class="s2">".zip"</span><span class="p">,</span> <span class="s2">".tar"</span><span class="p">}:</span>
+                    <span class="n">message</span> <span class="o">=</span> <span class="s2">" "</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">message</span><span class="p">,</span> <span class="n">error_archives</span><span class="p">])</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">modules</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">extensions</span><span class="p">[</span><span class="n">ext</span><span class="p">]]</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">modules</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">method</span><span class="p">]</span></div>
@@ -848,7 +854,7 @@ document.write(`
   
   <div class="footer-item">
     <p class="last-updated">
-  Last updated on Jan 30, 2026.
+  Last updated on Sep 09, 2026.
   <br/>
 </p>
   </div>

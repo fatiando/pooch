@@ -384,12 +384,12 @@ document.write(`
 <span class="c1">#</span>
 <span class="c1"># This code is part of the Fatiando a Terra project (https://www.fatiando.org)</span>
 <span class="c1">#</span>
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 <span class="sd">Custom classes for type annotations</span>
 
 <span class="sd">This module provides additional `PEP 484 &lt;https://peps.python.org/pep-0484/&gt;`_</span>
-<span class="sd">type aliases used in ``pooch``&#39;s codebase.</span>
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">type aliases used in ``pooch``'s codebase.</span>
+<span class="sd">"""</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
@@ -409,37 +409,36 @@ document.write(`
 
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="s2">&quot;Action&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;Downloader&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;PathType&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;PathInputType&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;ParsedURL&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;Processor&quot;</span><span class="p">,</span>
+    <span class="s2">"Action"</span><span class="p">,</span>
+    <span class="s2">"Downloader"</span><span class="p">,</span>
+    <span class="s2">"ParsedURL"</span><span class="p">,</span>
+    <span class="s2">"PathInputType"</span><span class="p">,</span>
+    <span class="s2">"PathType"</span><span class="p">,</span>
+    <span class="s2">"Processor"</span><span class="p">,</span>
 <span class="p">]</span>
 
 
-<span class="n">Action</span> <span class="o">=</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;download&quot;</span><span class="p">,</span> <span class="s2">&quot;fetch&quot;</span><span class="p">,</span> <span class="s2">&quot;update&quot;</span><span class="p">]</span>
+<span class="n">Action</span> <span class="o">=</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">"download"</span><span class="p">,</span> <span class="s2">"fetch"</span><span class="p">,</span> <span class="s2">"update"</span><span class="p">]</span>
 <span class="n">PathType</span> <span class="o">=</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">PathLike</span><span class="p">]</span>
 <span class="n">PathInputType</span> <span class="o">=</span> <span class="n">Union</span><span class="p">[</span><span class="n">PathType</span><span class="p">,</span> <span class="nb">list</span><span class="p">[</span><span class="n">PathType</span><span class="p">],</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">PathType</span><span class="p">]]</span>
-<span class="n">Processor</span> <span class="o">=</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Action</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="s2">&quot;Pooch&quot;</span><span class="p">]],</span> <span class="n">Any</span><span class="p">]</span>
+<span class="n">Processor</span> <span class="o">=</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Action</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="s2">"Pooch"</span><span class="p">]],</span> <span class="n">Any</span><span class="p">]</span>
 
 
 <div class="viewcode-block" id="Downloader">
 <a class="viewcode-back" href="../../api/generated/pooch.typing.Downloader.html#pooch.typing.Downloader">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">Downloader</span><span class="p">(</span><span class="n">Protocol</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Class used to define the type definition for the downloader function.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
-    <span class="c1"># pylint: disable=too-few-public-methods</span>
 <div class="viewcode-block" id="Downloader.__call__">
 <a class="viewcode-back" href="../../api/generated/pooch.typing.Downloader.html#pooch.typing.Downloader.__call__">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span>  <span class="c1"># noqa: E704</span></div>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span></div>
 
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">fname</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
         <span class="n">action</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">PathType</span><span class="p">],</span>
-        <span class="n">pooch</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="s2">&quot;Pooch&quot;</span><span class="p">],</span>
+        <span class="n">pooch</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="s2">"Pooch"</span><span class="p">],</span>
         <span class="o">*</span><span class="p">,</span>
         <span class="n">check_only</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span> <span class="o">...</span></div>
@@ -449,11 +448,11 @@ document.write(`
 <div class="viewcode-block" id="ParsedURL">
 <a class="viewcode-back" href="../../api/generated/pooch.typing.ParsedURL.html#pooch.typing.ParsedURL">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">ParsedURL</span><span class="p">(</span><span class="n">TypedDict</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Type for a dictionary generated after parsing a URL.</span>
 
 <span class="sd">    The dictionary contains three keys: protocol, netloc and path.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="n">protocol</span><span class="p">:</span> <span class="nb">str</span>
     <span class="n">netloc</span><span class="p">:</span> <span class="nb">str</span>
@@ -502,7 +501,7 @@ document.write(`
   
   <div class="footer-item">
     <p class="last-updated">
-  Last updated on Jan 30, 2026.
+  Last updated on Sep 09, 2026.
   <br/>
 </p>
   </div>

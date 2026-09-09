@@ -384,31 +384,30 @@ document.write(`
 <span class="c1">#</span>
 <span class="c1"># This code is part of the Fatiando a Terra project (https://www.fatiando.org)</span>
 <span class="c1">#</span>
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 <span class="sd">The main Pooch class and a factory function for it.</span>
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 
-<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">contextlib</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">shlex</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">shutil</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Any</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span>
 
-
-<span class="kn">from</span><span class="w"> </span><span class="nn">.hashes</span><span class="w"> </span><span class="kn">import</span> <span class="n">hash_matches</span><span class="p">,</span> <span class="n">file_hash</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.downloaders</span><span class="w"> </span><span class="kn">import</span> <span class="n">DOIDownloader</span><span class="p">,</span> <span class="n">choose_downloader</span><span class="p">,</span> <span class="n">doi_to_repository</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.hashes</span><span class="w"> </span><span class="kn">import</span> <span class="n">file_hash</span><span class="p">,</span> <span class="n">hash_matches</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Action</span><span class="p">,</span> <span class="n">Downloader</span><span class="p">,</span> <span class="n">PathInputType</span><span class="p">,</span> <span class="n">PathType</span><span class="p">,</span> <span class="n">Processor</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.utils</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">cache_location</span><span class="p">,</span>
     <span class="n">check_version</span><span class="p">,</span>
     <span class="n">get_logger</span><span class="p">,</span>
     <span class="n">make_local_storage</span><span class="p">,</span>
-    <span class="n">cache_location</span><span class="p">,</span>
-    <span class="n">temporary_file</span><span class="p">,</span>
     <span class="n">os_cache</span><span class="p">,</span>
+    <span class="n">temporary_file</span><span class="p">,</span>
     <span class="n">unique_file_name</span><span class="p">,</span>
 <span class="p">)</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">.downloaders</span><span class="w"> </span><span class="kn">import</span> <span class="n">DOIDownloader</span><span class="p">,</span> <span class="n">choose_downloader</span><span class="p">,</span> <span class="n">doi_to_repository</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">.typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">PathType</span><span class="p">,</span> <span class="n">PathInputType</span><span class="p">,</span> <span class="n">Processor</span><span class="p">,</span> <span class="n">Downloader</span><span class="p">,</span> <span class="n">Action</span>
 
 
 <div class="viewcode-block" id="retrieve">
@@ -422,7 +421,7 @@ document.write(`
     <span class="n">downloader</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Downloader</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">progressbar</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Download and cache a single file locally.</span>
 
 <span class="sd">    Uses HTTP or FTP by default, depending on the protocol in the given *url*.</span>
@@ -431,7 +430,7 @@ document.write(`
 
 <span class="sd">    The file will be downloaded to a temporary location first and its hash will</span>
 <span class="sd">    be compared to the given *known_hash*. This is done to ensure that the</span>
-<span class="sd">    download happened correctly and securely. If the hash doesn&#39;t match, the</span>
+<span class="sd">    download happened correctly and securely. If the hash doesn't match, the</span>
 <span class="sd">    file will be deleted and an exception will be raised.</span>
 
 <span class="sd">    If the file already exists locally, its hash will be compared to</span>
@@ -462,7 +461,7 @@ document.write(`
 <span class="sd">    known_hash : str or None</span>
 <span class="sd">        A known hash (checksum) of the file. Will be used to verify the</span>
 <span class="sd">        download or check if an existing file needs to be updated. By default,</span>
-<span class="sd">        will assume it&#39;s a SHA256 hash. To specify a different hashing method,</span>
+<span class="sd">        will assume it's a SHA256 hash. To specify a different hashing method,</span>
 <span class="sd">        prepend the hash with ``algorithm:``, for example</span>
 <span class="sd">        ``md5:pw9co2iun29juoh`` or ``sha1:092odwhi2ujdp2du2od2odh2wod2``. If</span>
 <span class="sd">        None, will NOT check the hash of the downloaded file or check if an</span>
@@ -471,7 +470,7 @@ document.write(`
 <span class="sd">        The name that will be used to save the file. Should NOT include the</span>
 <span class="sd">        full path, just the file name (it will be appended to *path*). If</span>
 <span class="sd">        None, will create a unique file name using a combination of the last</span>
-<span class="sd">        part of the URL (assuming it&#39;s the file name) and the MD5 hash of the</span>
+<span class="sd">        part of the URL (assuming it's the file name) and the MD5 hash of the</span>
 <span class="sd">        URL. For example, ``81whdo2d2e928yd1wi22-data-file.csv``. This ensures</span>
 <span class="sd">        that files from different URLs never overwrite each other, even if they</span>
 <span class="sd">        have the same name.</span>
@@ -507,23 +506,23 @@ document.write(`
 <span class="sd">    &gt;&gt;&gt; import os</span>
 <span class="sd">    &gt;&gt;&gt; from pooch import __version__, check_version, retrieve</span>
 <span class="sd">    &gt;&gt;&gt; # Make a URL for the version of pooch we have installed</span>
-<span class="sd">    &gt;&gt;&gt; url = &quot;https://github.com/fatiando/pooch/raw/{}/data/tiny-data.txt&quot;</span>
-<span class="sd">    &gt;&gt;&gt; url = url.format(check_version(__version__, fallback=&quot;main&quot;))</span>
+<span class="sd">    &gt;&gt;&gt; url = "https://github.com/fatiando/pooch/raw/{}/data/tiny-data.txt"</span>
+<span class="sd">    &gt;&gt;&gt; url = url.format(check_version(__version__, fallback="main"))</span>
 <span class="sd">    &gt;&gt;&gt; # Download the file and save it locally. Will check the MD5 checksum of</span>
-<span class="sd">    &gt;&gt;&gt; # the downloaded file against the given value to make sure it&#39;s the</span>
+<span class="sd">    &gt;&gt;&gt; # the downloaded file against the given value to make sure it's the</span>
 <span class="sd">    &gt;&gt;&gt; # right file. You can use other hashes by specifying different</span>
 <span class="sd">    &gt;&gt;&gt; # algorithm names (sha256, sha1, etc).</span>
 <span class="sd">    &gt;&gt;&gt; fname = retrieve(</span>
-<span class="sd">    ...     url, known_hash=&quot;md5:70e2afd3fd7e336ae478b1e740a5f08e&quot;,</span>
+<span class="sd">    ...     url, known_hash="md5:70e2afd3fd7e336ae478b1e740a5f08e",</span>
 <span class="sd">    ... )</span>
 <span class="sd">    &gt;&gt;&gt; with open(fname) as f:</span>
 <span class="sd">    ...     print(f.read().strip())</span>
 <span class="sd">    # A tiny data file for test purposes only</span>
 <span class="sd">    1  2  3  4  5  6</span>
-<span class="sd">    &gt;&gt;&gt; # Running again won&#39;t trigger a download and only return the path to</span>
+<span class="sd">    &gt;&gt;&gt; # Running again won't trigger a download and only return the path to</span>
 <span class="sd">    &gt;&gt;&gt; # the existing file.</span>
 <span class="sd">    &gt;&gt;&gt; fname2 = retrieve(</span>
-<span class="sd">    ...     url, known_hash=&quot;md5:70e2afd3fd7e336ae478b1e740a5f08e&quot;,</span>
+<span class="sd">    ...     url, known_hash="md5:70e2afd3fd7e336ae478b1e740a5f08e",</span>
 <span class="sd">    ... )</span>
 <span class="sd">    &gt;&gt;&gt; print(fname2 == fname)</span>
 <span class="sd">    True</span>
@@ -534,13 +533,13 @@ document.write(`
 
 <span class="sd">    &gt;&gt;&gt; from pooch import Decompress</span>
 <span class="sd">    &gt;&gt;&gt; # URLs to a gzip compressed version of the data file.</span>
-<span class="sd">    &gt;&gt;&gt; url = (&quot;https://github.com/fatiando/pooch/raw/{}/&quot;</span>
-<span class="sd">    ...        + &quot;pooch/tests/data/tiny-data.txt.gz&quot;)</span>
-<span class="sd">    &gt;&gt;&gt; url = url.format(check_version(__version__, fallback=&quot;main&quot;))</span>
+<span class="sd">    &gt;&gt;&gt; url = ("https://github.com/fatiando/pooch/raw/{}/"</span>
+<span class="sd">    ...        + "pooch/tests/data/tiny-data.txt.gz")</span>
+<span class="sd">    &gt;&gt;&gt; url = url.format(check_version(__version__, fallback="main"))</span>
 <span class="sd">    &gt;&gt;&gt; # By default, you would have to decompress the file yourself</span>
 <span class="sd">    &gt;&gt;&gt; fname = retrieve(</span>
 <span class="sd">    ...     url,</span>
-<span class="sd">    ...     known_hash=&quot;md5:8812ba10b6c7778014fdae81b03f9def&quot;,</span>
+<span class="sd">    ...     known_hash="md5:8812ba10b6c7778014fdae81b03f9def",</span>
 <span class="sd">    ... )</span>
 <span class="sd">    &gt;&gt;&gt; print(os.path.splitext(fname)[1])</span>
 <span class="sd">    .gz</span>
@@ -548,7 +547,7 @@ document.write(`
 <span class="sd">    &gt;&gt;&gt; # return the path to the decompressed file instead.</span>
 <span class="sd">    &gt;&gt;&gt; fname2 = retrieve(</span>
 <span class="sd">    ...     url,</span>
-<span class="sd">    ...     known_hash=&quot;md5:8812ba10b6c7778014fdae81b03f9def&quot;,</span>
+<span class="sd">    ...     known_hash="md5:8812ba10b6c7778014fdae81b03f9def",</span>
 <span class="sd">    ...     processor=Decompress(),</span>
 <span class="sd">    ... )</span>
 <span class="sd">    &gt;&gt;&gt; print(fname2 == fname)</span>
@@ -566,13 +565,13 @@ document.write(`
 
 <span class="sd">    &gt;&gt;&gt; from pooch import Unzip</span>
 <span class="sd">    &gt;&gt;&gt; # URLs to a zip archive with a single data file.</span>
-<span class="sd">    &gt;&gt;&gt; url = (&quot;https://github.com/fatiando/pooch/raw/{}/&quot;</span>
-<span class="sd">    ...        + &quot;pooch/tests/data/tiny-data.zip&quot;)</span>
-<span class="sd">    &gt;&gt;&gt; url = url.format(check_version(__version__, fallback=&quot;main&quot;))</span>
+<span class="sd">    &gt;&gt;&gt; url = ("https://github.com/fatiando/pooch/raw/{}/"</span>
+<span class="sd">    ...        + "pooch/tests/data/tiny-data.zip")</span>
+<span class="sd">    &gt;&gt;&gt; url = url.format(check_version(__version__, fallback="main"))</span>
 <span class="sd">    &gt;&gt;&gt; # By default, you would get the path to the archive</span>
 <span class="sd">    &gt;&gt;&gt; fname = retrieve(</span>
 <span class="sd">    ...     url,</span>
-<span class="sd">    ...     known_hash=&quot;md5:e9592cb46cf3514a1079051f8a148148&quot;,</span>
+<span class="sd">    ...     known_hash="md5:e9592cb46cf3514a1079051f8a148148",</span>
 <span class="sd">    ... )</span>
 <span class="sd">    &gt;&gt;&gt; print(os.path.splitext(fname)[1])</span>
 <span class="sd">    .zip</span>
@@ -581,7 +580,7 @@ document.write(`
 <span class="sd">    &gt;&gt;&gt; # path to every file will be returned instead of a single path.</span>
 <span class="sd">    &gt;&gt;&gt; fnames = retrieve(</span>
 <span class="sd">    ...     url,</span>
-<span class="sd">    ...     known_hash=&quot;md5:e9592cb46cf3514a1079051f8a148148&quot;,</span>
+<span class="sd">    ...     known_hash="md5:e9592cb46cf3514a1079051f8a148148",</span>
 <span class="sd">    ...     processor=Unzip(),</span>
 <span class="sd">    ... )</span>
 <span class="sd">    &gt;&gt;&gt; # There was only a single file in our archive.</span>
@@ -595,9 +594,9 @@ document.write(`
 <span class="sd">    ...     os.remove(f)</span>
 
 
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">if</span> <span class="n">path</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">path</span> <span class="o">=</span> <span class="n">os_cache</span><span class="p">(</span><span class="s2">&quot;pooch&quot;</span><span class="p">)</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="n">os_cache</span><span class="p">(</span><span class="s2">"pooch"</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">fname</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">fname</span> <span class="o">=</span> <span class="n">unique_file_name</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
     <span class="c1"># Make the path absolute.</span>
@@ -606,13 +605,13 @@ document.write(`
     <span class="n">full_path</span> <span class="o">=</span> <span class="n">path</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span> <span class="o">/</span> <span class="n">fname</span>
     <span class="n">action</span><span class="p">,</span> <span class="n">verb</span> <span class="o">=</span> <span class="n">download_action</span><span class="p">(</span><span class="n">full_path</span><span class="p">,</span> <span class="n">known_hash</span><span class="p">)</span>
 
-    <span class="k">if</span> <span class="n">action</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;download&quot;</span><span class="p">,</span> <span class="s2">&quot;update&quot;</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">action</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">"download"</span><span class="p">,</span> <span class="s2">"update"</span><span class="p">):</span>
         <span class="c1"># We need to write data, so create the local data directory if it</span>
-        <span class="c1"># doesn&#39;t already exist.</span>
+        <span class="c1"># doesn't already exist.</span>
         <span class="n">make_local_storage</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
 
         <span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
-            <span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> data from &#39;</span><span class="si">%s</span><span class="s2">&#39; to file &#39;</span><span class="si">%s</span><span class="s2">&#39;.&quot;</span><span class="p">,</span>
+            <span class="s2">"</span><span class="si">%s</span><span class="s2"> data from '</span><span class="si">%s</span><span class="s2">' to file '</span><span class="si">%s</span><span class="s2">'."</span><span class="p">,</span>
             <span class="n">verb</span><span class="p">,</span>
             <span class="n">url</span><span class="p">,</span>
             <span class="nb">str</span><span class="p">(</span><span class="n">full_path</span><span class="p">),</span>
@@ -625,10 +624,10 @@ document.write(`
 
         <span class="k">if</span> <span class="n">known_hash</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
-                <span class="s2">&quot;SHA256 hash of downloaded file: </span><span class="si">%s</span><span class="se">\n</span><span class="s2">&quot;</span>
-                <span class="s2">&quot;Use this value as the &#39;known_hash&#39; argument of &#39;pooch.retrieve&#39;&quot;</span>
-                <span class="s2">&quot; to ensure that the file hasn&#39;t changed if it is downloaded again&quot;</span>
-                <span class="s2">&quot; in the future.&quot;</span><span class="p">,</span>
+                <span class="s2">"SHA256 hash of downloaded file: </span><span class="si">%s</span><span class="se">\n</span><span class="s2">"</span>
+                <span class="s2">"Use this value as the 'known_hash' argument of 'pooch.retrieve'"</span>
+                <span class="s2">" to ensure that the file hasn't changed if it is downloaded again"</span>
+                <span class="s2">" in the future."</span><span class="p">,</span>
                 <span class="n">file_hash</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">full_path</span><span class="p">)),</span>
             <span class="p">)</span>
 
@@ -645,14 +644,14 @@ document.write(`
     <span class="n">path</span><span class="p">:</span> <span class="n">PathInputType</span><span class="p">,</span>
     <span class="n">base_url</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">version</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="n">version_dev</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;master&quot;</span><span class="p">,</span>
+    <span class="n">version_dev</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"master"</span><span class="p">,</span>
     <span class="n">env</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">registry</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">urls</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">retry_if_failed</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
     <span class="n">allow_updates</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">bool</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
 <span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Create a :class:`~pooch.Pooch` with sensible defaults to fetch data files.</span>
 
 <span class="sd">    If a version string is given, the Pooch will be versioned, meaning that the</span>
@@ -669,21 +668,21 @@ document.write(`
 <span class="sd">    Does **not** create the local data storage folder. The folder will only be</span>
 <span class="sd">    created the first time a download is attempted with</span>
 <span class="sd">    :meth:`pooch.Pooch.fetch`. This makes it safe to use this function at the</span>
-<span class="sd">    module level (so it&#39;s executed on ``import`` and the resulting</span>
+<span class="sd">    module level (so it's executed on ``import`` and the resulting</span>
 <span class="sd">    :class:`~pooch.Pooch` is a global variable).</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    path : str, PathLike, list or tuple</span>
 <span class="sd">        The path to the local data storage folder. If this is a list or tuple,</span>
-<span class="sd">        we&#39;ll join the parts with the appropriate separator. The *version* will</span>
+<span class="sd">        we'll join the parts with the appropriate separator. The *version* will</span>
 <span class="sd">        be appended to the end of this path. Use :func:`pooch.os_cache` for a</span>
 <span class="sd">        sensible default.</span>
 <span class="sd">    base_url : str</span>
 <span class="sd">        Base URL for the remote data source. All requests will be made relative</span>
 <span class="sd">        to this URL. The string should have a ``{version}`` formatting mark in</span>
 <span class="sd">        it. We will call ``.format(version=version)`` on this string. If the</span>
-<span class="sd">        URL does not end in a ``&#39;/&#39;``, a trailing ``&#39;/&#39;`` will be added</span>
+<span class="sd">        URL does not end in a ``'/'``, a trailing ``'/'`` will be added</span>
 <span class="sd">        automatically.</span>
 <span class="sd">    version : str or None</span>
 <span class="sd">        The version string for your project. Should be PEP440 compatible. If</span>
@@ -692,16 +691,16 @@ document.write(`
 <span class="sd">    version_dev : str</span>
 <span class="sd">        The name used for the development version of a project. If your data is</span>
 <span class="sd">        hosted on Github (and *base_url* is a Github raw link), then</span>
-<span class="sd">        ``&quot;master&quot;`` is a good choice (default). Ignored if *version* is None.</span>
+<span class="sd">        ``"master"`` is a good choice (default). Ignored if *version* is None.</span>
 <span class="sd">    env : str or None</span>
 <span class="sd">        An environment variable that can be used to overwrite *path*. This</span>
-<span class="sd">        allows users to control where they want the data to be stored. We&#39;ll</span>
+<span class="sd">        allows users to control where they want the data to be stored. We'll</span>
 <span class="sd">        append *version* to the end of this value as well.</span>
 <span class="sd">    registry : dict or None</span>
 <span class="sd">        A record of the files that are managed by this Pooch. Keys should be</span>
 <span class="sd">        the file names and the values should be their hashes. Only files</span>
 <span class="sd">        in the registry can be fetched from the local storage. Files in</span>
-<span class="sd">        subdirectories of *path* **must use Unix-style separators** (``&#39;/&#39;``)</span>
+<span class="sd">        subdirectories of *path* **must use Unix-style separators** (``'/'``)</span>
 <span class="sd">        even on Windows.</span>
 <span class="sd">    urls : dict or None</span>
 <span class="sd">        Custom URLs for downloading individual files in the registry. A</span>
@@ -718,7 +717,7 @@ document.write(`
 <span class="sd">    allow_updates : bool or str</span>
 <span class="sd">        Whether existing files in local storage that have a hash mismatch with</span>
 <span class="sd">        the registry are allowed to update from the remote URL. If a string is</span>
-<span class="sd">        passed, we will assume it&#39;s the name of an environment variable that</span>
+<span class="sd">        passed, we will assume it's the name of an environment variable that</span>
 <span class="sd">        will be checked for the true/false value. If ``False``, any mismatch</span>
 <span class="sd">        with hashes in the registry will result in an error. Defaults to</span>
 <span class="sd">        ``True``.</span>
@@ -733,86 +732,86 @@ document.write(`
 
 <span class="sd">    Create a :class:`~pooch.Pooch` for a release (v0.1):</span>
 
-<span class="sd">    &gt;&gt;&gt; pup = create(path=&quot;myproject&quot;,</span>
-<span class="sd">    ...              base_url=&quot;http://some.link.com/{version}/&quot;,</span>
-<span class="sd">    ...              version=&quot;v0.1&quot;,</span>
-<span class="sd">    ...              registry={&quot;data.txt&quot;: &quot;9081wo2eb2gc0u...&quot;})</span>
+<span class="sd">    &gt;&gt;&gt; pup = create(path="myproject",</span>
+<span class="sd">    ...              base_url="http://some.link.com/{version}/",</span>
+<span class="sd">    ...              version="v0.1",</span>
+<span class="sd">    ...              registry={"data.txt": "9081wo2eb2gc0u..."})</span>
 <span class="sd">    &gt;&gt;&gt; print(pup.path.parts)  # The path is a pathlib.Path</span>
-<span class="sd">    (&#39;myproject&#39;, &#39;v0.1&#39;)</span>
+<span class="sd">    ('myproject', 'v0.1')</span>
 <span class="sd">    &gt;&gt;&gt; # The local folder is only created when a dataset is first downloaded</span>
 <span class="sd">    &gt;&gt;&gt; print(pup.path.exists())</span>
 <span class="sd">    False</span>
 <span class="sd">    &gt;&gt;&gt; print(pup.base_url)</span>
 <span class="sd">    http://some.link.com/v0.1/</span>
 <span class="sd">    &gt;&gt;&gt; print(pup.registry)</span>
-<span class="sd">    {&#39;data.txt&#39;: &#39;9081wo2eb2gc0u...&#39;}</span>
+<span class="sd">    {'data.txt': '9081wo2eb2gc0u...'}</span>
 <span class="sd">    &gt;&gt;&gt; print(pup.registry_files)</span>
-<span class="sd">    [&#39;data.txt&#39;]</span>
+<span class="sd">    ['data.txt']</span>
 
 <span class="sd">    If this is a development version (12 commits ahead of v0.1), then the</span>
-<span class="sd">    ``version_dev`` will be used (defaults to ``&quot;master&quot;``):</span>
+<span class="sd">    ``version_dev`` will be used (defaults to ``"master"``):</span>
 
-<span class="sd">    &gt;&gt;&gt; pup = create(path=&quot;myproject&quot;,</span>
-<span class="sd">    ...              base_url=&quot;http://some.link.com/{version}/&quot;,</span>
-<span class="sd">    ...              version=&quot;v0.1+12.do9iwd&quot;)</span>
+<span class="sd">    &gt;&gt;&gt; pup = create(path="myproject",</span>
+<span class="sd">    ...              base_url="http://some.link.com/{version}/",</span>
+<span class="sd">    ...              version="v0.1+12.do9iwd")</span>
 <span class="sd">    &gt;&gt;&gt; print(pup.path.parts)</span>
-<span class="sd">    (&#39;myproject&#39;, &#39;master&#39;)</span>
+<span class="sd">    ('myproject', 'master')</span>
 <span class="sd">    &gt;&gt;&gt; print(pup.base_url)</span>
 <span class="sd">    http://some.link.com/master/</span>
 
 <span class="sd">    Versioning is optional (but highly encouraged):</span>
 
-<span class="sd">    &gt;&gt;&gt; pup = create(path=&quot;myproject&quot;,</span>
-<span class="sd">    ...              base_url=&quot;http://some.link.com/&quot;,</span>
-<span class="sd">    ...              registry={&quot;data.txt&quot;: &quot;9081wo2eb2gc0u...&quot;})</span>
+<span class="sd">    &gt;&gt;&gt; pup = create(path="myproject",</span>
+<span class="sd">    ...              base_url="http://some.link.com/",</span>
+<span class="sd">    ...              registry={"data.txt": "9081wo2eb2gc0u..."})</span>
 <span class="sd">    &gt;&gt;&gt; print(pup.path.parts)  # The path is a pathlib.Path</span>
-<span class="sd">    (&#39;myproject&#39;,)</span>
+<span class="sd">    ('myproject',)</span>
 <span class="sd">    &gt;&gt;&gt; print(pup.base_url)</span>
 <span class="sd">    http://some.link.com/</span>
 
-<span class="sd">    To place the storage folder at a subdirectory, pass in a list and we&#39;ll</span>
+<span class="sd">    To place the storage folder at a subdirectory, pass in a list and we'll</span>
 <span class="sd">    join the path for you using the appropriate separator for your operating</span>
 <span class="sd">    system:</span>
 
-<span class="sd">    &gt;&gt;&gt; pup = create(path=[&quot;myproject&quot;, &quot;cache&quot;, &quot;data&quot;],</span>
-<span class="sd">    ...              base_url=&quot;http://some.link.com/{version}/&quot;,</span>
-<span class="sd">    ...              version=&quot;v0.1&quot;)</span>
+<span class="sd">    &gt;&gt;&gt; pup = create(path=["myproject", "cache", "data"],</span>
+<span class="sd">    ...              base_url="http://some.link.com/{version}/",</span>
+<span class="sd">    ...              version="v0.1")</span>
 <span class="sd">    &gt;&gt;&gt; print(pup.path.parts)</span>
-<span class="sd">    (&#39;myproject&#39;, &#39;cache&#39;, &#39;data&#39;, &#39;v0.1&#39;)</span>
+<span class="sd">    ('myproject', 'cache', 'data', 'v0.1')</span>
 
 <span class="sd">    The user can overwrite the storage path by setting an environment variable:</span>
 
-<span class="sd">    &gt;&gt;&gt; # The variable is not set so we&#39;ll use *path*</span>
-<span class="sd">    &gt;&gt;&gt; pup = create(path=[&quot;myproject&quot;, &quot;not_from_env&quot;],</span>
-<span class="sd">    ...              base_url=&quot;http://some.link.com/{version}/&quot;,</span>
-<span class="sd">    ...              version=&quot;v0.1&quot;,</span>
-<span class="sd">    ...              env=&quot;MYPROJECT_DATA_DIR&quot;)</span>
+<span class="sd">    &gt;&gt;&gt; # The variable is not set so we'll use *path*</span>
+<span class="sd">    &gt;&gt;&gt; pup = create(path=["myproject", "not_from_env"],</span>
+<span class="sd">    ...              base_url="http://some.link.com/{version}/",</span>
+<span class="sd">    ...              version="v0.1",</span>
+<span class="sd">    ...              env="MYPROJECT_DATA_DIR")</span>
 <span class="sd">    &gt;&gt;&gt; print(pup.path.parts)</span>
-<span class="sd">    (&#39;myproject&#39;, &#39;not_from_env&#39;, &#39;v0.1&#39;)</span>
+<span class="sd">    ('myproject', 'not_from_env', 'v0.1')</span>
 <span class="sd">    &gt;&gt;&gt; # Set the environment variable and try again</span>
 <span class="sd">    &gt;&gt;&gt; import os</span>
-<span class="sd">    &gt;&gt;&gt; os.environ[&quot;MYPROJECT_DATA_DIR&quot;] = os.path.join(&quot;myproject&quot;, &quot;env&quot;)</span>
-<span class="sd">    &gt;&gt;&gt; pup = create(path=[&quot;myproject&quot;, &quot;not_env&quot;],</span>
-<span class="sd">    ...              base_url=&quot;http://some.link.com/{version}/&quot;,</span>
-<span class="sd">    ...              version=&quot;v0.1&quot;,</span>
-<span class="sd">    ...              env=&quot;MYPROJECT_DATA_DIR&quot;)</span>
+<span class="sd">    &gt;&gt;&gt; os.environ["MYPROJECT_DATA_DIR"] = os.path.join("myproject", "env")</span>
+<span class="sd">    &gt;&gt;&gt; pup = create(path=["myproject", "not_env"],</span>
+<span class="sd">    ...              base_url="http://some.link.com/{version}/",</span>
+<span class="sd">    ...              version="v0.1",</span>
+<span class="sd">    ...              env="MYPROJECT_DATA_DIR")</span>
 <span class="sd">    &gt;&gt;&gt; print(pup.path.parts)</span>
-<span class="sd">    (&#39;myproject&#39;, &#39;env&#39;, &#39;v0.1&#39;)</span>
+<span class="sd">    ('myproject', 'env', 'v0.1')</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">if</span> <span class="n">version</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">version</span> <span class="o">=</span> <span class="n">check_version</span><span class="p">(</span><span class="n">version</span><span class="p">,</span> <span class="n">fallback</span><span class="o">=</span><span class="n">version_dev</span><span class="p">)</span>
         <span class="n">base_url</span> <span class="o">=</span> <span class="n">base_url</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">version</span><span class="o">=</span><span class="n">version</span><span class="p">)</span>
-    <span class="c1"># Don&#39;t create the cache folder here! This function is usually called in</span>
+    <span class="c1"># Don't create the cache folder here! This function is usually called in</span>
     <span class="c1"># the module context (at import time), so touching the file system is not</span>
     <span class="c1"># recommended. It could cause crashes when multiple processes/threads try</span>
     <span class="c1"># to import at the same time (which would try to create the folder several</span>
     <span class="c1"># times at once).</span>
     <span class="n">path</span> <span class="o">=</span> <span class="n">cache_location</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">env</span><span class="p">,</span> <span class="n">version</span><span class="p">)</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">allow_updates</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
-        <span class="n">allow_updates</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">allow_updates</span><span class="p">,</span> <span class="s2">&quot;true&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">!=</span> <span class="s2">&quot;false&quot;</span>
-    <span class="c1"># add trailing &quot;/&quot;</span>
-    <span class="n">base_url</span> <span class="o">=</span> <span class="n">base_url</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span>
+        <span class="n">allow_updates</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">allow_updates</span><span class="p">,</span> <span class="s2">"true"</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">!=</span> <span class="s2">"false"</span>
+    <span class="c1"># add trailing "/"</span>
+    <span class="n">base_url</span> <span class="o">=</span> <span class="n">base_url</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s2">"/"</span><span class="p">)</span> <span class="o">+</span> <span class="s2">"/"</span>
     <span class="n">pup</span> <span class="o">=</span> <span class="n">Pooch</span><span class="p">(</span>
         <span class="n">path</span><span class="o">=</span><span class="n">path</span><span class="p">,</span>
         <span class="n">base_url</span><span class="o">=</span><span class="n">base_url</span><span class="p">,</span>
@@ -828,7 +827,7 @@ document.write(`
 <div class="viewcode-block" id="Pooch">
 <a class="viewcode-back" href="../../api/generated/pooch.Pooch.html#pooch.Pooch">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">Pooch</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Manager for a local data storage that can fetch from a remote source.</span>
 
 <span class="sd">    Avoid creating ``Pooch`` instances directly. Use :func:`pooch.create`</span>
@@ -846,7 +845,7 @@ document.write(`
 <span class="sd">        A record of the files that are managed by this good boy. Keys should be</span>
 <span class="sd">        the file names and the values should be their hashes. Only files</span>
 <span class="sd">        in the registry can be fetched from the local storage. Files in</span>
-<span class="sd">        subdirectories of *path* **must use Unix-style separators** (``&#39;/&#39;``)</span>
+<span class="sd">        subdirectories of *path* **must use Unix-style separators** (``'/'``)</span>
 <span class="sd">        even on Windows.</span>
 <span class="sd">    urls : dict or None</span>
 <span class="sd">        Custom URLs for downloading individual files in the registry. A</span>
@@ -866,7 +865,7 @@ document.write(`
 <span class="sd">        any mismatch with hashes in the registry will result in an error.</span>
 <span class="sd">        Defaults to ``True``.</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
@@ -890,12 +889,12 @@ document.write(`
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">abspath</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Path</span><span class="p">:</span>
-        <span class="s2">&quot;Absolute path to the local storage&quot;</span>
+        <span class="s2">"Absolute path to the local storage"</span>
         <span class="k">return</span> <span class="n">Path</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="p">))))</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">registry_files</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
-        <span class="s2">&quot;List of file names on the registry&quot;</span>
+        <span class="s2">"List of file names on the registry"</span>
         <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">registry</span><span class="p">)</span>
 
 <div class="viewcode-block" id="Pooch.fetch">
@@ -907,14 +906,14 @@ document.write(`
         <span class="n">downloader</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Downloader</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">progressbar</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Get the absolute path to a file in the local storage.</span>
 
-<span class="sd">        If it&#39;s not in the local storage, it will be downloaded. If the hash of</span>
-<span class="sd">        the file in local storage doesn&#39;t match the one in the registry, will</span>
+<span class="sd">        If it's not in the local storage, it will be downloaded. If the hash of</span>
+<span class="sd">        the file in local storage doesn't match the one in the registry, will</span>
 <span class="sd">        download a new copy of the file. This is considered a sign that the</span>
 <span class="sd">        file was updated in the remote storage. If the hash of the downloaded</span>
-<span class="sd">        file still doesn&#39;t match the one in the registry, will raise an</span>
+<span class="sd">        file still doesn't match the one in the registry, will raise an</span>
 <span class="sd">        exception to warn of possible file corruption.</span>
 
 <span class="sd">        Post-processing actions sometimes need to be taken on downloaded files</span>
@@ -956,7 +955,7 @@ document.write(`
 <span class="sd">            The absolute path (including the file name) of the file in the</span>
 <span class="sd">            local storage.</span>
 
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_assert_file_in_registry</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
 
         <span class="n">url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_url</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
@@ -964,18 +963,17 @@ document.write(`
         <span class="n">known_hash</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">registry</span><span class="p">[</span><span class="n">fname</span><span class="p">]</span>
         <span class="n">action</span><span class="p">,</span> <span class="n">verb</span> <span class="o">=</span> <span class="n">download_action</span><span class="p">(</span><span class="n">full_path</span><span class="p">,</span> <span class="n">known_hash</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="n">action</span> <span class="o">==</span> <span class="s2">&quot;update&quot;</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">allow_updates</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">fname</span><span class="si">}</span><span class="s2"> needs to update </span><span class="si">{</span><span class="n">full_path</span><span class="si">}</span><span class="s2"> but updates are disallowed.&quot;</span>
-            <span class="p">)</span>
+        <span class="k">if</span> <span class="n">action</span> <span class="o">==</span> <span class="s2">"update"</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">allow_updates</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">fname</span><span class="si">}</span><span class="s2"> needs to update </span><span class="si">{</span><span class="n">full_path</span><span class="si">}</span><span class="s2"> but updates are disallowed."</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="n">action</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;download&quot;</span><span class="p">,</span> <span class="s2">&quot;update&quot;</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">action</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">"download"</span><span class="p">,</span> <span class="s2">"update"</span><span class="p">):</span>
             <span class="c1"># We need to write data, so create the local data directory if it</span>
-            <span class="c1"># doesn&#39;t already exist.</span>
+            <span class="c1"># doesn't already exist.</span>
             <span class="n">make_local_storage</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">abspath</span><span class="p">))</span>
 
             <span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
-                <span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> file &#39;</span><span class="si">%s</span><span class="s2">&#39; from &#39;</span><span class="si">%s</span><span class="s2">&#39; to &#39;</span><span class="si">%s</span><span class="s2">&#39;.&quot;</span><span class="p">,</span>
+                <span class="s2">"</span><span class="si">%s</span><span class="s2"> file '</span><span class="si">%s</span><span class="s2">' from '</span><span class="si">%s</span><span class="s2">' to '</span><span class="si">%s</span><span class="s2">'."</span><span class="p">,</span>
                 <span class="n">verb</span><span class="p">,</span>
                 <span class="n">fname</span><span class="p">,</span>
                 <span class="n">url</span><span class="p">,</span>
@@ -1001,17 +999,18 @@ document.write(`
 
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_assert_file_in_registry</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fname</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Check if a file is in the registry and raise :class:`ValueError` if</span>
-<span class="sd">        it&#39;s not.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        it's not.</span>
+<span class="sd">        """</span>
         <span class="k">if</span> <span class="n">fname</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">registry</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;File &#39;</span><span class="si">{</span><span class="n">fname</span><span class="si">}</span><span class="s2">&#39; is not in the registry.&quot;</span><span class="p">)</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"File '</span><span class="si">{</span><span class="n">fname</span><span class="si">}</span><span class="s2">' is not in the registry."</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
 
 <div class="viewcode-block" id="Pooch.get_url">
 <a class="viewcode-back" href="../../api/generated/pooch.Pooch.html#pooch.Pooch.get_url">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">get_url</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fname</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Get the full URL to download a file in the registry.</span>
 
 <span class="sd">        Parameters</span>
@@ -1020,21 +1019,21 @@ document.write(`
 <span class="sd">            The file name (relative to the *base_url* of the remote data</span>
 <span class="sd">            storage) to fetch from the local storage.</span>
 
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_assert_file_in_registry</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">urls</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">base_url</span><span class="p">,</span> <span class="n">fname</span><span class="p">]))</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">urls</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="s2">""</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">base_url</span><span class="p">,</span> <span class="n">fname</span><span class="p">]))</span></div>
 
 
 <div class="viewcode-block" id="Pooch.load_registry">
 <a class="viewcode-back" href="../../api/generated/pooch.Pooch.html#pooch.Pooch.load_registry">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">load_registry</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fname</span><span class="p">:</span> <span class="n">PathType</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Load entries from a file and add them to the registry.</span>
 
 <span class="sd">        Use this if you are managing many files.</span>
 
 <span class="sd">        Each line of the file should have file name and its hash separated by</span>
-<span class="sd">        a space. Hash can specify checksum algorithm using &quot;alg:hash&quot; format.</span>
+<span class="sd">        a space. Hash can specify checksum algorithm using "alg:hash" format.</span>
 <span class="sd">        In case no algorithm is provided, SHA256 is used by default.</span>
 <span class="sd">        Only one file per line is allowed. Custom download URLs for individual</span>
 <span class="sd">        files can be specified as a third element on the line. Line comments</span>
@@ -1045,31 +1044,32 @@ document.write(`
 <span class="sd">        fname : str | fileobj</span>
 <span class="sd">            Path (or open file object) to the registry file.</span>
 
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">with</span> <span class="n">contextlib</span><span class="o">.</span><span class="n">ExitStack</span><span class="p">()</span> <span class="k">as</span> <span class="n">stack</span><span class="p">:</span>
-            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="s2">&quot;read&quot;</span><span class="p">):</span>
-                <span class="c1"># It&#39;s a file object</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="s2">"read"</span><span class="p">):</span>
+                <span class="c1"># It's a file object</span>
                 <span class="n">fin</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="n">fname</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="c1"># It&#39;s a file path</span>
-                <span class="n">fin</span> <span class="o">=</span> <span class="n">stack</span><span class="o">.</span><span class="n">enter_context</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">))</span>
+                <span class="c1"># It's a file path</span>
+                <span class="n">fin</span> <span class="o">=</span> <span class="n">stack</span><span class="o">.</span><span class="n">enter_context</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">))</span>
 
             <span class="k">for</span> <span class="n">linenum</span><span class="p">,</span> <span class="n">line</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">fin</span><span class="p">):</span>
                 <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">line</span><span class="p">,</span> <span class="nb">bytes</span><span class="p">):</span>
-                    <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span>
+                    <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">"utf-8"</span><span class="p">)</span>  <span class="c1"># noqa: PLW2901</span>
 
-                <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+                <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>  <span class="c1"># noqa: PLW2901</span>
                 <span class="c1"># skip line comments</span>
-                <span class="k">if</span> <span class="n">line</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;#&quot;</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">line</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">"#"</span><span class="p">):</span>
                     <span class="k">continue</span>
 
                 <span class="n">elements</span> <span class="o">=</span> <span class="n">shlex</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
-                <span class="k">if</span> <span class="ow">not</span> <span class="nb">len</span><span class="p">(</span><span class="n">elements</span><span class="p">)</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]:</span>
-                    <span class="k">raise</span> <span class="ne">OSError</span><span class="p">(</span>
-                        <span class="sa">f</span><span class="s2">&quot;Invalid entry in Pooch registry file &#39;</span><span class="si">{</span><span class="n">fname</span><span class="si">}</span><span class="s2">&#39;: &quot;</span>
-                        <span class="sa">f</span><span class="s2">&quot;expected 2 or 3 elements in line </span><span class="si">{</span><span class="n">linenum</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2"> but got &quot;</span>
-                        <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">elements</span><span class="p">)</span><span class="si">}</span><span class="s2">. Offending entry: &#39;</span><span class="si">{</span><span class="n">line</span><span class="si">}</span><span class="s2">&#39;&quot;</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">elements</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]:</span>
+                    <span class="n">msg</span> <span class="o">=</span> <span class="p">(</span>
+                        <span class="sa">f</span><span class="s2">"Invalid entry in Pooch registry file '</span><span class="si">{</span><span class="n">fname</span><span class="si">}</span><span class="s2">': "</span>
+                        <span class="sa">f</span><span class="s2">"expected 2 or 3 elements in line </span><span class="si">{</span><span class="n">linenum</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2"> but got "</span>
+                        <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">elements</span><span class="p">)</span><span class="si">}</span><span class="s2">. Offending entry: '</span><span class="si">{</span><span class="n">line</span><span class="si">}</span><span class="s2">'"</span>
                     <span class="p">)</span>
+                    <span class="k">raise</span> <span class="ne">OSError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
                 <span class="k">if</span> <span class="n">elements</span><span class="p">:</span>
                     <span class="n">file_name</span> <span class="o">=</span> <span class="n">elements</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
                     <span class="n">file_checksum</span> <span class="o">=</span> <span class="n">elements</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
@@ -1082,7 +1082,7 @@ document.write(`
 <div class="viewcode-block" id="Pooch.load_registry_from_doi">
 <a class="viewcode-back" href="../../api/generated/pooch.Pooch.html#pooch.Pooch.load_registry_from_doi">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">load_registry_from_doi</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Populate the registry using the data repository API</span>
 
 <span class="sd">        Fill the registry with all the files available in the data repository,</span>
@@ -1094,18 +1094,18 @@ document.write(`
 
 <span class="sd">            This method is intended to be used only when the ``base_url`` is</span>
 <span class="sd">            a DOI.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
 
         <span class="c1"># Ensure that this is indeed a DOI-based pooch</span>
         <span class="n">downloader</span> <span class="o">=</span> <span class="n">choose_downloader</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">base_url</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">downloader</span><span class="p">,</span> <span class="n">DOIDownloader</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Invalid base_url &#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">base_url</span><span class="si">}</span><span class="s2">&#39;: &quot;</span>
-                <span class="o">+</span> <span class="s2">&quot;Pooch.load_registry_from_doi is only implemented for DOIs&quot;</span>
+                <span class="sa">f</span><span class="s2">"Invalid base_url '</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">base_url</span><span class="si">}</span><span class="s2">': "</span>
+                <span class="o">+</span> <span class="s2">"Pooch.load_registry_from_doi is only implemented for DOIs"</span>
             <span class="p">)</span>
 
         <span class="c1"># Create a repository instance</span>
-        <span class="n">doi</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">base_url</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;doi:&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="n">doi</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">base_url</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">"doi:"</span><span class="p">,</span> <span class="s2">""</span><span class="p">)</span>
         <span class="n">repository</span> <span class="o">=</span> <span class="n">doi_to_repository</span><span class="p">(</span>
             <span class="n">doi</span><span class="p">,</span>
             <span class="n">headers</span><span class="o">=</span><span class="n">downloader</span><span class="o">.</span><span class="n">headers</span><span class="p">,</span>
@@ -1120,7 +1120,7 @@ document.write(`
 <div class="viewcode-block" id="Pooch.is_available">
 <a class="viewcode-back" href="../../api/generated/pooch.Pooch.html#pooch.Pooch.is_available">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">is_available</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fname</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">downloader</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Downloader</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Check availability of a remote file without downloading it.</span>
 
 <span class="sd">        Use this method when working with large files to check if they are</span>
@@ -1141,7 +1141,7 @@ document.write(`
 <span class="sd">        status : bool</span>
 <span class="sd">            True if the file is available for download. False otherwise.</span>
 
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_assert_file_in_registry</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
         <span class="n">url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_url</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">downloader</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -1150,7 +1150,7 @@ document.write(`
             <span class="n">available</span> <span class="o">=</span> <span class="n">downloader</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="n">check_only</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
         <span class="k">except</span> <span class="ne">TypeError</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
             <span class="n">error_msg</span> <span class="o">=</span> <span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Downloader &#39;</span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">downloader</span><span class="p">)</span><span class="si">}</span><span class="s2">&#39; does not support availability checks.&quot;</span>
+                <span class="sa">f</span><span class="s2">"Downloader '</span><span class="si">{</span><span class="n">downloader</span><span class="si">!s}</span><span class="s2">' does not support availability checks."</span>
             <span class="p">)</span>
             <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="n">error_msg</span><span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">error</span>
         <span class="k">return</span> <span class="n">available</span></div>
@@ -1159,7 +1159,7 @@ document.write(`
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">download_action</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">known_hash</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">Action</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Determine the action that is needed to get the file on disk.</span>
 
 <span class="sd">    Parameters</span>
@@ -1169,7 +1169,7 @@ document.write(`
 <span class="sd">    known_hash : str</span>
 <span class="sd">        A known hash (checksum) of the file. Will be used to verify the</span>
 <span class="sd">        download or check if an existing file needs to be updated. By default,</span>
-<span class="sd">        will assume it&#39;s a SHA256 hash. To specify a different hashing method,</span>
+<span class="sd">        will assume it's a SHA256 hash. To specify a different hashing method,</span>
 <span class="sd">        prepend the hash with ``algorithm:``, for example</span>
 <span class="sd">        ``md5:pw9co2iun29juoh`` or ``sha1:092odwhi2ujdp2du2od2odh2wod2``.</span>
 
@@ -1178,17 +1178,17 @@ document.write(`
 <span class="sd">    action, verb : str</span>
 <span class="sd">        The action that must be taken and the English verb (infinitive form of</span>
 <span class="sd">        *action*) used in the log:</span>
-<span class="sd">        * ``&#39;download&#39;``: File does not exist locally and must be downloaded.</span>
-<span class="sd">        * ``&#39;update&#39;``: File exists locally but needs to be updated.</span>
-<span class="sd">        * ``&#39;fetch&#39;``: File exists locally and only need to inform its path.</span>
+<span class="sd">        * ``'download'``: File does not exist locally and must be downloaded.</span>
+<span class="sd">        * ``'update'``: File exists locally but needs to be updated.</span>
+<span class="sd">        * ``'fetch'``: File exists locally and only need to inform its path.</span>
 
 
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
-        <span class="k">return</span> <span class="s2">&quot;download&quot;</span><span class="p">,</span> <span class="s2">&quot;Downloading&quot;</span>
+        <span class="k">return</span> <span class="s2">"download"</span><span class="p">,</span> <span class="s2">"Downloading"</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">hash_matches</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">path</span><span class="p">),</span> <span class="n">known_hash</span><span class="p">):</span>
-        <span class="k">return</span> <span class="s2">&quot;update&quot;</span><span class="p">,</span> <span class="s2">&quot;Updating&quot;</span>
-    <span class="k">return</span> <span class="s2">&quot;fetch&quot;</span><span class="p">,</span> <span class="s2">&quot;Fetching&quot;</span>
+        <span class="k">return</span> <span class="s2">"update"</span><span class="p">,</span> <span class="s2">"Updating"</span>
+    <span class="k">return</span> <span class="s2">"fetch"</span><span class="p">,</span> <span class="s2">"Fetching"</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">stream_download</span><span class="p">(</span>
@@ -1199,7 +1199,7 @@ document.write(`
     <span class="n">pooch</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Pooch</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">retry_if_failed</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Stream the file and check that its hash matches the known one.</span>
 
 <span class="sd">    The file is first downloaded to a temporary file name in the cache folder.</span>
@@ -1209,9 +1209,9 @@ document.write(`
 <span class="sd">    If the download fails for either a bad connection or a hash mismatch, we</span>
 <span class="sd">    will retry the download the specified number of times in case the failure</span>
 <span class="sd">    was due to a network error.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="c1"># Lazy import requests to speed up import time</span>
-    <span class="kn">import</span><span class="w"> </span><span class="nn">requests.exceptions</span>  <span class="c1"># pylint: disable=C0415</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">requests.exceptions</span>  <span class="c1"># noqa: PLC0415</span>
 
     <span class="c1"># Ensure the parent directory exists in case the file is in a subdirectory.</span>
     <span class="c1"># Otherwise, move will cause an error.</span>
@@ -1233,11 +1233,11 @@ document.write(`
                 <span class="k">raise</span>
             <span class="n">retries_left</span> <span class="o">=</span> <span class="n">download_attempts</span> <span class="o">-</span> <span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
             <span class="n">get_logger</span><span class="p">()</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
-                <span class="s2">&quot;Failed to download &#39;</span><span class="si">%s</span><span class="s2">&#39;. &quot;</span>
-                <span class="s2">&quot;Will attempt the download again </span><span class="si">%d</span><span class="s2"> more time</span><span class="si">%s</span><span class="s2">.&quot;</span><span class="p">,</span>
+                <span class="s2">"Failed to download '</span><span class="si">%s</span><span class="s2">'. "</span>
+                <span class="s2">"Will attempt the download again </span><span class="si">%d</span><span class="s2"> more time</span><span class="si">%s</span><span class="s2">."</span><span class="p">,</span>
                 <span class="nb">str</span><span class="p">(</span><span class="n">fname</span><span class="o">.</span><span class="n">name</span><span class="p">),</span>
                 <span class="n">retries_left</span><span class="p">,</span>
-                <span class="s2">&quot;s&quot;</span> <span class="k">if</span> <span class="n">retries_left</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+                <span class="s2">"s"</span> <span class="k">if</span> <span class="n">retries_left</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="k">else</span> <span class="s2">""</span><span class="p">,</span>
             <span class="p">)</span>
             <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">max_wait</span><span class="p">))</span>
 </pre></div>
@@ -1283,7 +1283,7 @@ document.write(`
   
   <div class="footer-item">
     <p class="last-updated">
-  Last updated on Jan 30, 2026.
+  Last updated on Sep 09, 2026.
   <br/>
 </p>
   </div>

@@ -462,8 +462,8 @@ document.write(`
 bar. This is turned off by default but can be enabled using
 <code class="docutils literal notranslate"><span class="pre">progressbar=True</span></code> in <a class="reference internal" href="api/generated/pooch.retrieve.html#pooch.retrieve" title="pooch.retrieve"><code class="xref py py-func docutils literal notranslate"><span class="pre">pooch.retrieve</span></code></a>:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">fname</span> <span class="o">=</span> <span class="n">retrieve</span><span class="p">(</span>
-    <span class="n">url</span><span class="o">=</span><span class="s2">&quot;https://some-data-server.org/a-data-file.nc&quot;</span><span class="p">,</span>
-    <span class="n">known_hash</span><span class="o">=</span><span class="s2">&quot;md5:70e2afd3fd7e336ae478b1e740a5f08e&quot;</span><span class="p">,</span>
+    <span class="n">url</span><span class="o">=</span><span class="s2">"https://some-data-server.org/a-data-file.nc"</span><span class="p">,</span>
+    <span class="n">known_hash</span><span class="o">=</span><span class="s2">"md5:70e2afd3fd7e336ae478b1e740a5f08e"</span><span class="p">,</span>
     <span class="n">progressbar</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
 <span class="p">)</span>
 </pre></div>
@@ -479,7 +479,7 @@ bar. This is turned off by default but can be enabled using
 <span class="p">)</span>
 
 <span class="n">fname</span> <span class="o">=</span> <span class="n">POOCH</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span>
-    <span class="s2">&quot;large-data-file.h5&quot;</span><span class="p">,</span>
+    <span class="s2">"large-data-file.h5"</span><span class="p">,</span>
     <span class="n">progressbar</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
 <span class="p">)</span>
 </pre></div>
@@ -488,14 +488,14 @@ bar. This is turned off by default but can be enabled using
 <a class="reference internal" href="downloaders.html#downloaders"><span class="std std-ref">downloaders</span></a>:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Using fetch</span>
 <span class="n">fname</span> <span class="o">=</span> <span class="n">POOCH</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span>
-    <span class="s2">&quot;large-data-file.h5&quot;</span><span class="p">,</span>
+    <span class="s2">"large-data-file.h5"</span><span class="p">,</span>
     <span class="n">downloader</span><span class="o">=</span><span class="n">pooch</span><span class="o">.</span><span class="n">HTTPDownloader</span><span class="p">(</span><span class="n">progressbar</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
 <span class="p">)</span>
 
 <span class="c1"># Using retrieve</span>
 <span class="n">fname</span> <span class="o">=</span> <span class="n">retrieve</span><span class="p">(</span>
-    <span class="n">url</span><span class="o">=</span><span class="s2">&quot;https://some-data-server.org/a-data-file.nc&quot;</span><span class="p">,</span>
-    <span class="n">known_hash</span><span class="o">=</span><span class="s2">&quot;md5:70e2afd3fd7e336ae478b1e740a5f08e&quot;</span><span class="p">,</span>
+    <span class="n">url</span><span class="o">=</span><span class="s2">"https://some-data-server.org/a-data-file.nc"</span><span class="p">,</span>
+    <span class="n">known_hash</span><span class="o">=</span><span class="s2">"md5:70e2afd3fd7e336ae478b1e740a5f08e"</span><span class="p">,</span>
     <span class="n">downloader</span><span class="o">=</span><span class="n">pooch</span><span class="o">.</span><span class="n">HTTPDownloader</span><span class="p">(</span><span class="n">progressbar</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
 <span class="p">)</span>
 </pre></div>
@@ -533,10 +533,10 @@ progress bar.</p>
         <span class="bp">self</span><span class="o">.</span><span class="n">total</span> <span class="o">=</span> <span class="n">total</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">count</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">total</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">count</span><span class="p">)</span> <span class="o">+</span> <span class="s2">"/"</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">total</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\r</span><span class="si">{</span><span class="bp">self</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="se">\r</span><span class="si">{</span><span class="bp">self</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s2">""</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">i</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">count</span> <span class="o">=</span> <span class="n">i</span>
@@ -546,7 +546,7 @@ progress bar.</p>
         <span class="bp">self</span><span class="o">.</span><span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">""</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>An instance of this class can now be passed to an <code class="docutils literal notranslate"><span class="pre">HTTPDownloader</span></code> as:</p>
@@ -558,7 +558,7 @@ progress bar.</p>
 <span class="n">minimal_progress</span> <span class="o">=</span> <span class="n">MinimalProgressDisplay</span><span class="p">(</span><span class="n">total</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 
 <span class="n">fname</span> <span class="o">=</span> <span class="n">POOCH</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span>
-    <span class="s2">&quot;large-data-file.h5&quot;</span><span class="p">,</span>
+    <span class="s2">"large-data-file.h5"</span><span class="p">,</span>
     <span class="n">downloader</span><span class="o">=</span><span class="n">pooch</span><span class="o">.</span><span class="n">HTTPDownloader</span><span class="p">(</span><span class="n">progressbar</span><span class="o">=</span><span class="n">minimal_progress</span><span class="p">),</span>
 <span class="p">)</span>
 </pre></div>
@@ -642,7 +642,7 @@ progress bar.</p>
   
   <div class="footer-item">
     <p class="last-updated">
-  Last updated on Jan 30, 2026.
+  Last updated on Sep 09, 2026.
   <br/>
 </p>
   </div>

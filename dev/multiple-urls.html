@@ -463,19 +463,19 @@ downloading the files as values.</p>
 <code class="docutils literal notranslate"><span class="pre">https://www.some-data-hosting-site.com</span></code> instead:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># The basic setup is the same</span>
 <span class="n">POOCH</span> <span class="o">=</span> <span class="n">pooch</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
-    <span class="n">path</span><span class="o">=</span><span class="n">pooch</span><span class="o">.</span><span class="n">os_cache</span><span class="p">(</span><span class="s2">&quot;plumbus&quot;</span><span class="p">),</span>
-    <span class="n">base_url</span><span class="o">=</span><span class="s2">&quot;https://github.com/rick/plumbus/raw/</span><span class="si">{version}</span><span class="s2">/data/&quot;</span><span class="p">,</span>
+    <span class="n">path</span><span class="o">=</span><span class="n">pooch</span><span class="o">.</span><span class="n">os_cache</span><span class="p">(</span><span class="s2">"plumbus"</span><span class="p">),</span>
+    <span class="n">base_url</span><span class="o">=</span><span class="s2">"https://github.com/rick/plumbus/raw/</span><span class="si">{version}</span><span class="s2">/data/"</span><span class="p">,</span>
     <span class="n">version</span><span class="o">=</span><span class="n">version</span><span class="p">,</span>
-    <span class="n">version_dev</span><span class="o">=</span><span class="s2">&quot;main&quot;</span><span class="p">,</span>
+    <span class="n">version_dev</span><span class="o">=</span><span class="s2">"main"</span><span class="p">,</span>
     <span class="n">registry</span><span class="o">=</span><span class="p">{</span>
-        <span class="s2">&quot;c137.csv&quot;</span><span class="p">:</span> <span class="s2">&quot;19uheidhlkjdwhoiwuhc0uhcwljchw9ochwochw89dcgw9dcgwc&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;cronen.csv&quot;</span><span class="p">:</span> <span class="s2">&quot;1upodh2ioduhw9celdjhlfvhksgdwikdgcowjhcwoduchowjg8w&quot;</span><span class="p">,</span>
+        <span class="s2">"c137.csv"</span><span class="p">:</span> <span class="s2">"19uheidhlkjdwhoiwuhc0uhcwljchw9ochwochw89dcgw9dcgwc"</span><span class="p">,</span>
+        <span class="s2">"cronen.csv"</span><span class="p">:</span> <span class="s2">"1upodh2ioduhw9celdjhlfvhksgdwikdgcowjhcwoduchowjg8w"</span><span class="p">,</span>
         <span class="c1"># Still include the file in the registry</span>
-        <span class="s2">&quot;citadel.csv&quot;</span><span class="p">:</span> <span class="s2">&quot;893yprofwjndcwhx9c0ehp3ue9gcwoscjwdfgh923e0hwhcwiyc&quot;</span><span class="p">,</span>
+        <span class="s2">"citadel.csv"</span><span class="p">:</span> <span class="s2">"893yprofwjndcwhx9c0ehp3ue9gcwoscjwdfgh923e0hwhcwiyc"</span><span class="p">,</span>
     <span class="p">},</span>
     <span class="c1"># Now specify custom URLs for some of the files in the registry.</span>
     <span class="n">urls</span><span class="o">=</span><span class="p">{</span>
-        <span class="s2">&quot;citadel.csv&quot;</span><span class="p">:</span> <span class="s2">&quot;https://www.some-data-hosting-site.com/files/citadel.csv&quot;</span><span class="p">,</span>
+        <span class="s2">"citadel.csv"</span><span class="p">:</span> <span class="s2">"https://www.some-data-hosting-site.com/files/citadel.csv"</span><span class="p">,</span>
     <span class="p">},</span>
 <span class="p">)</span>
 </pre></div>
@@ -511,15 +511,15 @@ This way, custom URLs don’t need to be set in the code.
 In fact, the module code doesn’t change at all:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define the Pooch exactly the same (urls is None by default)</span>
 <span class="n">POOCH</span> <span class="o">=</span> <span class="n">pooch</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
-    <span class="n">path</span><span class="o">=</span><span class="n">pooch</span><span class="o">.</span><span class="n">os_cache</span><span class="p">(</span><span class="s2">&quot;plumbus&quot;</span><span class="p">),</span>
-    <span class="n">base_url</span><span class="o">=</span><span class="s2">&quot;https://github.com/rick/plumbus/raw/</span><span class="si">{version}</span><span class="s2">/data/&quot;</span><span class="p">,</span>
+    <span class="n">path</span><span class="o">=</span><span class="n">pooch</span><span class="o">.</span><span class="n">os_cache</span><span class="p">(</span><span class="s2">"plumbus"</span><span class="p">),</span>
+    <span class="n">base_url</span><span class="o">=</span><span class="s2">"https://github.com/rick/plumbus/raw/</span><span class="si">{version}</span><span class="s2">/data/"</span><span class="p">,</span>
     <span class="n">version</span><span class="o">=</span><span class="n">version</span><span class="p">,</span>
-    <span class="n">version_dev</span><span class="o">=</span><span class="s2">&quot;main&quot;</span><span class="p">,</span>
+    <span class="n">version_dev</span><span class="o">=</span><span class="s2">"main"</span><span class="p">,</span>
     <span class="n">registry</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span>
 <span class="c1"># If custom URLs are present in the registry file, they will be set</span>
 <span class="c1"># automatically.</span>
-<span class="n">POOCH</span><span class="o">.</span><span class="n">load_registry</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="vm">__file__</span><span class="p">),</span> <span class="s2">&quot;registry.txt&quot;</span><span class="p">))</span>
+<span class="n">POOCH</span><span class="o">.</span><span class="n">load_registry</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="vm">__file__</span><span class="p">),</span> <span class="s2">"registry.txt"</span><span class="p">))</span>
 </pre></div>
 </div>
 </section>
@@ -600,7 +600,7 @@ In fact, the module code doesn’t change at all:</p>
   
   <div class="footer-item">
     <p class="last-updated">
-  Last updated on Jan 30, 2026.
+  Last updated on Sep 09, 2026.
   <br/>
 </p>
   </div>

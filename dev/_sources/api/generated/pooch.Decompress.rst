@@ -10,6 +10,8 @@ pooch.Decompress
     .. autosummary::
     
     
+    
+    
         Decompress.__call__
     
     
@@ -82,6 +84,8 @@ pooch.Decompress
     
 
 ----
+
+
 
 
 

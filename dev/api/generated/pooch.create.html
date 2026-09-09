@@ -524,40 +524,40 @@ with hashes in the registry will result in an error. Defaults to
 </dl>
 <p class="rubric">Examples</p>
 <p>Create a <a class="reference internal" href="pooch.Pooch.html#pooch.Pooch" title="pooch.Pooch"><code class="xref py py-class docutils literal notranslate"><span class="pre">Pooch</span></code></a> for a release (v0.1):</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">pup</span> <span class="o">=</span> <span class="n">create</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s2">&quot;myproject&quot;</span><span class="p">,</span>
-<span class="gp">... </span>             <span class="n">base_url</span><span class="o">=</span><span class="s2">&quot;http://some.link.com/</span><span class="si">{version}</span><span class="s2">/&quot;</span><span class="p">,</span>
-<span class="gp">... </span>             <span class="n">version</span><span class="o">=</span><span class="s2">&quot;v0.1&quot;</span><span class="p">,</span>
-<span class="gp">... </span>             <span class="n">registry</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;data.txt&quot;</span><span class="p">:</span> <span class="s2">&quot;9081wo2eb2gc0u...&quot;</span><span class="p">})</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">pup</span> <span class="o">=</span> <span class="n">create</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s2">"myproject"</span><span class="p">,</span>
+<span class="gp">... </span>             <span class="n">base_url</span><span class="o">=</span><span class="s2">"http://some.link.com/</span><span class="si">{version}</span><span class="s2">/"</span><span class="p">,</span>
+<span class="gp">... </span>             <span class="n">version</span><span class="o">=</span><span class="s2">"v0.1"</span><span class="p">,</span>
+<span class="gp">... </span>             <span class="n">registry</span><span class="o">=</span><span class="p">{</span><span class="s2">"data.txt"</span><span class="p">:</span> <span class="s2">"9081wo2eb2gc0u..."</span><span class="p">})</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">pup</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">parts</span><span class="p">)</span>  <span class="c1"># The path is a pathlib.Path</span>
-<span class="go">(&#39;myproject&#39;, &#39;v0.1&#39;)</span>
+<span class="go">('myproject', 'v0.1')</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># The local folder is only created when a dataset is first downloaded</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">pup</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">())</span>
 <span class="go">False</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">pup</span><span class="o">.</span><span class="n">base_url</span><span class="p">)</span>
 <span class="go">http://some.link.com/v0.1/</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">pup</span><span class="o">.</span><span class="n">registry</span><span class="p">)</span>
-<span class="go">{&#39;data.txt&#39;: &#39;9081wo2eb2gc0u...&#39;}</span>
+<span class="go">{'data.txt': '9081wo2eb2gc0u...'}</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">pup</span><span class="o">.</span><span class="n">registry_files</span><span class="p">)</span>
-<span class="go">[&#39;data.txt&#39;]</span>
+<span class="go">['data.txt']</span>
 </pre></div>
 </div>
 <p>If this is a development version (12 commits ahead of v0.1), then the
 <code class="docutils literal notranslate"><span class="pre">version_dev</span></code> will be used (defaults to <code class="docutils literal notranslate"><span class="pre">&quot;master&quot;</span></code>):</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">pup</span> <span class="o">=</span> <span class="n">create</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s2">&quot;myproject&quot;</span><span class="p">,</span>
-<span class="gp">... </span>             <span class="n">base_url</span><span class="o">=</span><span class="s2">&quot;http://some.link.com/</span><span class="si">{version}</span><span class="s2">/&quot;</span><span class="p">,</span>
-<span class="gp">... </span>             <span class="n">version</span><span class="o">=</span><span class="s2">&quot;v0.1+12.do9iwd&quot;</span><span class="p">)</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">pup</span> <span class="o">=</span> <span class="n">create</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s2">"myproject"</span><span class="p">,</span>
+<span class="gp">... </span>             <span class="n">base_url</span><span class="o">=</span><span class="s2">"http://some.link.com/</span><span class="si">{version}</span><span class="s2">/"</span><span class="p">,</span>
+<span class="gp">... </span>             <span class="n">version</span><span class="o">=</span><span class="s2">"v0.1+12.do9iwd"</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">pup</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">parts</span><span class="p">)</span>
-<span class="go">(&#39;myproject&#39;, &#39;master&#39;)</span>
+<span class="go">('myproject', 'master')</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">pup</span><span class="o">.</span><span class="n">base_url</span><span class="p">)</span>
 <span class="go">http://some.link.com/master/</span>
 </pre></div>
 </div>
 <p>Versioning is optional (but highly encouraged):</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">pup</span> <span class="o">=</span> <span class="n">create</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s2">&quot;myproject&quot;</span><span class="p">,</span>
-<span class="gp">... </span>             <span class="n">base_url</span><span class="o">=</span><span class="s2">&quot;http://some.link.com/&quot;</span><span class="p">,</span>
-<span class="gp">... </span>             <span class="n">registry</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;data.txt&quot;</span><span class="p">:</span> <span class="s2">&quot;9081wo2eb2gc0u...&quot;</span><span class="p">})</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">pup</span> <span class="o">=</span> <span class="n">create</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s2">"myproject"</span><span class="p">,</span>
+<span class="gp">... </span>             <span class="n">base_url</span><span class="o">=</span><span class="s2">"http://some.link.com/"</span><span class="p">,</span>
+<span class="gp">... </span>             <span class="n">registry</span><span class="o">=</span><span class="p">{</span><span class="s2">"data.txt"</span><span class="p">:</span> <span class="s2">"9081wo2eb2gc0u..."</span><span class="p">})</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">pup</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">parts</span><span class="p">)</span>  <span class="c1"># The path is a pathlib.Path</span>
-<span class="go">(&#39;myproject&#39;,)</span>
+<span class="go">('myproject',)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">pup</span><span class="o">.</span><span class="n">base_url</span><span class="p">)</span>
 <span class="go">http://some.link.com/</span>
 </pre></div>
@@ -565,30 +565,30 @@ with hashes in the registry will result in an error. Defaults to
 <p>To place the storage folder at a subdirectory, pass in a list and we’ll
 join the path for you using the appropriate separator for your operating
 system:</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">pup</span> <span class="o">=</span> <span class="n">create</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;myproject&quot;</span><span class="p">,</span> <span class="s2">&quot;cache&quot;</span><span class="p">,</span> <span class="s2">&quot;data&quot;</span><span class="p">],</span>
-<span class="gp">... </span>             <span class="n">base_url</span><span class="o">=</span><span class="s2">&quot;http://some.link.com/</span><span class="si">{version}</span><span class="s2">/&quot;</span><span class="p">,</span>
-<span class="gp">... </span>             <span class="n">version</span><span class="o">=</span><span class="s2">&quot;v0.1&quot;</span><span class="p">)</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">pup</span> <span class="o">=</span> <span class="n">create</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="p">[</span><span class="s2">"myproject"</span><span class="p">,</span> <span class="s2">"cache"</span><span class="p">,</span> <span class="s2">"data"</span><span class="p">],</span>
+<span class="gp">... </span>             <span class="n">base_url</span><span class="o">=</span><span class="s2">"http://some.link.com/</span><span class="si">{version}</span><span class="s2">/"</span><span class="p">,</span>
+<span class="gp">... </span>             <span class="n">version</span><span class="o">=</span><span class="s2">"v0.1"</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">pup</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">parts</span><span class="p">)</span>
-<span class="go">(&#39;myproject&#39;, &#39;cache&#39;, &#39;data&#39;, &#39;v0.1&#39;)</span>
+<span class="go">('myproject', 'cache', 'data', 'v0.1')</span>
 </pre></div>
 </div>
 <p>The user can overwrite the storage path by setting an environment variable:</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># The variable is not set so we&#39;ll use *path*</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">pup</span> <span class="o">=</span> <span class="n">create</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;myproject&quot;</span><span class="p">,</span> <span class="s2">&quot;not_from_env&quot;</span><span class="p">],</span>
-<span class="gp">... </span>             <span class="n">base_url</span><span class="o">=</span><span class="s2">&quot;http://some.link.com/</span><span class="si">{version}</span><span class="s2">/&quot;</span><span class="p">,</span>
-<span class="gp">... </span>             <span class="n">version</span><span class="o">=</span><span class="s2">&quot;v0.1&quot;</span><span class="p">,</span>
-<span class="gp">... </span>             <span class="n">env</span><span class="o">=</span><span class="s2">&quot;MYPROJECT_DATA_DIR&quot;</span><span class="p">)</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># The variable is not set so we'll use *path*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pup</span> <span class="o">=</span> <span class="n">create</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="p">[</span><span class="s2">"myproject"</span><span class="p">,</span> <span class="s2">"not_from_env"</span><span class="p">],</span>
+<span class="gp">... </span>             <span class="n">base_url</span><span class="o">=</span><span class="s2">"http://some.link.com/</span><span class="si">{version}</span><span class="s2">/"</span><span class="p">,</span>
+<span class="gp">... </span>             <span class="n">version</span><span class="o">=</span><span class="s2">"v0.1"</span><span class="p">,</span>
+<span class="gp">... </span>             <span class="n">env</span><span class="o">=</span><span class="s2">"MYPROJECT_DATA_DIR"</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">pup</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">parts</span><span class="p">)</span>
-<span class="go">(&#39;myproject&#39;, &#39;not_from_env&#39;, &#39;v0.1&#39;)</span>
+<span class="go">('myproject', 'not_from_env', 'v0.1')</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># Set the environment variable and try again</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;MYPROJECT_DATA_DIR&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;myproject&quot;</span><span class="p">,</span> <span class="s2">&quot;env&quot;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">pup</span> <span class="o">=</span> <span class="n">create</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;myproject&quot;</span><span class="p">,</span> <span class="s2">&quot;not_env&quot;</span><span class="p">],</span>
-<span class="gp">... </span>             <span class="n">base_url</span><span class="o">=</span><span class="s2">&quot;http://some.link.com/</span><span class="si">{version}</span><span class="s2">/&quot;</span><span class="p">,</span>
-<span class="gp">... </span>             <span class="n">version</span><span class="o">=</span><span class="s2">&quot;v0.1&quot;</span><span class="p">,</span>
-<span class="gp">... </span>             <span class="n">env</span><span class="o">=</span><span class="s2">&quot;MYPROJECT_DATA_DIR&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">"MYPROJECT_DATA_DIR"</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">"myproject"</span><span class="p">,</span> <span class="s2">"env"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pup</span> <span class="o">=</span> <span class="n">create</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="p">[</span><span class="s2">"myproject"</span><span class="p">,</span> <span class="s2">"not_env"</span><span class="p">],</span>
+<span class="gp">... </span>             <span class="n">base_url</span><span class="o">=</span><span class="s2">"http://some.link.com/</span><span class="si">{version}</span><span class="s2">/"</span><span class="p">,</span>
+<span class="gp">... </span>             <span class="n">version</span><span class="o">=</span><span class="s2">"v0.1"</span><span class="p">,</span>
+<span class="gp">... </span>             <span class="n">env</span><span class="o">=</span><span class="s2">"MYPROJECT_DATA_DIR"</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">pup</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">parts</span><span class="p">)</span>
-<span class="go">(&#39;myproject&#39;, &#39;env&#39;, &#39;v0.1&#39;)</span>
+<span class="go">('myproject', 'env', 'v0.1')</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -670,7 +670,7 @@ system:</p>
   
   <div class="footer-item">
     <p class="last-updated">
-  Last updated on Jan 30, 2026.
+  Last updated on Sep 09, 2026.
   <br/>
 </p>
   </div>

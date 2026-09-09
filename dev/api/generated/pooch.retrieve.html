@@ -527,23 +527,23 @@ storage.</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">pooch</span><span class="w"> </span><span class="kn">import</span> <span class="n">__version__</span><span class="p">,</span> <span class="n">check_version</span><span class="p">,</span> <span class="n">retrieve</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># Make a URL for the version of pooch we have installed</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;https://github.com/fatiando/pooch/raw/</span><span class="si">{}</span><span class="s2">/data/tiny-data.txt&quot;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">url</span> <span class="o">=</span> <span class="n">url</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">check_version</span><span class="p">(</span><span class="n">__version__</span><span class="p">,</span> <span class="n">fallback</span><span class="o">=</span><span class="s2">&quot;main&quot;</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">url</span> <span class="o">=</span> <span class="s2">"https://github.com/fatiando/pooch/raw/</span><span class="si">{}</span><span class="s2">/data/tiny-data.txt"</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">url</span> <span class="o">=</span> <span class="n">url</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">check_version</span><span class="p">(</span><span class="n">__version__</span><span class="p">,</span> <span class="n">fallback</span><span class="o">=</span><span class="s2">"main"</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># Download the file and save it locally. Will check the MD5 checksum of</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c1"># the downloaded file against the given value to make sure it&#39;s the</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># the downloaded file against the given value to make sure it's the</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># right file. You can use other hashes by specifying different</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># algorithm names (sha256, sha1, etc).</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">fname</span> <span class="o">=</span> <span class="n">retrieve</span><span class="p">(</span>
-<span class="gp">... </span>    <span class="n">url</span><span class="p">,</span> <span class="n">known_hash</span><span class="o">=</span><span class="s2">&quot;md5:70e2afd3fd7e336ae478b1e740a5f08e&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">url</span><span class="p">,</span> <span class="n">known_hash</span><span class="o">=</span><span class="s2">"md5:70e2afd3fd7e336ae478b1e740a5f08e"</span><span class="p">,</span>
 <span class="gp">... </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
 <span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>
 <span class="go"># A tiny data file for test purposes only</span>
 <span class="go">1  2  3  4  5  6</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Running again won&#39;t trigger a download and only return the path to</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Running again won't trigger a download and only return the path to</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># the existing file.</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">fname2</span> <span class="o">=</span> <span class="n">retrieve</span><span class="p">(</span>
-<span class="gp">... </span>    <span class="n">url</span><span class="p">,</span> <span class="n">known_hash</span><span class="o">=</span><span class="s2">&quot;md5:70e2afd3fd7e336ae478b1e740a5f08e&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">url</span><span class="p">,</span> <span class="n">known_hash</span><span class="o">=</span><span class="s2">"md5:70e2afd3fd7e336ae478b1e740a5f08e"</span><span class="p">,</span>
 <span class="gp">... </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">fname2</span> <span class="o">==</span> <span class="n">fname</span><span class="p">)</span>
 <span class="go">True</span>
@@ -554,13 +554,13 @@ storage.</p>
 decompressed by passing using the <a class="reference internal" href="pooch.Decompress.html#pooch.Decompress" title="pooch.Decompress"><code class="xref py py-class docutils literal notranslate"><span class="pre">pooch.Decompress</span></code></a> processor:</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">pooch</span><span class="w"> </span><span class="kn">import</span> <span class="n">Decompress</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># URLs to a gzip compressed version of the data file.</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">url</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;https://github.com/fatiando/pooch/raw/</span><span class="si">{}</span><span class="s2">/&quot;</span>
-<span class="gp">... </span>       <span class="o">+</span> <span class="s2">&quot;pooch/tests/data/tiny-data.txt.gz&quot;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">url</span> <span class="o">=</span> <span class="n">url</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">check_version</span><span class="p">(</span><span class="n">__version__</span><span class="p">,</span> <span class="n">fallback</span><span class="o">=</span><span class="s2">&quot;main&quot;</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">url</span> <span class="o">=</span> <span class="p">(</span><span class="s2">"https://github.com/fatiando/pooch/raw/</span><span class="si">{}</span><span class="s2">/"</span>
+<span class="gp">... </span>       <span class="o">+</span> <span class="s2">"pooch/tests/data/tiny-data.txt.gz"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">url</span> <span class="o">=</span> <span class="n">url</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">check_version</span><span class="p">(</span><span class="n">__version__</span><span class="p">,</span> <span class="n">fallback</span><span class="o">=</span><span class="s2">"main"</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># By default, you would have to decompress the file yourself</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">fname</span> <span class="o">=</span> <span class="n">retrieve</span><span class="p">(</span>
 <span class="gp">... </span>    <span class="n">url</span><span class="p">,</span>
-<span class="gp">... </span>    <span class="n">known_hash</span><span class="o">=</span><span class="s2">&quot;md5:8812ba10b6c7778014fdae81b03f9def&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">known_hash</span><span class="o">=</span><span class="s2">"md5:8812ba10b6c7778014fdae81b03f9def"</span><span class="p">,</span>
 <span class="gp">... </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">fname</span><span class="p">)[</span><span class="mi">1</span><span class="p">])</span>
 <span class="go">.gz</span>
@@ -568,7 +568,7 @@ decompressed by passing using the <a class="reference internal" href="pooch.Deco
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># return the path to the decompressed file instead.</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">fname2</span> <span class="o">=</span> <span class="n">retrieve</span><span class="p">(</span>
 <span class="gp">... </span>    <span class="n">url</span><span class="p">,</span>
-<span class="gp">... </span>    <span class="n">known_hash</span><span class="o">=</span><span class="s2">&quot;md5:8812ba10b6c7778014fdae81b03f9def&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">known_hash</span><span class="o">=</span><span class="s2">"md5:8812ba10b6c7778014fdae81b03f9def"</span><span class="p">,</span>
 <span class="gp">... </span>    <span class="n">processor</span><span class="o">=</span><span class="n">Decompress</span><span class="p">(),</span>
 <span class="gp">... </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">fname2</span> <span class="o">==</span> <span class="n">fname</span><span class="p">)</span>
@@ -586,13 +586,13 @@ after download to avoid having to do that yourself. Use the processors
 <a class="reference internal" href="pooch.Unzip.html#pooch.Unzip" title="pooch.Unzip"><code class="xref py py-class docutils literal notranslate"><span class="pre">pooch.Unzip</span></code></a> or <a class="reference internal" href="pooch.Untar.html#pooch.Untar" title="pooch.Untar"><code class="xref py py-class docutils literal notranslate"><span class="pre">pooch.Untar</span></code></a> to do this automatically:</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">pooch</span><span class="w"> </span><span class="kn">import</span> <span class="n">Unzip</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># URLs to a zip archive with a single data file.</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">url</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;https://github.com/fatiando/pooch/raw/</span><span class="si">{}</span><span class="s2">/&quot;</span>
-<span class="gp">... </span>       <span class="o">+</span> <span class="s2">&quot;pooch/tests/data/tiny-data.zip&quot;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">url</span> <span class="o">=</span> <span class="n">url</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">check_version</span><span class="p">(</span><span class="n">__version__</span><span class="p">,</span> <span class="n">fallback</span><span class="o">=</span><span class="s2">&quot;main&quot;</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">url</span> <span class="o">=</span> <span class="p">(</span><span class="s2">"https://github.com/fatiando/pooch/raw/</span><span class="si">{}</span><span class="s2">/"</span>
+<span class="gp">... </span>       <span class="o">+</span> <span class="s2">"pooch/tests/data/tiny-data.zip"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">url</span> <span class="o">=</span> <span class="n">url</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">check_version</span><span class="p">(</span><span class="n">__version__</span><span class="p">,</span> <span class="n">fallback</span><span class="o">=</span><span class="s2">"main"</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># By default, you would get the path to the archive</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">fname</span> <span class="o">=</span> <span class="n">retrieve</span><span class="p">(</span>
 <span class="gp">... </span>    <span class="n">url</span><span class="p">,</span>
-<span class="gp">... </span>    <span class="n">known_hash</span><span class="o">=</span><span class="s2">&quot;md5:e9592cb46cf3514a1079051f8a148148&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">known_hash</span><span class="o">=</span><span class="s2">"md5:e9592cb46cf3514a1079051f8a148148"</span><span class="p">,</span>
 <span class="gp">... </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">fname</span><span class="p">)[</span><span class="mi">1</span><span class="p">])</span>
 <span class="go">.zip</span>
@@ -601,7 +601,7 @@ after download to avoid having to do that yourself. Use the processors
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># path to every file will be returned instead of a single path.</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">fnames</span> <span class="o">=</span> <span class="n">retrieve</span><span class="p">(</span>
 <span class="gp">... </span>    <span class="n">url</span><span class="p">,</span>
-<span class="gp">... </span>    <span class="n">known_hash</span><span class="o">=</span><span class="s2">&quot;md5:e9592cb46cf3514a1079051f8a148148&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">known_hash</span><span class="o">=</span><span class="s2">"md5:e9592cb46cf3514a1079051f8a148148"</span><span class="p">,</span>
 <span class="gp">... </span>    <span class="n">processor</span><span class="o">=</span><span class="n">Unzip</span><span class="p">(),</span>
 <span class="gp">... </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># There was only a single file in our archive.</span>
@@ -694,7 +694,7 @@ after download to avoid having to do that yourself. Use the processors
   
   <div class="footer-item">
     <p class="last-updated">
-  Last updated on Jan 30, 2026.
+  Last updated on Sep 09, 2026.
   <br/>
 </p>
   </div>

@@ -467,7 +467,7 @@ argument to handle these situations.</p>
 these actions.
 They must have the following format:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">myprocessor</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">action</span><span class="p">,</span> <span class="n">pooch</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="w">    </span><span class="sd">'''</span>
 <span class="sd">    Processes the downloaded file and returns a new file name.</span>
 
 <span class="sd">    The function **must** take as arguments (in order):</span>
@@ -475,8 +475,8 @@ They must have the following format:</p>
 <span class="sd">    fname : str</span>
 <span class="sd">        The full path of the file in the local data storage</span>
 <span class="sd">    action : str</span>
-<span class="sd">        Either: &quot;download&quot; (file doesn&#39;t exist and will be downloaded),</span>
-<span class="sd">        &quot;update&quot; (file is outdated and will be downloaded), or &quot;fetch&quot;</span>
+<span class="sd">        Either: "download" (file doesn't exist and will be downloaded),</span>
+<span class="sd">        "update" (file is outdated and will be downloaded), or "fetch"</span>
 <span class="sd">        (file exists and is updated so no download is necessary).</span>
 <span class="sd">    pooch : pooch.Pooch</span>
 <span class="sd">        The instance of the Pooch class that is calling this function.</span>
@@ -484,7 +484,7 @@ They must have the following format:</p>
 <span class="sd">    The return value can be anything but is usually a full path to a file</span>
 <span class="sd">    (or list of files). This is what will be returned by Pooch.fetch and</span>
 <span class="sd">    pooch.retrieve in place of the original file path.</span>
-<span class="sd">    &#39;&#39;&#39;</span>
+<span class="sd">    '''</span>
     <span class="o">...</span>
     <span class="k">return</span> <span class="n">full_path</span>
 </pre></div>
@@ -511,7 +511,7 @@ function:</p>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">unpack</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">action</span><span class="p">,</span> <span class="n">pup</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Post-processing hook to unzip a file and return the unzipped file name.</span>
 
 <span class="sd">    Parameters</span>
@@ -519,9 +519,9 @@ function:</p>
 <span class="sd">    fname : str</span>
 <span class="sd">       Full path of the zipped file in local storage</span>
 <span class="sd">    action : str</span>
-<span class="sd">       One of &quot;download&quot; (file doesn&#39;t exist and will download),</span>
-<span class="sd">       &quot;update&quot; (file is outdated and will download), and</span>
-<span class="sd">       &quot;fetch&quot; (file exists and is updated so no download).</span>
+<span class="sd">       One of "download" (file doesn't exist and will download),</span>
+<span class="sd">       "update" (file is outdated and will download), and</span>
+<span class="sd">       "fetch" (file exists and is updated so no download).</span>
 <span class="sd">    pup : Pooch</span>
 <span class="sd">       The instance of Pooch that called the processor function.</span>
 
@@ -529,31 +529,31 @@ function:</p>
 <span class="sd">    -------</span>
 <span class="sd">    fname : str</span>
 <span class="sd">       The full path to the unzipped file. (Return the same fname is your</span>
-<span class="sd">       processor doesn&#39;t modify the file).</span>
+<span class="sd">       processor doesn't modify the file).</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="c1"># Create a new name for the unzipped file. Appending something to the</span>
     <span class="c1"># name is a relatively safe way of making sure there are no clashes</span>
     <span class="c1"># with other files in the registry.</span>
-    <span class="n">unzipped</span> <span class="o">=</span> <span class="n">fname</span> <span class="o">+</span> <span class="s2">&quot;.unzipped&quot;</span>
-    <span class="c1"># Don&#39;t unzip if file already exists and is not being downloaded</span>
-    <span class="k">if</span> <span class="n">action</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;update&quot;</span><span class="p">,</span> <span class="s2">&quot;download&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">unzipped</span><span class="p">):</span>
-        <span class="k">with</span> <span class="n">ZipFile</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">zip_file</span><span class="p">:</span>
+    <span class="n">unzipped</span> <span class="o">=</span> <span class="n">fname</span> <span class="o">+</span> <span class="s2">".unzipped"</span>
+    <span class="c1"># Don't unzip if file already exists and is not being downloaded</span>
+    <span class="k">if</span> <span class="n">action</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">"update"</span><span class="p">,</span> <span class="s2">"download"</span><span class="p">)</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">unzipped</span><span class="p">):</span>
+        <span class="k">with</span> <span class="n">ZipFile</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="s2">"r"</span><span class="p">)</span> <span class="k">as</span> <span class="n">zip_file</span><span class="p">:</span>
             <span class="c1"># Extract the data file from within the archive</span>
-            <span class="k">with</span> <span class="n">zip_file</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s2">&quot;actual-data-file.txt&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">data_file</span><span class="p">:</span>
+            <span class="k">with</span> <span class="n">zip_file</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s2">"actual-data-file.txt"</span><span class="p">)</span> <span class="k">as</span> <span class="n">data_file</span><span class="p">:</span>
                 <span class="c1"># Save it to our desired file name</span>
-                <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">unzipped</span><span class="p">,</span> <span class="s2">&quot;wb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">output</span><span class="p">:</span>
+                <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">unzipped</span><span class="p">,</span> <span class="s2">"wb"</span><span class="p">)</span> <span class="k">as</span> <span class="n">output</span><span class="p">:</span>
                     <span class="n">output</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">data_file</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
     <span class="c1"># Return the path of the unzipped file</span>
     <span class="k">return</span> <span class="n">unzipped</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">fetch_zipped_file</span><span class="p">():</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Load a large zipped sample data as a pandas.DataFrame.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="c1"># Pass in the processor to unzip the data file</span>
-    <span class="n">fname</span> <span class="o">=</span> <span class="n">GOODBOY</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="s2">&quot;zipped-data-file.zip&quot;</span><span class="p">,</span> <span class="n">processor</span><span class="o">=</span><span class="n">unpack</span><span class="p">)</span>
+    <span class="n">fname</span> <span class="o">=</span> <span class="n">GOODBOY</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="s2">"zipped-data-file.zip"</span><span class="p">,</span> <span class="n">processor</span><span class="o">=</span><span class="n">unpack</span><span class="p">)</span>
     <span class="c1"># fname is now the path of the unzipped file which can be loaded by</span>
     <span class="c1"># pandas directly</span>
     <span class="n">data</span> <span class="o">=</span> <span class="n">pandas</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
@@ -652,7 +652,7 @@ convenient if the processor task takes a long time to run.</p>
   
   <div class="footer-item">
     <p class="last-updated">
-  Last updated on Jan 30, 2026.
+  Last updated on Sep 09, 2026.
   <br/>
 </p>
   </div>

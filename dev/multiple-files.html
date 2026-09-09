@@ -475,12 +475,12 @@ locations, then this section is for you!</p>
 
 <span class="n">odie</span> <span class="o">=</span> <span class="n">pooch</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
     <span class="c1"># Use the default cache folder for the operating system</span>
-    <span class="n">path</span><span class="o">=</span><span class="n">pooch</span><span class="o">.</span><span class="n">os_cache</span><span class="p">(</span><span class="s2">&quot;my-project&quot;</span><span class="p">),</span>
-    <span class="n">base_url</span><span class="o">=</span><span class="s2">&quot;https://www.somewebpage.org/science/data/&quot;</span><span class="p">,</span>
+    <span class="n">path</span><span class="o">=</span><span class="n">pooch</span><span class="o">.</span><span class="n">os_cache</span><span class="p">(</span><span class="s2">"my-project"</span><span class="p">),</span>
+    <span class="n">base_url</span><span class="o">=</span><span class="s2">"https://www.somewebpage.org/science/data/"</span><span class="p">,</span>
     <span class="c1"># The registry specifies the files that can be fetched</span>
     <span class="n">registry</span><span class="o">=</span><span class="p">{</span>
-        <span class="s2">&quot;temperature.csv&quot;</span><span class="p">:</span> <span class="s2">&quot;sha256:19uheidhlkjdwhoiwuhc0uhcwljchw9ochwochw89dcgw9dcgwc&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;gravity-disturbance.nc&quot;</span><span class="p">:</span> <span class="s2">&quot;sha256:1upodh2ioduhw9celdjhlfvhksgdwikdgcowjhcwoduchowjg8w&quot;</span><span class="p">,</span>
+        <span class="s2">"temperature.csv"</span><span class="p">:</span> <span class="s2">"sha256:19uheidhlkjdwhoiwuhc0uhcwljchw9ochwochw89dcgw9dcgwc"</span><span class="p">,</span>
+        <span class="s2">"gravity-disturbance.nc"</span><span class="p">:</span> <span class="s2">"sha256:1upodh2ioduhw9celdjhlfvhksgdwikdgcowjhcwoduchowjg8w"</span><span class="p">,</span>
     <span class="p">},</span>
 <span class="p">)</span>
 </pre></div>
@@ -516,7 +516,7 @@ Pooch will handle the appropriate conversions.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">xarray</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">xr</span>
 
 
-<span class="n">file_path</span> <span class="o">=</span> <span class="n">odie</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="s2">&quot;gravity-disturbance.nc&quot;</span><span class="p">)</span>
+<span class="n">file_path</span> <span class="o">=</span> <span class="n">odie</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="s2">"gravity-disturbance.nc"</span><span class="p">)</span>
 <span class="c1"># Standard use of xarray to load a netCDF file (.nc)</span>
 <span class="n">data</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">open_dataset</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span>
 </pre></div>
@@ -641,7 +641,7 @@ show <a class="reference internal" href="progressbars.html#progressbars"><span c
   
   <div class="footer-item">
     <p class="last-updated">
-  Last updated on Jan 30, 2026.
+  Last updated on Sep 09, 2026.
   <br/>
 </p>
   </div>

@@ -468,15 +468,15 @@ hashes in a file and use <a class="reference internal" href="api/generated/pooch
 <span class="kn">from</span><span class="w"> </span><span class="nn">importlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">resources</span>
 
 <span class="n">POOCH</span> <span class="o">=</span> <span class="n">pooch</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
-    <span class="n">path</span><span class="o">=</span><span class="n">pooch</span><span class="o">.</span><span class="n">os_cache</span><span class="p">(</span><span class="s2">&quot;plumbus&quot;</span><span class="p">),</span>
-    <span class="n">base_url</span><span class="o">=</span><span class="s2">&quot;https://github.com/rick/plumbus/raw/</span><span class="si">{version}</span><span class="s2">/data/&quot;</span><span class="p">,</span>
+    <span class="n">path</span><span class="o">=</span><span class="n">pooch</span><span class="o">.</span><span class="n">os_cache</span><span class="p">(</span><span class="s2">"plumbus"</span><span class="p">),</span>
+    <span class="n">base_url</span><span class="o">=</span><span class="s2">"https://github.com/rick/plumbus/raw/</span><span class="si">{version}</span><span class="s2">/data/"</span><span class="p">,</span>
     <span class="n">version</span><span class="o">=</span><span class="n">version</span><span class="p">,</span>
-    <span class="n">version_dev</span><span class="o">=</span><span class="s2">&quot;main&quot;</span><span class="p">,</span>
-    <span class="c1"># We&#39;ll load it from a file later</span>
+    <span class="n">version_dev</span><span class="o">=</span><span class="s2">"main"</span><span class="p">,</span>
+    <span class="c1"># We'll load it from a file later</span>
     <span class="n">registry</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span>
 <span class="c1"># Get registry file from package_data</span>
-<span class="n">registry_file</span> <span class="o">=</span> <span class="n">resources</span><span class="o">.</span><span class="n">open_text</span><span class="p">(</span><span class="s2">&quot;plumbus&quot;</span><span class="p">,</span> <span class="s2">&quot;registry.txt&quot;</span><span class="p">)</span>
+<span class="n">registry_file</span> <span class="o">=</span> <span class="n">resources</span><span class="o">.</span><span class="n">open_text</span><span class="p">(</span><span class="s2">"plumbus"</span><span class="p">,</span> <span class="s2">"registry.txt"</span><span class="p">)</span>
 <span class="c1"># Load this registry file</span>
 <span class="n">POOCH</span><span class="o">.</span><span class="n">load_registry</span><span class="p">(</span><span class="n">registry_file</span><span class="p">)</span>
 </pre></div>
@@ -525,7 +525,7 @@ following in your <code class="docutils literal notranslate"><span class="pre">M
 <p>And the following entry in the <code class="docutils literal notranslate"><span class="pre">setup</span></code> function of your <code class="docutils literal notranslate"><span class="pre">setup.py</span></code> file:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">setup</span><span class="p">(</span>
     <span class="o">...</span>
-    <span class="n">package_data</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;plumbus&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;registry.txt&quot;</span><span class="p">]},</span>
+    <span class="n">package_data</span><span class="o">=</span><span class="p">{</span><span class="s2">"plumbus"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"registry.txt"</span><span class="p">]},</span>
     <span class="o">...</span>
 <span class="p">)</span>
 </pre></div>
@@ -537,7 +537,7 @@ following in your <code class="docutils literal notranslate"><span class="pre">M
 be a challenge. Function <a class="reference internal" href="api/generated/pooch.make_registry.html#pooch.make_registry" title="pooch.make_registry"><code class="xref py py-func docutils literal notranslate"><span class="pre">pooch.make_registry</span></code></a> will create a registry
 file with all contents of a directory. For example, we can generate the
 registry file for our fictitious project from the command-line:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>python<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;import pooch; pooch.make_registry(&#39;data&#39;, &#39;plumbus/registry.txt&#39;)&quot;</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>python<span class="w"> </span>-c<span class="w"> </span><span class="s2">"import pooch; pooch.make_registry('data', 'plumbus/registry.txt')"</span>
 </pre></div>
 </div>
 </section>
@@ -554,13 +554,13 @@ registry:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
 
 <span class="c1"># Names of the data files</span>
-<span class="n">filenames</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;c137.csv&quot;</span><span class="p">,</span> <span class="s2">&quot;cronen.csv&quot;</span><span class="p">,</span> <span class="s2">&quot;citadel.csv&quot;</span><span class="p">]</span>
+<span class="n">filenames</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"c137.csv"</span><span class="p">,</span> <span class="s2">"cronen.csv"</span><span class="p">,</span> <span class="s2">"citadel.csv"</span><span class="p">]</span>
 
 <span class="c1"># Base url from which the data files can be downloaded from</span>
-<span class="n">base_url</span> <span class="o">=</span> <span class="s2">&quot;https://www.some-data-hosting-site.com/files/&quot;</span>
+<span class="n">base_url</span> <span class="o">=</span> <span class="s2">"https://www.some-data-hosting-site.com/files/"</span>
 
 <span class="c1"># Create a new directory where all files will be downloaded</span>
-<span class="n">directory</span> <span class="o">=</span> <span class="s2">&quot;data_files&quot;</span>
+<span class="n">directory</span> <span class="o">=</span> <span class="s2">"data_files"</span>
 <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">directory</span><span class="p">)</span>
 
 <span class="c1"># Download each data file to data_files</span>
@@ -570,7 +570,7 @@ registry:</p>
     <span class="p">)</span>
 
 <span class="c1"># Create the registry file from the downloaded data files</span>
-<span class="n">pooch</span><span class="o">.</span><span class="n">make_registry</span><span class="p">(</span><span class="s2">&quot;data_files&quot;</span><span class="p">,</span> <span class="s2">&quot;registry.txt&quot;</span><span class="p">)</span>
+<span class="n">pooch</span><span class="o">.</span><span class="n">make_registry</span><span class="p">(</span><span class="s2">"data_files"</span><span class="p">,</span> <span class="s2">"registry.txt"</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>If each data file has its own url, the registry file can be manually created
@@ -580,17 +580,17 @@ after downloading each data file through <a class="reference internal" href="api
 <span class="c1"># Names and urls of the data files. The file names are used for naming the</span>
 <span class="c1"># downloaded files. These are the names that will be included in the registry.</span>
 <span class="n">fnames_and_urls</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s2">&quot;c137.csv&quot;</span><span class="p">:</span> <span class="s2">&quot;https://www.some-data-hosting-site.com/c137/data.csv&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;cronen.csv&quot;</span><span class="p">:</span> <span class="s2">&quot;https://www.some-data-hosting-site.com/cronen/data.csv&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;citadel.csv&quot;</span><span class="p">:</span> <span class="s2">&quot;https://www.some-data-hosting-site.com/citadel/data.csv&quot;</span><span class="p">,</span>
+    <span class="s2">"c137.csv"</span><span class="p">:</span> <span class="s2">"https://www.some-data-hosting-site.com/c137/data.csv"</span><span class="p">,</span>
+    <span class="s2">"cronen.csv"</span><span class="p">:</span> <span class="s2">"https://www.some-data-hosting-site.com/cronen/data.csv"</span><span class="p">,</span>
+    <span class="s2">"citadel.csv"</span><span class="p">:</span> <span class="s2">"https://www.some-data-hosting-site.com/citadel/data.csv"</span><span class="p">,</span>
 <span class="p">}</span>
 
 <span class="c1"># Create a new directory where all files will be downloaded</span>
-<span class="n">directory</span> <span class="o">=</span> <span class="s2">&quot;data_files&quot;</span>
+<span class="n">directory</span> <span class="o">=</span> <span class="s2">"data_files"</span>
 <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">directory</span><span class="p">)</span>
 
 <span class="c1"># Create a new registry file</span>
-<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;registry.txt&quot;</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">registry</span><span class="p">:</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">"registry.txt"</span><span class="p">,</span> <span class="s2">"w"</span><span class="p">)</span> <span class="k">as</span> <span class="n">registry</span><span class="p">:</span>
     <span class="k">for</span> <span class="n">fname</span><span class="p">,</span> <span class="n">url</span> <span class="ow">in</span> <span class="n">fnames_and_urls</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
         <span class="c1"># Download each data file to the specified directory</span>
         <span class="n">path</span> <span class="o">=</span> <span class="n">pooch</span><span class="o">.</span><span class="n">retrieve</span><span class="p">(</span>
@@ -598,7 +598,7 @@ after downloading each data file through <a class="reference internal" href="api
         <span class="p">)</span>
         <span class="c1"># Add the name, hash, and url of the file to the new registry file</span>
         <span class="n">registry</span><span class="o">.</span><span class="n">write</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">fname</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">pooch</span><span class="o">.</span><span class="n">file_hash</span><span class="p">(</span><span class="n">path</span><span class="p">)</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">url</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">fname</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">pooch</span><span class="o">.</span><span class="n">file_hash</span><span class="p">(</span><span class="n">path</span><span class="p">)</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">url</span><span class="si">}</span><span class="se">\n</span><span class="s2">"</span>
         <span class="p">)</span>
 </pre></div>
 </div>
@@ -691,7 +691,7 @@ and over a secure connection. If you have access to file hashes/checksums,
   
   <div class="footer-item">
     <p class="last-updated">
-  Last updated on Jan 30, 2026.
+  Last updated on Sep 09, 2026.
   <br/>
 </p>
   </div>

@@ -466,7 +466,7 @@ To get around this, use the <code class="docutils literal notranslate"><span cla
 <p>Downloaders are Python <em>callable objects</em>  (like functions or classes with a
 <code class="docutils literal notranslate"><span class="pre">__call__</span></code> method) and must have the following format:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">mydownloader</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">output_file</span><span class="p">,</span> <span class="n">pooch</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="w">    </span><span class="sd">'''</span>
 <span class="sd">    Download a file from the given URL to the given local file.</span>
 
 <span class="sd">    The function **must** take the following arguments (in order).</span>
@@ -481,7 +481,7 @@ To get around this, use the <code class="docutils literal notranslate"><span cla
 <span class="sd">        The instance of the Pooch class that is calling this function.</span>
 
 <span class="sd">    No return value is required.</span>
-<span class="sd">    &#39;&#39;&#39;</span>
+<span class="sd">    '''</span>
     <span class="o">...</span>
 </pre></div>
 </div>
@@ -504,12 +504,12 @@ redirected from the original download URL:</p>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">redirect_downloader</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">output_file</span><span class="p">,</span> <span class="n">pooch</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Download after following a redirection.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="c1"># Get the credentials from the user&#39;s environment</span>
-    <span class="n">username</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;SOMESITE_USERNAME&quot;</span><span class="p">)</span>
-    <span class="n">password</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;SOMESITE_PASSWORD&quot;</span><span class="p">)</span>
+<span class="sd">    """</span>
+    <span class="c1"># Get the credentials from the user's environment</span>
+    <span class="n">username</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"SOMESITE_USERNAME"</span><span class="p">)</span>
+    <span class="n">password</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"SOMESITE_PASSWORD"</span><span class="p">)</span>
     <span class="c1"># Make a request that will redirect to the login page</span>
     <span class="n">login</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
     <span class="c1"># Provide the credentials and download from the new URL</span>
@@ -518,10 +518,10 @@ redirected from the original download URL:</p>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">fetch_protected_data</span><span class="p">():</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Fetch a file from a server that requires authentication</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">fname</span> <span class="o">=</span> <span class="n">GOODBOY</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="s2">&quot;some-data.csv&quot;</span><span class="p">,</span> <span class="n">downloader</span><span class="o">=</span><span class="n">redirect_downloader</span><span class="p">)</span>
+<span class="sd">    """</span>
+    <span class="n">fname</span> <span class="o">=</span> <span class="n">GOODBOY</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="s2">"some-data.csv"</span><span class="p">,</span> <span class="n">downloader</span><span class="o">=</span><span class="n">redirect_downloader</span><span class="p">)</span>
     <span class="n">data</span> <span class="o">=</span> <span class="n">pandas</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">data</span>
 </pre></div>
@@ -535,7 +535,7 @@ download <strong>without</strong> downloading the file.
 This makes a downloader compatible with <a class="reference internal" href="api/generated/pooch.Pooch.html#pooch.Pooch.is_available" title="pooch.Pooch.is_available"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pooch.Pooch.is_available</span></code></a>.</p>
 <p>In this case, the downloader should return a boolean:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">mydownloader</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">output_file</span><span class="p">,</span> <span class="n">pooch</span><span class="p">,</span> <span class="n">check_only</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="w">    </span><span class="sd">'''</span>
 <span class="sd">    Download a file from the given URL to the given local file.</span>
 
 <span class="sd">    The function **must** take the following arguments (in order).</span>
@@ -558,7 +558,7 @@ This makes a downloader compatible with <a class="reference internal" href="api/
 <span class="sd">    None or availability</span>
 <span class="sd">        If ``check_only==True``, returns a boolean indicating if the file</span>
 <span class="sd">        is available on the server. Otherwise, returns ``None``.</span>
-<span class="sd">    &#39;&#39;&#39;</span>
+<span class="sd">    '''</span>
     <span class="o">...</span>
 </pre></div>
 </div>
@@ -644,7 +644,7 @@ will raise a <code class="docutils literal notranslate"><span class="pre">NotImp
   
   <div class="footer-item">
     <p class="last-updated">
-  Last updated on Jan 30, 2026.
+  Last updated on Sep 09, 2026.
   <br/>
 </p>
   </div>

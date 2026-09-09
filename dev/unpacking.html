@@ -456,16 +456,16 @@ We can do both operations with the <a class="reference internal" href="api/gener
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">fetch_zipped_file</span><span class="p">():</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Load a large zipped sample data as a pandas.DataFrame.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="c1"># Extract the file &quot;actual-data-file.txt&quot; from the archive</span>
-    <span class="n">unpack</span> <span class="o">=</span> <span class="n">Unzip</span><span class="p">(</span><span class="n">members</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;actual-data-file.txt&quot;</span><span class="p">])</span>
+<span class="sd">    """</span>
+    <span class="c1"># Extract the file "actual-data-file.txt" from the archive</span>
+    <span class="n">unpack</span> <span class="o">=</span> <span class="n">Unzip</span><span class="p">(</span><span class="n">members</span><span class="o">=</span><span class="p">[</span><span class="s2">"actual-data-file.txt"</span><span class="p">])</span>
     <span class="c1"># Pass in the processor to unzip the data file</span>
-    <span class="n">fnames</span> <span class="o">=</span> <span class="n">GOODBOY</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="s2">&quot;zipped-data-file.zip&quot;</span><span class="p">,</span> <span class="n">processor</span><span class="o">=</span><span class="n">unpack</span><span class="p">)</span>
+    <span class="n">fnames</span> <span class="o">=</span> <span class="n">GOODBOY</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="s2">"zipped-data-file.zip"</span><span class="p">,</span> <span class="n">processor</span><span class="o">=</span><span class="n">unpack</span><span class="p">)</span>
     <span class="c1"># Returns the paths of all extract members (in our case, only one)</span>
     <span class="n">fname</span> <span class="o">=</span> <span class="n">fnames</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-    <span class="c1"># fname is now the path of the unzipped file (&quot;actual-data-file.txt&quot;)</span>
+    <span class="c1"># fname is now the path of the unzipped file ("actual-data-file.txt")</span>
     <span class="c1"># which can be loaded by pandas directly</span>
     <span class="n">data</span> <span class="o">=</span> <span class="n">pandas</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">data</span>
@@ -482,14 +482,14 @@ the files:</p>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">fetch_and_unpack_tar_file</span><span class="p">():</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Unpack a file from a tar archive to a custom subdirectory in the cache.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="c1"># Extract a single file from the archive, to a specific location</span>
-    <span class="n">unpack_to_custom_dir</span> <span class="o">=</span> <span class="n">Untar</span><span class="p">(</span><span class="n">members</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;actual-data-file.txt&quot;</span><span class="p">],</span>
-                                 <span class="n">extract_dir</span><span class="o">=</span><span class="s2">&quot;custom_folder&quot;</span><span class="p">)</span>
+    <span class="n">unpack_to_custom_dir</span> <span class="o">=</span> <span class="n">Untar</span><span class="p">(</span><span class="n">members</span><span class="o">=</span><span class="p">[</span><span class="s2">"actual-data-file.txt"</span><span class="p">],</span>
+                                 <span class="n">extract_dir</span><span class="o">=</span><span class="s2">"custom_folder"</span><span class="p">)</span>
     <span class="c1"># Pass in the processor to untar the data file</span>
-    <span class="n">fnames</span> <span class="o">=</span> <span class="n">GOODBOY</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="s2">&quot;tarred-data-file.tar.gz&quot;</span><span class="p">,</span> <span class="n">processor</span><span class="o">=</span><span class="n">unpack</span><span class="p">)</span>
+    <span class="n">fnames</span> <span class="o">=</span> <span class="n">GOODBOY</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="s2">"tarred-data-file.tar.gz"</span><span class="p">,</span> <span class="n">processor</span><span class="o">=</span><span class="n">unpack</span><span class="p">)</span>
     <span class="c1"># Returns the paths of all extract members (in our case, only one)</span>
     <span class="n">fname</span> <span class="o">=</span> <span class="n">fnames</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
     <span class="k">return</span> <span class="n">fname</span>
@@ -498,10 +498,10 @@ the files:</p>
 <p>To extract all files into a folder and return the path to each file, omit the
 <code class="docutils literal notranslate"><span class="pre">members</span></code> parameter:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">fetch_zipped_archive</span><span class="p">():</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Load all files from a zipped archive.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">fnames</span> <span class="o">=</span> <span class="n">GOODBOY</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="s2">&quot;zipped-archive.zip&quot;</span><span class="p">,</span> <span class="n">processor</span><span class="o">=</span><span class="n">Unzip</span><span class="p">())</span>
+<span class="sd">    """</span>
+    <span class="n">fnames</span> <span class="o">=</span> <span class="n">GOODBOY</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="s2">"zipped-archive.zip"</span><span class="p">,</span> <span class="n">processor</span><span class="o">=</span><span class="n">Unzip</span><span class="p">())</span>
     <span class="k">return</span> <span class="n">fnames</span>
 </pre></div>
 </div>
@@ -569,7 +569,7 @@ compression).</p>
   
   <div class="footer-item">
     <p class="last-updated">
-  Last updated on Jan 30, 2026.
+  Last updated on Sep 09, 2026.
   <br/>
 </p>
   </div>

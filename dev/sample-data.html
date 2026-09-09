@@ -477,7 +477,7 @@ interdimensional portals.</p></li>
 library by copying and pasting from the documentation.</p></li>
 <li><p>You want to have a <code class="docutils literal notranslate"><span class="pre">plumbus.datasets</span></code> module that defines functions like
 <code class="docutils literal notranslate"><span class="pre">fetch_c137()</span></code> that will return the data loaded as a
-<a class="reference external" href="http://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v3.0.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">pandas.DataFrame</span></code></a> for convenient access.</p></li>
+<a class="reference external" href="http://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v3.0.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">pandas.DataFrame</span></code></a> for convenient access.</p></li>
 <li><p>Your sample data are in a folder of your GitHub repository but you don’t want
 to include the data files with your source and wheel distributions because of
 their size.</p></li>
@@ -513,9 +513,9 @@ See the tutorials under “Training your Pooch” and the documentation for
 <section id="basic-setup">
 <h2>Basic setup<a class="headerlink" href="#basic-setup" title="Link to this heading">#</a></h2>
 <p>This is what the <code class="docutils literal notranslate"><span class="pre">plumbus/datasets.py</span></code> file would look like:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="sd">"""</span>
 <span class="sd">Load sample data.</span>
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">pooch</span>
 
@@ -524,38 +524,38 @@ See the tutorials under “Training your Pooch” and the documentation for
 
 <span class="n">BRIAN</span> <span class="o">=</span> <span class="n">pooch</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
     <span class="c1"># Use the default cache folder for the operating system</span>
-    <span class="n">path</span><span class="o">=</span><span class="n">pooch</span><span class="o">.</span><span class="n">os_cache</span><span class="p">(</span><span class="s2">&quot;plumbus&quot;</span><span class="p">),</span>
+    <span class="n">path</span><span class="o">=</span><span class="n">pooch</span><span class="o">.</span><span class="n">os_cache</span><span class="p">(</span><span class="s2">"plumbus"</span><span class="p">),</span>
     <span class="c1"># The remote data is on Github</span>
-    <span class="n">base_url</span><span class="o">=</span><span class="s2">&quot;https://github.com/rick/plumbus/raw/</span><span class="si">{version}</span><span class="s2">/data/&quot;</span><span class="p">,</span>
+    <span class="n">base_url</span><span class="o">=</span><span class="s2">"https://github.com/rick/plumbus/raw/</span><span class="si">{version}</span><span class="s2">/data/"</span><span class="p">,</span>
     <span class="n">version</span><span class="o">=</span><span class="n">version</span><span class="p">,</span>
-    <span class="c1"># If this is a development version, get the data from the &quot;main&quot; branch</span>
-    <span class="n">version_dev</span><span class="o">=</span><span class="s2">&quot;main&quot;</span><span class="p">,</span>
+    <span class="c1"># If this is a development version, get the data from the "main" branch</span>
+    <span class="n">version_dev</span><span class="o">=</span><span class="s2">"main"</span><span class="p">,</span>
     <span class="n">registry</span><span class="o">=</span><span class="p">{</span>
-        <span class="s2">&quot;c137.csv&quot;</span><span class="p">:</span> <span class="s2">&quot;sha256:19uheidhlkjdwhoiwuhc0uhcwljchw9ochwochw89dcgw9dcgwc&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;cronen.csv&quot;</span><span class="p">:</span> <span class="s2">&quot;sha256:1upodh2ioduhw9celdjhlfvhksgdwikdgcowjhcwoduchowjg8w&quot;</span><span class="p">,</span>
+        <span class="s2">"c137.csv"</span><span class="p">:</span> <span class="s2">"sha256:19uheidhlkjdwhoiwuhc0uhcwljchw9ochwochw89dcgw9dcgwc"</span><span class="p">,</span>
+        <span class="s2">"cronen.csv"</span><span class="p">:</span> <span class="s2">"sha256:1upodh2ioduhw9celdjhlfvhksgdwikdgcowjhcwoduchowjg8w"</span><span class="p">,</span>
     <span class="p">},</span>
 <span class="p">)</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">fetch_c137</span><span class="p">():</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Load the C-137 sample data as a pandas.DataFrame.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="c1"># The file will be downloaded automatically the first time this is run</span>
     <span class="c1"># returns the file path to the downloaded file. Afterwards, Pooch finds</span>
-    <span class="c1"># it in the local cache and doesn&#39;t repeat the download.</span>
-    <span class="n">fname</span> <span class="o">=</span> <span class="n">BRIAN</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="s2">&quot;c137.csv&quot;</span><span class="p">)</span>
-    <span class="c1"># The &quot;fetch&quot; method returns the full path to the downloaded data file.</span>
+    <span class="c1"># it in the local cache and doesn't repeat the download.</span>
+    <span class="n">fname</span> <span class="o">=</span> <span class="n">BRIAN</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="s2">"c137.csv"</span><span class="p">)</span>
+    <span class="c1"># The "fetch" method returns the full path to the downloaded data file.</span>
     <span class="c1"># All we need to do now is load it with our standard Python tools.</span>
     <span class="n">data</span> <span class="o">=</span> <span class="n">pandas</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">data</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">fetch_cronen</span><span class="p">():</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Load the Cronenberg sample data as a pandas.DataFrame.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">fname</span> <span class="o">=</span> <span class="n">BRIAN</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="s2">&quot;cronen.csv&quot;</span><span class="p">)</span>
+<span class="sd">    """</span>
+    <span class="n">fname</span> <span class="o">=</span> <span class="n">BRIAN</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="s2">"cronen.csv"</span><span class="p">)</span>
     <span class="n">data</span> <span class="o">=</span> <span class="n">pandas</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">data</span>
 </pre></div>
@@ -598,7 +598,7 @@ failure by setting <code class="docutils literal notranslate"><span class="pre">
 will be valid for all downloads attempted with <a class="reference internal" href="api/generated/pooch.Pooch.html#pooch.Pooch.fetch" title="pooch.Pooch.fetch"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pooch.Pooch.fetch</span></code></a>. The
 download can fail because the file hash doesn’t match the known hash (due to a
 partial download, for example) or because of network errors coming from
-<a class="reference external" href="https://requests.readthedocs.io/en/latest/api/#module-requests" title="(in Requests v2.32.5)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">requests</span></code></a>. Other errors (file system permission errors, etc) will still
+<a class="reference external" href="https://requests.readthedocs.io/en/latest/api/#module-requests" title="(in Requests v2.34.2)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">requests</span></code></a>. Other errors (file system permission errors, etc) will still
 result in a failed download.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -729,7 +729,7 @@ tutorials under “Training your Pooch” for more information.</p>
   
   <div class="footer-item">
     <p class="last-updated">
-  Last updated on Jan 30, 2026.
+  Last updated on Sep 09, 2026.
   <br/>
 </p>
   </div>

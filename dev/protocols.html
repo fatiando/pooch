@@ -468,23 +468,23 @@ appropriate download method.</p>
 <p>For example, if our data were hosted on an FTP server, we could use the
 following setup:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">POOCH</span> <span class="o">=</span> <span class="n">pooch</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
-    <span class="n">path</span><span class="o">=</span><span class="n">pooch</span><span class="o">.</span><span class="n">os_cache</span><span class="p">(</span><span class="s2">&quot;plumbus&quot;</span><span class="p">),</span>
+    <span class="n">path</span><span class="o">=</span><span class="n">pooch</span><span class="o">.</span><span class="n">os_cache</span><span class="p">(</span><span class="s2">"plumbus"</span><span class="p">),</span>
     <span class="c1"># Use an FTP server instead of HTTP. The rest is all the same.</span>
-    <span class="n">base_url</span><span class="o">=</span><span class="s2">&quot;ftp://garage-basement.org/</span><span class="si">{version}</span><span class="s2">/&quot;</span><span class="p">,</span>
+    <span class="n">base_url</span><span class="o">=</span><span class="s2">"ftp://garage-basement.org/</span><span class="si">{version}</span><span class="s2">/"</span><span class="p">,</span>
     <span class="n">version</span><span class="o">=</span><span class="n">version</span><span class="p">,</span>
-    <span class="n">version_dev</span><span class="o">=</span><span class="s2">&quot;main&quot;</span><span class="p">,</span>
+    <span class="n">version_dev</span><span class="o">=</span><span class="s2">"main"</span><span class="p">,</span>
     <span class="n">registry</span><span class="o">=</span><span class="p">{</span>
-        <span class="s2">&quot;c137.csv&quot;</span><span class="p">:</span> <span class="s2">&quot;19uheidhlkjdwhoiwuhc0uhcwljchw9ochwochw89dcgw9dcgwc&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;cronen.csv&quot;</span><span class="p">:</span> <span class="s2">&quot;1upodh2ioduhw9celdjhlfvhksgdwikdgcowjhcwoduchowjg8w&quot;</span><span class="p">,</span>
+        <span class="s2">"c137.csv"</span><span class="p">:</span> <span class="s2">"19uheidhlkjdwhoiwuhc0uhcwljchw9ochwochw89dcgw9dcgwc"</span><span class="p">,</span>
+        <span class="s2">"cronen.csv"</span><span class="p">:</span> <span class="s2">"1upodh2ioduhw9celdjhlfvhksgdwikdgcowjhcwoduchowjg8w"</span><span class="p">,</span>
     <span class="p">},</span>
 <span class="p">)</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">fetch_c137</span><span class="p">():</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Load the C-137 sample data as a pandas.DataFrame (over FTP this time).</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">fname</span> <span class="o">=</span> <span class="n">POOCH</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="s2">&quot;c137.csv&quot;</span><span class="p">)</span>
+<span class="sd">    """</span>
+    <span class="n">fname</span> <span class="o">=</span> <span class="n">POOCH</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="s2">"c137.csv"</span><span class="p">)</span>
     <span class="n">data</span> <span class="o">=</span> <span class="n">pandas</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">data</span>
 </pre></div>
@@ -507,29 +507,29 @@ figshare dataset
 doi:<a class="reference external" href="https://doi.org/10.6084/m9.figshare.14763051.v1">10.6084/m9.figshare.14763051.v1</a>.
 We can could use <a class="reference internal" href="api/generated/pooch.retrieve.html#pooch.retrieve" title="pooch.retrieve"><code class="xref py py-func docutils literal notranslate"><span class="pre">pooch.retrieve</span></code></a> to download it like so:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">file_path</span> <span class="o">=</span> <span class="n">pooch</span><span class="o">.</span><span class="n">retrieve</span><span class="p">(</span>
-    <span class="n">url</span><span class="o">=</span><span class="s2">&quot;doi:10.6084/m9.figshare.14763051.v1/tiny-data.txt&quot;</span><span class="p">,</span>
-    <span class="n">known_hash</span><span class="o">=</span><span class="s2">&quot;md5:70e2afd3fd7e336ae478b1e740a5f08e&quot;</span><span class="p">,</span>
+    <span class="n">url</span><span class="o">=</span><span class="s2">"doi:10.6084/m9.figshare.14763051.v1/tiny-data.txt"</span><span class="p">,</span>
+    <span class="n">known_hash</span><span class="o">=</span><span class="s2">"md5:70e2afd3fd7e336ae478b1e740a5f08e"</span><span class="p">,</span>
 <span class="p">)</span>
 </pre></div>
 </div>
 <p>We can also make a <a class="reference internal" href="api/generated/pooch.Pooch.html#pooch.Pooch" title="pooch.Pooch"><code class="xref py py-class docutils literal notranslate"><span class="pre">pooch.Pooch</span></code></a> with a registry stored entirely on a
 figshare dataset:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">POOCH</span> <span class="o">=</span> <span class="n">pooch</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
-    <span class="n">path</span><span class="o">=</span><span class="n">pooch</span><span class="o">.</span><span class="n">os_cache</span><span class="p">(</span><span class="s2">&quot;plumbus&quot;</span><span class="p">),</span>
+    <span class="n">path</span><span class="o">=</span><span class="n">pooch</span><span class="o">.</span><span class="n">os_cache</span><span class="p">(</span><span class="s2">"plumbus"</span><span class="p">),</span>
     <span class="c1"># Use the figshare DOI</span>
-    <span class="n">base_url</span><span class="o">=</span><span class="s2">&quot;doi:10.6084/m9.figshare.14763051.v1/&quot;</span><span class="p">,</span>
+    <span class="n">base_url</span><span class="o">=</span><span class="s2">"doi:10.6084/m9.figshare.14763051.v1/"</span><span class="p">,</span>
     <span class="n">registry</span><span class="o">=</span><span class="p">{</span>
-        <span class="s2">&quot;tiny-data.txt&quot;</span><span class="p">:</span> <span class="s2">&quot;md5:70e2afd3fd7e336ae478b1e740a5f08e&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;store.zip&quot;</span><span class="p">:</span> <span class="s2">&quot;md5:7008231125631739b64720d1526619ae&quot;</span><span class="p">,</span>
+        <span class="s2">"tiny-data.txt"</span><span class="p">:</span> <span class="s2">"md5:70e2afd3fd7e336ae478b1e740a5f08e"</span><span class="p">,</span>
+        <span class="s2">"store.zip"</span><span class="p">:</span> <span class="s2">"md5:7008231125631739b64720d1526619ae"</span><span class="p">,</span>
     <span class="p">},</span>
 <span class="p">)</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">fetch_tiny_data</span><span class="p">():</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Load the tiny data as a numpy array.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">fname</span> <span class="o">=</span> <span class="n">POOCH</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="s2">&quot;tiny-data.txt&quot;</span><span class="p">)</span>
+<span class="sd">    """</span>
+    <span class="n">fname</span> <span class="o">=</span> <span class="n">POOCH</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="s2">"tiny-data.txt"</span><span class="p">)</span>
     <span class="n">data</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">data</span>
 </pre></div>
@@ -548,9 +548,9 @@ their hashes.
 Instead, we can use the <a class="reference internal" href="api/generated/pooch.Pooch.html#pooch.Pooch.load_registry_from_doi" title="pooch.Pooch.load_registry_from_doi"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pooch.Pooch.load_registry_from_doi</span></code></a> to
 automatically populate the registry:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">POOCH</span> <span class="o">=</span> <span class="n">pooch</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
-    <span class="n">path</span><span class="o">=</span><span class="n">pooch</span><span class="o">.</span><span class="n">os_cache</span><span class="p">(</span><span class="s2">&quot;plumbus&quot;</span><span class="p">),</span>
+    <span class="n">path</span><span class="o">=</span><span class="n">pooch</span><span class="o">.</span><span class="n">os_cache</span><span class="p">(</span><span class="s2">"plumbus"</span><span class="p">),</span>
     <span class="c1"># Use the figshare DOI</span>
-    <span class="n">base_url</span><span class="o">=</span><span class="s2">&quot;doi:10.6084/m9.figshare.14763051.v1/&quot;</span><span class="p">,</span>
+    <span class="n">base_url</span><span class="o">=</span><span class="s2">"doi:10.6084/m9.figshare.14763051.v1/"</span><span class="p">,</span>
     <span class="n">registry</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span>
 
@@ -558,7 +558,7 @@ automatically populate the registry:</p>
 <span class="n">POOCH</span><span class="o">.</span><span class="n">load_registry_from_doi</span><span class="p">()</span>
 
 <span class="c1"># Fetch one of the files in the repository</span>
-<span class="n">fname</span> <span class="o">=</span> <span class="n">POOCH</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="s2">&quot;tiny-data.txt&quot;</span><span class="p">)</span>
+<span class="n">fname</span> <span class="o">=</span> <span class="n">POOCH</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="s2">"tiny-data.txt"</span><span class="p">)</span>
 </pre></div>
 </div>
 </section>
@@ -639,7 +639,7 @@ automatically populate the registry:</p>
   
   <div class="footer-item">
     <p class="last-updated">
-  Last updated on Jan 30, 2026.
+  Last updated on Sep 09, 2026.
   <br/>
 </p>
   </div>
