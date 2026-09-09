@@ -229,43 +229,49 @@ class HTTPDownloader:
             output_file = open(output_file, "w+b")  # noqa: SIM115
 
         try:
-            response = requests.get(url, timeout=timeout, **kwargs)
-            response.raise_for_status()
-            content = response.iter_content(chunk_size=self.chunk_size)
-            total = int(response.headers.get("content-length", 0))
-            if self.progressbar is True:
-                # Need to use ascii characters on Windows because there isn't
-                # always full unicode support
-                # (see https://github.com/tqdm/tqdm/issues/454)
-                use_ascii = bool(sys.platform == "win32")
-                progress = tqdm(
-                    total=total,
-                    ncols=79,
-                    ascii=use_ascii,
-                    unit="B",
-                    unit_scale=True,
-                    leave=True,
-                )
-            elif self.progressbar:
-                progress = self.progressbar
-                progress.total = total
-            for chunk in content:
-                if chunk:
-                    output_file.write(chunk)
-                    output_file.flush()
-                    if self.progressbar:
-                        # Use the chunk size here because chunk may be much
-                        # larger if the data are decompressed by requests after
-                        # reading (happens with text files).
-                        progress.update(self.chunk_size)
-            # Make sure the progress bar gets filled even if the actual number
-            # is chunks is smaller than expected. This happens when streaming
-            # text files that are compressed by the server when sending (gzip).
-            # Binary files don't experience this.
-            if self.progressbar:
-                progress.reset()
-                progress.update(total)
-                progress.close()
+            # Use an explicit session that outlives the streamed response: the
+            # implicit session behind requests.get is closed before the body is
+            # read, which leaks the connection with some urllib3 implementations.
+            with (
+                requests.Session() as session,
+                session.get(url, timeout=timeout, **kwargs) as response,
+            ):
+                response.raise_for_status()
+                content = response.iter_content(chunk_size=self.chunk_size)
+                total = int(response.headers.get("content-length", 0))
+                if self.progressbar is True:
+                    # Need to use ascii characters on Windows because there isn't
+                    # always full unicode support
+                    # (see https://github.com/tqdm/tqdm/issues/454)
+                    use_ascii = bool(sys.platform == "win32")
+                    progress = tqdm(
+                        total=total,
+                        ncols=79,
+                        ascii=use_ascii,
+                        unit="B",
+                        unit_scale=True,
+                        leave=True,
+                    )
+                elif self.progressbar:
+                    progress = self.progressbar
+                    progress.total = total
+                for chunk in content:
+                    if chunk:
+                        output_file.write(chunk)
+                        output_file.flush()
+                        if self.progressbar:
+                            # Use the chunk size here because chunk may be much
+                            # larger if the data are decompressed by requests after
+                            # reading (happens with text files).
+                            progress.update(self.chunk_size)
+                # Make sure the progress bar gets filled even if the actual number
+                # is chunks is smaller than expected. This happens when streaming
+                # text files that are compressed by the server when sending (gzip).
+                # Binary files don't experience this.
+                if self.progressbar:
+                    progress.reset()
+                    progress.update(total)
+                    progress.close()
         finally:
             if ispath:
                 output_file.close()
