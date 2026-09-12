@@ -619,6 +619,63 @@ def test_download_action():
     assert verb == "Fetching"
 
 
+def test_download_action_with_pooch_hash_file(tmp_path):
+    "Test that the right action is performed based on .pooch_hash file contents"
+    downloaded = str(tmp_path / "downloaded.txt")
+    (tmp_path / "descendants").mkdir(exist_ok=True)
+    descendant = str(tmp_path / "descendants/descendant.txt")
+    pooch_hash = str(tmp_path / "downloaded.txt.pooch_hash")
+
+    with open(downloaded, "w", encoding="utf-8") as output:
+        output.write("some data")
+
+    known_hash = file_hash(downloaded)
+
+    with open(descendant, "w") as output:
+        output.write("derived data")
+
+    with open(pooch_hash, "w") as phf:
+        print(known_hash, Path(downloaded).name, file=phf)
+        print(
+            file_hash(descendant), str(Path(descendant).relative_to(tmp_path)), file=phf
+        )
+
+    Path(pooch_hash).copy(f"{pooch_hash}.bkp")
+
+    action, verb = download_action(Path(downloaded), known_hash=known_hash)
+    assert action == "fetch"
+    assert verb == "Fetching"
+
+    Path(downloaded).unlink()
+    action, verb = download_action(Path(downloaded), known_hash=known_hash)
+    assert action == "fetch"
+    assert verb == "Fetching"
+
+    with open(downloaded, "w", encoding="utf-8") as output:
+        output.write("some incorrect data")
+
+    action, verb = download_action(Path(downloaded), known_hash=known_hash)
+    assert action == "update"
+    assert verb == "Updating"
+
+    Path(f"{pooch_hash}.bkp").copy(pooch_hash)
+    Path(descendant).unlink()
+    with open(downloaded, "w", encoding="utf-8") as output:
+        output.write("some data")
+
+    action, verb = download_action(Path(downloaded), known_hash=known_hash)
+    assert action == "update"
+    assert verb == "Updating"
+
+    Path(f"{pooch_hash}.bkp").copy(pooch_hash)
+    with open(descendant, "w") as output:
+        output.write("derived incorrect data")
+
+    action, verb = download_action(Path(downloaded), known_hash=known_hash)
+    assert action == "update"
+    assert verb == "Updating"
+
+
 @pytest.mark.network
 @pytest.mark.parametrize("fname", ["tiny-data.txt", "subdir/tiny-data.txt"])
 def test_stream_download(fname):

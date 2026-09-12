@@ -780,6 +780,36 @@ def download_action(path: Path, known_hash: Optional[str]) -> tuple[Action, str]
 
 
     """
+    pooch_hash_path = path.with_name(f"{path.name}.pooch_hash")
+
+    def _unlink_pooch_hash_and_update() -> tuple[Action, str]:
+        pooch_hash_path.unlink()
+        return "update", "Updating"
+
+    if pooch_hash_path.exists():
+        if path.exists() and not hash_matches(str(path), known_hash):
+            return _unlink_pooch_hash_and_update()
+
+        with open(pooch_hash_path, "r") as phf:
+            # First line is deleted file
+            fhash, fname = next(phf).strip().split(" ", maxsplit=1)
+            if known_hash is not None and fhash != known_hash:
+                return _unlink_pooch_hash_and_update()
+            if fname != path.name:
+                # Malformed .pooch_hash file
+                return _unlink_pooch_hash_and_update()
+
+            # Subsequent lines in .pooch_hash file list the downloaded file's descendants
+            for line in phf:
+                fhash, fname = line.strip().split(" ", maxsplit=1)
+                fpath = path.parent / fname
+                if not fpath.exists():
+                    return _unlink_pooch_hash_and_update()
+                if not hash_matches(str(fpath), fhash):
+                    return _unlink_pooch_hash_and_update()
+
+        return "fetch", "Fetching"
+
     if not path.exists():
         return "download", "Downloading"
     if not hash_matches(str(path), known_hash):
