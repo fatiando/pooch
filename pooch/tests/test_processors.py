@@ -8,7 +8,10 @@
 Test the processor hooks
 """
 
+import io
+import os
 import re
+import tarfile
 from pathlib import Path
 from tempfile import TemporaryDirectory
 
@@ -285,3 +288,48 @@ def test_unpacking_wrong_members_then_no_members(processor_class, extension):
         processor2 = processor_class()
         filenames2 = pup.fetch("store" + extension, processor=processor2)
         assert len(filenames2) > 0
+
+
+@pytest.mark.skipif(
+    not hasattr(tarfile, "data_filter"),
+    reason="tar 'data' extraction filter is unavailable on this interpreter",
+)
+def test_untar_blocks_symlink_path_traversal():
+    """
+    Untar must not let a malicious archive write outside the destination.
+
+    A tar entry that is a symlink pointing outside the extraction directory,
+    followed by a file written *through* that symlink, is a classic
+    archive path-traversal / arbitrary-write attack. The "data" extraction
+    filter blocks it, and Pooch must enable the filter whenever the running
+    ``tarfile`` supports it (it was backported to 3.9.17, 3.10.12 and 3.11.4),
+    not only on Python >= 3.12.
+    https://github.com/fatiando/pooch/issues/543
+    """
+    with TemporaryDirectory() as tmpdir:
+        tmp = Path(tmpdir)
+        outside = tmp / "outside"
+        outside.mkdir()
+        extract_dir = tmp / "store.tar.untar"
+        archive = tmp / "store.tar"
+
+        # Build a malicious tar: a symlink that escapes the destination,
+        # followed by a file written *through* that symlink into ``outside``.
+        with tarfile.open(archive, "w") as tar:
+            link = tarfile.TarInfo("sl")
+            link.type = tarfile.SYMTYPE
+            link.linkname = os.path.abspath(outside)
+            tar.addfile(link)
+
+            payload = b"owned"
+            member = tarfile.TarInfo("sl/owned.txt")
+            member.size = len(payload)
+            tar.addfile(member, io.BytesIO(payload))
+
+        # The "data" filter rejects the unsafe symlink, so extraction raises
+        # instead of silently writing through it.
+        with pytest.raises(tarfile.FilterError):
+            Untar()._extract_file(str(archive), str(extract_dir))
+
+        # The attacker-controlled file must NOT have escaped the destination.
+        assert not (outside / "owned.txt").exists()
