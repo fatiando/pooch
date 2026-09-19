@@ -12,6 +12,8 @@ Test the core class and factory function.
 import hashlib
 import os
 import re
+import threading
+from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 from tempfile import TemporaryDirectory
 
@@ -633,6 +635,40 @@ def test_stream_download(fname):
         stream_download(url, destination, known_hash, downloader, pooch=None)
         assert destination.exists()
         check_tiny_data(str(destination))
+
+
+def test_stream_download_parallel_subdir(monkeypatch):
+    "Downloading into a new subdirectory in parallel shouldn't fail"
+    nthreads = 4
+    barrier = threading.Barrier(nthreads, timeout=30)
+    makedirs = os.makedirs
+
+    def mockmakedirs(path, exist_ok=False):
+        "Wait for all the threads before creating the directory"
+        barrier.wait()
+        makedirs(path, exist_ok=exist_ok)
+
+    def downloader(url, output_file, pooch):  # noqa: ARG001
+        "Write some data instead of downloading it"
+        Path(output_file).write_text("some data", encoding="utf-8")
+
+    monkeypatch.setattr(os, "makedirs", mockmakedirs)
+
+    with TemporaryDirectory() as local_store:
+        destinations = [
+            Path(local_store) / "subdir" / f"data-{i}.txt" for i in range(nthreads)
+        ]
+        with ThreadPoolExecutor(max_workers=nthreads) as executor:
+            futures = [
+                executor.submit(
+                    stream_download, "unused", dest, None, downloader, pooch=None
+                )
+                for dest in destinations
+            ]
+            for future in futures:
+                future.result()
+        for dest in destinations:
+            assert dest.read_text(encoding="utf-8") == "some data"
 
 
 @pytest.mark.network

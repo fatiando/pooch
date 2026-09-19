@@ -812,7 +812,7 @@ def stream_download(
     # Ensure the parent directory exists in case the file is in a subdirectory.
     # Otherwise, move will cause an error.
     if not fname.parent.exists():
-        os.makedirs(str(fname.parent))
+        os.makedirs(str(fname.parent), exist_ok=True)
     download_attempts = 1 + retry_if_failed
     max_wait = 10
     for i in range(download_attempts):
