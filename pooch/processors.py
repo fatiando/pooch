@@ -125,16 +125,30 @@ class ExtractorProcessor(abc.ABC):
 
         # Get a list of all file names (including subdirectories) in our folder
         # of unzipped files, filtered by the given members list
-        fnames = []
-        for path, _, files in os.walk(self.extract_dir):
-            for filename in files:
-                relpath = os.path.normpath(
-                    os.path.join(os.path.relpath(path, self.extract_dir), filename)
-                )
-                if self.members is None or any(
-                    relpath.startswith(os.path.normpath(m)) for m in self.members
-                ):
+        if self.members is None:
+            # No filter: collect all extracted files in walk order
+            fnames = []
+            for path, _, files in os.walk(self.extract_dir):
+                for filename in files:
                     fnames.append(os.path.join(path, filename))
+        else:
+            # Build a mapping from each requested member to its extracted path.
+            # Walking the directory only once keeps this O(N) in the number of
+            # extracted files regardless of how many members were requested.
+            extracted = {}
+            for path, _, files in os.walk(self.extract_dir):
+                for filename in files:
+                    relpath = os.path.normpath(
+                        os.path.join(
+                            os.path.relpath(path, self.extract_dir), filename
+                        )
+                    )
+                    for m in self.members:
+                        if relpath.startswith(os.path.normpath(m)):
+                            extracted[m] = os.path.join(path, filename)
+            # Return files in the same order as self.members so callers can
+            # rely on the position of each file in the returned list.
+            fnames = [extracted[m] for m in self.members if m in extracted]
 
         return fnames
 
