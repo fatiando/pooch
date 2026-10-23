@@ -23,6 +23,13 @@ from zipfile import ZipFile
 from .utils import get_logger
 
 
+def _is_selected_member(name, member):
+    """Check whether an archive entry is the member or its child."""
+    name = os.path.normpath(name)
+    member = os.path.normpath(member)
+    return name == member or name.startswith(member + os.path.sep)
+
+
 class ExtractorProcessor(abc.ABC):
     """
     Abstract base class for extractions from compressed archives.
@@ -132,7 +139,7 @@ class ExtractorProcessor(abc.ABC):
                     os.path.join(os.path.relpath(path, self.extract_dir), filename)
                 )
                 if self.members is None or any(
-                    relpath.startswith(os.path.normpath(m)) for m in self.members
+                    _is_selected_member(relpath, m) for m in self.members
                 ):
                     fnames.append(os.path.join(path, filename))
 
@@ -205,7 +212,7 @@ class Unzip(ExtractorProcessor):
                     subdir_members = [
                         name
                         for name in zip_file.namelist()
-                        if os.path.normpath(name).startswith(os.path.normpath(member))
+                        if _is_selected_member(name, member)
                     ]
                     # Extract the data file from within the archive
                     zip_file.extractall(members=subdir_members, path=extract_dir)
@@ -280,9 +287,7 @@ class Untar(ExtractorProcessor):
                     subdir_members = [
                         info
                         for info in tar_file.getmembers()
-                        if os.path.normpath(info.name).startswith(
-                            os.path.normpath(member)
-                        )
+                        if _is_selected_member(info.name, member)
                     ]
                     # Extract the data file from within the archive
                     tar_file.extractall(
