@@ -1,10 +1,8 @@
-# Copyright (c) 2018 The Pooch Developers.
-# Distributed under the terms of the BSD 3-Clause License.
-# SPDX-License-Identifier: BSD-3-Clause
-#
-# This code is part of the Fatiando a Terra project (https://www.fatiando.org)
-#
+import os
+import sys
 import datetime
+
+sys.path.insert(0, os.path.abspath(".."))
 
 import pooch
 
@@ -57,6 +55,7 @@ source_encoding = "utf-8"
 master_doc = "index"
 pygments_style = "default"
 add_function_parentheses = False
+nitpicky = True
 
 
 # HTML output configuration
