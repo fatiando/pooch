@@ -38,6 +38,7 @@ def retrieve(
     processor: Optional[Processor] = None,
     downloader: Optional[Downloader] = None,
     progressbar: bool = False,
+    retry_if_failed: int = 0,
 ) -> str:
     """
     Download and cache a single file locally.
@@ -109,6 +110,12 @@ def retrieve(
         (stderr). Requires `tqdm <https://github.com/tqdm/tqdm>`__ to be
         installed. Alternatively, an arbitrary progress bar object can be
         passed. See :ref:`custom-progressbar` for details.
+    retry_if_failed : int
+        Retry a file download the specified number of times if it fails because
+        of a bad connection or a hash mismatch. By default, downloads are only
+        attempted once (``retry_if_failed=0``). Initially, will wait for 1s
+        between retries and then increase the wait time by 1s with each retry
+        until a maximum of 10s.
 
     Returns
     -------
@@ -238,7 +245,14 @@ def retrieve(
         if downloader is None:
             downloader = choose_downloader(url, progressbar=progressbar)
 
-        stream_download(url, full_path, known_hash, downloader, pooch=None)
+        stream_download(
+            url,
+            full_path,
+            known_hash,
+            downloader,
+            pooch=None,
+            retry_if_failed=retry_if_failed,
+        )
 
         if known_hash is None:
             get_logger().info(
