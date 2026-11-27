@@ -43,6 +43,50 @@ Common uses of downloaders include:
 
 * Passing :ref:`login credentials <authentication>` to HTTP and FTP servers
 * Printing :ref:`progress bars <progressbars>`
+* Passing custom keyword arguments to :func:`requests.get` (see
+  :ref:`passing-requests-arguments`)
+
+
+.. _passing-requests-arguments:
+
+Passing arguments to ``requests``
+---------------------------------
+
+Any keyword arguments passed to :class:`pooch.HTTPDownloader` (besides
+``progressbar`` and ``chunk_size``) are forwarded directly to
+:func:`requests.get` when downloading over HTTP or HTTPS. This also works with
+:class:`pooch.DOIDownloader`.
+
+This allows you to customize HTTP requests with options such as custom
+``headers``, query ``params``, ``timeout``, proxies, or SSL settings. For
+example, to pass custom headers and a request timeout:
+
+.. code:: python
+
+    downloader = pooch.HTTPDownloader(
+        headers={"User-Agent": "my-package/1.0"},
+        timeout=60,
+    )
+    fname = GOODBOY.fetch("some-data.csv", downloader=downloader)
+
+If a server uses a self-signed certificate or you need to bypass SSL
+verification in a restricted environment, you can pass ``verify=False`` (or a
+path to a CA bundle):
+
+.. code:: python
+
+    downloader = pooch.HTTPDownloader(verify=False)
+    fname = pooch.retrieve(
+        url="https://some-data-server.org/some-data.csv",
+        known_hash="...",
+        downloader=downloader,
+    )
+
+.. warning::
+
+    Setting ``verify=False`` disables SSL certificate verification, which
+    exposes the connection to man-in-the-middle attacks. Only use this when
+    explicitly required for trusted servers.
 
 
 Creating your own downloaders
