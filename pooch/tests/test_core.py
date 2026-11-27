@@ -12,6 +12,7 @@ Test the core class and factory function.
 import hashlib
 import os
 import re
+import shutil
 from pathlib import Path
 from tempfile import TemporaryDirectory
 
@@ -687,3 +688,63 @@ def test_wrong_load_registry_from_doi():
     msg = "only implemented for DOIs"
     with pytest.raises(ValueError, match=msg):
         pup.load_registry_from_doi()
+
+
+def test_retrieve_retry_if_failed(monkeypatch, tmp_path):
+    "Check that retrieve retries failed downloads when retry_if_failed is set"
+    monkeypatch.setattr(core, "hash_matches", FakeHashMatches(2).hash_matches)
+    fakesleep = FakeSleep()
+    monkeypatch.setattr(core.time, "sleep", fakesleep.sleep)
+
+    attempts = 0
+
+    def fake_downloader(url, output_file, pup):  # noqa: ARG001
+        nonlocal attempts
+        attempts += 1
+        shutil.copyfile(os.path.join(DATA_DIR, "tiny-data.txt"), output_file)
+
+    with capture_log() as log_file:
+        fname = retrieve(
+            url="https://example.com/tiny-data.txt",
+            known_hash=REGISTRY["tiny-data.txt"],
+            fname="tiny-data.txt",
+            path=tmp_path,
+            downloader=fake_downloader,
+            retry_if_failed=2,
+        )
+        logs = log_file.getvalue().strip().split("\n")
+
+    assert attempts == 3
+    assert fakesleep.times == [1, 2]
+    assert len(logs) == 3
+    assert logs[0].startswith("Downloading")
+    assert "download again 2 more times." in logs[1]
+    assert "download again 1 more time." in logs[2]
+    check_tiny_data(fname)
+    assert file_hash(fname) == REGISTRY["tiny-data.txt"]
+
+
+def test_retrieve_retry_off_by_default(monkeypatch, tmp_path):
+    "Check that retrieve does not retry by default"
+    monkeypatch.setattr(core, "hash_matches", FakeHashMatches(2).hash_matches)
+    attempts = 0
+
+    def fake_downloader(url, output_file, pup):  # noqa: ARG001
+        nonlocal attempts
+        attempts += 1
+        shutil.copyfile(os.path.join(DATA_DIR, "tiny-data.txt"), output_file)
+
+    msg = "does not match the known hash"
+    with pytest.raises(ValueError, match=msg), capture_log() as log_file:
+        retrieve(
+            url="https://example.com/tiny-data.txt",
+            known_hash=REGISTRY["tiny-data.txt"],
+            fname="tiny-data.txt",
+            path=tmp_path,
+            downloader=fake_downloader,
+        )
+
+    assert attempts == 1
+    logs = log_file.getvalue().strip().split("\n")
+    assert len(logs) == 1
+    assert logs[0].startswith("Downloading")
