@@ -69,6 +69,25 @@ with a ``#``:
     using comments as earlier versions cannot handle them:
     ``install_requires = [..., "pooch>=1.2.0", ...]``
 
+From Pooch v1.7.0, registry files are parsed using POSIX shell-like syntax
+(``shlex.split``) to support spaces in file names. File names that contain
+spaces must be enclosed in quotes or have each space escaped with a backslash:
+
+.. code-block:: none
+
+    "file with spaces.txt" 19uheidhlkjdwhoiwuhc0uhcwljchw9ochwochw89dcgw9dcgwc
+    other\ with\ spaces.txt 1upodh2ioduhw9celdjhlfvhksgdwikdgcowjhcwoduchowjg8w
+
+.. note::
+
+    Because lines are parsed with POSIX shell rules, file names in registry
+    files must use POSIX-compatible quoting and escaping. Any literal quotation
+    marks (``'`` or ``"``) or backslashes (``\``) in a file name must be
+    escaped (or quoted), and subdirectories must use Unix-style ``/`` path
+    separators even on Windows. Existing registry files written before Pooch
+    v1.7.0 with unescaped quotation marks or backslashes will fail to parse or
+    have those characters stripped.
+
 
 Packaging registry files
 ------------------------
