@@ -643,6 +643,16 @@ class Pooch:
         files can be specified as a third element on the line. Line comments
         can be added and must be prepended with ``#``.
 
+        .. note::
+
+            Since Pooch v1.7.0, each line is parsed using POSIX shell-like
+            syntax (:func:`shlex.split`). File names containing spaces must be
+            quoted or escaped with backslashes, special characters such as
+            quotation marks and backslashes must be escaped, and subdirectories
+            must use Unix-style ``/`` separators even on Windows. Existing
+            registry files from earlier versions that contain unescaped quotes
+            or backslashes will raise an error or be parsed without them.
+
         Parameters
         ----------
         fname : str | fileobj
